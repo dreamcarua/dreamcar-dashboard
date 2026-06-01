@@ -1,0 +1,64 @@
+/* === date-filter.css === */
+/* Стили для фильтра по дате */
+
+.date-filter {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--card-bg);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.date-filter label {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+input[type="date"] {
+    padding: 0.75rem 1rem;
+    background: var(--ai-gray);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+input[type="date"]:hover {
+    border-color: var(--ai-blue);
+}
+
+input[type="date"]:focus {
+    outline: none;
+    border-color: var(--ai-blue);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
+
+/* Подсветка активного фильтра (значение != "all") */
+.date-filter.filter-active {
+    border-color: var(--ai-purple, #8b5cf6);
+    background: color-mix(in srgb, var(--card-bg) 90%, var(--ai-purple, #8b5cf6));
+}
+
+.date-filter.filter-active label {
+    color: var(--ai-purple, #8b5cf6);
+}
+
+@media (max-width: 768px) {
+    .date-filter {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+}

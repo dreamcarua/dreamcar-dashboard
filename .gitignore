@@ -1,0 +1,10 @@
+.env
+.env.local
+.env.*.local
+*.log
+vendor/
+node_modules/
+.DS_Store
+config/secrets.php
+config/sendpulse_token.json
+data/google_credentials.json

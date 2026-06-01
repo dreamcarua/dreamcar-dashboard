@@ -1,0 +1,71 @@
+{
+    "version": "1.0",
+    "last_updated": "2025-12-15T21:33:43Z",
+    "users": [
+        {
+            "username": "admin_vadym",
+            "password_hash": "$2y$12$0oi8.V6vUAUGiAKHJLAemurBlfK.qXYB6Z9CaX5j73YgZCyoQmOoS",
+            "role": "admin",
+            "utm_term": null,
+            "created_at": "2025-12-15T21:33:43Z",
+            "last_login": "2026-01-14T20:10:50Z",
+            "is_active": true,
+            "settings": {
+                "theme": "dark",
+                "language": "ru"
+            }
+        },
+        {
+            "username": "vadym",
+            "password_hash": "$2y$12$sCIGhPki5wd13i5KKGwhIuWaF46hL7p4591kcZgxkE4.dhtuojG..",
+            "role": "targetolog",
+            "utm_term": "vadym",
+            "created_at": "2025-12-15T21:33:44Z",
+            "last_login": null,
+            "is_active": true,
+            "settings": {
+                "theme": "dark",
+                "language": "ru"
+            }
+        },
+        {
+            "username": "vira",
+            "password_hash": "$2y$12$2cNVWWnM4UzSXmx1BS0a0uckD7F9cAKz6M\/H0p6dn32.oDkNBs0vO",
+            "role": "targetolog",
+            "utm_term": "vira",
+            "created_at": "2025-12-15T21:33:44Z",
+            "last_login": null,
+            "is_active": true,
+            "settings": {
+                "theme": "dark",
+                "language": "ru"
+            }
+        },
+        {
+            "username": "artem",
+            "password_hash": "$2y$12$9VpHuO6T1RtMOrkQjuFhJushWZuhhLKKua3wdcpBPCjS74vAuLKVm",
+            "role": "targetolog",
+            "utm_term": "artem",
+            "created_at": "2025-12-15T21:33:44Z",
+            "last_login": null,
+            "is_active": true,
+            "settings": {
+                "theme": "dark",
+                "language": "ru"
+            }
+        },
+        {
+            "username": "oborotfb",
+            "password_hash": "$2y$12$Xka9HGc0oMvkBfOC3rMjB.iENE\/XFAA9iG3uRpM6U5Txcjv86Pz4a",
+            "role": "targetolog",
+            "utm_term": "oborotfb",
+            "created_at": "2025-12-15T21:33:44Z",
+            "last_login": null,
+            "is_active": true,
+            "settings": {
+                "theme": "dark",
+                "language": "ru"
+            }
+        }
+    ]
+}

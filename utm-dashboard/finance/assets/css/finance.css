@@ -1,0 +1,433 @@
+/* === finance.css ===
+ * finance/assets/css/finance.css
+ * НАЗНАЧЕНИЕ: Стили финансового модуля DreamCar
+ * ИСПОЛЬЗУЕТ CSS переменные из родительского style.css
+ * БЕЗ :root — только var(--ai-green) и т.д.
+ */
+
+/* ─── Dark/Light toggle иконки ─────────────────────────────────────────── */
+.zk-icon-sun  { display: none; }
+.zk-icon-moon { display: inline; }
+html.light-theme .zk-icon-sun  { display: inline; }
+html.light-theme .zk-icon-moon { display: none; }
+
+.zk-theme-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 8px;
+    min-width: 32px;
+}
+
+/* ─── Навигация финансового модуля ─────────────────────────────────────── */
+.finance-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.finance-nav .nav-btn {
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.finance-nav .nav-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--ai-blue);
+}
+
+.finance-nav .nav-btn.active {
+    background: var(--ai-blue);
+    border-color: var(--ai-blue);
+    color: #fff;
+}
+
+/* ─── Основной контент ──────────────────────────────────────────────────── */
+.finance-main {
+    margin-top: 1.5rem;
+}
+
+.content-section {
+    display: none;
+}
+
+.content-section.active {
+    display: block;
+}
+
+/* ─── Loading состояние ─────────────────────────────────────────────────── */
+.section-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    color: var(--text-muted);
+    gap: 12px;
+}
+
+.loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--ai-blue);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ─── Метрические карточки ──────────────────────────────────────────────── */
+.finance-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.metric-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 14px;
+    position: relative;
+    overflow: hidden;
+}
+
+.metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+}
+
+.metric-card.income::before    { background: var(--ai-green); }
+.metric-card.expense::before   { background: var(--color-danger); }
+.metric-card.profit::before    { background: #10d9a0; }
+.metric-card.margin::before    { background: var(--ai-blue); }
+.metric-card.conversion::before { background: var(--ai-purple); }
+.metric-card.dividend::before  { background: #f59e0b; }
+
+.metric-card .metric-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.metric-card .metric-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+}
+
+.metric-card.income .metric-value    { color: var(--ai-green); }
+.metric-card.expense .metric-value   { color: var(--color-danger); }
+.metric-card.profit .metric-value    { color: #10d9a0; }
+.metric-card.margin .metric-value    { color: var(--ai-blue); }
+.metric-card.conversion .metric-value { color: var(--ai-purple); }
+.metric-card.dividend .metric-value  { color: #f59e0b; }
+
+.metric-card .metric-sub {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+/* ─── Таблицы финансов ──────────────────────────────────────────────────── */
+.finance-table-wrap {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+
+.finance-table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border-color);
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.finance-table-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.finance-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.finance-table th {
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    background: rgba(255,255,255,0.02);
+    border-bottom: 1px solid var(--border-color);
+    white-space: nowrap;
+}
+
+.finance-table td {
+    padding: 8px 12px;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+}
+
+.finance-table tr:last-child td {
+    border-bottom: none;
+}
+
+.finance-table tr:hover td {
+    background: rgba(255,255,255,0.02);
+}
+
+/* Тип транзакции — значок */
+.tx-type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.tx-type-badge.income     { background: rgba(16,185,129,0.15); color: var(--ai-green); }
+.tx-type-badge.expense    { background: rgba(239,68,68,0.15);  color: var(--color-danger); }
+.tx-type-badge.card_topup { background: rgba(59,130,246,0.15); color: var(--ai-blue); }
+.tx-type-badge.salary     { background: rgba(139,92,246,0.15); color: var(--ai-purple); }
+.tx-type-badge.withdrawal { background: rgba(245,158,11,0.15); color: #f59e0b; }
+.tx-type-badge.conversion { background: rgba(139,92,246,0.2);  color: var(--ai-purple); }
+.tx-type-badge.auto-tag   { background: rgba(107,114,128,0.15); color: var(--text-muted); }
+
+/* ─── Фильтры ───────────────────────────────────────────────────────────── */
+.finance-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.finance-filters select,
+.finance-filters input[type="date"],
+.finance-filters input[type="text"] {
+    padding: 5px 10px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-size: 0.82rem;
+    outline: none;
+}
+
+.finance-filters select:focus,
+.finance-filters input:focus {
+    border-color: var(--ai-blue);
+}
+
+/* ─── Прогресс-бар баланса карты ────────────────────────────────────────── */
+.card-balance-bar {
+    height: 5px;
+    background: var(--border-color);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 6px;
+}
+
+.card-balance-bar .fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s;
+    background: var(--ai-green);
+}
+
+.card-balance-bar.warn .fill    { background: #f59e0b; }
+.card-balance-bar.danger .fill  { background: var(--color-danger); }
+
+/* ─── Карточки рекламных карт ───────────────────────────────────────────── */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px;
+}
+
+.ad-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 14px;
+}
+
+.ad-card.warn   { border-color: rgba(245,158,11,0.4); }
+.ad-card.danger { border-color: rgba(239,68,68,0.4); }
+
+.ad-card .card-bank {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.ad-card .card-number {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 4px 0;
+    font-family: 'Courier New', monospace;
+}
+
+.ad-card .card-meta {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.ad-card .card-amounts {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+}
+
+.ad-card .card-balance-val {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.ad-card .card-limit-val {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+/* ─── Статус зарплаты ───────────────────────────────────────────────────── */
+.payroll-status {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.payroll-status.pending { background: rgba(245,158,11,0.15); color: #f59e0b; }
+.payroll-status.paid    { background: rgba(16,185,129,0.15); color: var(--ai-green); }
+
+/* ─── P&L таблица проектов ──────────────────────────────────────────────── */
+.pl-row-income   { color: var(--ai-green); }
+.pl-row-expense  { color: var(--color-danger); }
+.pl-row-profit   { color: #10d9a0; font-weight: 600; }
+
+/* ─── Пагинация ─────────────────────────────────────────────────────────── */
+.finance-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 12px;
+    border-top: 1px solid var(--border-color);
+}
+
+.finance-pagination .page-btn {
+    padding: 4px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--text-primary);
+    cursor: pointer;
+    font-size: 0.82rem;
+}
+
+.finance-pagination .page-btn.active {
+    background: var(--ai-blue);
+    border-color: var(--ai-blue);
+    color: #fff;
+}
+
+.finance-pagination .page-btn:hover:not(.active) {
+    border-color: var(--ai-blue);
+}
+
+/* ─── Модальные окна (наследует из components.css) ──────────────────────── */
+.finance-modal-body .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.finance-modal-body .form-row.full {
+    grid-template-columns: 1fr;
+}
+
+/* ─── Badge роли пользователя ───────────────────────────────────────────── */
+.badge-role {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 0.68rem;
+    background: rgba(59,130,246,0.2);
+    color: var(--ai-blue);
+    margin-left: 4px;
+}
+
+/* ─── Секция настроек ───────────────────────────────────────────────────── */
+.settings-section-block {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 12px;
+}
+
+.settings-section-block h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* ─── Пустые состояния ──────────────────────────────────────────────────── */
+.finance-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* ─── Адаптивность ──────────────────────────────────────────────────────── */
+@media (width < 768px) {
+    .finance-metrics {
+        grid-template-columns: 1fr 1fr;
+    }
+    .cards-grid {
+        grid-template-columns: 1fr;
+    }
+    .finance-modal-body .form-row {
+        grid-template-columns: 1fr;
+    }
+}

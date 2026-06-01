@@ -1,0 +1,9 @@
+RewriteEngine On
+
+# POST запросы НЕ редиректим - пропускаем к PHP файлам (webhook proxy)
+RewriteCond %{REQUEST_METHOD} POST
+RewriteRule .* - [L]
+
+# GET/остальное - редирект на VPS
+RewriteCond %{HTTP_HOST} dreamcar\.ai-platform\.space [NC]
+RewriteRule ^(.*)$ https://ticket.ai-platform.space/dashboard/$1 [R=301,L,QSA]

@@ -1,0 +1,11 @@
+# Git Server Sync runtime files
+data/
+data/*.json
+data/*.log
+data/gitsync_dedup/
+data/git_sync.log
+data/gitsync.lock
+data/gitsync_pause
+logs/
+cache/
+sessions/
