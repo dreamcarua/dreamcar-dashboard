@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DreamCar · Dashboard</title>
+  <meta name="description" content="UTM-аналітика лідів DreamCar (read-only)">
+
+  <!-- DreamCar Brand CDN -->
+  <link rel="stylesheet" href="https://brand.dreamcar.ua/assets/styles.css">
+
+  <!-- Google Fonts (Oswald / Manrope / JetBrains Mono / Archivo Black) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Archivo+Black&display=swap" rel="stylesheet">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <!-- Local styles -->
+  <link rel="stylesheet" href="assets/css/dashboard.css">
+
+  <!-- DreamCar Global Header (universal) -->
+  <script src="https://brand.dreamcar.ua/assets/global-header.js" defer></script>
+
+  <!-- Auth Guard (захист сторінки) -->
+  <script src="assets/js/auth-guard.js" defer></script>
+</head>
+<body>
+
+  <main class="dashboard-container">
+
+    <h1 class="dashboard-title">DREAM<span class="red">CAR</span> · ДАШБОРД</h1>
+    <p class="dashboard-sub">UTM-аналітика лідів з SendPulse CRM + Facebook Ads · <span style="color:#10B981">● READ-ONLY</span></p>
+
+    <!-- Webhook health -->
+    <div class="health-row" id="health">
+      <div class="health-badge"><span class="dot"></span> Перевірка стану…</div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-bar">
+      <label>
+        Від
+        <input type="date" id="f-from">
+      </label>
+      <label>
+        До
+        <input type="date" id="f-to">
+      </label>
+      <label>
+        Проєкт
+        <select id="f-project">
+          <option value="">— Всі —</option>
+        </select>
+      </label>
+      <label>
+        UTM Source
+        <select id="f-source">
+          <option value="">— Всі —</option>
+        </select>
+      </label>
+      <label>
+        Статус
+        <select id="f-status">
+          <option value="">— Всі —</option>
+          <option value="new">new</option>
+          <option value="pending">pending</option>
+          <option value="pay">pay</option>
+          <option value="fail">fail</option>
+          <option value="refunded">refunded</option>
+        </select>
+      </label>
+      <label style="align-self:flex-end">
+        &nbsp;
+        <button id="f-refresh" style="background:#E30613;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-family:'Archivo Black',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:0.08em">↻ Оновити</button>
+      </label>
+    </div>
+
+    <!-- KPI cards -->
+    <div class="kpi-grid" id="kpis">
+      <div class="loading-state">Завантаження…</div>
+    </div>
+
+    <!-- Charts -->
+    <div class="section-title">Графіки</div>
+    <div class="charts-row">
+      <div class="chart-card">
+        <h3>Динаміка по днях (всього vs оплачено)</h3>
+        <div style="position:relative;height:260px"><canvas id="chart-timeline"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Top UTM Sources</h3>
+        <div style="position:relative;height:260px"><canvas id="chart-source"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Deals table -->
+    <div class="section-title">
+      Останні угоди
+      <span class="count" id="deals-count">—</span>
+    </div>
+    <div class="deals-table-wrap" id="deals-table">
+      <div class="loading-state">Завантаження угод…</div>
+    </div>
+
+    <p style="margin-top:48px; font-family:'JetBrains Mono',monospace; font-size:11px; color:#666; text-align:center; letter-spacing:0.08em">
+      DreamCar Dashboard v0.1 · READ-ONLY · paralell mode<br>
+      Legacy PHP working at dreamcar.ai-platform.space, дані синхронізуються через ETL
+    </p>
+
+  </main>
+
+  <!-- App logic -->
+  <script src="assets/js/app.js" defer></script>
+</body>
+</html>

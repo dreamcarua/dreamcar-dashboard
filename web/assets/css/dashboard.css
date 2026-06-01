@@ -1,0 +1,256 @@
+/* DreamCar Dashboard — overrides поверх brand.dreamcar.ua/assets/styles.css */
+
+/* === Page layout === */
+body {
+  background: var(--black, #0A0A0A);
+  color: var(--white, #fff);
+  font-family: 'Manrope', 'Wix Madefor Display', sans-serif;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.dashboard-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px 24px 80px;
+}
+
+.dashboard-title {
+  font-family: 'Oswald', 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 24px 0 8px;
+}
+.dashboard-title .red { color: var(--red, #E30613); }
+
+.dashboard-sub {
+  color: var(--ash, #888);
+  font-size: 14px;
+  margin: 0 0 32px;
+}
+
+/* === Filter bar === */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: var(--coal, #141414);
+  border: 1px solid var(--line, #2A2A2A);
+  border-radius: 8px;
+}
+
+.filter-bar label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ash, #888);
+  font-family: 'JetBrains Mono', monospace;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.filter-bar input[type="date"],
+.filter-bar select {
+  background: var(--black, #0A0A0A);
+  color: var(--white, #fff);
+  border: 1px solid var(--line, #2A2A2A);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 13px;
+  min-width: 140px;
+}
+.filter-bar input:focus,
+.filter-bar select:focus {
+  outline: none;
+  border-color: var(--red, #E30613);
+}
+
+/* === KPI cards === */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.kpi-card {
+  background: var(--coal, #141414);
+  border: 1px solid var(--line, #2A2A2A);
+  border-radius: 8px;
+  padding: 20px;
+  transition: border-color 200ms;
+}
+.kpi-card:hover {
+  border-color: var(--red, #E30613);
+}
+
+.kpi-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ash, #888);
+  font-family: 'JetBrains Mono', monospace;
+  margin-bottom: 8px;
+}
+
+.kpi-value {
+  font-family: 'Oswald', 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.kpi-delta {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--ash, #888);
+}
+.kpi-delta.up { color: var(--success, #10B981); }
+.kpi-delta.down { color: var(--danger, #DC2626); }
+
+/* === Section title === */
+.section-title {
+  font-family: 'Oswald', 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 40px 0 16px;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+.section-title .count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--ash, #888);
+  letter-spacing: 0.08em;
+}
+
+/* === Charts row === */
+.charts-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+@media (max-width: 900px) {
+  .charts-row { grid-template-columns: 1fr; }
+}
+
+.chart-card {
+  background: var(--coal, #141414);
+  border: 1px solid var(--line, #2A2A2A);
+  border-radius: 8px;
+  padding: 20px;
+  min-height: 280px;
+}
+
+.chart-card h3 {
+  margin: 0 0 12px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--bone, #DDD);
+}
+
+/* === Deals table === */
+.deals-table-wrap {
+  background: var(--coal, #141414);
+  border: 1px solid var(--line, #2A2A2A);
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.deals-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.deals-table th {
+  text-align: left;
+  padding: 14px 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ash, #888);
+  border-bottom: 1px solid var(--line, #2A2A2A);
+  background: var(--graphite, #1F1F1F);
+}
+
+.deals-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line, #2A2A2A);
+  vertical-align: middle;
+}
+
+.deals-table tr:last-child td { border-bottom: none; }
+
+.deals-table tr:hover td { background: rgba(227,6,19,0.04); }
+
+.status-pill {
+  display: inline-block;
+  padding: 3px 10px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-radius: var(--r-pill, 999px);
+  font-family: 'JetBrains Mono', monospace;
+}
+.status-pill.new { background: rgba(59,130,246,0.15); color: #60A5FA; }
+.status-pill.pay { background: rgba(16,185,129,0.15); color: var(--success, #10B981); }
+.status-pill.fail { background: rgba(220,38,38,0.15); color: var(--danger, #DC2626); }
+.status-pill.pending { background: rgba(245,158,11,0.15); color: var(--warning, #F59E0B); }
+.status-pill.refunded { background: rgba(136,136,136,0.15); color: var(--ash, #888); }
+
+.empty-state, .loading-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--ash, #888);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+}
+
+/* === Health badge === */
+.health-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.health-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: var(--graphite, #1F1F1F);
+  border: 1px solid var(--line, #2A2A2A);
+  border-radius: var(--r-pill, 999px);
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.health-badge .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--success, #10B981);
+}
+.health-badge.warn .dot { background: var(--warning, #F59E0B); }
+.health-badge.fail .dot { background: var(--danger, #DC2626); }
+
+/* === Mobile === */
+@media (max-width: 768px) {
+  .dashboard-container { padding: 16px; }
+  .dashboard-title { font-size: 28px; }
+  .kpi-value { font-size: 24px; }
+  .charts-row { grid-template-columns: 1fr; }
+  .deals-table th, .deals-table td { padding: 10px 12px; font-size: 12px; }
+}
