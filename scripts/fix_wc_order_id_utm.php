@@ -30,7 +30,7 @@ try {
     $dbWP = new PDO(
         'mysql:host=fincheck.mysql.network;port=10145;dbname=dreamlava;charset=utf8mb4',
         'dreamlava',
-        '74TBL8aav6',
+        getenv('WP_DB_PASS') ?: '',
         [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,

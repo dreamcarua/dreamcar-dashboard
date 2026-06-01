@@ -12,6 +12,7 @@ Original repo (`cemahalexandr/dashboard-dreamcar`) contained leaked secrets у g
 | `DB_PASS` (A8Ci4dC79n@fincheck) | 🔴 Compromised | **ROTATE на MySQL** + update у env обох серверів |
 | `SSH_PASSWORD` (dA3lvB2tqW@serflow) | 🔴 Compromised | **ROTATE на ukraine.com.ua** |
 | `TELEGRAM_BOT_TOKEN` (1769…AAHh…) | 🔴 Compromised | **REVOKE через @BotFather** + новий токен |
+| `WP_DB_PASS` (74TBL8aav6@dreamlava) | 🔴 Compromised | **ROTATE на MySQL** + update у env обох серверів |
 | `GITHUB_WEBHOOK_SECRET` | 🟠 Rotate | Перегенерувати у GitHub repo settings |
 
 ## How to onboard
