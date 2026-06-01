@@ -294,6 +294,12 @@ def sync_ads(mode, limit=None):
         rows = cur.fetchall()
         if not rows: break
         mapped = [m for m in (map_ad(r) for r in rows) if m['ad_account_id'] or m['campaign_id']]
+        # Dedup батч по composite key — Postgres ON CONFLICT не може affect row twice у одній операції
+        seen = {}
+        for m in mapped:
+            k = (m.get('ad_account_id'), m.get('campaign_id'), m.get('adset_id'), m.get('ad_id'), m.get('date_start'), m.get('date_end'))
+            seen[k] = m  # останній виграє
+        mapped = list(seen.values())
         n = supabase_upsert('dashboard_ads_data', mapped, on_conflict='ad_account_id,campaign_id,adset_id,ad_id,date_start,date_end')
         pushed += n
         offset += len(rows)
