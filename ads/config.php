@@ -1,10 +1,10 @@
 <?php
 // Meta Marketing API Configuration
 
-// App Credentials
-define('META_APP_ID', '272589421753029');
-define('META_APP_SECRET', '52c69c9323d7804011c37bb6c761d6af');
-define('META_CLIENT_TOKEN', '5aa6f13346c4e625cd8d637f0fd1a6ad');
+// App Credentials (з ENV, див. .env.example + SECURITY.md)
+define('META_APP_ID', getenv('META_APP_ID') ?: '272589421753029');
+define('META_APP_SECRET', getenv('META_APP_SECRET') ?: '');
+define('META_CLIENT_TOKEN', getenv('META_CLIENT_TOKEN') ?: '');
 
 // API Version
 define('META_API_VERSION', 'v21.0');
