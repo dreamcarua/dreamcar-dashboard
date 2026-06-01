@@ -1,124 +1,2071 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DreamCar · Dashboard</title>
-  <meta name="description" content="UTM-аналітика лідів DreamCar (read-only)">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DreamCar · Dashboard</title>
+<meta name="description" content="UTM-аналітика, реклама і фінанси DreamCar — internal dashboard">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Archivo+Black&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://brand.dreamcar.ua/assets/styles.css">
+<style>
+  :root {
+    --black: #0A0A0A;
+    --black-2: #141414;
+    --red: #E30613;
+    --red-deep: #B8050F;
+    --steel: #2A2A2A;
+    --steel-2: #1B1B1B;
+    --ash: #888;
+    --ash-2: #BBB;
+    --white: #FFF;
+    --success: #10B981;
+    --warning: #F59E0B;
+    --danger: #DC2626;
+    --info: #3B82F6;
+    --sidebar-w: 220px;
+    --topbar-h: 56px;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--black);
+    color: #EAEAEA;
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+  code { font-family: 'JetBrains Mono', monospace; font-size: 11px; }
 
-  <!-- DreamCar Brand CDN -->
-  <link rel="stylesheet" href="https://brand.dreamcar.ua/assets/styles.css">
+  /* Layout */
+  .app {
+    display: grid;
+    grid-template-columns: var(--sidebar-w) 1fr;
+    grid-template-rows: var(--topbar-h) 1fr;
+    grid-template-areas: "sidebar topbar" "sidebar main";
+    min-height: 100vh;
+  }
 
-  <!-- Google Fonts (Oswald / Manrope / JetBrains Mono / Archivo Black) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Archivo+Black&display=swap" rel="stylesheet">
+  /* Topbar */
+  .topbar {
+    grid-area: topbar;
+    background: var(--black-2);
+    border-bottom: 1px solid var(--steel);
+    height: var(--topbar-h);
+    display: flex; align-items: center;
+    padding: 0 20px;
+    gap: 16px;
+    position: sticky; top: 0; z-index: 50;
+  }
+  .topbar-title {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+  .topbar-title .sep { color: var(--steel); margin: 0 8px; }
+  .topbar-title .sec { color: var(--red); }
+  .topbar-spacer { flex: 1; }
+  .live-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--success);
+    text-transform: uppercase;
+  }
+  .live-dot {
+    width: 8px; height: 8px;
+    background: var(--success);
+    border-radius: 50%;
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(16,185,129,0.7); }
+    50% { opacity: 0.6; box-shadow: 0 0 0 6px rgba(16,185,129,0); }
+  }
+  .user-chip {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 12px;
+    background: var(--steel-2);
+    border: 1px solid var(--steel);
+    border-radius: 20px;
+    font-size: 12px;
+    color: var(--ash-2);
+  }
+  .user-avatar {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--red), var(--red-deep));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 11px;
+    color: var(--white);
+  }
+  .burger {
+    display: none;
+    background: transparent;
+    border: 1px solid var(--steel);
+    color: var(--white);
+    padding: 6px 10px;
+    border-radius: 6px;
+  }
 
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  /* Sidebar */
+  .sidebar {
+    grid-area: sidebar;
+    background: var(--black-2);
+    border-right: 1px solid var(--steel);
+    padding: 16px 0;
+    overflow-y: auto;
+    position: sticky; top: 0;
+    height: 100vh;
+    z-index: 60;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 12px;
+    padding: 0 16px 18px;
+    border-bottom: 1px solid var(--steel);
+    margin-bottom: 14px;
+  }
+  .brand-plate {
+    width: 56px; height: 38px;
+    background: linear-gradient(135deg, var(--red) 0%, var(--red-deep) 100%);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 18px;
+    color: var(--white);
+    letter-spacing: -0.02em;
+    box-shadow: 0 4px 12px rgba(227,6,19,0.3);
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .brand-plate img { width: 100%; height: 100%; object-fit: cover; }
+  .brand-text {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.15;
+  }
+  .brand-text .ver {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--ash);
+    letter-spacing: 0.12em;
+    margin-top: 3px;
+  }
+  .nav-group {
+    padding: 0 8px;
+    margin-bottom: 14px;
+  }
+  .nav-group-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ash);
+    padding: 0 10px;
+    margin: 8px 0;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    color: #D0D0D0;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 120ms;
+    border: 1px solid transparent;
+    margin-bottom: 2px;
+  }
+  .nav-item:hover {
+    background: rgba(255,255,255,0.04);
+    color: var(--white);
+  }
+  .nav-item.active {
+    background: rgba(227,6,19,0.12);
+    color: var(--red);
+    border-color: rgba(227,6,19,0.3);
+  }
+  .nav-item .icon { font-size: 14px; width: 16px; text-align: center; }
+  .nav-item .badge {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    background: var(--steel);
+    color: var(--ash-2);
+    padding: 1px 5px;
+    border-radius: 3px;
+    letter-spacing: 0.08em;
+  }
 
-  <!-- Local styles -->
-  <link rel="stylesheet" href="assets/css/dashboard.css">
+  /* Main */
+  .main {
+    grid-area: main;
+    padding: 0;
+    overflow-x: hidden;
+    min-width: 0;
+  }
 
-  <!-- DreamCar Global Header (universal) -->
-  <script src="https://brand.dreamcar.ua/assets/global-header.js" defer></script>
+  /* Filter bar */
+  .filter-bar {
+    position: sticky; top: var(--topbar-h); z-index: 40;
+    background: var(--black-2);
+    border-bottom: 1px solid var(--steel);
+    padding: 14px 24px;
+    display: flex; flex-wrap: wrap; gap: 10px;
+    align-items: center;
+  }
+  .filter-bar.hidden { display: none; }
+  .filter-bar label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--ash);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-right: 4px;
+    display: block;
+    margin-bottom: 3px;
+  }
+  .filter-bar input, .filter-bar select {
+    background: var(--steel-2);
+    color: var(--white);
+    border: 1px solid var(--steel);
+    border-radius: 6px;
+    padding: 7px 10px;
+    font-size: 12px;
+    font-family: inherit;
+    outline: none;
+    transition: border 120ms;
+  }
+  .filter-bar input:focus, .filter-bar select:focus {
+    border-color: var(--red);
+  }
+  .filter-presets {
+    display: flex; gap: 4px;
+    background: var(--steel-2);
+    padding: 3px;
+    border-radius: 6px;
+    border: 1px solid var(--steel);
+  }
+  .preset-btn {
+    background: transparent;
+    border: none;
+    color: var(--ash-2);
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.04em;
+  }
+  .preset-btn:hover { color: var(--white); }
+  .preset-btn.active {
+    background: var(--red);
+    color: var(--white);
+  }
+  .btn {
+    background: var(--steel-2);
+    color: var(--white);
+    border: 1px solid var(--steel);
+    border-radius: 6px;
+    padding: 7px 14px;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: all 120ms;
+  }
+  .btn:hover { border-color: var(--ash); }
+  .btn-primary {
+    background: var(--red);
+    border-color: var(--red);
+  }
+  .btn-primary:hover { background: var(--red-deep); border-color: var(--red-deep); }
+  .btn-ghost { background: transparent; }
+  .btn-sm { padding: 4px 9px; font-size: 10px; }
+  .btn-danger { background: var(--danger); border-color: var(--danger); color: #fff; }
 
-  <!-- Auth Guard (захист сторінки) -->
-  <script src="assets/js/auth-guard.js" defer></script>
+  /* Content */
+  .content {
+    padding: 24px;
+    max-width: 1700px;
+  }
+  .section-head {
+    margin-bottom: 22px;
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 14px;
+    justify-content: space-between;
+  }
+  .section-head h1 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 26px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin: 0;
+    color: var(--white);
+  }
+  .section-head .subtitle {
+    font-size: 13px;
+    color: var(--ash);
+    margin-top: 4px;
+  }
+  .section-head .actions { display: flex; gap: 8px; }
+
+  /* KPI cards */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .kpi {
+    background: var(--black-2);
+    border: 1px solid var(--steel);
+    border-radius: 10px;
+    padding: 16px 18px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 120ms;
+  }
+  .kpi:hover { border-color: var(--ash); }
+  .kpi::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 3px; height: 100%;
+    background: var(--red);
+  }
+  .kpi.green::before { background: var(--success); }
+  .kpi.blue::before { background: var(--info); }
+  .kpi.amber::before { background: var(--warning); }
+  .kpi.purple::before { background: #A855F7; }
+  .kpi-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--ash);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .kpi-value {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    color: var(--white);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    word-break: break-all;
+  }
+  .kpi-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ash-2);
+    margin-top: 6px;
+    letter-spacing: 0.06em;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--black-2);
+    border: 1px solid var(--steel);
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 18px;
+  }
+  .card-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .card-head h3 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin: 0;
+    color: var(--white);
+    font-weight: 600;
+  }
+  .card-head .meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ash);
+    letter-spacing: 0.08em;
+  }
+
+  /* Grid 2 col */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  @media (max-width: 1100px) {
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+
+  /* Charts */
+  .chart-container {
+    position: relative;
+    width: 100%;
+    height: 320px;
+  }
+  .chart-container.tall { height: 380px; }
+  .chart-container.short { height: 240px; }
+
+  /* Tables */
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--steel);
+    border-radius: 8px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--black-2);
+  }
+  thead th {
+    background: var(--steel-2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 10px 12px;
+    color: var(--ash);
+    font-weight: 500;
+    border-bottom: 1px solid var(--steel);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+  thead th:hover { color: var(--white); }
+  thead th.sort-asc::after { content: ' ▲'; color: var(--red); }
+  thead th.sort-desc::after { content: ' ▼'; color: var(--red); }
+  tbody td {
+    padding: 10px 12px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--steel-2);
+    color: #D0D0D0;
+    vertical-align: middle;
+  }
+  tbody tr:hover td { background: rgba(255,255,255,0.025); }
+  tbody tr:last-child td { border-bottom: none; }
+  td.mono, th.mono { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+  td.num { font-family: 'JetBrains Mono', monospace; text-align: right; font-variant-numeric: tabular-nums; }
+  td.amount { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--white); text-align: right; font-variant-numeric: tabular-nums; }
+  td.muted { color: var(--ash); }
+
+  /* Pagination */
+  .pagination {
+    display: flex; align-items: center; gap: 6px;
+    margin-top: 14px;
+    justify-content: flex-end;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ash-2);
+    flex-wrap: wrap;
+  }
+  .page-btn {
+    background: var(--steel-2);
+    color: var(--white);
+    border: 1px solid var(--steel);
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-family: inherit;
+  }
+  .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .page-btn.active { background: var(--red); border-color: var(--red); }
+
+  /* Status pills */
+  .pill {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .pill.pay { background: rgba(16,185,129,0.15); color: var(--success); }
+  .pill.new { background: rgba(59,130,246,0.15); color: var(--info); }
+  .pill.pending { background: rgba(245,158,11,0.15); color: var(--warning); }
+  .pill.fail { background: rgba(220,38,38,0.15); color: var(--danger); }
+  .pill.refunded { background: rgba(168,85,247,0.15); color: #A855F7; }
+  .pill.default { background: var(--steel); color: var(--ash-2); }
+
+  /* States */
+  .state {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--ash);
+    font-size: 13px;
+  }
+  .state.error { color: var(--danger); }
+  .spinner {
+    display: inline-block;
+    width: 22px; height: 22px;
+    border: 3px solid var(--steel);
+    border-top-color: var(--red);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Forms */
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+    align-items: end;
+  }
+  .form-row label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: var(--ash);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .form-row input, .form-row select {
+    width: 100%;
+    background: var(--steel-2);
+    color: var(--white);
+    border: 1px solid var(--steel);
+    border-radius: 6px;
+    padding: 7px 10px;
+    font-size: 12px;
+    font-family: inherit;
+  }
+  @media (max-width: 800px) {
+    .form-row { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* Mobile */
+  @media (max-width: 900px) {
+    :root { --sidebar-w: 0px; }
+    .app {
+      grid-template-columns: 1fr;
+      grid-template-areas: "topbar" "main";
+    }
+    .sidebar {
+      position: fixed;
+      left: -240px;
+      top: 0; bottom: 0;
+      width: 240px;
+      transition: left 200ms ease;
+      box-shadow: 4px 0 20px rgba(0,0,0,0.4);
+    }
+    .sidebar.open { left: 0; }
+    .burger { display: inline-flex; }
+    .content { padding: 16px; }
+    .kpi-grid { grid-template-columns: 1fr 1fr; }
+    .kpi-value { font-size: 24px; }
+    .filter-bar { padding: 10px 14px; }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--steel); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--ash); }
+
+  /* Coming soon */
+  .coming {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--black-2);
+    border: 1px dashed var(--steel);
+    border-radius: 10px;
+  }
+  .coming .em { font-size: 48px; margin-bottom: 10px; }
+  .coming h2 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 22px;
+    margin: 0 0 8px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+  .coming p { color: var(--ash); margin: 0; }
+</style>
 </head>
 <body>
 
-  <main class="dashboard-container">
-
-    <header class="dc-hero">
-      <div class="dc-hero-plate">
-        <img src="https://brand.dreamcar.ua/assets/logo/dreamcar-racing-plate.svg" alt="DreamCar" onerror="this.style.display='none'">
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-plate">
+        <img src="https://brand.dreamcar.ua/assets/logo/dreamcar-racing-plate.svg" alt="DC" onerror="this.style.display='none';this.parentNode.textContent='DC';">
       </div>
-      <div class="dc-hero-text">
-        <h1 class="dashboard-title">DREAM<span class="red">CAR</span> · ДАШБОРД</h1>
-        <p class="dashboard-sub">UTM-аналітика лідів з SendPulse CRM + Facebook Ads · <span class="live-badge">● LIVE</span></p>
+      <div class="brand-text">
+        DreamCar<br>Аналітика
+        <span class="ver">v2.0.0</span>
       </div>
-    </header>
-
-    <!-- Webhook health -->
-    <div class="health-row" id="health">
-      <div class="health-badge"><span class="dot"></span> Перевірка стану…</div>
     </div>
 
-    <!-- Filters -->
-    <div class="filter-bar">
-      <label>
-        Від
+    <div class="nav-group">
+      <div class="nav-group-title">UTM Dashboard</div>
+      <div class="nav-item" data-route="overview"><span class="icon">📊</span>Огляд</div>
+      <div class="nav-item" data-route="analytics"><span class="icon">📈</span>Аналітика</div>
+      <div class="nav-item" data-route="sources"><span class="icon">🌐</span>Джерела</div>
+      <div class="nav-item" data-route="medium"><span class="icon">📡</span>Канали</div>
+      <div class="nav-item" data-route="campaigns"><span class="icon">🎯</span>Кампанії</div>
+      <div class="nav-item" data-route="content"><span class="icon">📝</span>Контент</div>
+      <div class="nav-item" data-route="terms"><span class="icon">🔤</span>UTM Term</div>
+      <div class="nav-item" data-route="combos"><span class="icon">🔀</span>Комбінації</div>
+      <div class="nav-item" data-route="deals"><span class="icon">📋</span>Таблиця угод</div>
+      <div class="nav-item" data-route="webhooks"><span class="icon">🪝</span>Webhook логи</div>
+      <div class="nav-item" data-route="mapping"><span class="icon">🗺</span>UTM Mapping</div>
+      <div class="nav-item" data-route="costs"><span class="icon">💰</span>Manual Costs</div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">Facebook Ads</div>
+      <div class="nav-item" data-route="ads-overview"><span class="icon">💸</span>Ads Overview</div>
+      <div class="nav-item" data-route="ads-campaigns"><span class="icon">📊</span>Ads Campaigns</div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">Finance</div>
+      <div class="nav-item" data-route="cards"><span class="icon">💳</span>Cards<span class="badge">SOON</span></div>
+      <div class="nav-item" data-route="usdt"><span class="icon">💵</span>USDT<span class="badge">SOON</span></div>
+      <div class="nav-item" data-route="payroll"><span class="icon">👥</span>Payroll<span class="badge">SOON</span></div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">System</div>
+      <div class="nav-item" data-route="settings"><span class="icon">⚙️</span>Settings</div>
+    </div>
+  </aside>
+
+  <header class="topbar">
+    <button class="burger" id="burger">☰</button>
+    <div class="topbar-title">
+      DREAM<span style="color:var(--red)">CAR</span><span class="sep">·</span><span class="sec" id="topbar-section">DASHBOARD</span>
+    </div>
+    <div class="topbar-spacer"></div>
+    <div class="live-badge"><span class="live-dot"></span>Live</div>
+    <div class="user-chip" id="user-chip">
+      <div class="user-avatar">?</div>
+      <span id="user-email">guest</span>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="filter-bar" id="filter-bar">
+      <div class="filter-presets" id="presets">
+        <button class="preset-btn" data-preset="today">Today</button>
+        <button class="preset-btn" data-preset="yesterday">Yesterday</button>
+        <button class="preset-btn" data-preset="7d">7d</button>
+        <button class="preset-btn active" data-preset="30d">30d</button>
+        <button class="preset-btn" data-preset="90d">90d</button>
+        <button class="preset-btn" data-preset="all">All</button>
+      </div>
+      <div>
+        <label>From</label>
         <input type="date" id="f-from">
-      </label>
-      <label>
-        До
+      </div>
+      <div>
+        <label>To</label>
         <input type="date" id="f-to">
-      </label>
-      <label>
-        Проєкт
+      </div>
+      <div>
+        <label>Project</label>
         <select id="f-project">
-          <option value="">— Всі —</option>
+          <option value="">All</option>
         </select>
-      </label>
-      <label>
-        UTM Source
-        <select id="f-source">
-          <option value="">— Всі —</option>
-        </select>
-      </label>
-      <label>
-        Статус
+      </div>
+      <div>
+        <label>Status</label>
         <select id="f-status">
-          <option value="">— Всі —</option>
-          <option value="new">new</option>
-          <option value="pending">pending</option>
-          <option value="pay">pay</option>
-          <option value="fail">fail</option>
-          <option value="refunded">refunded</option>
+          <option value="">All</option>
+          <option value="pay">Pay</option>
+          <option value="new">New</option>
+          <option value="pending">Pending</option>
+          <option value="fail">Fail</option>
+          <option value="refunded">Refunded</option>
         </select>
-      </label>
-      <label style="align-self:flex-end">
-        &nbsp;
-        <button id="f-refresh" style="background:#E30613;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-family:'Archivo Black',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:0.08em">↻ Оновити</button>
-      </label>
-    </div>
-
-    <!-- KPI cards -->
-    <div class="kpi-grid" id="kpis">
-      <div class="loading-state">Завантаження…</div>
-    </div>
-
-    <!-- Charts -->
-    <div class="section-title">Графіки</div>
-    <div class="charts-row">
-      <div class="chart-card">
-        <h3>Динаміка по днях (всього vs оплачено)</h3>
-        <div style="position:relative;height:260px"><canvas id="chart-timeline"></canvas></div>
       </div>
-      <div class="chart-card">
-        <h3>Top UTM Sources</h3>
-        <div style="position:relative;height:260px"><canvas id="chart-source"></canvas></div>
-      </div>
+      <button class="btn btn-ghost" id="f-reset">Reset</button>
+      <button class="btn btn-primary" id="f-apply">↻ Refresh</button>
     </div>
 
-    <!-- Deals table -->
-    <div class="section-title">
-      Останні угоди
-      <span class="count" id="deals-count">—</span>
+    <div class="content" id="content">
+      <div class="state"><span class="spinner"></span>Завантаження…</div>
     </div>
-    <div class="deals-table-wrap" id="deals-table">
-      <div class="loading-state">Завантаження угод…</div>
-    </div>
-
-    <p style="margin-top:48px; font-family:'JetBrains Mono',monospace; font-size:11px; color:#666; text-align:center; letter-spacing:0.08em">
-      DreamCar Dashboard v0.1 · READ-ONLY · paralell mode<br>
-      Legacy PHP working at dreamcar.ai-platform.space, дані синхронізуються через ETL
-    </p>
-
   </main>
+</div>
 
-  <!-- App logic -->
-  <script src="assets/js/app.js" defer></script>
+<script src="assets/js/auth-guard.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://brand.dreamcar.ua/assets/global-header.js" defer></script>
+
+<script type="module">
+/* =================================================================
+   DreamCar Dashboard SPA v2.0
+   Single-file modular dashboard with hash routing
+   ================================================================= */
+
+let sb = null;
+let currentUser = null;
+
+if (window.Chart) {
+  Chart.defaults.color = '#BBB';
+  Chart.defaults.borderColor = '#2A2A2A';
+  Chart.defaults.font.family = "'Manrope', sans-serif";
+  Chart.defaults.font.size = 11;
+}
+
+const $ = (s, el=document) => el.querySelector(s);
+const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
+
+const fmtMoney = (v, c='UAH') => {
+  if (v == null || isNaN(v)) return '—';
+  try {
+    return new Intl.NumberFormat('uk-UA', { style: 'currency', currency: c || 'UAH', maximumFractionDigits: 0 }).format(v);
+  } catch { return Number(v).toFixed(0); }
+};
+const fmtNum = (v) => {
+  if (v == null || isNaN(v)) return '—';
+  return new Intl.NumberFormat('uk-UA').format(v);
+};
+const fmtPct = (v, d=1) => v == null || isNaN(v) ? '—' : v.toFixed(d) + '%';
+const fmtDate = (d) => {
+  if (!d) return '—';
+  const dt = new Date(d);
+  if (isNaN(dt)) return '—';
+  return dt.toLocaleDateString('uk-UA', { day: '2-digit', month: '2-digit', year: 'numeric' });
+};
+const fmtDateTime = (d) => {
+  if (!d) return '—';
+  const dt = new Date(d);
+  if (isNaN(dt)) return '—';
+  return dt.toLocaleString('uk-UA', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+};
+const escapeHtml = (s) => {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+};
+const debounce = (fn, ms=200) => {
+  let t;
+  return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); };
+};
+
+/* ------------ Filters state ------------ */
+const filters = { from: null, to: null, project: '', status: '', preset: '30d' };
+
+function applyPreset(p) {
+  const today = new Date();
+  const ymd = (d) => { const dd = new Date(d); dd.setHours(0,0,0,0); return dd.toISOString().slice(0,10); };
+  if (p === 'today') { filters.from = ymd(today); filters.to = ymd(today); }
+  else if (p === 'yesterday') { const d = new Date(today); d.setDate(d.getDate()-1); filters.from = ymd(d); filters.to = ymd(d); }
+  else if (p === '7d') { const d = new Date(today); d.setDate(d.getDate()-7); filters.from = ymd(d); filters.to = ymd(today); }
+  else if (p === '30d') { const d = new Date(today); d.setDate(d.getDate()-30); filters.from = ymd(d); filters.to = ymd(today); }
+  else if (p === '90d') { const d = new Date(today); d.setDate(d.getDate()-90); filters.from = ymd(d); filters.to = ymd(today); }
+  else if (p === 'all') { filters.from = '2019-01-01'; filters.to = ymd(today); }
+  filters.preset = p;
+  $('#f-from').value = filters.from;
+  $('#f-to').value = filters.to;
+  $$('.preset-btn').forEach(b => b.classList.toggle('active', b.dataset.preset === p));
+}
+
+function setupFilterBar() {
+  $$('.preset-btn').forEach(b => {
+    b.addEventListener('click', () => { applyPreset(b.dataset.preset); renderRoute(); });
+  });
+  $('#f-from').addEventListener('change', () => {
+    filters.from = $('#f-from').value;
+    filters.preset = 'custom';
+    $$('.preset-btn').forEach(b => b.classList.remove('active'));
+  });
+  $('#f-to').addEventListener('change', () => {
+    filters.to = $('#f-to').value;
+    filters.preset = 'custom';
+    $$('.preset-btn').forEach(b => b.classList.remove('active'));
+  });
+  $('#f-project').addEventListener('change', e => { filters.project = e.target.value; });
+  $('#f-status').addEventListener('change', e => { filters.status = e.target.value; });
+  $('#f-reset').addEventListener('click', () => {
+    applyPreset('30d');
+    filters.project = ''; filters.status = '';
+    $('#f-project').value = ''; $('#f-status').value = '';
+    renderRoute();
+  });
+  $('#f-apply').addEventListener('click', () => renderRoute());
+}
+
+/* ------------ Supabase fetch helpers ------------ */
+async function fetchDealsRange(offset, limit) {
+  let q = sb.from('dashboard_deals')
+    .select('id,sendpulse_deal_id,status,amount,currency,project,utm_source,utm_medium,utm_campaign,utm_term,utm_content,customer_email,customer_type,tariff,pay_provider,created_at,paid_at')
+    .gte('created_at', filters.from + 'T00:00:00Z')
+    .lte('created_at', filters.to + 'T23:59:59Z')
+    .order('created_at', { ascending: false })
+    .range(offset, offset + limit - 1);
+  if (filters.project) q = q.eq('project', filters.project);
+  if (filters.status) q = q.eq('status', filters.status);
+  return q;
+}
+
+async function fetchAllDealsBatched(maxRows=30000) {
+  const BATCH = 1000;
+  const all = [];
+  let offset = 0;
+  while (offset < maxRows) {
+    const { data, error } = await fetchDealsRange(offset, BATCH);
+    if (error) throw error;
+    if (!data || data.length === 0) break;
+    all.push(...data);
+    if (data.length < BATCH) break;
+    offset += BATCH;
+  }
+  return all;
+}
+
+async function loadProjects() {
+  try {
+    const { data } = await sb.from('dashboard_deals').select('project').not('project','is',null).limit(2000);
+    const set = new Set();
+    (data || []).forEach(r => { if (r.project) set.add(r.project); });
+    const sel = $('#f-project');
+    sel.innerHTML = '<option value="">All projects</option>' +
+      Array.from(set).sort().map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
+  } catch (e) { console.warn('projects load failed', e); }
+}
+
+/* ------------ Aggregation helpers ------------ */
+function aggregateByField(rows, field) {
+  const map = new Map();
+  rows.forEach(r => {
+    const k = r[field] || '(none)';
+    if (!map.has(k)) map.set(k, { key: k, leads: 0, paid: 0, sum: 0, fail: 0, pending: 0 });
+    const a = map.get(k);
+    a.leads++;
+    if (r.status === 'pay') { a.paid++; a.sum += Number(r.amount || 0); }
+    else if (r.status === 'fail') a.fail++;
+    else if (r.status === 'pending') a.pending++;
+  });
+  return Array.from(map.values()).map(a => ({
+    ...a,
+    avg: a.paid > 0 ? a.sum / a.paid : 0,
+    conv: a.leads > 0 ? (a.paid / a.leads * 100) : 0
+  })).sort((x, y) => y.sum - x.sum);
+}
+
+function aggregateByDay(rows) {
+  const map = new Map();
+  rows.forEach(r => {
+    const d = r.created_at ? r.created_at.slice(0,10) : null;
+    if (!d) return;
+    if (!map.has(d)) map.set(d, { date: d, leads: 0, paid: 0, sum: 0 });
+    const a = map.get(d);
+    a.leads++;
+    if (r.status === 'pay') { a.paid++; a.sum += Number(r.amount || 0); }
+  });
+  return Array.from(map.values()).sort((a,b) => a.date.localeCompare(b.date));
+}
+
+function aggregateCombos(rows) {
+  const map = new Map();
+  rows.forEach(r => {
+    const k = `${r.utm_source||'(none)'}|${r.utm_medium||'(none)'}|${r.utm_campaign||'(none)'}`;
+    if (!map.has(k)) map.set(k, {
+      utm_source: r.utm_source||'(none)',
+      utm_medium: r.utm_medium||'(none)',
+      utm_campaign: r.utm_campaign||'(none)',
+      leads: 0, paid: 0, sum: 0
+    });
+    const a = map.get(k);
+    a.leads++;
+    if (r.status === 'pay') { a.paid++; a.sum += Number(r.amount || 0); }
+  });
+  return Array.from(map.values()).map(a => ({
+    ...a,
+    conv: a.leads > 0 ? (a.paid / a.leads * 100) : 0
+  })).sort((x,y) => y.sum - x.sum);
+}
+
+/* ------------ Common UI helpers ------------ */
+function setSectionTitle(t) { $('#topbar-section').textContent = t.toUpperCase(); }
+const loadingHTML = (msg='Завантаження…') => `<div class="state"><span class="spinner"></span>${msg}</div>`;
+const emptyHTML = (msg='Немає даних') => `<div class="state">📭 ${msg}</div>`;
+const errorHTML = (err) => `<div class="state error">⚠️ Помилка: ${escapeHtml(String(err.message || err))}<br><br><button class="btn" onclick="window.__retry()">↻ Повторити</button></div>`;
+const kpi = (label, value, sub='', cls='') => `<div class="kpi ${cls}">
+  <div class="kpi-label">${escapeHtml(label)}</div>
+  <div class="kpi-value">${value}</div>
+  ${sub ? `<div class="kpi-sub">${escapeHtml(sub)}</div>` : ''}
+</div>`;
+const statusPill = (s) => {
+  const cls = ['pay','new','pending','fail','refunded'].includes(s) ? s : 'default';
+  return `<span class="pill ${cls}">${escapeHtml(s || '—')}</span>`;
+};
+
+function exportCSV(rows, cols, filename='export.csv') {
+  if (!rows || !rows.length) return alert('Немає даних для експорту');
+  const escape = (v) => {
+    if (v == null) return '';
+    const s = String(v).replace(/"/g, '""');
+    return /[",\n]/.test(s) ? `"${s}"` : s;
+  };
+  const head = cols.map(c => escape(c.label || c.key)).join(',');
+  const body = rows.map(r => cols.map(c => escape(typeof c.val === 'function' ? c.val(r) : r[c.key])).join(',')).join('\n');
+  const csv = '﻿' + head + '\n' + body;
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* ------------ Sortable + paginated table ------------ */
+function buildTable(containerSelector, opts) {
+  const cont = $(containerSelector);
+  if (!cont) return;
+  let state = {
+    sortKey: opts.sortKey || (opts.cols[0] && opts.cols[0].key),
+    sortAsc: opts.sortAsc === true,
+    page: 1,
+    pageSize: opts.pageSize || 50,
+    search: ''
+  };
+
+  function render() {
+    let rows = opts.rows.slice();
+    if (state.search) {
+      const q = state.search.toLowerCase();
+      rows = rows.filter(r => opts.cols.some(c => {
+        const v = c.key ? r[c.key] : '';
+        return String(v ?? '').toLowerCase().includes(q);
+      }));
+    }
+    if (state.sortKey) {
+      const col = opts.cols.find(c => c.key === state.sortKey);
+      rows.sort((a,b) => {
+        const va = col && col.sortVal ? col.sortVal(a) : a[state.sortKey];
+        const vb = col && col.sortVal ? col.sortVal(b) : b[state.sortKey];
+        if (va == null && vb == null) return 0;
+        if (va == null) return 1;
+        if (vb == null) return -1;
+        if (typeof va === 'number' && typeof vb === 'number') return state.sortAsc ? va - vb : vb - va;
+        return state.sortAsc ? String(va).localeCompare(String(vb)) : String(vb).localeCompare(String(va));
+      });
+    }
+    const total = rows.length;
+    const pages = Math.max(1, Math.ceil(total / state.pageSize));
+    if (state.page > pages) state.page = pages;
+    const slice = rows.slice((state.page-1)*state.pageSize, state.page*state.pageSize);
+
+    const head = '<tr>' + opts.cols.map(c => {
+      const cls = c.key === state.sortKey ? (state.sortAsc ? 'sort-asc' : 'sort-desc') : '';
+      return `<th class="${cls}" data-key="${escapeHtml(c.key)}">${escapeHtml(c.label || c.key)}</th>`;
+    }).join('') + '</tr>';
+
+    const body = slice.length === 0
+      ? `<tr><td colspan="${opts.cols.length}" class="muted" style="text-align:center;padding:30px">Немає даних</td></tr>`
+      : slice.map(r => '<tr>' + opts.cols.map(c => {
+          const v = c.fmt ? c.fmt(r[c.key], r) : (r[c.key] ?? '');
+          return `<td class="${c.class||''}">${v}</td>`;
+        }).join('') + '</tr>').join('');
+
+    const pagBtns = [];
+    const maxBtns = 5;
+    let pStart = Math.max(1, state.page - Math.floor(maxBtns/2));
+    let pEnd = Math.min(pages, pStart + maxBtns - 1);
+    if (pEnd - pStart < maxBtns - 1) pStart = Math.max(1, pEnd - maxBtns + 1);
+    for (let i=pStart; i<=pEnd; i++) {
+      pagBtns.push(`<button class="page-btn ${i===state.page?'active':''}" data-page="${i}">${i}</button>`);
+    }
+
+    cont.innerHTML = `
+      <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center;flex-wrap:wrap;">
+        ${opts.search !== false ? `<input type="search" placeholder="🔍 Пошук…" class="t-search" style="background:var(--steel-2);color:#fff;border:1px solid var(--steel);border-radius:6px;padding:6px 10px;font-size:12px;width:240px;" value="${escapeHtml(state.search)}">` : ''}
+        <div style="flex:1"></div>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ash);letter-spacing:0.1em;">${fmtNum(total)} rows</span>
+        ${opts.csvFile ? `<button class="btn btn-sm t-csv">⬇ CSV</button>` : ''}
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>${head}</thead>
+          <tbody>${body}</tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <button class="page-btn t-prev" ${state.page<=1?'disabled':''}>‹</button>
+        ${pagBtns.join('')}
+        <button class="page-btn t-next" ${state.page>=pages?'disabled':''}>›</button>
+        <span style="margin-left:10px;">Page ${state.page} / ${pages}</span>
+      </div>
+    `;
+
+    $$('thead th', cont).forEach(th => {
+      th.addEventListener('click', () => {
+        const k = th.dataset.key;
+        if (!k || k === 'undefined') return;
+        if (state.sortKey === k) state.sortAsc = !state.sortAsc;
+        else { state.sortKey = k; state.sortAsc = false; }
+        render();
+      });
+    });
+    $$('.page-btn', cont).forEach(b => {
+      b.addEventListener('click', () => {
+        if (b.classList.contains('t-prev')) state.page--;
+        else if (b.classList.contains('t-next')) state.page++;
+        else if (b.dataset.page) state.page = parseInt(b.dataset.page);
+        render();
+      });
+    });
+    const csvBtn = $('.t-csv', cont);
+    if (csvBtn) csvBtn.addEventListener('click', () => {
+      const cols = opts.cols.map(c => ({ key: c.key, label: c.label || c.key, val: c.csv || (r => r[c.key]) }));
+      exportCSV(opts.rows, cols, opts.csvFile);
+    });
+    const search = $('.t-search', cont);
+    if (search) {
+      search.addEventListener('input', debounce(() => { state.search = search.value; state.page = 1; render(); }, 250));
+    }
+  }
+  render();
+}
+
+/* ------------ Chart helpers ------------ */
+let _charts = {};
+function destroyCharts() {
+  Object.values(_charts).forEach(c => { try { c.destroy(); } catch {} });
+  _charts = {};
+}
+function lineChart(canvasId, labels, datasets, opts={}) {
+  const el = document.getElementById(canvasId);
+  if (!el) return;
+  _charts[canvasId] = new Chart(el, {
+    type: 'line',
+    data: { labels, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { position: 'top', labels: { boxWidth: 12, padding: 10 } },
+        tooltip: { backgroundColor: '#0A0A0A', borderColor: '#2A2A2A', borderWidth: 1, padding: 10 }
+      },
+      scales: {
+        x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#888', maxRotation: 0, autoSkipPadding: 16 } },
+        y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#888' }, beginAtZero: true },
+        ...(opts.scales || {})
+      }
+    }
+  });
+}
+function barChart(canvasId, labels, datasets, opts={}) {
+  const el = document.getElementById(canvasId);
+  if (!el) return;
+  const scales = {
+    x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#888' } },
+    y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#888' }, beginAtZero: true },
+    ...(opts.scales || {})
+  };
+  _charts[canvasId] = new Chart(el, {
+    type: 'bar',
+    data: { labels, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      indexAxis: opts.horizontal ? 'y' : 'x',
+      plugins: {
+        legend: { display: opts.legend !== false, position: 'top', labels: { boxWidth: 12, padding: 10 } },
+        tooltip: { backgroundColor: '#0A0A0A', borderColor: '#2A2A2A', borderWidth: 1, padding: 10 }
+      },
+      scales
+    }
+  });
+}
+function doughnutChart(canvasId, labels, data, colors) {
+  const el = document.getElementById(canvasId);
+  if (!el) return;
+  _charts[canvasId] = new Chart(el, {
+    type: 'doughnut',
+    data: { labels, datasets: [{ data, backgroundColor: colors, borderColor: '#0A0A0A', borderWidth: 2 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '60%',
+      plugins: { legend: { position: 'right', labels: { boxWidth: 12, padding: 8 } } }
+    }
+  });
+}
+
+/* =================================================================
+   SECTIONS / ROUTES
+   ================================================================= */
+
+const SECTIONS = {
+  'overview': renderOverview,
+  'analytics': renderAnalytics,
+  'sources': () => renderUtmField('utm_source', 'Джерела', 'sources.csv'),
+  'medium': () => renderUtmField('utm_medium', 'Канали', 'medium.csv'),
+  'campaigns': renderCampaigns,
+  'content': () => renderUtmField('utm_content', 'Контент', 'content.csv'),
+  'terms': () => renderUtmField('utm_term', 'UTM Term', 'terms.csv'),
+  'combos': renderCombos,
+  'deals': renderDeals,
+  'webhooks': renderWebhooks,
+  'mapping': renderMapping,
+  'costs': renderCosts,
+  'ads-overview': renderAdsOverview,
+  'ads-campaigns': renderAdsCampaigns,
+  'cards': () => renderComing('💳', 'Cards', 'Облік корпоративних карт. Скоро доступно.'),
+  'usdt': () => renderComing('💵', 'USDT Balances', 'USDT / USDC баланси, потоки. Скоро.'),
+  'payroll': () => renderComing('👥', 'Payroll', 'Зарплати команди, контракти. Скоро.'),
+  'settings': renderSettings
+};
+
+const SECTION_TITLES = {
+  'overview': 'Огляд', 'analytics': 'Аналітика',
+  'sources': 'Джерела', 'medium': 'Канали', 'campaigns': 'Кампанії',
+  'content': 'Контент', 'terms': 'UTM Term', 'combos': 'Комбінації',
+  'deals': 'Угоди', 'webhooks': 'Webhooks', 'mapping': 'UTM Mapping',
+  'costs': 'Manual Costs', 'ads-overview': 'Ads Overview',
+  'ads-campaigns': 'Ads Campaigns', 'cards': 'Cards', 'usdt': 'USDT',
+  'payroll': 'Payroll', 'settings': 'Settings'
+};
+
+const UTM_SECTIONS = new Set(['overview','analytics','sources','medium','campaigns','content','terms','combos','deals']);
+const ADS_SECTIONS = new Set(['ads-overview','ads-campaigns']);
+
+/* ---------------- OVERVIEW ---------------- */
+async function renderOverview() {
+  const c = $('#content');
+  c.innerHTML = `
+    <div class="section-head">
+      <div>
+        <h1>📊 Огляд</h1>
+        <div class="subtitle">${escapeHtml(filters.from)} → ${escapeHtml(filters.to)}</div>
+      </div>
+    </div>
+    ${loadingHTML('Завантаження угод…')}
+  `;
+  try {
+    const rows = await fetchAllDealsBatched(30000);
+    const paid = rows.filter(r => r.status === 'pay');
+    const sum = paid.reduce((a,r) => a + Number(r.amount||0), 0);
+    const uniqEmails = new Set(paid.map(r => r.customer_email).filter(Boolean)).size;
+    const sources = new Set(rows.map(r => r.utm_source).filter(Boolean)).size;
+    const campaigns = new Set(rows.map(r => r.utm_campaign).filter(Boolean)).size;
+    const avg = paid.length ? sum / paid.length : 0;
+
+    let adSpend = 0;
+    try {
+      const { data } = await sb.from('dashboard_ads_data')
+        .select('spend')
+        .gte('date_start', filters.from)
+        .lte('date_start', filters.to);
+      (data||[]).forEach(r => adSpend += Number(r.spend||0));
+    } catch(e) {}
+
+    const profit = sum - adSpend;
+    const byDay = aggregateByDay(rows);
+    const last20 = rows.slice(0, 20);
+
+    c.innerHTML = `
+      <div class="section-head">
+        <div>
+          <h1>📊 Огляд</h1>
+          <div class="subtitle">${escapeHtml(filters.from)} → ${escapeHtml(filters.to)} · ${fmtNum(rows.length)} угод</div>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        ${kpi('Total Leads', fmtNum(rows.length), 'усі статуси')}
+        ${kpi('Paid', fmtNum(paid.length), fmtPct(rows.length ? paid.length/rows.length*100 : 0) + ' конверсія', 'green')}
+        ${kpi('Revenue', fmtMoney(sum, 'UAH'), 'сума оплачених', 'green')}
+        ${kpi('Unique Buyers', fmtNum(uniqEmails), 'унікальних емейлів', 'blue')}
+        ${kpi('Avg Deal', fmtMoney(avg, 'UAH'), 'середній чек', 'blue')}
+        ${kpi('Sources', fmtNum(sources), 'utm_source')}
+        ${kpi('Campaigns', fmtNum(campaigns), 'utm_campaign')}
+        ${kpi('Ad Spend', fmtMoney(adSpend, 'UAH'), 'витрати', 'amber')}
+        ${kpi('Profit', fmtMoney(profit, 'UAH'), adSpend > 0 ? 'ROAS ' + (sum/adSpend).toFixed(2)+'x' : 'без реклами', profit > 0 ? 'green' : 'amber')}
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>Угоди по днях</h3><span class="meta">${byDay.length} днів</span></div>
+        <div class="chart-container"><canvas id="ch-daily"></canvas></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>Останні 20 угод</h3></div>
+        <div id="t-recent"></div>
+      </div>
+    `;
+
+    lineChart('ch-daily',
+      byDay.map(d => fmtDate(d.date)),
+      [
+        { label: 'Усі', data: byDay.map(d => d.leads), borderColor: '#3B82F6', backgroundColor: 'rgba(59,130,246,0.1)', tension: 0.3, fill: true },
+        { label: 'Оплачені', data: byDay.map(d => d.paid), borderColor: '#10B981', backgroundColor: 'rgba(16,185,129,0.15)', tension: 0.3, fill: true },
+        { label: 'Сума (UAH)', data: byDay.map(d => d.sum), borderColor: '#E30613', backgroundColor: 'transparent', tension: 0.3, yAxisID: 'y1', borderDash: [5,3] }
+      ],
+      { scales: { y1: { position: 'right', grid: { drawOnChartArea: false }, ticks: { color: '#E30613' } } } }
+    );
+
+    buildTable('#t-recent', {
+      rows: last20,
+      pageSize: 20,
+      sortKey: 'created_at',
+      cols: [
+        { key: 'created_at', label: 'Дата', fmt: v => `<span class="mono">${fmtDateTime(v)}</span>` },
+        { key: 'sendpulse_deal_id', label: 'ID', fmt: v => `<code>${escapeHtml(v||'')}</code>` },
+        { key: 'customer_email', label: 'Email', fmt: v => `<span class="mono">${escapeHtml(v||'—')}</span>` },
+        { key: 'project', label: 'Проект', fmt: v => escapeHtml(v||'—') },
+        { key: 'utm_source', label: 'Source', fmt: v => escapeHtml(v||'—') },
+        { key: 'utm_campaign', label: 'Campaign', fmt: v => escapeHtml(v||'—') },
+        { key: 'amount', label: 'Сума', class: 'amount', fmt: (v, r) => fmtMoney(v, r.currency) },
+        { key: 'status', label: 'Статус', fmt: statusPill }
+      ],
+      search: false
+    });
+  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
+}
+
+/* ---------------- ANALYTICS ---------------- */
+async function renderAnalytics() {
+  const c = $('#content');
+  c.innerHTML = `<div class="section-head"><h1>📈 Аналітика</h1></div>${loadingHTML()}`;
+  try {
+    const rows = await fetchAllDealsBatched(30000);
+    const byStatus = {};
+    rows.forEach(r => byStatus[r.status||'unknown'] = (byStatus[r.status||'unknown']||0) + 1);
+    const byProj = aggregateByField(rows, 'project').slice(0, 10);
+    const totalLeads = rows.length;
+    const pending = rows.filter(r => r.status==='pending').length;
+    const paid = rows.filter(r => r.status==='pay').length;
+    const fail = rows.filter(r => r.status==='fail').length;
+
+    c.innerHTML = `
+      <div class="section-head">
+        <div><h1>📈 Аналітика</h1><div class="subtitle">${fmtNum(rows.length)} угод</div></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head"><h3>Розподіл за статусами</h3></div>
+          <div class="chart-container short"><canvas id="ch-status"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>Воронка</h3></div>
+          <div class="chart-container short"><canvas id="ch-funnel"></canvas></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>Топ-10 проектів</h3></div>
+        <div class="chart-container"><canvas id="ch-projects"></canvas></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>Деталі по проектах</h3></div>
+        <div id="t-proj"></div>
+      </div>
+    `;
+
+    const statusColors = { pay:'#10B981', new:'#3B82F6', pending:'#F59E0B', fail:'#DC2626', refunded:'#A855F7', unknown:'#888' };
+    const sKeys = Object.keys(byStatus);
+    doughnutChart('ch-status', sKeys, sKeys.map(k=>byStatus[k]), sKeys.map(k=>statusColors[k]||'#888'));
+
+    barChart('ch-funnel',
+      ['Усі ліди','Pending','Paid','Fail'],
+      [{ label: 'К-сть', data: [totalLeads, pending, paid, fail], backgroundColor: ['#3B82F6','#F59E0B','#10B981','#DC2626'] }],
+      { legend: false }
+    );
+
+    barChart('ch-projects',
+      byProj.map(p => p.key),
+      [
+        { label: 'Ліди', data: byProj.map(p=>p.leads), backgroundColor: '#3B82F6' },
+        { label: 'Оплачені', data: byProj.map(p=>p.paid), backgroundColor: '#10B981' }
+      ]
+    );
+
+    buildTable('#t-proj', {
+      rows: byProj,
+      pageSize: 25,
+      sortKey: 'sum',
+      csvFile: 'projects.csv',
+      cols: [
+        { key: 'key', label: 'Проект', fmt: v => escapeHtml(v) },
+        { key: 'leads', label: 'Ліди', class: 'num', fmt: fmtNum },
+        { key: 'paid', label: 'Paid', class: 'num', fmt: fmtNum },
+        { key: 'fail', label: 'Fail', class: 'num', fmt: fmtNum },
+        { key: 'sum', label: 'Сума', class: 'amount', fmt: v => fmtMoney(v) },
+        { key: 'avg', label: 'Середній', class: 'amount', fmt: v => fmtMoney(v) },
+        { key: 'conv', label: 'Conv %', class: 'num', fmt: v => fmtPct(v) }
+      ]
+    });
+  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
+}
+
+/* ---------------- UTM FIELDS GENERIC ---------------- */
+async function renderUtmField(field, title, csvName) {
+  const c = $('#content');
+  c.innerHTML = `<div class="section-head"><h1>${escapeHtml(title)}</h1></div>${loadingHTML()}`;
+  try {
+    const rows = await fetchAllDealsBatched(30000);
+    const agg = aggregateByField(rows, field);
+    const topPaid = agg.filter(a => a.paid > 0).slice(0, 10);
+
+    c.innerHTML = `
+      <div class="section-head">
+        <div><h1>${escapeHtml(title)}</h1><div class="subtitle">${agg.length} унікальних значень · ${fmtNum(rows.length)} угод</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>Топ-10 за виручкою</h3></div>
+        <div class="chart-container"><canvas id="ch-top"></canvas></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>Деталі</h3></div>
+        <div id="t-utm"></div>
+      </div>
+    `;
+
+    barChart('ch-top',
+      topPaid.map(a => a.key.length > 25 ? a.key.slice(0,22)+'...' : a.key),
+      [
+        { label: 'Сума UAH', data: topPaid.map(a=>a.sum), backgroundColor: '#E30613' },
+        { label: 'Paid', data: topPaid.map(a=>a.paid), backgroundColor: '#10B981', yAxisID: 'y1' }
+      ],
+      { scales: { y1: { position: 'right', grid: { drawOnChartArea: false } } } }
+    );
+
+    buildTable('#t-utm', {
+      rows: agg,
+      pageSize: 50,
+      sortKey: 'sum',
+      csvFile: csvName,
+      cols: [
+        { key: 'key', label: title.split(' ')[0], fmt: v => `<span class="mono" style="font-size:12px">${escapeHtml(v)}</span>` },
+        { key: 'leads', label: 'Ліди', class: 'num', fmt: fmtNum },
+        { key: 'paid', label: 'Paid', class: 'num', fmt: fmtNum },
+        { key: 'fail', label: 'Fail', class: 'num', fmt: fmtNum },
+        { key: 'sum', label: 'Сума', class: 'amount', fmt: v => fmtMoney(v) },
+        { key: 'avg', label: 'Середній', class: 'amount', fmt: v => fmtMoney(v) },
+        { key: 'conv', label: 'Conv %', class: 'num', fmt: v => fmtPct(v) }
+      ]
+    });
+  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
+}
+
+/* ---------------- CAMPAIGNS ---------------- */
+async function renderCampaigns() {
+  const c = $('#content');
+  c.innerHTML = `<div class="section-head"><h1>🎯 Кампанії</h1></div>${loadingHTML()}`;
+  try {
+    const [rows, adsRes] = await Promise.all([
+      fetchAllDealsBatched(30000),
+      sb.from('dashboard_ads_data').select('campaign_name, spend, impressions, clicks').gte('date_start', filters.from).lte('date_start', filters.to)
+    ]);
+    const agg = aggregateByField(rows, 'utm_campaign');
+    const adMap = new Map();
+    (adsRes.data||[]).forEach(a => {
+      const k = a.campaign_name;
+      if (!k) return;
+      if (!adMap.has(k)) adMap.set(k, { spend:0, impr:0, clicks:0 });
+      const x = adMap.get(k);
+      x.spend += Number(a.spend||0);
+      x.impr += Number(a.impressions||0);
+      x.clicks += Number(a.clicks||0);
+    });
+    agg.forEach(a => {
+      const ad = adMap.get(a.key);
+      a.spend = ad ? ad.spend : 0;
+      a.impr = ad ? ad.impr : 0;
+      a.clicks = ad ? ad.clicks : 0;
+      a.roas = a.spend > 0 ? a.sum / a.spend : null;
+      a.cpa = a.paid > 0 && a.spend > 0 ? a.spend / a.paid : null;
+    });
+    const topSpend = agg.filter(a=>a.spend>0).sort((x,y)=>y.spend-x.spend).slice(0,10);
+
+    c.innerHTML = `
+      <div class="section-head"><div><h1>🎯 Кампанії</h1><div class="subtitle">${agg.length} кампаній</div></div></div>
+      <div class="card">
+        <div class="card-head"><h3>Топ-10 за витратами vs Виручка</h3></div>
+        <div class="chart-container"><canvas id="ch-camp"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h3>Деталі кампаній</h3></div>
+        <div id="t-camp"></div>
+      </div>
+    `;
+
+    if (topSpend.length) {
+      barChart('ch-camp',
+        topSpend.map(a => a.key.length > 25 ? a.key.slice(0,22)+'...' : a.key),
+        [
+          { label: 'Spend', data: topSpend.map(a=>a.spend), backgroundColor: '#F59E0B' },
+          { label: 'Revenue', data: topSpend.map(a=>a.sum), backgroundColor: '#10B981' }
+        ]
+      );
+    } else {
+      $('#ch-camp').parentElement.innerHTML = '<div class="state">Немає даних з рекламою для зіставлення</div>';
+    }
+
+    buildTable('#t-camp', {
+      rows: agg,
+      pageSize: 50,
+      sortKey: 'sum',
+      csvFile: 'campaigns.csv',
+      cols: [
+        { key: 'key', label: 'Кампанія', fmt: v => `<span class="mono" style="font-size:12px">${escapeHtml(v)}</span>` },
+        { key: 'leads', label: 'Ліди', class: 'num', fmt: fmtNum },
+        { key: 'paid', label: 'Paid', class: 'num', fmt: fmtNum },
+        { key: 'sum', label: 'Revenue', class: 'amount', fmt: v => fmtMoney(v) },
+        { key: 'spend', label: 'Spend', class: 'amount', fmt: v => v ? fmtMoney(v) : '—' },
+        { key: 'roas', label: 'ROAS', class: 'num', fmt: v => v ? v.toFixed(2)+'x' : '—' },
+        { key: 'cpa', label: 'CPA', class: 'num', fmt: v => v ? fmtMoney(v) : '—' },
+        { key: 'conv', label: 'Conv %', class: 'num', fmt: v => fmtPct(v) }
+      ]
+    });
+  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
+}
+
+/* ---------------- COMBOS ---------------- */
+async function renderCombos() {
+  const c = $('#content');
+  c.innerHTML = `<div class="section-head"><h1>🔀 Комбінації UTM</h1></div>${loadingHTML()}`;
+  try {
+    const rows = await fetchAllDealsBatched(30000);
+    const agg = aggregateCombos(rows);
+    c.innerHTML = `
+      <div class="section-head"><div><h1>🔀 Комбінації UTM</h1><div class="subtitle">${agg.length} унікальних source+medium+campaign</div></div></div>
+      <div class="card"><div id="t-combos"></div></div>
+    `;
+    buildTable('#t-combos', {
+      rows: agg,
+      pageSize: 50,
+      sortKey: 'sum',
+      csvFile: 'combos.csv',
+      cols: [
+        { key: 'utm_source', label: 'Source', fmt: v => `<span class="mono" style="font-size:11px">${escapeHtml(v)}</span>` },
+        { key: 'utm_medium', label: 'Medium', fmt: v => `<span class="mono" style="font-size:11px">${escapeHtml(v)}</span>` },
+        { key: 'utm_campaign', label: 'Campaign', fmt: v => `<span class="mono" style="font-size:11px">${escapeHtml(v)}</span>` },
+        { key: 'leads', label: 'Ліди', class: 'num', fmt: fmtNum },
+        { key: 'paid', label: 'Paid', class: 'num', fmt: fmtNum },
+        { key: 'sum', label: 'Сума', class: 'amount', fmt: v => fmtMoney(v) },
+        { key: 'conv', label: 'Conv %', class: 'num', fmt: v => fmtPct(v) }
+      ]
+    });
+  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
+}
+
+/* ---------------- DEALS TABLE ---------------- */
+async function renderDeals() {
+  const c = $('#content');
+  c.innerHTML = `<div class="section-head"><h1>📋 Таблиця угод</h1></div>${loadingHTML()}`;
+  try {
+    const rows = await fetchAllDealsBatched(20000);
+    c.innerHTML = `
+      <div class="section-head">
+        <div><h1>📋 Таблиця угод</h1><div class="subtitle">${fmtNum(rows.length)} угод за період</div></div>
+      </div>
+      <div class="card"><div id="t-deals"></div></div>
+    `;
+    buildTable('#t-deals', {
+      rows,
+      pageSize: 50,
+      sortKey: 'created_at',
+      csvFile: 'deals.csv',
+      cols: [
+        { key: 'created_at', label: 'Дата', fmt: v => `<span class="mono">${fmtDateTime(v)}</span>` },
+        { key: 'sendpulse_deal_id', label: 'Deal ID', fmt: v => `<code>${escapeHtml(v||'')}</code>` },
+        { key: 'customer_email', label: 'Email', fmt: v => `<span class="mono" style="font-size:11px">${escapeHtml(v||'—')}</span>` },
+        { key: 'project', label: 'Проект', fmt: v => escapeHtml(v||'—') },
+        { key: 'tariff', label: 'Тариф', fmt: v => escapeHtml(v||'—') },
+        { key: 'utm_source', label: 'Source', fmt: v => `<span class="mono" style="font-size:11px">${escapeHtml(v||'—')}</span>` },
+        { key: 'utm_campaign', label: 'Campaign', fmt: v => `<span class="mono" style="font-size:11px">${escapeHtml(v||'—')}</span>` },
+        { key: 'pay_provider', label: 'Provider', fmt: v => escapeHtml(v||'—') },
+        { key: 'amount', label: 'Сума', class: 'amount', fmt: (v,r) => fmtMoney(v, r.currency) },
+        { key: 'status', label: 'Статус', fmt: statusPill }
+      ]
+    });
+  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
+}
+
+/* ---------------- WEBHOOKS ---------------- */
+async function renderWebhooks() {
+  const c = $('#content');
+  c.innerHTML = `<div class="section-head"><h1>🪝 Webhook логи</h1></div>${loadingHTML()}`;
+  try {
+    const { data, error } = await sb.from('dashboard_webhooks')
+      .select('id,source,event_type,status_code,created_at')
+      .order('created_at', { ascending: false })
+      .limit(500);
+    if (error) throw error;
+    c.innerHTML = `
+      <div class="section-head">
+        <div><h1>🪝 Webhook логи</h1><div class="subtitle">останні ${(data||[]).length} подій</div></div>
+      </div>
+      <div class="card"><div id="t-wh"></div></div>
+    `;
+    buildTable('#t-wh', {
+      rows: data || [],
+      pageSize: 50,
+      sortKey: 'created_at',
+      csvFile: 'webhooks.csv',
+      cols: [
+        { key: 'created_at', label: 'Дата', fmt: v => `<span class="mono">${fmtDateTime(v)}</span>` },
+        { key: 'source', label: 'Джерело', fmt: v => `<span class="pill default">${escapeHtml(v||'—')}</span>` },
+        { key: 'event_type', label: 'Подія', fmt: v => `<span class="mono">${escapeHtml(v||'—')}</span>` },
+        { key: 'status_code', label: 'HTTP', class: 'num', fmt: v => {
+          if (!v) return '—';
+          const cls = v >= 200 && v < 300 ? 'pay' : v >= 400 ? 'fail' : 'pending';
+          return `<span class="pill ${cls}">${v}</span>`;
+        }},
+        { key: 'id', label: 'ID', fmt: v => `<code style="font-size:10px;color:var(--ash)">${escapeHtml(String(v||'')).slice(0,8)}…</code>` }
+      ]
+    });
+  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
+}
+
+/* ---------------- UTM MAPPING (CRUD) ---------------- */
+async function renderMapping() {
+  const c = $('#content');
+  c.innerHTML = `<div class="section-head"><h1>🗺 UTM Mapping</h1></div>${loadingHTML()}`;
+  try {
+    const { data, error } = await sb.from('dashboard_utm_mapping').select('*').order('priority', { ascending: false }).limit(500);
+    if (error && error.code !== '42P01' && !String(error.message||'').includes('does not exist')) throw error;
+    const rows = data || [];
+    c.innerHTML = `
+      <div class="section-head">
+        <div><h1>🗺 UTM Mapping</h1><div class="subtitle">Правила нормалізації UTM-міток · ${rows.length} правил</div></div>
+        <button class="btn btn-primary" id="add-rule">+ Додати правило</button>
+      </div>
+
+      <div class="card" id="form-card" style="display:none">
+        <div class="card-head"><h3 id="form-title">Нове правило</h3></div>
+        <form id="map-form">
+          <input type="hidden" name="id">
+          <div class="form-row">
+            <div><label>Source pattern</label><input name="source_pattern" placeholder="instagram*"></div>
+            <div><label>Medium pattern</label><input name="medium_pattern" placeholder="cpc"></div>
+            <div><label>Campaign pattern</label><input name="campaign_pattern"></div>
+            <div><label>Priority</label><input type="number" name="priority" value="100"></div>
+            <div><label>Active</label><select name="is_active"><option value="true">true</option><option value="false">false</option></select></div>
+          </div>
+          <div class="form-row">
+            <div><label>→ Mapped source</label><input name="mapped_source"></div>
+            <div><label>→ Mapped medium</label><input name="mapped_medium"></div>
+            <div><label>→ Mapped campaign</label><input name="mapped_campaign"></div>
+            <div style="grid-column:span 2"></div>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-primary" type="submit">💾 Зберегти</button>
+            <button class="btn" type="button" id="cancel-form">Скасувати</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <div id="t-map"></div>
+      </div>
+    `;
+
+    buildTable('#t-map', {
+      rows,
+      pageSize: 50,
+      sortKey: 'priority',
+      cols: [
+        { key: 'priority', label: 'Prio', class: 'num', fmt: fmtNum },
+        { key: 'source_pattern', label: 'Source', fmt: v => `<span class="mono">${escapeHtml(v||'')}</span>` },
+        { key: 'medium_pattern', label: 'Medium', fmt: v => `<span class="mono">${escapeHtml(v||'')}</span>` },
+        { key: 'campaign_pattern', label: 'Campaign', fmt: v => `<span class="mono">${escapeHtml(v||'')}</span>` },
+        { key: 'mapped_source', label: '→ Source', fmt: v => `<span class="mono" style="color:var(--success)">${escapeHtml(v||'')}</span>` },
+        { key: 'mapped_medium', label: '→ Medium', fmt: v => `<span class="mono" style="color:var(--success)">${escapeHtml(v||'')}</span>` },
+        { key: 'is_active', label: 'Active', fmt: v => v ? `<span class="pill pay">YES</span>` : `<span class="pill fail">NO</span>` },
+        { key: 'id', label: '', fmt: (v, r) => `<button class="btn btn-sm" data-act="edit" data-id="${escapeHtml(String(r.id))}">✏️</button> <button class="btn btn-sm btn-danger" data-act="del" data-id="${escapeHtml(String(r.id))}">🗑</button>` }
+      ]
+    });
+
+    const form = $('#map-form');
+    const formCard = $('#form-card');
+
+    $('#add-rule').onclick = () => {
+      form.reset();
+      form.id.value = '';
+      $('#form-title').textContent = 'Нове правило';
+      formCard.style.display = '';
+      formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    $('#cancel-form').onclick = () => { formCard.style.display = 'none'; };
+
+    $('#t-map').addEventListener('click', async (ev) => {
+      const btn = ev.target.closest('button[data-act]');
+      if (!btn) return;
+      const id = btn.dataset.id;
+      if (btn.dataset.act === 'edit') {
+        const r = rows.find(x => String(x.id) === String(id));
+        if (!r) return;
+        Object.entries(r).forEach(([k,v]) => {
+          if (form[k]) form[k].value = v == null ? '' : v;
+        });
+        $('#form-title').textContent = 'Редагувати правило #' + id;
+        formCard.style.display = '';
+        formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else if (btn.dataset.act === 'del') {
+        if (!confirm('Видалити правило #' + id + '?')) return;
+        const { error } = await sb.from('dashboard_utm_mapping').delete().eq('id', id);
+        if (error) return alert('Помилка: ' + error.message);
+        renderMapping();
+      }
+    });
+
+    form.onsubmit = async (ev) => {
+      ev.preventDefault();
+      const fd = new FormData(form);
+      const payload = {};
+      fd.forEach((v, k) => {
+        if (v === '') payload[k] = null;
+        else if (k === 'is_active') payload[k] = v === 'true';
+        else if (k === 'priority') payload[k] = parseInt(v) || 0;
+        else payload[k] = v;
+      });
+      const id = payload.id;
+      delete payload.id;
+      let res;
+      if (id) res = await sb.from('dashboard_utm_mapping').update(payload).eq('id', id);
+      else res = await sb.from('dashboard_utm_mapping').insert(payload);
+      if (res.error) return alert('Помилка: ' + res.error.message);
+      renderMapping();
+    };
+  } catch (e) {
+    if (String(e.message||'').includes('does not exist') || e.code === '42P01') {
+      c.innerHTML = `<div class="section-head"><h1>🗺 UTM Mapping</h1></div>
+        <div class="coming"><div class="em">🚧</div><h2>Таблиця ще не створена</h2><p>Створи <code>dashboard_utm_mapping</code> у Supabase щоб додавати правила нормалізації UTM-міток.</p></div>`;
+    } else {
+      console.error(e);
+      c.querySelector('.state').outerHTML = errorHTML(e);
+    }
+  }
+}
+
+/* ---------------- MANUAL COSTS (CRUD) ---------------- */
+async function renderCosts() {
+  const c = $('#content');
+  c.innerHTML = `<div class="section-head"><h1>💰 Manual Costs</h1></div>${loadingHTML()}`;
+  try {
+    const { data, error } = await sb.from('dashboard_manual_costs').select('*').order('date', { ascending: false }).limit(500);
+    if (error && error.code !== '42P01' && !String(error.message||'').includes('does not exist')) throw error;
+    const rows = data || [];
+    const total = rows.reduce((a,r) => a + Number(r.amount||0), 0);
+
+    c.innerHTML = `
+      <div class="section-head">
+        <div><h1>💰 Manual Costs</h1><div class="subtitle">${rows.length} записів · сумарно ${fmtMoney(total)}</div></div>
+        <button class="btn btn-primary" id="add-cost">+ Додати витрату</button>
+      </div>
+
+      <div class="card" id="form-card" style="display:none">
+        <div class="card-head"><h3 id="form-title">Нова витрата</h3></div>
+        <form id="cost-form">
+          <input type="hidden" name="id">
+          <div class="form-row">
+            <div><label>Дата</label><input type="date" name="date" required></div>
+            <div><label>Категорія</label><input name="category" placeholder="ads / payroll / saas"></div>
+            <div><label>Опис</label><input name="description" placeholder="Опис витрати"></div>
+            <div><label>Сума</label><input type="number" step="0.01" name="amount" required></div>
+            <div><label>Валюта</label><select name="currency"><option>UAH</option><option>USD</option><option>EUR</option></select></div>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-primary" type="submit">💾 Зберегти</button>
+            <button class="btn" type="button" id="cancel-form">Скасувати</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card"><div id="t-costs"></div></div>
+    `;
+
+    buildTable('#t-costs', {
+      rows,
+      pageSize: 50,
+      sortKey: 'date',
+      csvFile: 'manual-costs.csv',
+      cols: [
+        { key: 'date', label: 'Дата', fmt: v => `<span class="mono">${fmtDate(v)}</span>` },
+        { key: 'category', label: 'Категорія', fmt: v => `<span class="pill default">${escapeHtml(v||'—')}</span>` },
+        { key: 'description', label: 'Опис', fmt: v => escapeHtml(v||'—') },
+        { key: 'amount', label: 'Сума', class: 'amount', fmt: (v,r) => fmtMoney(v, r.currency) },
+        { key: 'currency', label: 'Cur', fmt: v => `<span class="mono">${escapeHtml(v||'UAH')}</span>` },
+        { key: 'id', label: '', fmt: (v, r) => `<button class="btn btn-sm" data-act="edit" data-id="${escapeHtml(String(r.id))}">✏️</button> <button class="btn btn-sm btn-danger" data-act="del" data-id="${escapeHtml(String(r.id))}">🗑</button>` }
+      ]
+    });
+
+    const form = $('#cost-form');
+    const formCard = $('#form-card');
+    $('#add-cost').onclick = () => {
+      form.reset();
+      form.id.value = '';
+      form.date.value = new Date().toISOString().slice(0,10);
+      $('#form-title').textContent = 'Нова витрата';
+      formCard.style.display = '';
+      formCard.scrollIntoView({ behavior: 'smooth' });
+    };
+    $('#cancel-form').onclick = () => { formCard.style.display = 'none'; };
+
+    $('#t-costs').addEventListener('click', async (ev) => {
+      const btn = ev.target.closest('button[data-act]');
+      if (!btn) return;
+      const id = btn.dataset.id;
+      if (btn.dataset.act === 'edit') {
+        const r = rows.find(x => String(x.id) === String(id));
+        if (!r) return;
+        Object.entries(r).forEach(([k,v]) => {
+          if (form[k]) form[k].value = v == null ? '' : v;
+        });
+        $('#form-title').textContent = 'Редагувати #' + id;
+        formCard.style.display = '';
+        formCard.scrollIntoView({ behavior: 'smooth' });
+      } else if (btn.dataset.act === 'del') {
+        if (!confirm('Видалити запис #' + id + '?')) return;
+        const { error } = await sb.from('dashboard_manual_costs').delete().eq('id', id);
+        if (error) return alert('Помилка: ' + error.message);
+        renderCosts();
+      }
+    });
+
+    form.onsubmit = async (ev) => {
+      ev.preventDefault();
+      const fd = new FormData(form);
+      const payload = {};
+      fd.forEach((v, k) => {
+        if (v === '') payload[k] = null;
+        else if (k === 'amount') payload[k] = parseFloat(v);
+        else payload[k] = v;
+      });
+      const id = payload.id;
+      delete payload.id;
+      let res;
+      if (id) res = await sb.from('dashboard_manual_costs').update(payload).eq('id', id);
+      else res = await sb.from('dashboard_manual_costs').insert(payload);
+      if (res.error) return alert('Помилка: ' + res.error.message);
+      renderCosts();
+    };
+  } catch (e) {
+    if (String(e.message||'').includes('does not exist') || e.code === '42P01') {
+      c.innerHTML = `<div class="section-head"><h1>💰 Manual Costs</h1></div>
+        <div class="coming"><div class="em">🚧</div><h2>Таблиця ще не створена</h2><p>Створи <code>dashboard_manual_costs</code> у Supabase.</p></div>`;
+    } else {
+      console.error(e);
+      c.querySelector('.state').outerHTML = errorHTML(e);
+    }
+  }
+}
+
+/* ---------------- ADS OVERVIEW ---------------- */
+async function renderAdsOverview() {
+  const c = $('#content');
+  c.innerHTML = `<div class="section-head"><h1>💸 Ads Overview</h1></div>${loadingHTML()}`;
+  try {
+    const { data, error } = await sb.from('dashboard_ads_data').select('*')
+      .gte('date_start', filters.from).lte('date_start', filters.to);
+    if (error) throw error;
+    const rows = data || [];
+    const sumSpend = rows.reduce((a,r)=>a+Number(r.spend||0),0);
+    const sumImpr = rows.reduce((a,r)=>a+Number(r.impressions||0),0);
+    const sumClicks = rows.reduce((a,r)=>a+Number(r.clicks||0),0);
+    const sumConv = rows.reduce((a,r)=>a+Number(r.conversions||0),0);
+    const avgCtr = sumImpr > 0 ? (sumClicks / sumImpr * 100) : 0;
+    const avgCpc = sumClicks > 0 ? sumSpend / sumClicks : 0;
+    const avgCpm = sumImpr > 0 ? sumSpend / sumImpr * 1000 : 0;
+
+    const byDay = new Map();
+    rows.forEach(r => {
+      const d = r.date_start;
+      if (!d) return;
+      if (!byDay.has(d)) byDay.set(d, { date: d, spend: 0, clicks: 0, impr: 0 });
+      const x = byDay.get(d);
+      x.spend += Number(r.spend||0);
+      x.clicks += Number(r.clicks||0);
+      x.impr += Number(r.impressions||0);
+    });
+    const days = Array.from(byDay.values()).sort((a,b) => a.date.localeCompare(b.date));
+
+    c.innerHTML = `
+      <div class="section-head"><div><h1>💸 Ads Overview</h1><div class="subtitle">${fmtNum(rows.length)} рядків даних</div></div></div>
+      <div class="kpi-grid">
+        ${kpi('Spend', fmtMoney(sumSpend, 'UAH'), 'витрати', 'amber')}
+        ${kpi('Impressions', fmtNum(sumImpr), 'покази', 'blue')}
+        ${kpi('Clicks', fmtNum(sumClicks), 'кліки', 'blue')}
+        ${kpi('CTR', fmtPct(avgCtr, 2), 'click-through', 'green')}
+        ${kpi('CPC', fmtMoney(avgCpc, 'UAH'), 'ціна кліку')}
+        ${kpi('CPM', fmtMoney(avgCpm, 'UAH'), 'ціна 1000 показів')}
+        ${kpi('Conversions', fmtNum(sumConv), 'конверсії', 'green')}
+      </div>
+      <div class="card">
+        <div class="card-head"><h3>Витрати по днях</h3></div>
+        <div class="chart-container"><canvas id="ch-ads-day"></canvas></div>
+      </div>
+    `;
+
+    lineChart('ch-ads-day',
+      days.map(d => fmtDate(d.date)),
+      [
+        { label: 'Spend', data: days.map(d=>d.spend), borderColor: '#F59E0B', backgroundColor: 'rgba(245,158,11,0.15)', fill: true, tension: 0.3 },
+        { label: 'Clicks', data: days.map(d=>d.clicks), borderColor: '#3B82F6', backgroundColor: 'transparent', tension: 0.3, yAxisID: 'y1' }
+      ],
+      { scales: { y1: { position: 'right', grid: { drawOnChartArea: false } } } }
+    );
+  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
+}
+
+/* ---------------- ADS CAMPAIGNS ---------------- */
+async function renderAdsCampaigns() {
+  const c = $('#content');
+  c.innerHTML = `<div class="section-head"><h1>📊 Ads Campaigns</h1></div>${loadingHTML()}`;
+  try {
+    const { data, error } = await sb.from('dashboard_ads_data').select('*')
+      .gte('date_start', filters.from).lte('date_start', filters.to);
+    if (error) throw error;
+
+    const map = new Map();
+    (data||[]).forEach(r => {
+      const k = r.campaign_name || '(none)';
+      if (!map.has(k)) map.set(k, { campaign_name: k, ad_account_name: r.ad_account_name, spend: 0, impressions: 0, clicks: 0, conversions: 0 });
+      const x = map.get(k);
+      x.spend += Number(r.spend||0);
+      x.impressions += Number(r.impressions||0);
+      x.clicks += Number(r.clicks||0);
+      x.conversions += Number(r.conversions||0);
+    });
+    const rows = Array.from(map.values()).map(r => ({
+      ...r,
+      ctr: r.impressions > 0 ? r.clicks/r.impressions*100 : 0,
+      cpc: r.clicks > 0 ? r.spend/r.clicks : 0,
+      cpm: r.impressions > 0 ? r.spend/r.impressions*1000 : 0
+    })).sort((a,b)=>b.spend-a.spend);
+
+    c.innerHTML = `
+      <div class="section-head"><div><h1>📊 Ads Campaigns</h1><div class="subtitle">${rows.length} кампаній</div></div></div>
+      <div class="card"><div id="t-ads"></div></div>
+    `;
+    buildTable('#t-ads', {
+      rows,
+      pageSize: 50,
+      sortKey: 'spend',
+      csvFile: 'ads-campaigns.csv',
+      cols: [
+        { key: 'campaign_name', label: 'Кампанія', fmt: v => `<span class="mono" style="font-size:11px">${escapeHtml(v)}</span>` },
+        { key: 'ad_account_name', label: 'Акаунт', fmt: v => escapeHtml(v||'—') },
+        { key: 'spend', label: 'Spend', class: 'amount', fmt: v => fmtMoney(v) },
+        { key: 'impressions', label: 'Impressions', class: 'num', fmt: fmtNum },
+        { key: 'clicks', label: 'Clicks', class: 'num', fmt: fmtNum },
+        { key: 'ctr', label: 'CTR', class: 'num', fmt: v => fmtPct(v, 2) },
+        { key: 'cpc', label: 'CPC', class: 'num', fmt: v => fmtMoney(v) },
+        { key: 'cpm', label: 'CPM', class: 'num', fmt: v => fmtMoney(v) },
+        { key: 'conversions', label: 'Conv', class: 'num', fmt: fmtNum }
+      ]
+    });
+  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
+}
+
+/* ---------------- COMING SOON ---------------- */
+function renderComing(emoji, title, desc) {
+  const c = $('#content');
+  c.innerHTML = `
+    <div class="section-head"><h1>${emoji} ${escapeHtml(title)}</h1></div>
+    <div class="coming">
+      <div class="em">${emoji}</div>
+      <h2>Coming Soon</h2>
+      <p>${escapeHtml(desc)}</p>
+    </div>
+  `;
+}
+
+/* ---------------- SETTINGS ---------------- */
+async function renderSettings() {
+  const c = $('#content');
+  c.innerHTML = `<div class="section-head"><h1>⚙️ Settings</h1></div>${loadingHTML()}`;
+  try {
+    const user = currentUser;
+    let userRow = null;
+    let team = [];
+    try {
+      const { data: ur } = await sb.from('users').select('*').eq('auth_id', user.id).maybeSingle();
+      userRow = ur;
+    } catch {}
+    try {
+      const { data: t } = await sb.from('users').select('name,email,role,active').limit(50);
+      team = t || [];
+    } catch {}
+
+    const counts = {};
+    for (const t of ['dashboard_deals','dashboard_webhooks','dashboard_ads_data','dashboard_manual_costs']) {
+      try {
+        const { count } = await sb.from(t).select('*', { count: 'exact', head: true });
+        counts[t] = count;
+      } catch { counts[t] = '—'; }
+    }
+
+    c.innerHTML = `
+      <div class="section-head"><h1>⚙️ Settings</h1></div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head"><h3>👤 Профіль</h3></div>
+          <div class="table-wrap" style="border:none">
+            <table>
+              <tbody>
+                <tr><td class="muted" style="width:140px">Email</td><td class="mono">${escapeHtml(user?.email||'—')}</td></tr>
+                <tr><td class="muted">User ID</td><td class="mono" style="font-size:10px">${escapeHtml(user?.id||'—')}</td></tr>
+                <tr><td class="muted">Provider</td><td>${escapeHtml(user?.app_metadata?.provider||'—')}</td></tr>
+                <tr><td class="muted">Last sign-in</td><td class="mono">${fmtDateTime(user?.last_sign_in_at)}</td></tr>
+                ${userRow ? `
+                  <tr><td class="muted">Name</td><td>${escapeHtml(userRow.name||'—')}</td></tr>
+                  <tr><td class="muted">Role</td><td>${statusPill(userRow.role)}</td></tr>
+                ` : ''}
+              </tbody>
+            </table>
+          </div>
+          <div style="margin-top:14px">
+            <button class="btn btn-danger" id="logout-btn">🚪 Logout</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>💾 Системна інформація</h3></div>
+          <div class="table-wrap" style="border:none">
+            <table>
+              <tbody>
+                <tr><td class="muted" style="width:220px">Supabase project</td><td class="mono">wotghlaehnvxyeacznvv</td></tr>
+                <tr><td class="muted">dashboard_deals</td><td class="num">${fmtNum(counts.dashboard_deals)}</td></tr>
+                <tr><td class="muted">dashboard_webhooks</td><td class="num">${fmtNum(counts.dashboard_webhooks)}</td></tr>
+                <tr><td class="muted">dashboard_ads_data</td><td class="num">${fmtNum(counts.dashboard_ads_data)}</td></tr>
+                <tr><td class="muted">dashboard_manual_costs</td><td class="num">${fmtNum(counts.dashboard_manual_costs)}</td></tr>
+                <tr><td class="muted">Dashboard version</td><td class="mono">v2.0.0</td></tr>
+                <tr><td class="muted">Build</td><td class="mono">${new Date().toISOString().slice(0,10)}</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      ${team.length ? `
+        <div class="card">
+          <div class="card-head"><h3>👥 Команда (${team.length})</h3></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th></tr></thead>
+              <tbody>
+                ${team.map(t => `<tr>
+                  <td>${escapeHtml(t.name||'—')}</td>
+                  <td class="mono" style="font-size:11px">${escapeHtml(t.email||'—')}</td>
+                  <td>${statusPill(t.role)}</td>
+                  <td>${t.active ? `<span class="pill pay">ACTIVE</span>` : `<span class="pill fail">INACTIVE</span>`}</td>
+                </tr>`).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ` : ''}
+    `;
+
+    $('#logout-btn').onclick = async () => {
+      if (!confirm('Вийти з акаунту?')) return;
+      await sb.auth.signOut();
+      location.reload();
+    };
+  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
+}
+
+/* =================================================================
+   ROUTER
+   ================================================================= */
+
+function getRoute() {
+  const h = location.hash.replace(/^#/, '') || 'overview';
+  return SECTIONS[h] ? h : 'overview';
+}
+
+async function renderRoute() {
+  destroyCharts();
+  const route = getRoute();
+  $$('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.route === route));
+  setSectionTitle(SECTION_TITLES[route] || route);
+  $('#filter-bar').classList.toggle('hidden', !UTM_SECTIONS.has(route) && !ADS_SECTIONS.has(route));
+  $('#sidebar').classList.remove('open');
+  const fn = SECTIONS[route];
+  try {
+    await fn();
+  } catch (e) {
+    console.error('route error', e);
+    $('#content').innerHTML = errorHTML(e);
+  }
+  window.__retry = renderRoute;
+}
+
+window.addEventListener('hashchange', renderRoute);
+
+/* =================================================================
+   BOOTSTRAP
+   ================================================================= */
+
+async function bootstrap() {
+  if (window.supabase && window.supabase.auth) {
+    sb = window.supabase;
+    try {
+      const { data: { session } } = await sb.auth.getSession();
+      if (session?.user) {
+        currentUser = session.user;
+        await onAuthed();
+        return;
+      }
+    } catch (e) { console.warn(e); }
+  }
+  window.addEventListener('dc-auth-ok', async (ev) => {
+    sb = window.supabase;
+    currentUser = ev.detail.user;
+    await onAuthed();
+  });
+}
+
+async function onAuthed() {
+  const email = currentUser?.email || 'user';
+  $('#user-email').textContent = email;
+  const av = $('.user-avatar');
+  if (av) av.textContent = (email[0] || '?').toUpperCase();
+
+  applyPreset('30d');
+  setupFilterBar();
+
+  $$('.nav-item').forEach(n => {
+    n.addEventListener('click', () => { location.hash = n.dataset.route; });
+  });
+
+  $('#burger').addEventListener('click', () => {
+    $('#sidebar').classList.toggle('open');
+  });
+
+  loadProjects();
+  renderRoute();
+}
+
+bootstrap();
+</script>
+
 </body>
 </html>
