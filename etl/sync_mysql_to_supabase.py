@@ -321,6 +321,19 @@ def main():
         sys.exit(1)
 
     log(f'=== ETL start: mode={args.mode}, only={args.only}, limit={args.limit} ===')
+    # JWT role check (security)
+    try:
+        import base64
+        parts = SB_KEY.split('.')
+        if len(parts) >= 2:
+            pad = '=' * ((4 - len(parts[1]) % 4) % 4)
+            payload = json.loads(base64.urlsafe_b64decode(parts[1] + pad))
+            log(f'[auth] JWT role: {payload.get("role")!r}, ref: {payload.get("ref")!r}')
+            if payload.get('role') != 'service_role':
+                log('ERROR: SUPABASE_SERVICE_ROLE_KEY contains non-service-role JWT — RLS bypass impossible')
+                sys.exit(1)
+    except Exception as e:
+        log(f'[auth] WARN: cannot decode JWT: {e}')
     results = {}
     if args.only in ('deals', 'all'):
         results['deals'] = sync_deals(args.mode, args.limit)
