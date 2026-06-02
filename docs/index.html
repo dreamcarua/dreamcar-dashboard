@@ -1648,6 +1648,8 @@ async function loadProjects() {
         others.map(p => `<option value="raw::${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('') +
       '</optgroup>' : '');
     if (cur) sel.value = cur;
+    // resync f-model dropdown with the now-loaded __projectsList
+    if (typeof loadModelsSelect === 'function') loadModelsSelect();
   } catch (e) { console.warn('projects load failed', e); }
 }
 
