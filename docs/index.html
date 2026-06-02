@@ -81,6 +81,28 @@
     color: var(--success);
     text-transform: uppercase;
   }
+  /* renderAnalytics KPI variant — colored left border to differentiate page */
+  .kpi-card {
+    padding: 14px 16px;
+    background: var(--steel-2);
+    border: 1px solid var(--steel);
+    border-left: 3px solid var(--steel);
+    border-radius: 6px;
+    display: flex; flex-direction: column; gap: 6px;
+    transition: border-color 120ms;
+  }
+  .kpi-card:hover { border-color: var(--ash); }
+  .kpi-card.blue   { border-left-color: #3b82f6; }
+  .kpi-card.green  { border-left-color: var(--success, #10b981); }
+  .kpi-card.red    { border-left-color: var(--red, #E30613); }
+  .kpi-card.amber  { border-left-color: #f59e0b; }
+  .kpi-card .kpi-label { font-size: 10px; letter-spacing: 0.16em; color: var(--ash-2); text-transform: uppercase; font-family: 'JetBrains Mono', monospace; }
+  .kpi-card .kpi-value { font-size: 26px; font-weight: 700; color: var(--white); font-family: 'Oswald', sans-serif; line-height: 1.1; }
+  .kpi-card .kpi-meta  { font-size: 11px; color: var(--ash); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .kpi-card .pill { display: inline-block; padding: 1px 6px; border-radius: 8px; font-size: 10px; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+  .kpi-card .pill.up { background: rgba(16,185,129,0.15); color: var(--success, #10b981); }
+  .kpi-card .pill.dn { background: rgba(227,6,19,0.15); color: var(--red, #E30613); }
+  .kpi-card .pill.flat { background: rgba(170,170,170,0.15); color: var(--ash); }
   .live-dot {
     width: 8px; height: 8px;
     background: var(--success);
@@ -933,7 +955,7 @@
       <button class="tb-btn" id="tb-refresh" title="Оновити дані">🔄 <span class="full-label">Оновити</span></button>
       <button class="tb-btn" data-jump="settings" title="Налаштування проєктів">⚙️ <span class="full-label">Settings</span></button>
     </div>
-    <div class="live-badge"><span class="live-dot"></span>Live</div>
+    <div class="live-badge" id="live-badge"><span class="live-dot"></span>Live</div>
     <div class="user-chip" id="user-chip">
       <div class="user-avatar">?</div>
       <span id="user-email">guest</span>
