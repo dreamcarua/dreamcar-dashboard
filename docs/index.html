@@ -2140,9 +2140,10 @@ async function renderProjectsOverview() {
   const c = $('#content');
   c.innerHTML = `<div class="section-head"><h1>🏎️ Проекти</h1></div>${loadingHTML()}`;
   try {
-    const [projRes, uniqRes] = await Promise.all([
+    const [projRes, uniqRes, globRes] = await Promise.all([
       sb.rpc('dashboard_projects_with_stats'),
-      sb.rpc('dashboard_unique_buyers_total')
+      sb.rpc('dashboard_unique_buyers_total'),
+      sb.rpc('dashboard_globals').then(r => r.error ? null : (r.data||[])[0])
     ]);
     if (projRes.error) throw projRes.error;
     const rows = (projRes.data || []).map(r => ({
@@ -2187,7 +2188,7 @@ async function renderProjectsOverview() {
         ${kpi('Усього оплат', fmtNum(totals.paid), fmtPct(avgConv) + ' конв.', 'green')}
         ${kpi('Виручка lifetime', fmtMoney(totals.revenue), 'UAH', 'red')}
         ${kpi('Сер. чек', fmtMoney(avgAov), 'AOV', 'amber')}
-        ${kpi('Унік. покупців', fmtNum(trueUniqBuyers), 'без double-count', 'purple')}
+        ${kpi('Унік. покупців', fmtNum(trueUniqBuyers), globRes ? `30d: ${fmtNum(Number(globRes.unique_buyers_30d||0))}` : 'без double-count', 'purple')}
         ${kpi('Реклама (sum spend)', fmtMoney(totals.ad_spend), 'FB Ads + manual', 'amber')}
         ${kpi('ROI lifetime', totalRoiPct != null ? (totalRoiPct >= 0 ? '+' : '') + totalRoiPct.toFixed(0) + '%' : '—', avgCac != null ? 'CAC ' + fmtMoney(avgCac) : '', 'green')}
         ${kpi('Топ за виручкою', bestProj ? bestProj.name : '—', bestProj ? fmtMoney(bestProj.revenue) : '', 'red')}
