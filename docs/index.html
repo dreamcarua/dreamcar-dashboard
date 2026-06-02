@@ -2361,14 +2361,17 @@ async function renderAnalytics() {
   try {
     const params = _rpcParams();
     const isToday = (filters.from === filters.to);
-    const [kpiDelta, daily, hourly, mediums, campaigns, sources, trafficSplit] = await Promise.all([
+    // Extended KPI params (без p_traffic_type — не підтримується)
+    const extParams = { p_from: params.p_from, p_to: params.p_to, p_project_values: params.p_project_values, p_customer_type: params.p_customer_type, p_tariff: params.p_tariff, p_pay_provider: params.p_pay_provider };
+    const [kpiDelta, daily, hourly, mediums, campaigns, sources, trafficSplit, extKpi] = await Promise.all([
       sb.rpc('dashboard_kpi_with_delta', params).then(r => r.error ? null : (r.data||[])[0]),
       dailySeriesRPC(),
       isToday ? sb.rpc('dashboard_hourly_series', params).then(r => r.error ? [] : (r.data||[])) : Promise.resolve([]),
       aggViaRPC('utm_medium'),
       aggViaRPC('utm_campaign'),
       aggViaRPC('utm_source'),
-      trafficTypeRPC()
+      trafficTypeRPC(),
+      sb.rpc('dashboard_extended_kpi', extParams).then(r => r.error ? null : (r.data||[])[0])
     ]);
 
     const k = kpiDelta || {};
@@ -2432,6 +2435,32 @@ async function renderAnalytics() {
           <div class="chart-container short"><canvas id="ch-medium"></canvas></div>
         </div>
       </div>
+
+      ${extKpi ? `
+      <div class="kpi-grid" style="margin-top: 12px;">
+        <div class="kpi-card blue">
+          <div class="kpi-label">⏱ Час до оплати (median)</div>
+          <div class="kpi-value">${extKpi.median_minutes != null ? extKpi.median_minutes + ' хв' : '—'}</div>
+          <div class="kpi-meta">p90: ${extKpi.p90_minutes != null ? extKpi.p90_minutes + ' хв' : '—'}</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">🔁 Повторні покупці</div>
+          <div class="kpi-value">${extKpi.total_buyers > 0 ? Math.round((Number(extKpi.repeat_buyers)/Number(extKpi.total_buyers))*100) + '%' : '—'}</div>
+          <div class="kpi-meta">${fmtNum(Number(extKpi.repeat_buyers||0))} з ${fmtNum(Number(extKpi.total_buyers||0))} покупців</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">📊 Median check</div>
+          <div class="kpi-value">${fmtMoney(Number(extKpi.median_amount||0))}</div>
+          <div class="kpi-meta">avg (AOV) ▸ ${fmtMoney(Number(k.aov||0))}</div>
+        </div>
+        <div class="kpi-card red">
+          <div class="kpi-label">💱 Currency split</div>
+          <div class="kpi-value" style="font-size:14px;line-height:1.5;">
+            ${Number(extKpi.uah_revenue||0)>0?'UAH ' + fmtMoney(Number(extKpi.uah_revenue)) + '<br>':''}${Number(extKpi.usd_revenue||0)>0?'USD ' + fmtMoney(Number(extKpi.usd_revenue),'USD') + '<br>':''}${Number(extKpi.eur_revenue||0)>0?'EUR ' + fmtMoney(Number(extKpi.eur_revenue),'EUR'):''}${Number(extKpi.uah_revenue||0)===0 && Number(extKpi.usd_revenue||0)===0 && Number(extKpi.eur_revenue||0)===0 ? '<span style="color:var(--ash);font-size:12px">немає paid угод</span>' : ''}
+          </div>
+          <div class="kpi-meta">розкладка виручки</div>
+        </div>
+      </div>` : ''}
 
       <div class="card">
         <div class="card-head"><h3>🎯 Топ-10 кампаній</h3><span class="meta">${campaigns.length} усього</span></div>
