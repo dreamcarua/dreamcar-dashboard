@@ -1484,6 +1484,88 @@ function applyClientFilters(rows) {
   return out;
 }
 
+/* ============== RPC AGGREGATION HELPERS (fast path) ============== */
+function _rpcParams() {
+  const sp = getSelectedProject();
+  let fromDate = filters.from, toDate = filters.to;
+  let projectValues = null;
+  if (sp) {
+    if (sp.date_start > fromDate) fromDate = sp.date_start;
+    if (sp.date_end < toDate) toDate = sp.date_end;
+    if (sp.deal_project_values && sp.deal_project_values.length) projectValues = sp.deal_project_values;
+  } else if (filters.project && filters.project.startsWith('raw::')) {
+    projectValues = [filters.project.slice(5)];
+  }
+  return {
+    p_from: fromDate + 'T00:00:00Z',
+    p_to: toDate + 'T23:59:59Z',
+    p_project_values: projectValues
+  };
+}
+
+async function aggViaRPC(field) {
+  const params = { p_field: field, ..._rpcParams() };
+  const { data, error } = await sb.rpc('dashboard_agg_deals_with_traffic', params);
+  if (error) throw error;
+  return (data || []).map(r => ({
+    key: r.key,
+    leads: Number(r.leads),
+    paid: Number(r.paid),
+    fail: Number(r.fail),
+    pending: Number(r.pending),
+    sum: Number(r.sum_amount),
+    buyers: Number(r.buyers),
+    traffic_type: r.traffic_type === 'paid' ? '💸 Платний' : '🌱 Органічний',
+    conv: Number(r.leads) > 0 ? (Number(r.paid) / Number(r.leads) * 100) : 0,
+    avg:  Number(r.paid)  > 0 ? (Number(r.sum_amount) / Number(r.paid)) : 0
+  }));
+}
+
+async function trafficTypeRPC() {
+  const { data, error } = await sb.rpc('dashboard_traffic_type_summary', _rpcParams());
+  if (error) throw error;
+  const out = { paid: null, organic: null };
+  (data || []).forEach(r => {
+    out[r.traffic_type] = {
+      leads: Number(r.leads),
+      paid: Number(r.paid),
+      sum: Number(r.revenue),
+      buyers: Number(r.buyers),
+      conv: Number(r.conv_rate),
+      avg: Number(r.avg_check)
+    };
+  });
+  out.paid = out.paid || { leads:0, paid:0, sum:0, buyers:0, conv:0, avg:0 };
+  out.organic = out.organic || { leads:0, paid:0, sum:0, buyers:0, conv:0, avg:0 };
+  return out;
+}
+
+async function kpiSummaryRPC() {
+  const { data, error } = await sb.rpc('dashboard_kpi_summary', _rpcParams());
+  if (error) throw error;
+  const r = (data || [])[0] || {};
+  return {
+    total: Number(r.total||0),
+    paid: Number(r.paid||0),
+    fail: Number(r.fail||0),
+    pending: Number(r.pending||0),
+    revenue: Number(r.revenue||0),
+    unique_buyers: Number(r.unique_buyers||0),
+    paid_rate: Number(r.paid_rate||0)
+  };
+}
+
+async function dailySeriesRPC() {
+  const { data, error } = await sb.rpc('dashboard_daily_series', _rpcParams());
+  if (error) throw error;
+  return (data || []).map(r => ({
+    day: r.day,
+    leads: Number(r.leads),
+    paid: Number(r.paid),
+    revenue: Number(r.revenue)
+  }));
+}
+
 async function fetchAllDealsBatched(maxRows=30000) {
   const BATCH = 1000;
   const all = [];
@@ -2181,42 +2263,17 @@ async function renderTrafficType() {
   const c = $('#content');
   c.innerHTML = `<div class="section-head"><h1>🔗 Тип трафіка</h1></div>${loadingHTML()}`;
   try {
-    const rows = await fetchAllDealsBatched(30000);
-    setLastData('medium', rows);
-
-    // Bucket by traffic_type
-    const buckets = { paid: [], organic: [] };
-    rows.forEach(r => {
-      const key = isPaidSource(r.utm_source) ? 'paid' : 'organic';
-      buckets[key].push(r);
-    });
-
-    const compute = (lst) => {
-      const paid = lst.filter(r => r.status === 'pay');
-      const sum = paid.reduce((a,r) => a + Number(r.amount||0), 0);
-      return {
-        leads: lst.length,
-        paid: paid.length,
-        sum,
-        buyers: new Set(paid.map(r => r.customer_email).filter(Boolean)).size,
-        conv: lst.length ? (paid.length/lst.length*100) : 0,
-        avg: paid.length ? sum/paid.length : 0
-      };
-    };
-    const pStat = compute(buckets.paid);
-    const oStat = compute(buckets.organic);
-
-    // Detailed table — by medium с традиційним полем medium
-    const aggMedium = aggregateByField(rows, 'utm_medium');
-    aggMedium.forEach(a => {
-      // sample first row matching this medium to detect paid/organic via utm_source
-      const sample = rows.find(r => (r.utm_medium||'(none)') === a.key);
-      a.traffic_type = sample && isPaidSource(sample.utm_source) ? '💸 Платний' : '🌱 Органічний';
-    });
+    const [tt, aggMedium] = await Promise.all([
+      trafficTypeRPC(),
+      aggViaRPC('utm_medium')
+    ]);
+    const pStat = tt.paid;
+    const oStat = tt.organic;
+    const totalDeals = pStat.leads + oStat.leads;
 
     c.innerHTML = `
       <div class="section-head">
-        <div><h1>🔗 Тип трафіка</h1><div class="subtitle">розподіл лідів між платним та органічним трафіком · ${fmtNum(rows.length)} угод</div></div>
+        <div><h1>🔗 Тип трафіка</h1><div class="subtitle">розподіл лідів · ${fmtNum(totalDeals)} угод</div></div>
       </div>
 
       <div class="kpi-grid">
@@ -2257,14 +2314,14 @@ async function renderTrafficType() {
         { key: 'traffic_type', label: 'Тип', fmt: v => `<span class="pill ${v.includes('Платний')?'pending':'pay'}">${escapeHtml(v)}</span>` },
         { key: 'key', label: 'utm_medium', fmt: v => `<span class="mono" style="font-size:12px">${escapeHtml(v)}</span>` },
         { key: 'leads', label: 'Ліди', class: 'num', fmt: fmtNum },
-        { key: 'paid', label: 'Paid', class: 'num', fmt: fmtNum },
-        { key: 'buyers', label: 'Унік.', class: 'num', fmt: fmtNum },
-        { key: 'sum', label: 'Revenue', class: 'amount', fmt: v => fmtMoney(v) },
-        { key: 'avg', label: 'Середній', class: 'amount', fmt: v => fmtMoney(v) },
-        { key: 'conv', label: 'Conv %', class: 'num', fmt: v => fmtPct(v) }
+        { key: 'paid',  label: 'Оплати', class: 'num', fmt: fmtNum },
+        { key: 'sum',   label: 'Сума UAH', class: 'num', fmt: fmtMoney },
+        { key: 'buyers',label: 'Покупців', class: 'num', fmt: fmtNum },
+        { key: 'conv',  label: 'Конв %', class: 'num', fmt: fmtPct },
+        { key: 'avg',   label: 'Сер. чек', class: 'num', fmt: fmtMoney }
       ]
     });
-  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
+  } catch (e) { c.innerHTML = errorHTML(e); }
 }
 
 /* ---------------- UTM FIELDS GENERIC ---------------- */
@@ -2272,23 +2329,19 @@ async function renderUtmField(field, title, csvName) {
   const c = $('#content');
   c.innerHTML = `<div class="section-head"><h1>${escapeHtml(title)}</h1></div>${loadingHTML()}`;
   try {
-    const rows = await fetchAllDealsBatched(30000);
-    setLastData(field, rows);
-    const agg = aggregateByField(rows, field);
+    const agg = await aggViaRPC(field);
 
-    // Try to attach ad spend by matching utm field (best-effort)
-    const adField = field;
     let adMap = new Map();
     try {
       const { data: ads } = await sb.from('dashboard_ads_data')
-        .select(adField + ', spend')
+        .select(field + ', spend')
         .gte('date_start', filters.from)
         .lte('date_start', filters.to);
       (ads||[]).forEach(a => {
-        const k = a[adField] || '(none)';
+        const k = a[field] || '(none)';
         adMap.set(k, (adMap.get(k)||0) + Number(a.spend||0));
       });
-    } catch(e) { /* ads_data might not have that field — ignore */ }
+    } catch(e) { /* ads_data might not have that field */ }
 
     agg.forEach(a => {
       a.spend = adMap.get(a.key) || 0;
@@ -2298,27 +2351,23 @@ async function renderUtmField(field, title, csvName) {
       a.cpl = a.spend > 0 && a.leads > 0 ? a.spend / a.leads : null;
       a.cpa = a.spend > 0 && a.paid > 0 ? a.spend / a.paid : null;
     });
-
-    // Add ads-only rows (those that have spend but no leads)
     adMap.forEach((spend, k) => {
       if (!agg.find(a => a.key === k)) {
         agg.push({
           key: k, leads: 0, paid: 0, sum: 0, fail: 0, pending: 0, buyers: 0, avg: 0, conv: 0,
-          spend, profit: -spend,
-          roas: null, roi: null, cpl: null, cpa: null
+          spend, profit: -spend, roas: null, roi: null, cpl: null, cpa: null
         });
       }
     });
 
-    // sourceFilter post-filter
     let aggView = agg;
     if (filters.source_filter === 'both')   aggView = agg.filter(a => a.leads > 0 && a.spend > 0);
     else if (filters.source_filter === 'crm') aggView = agg.filter(a => a.leads > 0 && a.spend === 0);
     else if (filters.source_filter === 'ads') aggView = agg.filter(a => a.spend > 0 && a.leads === 0);
 
     const topPaid = aggView.filter(a => a.paid > 0).slice(0, 10);
+    const totalLeads = aggView.reduce((sum, r) => sum + r.leads, 0);
 
-    // Column label for the key field
     const keyLabel = field === 'utm_term' ? 'Виконавець (utm_term)'
                    : field === 'utm_content' ? 'Оголошення (utm_content)'
                    : field === 'utm_source' ? 'Джерело (utm_source)'
@@ -2326,7 +2375,7 @@ async function renderUtmField(field, title, csvName) {
 
     c.innerHTML = `
       <div class="section-head">
-        <div><h1>${escapeHtml(title)}</h1><div class="subtitle">${aggView.length} значень · ${fmtNum(rows.length)} угод${filters.source_filter ? ' · фільтр джерел: '+filters.source_filter : ''}</div></div>
+        <div><h1>${escapeHtml(title)}</h1><div class="subtitle">${aggView.length} значень · ${fmtNum(totalLeads)} лідів${filters.source_filter ? ' · фільтр: '+filters.source_filter : ''}</div></div>
       </div>
 
       <div class="card">
@@ -2335,7 +2384,7 @@ async function renderUtmField(field, title, csvName) {
       </div>
 
       <div class="card">
-        <div class="card-head"><h3>Деталі</h3><span class="meta">клік на рядок — деталі джерела</span></div>
+        <div class="card-head"><h3>Деталі</h3></div>
         <div id="t-utm"></div>
       </div>
     `;
@@ -2349,8 +2398,6 @@ async function renderUtmField(field, title, csvName) {
         ],
         { scales: { y1: { position: 'right', grid: { drawOnChartArea: false } } } }
       );
-    } else {
-      $('#ch-top').parentElement.innerHTML = '<div class="state">Немає оплачених лідів для топа</div>';
     }
 
     buildTable('#t-utm', {
@@ -2359,23 +2406,21 @@ async function renderUtmField(field, title, csvName) {
       sortKey: 'sum',
       csvFile: csvName,
       cols: [
-        { key: 'key', label: keyLabel, fmt: v => `<span class="mono" style="font-size:12px">${escapeHtml(v)}</span>` },
-        { key: 'leads', label: 'Ліди', class: 'num', fmt: fmtNum },
-        { key: 'paid', label: 'Paid', class: 'num', fmt: fmtNum },
-        { key: 'fail', label: 'Fail', class: 'num', fmt: fmtNum },
-        { key: 'buyers', label: 'Унік.', class: 'num', fmt: fmtNum },
-        { key: 'sum', label: 'Заробл.', class: 'amount', fmt: v => fmtMoney(v) },
-        { key: 'spend', label: 'Spend', class: 'amount', fmt: v => v ? fmtMoney(v) : '—' },
-        { key: 'profit', label: 'Прибуток', class: 'amount', fmt: v => v != null ? fmtMoney(v) : '—' },
-        { key: 'roas', label: 'ROAS', class: 'num', fmt: v => v != null ? v.toFixed(2)+'×' : '—' },
-        { key: 'roi', label: 'ROI', class: 'num', fmt: v => v != null ? fmtPct(v) : '—' },
-        { key: 'cpl', label: 'CPL', class: 'num', fmt: v => v != null ? fmtMoney(v) : '—' },
-        { key: 'cpa', label: 'CPA', class: 'num', fmt: v => v != null ? fmtMoney(v) : '—' },
-        { key: 'avg', label: 'Середній', class: 'amount', fmt: v => fmtMoney(v) },
-        { key: 'conv', label: 'Conv %', class: 'num', fmt: v => fmtPct(v) }
+        { key: 'key',    label: keyLabel, fmt: v => `<span class="mono" style="font-size:12px">${escapeHtml(v)}</span>` },
+        { key: 'leads',  label: 'Ліди',   class: 'num', fmt: fmtNum },
+        { key: 'paid',   label: 'Оплати', class: 'num', fmt: fmtNum },
+        { key: 'sum',    label: 'Виручка UAH', class: 'num', fmt: fmtMoney },
+        { key: 'spend',  label: 'Витрати', class: 'num', fmt: v => v > 0 ? fmtMoney(v) : '—' },
+        { key: 'profit', label: 'Прибуток', class: 'num', fmt: v => v !== 0 ? fmtMoney(v) : '—' },
+        { key: 'roas',   label: 'ROAS',  class: 'num', fmt: v => v != null ? v.toFixed(2) + 'x' : '—' },
+        { key: 'roi',    label: 'ROI %', class: 'num', fmt: v => v != null ? fmtPct(v) : '—' },
+        { key: 'cpl',    label: 'CPL',   class: 'num', fmt: v => v != null ? fmtMoney(v) : '—' },
+        { key: 'cpa',    label: 'CPA',   class: 'num', fmt: v => v != null ? fmtMoney(v) : '—' },
+        { key: 'conv',   label: 'Конв %', class: 'num', fmt: fmtPct },
+        { key: 'avg',    label: 'Сер. чек', class: 'num', fmt: fmtMoney }
       ]
     });
-  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
+  } catch (e) { c.innerHTML = errorHTML(e); }
 }
 
 /* ---------------- CAMPAIGNS ---------------- */
