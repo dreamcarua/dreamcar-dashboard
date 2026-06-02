@@ -139,11 +139,28 @@ def get_ad_link_urls(acct):
     return links
 
 
-def get_insights(acct, since, until):
+def _date(s):
+    return datetime.strptime(s, '%Y-%m-%d').date()
+
+
+def _chunks(since, until, max_days=80):
     """
-    Pull ad-level insights for date range.
-    time_increment=1 → daily breakdown
+    FB Marketing API ad-level insights max window with time_increment=1 is 90 days.
+    Split larger range into chunks of `max_days`.
+    Returns list of (since, until) tuples (strings).
     """
+    s = _date(since)
+    u = _date(until)
+    out = []
+    cur = s
+    while cur <= u:
+        nxt = min(cur + timedelta(days=max_days - 1), u)
+        out.append((cur.isoformat(), nxt.isoformat()))
+        cur = nxt + timedelta(days=1)
+    return out
+
+
+def _fetch_insights_chunk(acct, since, until):
     all_rows = []
     params = {
         'level': 'ad',
@@ -172,6 +189,25 @@ def get_insights(acct, since, until):
         next_url = paging.get('next')
         if not next_url:
             break
+    return all_rows
+
+
+def get_insights(acct, since, until):
+    """
+    Pull ad-level insights for date range.
+    Auto-chunks ranges > 80 days (FB API limit with time_increment=1).
+    """
+    chunks = _chunks(since, until, max_days=80)
+    if len(chunks) > 1:
+        log(f'   Chunking {since}..{until} into {len(chunks)} pieces (FB API 90-day limit)')
+    all_rows = []
+    for i, (cs, cu) in enumerate(chunks, 1):
+        if len(chunks) > 1:
+            log(f'   [{i}/{len(chunks)}] {cs}..{cu}')
+        rows = _fetch_insights_chunk(acct, cs, cu)
+        all_rows.extend(rows)
+        if len(chunks) > 1:
+            log(f'       +{len(rows)} rows (total {len(all_rows)})')
     return all_rows
 
 
