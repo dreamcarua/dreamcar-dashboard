@@ -876,6 +876,7 @@
     <div class="nav-group">
       <div class="nav-group-title">Аналітика</div>
       <div class="nav-item" data-route="overview"><span class="icon">📊</span>Огляд</div>
+      <div class="nav-item" data-route="projects"><span class="icon">🏎️</span>Проекти</div>
       <div class="nav-item" data-route="analytics"><span class="icon">💰</span>Аналітика</div>
       <div class="nav-item" data-route="combos"><span class="icon">🔗</span>Комбінації</div>
       <div class="nav-item" data-route="sources"><span class="icon">📍</span>Джерела</div>
@@ -1340,7 +1341,7 @@ function setupFilterBar() {
 }
 
 function resetFilters() {
-  applyPreset('30d');
+  applyPreset('today');
   filters.project = ''; filters.status = '';
   filters.customer_type = ''; filters.funnel_type = '';
   filters.tariff = ''; filters.pay_provider = '';
@@ -2036,6 +2037,7 @@ function doughnutChart(canvasId, labels, data, colors) {
    ================================================================= */
 
 const SECTIONS = {
+  'projects': renderProjectsOverview,
   'overview': renderOverview,
   'analytics': renderAnalytics,
   'sources': () => renderUtmField('utm_source', '📍 Джерела', 'sources.csv'),
@@ -2059,7 +2061,7 @@ const SECTIONS = {
 
 const SECTION_TITLES = {
   'overview': 'Огляд', 'analytics': 'Аналітика',
-  'sources': 'Джерела', 'medium': 'Тип трафіка', 'campaigns': 'Кампанії',
+  'projects': '🏎️ Проекти', 'sources': 'Джерела', 'medium': 'Тип трафіка', 'campaigns': 'Кампанії',
   'content': 'Оголошення', 'terms': 'Виконавець', 'combos': 'Комбінації',
   'deals': 'Таблиця', 'webhooks': 'Webhooks', 'mapping': 'UTM Mapping',
   'costs': 'Manual Costs', 'ads-overview': 'Ads Overview',
@@ -2067,11 +2069,100 @@ const SECTION_TITLES = {
   'payroll': 'Payroll', 'settings': 'Settings', 'help': 'Допомога'
 };
 
-const UTM_SECTIONS = new Set(['overview','analytics','sources','medium','campaigns','content','terms','combos','deals']);
+const UTM_SECTIONS = new Set(['overview','analytics','projects','sources','medium','campaigns','content','terms','combos','deals']);
 const ADS_SECTIONS = new Set(['ads-overview','ads-campaigns']);
 const NOFILTER_SECTIONS = new Set(['webhooks','mapping','costs','cards','usdt','payroll','settings','help']);
 
 /* ---------------- OVERVIEW ---------------- */
+/* ---------------- PROJECTS OVERVIEW ---------------- */
+async function renderProjectsOverview() {
+  const c = $('#content');
+  c.innerHTML = `<div class="section-head"><h1>🏎️ Проекти</h1></div>${loadingHTML()}`;
+  try {
+    const { data, error } = await sb.rpc('dashboard_projects_with_stats');
+    if (error) throw error;
+    const rows = (data || []).map(r => ({
+      code: r.code, name: r.name, car_model: r.car_model,
+      date_start: r.date_start, date_end: r.date_end,
+      status: r.status, color: r.color,
+      leads: Number(r.leads), paid: Number(r.paid),
+      fail: Number(r.fail), pending: Number(r.pending),
+      revenue: Number(r.revenue), buyers: Number(r.buyers),
+      conv_rate: Number(r.conv_rate), avg_check: Number(r.avg_check)
+    }));
+
+    const totals = rows.reduce((a,r) => ({
+      leads: a.leads + r.leads, paid: a.paid + r.paid,
+      revenue: a.revenue + r.revenue, buyers: a.buyers + r.buyers
+    }), { leads: 0, paid: 0, revenue: 0, buyers: 0 });
+    const avgConv = totals.leads > 0 ? (totals.paid / totals.leads * 100) : 0;
+    const avgAov = totals.paid > 0 ? (totals.revenue / totals.paid) : 0;
+    const bestProj = rows.reduce((best, r) => r.revenue > (best?.revenue || 0) ? r : best, null);
+    const bestConv = rows.reduce((best, r) => r.conv_rate > (best?.conv_rate || 0) ? r : best, null);
+
+    c.innerHTML = `
+      <div class="section-head">
+        <div><h1>🏎️ Проекти</h1><div class="subtitle">${rows.length} проектів · full-lifetime stats</div></div>
+      </div>
+
+      <div class="kpi-grid">
+        ${kpi('Усього лідів', fmtNum(totals.leads), 'across всіх проектів', 'blue')}
+        ${kpi('Усього оплат', fmtNum(totals.paid), fmtPct(avgConv) + ' конв.', 'green')}
+        ${kpi('Виручка lifetime', fmtMoney(totals.revenue), 'UAH', 'red')}
+        ${kpi('Сер. чек', fmtMoney(avgAov), 'AOV', 'amber')}
+        ${kpi('Унік. покупців', fmtNum(totals.buyers), '', 'purple')}
+        ${kpi('Топ за виручкою', bestProj ? bestProj.name : '—', bestProj ? fmtMoney(bestProj.revenue) : '', 'red')}
+        ${kpi('Топ за конверсією', bestConv ? bestConv.name : '—', bestConv ? fmtPct(bestConv.conv_rate) : '', 'green')}
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head"><h3>Revenue по проектах</h3></div>
+          <div class="chart-container"><canvas id="ch-proj-rev"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>Conv % по проектах</h3></div>
+          <div class="chart-container"><canvas id="ch-proj-conv"></canvas></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>Усі проекти — деталі</h3></div>
+        <div id="t-projects"></div>
+      </div>
+    `;
+
+    const reversedRows = [...rows].reverse();
+    barChart('ch-proj-rev',
+      reversedRows.map(r => r.name),
+      [{ label: 'Виручка UAH', data: reversedRows.map(r => r.revenue), backgroundColor: reversedRows.map(r => r.color || '#E30613') }],
+      { legend: false }
+    );
+    barChart('ch-proj-conv',
+      reversedRows.map(r => r.name),
+      [{ label: 'Конв %', data: reversedRows.map(r => r.conv_rate), backgroundColor: '#10B981' }],
+      { legend: false }
+    );
+
+    buildTable('#t-projects', {
+      rows, pageSize: 50, sortKey: 'date_start', sortDir: 'desc',
+      csvFile: 'projects.csv',
+      cols: [
+        { key: 'name', label: 'Проект', fmt: (v, r) => `<strong style="color:${r.color||'#fff'}">${escapeHtml(v)}</strong>` },
+        { key: 'date_start', label: 'Старт', fmt: v => `<span class="mono">${v}</span>` },
+        { key: 'date_end', label: 'Фініш', fmt: v => `<span class="mono">${v}</span>` },
+        { key: 'status', label: 'Статус', fmt: v => `<span class="pill ${v==='active'?'pay':v==='archived'?'pending':'fail'}">${escapeHtml(v)}</span>` },
+        { key: 'leads', label: 'Ліди', class: 'num', fmt: fmtNum },
+        { key: 'paid', label: 'Оплати', class: 'num', fmt: fmtNum },
+        { key: 'revenue', label: 'Виручка', class: 'num', fmt: fmtMoney },
+        { key: 'buyers', label: 'Покупців', class: 'num', fmt: fmtNum },
+        { key: 'conv_rate', label: 'Конв %', class: 'num', fmt: fmtPct },
+        { key: 'avg_check', label: 'AOV', class: 'num', fmt: fmtMoney }
+      ]
+    });
+  } catch (e) { c.innerHTML = errorHTML(e); }
+}
+
 async function renderOverview() {
   const c = $('#content');
   c.innerHTML = `
@@ -2207,94 +2298,145 @@ async function renderAnalytics() {
   const c = $('#content');
   c.innerHTML = `<div class="section-head"><h1>📈 Аналітика</h1></div>${loadingHTML()}`;
   try {
-    const rows = await fetchAllDealsBatched(30000);
-    const byStatus = {};
-    rows.forEach(r => byStatus[r.status||'unknown'] = (byStatus[r.status||'unknown']||0) + 1);
-    const byProj = aggregateByField(rows, 'project').slice(0, 10);
-    const totalLeads = rows.length;
-    const pending = rows.filter(r => r.status==='pending').length;
-    const paid = rows.filter(r => r.status==='pay').length;
-    const fail = rows.filter(r => r.status==='fail').length;
+    const params = _rpcParams();
+    const isToday = (filters.from === filters.to);
+    const [kpiDelta, daily, hourly, mediums, campaigns, sources, trafficSplit] = await Promise.all([
+      sb.rpc('dashboard_kpi_with_delta', params).then(r => r.error ? null : (r.data||[])[0]),
+      dailySeriesRPC(),
+      isToday ? sb.rpc('dashboard_hourly_series', params).then(r => r.error ? [] : (r.data||[])) : Promise.resolve([]),
+      aggViaRPC('utm_medium'),
+      aggViaRPC('utm_campaign'),
+      aggViaRPC('utm_source'),
+      trafficTypeRPC()
+    ]);
 
-    const byMonth = aggregateByMonth(rows);
+    const k = kpiDelta || {};
+    const dlt = v => v == null ? '' : (v >= 0 ? `▲ +${v}%` : `▼ ${v}%`);
+    const dltClass = v => v == null ? '' : (v >= 0 ? 'pay' : 'fail');
+
+    const topMediums = mediums.slice(0, 5);
+    const topCampaigns = campaigns.filter(c => c.key !== '(none)' && c.key !== '').slice(0, 10);
+    const topSources = sources.filter(s => s.key !== '(none)' && s.key !== '').slice(0, 10);
+
+    const seriesData = isToday ? hourly.map(h => ({ x: h.hour, leads: Number(h.leads), paid: Number(h.paid), revenue: Number(h.revenue) }))
+                               : daily.map(d => ({ x: d.day, leads: d.leads, paid: d.paid, revenue: d.revenue }));
+    const xLabels = seriesData.map(d => isToday ? new Date(d.x).getHours() + ':00' : d.x);
 
     c.innerHTML = `
       <div class="section-head">
-        <div><h1>📈 Аналітика</h1><div class="subtitle">${fmtNum(rows.length)} угод</div></div>
+        <div><h1>📈 Аналітика</h1><div class="subtitle">${filters.from} → ${filters.to} · ${isToday ? 'погодинна' : 'щоденна'} деталізація</div></div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card blue">
+          <div class="kpi-label">Ліди</div>
+          <div class="kpi-value">${fmtNum(Number(k.total||0))}</div>
+          <div class="kpi-meta"><span class="pill ${dltClass(Number(k.total_delta))}">${dlt(Number(k.total_delta))}</span> vs попередній період</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">Оплати</div>
+          <div class="kpi-value">${fmtNum(Number(k.paid||0))}</div>
+          <div class="kpi-meta">${fmtPct(Number(k.paid_rate||0))} конверсія · <span class="pill ${dltClass(Number(k.paid_delta))}">${dlt(Number(k.paid_delta))}</span></div>
+        </div>
+        <div class="kpi-card red">
+          <div class="kpi-label">Виручка UAH</div>
+          <div class="kpi-value">${fmtMoney(Number(k.revenue||0))}</div>
+          <div class="kpi-meta"><span class="pill ${dltClass(Number(k.revenue_delta))}">${dlt(Number(k.revenue_delta))}</span> vs попередній</div>
+        </div>
+        <div class="kpi-card amber">
+          <div class="kpi-label">Сер. чек (AOV)</div>
+          <div class="kpi-value">${fmtMoney(Number(k.aov||0))}</div>
+          <div class="kpi-meta">${fmtNum(Number(k.buyers||0))} унік. покупців</div>
+        </div>
       </div>
 
       <div class="grid-2">
         <div class="card">
-          <div class="card-head"><h3>Розподіл за статусами</h3></div>
-          <div class="chart-container short"><canvas id="ch-status"></canvas></div>
+          <div class="card-head"><h3>${isToday ? 'Сьогодні погодинно' : 'Динаміка по днях'}</h3></div>
+          <div class="chart-container"><canvas id="ch-trend"></canvas></div>
         </div>
         <div class="card">
-          <div class="card-head"><h3>Воронка</h3></div>
+          <div class="card-head"><h3>🔻 Воронка</h3></div>
           <div class="chart-container short"><canvas id="ch-funnel"></canvas></div>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-head"><h3>Cohort по місяцях</h3><span class="meta">${byMonth.length} міс.</span></div>
-        <div class="chart-container"><canvas id="ch-cohort"></canvas></div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head"><h3>💸 Платний vs 🌱 Органічний</h3></div>
+          <div class="chart-container short"><canvas id="ch-tt"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>🏆 Топ-5 каналів (utm_medium)</h3></div>
+          <div class="chart-container short"><canvas id="ch-medium"></canvas></div>
+        </div>
       </div>
 
       <div class="card">
-        <div class="card-head"><h3>Топ-10 проектів</h3></div>
-        <div class="chart-container"><canvas id="ch-projects"></canvas></div>
+        <div class="card-head"><h3>🎯 Топ-10 кампаній</h3><span class="meta">${campaigns.length} усього</span></div>
+        <div id="t-campaigns"></div>
       </div>
 
       <div class="card">
-        <div class="card-head"><h3>Деталі по проектах</h3></div>
-        <div id="t-proj"></div>
+        <div class="card-head"><h3>📍 Топ-10 джерел</h3></div>
+        <div id="t-sources"></div>
       </div>
     `;
 
-    const statusColors = { pay:'#10B981', new:'#3B82F6', pending:'#F59E0B', fail:'#DC2626', refunded:'#A855F7', unknown:'#888' };
-    const sKeys = Object.keys(byStatus);
-    doughnutChart('ch-status', sKeys, sKeys.map(k=>byStatus[k]), sKeys.map(k=>statusColors[k]||'#888'));
+    if (seriesData.length) {
+      lineChart('ch-trend', xLabels, [
+        { label: 'Ліди', data: seriesData.map(d => d.leads), borderColor: '#3B82F6', backgroundColor: 'rgba(59,130,246,0.10)', tension: 0.3, fill: true },
+        { label: 'Оплачені', data: seriesData.map(d => d.paid), borderColor: '#10B981', backgroundColor: 'rgba(16,185,129,0.15)', tension: 0.3, fill: true },
+        { label: 'Revenue', data: seriesData.map(d => d.revenue), borderColor: '#E30613', backgroundColor: 'transparent', tension: 0.3, yAxisID: 'y1' }
+      ], { scales: { y1: { position: 'right', grid: { drawOnChartArea: false }, ticks: { color: '#E30613' } } } });
+    }
 
+    const total = Number(k.total||0), paid = Number(k.paid||0);
     barChart('ch-funnel',
-      ['Усі ліди','Pending','Paid','Fail'],
-      [{ label: 'К-сть', data: [totalLeads, pending, paid, fail], backgroundColor: ['#3B82F6','#F59E0B','#10B981','#DC2626'] }],
+      ['Усі ліди', 'Оплачені'],
+      [{ label: 'К-сть', data: [total, paid], backgroundColor: ['#3B82F6','#10B981'] }],
       { legend: false }
     );
 
-    lineChart('ch-cohort',
-      byMonth.map(m => m.month),
-      [
-        { label: 'Ліди', data: byMonth.map(m => m.leads), borderColor: '#3B82F6', backgroundColor: 'rgba(59,130,246,0.10)', tension: 0.3, fill: true },
-        { label: 'Оплачені', data: byMonth.map(m => m.paid), borderColor: '#10B981', backgroundColor: 'rgba(16,185,129,0.15)', tension: 0.3, fill: true },
-        { label: 'Revenue', data: byMonth.map(m => m.sum), borderColor: '#E30613', backgroundColor: 'transparent', tension: 0.3, yAxisID: 'y1' }
-      ],
-      { scales: { y1: { position: 'right', grid: { drawOnChartArea: false }, ticks: { color: '#E30613' } } } }
+    doughnutChart('ch-tt',
+      ['💸 Платний','🌱 Органічний'],
+      [trafficSplit.paid.leads, trafficSplit.organic.leads],
+      ['#F59E0B','#10B981']
     );
 
-    barChart('ch-projects',
-      byProj.map(p => p.key),
-      [
-        { label: 'Ліди', data: byProj.map(p=>p.leads), backgroundColor: '#3B82F6' },
-        { label: 'Оплачені', data: byProj.map(p=>p.paid), backgroundColor: '#10B981' }
-      ]
-    );
+    if (topMediums.length) {
+      barChart('ch-medium',
+        topMediums.map(m => m.key.length > 15 ? m.key.slice(0,12)+'...' : m.key),
+        [{ label: 'Виручка', data: topMediums.map(m => m.sum), backgroundColor: '#E30613' }],
+        { legend: false }
+      );
+    }
 
-    buildTable('#t-proj', {
-      rows: byProj,
-      pageSize: 25,
-      sortKey: 'sum',
-      csvFile: 'projects.csv',
+    buildTable('#t-campaigns', {
+      rows: topCampaigns, pageSize: 10, sortKey: 'sum',
+      csvFile: 'top-campaigns.csv',
       cols: [
-        { key: 'key', label: 'Проект', fmt: v => escapeHtml(v) },
+        { key: 'key', label: 'Кампанія', fmt: v => `<span class="mono" style="font-size:12px">${escapeHtml(v)}</span>` },
         { key: 'leads', label: 'Ліди', class: 'num', fmt: fmtNum },
-        { key: 'paid', label: 'Paid', class: 'num', fmt: fmtNum },
-        { key: 'fail', label: 'Fail', class: 'num', fmt: fmtNum },
-        { key: 'buyers', label: 'Унік.', class: 'num', fmt: fmtNum },
-        { key: 'sum', label: 'Сума', class: 'amount', fmt: v => fmtMoney(v) },
-        { key: 'avg', label: 'Середній', class: 'amount', fmt: v => fmtMoney(v) },
-        { key: 'conv', label: 'Conv %', class: 'num', fmt: v => fmtPct(v) }
+        { key: 'paid', label: 'Оплати', class: 'num', fmt: fmtNum },
+        { key: 'sum', label: 'Виручка', class: 'num', fmt: fmtMoney },
+        { key: 'conv', label: 'Конв %', class: 'num', fmt: fmtPct }
       ]
     });
-  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
+
+    buildTable('#t-sources', {
+      rows: topSources, pageSize: 10, sortKey: 'sum',
+      csvFile: 'top-sources.csv',
+      cols: [
+        { key: 'key', label: 'Джерело', fmt: v => `<span class="mono" style="font-size:12px">${escapeHtml(v)}</span>` },
+        { key: 'traffic_type', label: 'Тип', fmt: v => `<span class="pill ${v.includes('Платний')?'pending':'pay'}">${escapeHtml(v)}</span>` },
+        { key: 'leads', label: 'Ліди', class: 'num', fmt: fmtNum },
+        { key: 'paid', label: 'Оплати', class: 'num', fmt: fmtNum },
+        { key: 'sum', label: 'Виручка', class: 'num', fmt: fmtMoney },
+        { key: 'conv', label: 'Конв %', class: 'num', fmt: fmtPct }
+      ]
+    });
+  } catch (e) { c.innerHTML = errorHTML(e); }
 }
 
 /* ---------------- TRAFFIC TYPE (medium → платний / органічний) ---------------- */
@@ -3337,7 +3479,7 @@ async function onAuthed() {
   const av = $('.user-avatar');
   if (av) av.textContent = (email[0] || '?').toUpperCase();
 
-  applyPreset('30d');
+  applyPreset('today');
   setupFilterBar();
   bindSettingsModalHandlers();
   loadModelsSelect();
