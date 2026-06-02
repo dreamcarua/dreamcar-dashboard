@@ -116,11 +116,14 @@ def get_ad_link_urls(acct):
             data = fb_get(f'{acct}/ads', params)
         for ad in data.get('data', []):
             creative = ad.get('creative') or {}
+            # Strategy 1: creative.link_url
             url = creative.get('link_url') or creative.get('template_url')
+            # Strategy 2: object_story_spec.link_data.link
             if not url:
                 spec = creative.get('object_story_spec') or {}
                 link_data = spec.get('link_data') or {}
                 url = link_data.get('link')
+            # Strategy 3: video_data.call_to_action.value.link
             if not url:
                 spec = creative.get('object_story_spec') or {}
                 vd = spec.get('video_data') or {}
@@ -128,6 +131,7 @@ def get_ad_link_urls(acct):
                 url = (cta.get('value') or {}).get('link')
             if url:
                 links[ad['id']] = url
+        # Paginate
         paging = data.get('paging') or {}
         next_url = paging.get('next')
         if not next_url:
@@ -173,6 +177,7 @@ def get_insights(acct, since, until):
 
 # ===== TRANSFORM =====
 def count_actions(actions, target_types):
+    """Sum actions of specific types (e.g., lead, purchase)."""
     if not actions:
         return 0
     total = 0
@@ -184,10 +189,12 @@ def count_actions(actions, target_types):
 
 
 def transform_row(row, link_map, acct_name, acct_currency):
+    """FB insight row → dashboard_ads_data row."""
     ad_id = row.get('ad_id') or ''
     link_url = link_map.get(ad_id)
     utm = extract_utm_from_url(link_url)
 
+    # Conversions = leads + completed registrations + purchases
     conv = count_actions(row.get('actions'), [
         'lead',
         'complete_registration',
@@ -227,6 +234,7 @@ def transform_row(row, link_map, acct_name, acct_currency):
 
 # ===== SUPABASE =====
 def upsert_ads(rows):
+    """Bulk upsert with batching."""
     if not rows:
         log('  ⚠ no rows to upsert')
         return 0
@@ -244,6 +252,7 @@ def upsert_ads(rows):
 
 
 def update_sync_meta(rows_count, since, until):
+    """Update dashboard_settings with last sync timestamp."""
     url = f'{SB_URL}/rest/v1/dashboard_settings?on_conflict=key'
     now = datetime.now(timezone.utc).isoformat()
     payload = [
@@ -282,7 +291,7 @@ def main():
             log('❌ --mode=range потребує --since і --until')
             sys.exit(1)
         since, until = args.since, args.until
-    else:
+    else:  # incremental
         since = (today - timedelta(days=1)).isoformat()
         until = today.isoformat()
 

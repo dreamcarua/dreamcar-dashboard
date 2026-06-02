@@ -11,9 +11,9 @@
 ## Крок 1: Створити System User у Business Manager
 
 System User — це non-human account у Meta Business Manager, який:
-- Видає **non-expiring** access token (на відміну від user token що expires кожні 60 днів)
-- Працює навіть якщо ти зніметеш доступ до свого user account
-- Має дрібний rate-limit (200 calls/год)
+- ✅ Видає **non-expiring** access token (на відміну від user token що expires кожні 60 днів)
+- ✅ Працює навіть якщо ти зніметеш доступ до свого user account
+- ✅ Має дрібний rate-limit (200 calls/год)
 
 **Кроки:**
 
@@ -36,9 +36,9 @@ System User — це non-human account у Meta Business Manager, який:
 1. У System User → **Згенерувати новий токен** (Generate new token)
 2. Вибрати **DreamCar App** (якщо немає → створи на developers.facebook.com → New App → Type: Business)
 3. Scopes (Permissions):
-   - `ads_read`
-   - `business_management`
-   - `read_insights`
+   - ✅ `ads_read`
+   - ✅ `business_management`
+   - ✅ `read_insights`
 4. Натиснути **Згенерувати** → скопіювати token (він показується ТІЛЬКИ ОДИН РАЗ)
 
 **Token виглядає так:** `EAAxxxxxxxxxxxx...` (200+ символів)

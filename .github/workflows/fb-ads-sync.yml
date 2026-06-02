@@ -1,0 +1,64 @@
+name: ETL Facebook Ads → Supabase (every 15min)
+
+# Replaces Make.com scenario "FB Ads → ads_data"
+# Pulls Facebook Marketing API insights and upserts into dashboard_ads_data.
+#
+# Cron: */15 to respect FB API rate limits (200 calls/hour per app).
+# Each run touches ~1-3 ad accounts, ≤30 calls total — ample headroom.
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Sync mode'
+        required: true
+        default: 'incremental'
+        type: choice
+        options: [incremental, initial, range]
+      since:
+        description: 'Since YYYY-MM-DD (for mode=range)'
+        required: false
+        default: ''
+      until:
+        description: 'Until YYYY-MM-DD (for mode=range)'
+        required: false
+        default: ''
+
+concurrency:
+  group: etl-fbads
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: etl/requirements.txt
+
+      - name: Install deps
+        run: pip install -r etl/requirements.txt
+
+      - name: Run FB Ads ETL
+        env:
+          FB_ACCESS_TOKEN:           ${{ secrets.FB_ACCESS_TOKEN }}
+          FB_AD_ACCOUNT_IDS:         ${{ secrets.FB_AD_ACCOUNT_IDS }}
+          SUPABASE_URL:              ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          MODE="${{ github.event.inputs.mode || 'incremental' }}"
+          ARGS="--mode=$MODE"
+          if [ -n "${{ github.event.inputs.since }}" ]; then
+            ARGS="$ARGS --since=${{ github.event.inputs.since }}"
+          fi
+          if [ -n "${{ github.event.inputs.until }}" ]; then
+            ARGS="$ARGS --until=${{ github.event.inputs.until }}"
+          fi
+          python etl/sync_fb_ads.py $ARGS
