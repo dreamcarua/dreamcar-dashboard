@@ -687,6 +687,166 @@
     color: var(--white);
   }
   .coming p { color: var(--ash); margin: 0; }
+
+  /* KPI row title */
+  .kpi-row-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--ash);
+    text-transform: uppercase;
+    margin: 6px 0 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--steel);
+  }
+
+  /* Modals */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeIn 160ms ease;
+  }
+  .modal-backdrop.hidden { display: none; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .modal {
+    background: var(--black-2);
+    border: 1px solid var(--steel);
+    border-radius: 12px;
+    max-width: 920px;
+    width: 100%;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    animation: slideUp 200ms ease;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .modal.sm { max-width: 480px; }
+  .modal.md { max-width: 640px; }
+  .modal.lg { max-width: 1100px; }
+  .modal-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--steel);
+    flex-shrink: 0;
+  }
+  .modal-head h3 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin: 0;
+    color: var(--white);
+    font-weight: 600;
+  }
+  .modal-close {
+    background: transparent;
+    border: 1px solid var(--steel);
+    color: var(--ash-2);
+    width: 30px; height: 30px;
+    border-radius: 6px;
+    font-size: 14px;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: all 120ms;
+  }
+  .modal-close:hover { color: var(--white); border-color: var(--red); }
+  .modal-body {
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+  }
+  .modal-foot {
+    padding: 14px 20px;
+    border-top: 1px solid var(--steel);
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+  }
+  .modal pre.json-view {
+    background: var(--black);
+    border: 1px solid var(--steel);
+    border-radius: 6px;
+    padding: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    line-height: 1.55;
+    color: #C8C8C8;
+    max-height: 60vh;
+    overflow: auto;
+    white-space: pre;
+    margin: 0;
+  }
+  .lead-grid {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 6px 14px;
+    font-size: 12px;
+  }
+  .lead-grid .k {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--ash);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding-top: 4px;
+  }
+  .lead-grid .v {
+    color: #EAEAEA;
+    word-break: break-word;
+  }
+  .lead-grid .v.mono { font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+  .lead-grid hr {
+    grid-column: 1/-1;
+    border: 0;
+    border-top: 1px solid var(--steel);
+    margin: 8px 0;
+  }
+  tbody tr.lead-row { cursor: pointer; }
+  tbody tr.lead-row:hover td { background: rgba(227,6,19,0.08); }
+
+  /* Settings modal model rows */
+  .model-row {
+    display: grid;
+    grid-template-columns: 1fr 130px 130px 36px;
+    gap: 8px;
+    margin-bottom: 6px;
+    align-items: center;
+  }
+  .model-row input {
+    background: var(--steel-2);
+    color: #fff;
+    border: 1px solid var(--steel);
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 12px;
+    font-family: inherit;
+  }
+  .model-row .del-mdl {
+    background: transparent;
+    border: 1px solid var(--steel);
+    color: var(--ash-2);
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+  }
+  .model-row .del-mdl:hover { color: var(--danger); border-color: var(--danger); }
+
+  /* Filter row spacing */
+  .filter-bar > div { display: flex; flex-direction: column; gap: 0; }
 </style>
 </head>
 <body>
@@ -706,14 +866,14 @@
     <div class="nav-group">
       <div class="nav-group-title">UTM Dashboard</div>
       <div class="nav-item" data-route="overview"><span class="icon">📊</span>Огляд</div>
-      <div class="nav-item" data-route="analytics"><span class="icon">📈</span>Аналітика</div>
-      <div class="nav-item" data-route="sources"><span class="icon">🌐</span>Джерела</div>
-      <div class="nav-item" data-route="medium"><span class="icon">📡</span>Канали</div>
+      <div class="nav-item" data-route="analytics"><span class="icon">💰</span>Аналітика</div>
+      <div class="nav-item" data-route="combos"><span class="icon">🔗</span>Комбінації</div>
+      <div class="nav-item" data-route="sources"><span class="icon">📍</span>Джерела</div>
+      <div class="nav-item" data-route="medium"><span class="icon">🔗</span>Тип трафіка</div>
       <div class="nav-item" data-route="campaigns"><span class="icon">🎯</span>Кампанії</div>
-      <div class="nav-item" data-route="content"><span class="icon">📝</span>Контент</div>
-      <div class="nav-item" data-route="terms"><span class="icon">🔤</span>UTM Term</div>
-      <div class="nav-item" data-route="combos"><span class="icon">🔀</span>Комбінації</div>
-      <div class="nav-item" data-route="deals"><span class="icon">📋</span>Таблиця угод</div>
+      <div class="nav-item" data-route="terms"><span class="icon">🔑</span>Виконавець</div>
+      <div class="nav-item" data-route="content"><span class="icon">🎨</span>Оголошення</div>
+      <div class="nav-item" data-route="deals"><span class="icon">📋</span>Таблиця</div>
       <div class="nav-item" data-route="webhooks"><span class="icon">🪝</span>Webhook логи</div>
       <div class="nav-item" data-route="mapping"><span class="icon">🗺</span>UTM Mapping</div>
       <div class="nav-item" data-route="costs"><span class="icon">💰</span>Manual Costs</div>
@@ -746,12 +906,13 @@
     </div>
     <div class="topbar-spacer"></div>
     <div class="topbar-actions" id="topbar-actions">
-      <button class="tb-btn" data-jump="costs" title="Manual Costs — додати ручні витрати">💰 <span class="full-label">Costs</span></button>
-      <button class="tb-btn" data-jump="mapping" title="UTM Mapping — правила нормалізації">🗺 <span class="full-label">Mapping</span></button>
-      <button class="tb-btn" data-jump="webhooks" title="Webhook логи">🔔 <span class="full-label">Webhooks</span></button>
-      <button class="tb-btn" data-jump="ads-overview" title="Реклама — Ads Overview">📈 <span class="full-label">Ads</span></button>
-      <button class="tb-btn" data-jump="settings" title="Settings">⚙️ <span class="full-label">Settings</span></button>
-      <button class="tb-btn" data-jump="cards" title="Finance — Coming Soon">💼 <span class="full-label">Finance</span></button>
+      <button class="tb-btn" data-jump="costs" title="Указати затрати вручну">💰 <span class="full-label">Затрати</span></button>
+      <button class="tb-btn" id="tb-apply" title="Застосувати фільтри">🔍 <span class="full-label">Застосувати</span></button>
+      <button class="tb-btn" id="tb-reset" title="Скинути фільтри">✕ <span class="full-label">Скинути</span></button>
+      <button class="tb-btn" id="tb-export-csv" title="Експорт поточної секції у CSV">💾 <span class="full-label">CSV</span></button>
+      <button class="tb-btn" id="tb-export-json" title="Показати raw JSON останніх даних">💾 <span class="full-label">JSON</span></button>
+      <button class="tb-btn" id="tb-refresh" title="Оновити дані">🔄 <span class="full-label">Оновити</span></button>
+      <button class="tb-btn" data-jump="settings" title="Налаштування проєктів">⚙️ <span class="full-label">Settings</span></button>
     </div>
     <div class="live-badge"><span class="live-dot"></span>Live</div>
     <div class="user-chip" id="user-chip">
@@ -762,40 +923,39 @@
 
   <main class="main">
     <div class="filter-bar" id="filter-bar">
-      <div class="filter-presets" id="presets">
-        <button class="preset-btn" data-preset="today">Today</button>
-        <button class="preset-btn" data-preset="yesterday">Yesterday</button>
-        <button class="preset-btn" data-preset="7d">7d</button>
-        <button class="preset-btn active" data-preset="30d">30d</button>
-        <button class="preset-btn" data-preset="90d">90d</button>
-        <button class="preset-btn" data-preset="all">All</button>
-      </div>
       <div>
-        <label>From</label>
-        <input type="date" id="f-from">
-      </div>
-      <div>
-        <label>To</label>
-        <input type="date" id="f-to">
-      </div>
-      <div>
-        <label>Project</label>
-        <select id="f-project">
-          <option value="">— Усі проекти —</option>
-          <option value="OLD">OLD</option>
-          <option value="VOLVO">VOLVO</option>
-          <option value="Q7">Q7</option>
-          <option value="Mercedes">Mercedes</option>
-          <option value="DreamCar AI">DreamCar AI</option>
-          <option value="AUDI E-TRON">AUDI E-TRON</option>
-          <option value="BMW">BMW</option>
-          <option value="Контакт">Контакт</option>
+        <label>Період</label>
+        <select id="f-date-range">
+          <option value="all">Весь період</option>
+          <option value="today">Сьогодні</option>
+          <option value="yesterday">Вчора</option>
+          <option value="7d">Останні 7 днів</option>
+          <option value="30d" selected>Останні 30 днів</option>
+          <option value="60d">Останні 60 днів</option>
+          <option value="custom">Свій період…</option>
+          <option value="project-all">Весь проєкт</option>
+          <option value="project-first3">Перші 3 дні проєкту</option>
+          <option value="project-firstweek">Перший тиждень проєкту</option>
+          <option value="project-lastweek">Останній тиждень проєкту</option>
+          <option value="project-lastday">Останній день проєкту</option>
         </select>
       </div>
       <div>
-        <label>Status</label>
+        <label>Активний розіграш</label>
+        <select id="f-model">
+          <option value="">Усі проєкти</option>
+        </select>
+      </div>
+      <div>
+        <label>Проєкт (DB)</label>
+        <select id="f-project">
+          <option value="">— Усі —</option>
+        </select>
+      </div>
+      <div>
+        <label>Статус</label>
         <select id="f-status">
-          <option value="">All</option>
+          <option value="">Усі</option>
           <option value="pay">Pay</option>
           <option value="new">New</option>
           <option value="pending">Pending</option>
@@ -804,11 +964,19 @@
         </select>
       </div>
       <div>
-        <label>Customer</label>
+        <label>Клієнт</label>
         <select id="f-customer-type">
           <option value="">Усі клієнти</option>
-          <option value="new">Нові</option>
-          <option value="returning">Повторні</option>
+          <option value="new">Нові (перша покупка)</option>
+          <option value="returning">Існуючі (повторні)</option>
+        </select>
+      </div>
+      <div>
+        <label>Воронка</label>
+        <select id="f-funnel-type">
+          <option value="">Усі воронки</option>
+          <option value="new">Нові у воронці</option>
+          <option value="returning">Повторні у воронці</option>
         </select>
       </div>
       <div>
@@ -824,6 +992,33 @@
         </select>
       </div>
       <div>
+        <label>Трафік</label>
+        <select id="f-traffic-type">
+          <option value="">Весь</option>
+          <option value="paid">💸 Платний</option>
+          <option value="organic">🌱 Органічний</option>
+        </select>
+      </div>
+      <div>
+        <label>Джерела</label>
+        <select id="f-source-filter">
+          <option value="">Усі</option>
+          <option value="both">🟢 Загальні (CRM+ADS)</option>
+          <option value="crm">🔵 CRM-only (органіка)</option>
+          <option value="ads">🟡 ADS-only (без лідів)</option>
+        </select>
+      </div>
+      <div id="f-combo-wrap" style="display:none">
+        <label>Комбінація</label>
+        <select id="f-combo-type">
+          <option value="source_medium">Source+Medium</option>
+          <option value="source_campaign">Source+Campaign</option>
+          <option value="medium_campaign">Medium+Campaign</option>
+          <option value="all" selected>Source+Medium+Campaign</option>
+          <option value="full">Усі мітки</option>
+        </select>
+      </div>
+      <div>
         <label>Granul.</label>
         <select id="f-granularity">
           <option value="day">День</option>
@@ -831,14 +1026,91 @@
           <option value="month">Місяць</option>
         </select>
       </div>
-      <button class="btn btn-ghost" id="f-reset">Reset</button>
-      <button class="btn btn-primary" id="f-apply">↻ Refresh</button>
+      <button class="btn btn-ghost" id="f-reset">✕ Скинути</button>
+      <button class="btn btn-primary" id="f-apply">🔍 Застосувати</button>
     </div>
 
     <div class="content" id="content">
       <div class="state"><span class="spinner"></span>Завантаження…</div>
     </div>
   </main>
+</div>
+
+<!-- ============ MODALS ============ -->
+<div class="modal-backdrop hidden" id="modal-rawdata" data-modal>
+  <div class="modal lg" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <h3>📋 Сирі JSON дані</h3>
+      <button class="modal-close" data-close>✕</button>
+    </div>
+    <div class="modal-body">
+      <pre class="json-view" id="rawdata-json">{}</pre>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" id="rawdata-copy">📋 Копіювати</button>
+      <button class="btn" id="rawdata-download">💾 Завантажити</button>
+      <button class="btn btn-primary" data-close>Закрити</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop hidden" id="modal-customdate" data-modal>
+  <div class="modal sm" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <h3>📅 Вибрати період</h3>
+      <button class="modal-close" data-close>✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ash);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px;">Від</label>
+          <input type="date" id="cd-from" style="width:100%;background:var(--steel-2);color:#fff;border:1px solid var(--steel);border-radius:6px;padding:8px 10px;font-size:12px;">
+        </div>
+        <div>
+          <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ash);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:4px;">До</label>
+          <input type="date" id="cd-to" style="width:100%;background:var(--steel-2);color:#fff;border:1px solid var(--steel);border-radius:6px;padding:8px 10px;font-size:12px;">
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" data-close>Скасувати</button>
+      <button class="btn btn-primary" id="cd-apply">Застосувати</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop hidden" id="modal-lead" data-modal>
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <h3>👤 Детальна інформація про лід</h3>
+      <button class="modal-close" data-close>✕</button>
+    </div>
+    <div class="modal-body" id="lead-body">
+      <div class="state">Завантаження…</div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" id="lead-copy">📋 Копіювати JSON</button>
+      <button class="btn btn-primary" data-close>Закрити</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop hidden" id="modal-settings" data-modal>
+  <div class="modal md" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <h3>⚙️ Налаштування проєктів</h3>
+      <button class="modal-close" data-close>✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:12px;color:var(--ash);margin:0 0 12px;">Активні розіграші — модель + дата старту + дата фіналу. Використовуються у фільтрі «Активний розіграш» і пресетах «Весь проєкт / Перший тиждень / …».</p>
+      <div id="settings-models"></div>
+      <button class="btn" id="add-model" style="margin-top:8px;">+ Додати розіграш</button>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" data-close>Скасувати</button>
+      <button class="btn btn-primary" id="settings-save">💾 Зберегти</button>
+    </div>
+  </div>
 </div>
 
 <script src="assets/js/auth-guard.js" defer></script>
@@ -902,58 +1174,267 @@ const filters = {
   project: '', status: '',
   customer_type: '', tariff: '', pay_provider: '',
   granularity: 'day',
-  preset: '30d'
+  preset: '30d',
+  model: '',
+  funnel_type: '',
+  traffic_type: '',
+  source_filter: '',
+  combo_type: 'all'
 };
 
 /* Хардкод-список основних проектів — захардкоджуємо для повного покриття */
 const MAIN_PROJECTS = ['OLD','VOLVO','Q7','Mercedes','DreamCar AI','AUDI E-TRON','BMW','Контакт'];
 
+/* Активні розіграші — модель + start/end + project-substring у БД.
+   Зберігаємо у localStorage щоб юзер міг редагувати через Settings. */
+const DEFAULT_MODELS = [
+  { id: 'volvo-xc90',     name: 'VOLVO XC90',           start: '2025-10-10', end: '2025-11-30', match: 'VOLVO' },
+  { id: 'audi-q7',        name: 'AUDI Q7',              start: '2025-12-08', end: '2025-12-28', match: 'Q7' },
+  { id: 'bmw-330e',       name: 'BMW 330E HYBRID',      start: '2026-01-09', end: '2026-01-23', match: 'BMW' },
+  { id: 'mercedes-gle',   name: 'MERCEDES GLE COUPE',   start: '2026-02-06', end: '2026-03-01', match: 'Mercedes' },
+  { id: 'bmw-x5',         name: 'BMW X5 HYBRID',        start: '2026-03-24', end: '2026-04-19', match: 'BMW' },
+  { id: 'audi-etron',     name: 'AUDI E-TRON',          start: '2026-05-06', end: '2026-05-31', match: 'AUDI E-TRON' }
+];
+function loadModels() {
+  try {
+    const raw = localStorage.getItem('dashboard_active_models');
+    if (raw) {
+      const arr = JSON.parse(raw);
+      if (Array.isArray(arr) && arr.length) return arr;
+    }
+  } catch {}
+  return DEFAULT_MODELS.slice();
+}
+function saveModels(arr) {
+  try { localStorage.setItem('dashboard_active_models', JSON.stringify(arr)); } catch {}
+}
+let ACTIVE_MODELS = loadModels();
+function getActiveModel() {
+  if (!filters.model) return null;
+  return ACTIVE_MODELS.find(m => m.id === filters.model) || null;
+}
+
+/* Платний vs органічний UTM source */
+const PAID_SOURCES = new Set(['facebook','instagram','google','tiktok','fb','ig','meta','youtube','linkedin','x','twitter']);
+function isPaidSource(src) {
+  if (!src) return false;
+  const s = String(src).toLowerCase();
+  return PAID_SOURCES.has(s) || /(_paid|_ads|_cpc)/.test(s);
+}
+
+const ymd = (d) => { const dd = new Date(d); dd.setHours(0,0,0,0); return dd.toISOString().slice(0,10); };
+const todayYmd = () => ymd(new Date());
+
 function applyPreset(p) {
   const today = new Date();
-  const ymd = (d) => { const dd = new Date(d); dd.setHours(0,0,0,0); return dd.toISOString().slice(0,10); };
-  if (p === 'today') { filters.from = ymd(today); filters.to = ymd(today); }
+  if (p === 'today') { filters.from = todayYmd(); filters.to = todayYmd(); }
   else if (p === 'yesterday') { const d = new Date(today); d.setDate(d.getDate()-1); filters.from = ymd(d); filters.to = ymd(d); }
-  else if (p === '7d') { const d = new Date(today); d.setDate(d.getDate()-7); filters.from = ymd(d); filters.to = ymd(today); }
-  else if (p === '30d') { const d = new Date(today); d.setDate(d.getDate()-30); filters.from = ymd(d); filters.to = ymd(today); }
-  else if (p === '90d') { const d = new Date(today); d.setDate(d.getDate()-90); filters.from = ymd(d); filters.to = ymd(today); }
-  else if (p === 'all') { filters.from = '2019-01-01'; filters.to = ymd(today); }
+  else if (p === '7d') { const d = new Date(today); d.setDate(d.getDate()-7); filters.from = ymd(d); filters.to = todayYmd(); }
+  else if (p === '30d') { const d = new Date(today); d.setDate(d.getDate()-30); filters.from = ymd(d); filters.to = todayYmd(); }
+  else if (p === '60d') { const d = new Date(today); d.setDate(d.getDate()-60); filters.from = ymd(d); filters.to = todayYmd(); }
+  else if (p === 'all') { filters.from = '2019-01-01'; filters.to = todayYmd(); }
+  else if (p === 'custom') {
+    /* opens modal — handled outside */
+    openModal('modal-customdate');
+    $('#cd-from').value = filters.from || todayYmd();
+    $('#cd-to').value = filters.to || todayYmd();
+    return;
+  }
+  else if (p.startsWith('project-')) {
+    const m = getActiveModel();
+    if (!m) {
+      alert('Спершу обери «Активний розіграш» у фільтрах, щоб застосувати цей пресет.');
+      filters.preset = 'all';
+      $('#f-date-range').value = 'all';
+      return applyPreset('all');
+    }
+    const sd = new Date(m.start);
+    const ed = new Date(m.end);
+    if (p === 'project-all') { filters.from = m.start; filters.to = m.end; }
+    else if (p === 'project-first3') {
+      const e = new Date(sd); e.setDate(e.getDate()+2);
+      filters.from = m.start; filters.to = ymd(e);
+    }
+    else if (p === 'project-firstweek') {
+      const e = new Date(sd); e.setDate(e.getDate()+6);
+      filters.from = m.start; filters.to = ymd(e);
+    }
+    else if (p === 'project-lastweek') {
+      const s = new Date(ed); s.setDate(s.getDate()-6);
+      filters.from = ymd(s); filters.to = m.end;
+    }
+    else if (p === 'project-lastday') {
+      filters.from = m.end; filters.to = m.end;
+    }
+  }
   filters.preset = p;
-  $('#f-from').value = filters.from;
-  $('#f-to').value = filters.to;
-  $$('.preset-btn').forEach(b => b.classList.toggle('active', b.dataset.preset === p));
 }
 
 function setupFilterBar() {
-  $$('.preset-btn').forEach(b => {
-    b.addEventListener('click', () => { applyPreset(b.dataset.preset); renderRoute(); });
+  $('#f-date-range').addEventListener('change', e => {
+    const v = e.target.value;
+    applyPreset(v);
+    if (v !== 'custom') renderRoute();
   });
-  $('#f-from').addEventListener('change', () => {
-    filters.from = $('#f-from').value;
-    filters.preset = 'custom';
-    $$('.preset-btn').forEach(b => b.classList.remove('active'));
-  });
-  $('#f-to').addEventListener('change', () => {
-    filters.to = $('#f-to').value;
-    filters.preset = 'custom';
-    $$('.preset-btn').forEach(b => b.classList.remove('active'));
-  });
+  $('#f-model').addEventListener('change', e => { filters.model = e.target.value; renderRoute(); });
   $('#f-project').addEventListener('change', e => { filters.project = e.target.value; });
   $('#f-status').addEventListener('change', e => { filters.status = e.target.value; });
   $('#f-customer-type').addEventListener('change', e => { filters.customer_type = e.target.value; });
+  $('#f-funnel-type').addEventListener('change', e => { filters.funnel_type = e.target.value; });
   $('#f-tariff').addEventListener('change', e => { filters.tariff = e.target.value; });
   $('#f-pay-provider').addEventListener('change', e => { filters.pay_provider = e.target.value; });
+  $('#f-traffic-type').addEventListener('change', e => { filters.traffic_type = e.target.value; });
+  $('#f-source-filter').addEventListener('change', e => { filters.source_filter = e.target.value; });
+  $('#f-combo-type').addEventListener('change', e => { filters.combo_type = e.target.value; renderRoute(); });
   $('#f-granularity').addEventListener('change', e => { filters.granularity = e.target.value; renderRoute(); });
-  $('#f-reset').addEventListener('click', () => {
-    applyPreset('30d');
-    filters.project = ''; filters.status = '';
-    filters.customer_type = ''; filters.tariff = ''; filters.pay_provider = '';
-    filters.granularity = 'day';
-    $('#f-project').value = ''; $('#f-status').value = '';
-    $('#f-customer-type').value = ''; $('#f-tariff').value = ''; $('#f-pay-provider').value = '';
-    $('#f-granularity').value = 'day';
+  $('#f-reset').addEventListener('click', () => resetFilters());
+  $('#f-apply').addEventListener('click', () => renderRoute());
+
+  // Topbar buttons
+  $('#tb-apply') && $('#tb-apply').addEventListener('click', () => renderRoute());
+  $('#tb-reset') && $('#tb-reset').addEventListener('click', () => resetFilters());
+  $('#tb-refresh') && $('#tb-refresh').addEventListener('click', () => renderRoute());
+  $('#tb-export-csv') && $('#tb-export-csv').addEventListener('click', () => triggerCurrentCsv());
+  $('#tb-export-json') && $('#tb-export-json').addEventListener('click', () => showRawDataModal());
+
+  // Custom date modal
+  $('#cd-apply').addEventListener('click', () => {
+    const f = $('#cd-from').value;
+    const t = $('#cd-to').value;
+    if (!f || !t) { alert('Вкажи обидві дати'); return; }
+    filters.from = f; filters.to = t;
+    filters.preset = 'custom';
+    closeModal('modal-customdate');
     renderRoute();
   });
-  $('#f-apply').addEventListener('click', () => renderRoute());
+}
+
+function resetFilters() {
+  applyPreset('30d');
+  filters.project = ''; filters.status = '';
+  filters.customer_type = ''; filters.funnel_type = '';
+  filters.tariff = ''; filters.pay_provider = '';
+  filters.traffic_type = ''; filters.source_filter = '';
+  filters.combo_type = 'all';
+  filters.model = '';
+  filters.granularity = 'day';
+  $('#f-date-range').value = '30d';
+  $('#f-model').value = '';
+  $('#f-project').value = ''; $('#f-status').value = '';
+  $('#f-customer-type').value = ''; $('#f-funnel-type').value = '';
+  $('#f-tariff').value = ''; $('#f-pay-provider').value = '';
+  $('#f-traffic-type').value = ''; $('#f-source-filter').value = '';
+  $('#f-combo-type').value = 'all';
+  $('#f-granularity').value = 'day';
+  renderRoute();
+}
+
+function syncFilterBarFromState() {
+  $('#f-date-range').value = filters.preset || '30d';
+}
+
+/* ------------ Modals ------------ */
+function openModal(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.remove('hidden');
+}
+function closeModal(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.add('hidden');
+}
+document.addEventListener('click', (e) => {
+  if (e.target.matches('[data-close]') || e.target.matches('.modal-backdrop')) {
+    const m = e.target.closest('[data-modal]') || e.target;
+    if (m && m.id) m.classList.add('hidden');
+  }
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') $$('.modal-backdrop').forEach(m => m.classList.add('hidden'));
+});
+
+/* ------------ Raw data state ------------ */
+window.__lastData = { route: null, ts: null, payload: null };
+function setLastData(route, payload) {
+  window.__lastData = { route, ts: new Date().toISOString(), payload };
+}
+function showRawDataModal() {
+  const ld = window.__lastData;
+  const txt = ld.payload == null
+    ? '{ "info": "Спочатку відкрий будь-яку секцію — там лежать сирі дані." }'
+    : JSON.stringify({ route: ld.route, fetched_at: ld.ts, count: Array.isArray(ld.payload) ? ld.payload.length : undefined, filters: { ...filters }, data: Array.isArray(ld.payload) ? ld.payload.slice(0, 100) : ld.payload }, null, 2);
+  $('#rawdata-json').textContent = txt;
+  openModal('modal-rawdata');
+  $('#rawdata-copy').onclick = async () => {
+    try { await navigator.clipboard.writeText(txt); $('#rawdata-copy').textContent = '✓ Скопійовано'; setTimeout(()=>$('#rawdata-copy').textContent='📋 Копіювати',1500); } catch {}
+  };
+  $('#rawdata-download').onclick = () => {
+    const blob = new Blob([txt], { type: 'application/json;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `dashboard-${ld.route||'data'}-${Date.now()}.json`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+}
+
+function triggerCurrentCsv() {
+  // Find first .t-csv on the page and click it
+  const btn = document.querySelector('.t-csv');
+  if (btn) btn.click();
+  else alert('У поточній секції немає CSV-таблиці. Перейди в розділ з таблицею (Джерела/Кампанії/Таблиця…).');
+}
+
+/* ------------ Settings modal (active models CRUD) ------------ */
+function openSettingsModal() {
+  renderSettingsModels();
+  openModal('modal-settings');
+}
+function renderSettingsModels() {
+  const cont = $('#settings-models');
+  cont.innerHTML = ACTIVE_MODELS.map((m, i) => `
+    <div class="model-row" data-idx="${i}">
+      <input data-k="name" value="${escapeHtml(m.name)}" placeholder="Назва моделі">
+      <input data-k="start" type="date" value="${escapeHtml(m.start)}">
+      <input data-k="end" type="date" value="${escapeHtml(m.end)}">
+      <button class="del-mdl" data-act="del">✕</button>
+    </div>
+  `).join('');
+  cont.querySelectorAll('[data-act="del"]').forEach(b => b.onclick = (ev) => {
+    const idx = parseInt(ev.target.closest('.model-row').dataset.idx);
+    ACTIVE_MODELS.splice(idx, 1);
+    renderSettingsModels();
+  });
+}
+function bindSettingsModalHandlers() {
+  $('#add-model').onclick = () => {
+    ACTIVE_MODELS.push({ id: 'm-'+Date.now(), name: 'НОВА МОДЕЛЬ', start: todayYmd(), end: todayYmd(), match: '' });
+    renderSettingsModels();
+  };
+  $('#settings-save').onclick = () => {
+    const rows = $$('#settings-models .model-row');
+    const arr = rows.map((r, i) => {
+      const id = ACTIVE_MODELS[i] && ACTIVE_MODELS[i].id || 'm-'+Date.now()+'-'+i;
+      const name = r.querySelector('[data-k="name"]').value.trim();
+      const start = r.querySelector('[data-k="start"]').value;
+      const end = r.querySelector('[data-k="end"]').value;
+      return { id, name, start, end, match: name.split(' ')[0] || '' };
+    }).filter(m => m.name && m.start && m.end);
+    ACTIVE_MODELS = arr;
+    saveModels(arr);
+    loadModelsSelect();
+    closeModal('modal-settings');
+  };
+}
+
+function loadModelsSelect() {
+  const sel = $('#f-model');
+  if (!sel) return;
+  const cur = filters.model;
+  sel.innerHTML = '<option value="">Усі проєкти</option>' +
+    ACTIVE_MODELS.map(m => `<option value="${escapeHtml(m.id)}">${escapeHtml(m.name)} (${m.start.slice(5).replace('-','.')}–${m.end.slice(5).replace('-','.')})</option>`).join('');
+  if (cur) sel.value = cur;
 }
 
 /* ------------ Supabase fetch helpers ------------ */
@@ -969,7 +1450,20 @@ async function fetchDealsRange(offset, limit) {
   if (filters.customer_type) q = q.eq('customer_type', filters.customer_type);
   if (filters.tariff) q = q.eq('tariff', filters.tariff);
   if (filters.pay_provider) q = q.eq('pay_provider', filters.pay_provider);
+  // Active model — narrow project by substring
+  const m = getActiveModel();
+  if (m && m.match) q = q.ilike('project', '%' + m.match + '%');
   return q;
+}
+
+/* Client-side post-filter for traffic/funnel/source */
+function applyClientFilters(rows) {
+  let out = rows;
+  if (filters.traffic_type === 'paid') out = out.filter(r => isPaidSource(r.utm_source));
+  else if (filters.traffic_type === 'organic') out = out.filter(r => !isPaidSource(r.utm_source));
+  if (filters.funnel_type === 'new') out = out.filter(r => r.customer_type === 'new' || !r.customer_type);
+  else if (filters.funnel_type === 'returning') out = out.filter(r => r.customer_type === 'returning');
+  return out;
 }
 
 async function fetchAllDealsBatched(maxRows=30000) {
@@ -984,7 +1478,7 @@ async function fetchAllDealsBatched(maxRows=30000) {
     if (data.length < BATCH) break;
     offset += BATCH;
   }
-  return all;
+  return applyClientFilters(all);
 }
 
 async function loadProjects() {
@@ -1206,10 +1700,13 @@ function buildTable(containerSelector, opts) {
 
     const body = slice.length === 0
       ? `<tr><td colspan="${opts.cols.length}" class="muted" style="text-align:center;padding:30px">Немає даних</td></tr>`
-      : slice.map(r => '<tr>' + opts.cols.map(c => {
-          const v = c.fmt ? c.fmt(r[c.key], r) : (r[c.key] ?? '');
-          return `<td class="${c.class||''}">${v}</td>`;
-        }).join('') + '</tr>').join('');
+      : slice.map((r, idx) => {
+          const tr = `<tr class="${opts.rowClick ? 'lead-row' : ''}" data-idx="${idx}" data-row-id="${escapeHtml(String(r.id != null ? r.id : ''))}">`;
+          return tr + opts.cols.map(c => {
+            const v = c.fmt ? c.fmt(r[c.key], r) : (r[c.key] ?? '');
+            return `<td class="${c.class||''}">${v}</td>`;
+          }).join('') + '</tr>';
+        }).join('');
 
     const pagBtns = [];
     const maxBtns = 5;
@@ -1267,8 +1764,68 @@ function buildTable(containerSelector, opts) {
     if (search) {
       search.addEventListener('input', debounce(() => { state.search = search.value; state.page = 1; render(); }, 250));
     }
+    if (opts.rowClick) {
+      $$('tbody tr.lead-row', cont).forEach(tr => {
+        tr.addEventListener('click', () => {
+          const idx = parseInt(tr.dataset.idx);
+          // Need to recompute the same sorted/filtered slice
+          let lst = opts.rows.slice();
+          if (state.search) {
+            const q = state.search.toLowerCase();
+            lst = lst.filter(r => opts.cols.some(c => String((c.key ? r[c.key] : '') ?? '').toLowerCase().includes(q)));
+          }
+          if (state.sortKey) {
+            const col = opts.cols.find(c => c.key === state.sortKey);
+            lst.sort((a,b) => {
+              const va = col && col.sortVal ? col.sortVal(a) : a[state.sortKey];
+              const vb = col && col.sortVal ? col.sortVal(b) : b[state.sortKey];
+              if (va == null && vb == null) return 0;
+              if (va == null) return 1;
+              if (vb == null) return -1;
+              if (typeof va === 'number' && typeof vb === 'number') return state.sortAsc ? va - vb : vb - va;
+              return state.sortAsc ? String(va).localeCompare(String(vb)) : String(vb).localeCompare(String(va));
+            });
+          }
+          const sliced = lst.slice((state.page-1)*state.pageSize, state.page*state.pageSize);
+          const r = sliced[idx];
+          if (r) opts.rowClick(r);
+        });
+      });
+    }
   }
   render();
+}
+
+/* ------------ Lead details modal ------------ */
+function openLeadDetailsModal(deal) {
+  const body = $('#lead-body');
+  const fields = [
+    ['id','ID',true], ['sendpulse_deal_id','SendPulse Deal ID',true],
+    ['status','Статус'], ['amount','Сума'], ['currency','Валюта'],
+    ['project','Проєкт'],
+    ['created_at','Створено',false,'date'], ['paid_at','Оплачено',false,'date'],
+    ['customer_email','Email'], ['customer_type','Тип клієнта'],
+    ['tariff','Тариф'], ['pay_provider','Платіжка'],
+    ['utm_source','utm_source'], ['utm_medium','utm_medium'],
+    ['utm_campaign','utm_campaign'], ['utm_term','utm_term'], ['utm_content','utm_content']
+  ];
+  const html = fields.map(([k, lbl, mono, type]) => {
+    let v = deal[k];
+    if (type === 'date') v = v ? fmtDateTime(v) : '—';
+    else if (v == null || v === '') v = '—';
+    else if (k === 'amount') v = fmtMoney(v, deal.currency);
+    else if (k === 'status') v = `<span class="pill ${['pay','new','pending','fail','refunded'].includes(v)?v:'default'}">${escapeHtml(String(v))}</span>`;
+    return `<div class="k">${escapeHtml(lbl)}</div><div class="v ${mono?'mono':''}">${v}</div>`;
+  }).join('');
+  body.innerHTML = `<div class="lead-grid">${html}
+    <hr>
+    <div class="k">RAW JSON</div>
+    <div class="v"><pre class="json-view" style="max-height:240px;font-size:10px;">${escapeHtml(JSON.stringify(deal, null, 2))}</pre></div>
+  </div>`;
+  $('#lead-copy').onclick = async () => {
+    try { await navigator.clipboard.writeText(JSON.stringify(deal, null, 2)); $('#lead-copy').textContent = '✓ Скопійовано'; setTimeout(()=>$('#lead-copy').textContent='📋 Копіювати JSON',1500); } catch {}
+  };
+  openModal('modal-lead');
 }
 
 /* ------------ Chart helpers ------------ */
@@ -1342,11 +1899,11 @@ function doughnutChart(canvasId, labels, data, colors) {
 const SECTIONS = {
   'overview': renderOverview,
   'analytics': renderAnalytics,
-  'sources': () => renderUtmField('utm_source', 'Джерела', 'sources.csv'),
-  'medium': () => renderUtmField('utm_medium', 'Канали', 'medium.csv'),
+  'sources': () => renderUtmField('utm_source', '📍 Джерела', 'sources.csv'),
+  'medium': renderTrafficType,
   'campaigns': renderCampaigns,
-  'content': () => renderUtmField('utm_content', 'Контент', 'content.csv'),
-  'terms': () => renderUtmField('utm_term', 'UTM Term', 'terms.csv'),
+  'content': () => renderUtmField('utm_content', '🎨 Оголошення', 'content.csv'),
+  'terms': () => renderUtmField('utm_term', '🔑 Виконавець', 'executor.csv'),
   'combos': renderCombos,
   'deals': renderDeals,
   'webhooks': renderWebhooks,
@@ -1363,9 +1920,9 @@ const SECTIONS = {
 
 const SECTION_TITLES = {
   'overview': 'Огляд', 'analytics': 'Аналітика',
-  'sources': 'Джерела', 'medium': 'Канали', 'campaigns': 'Кампанії',
-  'content': 'Контент', 'terms': 'UTM Term', 'combos': 'Комбінації',
-  'deals': 'Угоди', 'webhooks': 'Webhooks', 'mapping': 'UTM Mapping',
+  'sources': 'Джерела', 'medium': 'Тип трафіка', 'campaigns': 'Кампанії',
+  'content': 'Оголошення', 'terms': 'Виконавець', 'combos': 'Комбінації',
+  'deals': 'Таблиця', 'webhooks': 'Webhooks', 'mapping': 'UTM Mapping',
   'costs': 'Manual Costs', 'ads-overview': 'Ads Overview',
   'ads-campaigns': 'Ads Campaigns', 'cards': 'Cards', 'usdt': 'USDT',
   'payroll': 'Payroll', 'settings': 'Settings', 'help': 'Допомога'
@@ -1389,6 +1946,7 @@ async function renderOverview() {
   `;
   try {
     const rows = await fetchAllDealsBatched(30000);
+    setLastData('overview', rows);
     const paid = rows.filter(r => r.status === 'pay');
     const sum = paid.reduce((a,r) => a + Number(r.amount||0), 0);
     const uniqEmails = new Set(paid.map(r => r.customer_email).filter(Boolean)).size;
@@ -1406,6 +1964,10 @@ async function renderOverview() {
     } catch(e) {}
 
     const profit = sum - adSpend;
+    const roas = adSpend > 0 ? sum / adSpend : null;
+    const roi = adSpend > 0 ? ((sum - adSpend) / adSpend * 100) : null;
+    const cpl = adSpend > 0 && rows.length > 0 ? adSpend / rows.length : null;
+    const cpa = adSpend > 0 && paid.length > 0 ? adSpend / paid.length : null;
     const byDay = aggregateByDay(rows, filters.granularity);
     const last20 = rows.slice(0, 20);
     const byProj7 = aggregateByField(rows, 'project').slice(0, 7);
@@ -1420,18 +1982,26 @@ async function renderOverview() {
         </div>
       </div>
 
+      <div class="kpi-row-title">КОНВЕРСІЯ</div>
       <div class="kpi-grid">
-        ${kpi('Total Leads', fmtNum(rows.length), 'усі статуси')}
-        ${kpi('Paid', fmtNum(paid.length), fmtPct(conv) + ' конверсія', 'green')}
-        ${kpi('Revenue', fmtMoney(sum, 'UAH'), 'сума оплачених', 'green')}
-        ${kpi('Unique Buyers', fmtNum(uniqEmails), 'унікальних емейлів', 'blue')}
-        ${kpi('Avg Deal', fmtMoney(avg, 'UAH'), 'середній чек', 'blue')}
-        ${kpi('Sources', fmtNum(sources), 'utm_source')}
-        ${kpi('Campaigns', fmtNum(campaigns), 'utm_campaign')}
-        ${kpi('Ad Spend', fmtMoney(adSpend, 'UAH'), 'витрати', 'amber')}
-        ${kpi('Profit', fmtMoney(profit, 'UAH'), adSpend > 0 ? 'ROAS ' + (sum/adSpend).toFixed(2)+'x' : 'без реклами', profit > 0 ? 'green' : 'amber')}
-        ${kpi('Conv %', fmtPct(conv), 'paid / total', conv >= 5 ? 'green' : 'amber')}
-        ${kpi('ROI', adSpend > 0 ? fmtPct((sum-adSpend)/adSpend*100) : '—', 'return on investment', (sum-adSpend) > 0 ? 'green' : 'amber')}
+        ${kpi('Всього лідів', fmtNum(rows.length), 'усі статуси')}
+        ${kpi('Всього оплат', fmtNum(paid.length), fmtPct(conv) + ' конверсія', 'green')}
+        ${kpi('Унікальних покупців', fmtNum(uniqEmails), 'утм_email', 'blue')}
+        ${kpi('Заработано (оплати)', fmtMoney(sum, 'UAH'), 'сума оплачених', 'green')}
+        ${kpi('Середній чек', fmtMoney(avg, 'UAH'), 'revenue / paid', 'blue')}
+        ${kpi('Джерел', fmtNum(sources), 'utm_source')}
+        ${kpi('Кампаній', fmtNum(campaigns), 'utm_campaign')}
+        ${kpi('Конверсія %', fmtPct(conv), 'paid / total', conv >= 5 ? 'green' : 'amber')}
+      </div>
+
+      <div class="kpi-row-title">ЕКОНОМІКА</div>
+      <div class="kpi-grid">
+        ${kpi('Рекламні витрати', fmtMoney(adSpend, 'UAH'), 'ad spend', 'amber')}
+        ${kpi('Прибуток', fmtMoney(profit, 'UAH'), 'revenue − spend', profit > 0 ? 'green' : 'amber')}
+        ${kpi('ROI', roi != null ? fmtPct(roi) : '—', 'return on investment', roi != null && roi > 0 ? 'green' : 'amber')}
+        ${kpi('ROAS', roas != null ? roas.toFixed(2)+'×' : '—', 'revenue / spend', roas != null && roas >= 1 ? 'green' : 'amber')}
+        ${kpi('CPL', cpl != null ? fmtMoney(cpl, 'UAH') : '—', 'cost per lead', 'purple')}
+        ${kpi('CPA', cpa != null ? fmtMoney(cpa, 'UAH') : '—', 'cost per acquisition', 'purple')}
       </div>
 
       <div class="grid-2">
@@ -1446,7 +2016,7 @@ async function renderOverview() {
       </div>
 
       <div class="card">
-        <div class="card-head"><h3>Останні 20 угод</h3></div>
+        <div class="card-head"><h3>Останні 20 угод</h3><span class="meta">клік на рядок — деталі</span></div>
         <div id="t-recent"></div>
       </div>
     `;
@@ -1477,6 +2047,7 @@ async function renderOverview() {
       rows: last20,
       pageSize: 20,
       sortKey: 'created_at',
+      rowClick: openLeadDetailsModal,
       cols: [
         { key: 'created_at', label: 'Дата', fmt: v => `<span class="mono">${fmtDateTime(v)}</span>` },
         { key: 'sendpulse_deal_id', label: 'ID', fmt: v => `<code>${escapeHtml(v||'')}</code>` },
@@ -1587,12 +2158,104 @@ async function renderAnalytics() {
   } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
 }
 
+/* ---------------- TRAFFIC TYPE (medium → платний / органічний) ---------------- */
+async function renderTrafficType() {
+  const c = $('#content');
+  c.innerHTML = `<div class="section-head"><h1>🔗 Тип трафіка</h1></div>${loadingHTML()}`;
+  try {
+    const rows = await fetchAllDealsBatched(30000);
+    setLastData('medium', rows);
+
+    // Bucket by traffic_type
+    const buckets = { paid: [], organic: [] };
+    rows.forEach(r => {
+      const key = isPaidSource(r.utm_source) ? 'paid' : 'organic';
+      buckets[key].push(r);
+    });
+
+    const compute = (lst) => {
+      const paid = lst.filter(r => r.status === 'pay');
+      const sum = paid.reduce((a,r) => a + Number(r.amount||0), 0);
+      return {
+        leads: lst.length,
+        paid: paid.length,
+        sum,
+        buyers: new Set(paid.map(r => r.customer_email).filter(Boolean)).size,
+        conv: lst.length ? (paid.length/lst.length*100) : 0,
+        avg: paid.length ? sum/paid.length : 0
+      };
+    };
+    const pStat = compute(buckets.paid);
+    const oStat = compute(buckets.organic);
+
+    // Detailed table — by medium с традиційним полем medium
+    const aggMedium = aggregateByField(rows, 'utm_medium');
+    aggMedium.forEach(a => {
+      // sample first row matching this medium to detect paid/organic via utm_source
+      const sample = rows.find(r => (r.utm_medium||'(none)') === a.key);
+      a.traffic_type = sample && isPaidSource(sample.utm_source) ? '💸 Платний' : '🌱 Органічний';
+    });
+
+    c.innerHTML = `
+      <div class="section-head">
+        <div><h1>🔗 Тип трафіка</h1><div class="subtitle">розподіл лідів між платним та органічним трафіком · ${fmtNum(rows.length)} угод</div></div>
+      </div>
+
+      <div class="kpi-grid">
+        ${kpi('💸 Платний — Ліди', fmtNum(pStat.leads), fmtPct(pStat.conv) + ' конв.', 'amber')}
+        ${kpi('💸 Платний — Оплати', fmtNum(pStat.paid), fmtMoney(pStat.sum), 'amber')}
+        ${kpi('💸 Платний — Покупців', fmtNum(pStat.buyers), 'унікальних', 'amber')}
+        ${kpi('🌱 Органічний — Ліди', fmtNum(oStat.leads), fmtPct(oStat.conv) + ' конв.', 'green')}
+        ${kpi('🌱 Органічний — Оплати', fmtNum(oStat.paid), fmtMoney(oStat.sum), 'green')}
+        ${kpi('🌱 Органічний — Покупців', fmtNum(oStat.buyers), 'унікальних', 'green')}
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head"><h3>Платний vs Органічний — ліди</h3></div>
+          <div class="chart-container short"><canvas id="ch-traffic-leads"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>Платний vs Органічний — revenue</h3></div>
+          <div class="chart-container short"><canvas id="ch-traffic-rev"></canvas></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>Деталі по utm_medium</h3><span class="meta">${aggMedium.length} значень</span></div>
+        <div id="t-traffic"></div>
+      </div>
+    `;
+
+    doughnutChart('ch-traffic-leads', ['💸 Платний','🌱 Органічний'], [pStat.leads, oStat.leads], ['#F59E0B','#10B981']);
+    doughnutChart('ch-traffic-rev',   ['💸 Платний','🌱 Органічний'], [pStat.sum,   oStat.sum  ], ['#F59E0B','#10B981']);
+
+    buildTable('#t-traffic', {
+      rows: aggMedium,
+      pageSize: 50,
+      sortKey: 'sum',
+      csvFile: 'traffic-medium.csv',
+      cols: [
+        { key: 'traffic_type', label: 'Тип', fmt: v => `<span class="pill ${v.includes('Платний')?'pending':'pay'}">${escapeHtml(v)}</span>` },
+        { key: 'key', label: 'utm_medium', fmt: v => `<span class="mono" style="font-size:12px">${escapeHtml(v)}</span>` },
+        { key: 'leads', label: 'Ліди', class: 'num', fmt: fmtNum },
+        { key: 'paid', label: 'Paid', class: 'num', fmt: fmtNum },
+        { key: 'buyers', label: 'Унік.', class: 'num', fmt: fmtNum },
+        { key: 'sum', label: 'Revenue', class: 'amount', fmt: v => fmtMoney(v) },
+        { key: 'avg', label: 'Середній', class: 'amount', fmt: v => fmtMoney(v) },
+        { key: 'conv', label: 'Conv %', class: 'num', fmt: v => fmtPct(v) }
+      ]
+    });
+  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
+}
+
 /* ---------------- UTM FIELDS GENERIC ---------------- */
 async function renderUtmField(field, title, csvName) {
   const c = $('#content');
   c.innerHTML = `<div class="section-head"><h1>${escapeHtml(title)}</h1></div>${loadingHTML()}`;
   try {
     const rows = await fetchAllDealsBatched(30000);
+    setLastData(field, rows);
     const agg = aggregateByField(rows, field);
 
     // Try to attach ad spend by matching utm field (best-effort)
@@ -1618,11 +2281,34 @@ async function renderUtmField(field, title, csvName) {
       a.cpa = a.spend > 0 && a.paid > 0 ? a.spend / a.paid : null;
     });
 
-    const topPaid = agg.filter(a => a.paid > 0).slice(0, 10);
+    // Add ads-only rows (those that have spend but no leads)
+    adMap.forEach((spend, k) => {
+      if (!agg.find(a => a.key === k)) {
+        agg.push({
+          key: k, leads: 0, paid: 0, sum: 0, fail: 0, pending: 0, buyers: 0, avg: 0, conv: 0,
+          spend, profit: -spend,
+          roas: null, roi: null, cpl: null, cpa: null
+        });
+      }
+    });
+
+    // sourceFilter post-filter
+    let aggView = agg;
+    if (filters.source_filter === 'both')   aggView = agg.filter(a => a.leads > 0 && a.spend > 0);
+    else if (filters.source_filter === 'crm') aggView = agg.filter(a => a.leads > 0 && a.spend === 0);
+    else if (filters.source_filter === 'ads') aggView = agg.filter(a => a.spend > 0 && a.leads === 0);
+
+    const topPaid = aggView.filter(a => a.paid > 0).slice(0, 10);
+
+    // Column label for the key field
+    const keyLabel = field === 'utm_term' ? 'Виконавець (utm_term)'
+                   : field === 'utm_content' ? 'Оголошення (utm_content)'
+                   : field === 'utm_source' ? 'Джерело (utm_source)'
+                   : title.split(' ').slice(1).join(' ') || title;
 
     c.innerHTML = `
       <div class="section-head">
-        <div><h1>${escapeHtml(title)}</h1><div class="subtitle">${agg.length} унікальних значень · ${fmtNum(rows.length)} угод</div></div>
+        <div><h1>${escapeHtml(title)}</h1><div class="subtitle">${aggView.length} значень · ${fmtNum(rows.length)} угод${filters.source_filter ? ' · фільтр джерел: '+filters.source_filter : ''}</div></div>
       </div>
 
       <div class="card">
@@ -1631,27 +2317,31 @@ async function renderUtmField(field, title, csvName) {
       </div>
 
       <div class="card">
-        <div class="card-head"><h3>Деталі</h3></div>
+        <div class="card-head"><h3>Деталі</h3><span class="meta">клік на рядок — деталі джерела</span></div>
         <div id="t-utm"></div>
       </div>
     `;
 
-    barChart('ch-top',
-      topPaid.map(a => a.key.length > 25 ? a.key.slice(0,22)+'...' : a.key),
-      [
-        { label: 'Сума UAH', data: topPaid.map(a=>a.sum), backgroundColor: '#E30613' },
-        { label: 'Paid', data: topPaid.map(a=>a.paid), backgroundColor: '#10B981', yAxisID: 'y1' }
-      ],
-      { scales: { y1: { position: 'right', grid: { drawOnChartArea: false } } } }
-    );
+    if (topPaid.length) {
+      barChart('ch-top',
+        topPaid.map(a => a.key.length > 25 ? a.key.slice(0,22)+'...' : a.key),
+        [
+          { label: 'Сума UAH', data: topPaid.map(a=>a.sum), backgroundColor: '#E30613' },
+          { label: 'Paid', data: topPaid.map(a=>a.paid), backgroundColor: '#10B981', yAxisID: 'y1' }
+        ],
+        { scales: { y1: { position: 'right', grid: { drawOnChartArea: false } } } }
+      );
+    } else {
+      $('#ch-top').parentElement.innerHTML = '<div class="state">Немає оплачених лідів для топа</div>';
+    }
 
     buildTable('#t-utm', {
-      rows: agg,
+      rows: aggView,
       pageSize: 50,
       sortKey: 'sum',
       csvFile: csvName,
       cols: [
-        { key: 'key', label: title.split(' ')[0], fmt: v => `<span class="mono" style="font-size:12px">${escapeHtml(v)}</span>` },
+        { key: 'key', label: keyLabel, fmt: v => `<span class="mono" style="font-size:12px">${escapeHtml(v)}</span>` },
         { key: 'leads', label: 'Ліди', class: 'num', fmt: fmtNum },
         { key: 'paid', label: 'Paid', class: 'num', fmt: fmtNum },
         { key: 'fail', label: 'Fail', class: 'num', fmt: fmtNum },
@@ -1659,7 +2349,7 @@ async function renderUtmField(field, title, csvName) {
         { key: 'sum', label: 'Заробл.', class: 'amount', fmt: v => fmtMoney(v) },
         { key: 'spend', label: 'Spend', class: 'amount', fmt: v => v ? fmtMoney(v) : '—' },
         { key: 'profit', label: 'Прибуток', class: 'amount', fmt: v => v != null ? fmtMoney(v) : '—' },
-        { key: 'roas', label: 'ROAS', class: 'num', fmt: v => v != null ? v.toFixed(2)+'x' : '—' },
+        { key: 'roas', label: 'ROAS', class: 'num', fmt: v => v != null ? v.toFixed(2)+'×' : '—' },
         { key: 'roi', label: 'ROI', class: 'num', fmt: v => v != null ? fmtPct(v) : '—' },
         { key: 'cpl', label: 'CPL', class: 'num', fmt: v => v != null ? fmtMoney(v) : '—' },
         { key: 'cpa', label: 'CPA', class: 'num', fmt: v => v != null ? fmtMoney(v) : '—' },
@@ -1754,30 +2444,75 @@ async function renderCampaigns() {
 /* ---------------- COMBOS ---------------- */
 async function renderCombos() {
   const c = $('#content');
-  c.innerHTML = `<div class="section-head"><h1>🔀 Комбінації UTM</h1></div>${loadingHTML()}`;
+  c.innerHTML = `<div class="section-head"><h1>🔗 Комбінації UTM</h1></div>${loadingHTML()}`;
   try {
     const rows = await fetchAllDealsBatched(30000);
-    const agg = aggregateCombos(rows);
+    setLastData('combos', rows);
+
+    // Build keys based on combo_type
+    const type = filters.combo_type || 'all';
+    const fieldsFor = {
+      'source_medium':   ['utm_source','utm_medium'],
+      'source_campaign': ['utm_source','utm_campaign'],
+      'medium_campaign': ['utm_medium','utm_campaign'],
+      'all':             ['utm_source','utm_medium','utm_campaign'],
+      'full':            ['utm_source','utm_medium','utm_campaign','utm_term','utm_content']
+    };
+    const flds = fieldsFor[type] || fieldsFor.all;
+
+    const map = new Map();
+    rows.forEach(r => {
+      const k = flds.map(f => r[f] || '(none)').join('|');
+      if (!map.has(k)) {
+        const obj = { leads:0, paid:0, sum:0, buyers: new Set() };
+        flds.forEach(f => obj[f] = r[f] || '(none)');
+        map.set(k, obj);
+      }
+      const a = map.get(k);
+      a.leads++;
+      if (r.status === 'pay') {
+        a.paid++; a.sum += Number(r.amount||0);
+        if (r.customer_email) a.buyers.add(r.customer_email);
+      }
+    });
+    const agg = Array.from(map.values()).map(a => ({
+      ...a,
+      buyers: a.buyers.size,
+      avg: a.paid > 0 ? a.sum/a.paid : 0,
+      conv: a.leads > 0 ? (a.paid/a.leads*100) : 0
+    })).sort((x,y) => y.sum - x.sum);
+
+    const titles = {
+      'source_medium':   'Source + Medium',
+      'source_campaign': 'Source + Campaign',
+      'medium_campaign': 'Medium + Campaign',
+      'all':             'Source + Medium + Campaign',
+      'full':            'Усі UTM-мітки'
+    };
+
     c.innerHTML = `
-      <div class="section-head"><div><h1>🔀 Комбінації UTM</h1><div class="subtitle">${agg.length} унікальних source+medium+campaign</div></div></div>
+      <div class="section-head"><div><h1>🔗 Комбінації UTM</h1><div class="subtitle">${agg.length} унікальних · ${escapeHtml(titles[type])}</div></div></div>
       <div class="card"><div id="t-combos"></div></div>
     `;
+
+    const cols = flds.map(f => ({
+      key: f, label: f.replace('utm_',''),
+      fmt: v => `<span class="mono" style="font-size:11px">${escapeHtml(v)}</span>`
+    })).concat([
+      { key: 'leads', label: 'Ліди', class: 'num', fmt: fmtNum },
+      { key: 'paid', label: 'Paid', class: 'num', fmt: fmtNum },
+      { key: 'buyers', label: 'Унік.', class: 'num', fmt: fmtNum },
+      { key: 'sum', label: 'Сума', class: 'amount', fmt: v => fmtMoney(v) },
+      { key: 'avg', label: 'Середній', class: 'amount', fmt: v => fmtMoney(v) },
+      { key: 'conv', label: 'Conv %', class: 'num', fmt: v => fmtPct(v) }
+    ]);
+
     buildTable('#t-combos', {
       rows: agg,
       pageSize: 50,
       sortKey: 'sum',
-      csvFile: 'combos.csv',
-      cols: [
-        { key: 'utm_source', label: 'Source', fmt: v => `<span class="mono" style="font-size:11px">${escapeHtml(v)}</span>` },
-        { key: 'utm_medium', label: 'Medium', fmt: v => `<span class="mono" style="font-size:11px">${escapeHtml(v)}</span>` },
-        { key: 'utm_campaign', label: 'Campaign', fmt: v => `<span class="mono" style="font-size:11px">${escapeHtml(v)}</span>` },
-        { key: 'leads', label: 'Ліди', class: 'num', fmt: fmtNum },
-        { key: 'paid', label: 'Paid', class: 'num', fmt: fmtNum },
-        { key: 'buyers', label: 'Унік.', class: 'num', fmt: fmtNum },
-        { key: 'sum', label: 'Сума', class: 'amount', fmt: v => fmtMoney(v) },
-        { key: 'avg', label: 'Середній', class: 'amount', fmt: v => fmtMoney(v) },
-        { key: 'conv', label: 'Conv %', class: 'num', fmt: v => fmtPct(v) }
-      ]
+      csvFile: 'combos-'+type+'.csv',
+      cols
     });
   } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
 }
@@ -1785,12 +2520,13 @@ async function renderCombos() {
 /* ---------------- DEALS TABLE ---------------- */
 async function renderDeals() {
   const c = $('#content');
-  c.innerHTML = `<div class="section-head"><h1>📋 Таблиця угод</h1></div>${loadingHTML()}`;
+  c.innerHTML = `<div class="section-head"><h1>📋 Таблиця</h1></div>${loadingHTML()}`;
   try {
     const rows = await fetchAllDealsBatched(20000);
+    setLastData('deals', rows);
     c.innerHTML = `
       <div class="section-head">
-        <div><h1>📋 Таблиця угод</h1><div class="subtitle">${fmtNum(rows.length)} угод за період</div></div>
+        <div><h1>📋 Таблиця</h1><div class="subtitle">${fmtNum(rows.length)} угод за період · клік на рядок — деталі</div></div>
       </div>
       <div class="card"><div id="t-deals"></div></div>
     `;
@@ -1799,6 +2535,7 @@ async function renderDeals() {
       pageSize: 50,
       sortKey: 'created_at',
       csvFile: 'deals.csv',
+      rowClick: openLeadDetailsModal,
       cols: [
         { key: 'created_at', label: 'Дата', fmt: v => `<span class="mono">${fmtDateTime(v)}</span>` },
         { key: 'sendpulse_deal_id', label: 'Deal ID', fmt: v => `<code>${escapeHtml(v||'')}</code>` },
@@ -2318,18 +3055,24 @@ function renderHelp() {
       <div class="help-card" style="grid-column:1/-1">
         <h3>🗺 Розшифровка розділів</h3>
         <ul>
-          <li><strong>Огляд</strong> — KPI + timeline по днях / тижнях / місяцях + топ-7 проектів + останні 20 угод.</li>
+          <li><strong>Огляд</strong> — 13 KPI у 2 row («Конверсія» + «Економіка»), timeline по днях/тижнях/місяцях, топ-7 проектів, останні 20 угод (клік відкриває деталі).</li>
           <li><strong>Аналітика</strong> — розподіл статусів, воронка, cohort по місяцях, топ-10 проектів.</li>
-          <li><strong>Джерела / Канали / Кампанії / Контент / UTM Term</strong> — агрегації по відповідних <code>utm_*</code> з KPI: Ліди, Paid, Унікальні, Revenue, Spend (якщо співпадає utm у Ads), Прибуток, ROAS, ROI, CPL, CPA, Conv %.</li>
-          <li><strong>Комбінації</strong> — унікальні зв'язки source+medium+campaign з конверсією.</li>
-          <li><strong>Таблиця угод</strong> — повний дамп з фільтрами + сортуванням + експорт CSV.</li>
+          <li><strong>Комбінації</strong> — комбо source/medium/campaign (можна обрати: S+M / S+C / M+C / S+M+C / усі мітки).</li>
+          <li><strong>📍 Джерела</strong> — агрегація utm_source з KPI Ліди / Paid / Revenue / Spend / Profit / ROAS / ROI / CPL / CPA / Conv %.</li>
+          <li><strong>🔗 Тип трафіка</strong> — розподіл Платний (Meta/Google/TikTok/...) vs Органічний + детальна таблиця по utm_medium.</li>
+          <li><strong>🎯 Кампанії</strong> — utm_campaign × Facebook Ads (Spend / Revenue / ROAS / Profit / Imps / Clicks).</li>
+          <li><strong>🔑 Виконавець</strong> — utm_term як таргетолог/виконавець (хто запустив креатив).</li>
+          <li><strong>🎨 Оголошення</strong> — utm_content як креатив/оголошення.</li>
+          <li><strong>📋 Таблиця</strong> — повний дамп угод з рядковими деталями (клік відкриває модалку).</li>
           <li><strong>Webhook логи</strong> — останні 500 подій від SendPulse / Make.com для debug.</li>
           <li><strong>UTM Mapping</strong> — CRUD правил нормалізації UTM (наприклад <code>ig</code> → <code>instagram</code>).</li>
           <li><strong>Manual Costs</strong> — CRUD витрат поза Facebook Ads (зарплати, сервіси).</li>
           <li><strong>Ads Overview / Campaigns</strong> — статистика Facebook Ads (spend, CPC, CPM, CTR).</li>
-          <li><strong>Cards / USDT / Payroll</strong> — заглушки, окремий Finance модуль скоро.</li>
-          <li><strong>Settings</strong> — профіль користувача + системні лічильники + команда.</li>
         </ul>
+        <h4>🎯 Активний розіграш</h4>
+        <p>Фільтр <code>Активний розіграш</code> у верхньому барі дозволяє звузити вибірку до конкретної моделі (VOLVO, Q7, Mercedes, BMW, AUDI E-TRON…). У парі з пресетами <em>«Весь проєкт / Перші 3 дні / Перший тиждень / Останній тиждень / Останній день»</em> можна швидко аналізувати окремий розіграш. Список моделей редагується через ⚙️ у топбарі (modal «Налаштування проєктів»).</p>
+        <h4>💸 Платний vs 🌱 Органічний</h4>
+        <p>Платний трафік = utm_source у {facebook, instagram, google, tiktok, meta, …} або суфікс <code>_paid|_ads|_cpc</code>. Решта = органіка.</p>
       </div>
     </div>
   `;
@@ -2446,7 +3189,11 @@ async function renderRoute() {
   $$('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.route === route));
   setSectionTitle(SECTION_TITLES[route] || route);
   $('#filter-bar').classList.toggle('hidden', !UTM_SECTIONS.has(route) && !ADS_SECTIONS.has(route));
+  // combo type select — only on combos section
+  const comboWrap = $('#f-combo-wrap');
+  if (comboWrap) comboWrap.style.display = (route === 'combos') ? '' : 'none';
   $('#sidebar').classList.remove('open');
+  syncFilterBarFromState();
   const fn = SECTIONS[route];
   try {
     await fn();
@@ -2490,6 +3237,8 @@ async function onAuthed() {
 
   applyPreset('30d');
   setupFilterBar();
+  bindSettingsModalHandlers();
+  loadModelsSelect();
 
   $$('.nav-item').forEach(n => {
     n.addEventListener('click', () => { location.hash = n.dataset.route; });
@@ -2498,7 +3247,13 @@ async function onAuthed() {
   $$('#topbar-actions .tb-btn').forEach(b => {
     b.addEventListener('click', () => {
       const r = b.dataset.jump;
-      if (r) location.hash = r;
+      if (r) {
+        if (r === 'settings') {
+          openSettingsModal();
+          return;
+        }
+        location.hash = r;
+      }
     });
   });
 
