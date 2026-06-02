@@ -1202,6 +1202,7 @@ const filters = {
 
 /* Хардкод-список основних проектів — захардкоджуємо для повного покриття */
 const MAIN_PROJECTS = ['OLD','VOLVO','Q7','Mercedes','DreamCar AI','AUDI E-TRON','BMW','Контакт'];
+let __projectsList = []; // cached from dashboard_projects table
 
 /* Активні розіграші — модель + start/end + project-substring у БД.
    Зберігаємо у localStorage щоб юзер міг редагувати через Settings. */
@@ -1295,7 +1296,18 @@ function setupFilterBar() {
     if (v !== 'custom') renderRoute();
   });
   $('#f-model').addEventListener('change', e => { filters.model = e.target.value; renderRoute(); });
-  $('#f-project').addEventListener('change', e => { filters.project = e.target.value; });
+  $('#f-project').addEventListener('change', e => {
+    filters.project = e.target.value;
+    const sp = getSelectedProject();
+    if (sp) {
+      filters.from = sp.date_start;
+      filters.to = sp.date_end;
+      const cf = $('#cd-from'); if (cf) cf.value = sp.date_start;
+      const ct = $('#cd-to'); if (ct) ct.value = sp.date_end;
+      const dp = $('#date-preset'); if (dp) dp.value = 'custom';
+    }
+    renderRoute();
+  });
   $('#f-status').addEventListener('change', e => { filters.status = e.target.value; });
   $('#f-customer-type').addEventListener('change', e => { filters.customer_type = e.target.value; });
   $('#f-funnel-type').addEventListener('change', e => { filters.funnel_type = e.target.value; });
@@ -1581,25 +1593,52 @@ async function fetchAllDealsBatched(maxRows=30000) {
   return applyClientFilters(all);
 }
 
+function _fmtProjDate(s) {
+  if (!s) return '';
+  const [y,m,d] = s.split('-');
+  return `${d}.${m}.${y.slice(2)}`;
+}
+
 async function loadProjects() {
   try {
-    const { data } = await sb.from('dashboard_deals').select('project').not('project','is',null).limit(5000);
-    const set = new Set(MAIN_PROJECTS);
-    (data || []).forEach(r => { if (r.project) set.add(r.project); });
-    const main = MAIN_PROJECTS.filter(p => set.has(p));
-    const others = Array.from(set).filter(p => !MAIN_PROJECTS.includes(p)).sort((a,b) => a.localeCompare(b));
+    const { data: projData } = await sb
+      .from('dashboard_projects')
+      .select('*')
+      .order('sort_order', { ascending: true });
+    __projectsList = projData || [];
+
+    const { data: dealProjData } = await sb
+      .from('dashboard_deals')
+      .select('project')
+      .not('project','is',null)
+      .limit(5000);
+    const dealProjSet = new Set();
+    (dealProjData || []).forEach(r => { if (r.project) dealProjSet.add(r.project); });
+
+    const officialValues = new Set();
+    __projectsList.forEach(p => (p.deal_project_values || []).forEach(v => officialValues.add(v)));
+    const others = Array.from(dealProjSet).filter(p => !officialValues.has(p)).sort((a,b) => a.localeCompare(b));
+
     const sel = $('#f-project');
     const cur = filters.project;
+    const mainOpts = __projectsList.map(p => {
+      const dr = `${_fmtProjDate(p.date_start)}-${_fmtProjDate(p.date_end)}`;
+      return `<option value="${escapeHtml(p.code)}">${escapeHtml(p.name)} (${dr})</option>`;
+    }).join('');
     sel.innerHTML =
-      '<option value="">— Усі проекти —</option>' +
-      '<optgroup label="Основні проекти">' +
-        main.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('') +
-      '</optgroup>' +
+      '<option value="">- Усі проекти -</option>' +
+      (mainOpts ? `<optgroup label="Основні проекти">${mainOpts}</optgroup>` : '') +
       (others.length ? '<optgroup label="Інші">' +
-        others.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('') +
+        others.map(p => `<option value="raw::${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('') +
       '</optgroup>' : '');
     if (cur) sel.value = cur;
   } catch (e) { console.warn('projects load failed', e); }
+}
+
+function getSelectedProject() {
+  if (!filters.project) return null;
+  if (filters.project.startsWith('raw::')) return null;
+  return __projectsList.find(p => p.code === filters.project) || null;
 }
 
 async function loadTariffs() {
