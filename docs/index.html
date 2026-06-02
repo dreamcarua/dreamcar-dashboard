@@ -2140,24 +2140,40 @@ async function renderProjectsOverview() {
   const c = $('#content');
   c.innerHTML = `<div class="section-head"><h1>🏎️ Проекти</h1></div>${loadingHTML()}`;
   try {
-    const { data, error } = await sb.rpc('dashboard_projects_with_stats');
-    if (error) throw error;
-    const rows = (data || []).map(r => ({
+    const [projRes, uniqRes] = await Promise.all([
+      sb.rpc('dashboard_projects_with_stats'),
+      sb.rpc('dashboard_unique_buyers_total')
+    ]);
+    if (projRes.error) throw projRes.error;
+    const rows = (projRes.data || []).map(r => ({
       code: r.code, name: r.name, car_model: r.car_model,
       date_start: r.date_start, date_end: r.date_end,
       status: r.status, color: r.color,
       leads: Number(r.leads), paid: Number(r.paid),
       fail: Number(r.fail), pending: Number(r.pending),
       revenue: Number(r.revenue), buyers: Number(r.buyers),
-      conv_rate: Number(r.conv_rate), avg_check: Number(r.avg_check)
+      conv_rate: Number(r.conv_rate), avg_check: Number(r.avg_check),
+      ad_spend: Number(r.ad_spend || 0),
+      ad_campaigns: Number(r.ad_campaigns || 0),
+      ad_impressions: Number(r.ad_impressions || 0),
+      ad_clicks: Number(r.ad_clicks || 0),
+      manual_spend: Number(r.manual_spend || 0),
+      total_spend: Number(r.total_spend || 0),
+      roi_pct: r.roi_pct != null ? Number(r.roi_pct) : null,
+      cac: r.cac != null ? Number(r.cac) : null
     }));
 
     const totals = rows.reduce((a,r) => ({
       leads: a.leads + r.leads, paid: a.paid + r.paid,
-      revenue: a.revenue + r.revenue, buyers: a.buyers + r.buyers
-    }), { leads: 0, paid: 0, revenue: 0, buyers: 0 });
+      revenue: a.revenue + r.revenue,
+      ad_spend: a.ad_spend + r.ad_spend,
+      total_spend: a.total_spend + r.total_spend
+    }), { leads: 0, paid: 0, revenue: 0, ad_spend: 0, total_spend: 0 });
     const avgConv = totals.leads > 0 ? (totals.paid / totals.leads * 100) : 0;
     const avgAov = totals.paid > 0 ? (totals.revenue / totals.paid) : 0;
+    const trueUniqBuyers = Number(((uniqRes.data || [])[0] || {}).unique_buyers || 0);
+    const totalRoiPct = totals.total_spend > 0 ? ((totals.revenue - totals.total_spend) / totals.total_spend * 100) : null;
+    const avgCac = totals.paid > 0 && totals.total_spend > 0 ? (totals.total_spend / totals.paid) : null;
     const bestProj = rows.reduce((best, r) => r.revenue > (best?.revenue || 0) ? r : best, null);
     const bestConv = rows.reduce((best, r) => r.conv_rate > (best?.conv_rate || 0) ? r : best, null);
 
@@ -2171,9 +2187,10 @@ async function renderProjectsOverview() {
         ${kpi('Усього оплат', fmtNum(totals.paid), fmtPct(avgConv) + ' конв.', 'green')}
         ${kpi('Виручка lifetime', fmtMoney(totals.revenue), 'UAH', 'red')}
         ${kpi('Сер. чек', fmtMoney(avgAov), 'AOV', 'amber')}
-        ${kpi('Унік. покупців', fmtNum(totals.buyers), '', 'purple')}
+        ${kpi('Унік. покупців', fmtNum(trueUniqBuyers), 'без double-count', 'purple')}
+        ${kpi('Реклама (sum spend)', fmtMoney(totals.ad_spend), 'FB Ads + manual', 'amber')}
+        ${kpi('ROI lifetime', totalRoiPct != null ? (totalRoiPct >= 0 ? '+' : '') + totalRoiPct.toFixed(0) + '%' : '—', avgCac != null ? 'CAC ' + fmtMoney(avgCac) : '', 'green')}
         ${kpi('Топ за виручкою', bestProj ? bestProj.name : '—', bestProj ? fmtMoney(bestProj.revenue) : '', 'red')}
-        ${kpi('Топ за конверсією', bestConv ? bestConv.name : '—', bestConv ? fmtPct(bestConv.conv_rate) : '', 'green')}
       </div>
 
       <div class="grid-2">
@@ -2216,6 +2233,9 @@ async function renderProjectsOverview() {
         { key: 'leads', label: 'Ліди', class: 'num', fmt: fmtNum },
         { key: 'paid', label: 'Оплати', class: 'num', fmt: fmtNum },
         { key: 'revenue', label: 'Виручка', class: 'num', fmt: fmtMoney },
+        { key: 'ad_spend', label: 'Реклама', class: 'num', fmt: v => v > 0 ? fmtMoney(v) : '—' },
+        { key: 'roi_pct', label: 'ROI %', class: 'num', fmt: v => v == null ? '—' : `<span class="pill ${v >= 0 ? 'pay' : 'fail'}">${v >= 0 ? '+' : ''}${v.toFixed(0)}%</span>` },
+        { key: 'cac', label: 'CAC', class: 'num', fmt: v => v == null ? '—' : fmtMoney(v) },
         { key: 'buyers', label: 'Покупців', class: 'num', fmt: fmtNum },
         { key: 'conv_rate', label: 'Конв %', class: 'num', fmt: fmtPct },
         { key: 'avg_check', label: 'AOV', class: 'num', fmt: fmtMoney }
