@@ -177,6 +177,27 @@
     color: var(--ash);
     padding: 0 10px;
     margin: 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .nav-group-title.clickable {
+    cursor: pointer;
+    user-select: none;
+    border-radius: 4px;
+    transition: color 120ms;
+  }
+  .nav-group-title.clickable:hover { color: #fff; }
+  .nav-group-title .chev {
+    display: inline-block;
+    font-size: 8px;
+    transition: transform 200ms;
+    color: var(--ash);
+    width: 8px;
+  }
+  .nav-group.collapsible.collapsed .nav-group-body { display: none; }
+  .nav-group.collapsible .nav-group-body {
+    overflow: hidden;
   }
   .nav-item {
     display: flex; align-items: center; gap: 10px;
@@ -218,14 +239,13 @@
     min-width: 0;
   }
 
-  /* Filter bar */
+  /* Filter bar — НЕ sticky (скролиться разом з контентом), щоб не перекривати content header */
   .filter-bar {
-    position: sticky; top: var(--topbar-h); z-index: 40;
     background: var(--black-2);
     border-bottom: 1px solid var(--steel);
-    padding: 14px 24px;
-    display: flex; flex-wrap: wrap; gap: 10px;
-    align-items: center;
+    padding: 14px 24px 16px;
+    display: flex; flex-wrap: wrap; gap: 10px 14px;
+    align-items: flex-end;
   }
   .filter-bar.hidden { display: none; }
   .filter-bar label {
@@ -853,18 +873,8 @@
 
 <div class="app">
   <aside class="sidebar" id="sidebar">
-    <div class="brand">
-      <div class="brand-plate">
-        <img src="https://brand.dreamcar.ua/assets/logo/dreamcar-racing-plate.svg" alt="DC" onerror="this.style.display='none';this.parentNode.textContent='DC';">
-      </div>
-      <div class="brand-text">
-        DreamCar<br>Аналітика
-        <span class="ver">v2.0.0</span>
-      </div>
-    </div>
-
     <div class="nav-group">
-      <div class="nav-group-title">UTM Dashboard</div>
+      <div class="nav-group-title">Аналітика</div>
       <div class="nav-item" data-route="overview"><span class="icon">📊</span>Огляд</div>
       <div class="nav-item" data-route="analytics"><span class="icon">💰</span>Аналітика</div>
       <div class="nav-item" data-route="combos"><span class="icon">🔗</span>Комбінації</div>
@@ -873,10 +883,6 @@
       <div class="nav-item" data-route="campaigns"><span class="icon">🎯</span>Кампанії</div>
       <div class="nav-item" data-route="terms"><span class="icon">🔑</span>Виконавець</div>
       <div class="nav-item" data-route="content"><span class="icon">🎨</span>Оголошення</div>
-      <div class="nav-item" data-route="deals"><span class="icon">📋</span>Таблиця</div>
-      <div class="nav-item" data-route="webhooks"><span class="icon">🪝</span>Webhook логи</div>
-      <div class="nav-item" data-route="mapping"><span class="icon">🗺</span>UTM Mapping</div>
-      <div class="nav-item" data-route="costs"><span class="icon">💰</span>Manual Costs</div>
     </div>
 
     <div class="nav-group">
@@ -885,11 +891,23 @@
       <div class="nav-item" data-route="ads-campaigns"><span class="icon">📊</span>Ads Campaigns</div>
     </div>
 
-    <div class="nav-group">
-      <div class="nav-group-title">Finance</div>
-      <div class="nav-item" data-route="cards"><span class="icon">💳</span>Cards<span class="badge">SOON</span></div>
-      <div class="nav-item" data-route="usdt"><span class="icon">💵</span>USDT<span class="badge">SOON</span></div>
-      <div class="nav-item" data-route="payroll"><span class="icon">👥</span>Payroll<span class="badge">SOON</span></div>
+    <div class="nav-group collapsible" id="grp-maint">
+      <div class="nav-group-title clickable" data-toggle="grp-maint"><span class="chev">▾</span>Maintenance</div>
+      <div class="nav-group-body">
+        <div class="nav-item" data-route="deals"><span class="icon">📋</span>Таблиця</div>
+        <div class="nav-item" data-route="webhooks"><span class="icon">🪝</span>Webhook логи</div>
+        <div class="nav-item" data-route="mapping"><span class="icon">🗺</span>UTM Mapping</div>
+        <div class="nav-item" data-route="costs"><span class="icon">💰</span>Manual Costs</div>
+      </div>
+    </div>
+
+    <div class="nav-group collapsible collapsed" id="grp-fin">
+      <div class="nav-group-title clickable" data-toggle="grp-fin"><span class="chev">▸</span>Finance</div>
+      <div class="nav-group-body">
+        <div class="nav-item" data-route="cards"><span class="icon">💳</span>Cards<span class="badge">SOON</span></div>
+        <div class="nav-item" data-route="usdt"><span class="icon">💵</span>USDT<span class="badge">SOON</span></div>
+        <div class="nav-item" data-route="payroll"><span class="icon">👥</span>Payroll<span class="badge">SOON</span></div>
+      </div>
     </div>
 
     <div class="nav-group">
@@ -3261,10 +3279,87 @@ async function onAuthed() {
     $('#sidebar').classList.toggle('open');
   });
 
+  // Collapsible nav groups
+  $$('.nav-group-title.clickable').forEach(t => {
+    t.addEventListener('click', () => {
+      const grpId = t.dataset.toggle;
+      const grp = document.getElementById(grpId);
+      if (!grp) return;
+      grp.classList.toggle('collapsed');
+      const chev = t.querySelector('.chev');
+      if (chev) chev.textContent = grp.classList.contains('collapsed') ? '▸' : '▾';
+    });
+  });
+
   loadProjects();
   loadTariffs();
   loadPayProviders();
   renderRoute();
+
+  // ====== REAL-TIME: підписка на dashboard_deals + auto-refresh ======
+  setupRealtimeSubscription();
+  setupAutoRefreshIndicator();
+}
+
+/* ------------ Real-time data flow ------------ */
+let __rtChannel = null;
+let __rtNewDeals = 0;
+let __rtLastEvent = null;
+
+function setupRealtimeSubscription() {
+  if (!sb || !sb.channel) return;
+  try {
+    __rtChannel = sb.channel('dashboard-deals-rt')
+      .on('postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'dashboard_deals' },
+        (payload) => {
+          __rtNewDeals++;
+          __rtLastEvent = new Date();
+          updateLiveBadge();
+          // Debounced reload (3 сек після останнього нового deal)
+          debouncedReload();
+        })
+      .on('postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'dashboard_deals' },
+        (payload) => {
+          __rtLastEvent = new Date();
+          updateLiveBadge();
+          debouncedReload();
+        })
+      .subscribe((status) => {
+        console.log('[realtime] subscription:', status);
+        if (status === 'SUBSCRIBED') updateLiveBadge();
+      });
+  } catch (e) {
+    console.warn('[realtime] failed to subscribe:', e);
+  }
+}
+
+const debouncedReload = debounce(() => {
+  // Не перезавантажую якщо юзер на CRUD-сторінках чи help
+  const r = (location.hash || '#overview').replace('#','');
+  if (['mapping','costs','settings','help'].includes(r)) return;
+  console.log('[realtime] reloading route after', __rtNewDeals, 'new deals');
+  renderRoute();
+  __rtNewDeals = 0;
+}, 3000);
+
+function updateLiveBadge() {
+  const el = $('#live-badge');
+  if (!el) return;
+  const lastAgo = __rtLastEvent ? Math.round((Date.now() - __rtLastEvent.getTime())/1000) : null;
+  el.classList.add('on');
+  el.title = __rtLastEvent ? `Останній deal: ${lastAgo}s тому, +${__rtNewDeals} нових у черзі` : 'Підключено · очікую угоди';
+}
+
+function setupAutoRefreshIndicator() {
+  // Кожні 30s якщо у backround — рефреш кешу daily counts
+  setInterval(() => {
+    const el = $('#live-badge');
+    if (!el || !__rtLastEvent) return;
+    const secs = Math.round((Date.now() - __rtLastEvent.getTime())/1000);
+    el.querySelector('.live-time') && (el.querySelector('.live-time').textContent = secs < 60 ? `${secs}s` : `${Math.round(secs/60)}хв`);
+  }, 5000);
 }
 
 bootstrap();

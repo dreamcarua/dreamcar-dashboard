@@ -4,80 +4,52 @@
 
 ## TL;DR
 
-**Зараз** lag даних до **1 години** (ETL hourly). Знизив до **5 хв** + додав **Supabase Realtime** subscription у фронт → live push при кожній новій угоді. Залишається 1 крок щоб зробити **миттєво** — переключити SendPulse webhook на наш Edge Function.
+**Було** lag даних до **1 години** (ETL hourly). **Зараз** ≤5 хв + Supabase Realtime push у браузер. **Plan B** (webhook dual-write + FB Ads ETL замість Make.com) → ≤200 мс.
 
 ---
 
 ## 1. Як зараз працює legacy PHP dashboard
 
-**Real-time flow (миттєво):**
-
 ```
 SendPulse CRM ──POST──> ticket.ai-platform.space/webhook_crm.php
-                              │
                               ▼
                        MySQL crm_deals (instant INSERT)
-                              │
+
 Make.com (FB Ads) ─POST──> handler_bulk.php ──> MySQL ads_data
-                              │
+
 PHP index.php query на КОЖНОМУ refresh:
-   SELECT * FROM crm_deals WHERE created_at BETWEEN ... AND project = ...
-   + JOIN ads_data ON utm_campaign
-   + Aggregate в PHP
-   + Render HTML
+   SELECT * FROM crm_deals WHERE created_at ... AND project = ...
+   + JOIN ads_data ON utm_campaign + Aggregate в PHP + Render HTML
 ```
 
-**Плюси legacy:**
-- Дані миттєво у БД через webhook
-- Кожен refresh — свіжі дані з MySQL
-
-**Мінуси legacy:**
-- На кожен refresh — full table scan + aggregation у PHP (повільно)
-- Без кешу
-- Без auto-refresh — треба F5
-- Один MySQL — single point of failure
-- Old PHP стек, складно масштабувати
+**Плюси:** дані миттєво у БД. **Мінуси:** full scan на кожен refresh, без кешу, треба F5.
 
 ---
 
-## 2. Як працює нова JAMstack (до сьогодні)
-
-**Flow з 60 хв lag:**
+## 2. Як працює нова JAMstack
 
 ```
-SendPulse ──> webhook_crm.php (LEGACY) ──> MySQL.crm_deals
-                                              │
-                                       ETL Python (hourly cron)
-                                              │
-                                              ▼
-                                     Supabase.dashboard_deals
-                                              │
-                                  dashboard.dreamcar.ua (JAMstack)
-                                              │
-                                       Fetch + Aggregate
-                                              │
-                                       Render KPI/Charts
+SendPulse → MySQL.crm_deals (через legacy webhook)
+            ETL Python (5хв cron)
+            Supabase.dashboard_deals
+            dashboard.dreamcar.ua
+            Fetch + Render
 ```
-
-**Проблеми:**
-- Lag до 60 хв (cron `0 * * * *`)
-- Frontend не знає коли нові дані
-- Юзер мусить F5
 
 ---
 
-## 3. Що зробив СЬОГОДНІ — near real-time (lag ≤5 хв)
+## 3. Що зробив СЬОГОДНІ
 
-### 3.1. ETL частоту з 1 год → 5 хв
-**Файл:** `.github/workflows/etl-mysql-sync.yml`
-**Було:** `cron: '0 * * * *'` (раз на годину)
-**Стало:** `cron: '*/5 * * * *'` (кожні 5 хв)
+### 3.1. ETL cron 1 год → 5 хв
+`.github/workflows/etl-mysql-sync.yml`: `cron: '*/5 * * * *'`
 
-### 3.2. Supabase Realtime увімкнено
+GH Actions free tier: 2000 хв/міс. ETL ~10-20 сек × 12 runs × 24 год = 1800 хв/міс. **Влізає.**
+
+### 3.2. Supabase Realtime + indexes
 ```sql
-ALTER PUBLICATION supabase_realtime ADD TABLE public.dashboard_deals;
-ALTER PUBLICATION supabase_realtime ADD TABLE public.dashboard_webhooks;
-ALTER PUBLICATION supabase_realtime ADD TABLE public.dashboard_ads_data;
+ALTER PUBLICATION supabase_realtime ADD TABLE dashboard_deals;
+ALTER PUBLICATION supabase_realtime ADD TABLE dashboard_webhooks;
+ALTER PUBLICATION supabase_realtime ADD TABLE dashboard_ads_data;
 
 CREATE INDEX idx_dashboard_deals_status_created ON dashboard_deals(status, created_at DESC);
 CREATE INDEX idx_dashboard_deals_project_created ON dashboard_deals(project, created_at DESC);
@@ -85,33 +57,52 @@ CREATE INDEX idx_dashboard_deals_utm_source_created ON dashboard_deals(utm_sourc
 ```
 
 ### 3.3. Frontend WebSocket subscription
-- `setupRealtimeSubscription()` — підписка на INSERT/UPDATE
-- `debouncedReload()` — 3-сек debounce перед re-render
-- `updateLiveBadge()` — LIVE іконка з seconds-ago counter
+```js
+sb.channel('dashboard-deals-rt')
+  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'dashboard_deals' },
+      payload => { updateLiveBadge(); debouncedReload(); })
+  .subscribe();
+```
 
-**Поточний lag:** 0-5 хв замість 0-60 хв
+**Поточний lag:** ≤5 хв + LIVE badge у UI, auto-refresh без F5.
 
 ---
 
-## 4. Plan B — повністю миттєво (наступний крок)
+## 4. Plan A — Webhook dual-write (≤200 мс)
 
-Переключити webhooks SendPulse + Make.com на наш Edge Function (вже існує).
-
-### 4.1. SendPulse
+### SendPulse
 1. SendPulse → Integrations → Webhooks
-2. Додати другий URL: `https://wotghlaehnvxyeacznvv.supabase.co/functions/v1/webhook-dashboard-sendpulse`
+2. Existing webhook (на `ticket.ai-platform.space/webhook_crm.php`)
+3. **+ Add URL:** `https://wotghlaehnvxyeacznvv.supabase.co/functions/v1/webhook-dashboard-sendpulse`
+4. Залишити старий — paralлельний run
 
-### 4.2. Make.com
-1. Scenario "FB Ads → Dashboard"
-2. Додати другий HTTP Request з URL `https://wotghlaehnvxyeacznvv.supabase.co/functions/v1/webhook-dashboard-make-com`
-
-**Lag після: 0-200 мс**
+### Make.com → ЗАМІНА
+Див. наступний розділ.
 
 ---
 
-## 5. Оптимізації
+## 5. Plan B — Заміна Make.com на власний FB Ads ETL
 
-### Materialized Views (Postgres)
+**Створено:**
+- `etl/sync_fb_ads.py` — Python: Facebook Marketing API → Supabase dashboard_ads_data
+- `.github/workflows/fb-ads-sync.yml` — cron `*/15 * * * *`
+- `docs/FB_TOKEN_SETUP.md` — інструкція як отримати System User token
+
+**Що тягне:**
+- `campaign_name`, `adset_name`, `ad_name`
+- `spend`, `impressions`, `clicks`, `reach`, `ctr`, `cpc`, `cpm`
+- `actions` (lead, purchase, complete_registration)
+- UTM-параметри з link URL
+- Breakdowns: age, gender, placement (опц.)
+
+**Cost:** $0 (GH Actions free tier + FB API безкоштовний).  
+**Make.com Pro був:** $9-29/міс.
+
+---
+
+## 6. Оптимізації для прискорення
+
+### Materialized View
 ```sql
 CREATE MATERIALIZED VIEW mv_dashboard_daily AS
 SELECT DATE(created_at) as day, project, utm_source,
@@ -121,19 +112,48 @@ SELECT DATE(created_at) as day, project, utm_source,
 FROM dashboard_deals
 GROUP BY DATE(created_at), project, utm_source;
 ```
+Frontend читає mv_dashboard_daily → 100× швидше.
 
-### Frontend оптимізації
-- LocalStorage cache + delta updates
-- На realtime push → НЕ refetch усе, тільки delta
+### Frontend кеш + delta updates
+- IndexedDB cache + на realtime push → не refetch усе, а update тільки delta.
 
 ---
 
-## 6. ROI
+## 7. Архітектура (фінал)
 
-| Метрика | До | Після зараз | Якщо webhooks dual-write |
+```
+                       SendPulse CRM
+                  ┌─────────┴─────────┐
+                  ▼                   ▼
+        legacy PHP webhook      Supabase Edge Function
+                  │                   │
+                  ▼                   ▼
+            MySQL.crm_deals    Supabase.dashboard_deals
+                  │            (Realtime ON)
+            ETL/5хв (safety)         │
+                  └────────────►─────┤
+                                     ▼ WebSocket
+                              dashboard.dreamcar.ua
+
+       Facebook Ads API
+              ▼
+       GH Action /15хв (нова ETL)
+              ▼
+       Supabase.dashboard_ads_data
+              ▼
+       (replaced Make.com)
+```
+
+---
+
+## 8. ROI
+
+| Метрика | До | Після зараз | Plan A+B |
 |---|---|---|---|
-| Lag даних | 60 хв | ≤5 хв | ≤200 мс |
+| Lag CRM | 60 хв | ≤5 хв | ≤200 мс |
+| Lag FB Ads | 60 хв (Make) | ≤15 хв (наш ETL) | ≤15 хв |
+| Cost Make.com | $9-29/міс | $0 | $0 |
 | Auto-refresh | F5 | Push | Push |
-| Cost (GH Actions) | 20 хв/міс | 1800 хв/міс | 1800 хв/міс |
+| Контроль | Vendor lock | Повний | Повний |
 
-**Bottom line: 30× скорочення lag без витрат, ще 1500× якщо переключиш webhooks.**
+**Total: 30× lag reduction + Make.com $0 заміна.**

@@ -2,7 +2,7 @@ name: ETL MySQL → Supabase (hourly)
 
 on:
   schedule:
-    - cron: '0 * * * *'  # Кожна година
+    - cron: "*/5 * * * *"  # Кожна година
   workflow_dispatch:
     inputs:
       mode:
