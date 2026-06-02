@@ -1463,8 +1463,20 @@ function loadModelsSelect() {
   const sel = $('#f-model');
   if (!sel) return;
   const cur = filters.model;
+  // SYNC with dashboard_projects table (all 7 projects including archived)
+  const src = (__projectsList && __projectsList.length)
+    ? __projectsList.map(p => ({
+        id: p.code,
+        name: p.name,
+        start: p.date_start,
+        end: p.date_end,
+        match: (p.deal_project_values && p.deal_project_values[0]) || ''
+      }))
+    : ACTIVE_MODELS;
+  // Keep ACTIVE_MODELS in sync for legacy `getActiveModel()` reads
+  if (src !== ACTIVE_MODELS) ACTIVE_MODELS = src;
   sel.innerHTML = '<option value="">Усі проєкти</option>' +
-    ACTIVE_MODELS.map(m => `<option value="${escapeHtml(m.id)}">${escapeHtml(m.name)} (${m.start.slice(5).replace('-','.')}–${m.end.slice(5).replace('-','.')})</option>`).join('');
+    src.map(m => `<option value="${escapeHtml(m.id)}">${escapeHtml(m.name)} (${(m.start||'').slice(5).replace('-','.')}–${(m.end||'').slice(5).replace('-','.')})</option>`).join('');
   if (cur) sel.value = cur;
 }
 
