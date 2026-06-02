@@ -1512,12 +1512,15 @@ function _rpcParams() {
   return {
     p_from: fromDate + 'T00:00:00Z',
     p_to: toDate + 'T23:59:59Z',
-    p_project_values: projectValues
+    p_project_values: projectValues,
+    p_customer_type: filters.customer_type || null,
+    p_tariff: filters.tariff || null,
+    p_pay_provider: filters.pay_provider || null
   };
 }
 
 async function aggViaRPC(field) {
-  const params = { p_field: field, ..._rpcParams() };
+  const params = { p_field: field, ..._rpcParams(), p_traffic_type: filters.traffic_type || null };
   const { data, error } = await sb.rpc('dashboard_agg_deals_with_traffic', params);
   if (error) throw error;
   return (data || []).map(r => ({
