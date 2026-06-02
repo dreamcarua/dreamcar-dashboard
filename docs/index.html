@@ -1537,9 +1537,9 @@ async function fetchDealsRange(offset, limit) {
   if (filters.customer_type) q = q.eq('customer_type', filters.customer_type);
   if (filters.tariff) q = q.eq('tariff', filters.tariff);
   if (filters.pay_provider) q = q.eq('pay_provider', filters.pay_provider);
-  // Active model — narrow project by substring
+  // Active model — narrow project by substring (audit P2: skip if explicit deal_project_values from selected project to avoid cross-leak BMW captures BMW X5)
   const m = getActiveModel();
-  if (m && m.match) q = q.ilike('project', '%' + m.match + '%');
+  if (m && m.match && !sp) q = q.ilike('project', '%' + m.match + '%');
   return q;
 }
 
