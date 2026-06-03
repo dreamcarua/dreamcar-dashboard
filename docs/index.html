@@ -3382,11 +3382,34 @@ async function renderCosts() {
     const rows = data || [];
     const total = rows.reduce((a,r) => a + Number(r.amount||0), 0);
 
+    // P1 #12 — Aggregations by group + timeline
+    const byCategory = new Map();
+    const byDay = new Map();
+    rows.forEach(r => {
+      const cat = (r.category || 'other').toLowerCase().trim();
+      byCategory.set(cat, (byCategory.get(cat) || 0) + Number(r.amount || 0));
+      const d = r.date;
+      if (d) byDay.set(d, (byDay.get(d) || 0) + Number(r.amount || 0));
+    });
+    const catRows = Array.from(byCategory.entries()).sort((a,b)=>b[1]-a[1]);
+    const dayRows = Array.from(byDay.entries()).sort((a,b)=>a[0].localeCompare(b[0]));
+
     c.innerHTML = `
       <div class="section-head">
         <div><h1>💰 Manual Costs</h1><div class="subtitle">${rows.length} записів · сумарно ${fmtMoney(total)}</div></div>
         <button class="btn btn-primary" id="add-cost">+ Додати витрату</button>
       </div>
+
+      ${catRows.length ? `<div class="grid-2">
+        <div class="card">
+          <div class="card-head"><h3>Розподіл по категоріям</h3></div>
+          <div class="chart-container short"><canvas id="ch-costs-by-cat"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>По днях</h3></div>
+          <div class="chart-container short"><canvas id="ch-costs-by-day"></canvas></div>
+        </div>
+      </div>` : ''}
 
       <div class="card" id="form-card" style="display:none">
         <div class="card-head"><h3 id="form-title">Нова витрата</h3></div>
@@ -3408,6 +3431,23 @@ async function renderCosts() {
 
       <div class="card"><div id="t-costs"></div></div>
     `;
+
+    // P1 #12 — render aggregation charts
+    if (catRows.length) {
+      setTimeout(() => {
+        doughnutChart('ch-costs-by-cat',
+          catRows.slice(0,10).map(r => r[0]),
+          catRows.slice(0,10).map(r => r[1]),
+          ['#E30613','#FF1A2B','#F59E0B','#10B981','#3B82F6','#8B5CF6','#EC4899','#06B6D4','#FBBF24','#84CC16']
+        );
+        if (dayRows.length > 0) {
+          lineChart('ch-costs-by-day',
+            dayRows.map(r => r[0]),
+            [{ label: 'UAH', data: dayRows.map(r => r[1]), borderColor: '#F59E0B', backgroundColor: 'rgba(245,158,11,0.15)', fill: true, tension: 0.3 }]
+          );
+        }
+      }, 50);
+    }
 
     buildTable('#t-costs', {
       rows,
