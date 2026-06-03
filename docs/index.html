@@ -3196,10 +3196,21 @@ async function renderAdsOverview() {
   const c = $('#content');
   c.innerHTML = `<div class="section-head"><h1>💸 Ads Overview</h1></div>${loadingHTML()}`;
   try {
-    const { data, error } = await sb.from('dashboard_ads_data').select('*')
-      .gte('date_start', filters.from).lte('date_start', filters.to);
-    if (error) throw error;
-    const rows = data || [];
+    // 🛡 FIX 03.06.2026: pagination loop замість одного select (Supabase default limit=1000, ads_data має 6680+ rows → showed 15% data, 455K замість 3.7M spend)
+    const rows = [];
+    let offset = 0; const BATCH = 1000;
+    while (true) {
+      const { data, error } = await sb.from('dashboard_ads_data').select('*')
+        .gte('date_start', filters.from).lte('date_start', filters.to)
+        .order('date_start', { ascending: true })
+        .range(offset, offset + BATCH - 1);
+      if (error) throw error;
+      if (!data || !data.length) break;
+      rows.push(...data);
+      if (data.length < BATCH) break;
+      offset += BATCH;
+      if (offset > 50000) break; // safety
+    }
     const sumSpend = rows.reduce((a,r)=>a+Number(r.spend||0),0);
     const sumImpr = rows.reduce((a,r)=>a+Number(r.impressions||0),0);
     const sumClicks = rows.reduce((a,r)=>a+Number(r.clicks||0),0);
@@ -3253,12 +3264,24 @@ async function renderAdsCampaigns() {
   const c = $('#content');
   c.innerHTML = `<div class="section-head"><h1>📊 Ads Campaigns</h1></div>${loadingHTML()}`;
   try {
-    const { data, error } = await sb.from('dashboard_ads_data').select('*')
-      .gte('date_start', filters.from).lte('date_start', filters.to);
-    if (error) throw error;
+    // 🛡 FIX 03.06.2026: pagination loop (same as ads-overview)
+    const allRows = [];
+    let offset = 0; const BATCH = 1000;
+    while (true) {
+      const { data, error } = await sb.from('dashboard_ads_data').select('*')
+        .gte('date_start', filters.from).lte('date_start', filters.to)
+        .order('date_start', { ascending: true })
+        .range(offset, offset + BATCH - 1);
+      if (error) throw error;
+      if (!data || !data.length) break;
+      allRows.push(...data);
+      if (data.length < BATCH) break;
+      offset += BATCH;
+      if (offset > 50000) break;
+    }
 
     const map = new Map();
-    (data||[]).forEach(r => {
+    (allRows).forEach(r => {
       const k = r.campaign_name || '(none)';
       if (!map.has(k)) map.set(k, { campaign_name: k, ad_account_name: r.ad_account_name, spend: 0, impressions: 0, clicks: 0, conversions: 0 });
       const x = map.get(k);
