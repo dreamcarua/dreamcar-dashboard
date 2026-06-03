@@ -1944,6 +1944,10 @@ function buildTable(containerSelector, opts) {
     cont.innerHTML = `
       <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center;flex-wrap:wrap;">
         ${opts.search !== false ? `<input type="search" placeholder="🔍 Пошук…" class="t-search" style="background:var(--steel-2);color:#fff;border:1px solid var(--steel);border-radius:6px;padding:6px 10px;font-size:12px;width:240px;" value="${escapeHtml(state.search)}">` : ''}
+        <select class="t-pagesize" style="background:var(--steel-2);color:#fff;border:1px solid var(--steel);border-radius:6px;padding:6px 8px;font-size:12px;cursor:pointer;">
+          ${[25,50,100,200,500].map(n => `<option value="${n}" ${state.pageSize===n?'selected':''}>${n}/page</option>`).join('')}
+          <option value="999999" ${state.pageSize>=99999?'selected':''}>усі</option>
+        </select>
         <div style="flex:1"></div>
         <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ash);letter-spacing:0.1em;">${fmtNum(total)} rows</span>
         ${opts.csvFile ? `<button class="btn btn-sm t-csv">⬇ CSV</button>` : ''}
@@ -1987,6 +1991,10 @@ function buildTable(containerSelector, opts) {
     const search = $('.t-search', cont);
     if (search) {
       search.addEventListener('input', debounce(() => { state.search = search.value; state.page = 1; render(); }, 250));
+    }
+    const psSel = $('.t-pagesize', cont);
+    if (psSel) {
+      psSel.addEventListener('change', () => { state.pageSize = parseInt(psSel.value); state.page = 1; render(); });
     }
     if (opts.rowClick) {
       $$('tbody tr.lead-row', cont).forEach(tr => {
