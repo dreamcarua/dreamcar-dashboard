@@ -2935,15 +2935,33 @@ async function renderWebhooks() {
   const c = $('#content');
   c.innerHTML = `<div class="section-head"><h1>🪝 Webhook логи</h1></div>${loadingHTML()}`;
   try {
-    const { data, error } = await sb.from('dashboard_webhooks')
-      .select('id,source,event_type,status_code,created_at')
-      .order('created_at', { ascending: false })
-      .limit(500);
-    if (error) throw error;
+    const [logsRes, healthRes] = await Promise.all([
+      sb.from('dashboard_webhooks').select('id,source,event_type,status_code,created_at,processing_ms').order('created_at', { ascending: false }).limit(500),
+      sb.rpc('dashboard_webhook_health')
+    ]);
+    if (logsRes.error) throw logsRes.error;
+    const data = logsRes.data;
+    const health = healthRes.error ? [] : (healthRes.data || []);
+    const healthCards = health.map(h => {
+      const stale = h.last_1h === 0 ? '<span style="color:#DC2626;font-size:10px;">⚠ NO RECENT</span>' : '<span style="color:#10B981;font-size:10px;">✓ LIVE</span>';
+      const rateCls = h.success_rate_pct >= 95 ? 'pay' : h.success_rate_pct >= 80 ? 'pending' : 'fail';
+      return `<div class="kpi-card" style="background:var(--steel-2);border:1px solid var(--steel);border-radius:6px;padding:14px;">
+        <div style="font-size:10px;color:var(--ash);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">${escapeHtml(h.source)} ${stale}</div>
+        <div style="font-size:22px;font-weight:700;color:#fff;font-family:'Oswald',sans-serif;">${fmtNum(h.total)} <span style="font-size:14px;color:var(--ash);">за 24h</span></div>
+        <div style="font-size:11px;color:var(--ash);margin-top:6px;display:flex;gap:8px;flex-wrap:wrap;">
+          <span class="pill ${rateCls}">${h.success_rate_pct ?? '—'}% success</span>
+          <span class="pill pay">${fmtNum(h.success)} ✓</span>
+          <span class="pill fail">${fmtNum(h.failed)} ✗</span>
+          <span class="pill default">avg ${h.avg_processing_ms ?? '—'}ms</span>
+          <span class="pill default">last 1h: ${h.last_1h}</span>
+        </div>
+      </div>`;
+    }).join('');
     c.innerHTML = `
       <div class="section-head">
-        <div><h1>🪝 Webhook логи</h1><div class="subtitle">останні ${(data||[]).length} подій</div></div>
+        <div><h1>🪝 Webhook логи</h1><div class="subtitle">останні ${(data||[]).length} подій · health за 24h</div></div>
       </div>
+      ${health.length ? `<div class="kpi-grid" style="margin-bottom:16px;">${healthCards}</div>` : ''}
       <div class="card"><div id="t-wh"></div></div>
     `;
     buildTable('#t-wh', {
@@ -2960,6 +2978,7 @@ async function renderWebhooks() {
           const cls = v >= 200 && v < 300 ? 'pay' : v >= 400 ? 'fail' : 'pending';
           return `<span class="pill ${cls}">${v}</span>`;
         }},
+        { key: 'processing_ms', label: 'ms', class: 'num', fmt: v => v ? `<span class="mono">${v}</span>` : '—' },
         { key: 'id', label: 'ID', fmt: v => `<code style="font-size:10px;color:var(--ash)">${escapeHtml(String(v||'')).slice(0,8)}…</code>` }
       ]
     });
