@@ -2582,6 +2582,50 @@ async function renderAnalytics() {
       );
     }
 
+    // P2 #14 — Hourly Heatmap (day-of-week × hour)
+    try {
+      const { data: hmData } = await sb.rpc('dashboard_hourly_heatmap', {
+        p_from: kyivIsoStart(filters.from), p_to: kyivIsoEnd(filters.to),
+        p_project_values: _rpcParams().p_project_values
+      });
+      const matrix = {};
+      let maxLeads = 0;
+      (hmData || []).forEach(r => {
+        if (!matrix[r.dow]) matrix[r.dow] = {};
+        matrix[r.dow][r.hour] = Number(r.leads || 0);
+        if (matrix[r.dow][r.hour] > maxLeads) maxLeads = matrix[r.dow][r.hour];
+      });
+      const dowNames = { 1:'ПН', 2:'ВТ', 3:'СР', 4:'ЧТ', 5:'ПТ', 6:'СБ', 7:'НД' };
+      const cellColor = v => {
+        if (!v || !maxLeads) return 'rgba(255,255,255,0.04)';
+        const intensity = v / maxLeads;
+        return `rgba(227, 6, 19, ${0.15 + intensity * 0.7})`;
+      };
+      const hours = Array.from({length: 24}, (_, i) => i);
+      const headerHTML = '<th style="background:var(--steel-2);padding:6px;font-size:10px;color:var(--ash);">DOW</th>' +
+        hours.map(h => `<th style="padding:4px 6px;font-size:10px;color:var(--ash);">${h}</th>`).join('');
+      const bodyHTML = [1,2,3,4,5,6,7].map(d => {
+        const cells = hours.map(h => {
+          const v = (matrix[d] || {})[h] || 0;
+          const tc = v > maxLeads * 0.5 ? '#fff' : 'var(--ash)';
+          return `<td title="${dowNames[d]} ${h}:00 → ${v} лідів" style="background:${cellColor(v)};padding:4px 6px;text-align:center;color:${tc};font-size:11px;cursor:pointer;" data-dh="${d}-${h}">${v||''}</td>`;
+        }).join('');
+        return `<tr><td style="background:var(--steel-2);padding:4px 8px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#fff;font-weight:600;">${dowNames[d]}</td>${cells}</tr>`;
+      }).join('');
+      const heatmapHtml = `<div class="card" style="margin-top:14px;">
+        <div class="card-head"><h3>🕐 Hourly Heatmap (день × година, Київ-час)</h3><span class="meta">max ${maxLeads} лідів/cell</span></div>
+        <div style="overflow-x:auto;padding:8px;">
+          <table style="width:100%;border-collapse:separate;border-spacing:2px;color:#fff;">
+            <thead><tr>${headerHTML}</tr></thead>
+            <tbody>${bodyHTML}</tbody>
+          </table>
+          <div style="margin-top:8px;font-size:11px;color:var(--ash);">Чим темніше — тим більше лідів того дня тижня у ту годину. Дивись де піки → плануй пости/реклaмy.</div>
+        </div>
+      </div>`;
+      const tCampaignsCard = document.querySelector('#t-campaigns')?.closest('.card');
+      if (tCampaignsCard) tCampaignsCard.insertAdjacentHTML('beforebegin', heatmapHtml);
+    } catch (e) { console.warn('heatmap error', e); }
+
     buildTable('#t-campaigns', {
       rows: topCampaigns, pageSize: 10, sortKey: 'sum',
       csvFile: 'top-campaigns.csv',
