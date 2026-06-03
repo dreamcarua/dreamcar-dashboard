@@ -920,6 +920,7 @@
         <div class="nav-item" data-route="deals"><span class="icon">📋</span>Таблиця</div>
         <div class="nav-item" data-route="webhooks"><span class="icon">🪝</span>Webhook логи</div>
         <div class="nav-item" data-route="mapping"><span class="icon">🗺</span>UTM Mapping</div>
+        <div class="nav-item" data-route="people"><span class="icon">👥</span>People Merge</div>
         <div class="nav-item" data-route="costs"><span class="icon">💰</span>Manual Costs</div>
       </div>
     </div>
@@ -2131,6 +2132,7 @@ const SECTIONS = {
   'deals': renderDeals,
   'webhooks': renderWebhooks,
   'mapping': renderMapping,
+  'people': renderPeopleMapping,
   'costs': renderCosts,
   'ads-overview': renderAdsOverview,
   'ads-campaigns': renderAdsCampaigns,
@@ -2146,7 +2148,7 @@ const SECTION_TITLES = {
   'projects': '🏎️ Проекти', 'sources': 'Джерела', 'medium': 'Тип трафіка', 'campaigns': 'Кампанії',
   'content': 'Оголошення', 'terms': 'Виконавець', 'combos': 'Комбінації',
   'deals': 'Таблиця', 'webhooks': 'Webhooks', 'mapping': 'UTM Mapping',
-  'costs': 'Manual Costs', 'ads-overview': 'Ads Overview',
+  'costs': 'Manual Costs', 'people': '👥 People Merge', 'ads-overview': 'Ads Overview',
   'ads-campaigns': 'Ads Campaigns', 'cards': 'Cards', 'usdt': 'USDT',
   'payroll': 'Payroll', 'settings': 'Settings', 'help': 'Допомога'
 };
@@ -3086,6 +3088,146 @@ async function renderMapping() {
 }
 
 /* ---------------- MANUAL COSTS (CRUD) ---------------- */
+/* ---------------- PEOPLE MERGE MAPPING ---------------- */
+async function renderPeopleMapping() {
+  const c = $('#content');
+  c.innerHTML = `<div class="section-head"><h1>👥 People Merge (CRM↔ADS)</h1></div>${loadingHTML()}`;
+  try {
+    const [mappingsRes, breakdownRes] = await Promise.all([
+      sb.from('dashboard_people_mapping').select('*').order('person_name'),
+      sb.rpc('dashboard_agg_by_person', { p_from: kyivIsoStart(filters.from), p_to: kyivIsoEnd(filters.to), p_project_values: _rpcParams().p_project_values })
+    ]);
+    if (mappingsRes.error) throw mappingsRes.error;
+    const mappings = mappingsRes.data || [];
+    const breakdown = breakdownRes.error ? [] : (breakdownRes.data || []);
+
+    c.innerHTML = `
+      <div class="section-head">
+        <div><h1>👥 People Merge (CRM↔ADS)</h1><div class="subtitle">Мапінг "ці значення = одна людина". ${mappings.length} mapping rules</div></div>
+        <button class="tb-btn" id="people-add" style="background:var(--red);color:#fff;border-color:var(--red);">+ Додати людину</button>
+      </div>
+      <div class="card">
+        <div class="card-head"><h3>📊 Breakdown за поточний період</h3><span class="meta">${breakdown.length} людей · ${filters.from} → ${filters.to}</span></div>
+        <div id="t-people-breakdown"></div>
+      </div>
+      <div class="card" style="margin-top:18px;">
+        <div class="card-head"><h3>📋 Mapping rules</h3><span class="meta">CRUD</span></div>
+        <div id="t-people-rules"></div>
+      </div>
+      <div class="card" style="margin-top:18px; background:rgba(245,158,11,0.06); border-color:#F59E0B;">
+        <div class="card-head"><h3 style="color:#F59E0B;">ℹ️ Як працює</h3></div>
+        <div style="padding:12px 16px;font-size:13px;color:var(--ash);line-height:1.7;">
+          <p><b>Семантика:</b> люди мають різні tagи у CRM і FB Ads. Наприклад Vadym CRM = <code>dreamcar.ua uah</code> Ads = <code>Vadym_Volvo</code> BM.</p>
+          <p><b>Як використовувати:</b> для кожної людини зазначай список значень з CRM (utm_source/medium/campaign...) + список значень з FB Ads. Тоді breakdown агрегує по людях, а не по UTM-значеннях.</p>
+          <p><b>ROI:</b> формула <code>(revenue - spend) / spend × 100%</code>. CPA: <code>spend / paid_count</code>. CPL: <code>spend / leads</code>.</p>
+        </div>
+      </div>
+    `;
+
+    buildTable('#t-people-breakdown', {
+      rows: breakdown.map(r => ({
+        person: r.person, leads: Number(r.leads), paid: Number(r.paid),
+        revenue: Number(r.revenue), spend: Number(r.spend),
+        roi_pct: r.roi_pct != null ? Number(r.roi_pct) : null,
+        cpa: r.cpa != null ? Number(r.cpa) : null,
+        cpl: r.cpl != null ? Number(r.cpl) : null
+      })),
+      pageSize: 50,
+      sortKey: 'revenue', sortAsc: false,
+      csvFile: 'people-breakdown.csv',
+      cols: [
+        { key: 'person', label: 'Людина', fmt: v => `<strong style="color:#fff;">${escapeHtml(v)}</strong>` },
+        { key: 'leads', label: 'Ліди', class: 'num', fmt: fmtNum },
+        { key: 'paid', label: 'Оплати', class: 'num', fmt: fmtNum },
+        { key: 'revenue', label: 'Виручка', class: 'num', fmt: fmtMoney },
+        { key: 'spend', label: 'Spend', class: 'num', fmt: v => v > 0 ? fmtMoney(v) : '—' },
+        { key: 'roi_pct', label: 'ROI %', class: 'num', fmt: v => v == null ? '—' : `<span class="pill ${v >= 0 ? 'pay' : 'fail'}">${v >= 0 ? '+' : ''}${v.toFixed(0)}%</span>` },
+        { key: 'cpa', label: 'CPA', class: 'num', fmt: v => v == null ? '—' : fmtMoney(v) },
+        { key: 'cpl', label: 'CPL', class: 'num', fmt: v => v == null ? '—' : fmtMoney(v) }
+      ]
+    });
+    buildTable('#t-people-rules', {
+      rows: mappings.map(m => ({ ...m, _id: m.id })),
+      pageSize: 50,
+      sortKey: 'person_name', sortAsc: true,
+      cols: [
+        { key: 'person_name', label: 'Людина', fmt: v => `<strong>${escapeHtml(v)}</strong>` },
+        { key: 'field', label: 'Field', fmt: v => `<code>${escapeHtml(v)}</code>` },
+        { key: 'crm_values', label: 'CRM values', fmt: v => (v || []).map(x => `<span class="pill default">${escapeHtml(x)}</span>`).join(' ') || '—' },
+        { key: 'ads_values', label: 'ADS values', fmt: v => (v || []).map(x => `<span class="pill new">${escapeHtml(x)}</span>`).join(' ') || '—' },
+        { key: 'notes', label: 'Notes', fmt: v => escapeHtml(v || '—') },
+        { key: '_id', label: 'Дії', fmt: (v) => `<button class="tb-btn" data-edit="${v}" style="padding:3px 8px;font-size:11px;">✏️</button> <button class="tb-btn" data-del="${v}" style="padding:3px 8px;font-size:11px;color:#DC2626;">🗑</button>` }
+      ]
+    });
+
+    $('#people-add').addEventListener('click', () => openPersonModal(null));
+    document.querySelectorAll('[data-edit]').forEach(btn => btn.addEventListener('click', () => {
+      const id = btn.dataset.edit;
+      const row = mappings.find(m => m.id === id);
+      openPersonModal(row);
+    }));
+    document.querySelectorAll('[data-del]').forEach(btn => btn.addEventListener('click', async () => {
+      if (!confirm('Видалити mapping?')) return;
+      const { error } = await sb.from('dashboard_people_mapping').delete().eq('id', btn.dataset.del);
+      if (error) { alert('Помилка: ' + error.message); return; }
+      renderPeopleMapping();
+    }));
+  } catch (e) { c.innerHTML = errorHTML(e); }
+}
+
+function openPersonModal(row) {
+  const isEdit = !!row;
+  const modal = document.createElement('div');
+  modal.className = 'modal-backdrop';
+  modal.style.display = 'flex';
+  modal.innerHTML = `
+    <div class="modal" style="max-width:560px;width:100%;background:var(--bg-2);border:1px solid var(--red);border-radius:10px;padding:24px;">
+      <h2 style="font-family:Oswald;text-transform:uppercase;margin-bottom:18px;color:#fff;">${isEdit ? '✏️ Редагувати' : '+ Додати'} людину</h2>
+      <div style="display:grid;gap:12px;">
+        <div><label style="font-size:11px;color:var(--ash);text-transform:uppercase;letter-spacing:0.1em;">Ім'я</label>
+          <input id="p-name" type="text" placeholder="Vadym / Artem / Aleksandr" value="${row?.person_name || ''}" style="width:100%;background:var(--bg);border:1px solid var(--steel);color:#fff;padding:8px 10px;border-radius:6px;font-size:13px;"/></div>
+        <div><label style="font-size:11px;color:var(--ash);text-transform:uppercase;letter-spacing:0.1em;">Field</label>
+          <select id="p-field" style="width:100%;background:var(--bg);border:1px solid var(--steel);color:#fff;padding:8px 10px;border-radius:6px;font-size:13px;">
+            ${['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].map(f => `<option value="${f}" ${row?.field===f?'selected':''}>${f}</option>`).join('')}
+          </select></div>
+        <div><label style="font-size:11px;color:var(--ash);text-transform:uppercase;letter-spacing:0.1em;">CRM values (через кому)</label>
+          <textarea id="p-crm" placeholder="vadym, dreamcar.ua uah, vadym_personal" style="width:100%;background:var(--bg);border:1px solid var(--steel);color:#fff;padding:8px 10px;border-radius:6px;font-size:13px;min-height:50px;">${(row?.crm_values || []).join(', ')}</textarea></div>
+        <div><label style="font-size:11px;color:var(--ash);text-transform:uppercase;letter-spacing:0.1em;">ADS values (через кому)</label>
+          <textarea id="p-ads" placeholder="Vadym_Volvo, Vadym_Audi_2026" style="width:100%;background:var(--bg);border:1px solid var(--steel);color:#fff;padding:8px 10px;border-radius:6px;font-size:13px;min-height:50px;">${(row?.ads_values || []).join(', ')}</textarea></div>
+        <div><label style="font-size:11px;color:var(--ash);text-transform:uppercase;letter-spacing:0.1em;">Notes (опц.)</label>
+          <input id="p-notes" type="text" placeholder="чим він займається" value="${row?.notes || ''}" style="width:100%;background:var(--bg);border:1px solid var(--steel);color:#fff;padding:8px 10px;border-radius:6px;font-size:13px;"/></div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:20px;">
+        <button class="tb-btn" data-act="cancel">Скасувати</button>
+        <button class="tb-btn" data-act="save" style="background:var(--red);color:#fff;border-color:var(--red);">${isEdit ? 'Зберегти' : 'Створити'}</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  modal.addEventListener('click', async (e) => {
+    if (e.target === modal) { modal.remove(); return; }
+    const act = e.target.dataset?.act;
+    if (act === 'cancel') { modal.remove(); return; }
+    if (act === 'save') {
+      const name = modal.querySelector('#p-name').value.trim();
+      if (!name) { alert('Ім\'я обов\'язкове'); return; }
+      const data = {
+        person_name: name,
+        field: modal.querySelector('#p-field').value,
+        crm_values: modal.querySelector('#p-crm').value.split(',').map(s => s.trim()).filter(Boolean),
+        ads_values: modal.querySelector('#p-ads').value.split(',').map(s => s.trim()).filter(Boolean),
+        notes: modal.querySelector('#p-notes').value.trim() || null
+      };
+      const res = isEdit
+        ? await sb.from('dashboard_people_mapping').update(data).eq('id', row.id)
+        : await sb.from('dashboard_people_mapping').insert(data);
+      if (res.error) { alert('Помилка: ' + res.error.message); return; }
+      modal.remove();
+      renderPeopleMapping();
+    }
+  });
+}
+
 async function renderCosts() {
   const c = $('#content');
   c.innerHTML = `<div class="section-head"><h1>💰 Manual Costs</h1></div>${loadingHTML()}`;
