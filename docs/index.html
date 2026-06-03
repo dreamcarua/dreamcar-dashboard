@@ -1318,7 +1318,21 @@ function setupFilterBar() {
     applyPreset(v);
     if (v !== 'custom') renderRoute();
   });
-  $('#f-model').addEventListener('change', e => { filters.model = e.target.value; renderRoute(); });
+  $('#f-model').addEventListener('change', e => {
+    filters.model = e.target.value;
+    // 🛡 FIX 03.06.2026: при виборі моделі — також встановити її date range як period
+    // (раніше Mercedes вибрався, але дати залишались з попереднього project)
+    const m = getActiveModel();
+    if (m && m.start && m.end) {
+      filters.from = m.start;
+      filters.to = m.end;
+      const cf = $('#cd-from'); if (cf) cf.value = m.start;
+      const ct = $('#cd-to'); if (ct) ct.value = m.end;
+      const dp = $('#date-preset'); if (dp) dp.value = 'project-all';
+      const dr = $('#f-date-range'); if (dr) dr.value = 'custom';
+    }
+    renderRoute();
+  });
   $('#f-project').addEventListener('change', e => {
     filters.project = e.target.value;
     const sp = getSelectedProject();
