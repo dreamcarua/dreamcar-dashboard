@@ -1320,16 +1320,23 @@ function setupFilterBar() {
   });
   $('#f-model').addEventListener('change', e => {
     filters.model = e.target.value;
-    // 🛡 FIX 03.06.2026: при виборі моделі — також встановити її date range як period
-    // (раніше Mercedes вибрався, але дати залишались з попереднього project)
     const m = getActiveModel();
     if (m && m.start && m.end) {
+      // Вибрано конкретний проект → встановити його date range
       filters.from = m.start;
       filters.to = m.end;
       const cf = $('#cd-from'); if (cf) cf.value = m.start;
       const ct = $('#cd-to'); if (ct) ct.value = m.end;
       const dp = $('#date-preset'); if (dp) dp.value = 'project-all';
       const dr = $('#f-date-range'); if (dr) dr.value = 'custom';
+    } else {
+      // 🛡 FIX 03.06.2026: «Усі проєкти» — скинути дати на «Весь період» (all-time)
+      // Раніше дати залишались від попередньо вибраного проекту → цифри не оновлювались
+      filters.from = '2019-01-01';
+      filters.to = todayYmd();
+      const cf = $('#cd-from'); if (cf) cf.value = filters.from;
+      const ct = $('#cd-to'); if (ct) ct.value = filters.to;
+      const dr = $('#f-date-range'); if (dr) dr.value = 'all';
     }
     renderRoute();
   });
