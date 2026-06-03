@@ -2703,9 +2703,15 @@ async function renderUtmField(field, title, csvName) {
         <div><h1>${escapeHtml(title)}</h1><div class="subtitle">${aggView.length} значень · ${fmtNum(totalLeads)} лідів${filters.source_filter ? ' · фільтр: '+filters.source_filter : ''}</div></div>
       </div>
 
-      <div class="card">
-        <div class="card-head"><h3>Топ-10 за виручкою</h3></div>
-        <div class="chart-container"><canvas id="ch-top"></canvas></div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head"><h3>Топ-10 за виручкою</h3></div>
+          <div class="chart-container"><canvas id="ch-top"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>Розподіл по виручці</h3></div>
+          <div class="chart-container short"><canvas id="ch-top-doughnut"></canvas></div>
+        </div>
       </div>
 
       <div class="card">
@@ -2722,6 +2728,12 @@ async function renderUtmField(field, title, csvName) {
           { label: 'Paid', data: topPaid.map(a=>a.paid), backgroundColor: '#10B981', yAxisID: 'y1' }
         ],
         { scales: { y1: { position: 'right', grid: { drawOnChartArea: false } } } }
+      );
+      // P1 #9 — Source-distribution doughnut по виручці (раніше було тільки у old)
+      doughnutChart('ch-top-doughnut',
+        topPaid.map(a => a.key.length > 18 ? a.key.slice(0,15)+'...' : a.key),
+        topPaid.map(a => a.sum),
+        ['#E30613','#FF1A2B','#FF6577','#F59E0B','#FBBF24','#10B981','#3B82F6','#8B5CF6','#EC4899','#06B6D4']
       );
     }
 
