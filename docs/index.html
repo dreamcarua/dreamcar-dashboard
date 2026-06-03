@@ -1072,6 +1072,14 @@
       <button class="btn btn-ghost" id="f-reset">✕ Скинути</button>
       <button class="btn btn-primary" id="f-apply">🔍 Застосувати</button>
     </div>
+    <!-- P1 #10 UTM free-text filters — окремий ряд -->
+    <div class="filter-bar" id="filter-bar-utm" style="display:none;padding-top:0;">
+      <div><label>UTM Source</label><input type="text" id="f-utm-source" placeholder="напр. facebook" autocomplete="off"/></div>
+      <div><label>UTM Medium</label><input type="text" id="f-utm-medium" placeholder="напр. cpc" autocomplete="off"/></div>
+      <div><label>UTM Campaign</label><input type="text" id="f-utm-campaign" placeholder="part of name" autocomplete="off"/></div>
+      <div><label>UTM Term</label><input type="text" id="f-utm-term" placeholder="executor" autocomplete="off"/></div>
+      <div><label>UTM Content</label><input type="text" id="f-utm-content" placeholder="creative" autocomplete="off"/></div>
+    </div>
 
     <div class="content" id="content">
       <div class="state"><span class="spinner"></span>Завантаження…</div>
@@ -1362,6 +1370,15 @@ function setupFilterBar() {
   $('#f-pay-provider').addEventListener('change', e => { filters.pay_provider = e.target.value; renderRoute(); });
   $('#f-traffic-type').addEventListener('change', e => { filters.traffic_type = e.target.value; renderRoute(); });
   $('#f-source-filter').addEventListener('change', e => { filters.source_filter = e.target.value; renderRoute(); });
+  // P1 #10 — UTM free-text фільтри (debounced)
+  ['utm-source','utm-medium','utm-campaign','utm-term','utm-content'].forEach(f => {
+    var el = $('#f-' + f);
+    if (el) el.addEventListener('input', debounce(() => {
+      var key = f.replace(/-/g, '_');
+      filters[key] = el.value.trim() || null;
+      renderRoute();
+    }, 350));
+  });
   $('#f-combo-type').addEventListener('change', e => { filters.combo_type = e.target.value; renderRoute(); });
   $('#f-granularity').addEventListener('change', e => { filters.granularity = e.target.value; renderRoute(); });
   $('#f-reset').addEventListener('click', () => resetFilters());
@@ -1392,6 +1409,8 @@ function resetFilters() {
   filters.customer_type = ''; filters.funnel_type = '';
   filters.tariff = ''; filters.pay_provider = '';
   filters.traffic_type = ''; filters.source_filter = '';
+  filters.utm_source = null; filters.utm_medium = null; filters.utm_campaign = null; filters.utm_term = null; filters.utm_content = null;
+  ['f-utm-source','f-utm-medium','f-utm-campaign','f-utm-term','f-utm-content'].forEach(id => { var el = $('#' + id); if (el) el.value = ''; });
   filters.combo_type = 'all';
   filters.model = '';
   filters.granularity = 'day';
@@ -1549,7 +1568,7 @@ function kyivIsoEnd(yyyymmdd)   { return yyyymmdd + 'T23:59:59' + kyivOffset(yyy
 /* ------------ Supabase fetch helpers ------------ */
 async function fetchDealsRange(offset, limit) {
   let q = sb.from('dashboard_deals')
-    .select('id,sendpulse_deal_id,status,amount,currency,project,utm_source,utm_medium,utm_campaign,utm_term,utm_content,customer_email,customer_type,tariff,pay_provider,created_at,paid_at')
+    .select('id,sendpulse_deal_id,status,amount,currency,project,utm_source,utm_medium,utm_campaign,utm_term,utm_content,customer_email,customer_phone,customer_type,tariff,pay_provider,wc_order_id,created_at,paid_at,failed_at')
     .gte('created_at', kyivIsoStart(filters.from))
     .lte('created_at', kyivIsoEnd(filters.to))
     .order('created_at', { ascending: false })
@@ -1563,6 +1582,12 @@ async function fetchDealsRange(offset, limit) {
   // Active model — narrow project by substring (audit P2: skip if explicit deal_project_values from selected project to avoid cross-leak BMW captures BMW X5)
   const m = getActiveModel();
   if (m && m.match && !sp) q = q.ilike('project', '%' + m.match + '%');
+  // P1 #10 — UTM free-text filters застосовуються до fetchDealsRange теж
+  if (filters.utm_source) q = q.ilike('utm_source', '%' + filters.utm_source + '%');
+  if (filters.utm_medium) q = q.ilike('utm_medium', '%' + filters.utm_medium + '%');
+  if (filters.utm_campaign) q = q.ilike('utm_campaign', '%' + filters.utm_campaign + '%');
+  if (filters.utm_term) q = q.ilike('utm_term', '%' + filters.utm_term + '%');
+  if (filters.utm_content) q = q.ilike('utm_content', '%' + filters.utm_content + '%');
   return q;
 }
 
@@ -2938,15 +2963,23 @@ async function renderDeals() {
       rowClick: openLeadDetailsModal,
       cols: [
         { key: 'created_at', label: 'Дата', fmt: v => `<span class="mono">${fmtDateTime(v)}</span>` },
+        { key: 'paid_at', label: 'Оплачено', fmt: v => v ? `<span class="mono" style="font-size:10px;color:var(--success);">${fmtDateTime(v)}</span>` : '—' },
         { key: 'sendpulse_deal_id', label: 'Deal ID', fmt: v => `<code>${escapeHtml(v||'')}</code>` },
         { key: 'customer_email', label: 'Email', fmt: v => `<span class="mono" style="font-size:11px">${escapeHtml(v||'—')}</span>` },
+        { key: 'customer_type', label: 'Тип', fmt: v => v === 'returning' ? '<span class="pill pay">↻ повторний</span>' : v === 'new' ? '<span class="pill new">🆕 новий</span>' : '—' },
         { key: 'project', label: 'Проект', fmt: v => escapeHtml(v||'—') },
         { key: 'tariff', label: 'Тариф', fmt: v => escapeHtml(v||'—') },
         { key: 'utm_source', label: 'Source', fmt: v => `<span class="mono" style="font-size:11px">${escapeHtml(v||'—')}</span>` },
+        { key: 'utm_medium', label: 'Medium', fmt: v => `<span class="mono" style="font-size:11px">${escapeHtml(v||'—')}</span>` },
         { key: 'utm_campaign', label: 'Campaign', fmt: v => `<span class="mono" style="font-size:11px">${escapeHtml(v||'—')}</span>` },
+        { key: 'utm_term', label: 'Term', fmt: v => `<span class="mono" style="font-size:10px">${escapeHtml(v||'—')}</span>` },
+        { key: 'utm_content', label: 'Content', fmt: v => `<span class="mono" style="font-size:10px">${escapeHtml(v||'—')}</span>` },
         { key: 'pay_provider', label: 'Provider', fmt: v => escapeHtml(v||'—') },
+        { key: 'currency', label: 'Curr', fmt: v => `<span class="mono">${escapeHtml(v||'UAH')}</span>` },
         { key: 'amount', label: 'Сума', class: 'amount', fmt: (v,r) => fmtMoney(v, r.currency) },
-        { key: 'status', label: 'Статус', fmt: statusPill }
+        { key: 'status', label: 'Статус', fmt: statusPill },
+        { key: 'customer_phone', label: 'Phone', fmt: v => v ? `<span class="mono" style="font-size:10px">${escapeHtml(v)}</span>` : '—' },
+        { key: 'wc_order_id', label: 'WC Order', fmt: v => v ? `<code style="font-size:10px">${v}</code>` : '—' }
       ]
     });
   } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
@@ -3842,6 +3875,9 @@ async function renderRoute() {
   $$('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.route === route));
   setSectionTitle(SECTION_TITLES[route] || route);
   $('#filter-bar').classList.toggle('hidden', !UTM_SECTIONS.has(route) && !ADS_SECTIONS.has(route));
+  // P1 #10 — показуємо UTM free-text row на UTM-сторінках і таблиці угод
+  var utmBar = $('#filter-bar-utm');
+  if (utmBar) utmBar.style.display = UTM_SECTIONS.has(route) ? '' : 'none';
   // combo type select — only on combos section
   const comboWrap = $('#f-combo-wrap');
   if (comboWrap) comboWrap.style.display = (route === 'combos') ? '' : 'none';
