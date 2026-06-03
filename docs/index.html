@@ -3872,8 +3872,16 @@ async function renderSettings() {
         </div>
       </div>
 
+      <div class="card" id="projects-crud-card" style="margin-top:18px;">
+        <div class="card-head">
+          <h3>🏎️ Проекти (CRUD)</h3>
+          <button class="btn btn-primary" id="proj-add">+ Додати проект</button>
+        </div>
+        <div id="t-projects-crud"></div>
+      </div>
+
       ${team.length ? `
-        <div class="card">
+        <div class="card" style="margin-top:18px;">
           <div class="card-head"><h3>👥 Команда (${team.length})</h3></div>
           <div class="table-wrap">
             <table>
@@ -3897,7 +3905,110 @@ async function renderSettings() {
       await sb.auth.signOut();
       location.reload();
     };
+
+    // P1 #13 — Projects CRUD
+    await loadProjectsCRUD();
+    $('#proj-add').onclick = () => openProjectModal(null);
   } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
+}
+
+async function loadProjectsCRUD() {
+  const { data, error } = await sb.from('dashboard_projects').select('*').order('sort_order');
+  if (error) { $('#t-projects-crud').innerHTML = errorHTML(error); return; }
+  const rows = (data || []).map(p => ({
+    ...p,
+    deal_values_str: (p.deal_project_values || []).join(', ')
+  }));
+  buildTable('#t-projects-crud', {
+    rows,
+    pageSize: 25, sortKey: 'sort_order', sortAsc: true,
+    cols: [
+      { key: 'sort_order', label: '#', class: 'num', fmt: v => v ?? '—' },
+      { key: 'name', label: 'Назва', fmt: (v, r) => `<strong style="color:${r.color || '#fff'}">${escapeHtml(v)}</strong>` },
+      { key: 'code', label: 'Code', fmt: v => `<code>${escapeHtml(v)}</code>` },
+      { key: 'car_model', label: 'Авто', fmt: v => escapeHtml(v || '—') },
+      { key: 'date_start', label: 'Старт', fmt: v => `<span class="mono">${v}</span>` },
+      { key: 'date_end', label: 'Фініш', fmt: v => `<span class="mono">${v}</span>` },
+      { key: 'status', label: 'Статус', fmt: v => `<span class="pill ${v==='active'?'pay':v==='archived'?'default':'pending'}">${escapeHtml(v)}</span>` },
+      { key: 'deal_values_str', label: 'deal.project values', fmt: v => `<span class="mono" style="font-size:11px">${escapeHtml(v || '—')}</span>` },
+      { key: 'id', label: 'Дії', fmt: v => `<button class="btn btn-sm" data-proj-edit="${v}" style="margin-right:6px;">✏️</button><button class="btn btn-sm" data-proj-del="${v}" style="color:#DC2626;">🗑</button>` }
+    ]
+  });
+  document.querySelectorAll('[data-proj-edit]').forEach(btn => btn.addEventListener('click', () => {
+    const row = (data || []).find(p => p.id === btn.dataset.projEdit);
+    openProjectModal(row);
+  }));
+  document.querySelectorAll('[data-proj-del]').forEach(btn => btn.addEventListener('click', async () => {
+    if (!confirm('Видалити проект? (deals залишаться, але втратять mapping)')) return;
+    const { error } = await sb.from('dashboard_projects').delete().eq('id', btn.dataset.projDel);
+    if (error) { alert('Помилка: ' + error.message); return; }
+    loadProjectsCRUD();
+  }));
+}
+
+function openProjectModal(row) {
+  const isEdit = !!row;
+  const modal = document.createElement('div');
+  modal.className = 'modal-backdrop';
+  modal.style.display = 'flex';
+  modal.innerHTML = `
+    <div class="modal" style="max-width:640px;width:100%;background:var(--bg-2);border:1px solid var(--red);border-radius:10px;padding:24px;">
+      <h2 style="font-family:Oswald;text-transform:uppercase;margin-bottom:18px;color:#fff;">${isEdit ? '✏️ Редагувати' : '+ Створити'} проект</h2>
+      <div class="form-row">
+        <div><label>Code (slug)</label><input id="pr-code" type="text" placeholder="bmw_x5_hybrid" value="${escapeHtml(row?.code || '')}" ${isEdit ? 'readonly' : ''}/></div>
+        <div><label>Назва</label><input id="pr-name" type="text" placeholder="BMW X5 HYBRID" value="${escapeHtml(row?.name || '')}"/></div>
+      </div>
+      <div class="form-row">
+        <div><label>Авто (car_model)</label><input id="pr-car" type="text" placeholder="BMW X5 Hybrid" value="${escapeHtml(row?.car_model || '')}"/></div>
+        <div><label>Колір</label><input id="pr-color" type="color" value="${row?.color || '#E30613'}" style="height:34px;"/></div>
+      </div>
+      <div class="form-row">
+        <div><label>Старт</label><input id="pr-start" type="date" value="${row?.date_start || ''}"/></div>
+        <div><label>Фініш</label><input id="pr-end" type="date" value="${row?.date_end || ''}"/></div>
+      </div>
+      <div class="form-row">
+        <div><label>Статус</label><select id="pr-status">
+          <option value="active" ${row?.status==='active'?'selected':''}>active</option>
+          <option value="completed" ${row?.status==='completed'?'selected':''}>completed</option>
+          <option value="archived" ${row?.status==='archived'?'selected':''}>archived</option>
+        </select></div>
+        <div><label>Sort order</label><input id="pr-sort" type="number" value="${row?.sort_order ?? 99}"/></div>
+      </div>
+      <div><label>deal.project values (через кому) — як deals у CRM позначають цей проект</label><textarea id="pr-vals" placeholder="BMW X5 HYBRID, BMW X5" style="min-height:50px;">${(row?.deal_project_values || []).join(', ')}</textarea></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:18px;">
+        <button class="btn" data-act="cancel">Скасувати</button>
+        <button class="btn btn-primary" data-act="save">${isEdit ? 'Зберегти' : 'Створити'}</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  modal.addEventListener('click', async (e) => {
+    if (e.target === modal) { modal.remove(); return; }
+    const act = e.target.dataset?.act;
+    if (act === 'cancel') { modal.remove(); return; }
+    if (act === 'save') {
+      const data = {
+        code: modal.querySelector('#pr-code').value.trim(),
+        name: modal.querySelector('#pr-name').value.trim(),
+        car_model: modal.querySelector('#pr-car').value.trim() || null,
+        color: modal.querySelector('#pr-color').value,
+        date_start: modal.querySelector('#pr-start').value,
+        date_end: modal.querySelector('#pr-end').value,
+        status: modal.querySelector('#pr-status').value,
+        sort_order: parseInt(modal.querySelector('#pr-sort').value) || 99,
+        deal_project_values: modal.querySelector('#pr-vals').value.split(',').map(s=>s.trim()).filter(Boolean)
+      };
+      if (!data.code || !data.name || !data.date_start || !data.date_end) { alert('Обов\\'язкові: code, name, дати'); return; }
+      const res = isEdit
+        ? await sb.from('dashboard_projects').update(data).eq('id', row.id)
+        : await sb.from('dashboard_projects').insert(data);
+      if (res.error) { alert('Помилка: ' + res.error.message); return; }
+      modal.remove();
+      loadProjectsCRUD();
+      // Refresh MV after change
+      sb.rpc('dashboard_projects_with_stats').catch(()=>{});
+    }
+  });
 }
 
 /* =================================================================
