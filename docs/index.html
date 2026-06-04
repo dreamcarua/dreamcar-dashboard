@@ -4101,17 +4101,58 @@ async function bootstrap() {
     try {
       const { data: { session } } = await sb.auth.getSession();
       if (session?.user) {
-        currentUser = session.user;
+        // 03.06.2026 — додаткова перевірка ролі. Тільки CEO/COO/lead бачать dashboard.
+        try {
+          const { data: pu } = await sb.from('users').select('id,name,role,email').eq('auth_id', session.user.id).maybeSingle();
+          if (!pu) { showLoginGate('⚠ Профіль не знайдено у public.users. Звернися до CEO.'); return; }
+          if (!['ceo','coo','lead'].includes(pu.role)) {
+            showLoginGate('⚠ Доступ лише для CEO / COO / Lead. Твоя роль: ' + pu.role);
+            return;
+          }
+          currentUser = { ...session.user, name: pu.name, role: pu.role, public_id: pu.id };
+        } catch (e) { console.warn('[auth-role-check]', e); currentUser = session.user; }
         await onAuthed();
         return;
       }
     } catch (e) { console.warn(e); }
   }
+  // Немає session — show login gate
+  showLoginGate();
   window.addEventListener('dc-auth-ok', async (ev) => {
     sb = window.supabase;
     currentUser = ev.detail.user;
+    hideLoginGate();
     await onAuthed();
   });
+}
+
+function showLoginGate(errMsg) {
+  if (document.getElementById('dc-login-gate')) {
+    if (errMsg) document.getElementById('dc-login-error').textContent = errMsg;
+    return;
+  }
+  const ov = document.createElement('div');
+  ov.id = 'dc-login-gate';
+  ov.style.cssText = 'position:fixed;inset:0;background:#0a0a0a;z-index:999998;display:flex;align-items:center;justify-content:center;font-family:Manrope,sans-serif;color:#fff;';
+  ov.innerHTML =
+    '<div style="max-width:420px;padding:48px 36px;background:#141414;border:1px solid #2a2a2a;border-radius:14px;text-align:center;">' +
+      '<div style="font-family:Oswald,sans-serif;font-size:28px;letter-spacing:.08em;margin-bottom:8px;">DREAM<span style="color:#E30613;">CAR</span> · DASHBOARD</div>' +
+      '<div style="color:#888;font-size:13px;margin-bottom:32px;">🔒 Закрита бізнес-аналітика</div>' +
+      '<div style="background:rgba(245,158,11,0.08);border-left:3px solid #F59E0B;padding:12px 16px;border-radius:0 6px 6px 0;margin-bottom:24px;font-size:13px;text-align:left;line-height:1.5;">Доступ лише для <b>CEO / COO / Lead</b> після авторизації через Telegram OAuth.</div>' +
+      '<button id="dc-login-tg-btn" style="width:100%;padding:14px 24px;background:linear-gradient(135deg,#E30613,#ff1a2b);color:#fff;border:none;border-radius:8px;font-family:Manrope,sans-serif;font-size:14px;font-weight:700;letter-spacing:.08em;cursor:pointer;text-transform:uppercase;box-shadow:0 6px 18px rgba(227,6,19,.4);">🔐 Увійти через Telegram</button>' +
+      '<div id="dc-login-error" style="color:#FF6A7A;font-size:12px;margin-top:16px;min-height:18px;">' + (errMsg || '') + '</div>' +
+      '<div style="font-size:11px;color:#555;margin-top:24px;font-family:JetBrains Mono,monospace;">Login проходить через HQ (TG bot)</div>' +
+    '</div>';
+  document.body.appendChild(ov);
+  document.getElementById('dc-login-tg-btn').onclick = function () {
+    const ret = encodeURIComponent(window.location.pathname + window.location.hash);
+    window.location.href = 'https://team.dreamcar.ua/hq/?next=' + ret + '&dashboard=1';
+  };
+}
+
+function hideLoginGate() {
+  const el = document.getElementById('dc-login-gate');
+  if (el) el.remove();
 }
 
 async function onAuthed() {
