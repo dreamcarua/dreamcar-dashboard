@@ -4114,10 +4114,18 @@ async function bootstrap() {
     try {
       const { data: { session } } = await sb.auth.getSession();
       if (session?.user) {
-        // 03.06.2026 — додаткова перевірка ролі. Тільки CEO/COO/lead бачать dashboard.
+        // 03.06.2026 — role check + alias resolve (multiple Google accounts на одного юзера)
         try {
-          const { data: pu } = await sb.from('users').select('id,name,role,email').eq('auth_id', session.user.id).maybeSingle();
-          if (!pu) { showLoginGate('⚠ Профіль не знайдено у public.users. Звернися до CEO.'); return; }
+          let pu = null;
+          try {
+            const rpc = await sb.rpc('resolve_user_by_auth', { p_auth_id: session.user.id });
+            pu = (rpc.data && rpc.data[0]) || null;
+          } catch (e) { console.warn('[resolve_user_by_auth]', e); }
+          if (!pu) {
+            const direct = await sb.from('users').select('id,name,role,email').eq('auth_id', session.user.id).maybeSingle();
+            pu = direct.data;
+          }
+          if (!pu) { showLoginGate('⚠ Профіль не знайдено для ' + session.user.email + '. Звернися до CEO.'); return; }
           if (!['ceo','coo','lead'].includes(pu.role)) {
             showLoginGate('⚠ Доступ лише для CEO / COO / Lead. Твоя роль: ' + pu.role);
             return;
