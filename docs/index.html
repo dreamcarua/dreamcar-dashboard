@@ -4098,6 +4098,19 @@ window.addEventListener('hashchange', renderRoute);
 async function bootstrap() {
   if (window.supabase && window.supabase.auth) {
     sb = window.supabase;
+    // SSO bridge: token у URL fragment з HQ login (cross-domain shared session)
+    try {
+      const m = location.hash.match(/#sso=([^&]+)/);
+      if (m) {
+        const sso = JSON.parse(atob(decodeURIComponent(m[1])));
+        if (sso.access_token && sso.refresh_token) {
+          await sb.auth.setSession({ access_token: sso.access_token, refresh_token: sso.refresh_token });
+          // Очистити fragment — токен не повинен залишатись у URL
+          history.replaceState(null, '', location.pathname);
+          console.log('[sso] session set from HQ bridge');
+        }
+      }
+    } catch (e) { console.warn('[sso bridge]', e); }
     try {
       const { data: { session } } = await sb.auth.getSession();
       if (session?.user) {
