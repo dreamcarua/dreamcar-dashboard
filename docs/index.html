@@ -4043,7 +4043,7 @@ function openProjectModal(row) {
         sort_order: parseInt(modal.querySelector('#pr-sort').value) || 99,
         deal_project_values: modal.querySelector('#pr-vals').value.split(',').map(s=>s.trim()).filter(Boolean)
       };
-      if (!data.code || !data.name || !data.date_start || !data.date_end) { alert('Обов\\'язкові: code, name, дати'); return; }
+      if (!data.code || !data.name || !data.date_start || !data.date_end) { alert("Обов'язкові: code, name, дати"); return; }
       const res = isEdit
         ? await sb.from('dashboard_projects').update(data).eq('id', row.id)
         : await sb.from('dashboard_projects').insert(data);
