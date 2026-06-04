@@ -4154,7 +4154,14 @@ function showLoginGate(errMsg) {
   }
   const ov = document.createElement('div');
   ov.id = 'dc-login-gate';
-  ov.style.cssText = 'position:fixed;inset:0;background:#0a0a0a;z-index:999998;display:flex;align-items:center;justify-content:center;font-family:Manrope,sans-serif;color:#fff;';
+  ov.style.cssText = 'position:fixed;inset:0;background:#0a0a0a;z-index:999998;display:flex;align-items:center;justify-content:center;font-family:Manrope,sans-serif;color:#fff;filter:none;backdrop-filter:none;-webkit-backdrop-filter:none;transform:translateZ(0);will-change:transform;';
+  // Гарантовано прибрати inherited blur з усіх child elements
+  if(!document.getElementById('dc-login-gate-css')){
+    var st = document.createElement('style');
+    st.id = 'dc-login-gate-css';
+    st.textContent = '#dc-login-gate, #dc-login-gate *{filter:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;-webkit-filter:none!important;}';
+    document.head.appendChild(st);
+  }
   ov.innerHTML =
     '<div style="max-width:420px;padding:48px 36px;background:#141414;border:1px solid #2a2a2a;border-radius:14px;text-align:center;">' +
       '<div style="font-family:Oswald,sans-serif;font-size:28px;letter-spacing:.08em;margin-bottom:8px;">DREAM<span style="color:#E30613;">CAR</span> · DASHBOARD</div>' +
