@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -578,7 +578,7 @@ document.querySelectorAll('.period-btn').forEach(b => {
     document.querySelectorAll('.period-btn').forEach(x => x.classList.remove('active'));
     b.classList.add('active');
     state.period = parseInt(b.dataset.period);
-    document.getElementById('cmpPeriod').textContent = state.period + ' дней';
+    document.getElementById('cmpPeriod').textContent = state.period + ' днів';
     loadAll();
   };
 });
