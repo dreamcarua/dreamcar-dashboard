@@ -132,88 +132,77 @@ html,body{background:var(--bg);color:var(--white);font-family:'JetBrains Mono','
 
   <!-- HERO -->
   <div class="hero" id="hero">
-    <div class="hero-status need_data">Загрузка…</div>
-    <h2 id="heroTitle">Эксперимент: upsell_window_1</h2>
+    <div class="hero-status need_data">Завантаження…</div>
+    <h2 id="heroTitle">Експеримент: upsell_window_1</h2>
     <div id="heroBody"></div>
     <div id="anomaliesBlock" class="anomalies"></div>
   </div>
 
   <!-- KPI -->
   <div class="kpi-row" id="kpiRow">
-    <div class="kpi-card"><div class="kpi-label">Выручка</div><div class="kpi-value" id="kpiRevenue">—</div><div class="kpi-sub">все ветки</div></div>
-    <div class="kpi-card green"><div class="kpi-label">RPS</div><div class="kpi-value" id="kpiRps">—</div><div class="kpi-sub">среднее взвешенное</div></div>
-    <div class="kpi-card blue"><div class="kpi-label">Конверсия</div><div class="kpi-value" id="kpiConv">—</div><div class="kpi-sub">paid / started</div></div>
-    <div class="kpi-card gold"><div class="kpi-label">Лучший лифт</div><div class="kpi-value" id="kpiLift">—</div><div class="kpi-sub" id="kpiLiftVariant">—</div></div>
+    <div class="kpi-card"><div class="kpi-label">Виручка</div><div class="kpi-value" id="kpiRevenue">—</div><div class="kpi-sub">всі гілки</div></div>
+    <div class="kpi-card green"><div class="kpi-label">RPS</div><div class="kpi-value" id="kpiRps">—</div><div class="kpi-sub">середнє зважене</div></div>
+    <div class="kpi-card blue"><div class="kpi-label">Конверсія</div><div class="kpi-value" id="kpiConv">—</div><div class="kpi-sub">сплатили / почали</div></div>
+    <div class="kpi-card gold"><div class="kpi-label">Найкращий ліфт</div><div class="kpi-value" id="kpiLift">—</div><div class="kpi-sub" id="kpiLiftVariant">—</div></div>
   </div>
 
-  <!-- Filters -->
+  <!-- Filters — динамічні, формуються з реальних даних -->
   <div class="section">
-    <h3>🎚 Фильтры <span class="badge" id="filterCount">все данные</span></h3>
-    <div class="filter-row">
-      <div class="filter-group">
-        <span>Device:</span>
-        <button class="filter-chip on" data-filter="device" data-value="">Все</button>
-        <button class="filter-chip" data-filter="device" data-value="mobile">Mobile</button>
-        <button class="filter-chip" data-filter="device" data-value="desktop">Desktop</button>
-        <button class="filter-chip" data-filter="device" data-value="tablet">Tablet</button>
+    <h3>🎚 Фільтри <span class="badge" id="filterCount">всі дані</span></h3>
+    <div class="filter-row" id="filterRow">
+      <div class="filter-group" id="fg-device">
+        <span>Пристрій:</span>
+        <button class="filter-chip on" data-filter="device" data-value="">Всі</button>
       </div>
-      <div class="filter-group">
+      <div class="filter-group" id="fg-utm">
         <span>UTM source:</span>
-        <button class="filter-chip on" data-filter="utm_source" data-value="">Все</button>
-        <button class="filter-chip" data-filter="utm_source" data-value="fb_ads">FB Ads</button>
-        <button class="filter-chip" data-filter="utm_source" data-value="google">Google</button>
-        <button class="filter-chip" data-filter="utm_source" data-value="direct">Direct</button>
-        <button class="filter-chip" data-filter="utm_source" data-value="email">Email</button>
+        <button class="filter-chip on" data-filter="utm_source" data-value="">Всі</button>
       </div>
-      <div class="filter-group">
-        <span>Tariff:</span>
-        <button class="filter-chip on" data-filter="tariff_base" data-value="">Все</button>
-        <button class="filter-chip" data-filter="tariff_base" data-value="bronze">Bronze</button>
-        <button class="filter-chip" data-filter="tariff_base" data-value="silver">Silver</button>
-        <button class="filter-chip" data-filter="tariff_base" data-value="gold">Gold</button>
-        <button class="filter-chip" data-filter="tariff_base" data-value="platinum">Platinum</button>
+      <div class="filter-group" id="fg-tariff">
+        <span>Тариф:</span>
+        <button class="filter-chip on" data-filter="tariff_base" data-value="">Всі</button>
       </div>
     </div>
   </div>
 
   <!-- Compare table -->
   <div class="section">
-    <h3>📊 Сравнение веток <span class="badge" id="cmpPeriod">30 дней</span></h3>
+    <h3>📊 Порівняння гілок <span class="badge" id="cmpPeriod">30 днів</span></h3>
     <table class="compare-table">
       <thead>
         <tr>
-          <th>Ветка</th>
-          <th>Сесс</th>
+          <th>Гілка</th>
+          <th>Сесій</th>
           <th>Оплат</th>
-          <th>Конв</th>
+          <th>Конв.</th>
           <th>Сер.чек</th>
-          <th>Выручка</th>
+          <th>Виручка</th>
           <th>RPS</th>
           <th>vs Контроль</th>
           <th>p-value (RPS)</th>
-          <th>Confidence</th>
-          <th>Действие</th>
+          <th>Впевненість</th>
+          <th>Дія</th>
         </tr>
       </thead>
-      <tbody id="cmpBody"><tr><td colspan="11" class="empty">Загрузка…</td></tr></tbody>
+      <tbody id="cmpBody"><tr><td colspan="11" class="empty">Завантаження…</td></tr></tbody>
     </table>
   </div>
 
   <!-- Time series -->
   <div class="section">
-    <h3>📈 Динамика RPS по дням</h3>
+    <h3>📈 Динаміка RPS по днях</h3>
     <canvas id="timeSeries"></canvas>
   </div>
 
   <!-- Funnel -->
   <div class="section">
-    <h3>🔻 Воронка по веткам</h3>
-    <div class="funnel-row" id="funnelRow"><div class="funnel-col"><div class="empty">Загрузка…</div></div></div>
+    <h3>🔻 Воронка по гілках <span class="badge">% від першого кроку</span></h3>
+    <div class="funnel-row" id="funnelRow"><div class="funnel-col"><div class="empty">Завантаження…</div></div></div>
   </div>
 
   <!-- Recommendations -->
   <div class="section">
-    <h3>🤖 Что делать прямо сейчас</h3>
+    <h3>🤖 Що робити прямо зараз</h3>
     <div id="recommendationsBlock"></div>
   </div>
 
@@ -233,23 +222,45 @@ const state = {
   chart: null
 };
 
-function fmt(n, suf='') { if (n == null) return '—'; return Math.round(n).toLocaleString('ru-UA') + suf; }
+function fmt(n, suf='') { if (n == null) return '—'; return Math.round(n).toLocaleString('uk-UA') + suf; }
 function fmtPct(n) { if (n == null) return '—'; return n.toFixed(1) + '%'; }
-function fmtMoney(n) { if (n == null) return '—'; return Math.round(n).toLocaleString('ru-UA') + ' ₴'; }
+function fmtMoney(n) { if (n == null) return '—'; return Math.round(n).toLocaleString('uk-UA') + ' ₴'; }
 
 const STATUS_LABELS = {
-  ship: '🟢 ЗАПУСКАЕМ В PRODUCTION',
-  continue: '🟡 ПРОДОЛЖАЕМ ЭКСПЕРИМЕНТ',
-  kill: '🔴 ОТКАТЫВАЕМ',
-  need_data: '⚪ НАКАПЛИВАЕМ ДАННЫЕ'
+  ship: '🟢 ЗАПУСКАЄМО В PRODUCTION',
+  continue: '🟡 ПРОДОВЖУЄМО ЕКСПЕРИМЕНТ',
+  kill: '🔴 ВІДКАТУЄМО',
+  need_data: '⚪ НАКОПИЧУЄМО ДАНІ'
 };
 
 const VARIANT_LABELS = {
-  control: 'Контроль (без апсела)',
-  A: 'A: Пакет дороже',
-  B: 'B: Количество + скидка',
-  C: 'C: вариант 3',
-  D: 'D: вариант 4'
+  control: 'Контроль (без апселу)',
+  A: 'A: Пакет дорожче',
+  B: 'B: Кількість + знижка',
+  C: 'C: варіант 3',
+  D: 'D: варіант 4'
+};
+
+// Кроки checkout-воронки в логічному порядку.
+// Для control КРОК upsell_window_1 НЕ повинен існувати — ці events помилкові і виключаються.
+const FUNNEL_STEPS = ['phone', 'data_confirm', 'tariff_pick', 'upsell_window_1', 'payment', 'success'];
+const FUNNEL_STEPS_CONTROL = ['phone', 'data_confirm', 'tariff_pick', 'payment', 'success']; // без upsell для control
+const STEP_LABELS = {
+  phone: 'Телефон',
+  data_confirm: 'Підтвердження даних',
+  tariff_pick: 'Вибір тарифу',
+  upsell_window_1: 'Апсел-вікно',
+  payment: 'Платіж',
+  success: 'Успіх ✅',
+  failure: 'Невдача ❌'
+};
+const DROP_REASON_LABELS = {
+  close_btn: 'закрив вікно',
+  back_btn: 'натиснув "назад"',
+  tab_close: 'закрив вкладку',
+  inactive_5min: '5 хв без активності',
+  external_link: 'пішов за зовн. посиланням',
+  error_redirect: 'технічна помилка'
 };
 
 async function loadAll() {
@@ -272,7 +283,7 @@ async function loadAll() {
     renderChart(daily);
     await renderFunnels(sig);
     renderRecommendations(rec);
-    document.getElementById('lastUpdate').textContent = 'Обновлено: ' + new Date().toLocaleTimeString('ru-UA');
+    document.getElementById('lastUpdate').textContent = 'Оновлено: ' + new Date().toLocaleTimeString('uk-UA');
   } catch (e) {
     console.error('[load]', e);
   }
@@ -287,14 +298,14 @@ function renderHero(sig, rec) {
   statusEl.textContent = STATUS_LABELS[status] || status;
   let body = '';
   if (winner) {
-    body += `<div class="winner-line">🏆 Лидер: <b>${VARIANT_LABELS[winner.variant] || winner.variant}</b></div>`;
-    body += `<div>RPS <b>${fmt(winner.rps)} ₴</b> · Lift <b class="${winner.lift_vs_control_pct > 0 ? 'lift-pos' : 'lift-neg'}">${winner.lift_vs_control_pct > 0 ? '+' : ''}${fmtPct(winner.lift_vs_control_pct)}</b> над контролем</div>`;
-    body += `<div style="margin-top:8px;color:var(--grey);">Confidence: <b>${winner.confidence_level}</b> · p-value: <b>${(winner.p_value_welch_rps || 0).toFixed(3)}</b></div>`;
+    body += `<div class="winner-line">🏆 Лідер: <b>${VARIANT_LABELS[winner.variant] || winner.variant}</b></div>`;
+    body += `<div>RPS <b>${fmt(winner.rps)} ₴</b> · Ліфт <b class="${winner.lift_vs_control_pct > 0 ? 'lift-pos' : 'lift-neg'}">${winner.lift_vs_control_pct > 0 ? '+' : ''}${fmtPct(winner.lift_vs_control_pct)}</b> над контролем</div>`;
+    body += `<div style="margin-top:8px;color:var(--grey);">Впевненість: <b>${winner.confidence_level}</b> · p-value: <b>${(winner.p_value_welch_rps || 0).toFixed(3)}</b></div>`;
     const progress = Math.min(100, Math.round((rec.sample_progress || 0) * 100));
     body += `<div class="progress"><div class="progress-bar" style="width:${progress}%"></div></div>`;
-    body += `<div class="progress-label">Прогресс выборки: ${winner.sessions || 0} / 500 (${progress}%)</div>`;
+    body += `<div class="progress-label">Прогрес вибірки: ${winner.sessions || 0} / 500 (${progress}%)</div>`;
   } else {
-    body += '<div>Нет данных по ветка пока. Эксперимент только запущен или нет событий.</div>';
+    body += '<div>Поки що немає даних по гілках. Експеримент щойно запущено або немає подій.</div>';
   }
   document.getElementById('heroBody').innerHTML = body;
 
@@ -306,7 +317,7 @@ function renderHero(sig, rec) {
       <div class="anomaly">
         <div class="anomaly-title">⚠ ${a.title}</div>
         <div class="anomaly-desc">${a.description}</div>
-        <div class="anomaly-action">Действие: ${a.action}</div>
+        <div class="anomaly-action">Дія: ${a.action}</div>
       </div>
     `).join('');
   } else {
@@ -350,7 +361,7 @@ function renderTable(sig) {
       <td>${renderRecBadge(s.recommendation)}</td>
     </tr>`;
   });
-  document.getElementById('cmpBody').innerHTML = rows.length ? rows.join('') : '<tr><td colspan="11" class="empty">Нет данных за период</td></tr>';
+  document.getElementById('cmpBody').innerHTML = rows.length ? rows.join('') : '<tr><td colspan="11" class="empty">Немає даних за період</td></tr>';
 }
 
 function renderRecBadge(r) {
@@ -394,13 +405,26 @@ function renderChart(daily) {
       },
       scales: {
         x: { ticks: { color: '#888', font: { size: 10 } }, grid: { color: '#1a1a1a' } },
-        y: { ticks: { color: '#888', font: { size: 10 }, callback: v => v + ' ₴' }, grid: { color: '#1a1a1a' }, title: { display: true, text: '₴/сессию', color: '#888' } }
+        y: { ticks: { color: '#888', font: { size: 10 }, callback: v => v + ' ₴' }, grid: { color: '#1a1a1a' }, title: { display: true, text: '₴/сесію', color: '#888' } }
       }
     }
   });
 }
 
 async function renderFunnels(sig) {
+  // 06.06.2026 — повністю переписаний funnel з правильною логікою.
+  // RPC upsell_funnel повертає visitors (distinct sessions на крок), але було два бага:
+  //   1) baseline = max(visitors), а у деяких кроках дублікати events перевищували реальну
+  //      кількість сесій → бар показував >100%
+  //   2) для control крок 'upsell_window_1' показувався як 99% потерь — це нонсенс,
+  //      бо control НЕ повинен мати цей крок (туди потрапляють тільки помилкові events)
+  //
+  // Нова логіка:
+  //   - беремо реальний набір кроків залежно від варіанту (control БЕЗ upsell_window_1)
+  //   - baseline = найбільше значення visitors (зазвичай це phone)
+  //   - drop між кроками рахуємо як абсолютну різницю від попереднього КРОКУ (а не пропорції)
+  //   - якщо current > previous (повторний захід) — показуємо це не як "втрати" а нейтрально
+  //   - показуємо tooltip з drop_reasons
   const variants = sig.map(s => s.variant);
   const funnelData = await Promise.all(variants.map(v =>
     sb.rpc('upsell_funnel', { p_experiment_id: EXPERIMENT_ID, p_variant: v, p_period_days: state.period })
@@ -409,25 +433,53 @@ async function renderFunnels(sig) {
   const html = funnelData.map(fd => {
     const variantLabel = VARIANT_LABELS[fd.variant] || fd.variant;
     if (!fd.data.length) {
-      return `<div class="funnel-col"><div class="funnel-col-title">${variantLabel}</div><div class="empty" style="padding:10px;">Нет данных</div></div>`;
+      return `<div class="funnel-col"><div class="funnel-col-title">${variantLabel}</div><div class="empty" style="padding:10px;">Немає даних</div></div>`;
     }
-    const maxVisitors = Math.max(...fd.data.map(s => Number(s.visitors) || 0));
-    const stepsHtml = fd.data.map((s, i) => {
-      const widthPct = maxVisitors > 0 ? (Number(s.visitors) / maxVisitors * 100) : 0;
+    // Фільтруємо: для control НЕ показуємо upsell_window_1 (це помилкові events)
+    const expectedSteps = fd.variant === 'control' ? FUNNEL_STEPS_CONTROL : FUNNEL_STEPS;
+    const byStep = {};
+    fd.data.forEach(s => { byStep[s.step] = s; });
+    // Беремо тільки очікувані кроки в правильному порядку, ігноруючи "сторонні"
+    const orderedSteps = expectedSteps
+      .map(stepName => byStep[stepName])
+      .filter(Boolean);
+
+    // Baseline = visitors найпершого кроку який існує. Якщо першого нема — беремо max.
+    const baseline = orderedSteps[0]
+      ? Number(orderedSteps[0].visitors)
+      : Math.max(...orderedSteps.map(s => Number(s.visitors) || 0));
+
+    const stepsHtml = orderedSteps.map((s, i) => {
+      const visitors = Number(s.visitors) || 0;
+      const pctFromBase = baseline > 0 ? (visitors / baseline * 100) : 0;
+      const widthPct = Math.min(100, pctFromBase); // cap на 100%
       let dropHtml = '';
       if (i > 0) {
-        const prev = fd.data[i - 1];
-        const lost = (Number(prev.next_count) + Number(prev.took_count)) - Number(s.visitors);
-        const lostPct = (Number(prev.next_count) + Number(prev.took_count)) > 0
-          ? (lost / (Number(prev.next_count) + Number(prev.took_count)) * 100)
-          : 0;
-        if (lostPct > 0.5) {
-          dropHtml = `<div class="funnel-drop">↓ ${lostPct.toFixed(0)}% потерь</div>`;
+        const prev = orderedSteps[i - 1];
+        const prevVisitors = Number(prev.visitors) || 0;
+        const lost = prevVisitors - visitors;
+        if (lost > 0) {
+          const lostPct = prevVisitors > 0 ? (lost / prevVisitors * 100) : 0;
+          // dropBreakdown: показуємо чому юзери пішли
+          const drops = [];
+          if (Number(prev.drop_close) > 0) drops.push(`${prev.drop_close} ${DROP_REASON_LABELS.close_btn}`);
+          if (Number(prev.drop_back) > 0) drops.push(`${prev.drop_back} ${DROP_REASON_LABELS.back_btn}`);
+          if (Number(prev.drop_tab) > 0) drops.push(`${prev.drop_tab} ${DROP_REASON_LABELS.tab_close}`);
+          if (Number(prev.drop_inactive) > 0) drops.push(`${prev.drop_inactive} ${DROP_REASON_LABELS.inactive_5min}`);
+          if (Number(prev.drop_external) > 0) drops.push(`${prev.drop_external} ${DROP_REASON_LABELS.external_link}`);
+          const tooltip = drops.length ? ` title="${drops.join(' · ')}"` : '';
+          dropHtml = `<div class="funnel-drop"${tooltip}>↓ −${lost} (−${lostPct.toFixed(0)}%)</div>`;
+        } else if (lost < 0) {
+          dropHtml = `<div class="funnel-drop" style="color:var(--ash);" title="Повторні заходи / події з різних шляхів">↻ +${Math.abs(lost)} (повторні заходи)</div>`;
         }
       }
+      const stepLabel = STEP_LABELS[s.step] || s.step;
+      const tookBadge = Number(s.took_count) > 0
+        ? ` <span style="color:var(--green);font-weight:700;">· прийняли апсел: ${s.took_count}</span>`
+        : '';
       return `${dropHtml}<div class="funnel-step">
-        <div class="funnel-step-label">${s.step}${s.took_count > 0 ? ` · took:${s.took_count}` : ''}</div>
-        <div class="funnel-bar"><div class="funnel-bar-fill" style="width:${widthPct}%"></div><span>${fmt(s.visitors)} (${fmtPct(s.conv_to_next_pct)})</span></div>
+        <div class="funnel-step-label">${stepLabel}${tookBadge}</div>
+        <div class="funnel-bar"><div class="funnel-bar-fill" style="width:${widthPct}%"></div><span>${fmt(visitors)} <span style="opacity:0.7;">(${fmtPct(pctFromBase)})</span></span></div>
       </div>`;
     }).join('');
     return `<div class="funnel-col"><div class="funnel-col-title">${variantLabel}</div>${stepsHtml}</div>`;
@@ -438,7 +490,7 @@ async function renderFunnels(sig) {
 function renderRecommendations(rec) {
   const recs = rec.recommendations || [];
   if (!recs.length) {
-    document.getElementById('recommendationsBlock').innerHTML = '<div class="empty">Рекомендаций нет.</div>';
+    document.getElementById('recommendationsBlock').innerHTML = '<div class="empty">Рекомендацій немає.</div>';
     return;
   }
   document.getElementById('recommendationsBlock').innerHTML = recs.map(r => `
@@ -450,7 +502,62 @@ function renderRecommendations(rec) {
   `).join('');
 }
 
-// Filter buttons
+// 06.06.2026 — динамічні фільтри замість hardcoded.
+// Тягнемо реальні значення з checkout_events за останні 30 днів і формуємо chips
+async function loadDynamicFilters() {
+  try {
+    const since = new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString();
+    const { data: rows } = await sb
+      .from('checkout_events')
+      .select('device, utm_source, tariff_final')
+      .gte('ts', since)
+      .limit(5000);
+    if (!rows || !rows.length) return;
+    const devices = [...new Set(rows.map(r => r.device).filter(Boolean))].sort();
+    const sources = [...new Set(rows.map(r => r.utm_source).filter(Boolean))].sort();
+    const tariffs = [...new Set(rows.map(r => r.tariff_final).filter(Boolean))].sort();
+
+    const fg = id => document.getElementById(id);
+    const DEVICE_LABELS = { mobile: '📱 Mobile', desktop: '💻 Desktop', tablet: '📋 Tablet' };
+    const TARIFF_LABELS = { trial: 'Trial', minimum: 'Minimum', basic: 'Basic', popular: 'Popular', promo10: 'Promo 10', selftest: 'Selftest' };
+    const SOURCE_LABELS = { ig: '📷 Instagram', facebook: '👤 Facebook', google: '🔍 Google', direct: '🔗 Прямі', email: '✉ Email', fb_ads: '💸 FB Ads' };
+
+    if (devices.length) {
+      fg('fg-device').innerHTML = '<span>Пристрій:</span>' +
+        '<button class="filter-chip on" data-filter="device" data-value="">Всі</button>' +
+        devices.map(d => `<button class="filter-chip" data-filter="device" data-value="${d}">${DEVICE_LABELS[d] || d}</button>`).join('');
+    }
+    if (sources.length) {
+      fg('fg-utm').innerHTML = '<span>UTM source:</span>' +
+        '<button class="filter-chip on" data-filter="utm_source" data-value="">Всі</button>' +
+        sources.map(s => `<button class="filter-chip" data-filter="utm_source" data-value="${s}">${SOURCE_LABELS[s] || s}</button>`).join('');
+    }
+    if (tariffs.length) {
+      fg('fg-tariff').innerHTML = '<span>Тариф:</span>' +
+        '<button class="filter-chip on" data-filter="tariff_base" data-value="">Всі</button>' +
+        tariffs.map(t => `<button class="filter-chip" data-filter="tariff_base" data-value="${t}">${TARIFF_LABELS[t] || t}</button>`).join('');
+    }
+    // Прибиндити onclick для нових chips
+    document.querySelectorAll('#filterRow .filter-chip').forEach(bindFilterChip);
+  } catch (e) {
+    console.warn('[loadDynamicFilters]', e);
+  }
+}
+
+function bindFilterChip(b) {
+  b.onclick = () => {
+    const f = b.dataset.filter;
+    const v = b.dataset.value;
+    document.querySelectorAll(`.filter-chip[data-filter="${f}"]`).forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    if (v) state.filters[f] = v;
+    else delete state.filters[f];
+    document.getElementById('filterCount').textContent = Object.keys(state.filters).length ? Object.entries(state.filters).map(([k, v]) => `${k}=${v}`).join(', ') : 'всі дані';
+    loadAll();
+  };
+}
+
+// Початковий bind (для placeholder chips що вже у HTML)
 document.querySelectorAll('.filter-chip').forEach(b => {
   b.onclick = () => {
     const f = b.dataset.filter;
@@ -459,7 +566,7 @@ document.querySelectorAll('.filter-chip').forEach(b => {
     b.classList.add('on');
     if (v) state.filters[f] = v;
     else delete state.filters[f];
-    document.getElementById('filterCount').textContent = Object.keys(state.filters).length ? Object.entries(state.filters).map(([k, v]) => `${k}=${v}`).join(', ') : 'все данные';
+    document.getElementById('filterCount').textContent = Object.keys(state.filters).length ? Object.entries(state.filters).map(([k, v]) => `${k}=${v}`).join(', ') : 'всі дані';
     loadAll();
   };
 });
@@ -479,6 +586,8 @@ document.getElementById('btnRefresh').onclick = () => loadAll();
 
 // Initial period
 document.querySelector('.period-btn[data-period="30"]').click();
+// Підтягнути динамічні фільтри з реальних даних (паралельно з основним load)
+loadDynamicFilters();
 
 // Realtime subscription
 sb.channel('upsell_realtime')
