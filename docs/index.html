@@ -1275,7 +1275,8 @@ function isPaidSource(src) {
   return PAID_SOURCES.has(s) || /(_paid|_ads|_cpc)/.test(s);
 }
 
-const ymd = (d) => { const dd = new Date(d); dd.setHours(0,0,0,0); return dd.toISOString().slice(0,10); };
+// 06.06.2026 P0 FIX: toISOString() конвертує у UTC. У CET/CEST (UTC+1/+2) 06.06 00:00 LOCAL = 05.06 22:00 UTC → -1 день. Тепер local-форматування.
+const ymd = (d) => { const dd = new Date(d); const y = dd.getFullYear(); const m = String(dd.getMonth()+1).padStart(2,'0'); const day = String(dd.getDate()).padStart(2,'0'); return `${y}-${m}-${day}`; };
 const todayYmd = () => ymd(new Date());
 
 function applyPreset(p) {

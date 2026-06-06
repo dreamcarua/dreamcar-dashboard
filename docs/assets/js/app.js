@@ -100,9 +100,25 @@
   }
 
   async function fetchProjectsList() {
-    // Дістаємо унікальні значення з settings
-    const { data } = await sb.from('dashboard_settings').select('value').eq('key', 'projects').single();
-    return (data?.value) || [];
+    // 06.06.2026 FIX: тягнемо живі унікальні project-и з dashboard_deals (90 днів) +
+    // merge з settings — щоб нові проекти не зникали з dropdown.
+    const fromSettings = await sb.from('dashboard_settings').select('value').eq('key', 'projects').single();
+    const settingsList = (fromSettings?.data?.value) || [];
+    try {
+      const ninetyDaysAgo = new Date(Date.now() - 90*24*3600*1000).toISOString();
+      const { data: liveDeals } = await sb.from('dashboard_deals')
+        .select('project')
+        .gte('created_at', ninetyDaysAgo)
+        .not('project', 'is', null)
+        .limit(5000);
+      const liveSet = new Set((liveDeals || []).map(d => d.project).filter(Boolean));
+      // Merge: live distinct values first (sorted by frequency desc), then settings extras
+      const merged = Array.from(new Set([...liveSet, ...settingsList]));
+      return merged.sort();
+    } catch(e) {
+      console.warn('[projects] fallback to settings:', e);
+      return settingsList;
+    }
   }
 
   async function fetchWebhookHealth() {
