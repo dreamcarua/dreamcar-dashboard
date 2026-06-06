@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<title>DreamCar · Upsell A/B/C Dashboard</title>
+<script src="https://brand.dreamcar.ua/assets/global-header.js?v=20260606b" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg:#0a0a0a; --bg-2:#141414; --bg-3:#1a1a1a; --line:#1a1a1a; --steel:#2a2a2a;
+  --white:#fff; --ash:#888; --grey:#aaa;
+  --red:#E30613; --red-soft:#FF6A7A; --gold:#FBBF24;
+  --green:#10B981; --blue:#60A5FA; --purple:#a5b4fc;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:var(--bg);color:var(--white);font-family:'JetBrains Mono','Manrope',system-ui,sans-serif;min-height:100vh;}
+
+.topbar{background:var(--bg-2);border-bottom:1px solid var(--line);padding:14px 28px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;}
+.brand-mark{font-family:'Oswald',sans-serif;font-weight:800;font-size:16px;letter-spacing:0.05em;color:#fff;text-decoration:none;}
+.brand-mark .red{color:var(--red);}
+.brand-mark .meta{font-size:10px;color:var(--ash);letter-spacing:0.15em;margin-left:8px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;}
+.topbar-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.btn{padding:8px 14px;background:var(--bg-3);border:1px solid var(--steel);color:#fff;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;cursor:pointer;border-radius:6px;text-transform:uppercase;text-decoration:none;}
+.btn:hover{border-color:var(--red);}
+.btn.primary{background:var(--red);border-color:var(--red);}
+.btn.active{background:var(--red);border-color:var(--red);}
+
+.container{max-width:1400px;margin:0 auto;padding:24px;display:flex;flex-direction:column;gap:24px;}
+
+/* Hero */
+.hero{background:var(--bg-2);border:1px solid var(--steel);border-radius:12px;padding:28px;}
+.hero-status{display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border-radius:30px;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;font-weight:700;margin-bottom:14px;}
+.hero-status.ship{background:rgba(16,185,129,0.15);color:var(--green);border:1px solid var(--green);}
+.hero-status.continue{background:rgba(251,191,36,0.15);color:var(--gold);border:1px solid var(--gold);}
+.hero-status.kill{background:rgba(227,6,19,0.15);color:var(--red-soft);border:1px solid var(--red);}
+.hero-status.need_data{background:var(--bg-3);color:var(--grey);border:1px solid var(--steel);}
+.hero h2{font-family:'Oswald',sans-serif;font-size:24px;letter-spacing:0.02em;margin-bottom:8px;}
+.hero .winner-line{font-size:16px;color:var(--green);margin:6px 0;}
+.hero .progress{background:var(--bg-3);border-radius:8px;height:10px;margin-top:14px;overflow:hidden;}
+.hero .progress-bar{background:linear-gradient(90deg,var(--gold),var(--green));height:100%;transition:width 0.3s;}
+.hero .progress-label{font-size:11px;color:var(--ash);margin-top:6px;letter-spacing:0.1em;}
+
+/* Anomalies */
+.anomalies{margin-top:18px;display:flex;flex-direction:column;gap:8px;}
+.anomaly{background:rgba(227,6,19,0.1);border:1px solid var(--red);border-radius:8px;padding:12px 16px;}
+.anomaly-title{color:var(--red-soft);font-weight:700;margin-bottom:4px;}
+.anomaly-desc{color:var(--grey);font-size:12px;}
+.anomaly-action{color:var(--gold);font-size:12px;margin-top:6px;}
+
+/* KPI cards */
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
+.kpi-card{background:var(--bg-2);border:1px solid var(--steel);border-radius:12px;padding:20px;}
+.kpi-label{font-size:10px;color:var(--ash);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:10px;}
+.kpi-value{font-family:'Oswald',sans-serif;font-size:32px;font-weight:800;letter-spacing:0.02em;}
+.kpi-sub{font-size:11px;color:var(--grey);margin-top:6px;}
+.kpi-card.green .kpi-value{color:var(--green);}
+.kpi-card.gold .kpi-value{color:var(--gold);}
+.kpi-card.blue .kpi-value{color:var(--blue);}
+
+/* Section header */
+.section{background:var(--bg-2);border:1px solid var(--steel);border-radius:12px;padding:22px;}
+.section h3{font-family:'Oswald',sans-serif;font-size:18px;letter-spacing:0.05em;margin-bottom:18px;display:flex;align-items:center;gap:10px;}
+.section h3 .badge{background:var(--bg-3);color:var(--ash);font-size:11px;padding:3px 8px;border-radius:4px;font-weight:400;}
+
+/* Compare table */
+.compare-table{width:100%;border-collapse:collapse;font-size:12px;}
+.compare-table th{background:var(--bg-3);color:var(--ash);font-size:10px;letter-spacing:0.15em;text-transform:uppercase;text-align:left;padding:10px 8px;border-bottom:1px solid var(--steel);}
+.compare-table td{padding:14px 8px;border-bottom:1px solid var(--line);color:#fff;}
+.compare-table tr:hover{background:var(--bg-3);}
+.variant-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;vertical-align:middle;}
+.variant-dot.control{background:var(--green);}
+.variant-dot.A{background:var(--blue);}
+.variant-dot.B{background:var(--purple);}
+.variant-dot.C{background:var(--gold);}
+.lift-pos{color:var(--green);font-weight:700;}
+.lift-neg{color:var(--red-soft);font-weight:700;}
+.lift-zero{color:var(--grey);}
+.pvalue-sig{background:rgba(16,185,129,0.15);color:var(--green);padding:2px 6px;border-radius:4px;font-size:10px;}
+.pvalue-marginal{background:rgba(251,191,36,0.15);color:var(--gold);padding:2px 6px;border-radius:4px;font-size:10px;}
+.pvalue-no{background:var(--bg-3);color:var(--ash);padding:2px 6px;border-radius:4px;font-size:10px;}
+
+/* Funnel */
+.funnel-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.funnel-col{background:var(--bg-3);border:1px solid var(--steel);border-radius:10px;padding:14px;}
+.funnel-col-title{font-size:11px;color:var(--ash);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px;text-align:center;font-weight:700;}
+.funnel-step{margin-bottom:6px;}
+.funnel-step-label{font-size:10px;color:var(--ash);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:3px;}
+.funnel-bar{background:var(--bg);border-radius:4px;height:24px;display:flex;align-items:center;padding:0 8px;font-size:11px;color:#fff;font-weight:700;position:relative;overflow:hidden;}
+.funnel-bar-fill{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,var(--green),var(--blue));opacity:0.5;}
+.funnel-drop{font-size:10px;color:var(--red-soft);text-align:center;margin:2px 0;}
+
+/* Filters */
+.filter-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+.filter-group{display:flex;align-items:center;gap:6px;}
+.filter-group span{font-size:10px;color:var(--ash);letter-spacing:0.15em;text-transform:uppercase;}
+.filter-chip{padding:5px 10px;background:var(--bg-3);border:1px solid var(--steel);color:#ccc;border-radius:20px;font-size:11px;cursor:pointer;font-family:inherit;}
+.filter-chip.on{background:var(--red);border-color:var(--red);color:#fff;}
+
+.empty{text-align:center;padding:40px 20px;color:var(--ash);}
+
+/* Recommendations */
+.rec{padding:14px;background:var(--bg-3);border-left:3px solid var(--green);border-radius:6px;margin-bottom:10px;}
+.rec-action{font-size:11px;color:var(--green);letter-spacing:0.15em;text-transform:uppercase;font-weight:700;margin-bottom:5px;}
+.rec-title{color:#fff;font-weight:700;margin-bottom:5px;}
+.rec-reasoning{color:var(--grey);font-size:12px;}
+
+#timeSeries{max-height:320px;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="/" class="brand-mark">
+    DREAM<span class="red">CAR</span> · UPSELL A/B/C
+    <span class="meta">DASHBOARD</span>
+  </a>
+  <div class="topbar-actions">
+    <button class="btn period-btn active" data-period="7">7Д</button>
+    <button class="btn period-btn" data-period="14">14Д</button>
+    <button class="btn period-btn active" data-period="30">30Д</button>
+    <button class="btn" id="btnRefresh">↻ ОБНОВИТЬ</button>
+    <span id="lastUpdate" style="font-size:10px;color:var(--ash);"></span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero" id="hero">
+    <div class="hero-status need_data">Загрузка…</div>
+    <h2 id="heroTitle">Эксперимент: upsell_window_1</h2>
+    <div id="heroBody"></div>
+    <div id="anomaliesBlock" class="anomalies"></div>
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-row" id="kpiRow">
+    <div class="kpi-card"><div class="kpi-label">Выручка</div><div class="kpi-value" id="kpiRevenue">—</div><div class="kpi-sub">все ветки</div></div>
+    <div class="kpi-card green"><div class="kpi-label">RPS</div><div class="kpi-value" id="kpiRps">—</div><div class="kpi-sub">среднее взвешенное</div></div>
+    <div class="kpi-card blue"><div class="kpi-label">Конверсия</div><div class="kpi-value" id="kpiConv">—</div><div class="kpi-sub">paid / started</div></div>
+    <div class="kpi-card gold"><div class="kpi-label">Лучший лифт</div><div class="kpi-value" id="kpiLift">—</div><div class="kpi-sub" id="kpiLiftVariant">—</div></div>
+  </div>
+
+  <!-- Filters -->
+  <div class="section">
+    <h3>🎚 Фильтры <span class="badge" id="filterCount">все данные</span></h3>
+    <div class="filter-row">
+      <div class="filter-group">
+        <span>Device:</span>
+        <button class="filter-chip on" data-filter="device" data-value="">Все</button>
+        <button class="filter-chip" data-filter="device" data-value="mobile">Mobile</button>
+        <button class="filter-chip" data-filter="device" data-value="desktop">Desktop</button>
+        <button class="filter-chip" data-filter="device" data-value="tablet">Tablet</button>
+      </div>
+      <div class="filter-group">
+        <span>UTM source:</span>
+        <button class="filter-chip on" data-filter="utm_source" data-value="">Все</button>
+        <button class="filter-chip" data-filter="utm_source" data-value="fb_ads">FB Ads</button>
+        <button class="filter-chip" data-filter="utm_source" data-value="google">Google</button>
+        <button class="filter-chip" data-filter="utm_source" data-value="direct">Direct</button>
+        <button class="filter-chip" data-filter="utm_source" data-value="email">Email</button>
+      </div>
+      <div class="filter-group">
+        <span>Tariff:</span>
+        <button class="filter-chip on" data-filter="tariff_base" data-value="">Все</button>
+        <button class="filter-chip" data-filter="tariff_base" data-value="bronze">Bronze</button>
+        <button class="filter-chip" data-filter="tariff_base" data-value="silver">Silver</button>
+        <button class="filter-chip" data-filter="tariff_base" data-value="gold">Gold</button>
+        <button class="filter-chip" data-filter="tariff_base" data-value="platinum">Platinum</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Compare table -->
+  <div class="section">
+    <h3>📊 Сравнение веток <span class="badge" id="cmpPeriod">30 дней</span></h3>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Ветка</th>
+          <th>Сесс</th>
+          <th>Оплат</th>
+          <th>Конв</th>
+          <th>Сер.чек</th>
+          <th>Выручка</th>
+          <th>RPS</th>
+          <th>vs Контроль</th>
+          <th>p-value (RPS)</th>
+          <th>Confidence</th>
+          <th>Действие</th>
+        </tr>
+      </thead>
+      <tbody id="cmpBody"><tr><td colspan="11" class="empty">Загрузка…</td></tr></tbody>
+    </table>
+  </div>
+
+  <!-- Time series -->
+  <div class="section">
+    <h3>📈 Динамика RPS по дням</h3>
+    <canvas id="timeSeries"></canvas>
+  </div>
+
+  <!-- Funnel -->
+  <div class="section">
+    <h3>🔻 Воронка по веткам</h3>
+    <div class="funnel-row" id="funnelRow"><div class="funnel-col"><div class="empty">Загрузка…</div></div></div>
+  </div>
+
+  <!-- Recommendations -->
+  <div class="section">
+    <h3>🤖 Что делать прямо сейчас</h3>
+    <div id="recommendationsBlock"></div>
+  </div>
+
+</div>
+
+<script type="module">
+const SUPABASE_URL = 'https://wotghlaehnvxyeacznvv.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndvdGdobGFlaG52eHllYWN6bnZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2MDc4NjgsImV4cCI6MjA5NDE4Mzg2OH0.Se-y1WawsdSkMLXj7G_O-Kq-jVfjUOBD3KJOvemCR3A';
+const EXPERIMENT_ID = 'upsell_window_1';
+
+const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+const state = {
+  period: 30,
+  filters: {},
+  chart: null
+};
+
+function fmt(n, suf='') { if (n == null) return '—'; return Math.round(n).toLocaleString('ru-UA') + suf; }
+function fmtPct(n) { if (n == null) return '—'; return n.toFixed(1) + '%'; }
+function fmtMoney(n) { if (n == null) return '—'; return Math.round(n).toLocaleString('ru-UA') + ' ₴'; }
+
+const STATUS_LABELS = {
+  ship: '🟢 ЗАПУСКАЕМ В PRODUCTION',
+  continue: '🟡 ПРОДОЛЖАЕМ ЭКСПЕРИМЕНТ',
+  kill: '🔴 ОТКАТЫВАЕМ',
+  need_data: '⚪ НАКАПЛИВАЕМ ДАННЫЕ'
+};
+
+const VARIANT_LABELS = {
+  control: 'Контроль (без апсела)',
+  A: 'A: Пакет дороже',
+  B: 'B: Количество + скидка',
+  C: 'C: вариант 3',
+  D: 'D: вариант 4'
+};
+
+async function loadAll() {
+  try {
+    const filter = JSON.stringify(state.filters);
+    const [sigRes, recRes, dailyRes] = await Promise.all([
+      sb.rpc('upsell_significance', { p_experiment_id: EXPERIMENT_ID, p_period_days: state.period, p_filter: state.filters }),
+      sb.rpc('upsell_recommendation', { p_experiment_id: EXPERIMENT_ID }),
+      sb.rpc('upsell_daily', { p_experiment_id: EXPERIMENT_ID, p_period_days: state.period })
+    ]);
+    if (sigRes.error) console.error(sigRes.error);
+    if (recRes.error) console.error(recRes.error);
+    if (dailyRes.error) console.error(dailyRes.error);
+    const sig = sigRes.data || [];
+    const rec = recRes.data || {};
+    const daily = dailyRes.data || [];
+    renderHero(sig, rec);
+    renderKPI(sig);
+    renderTable(sig);
+    renderChart(daily);
+    await renderFunnels(sig);
+    renderRecommendations(rec);
+    document.getElementById('lastUpdate').textContent = 'Обновлено: ' + new Date().toLocaleTimeString('ru-UA');
+  } catch (e) {
+    console.error('[load]', e);
+  }
+}
+
+function renderHero(sig, rec) {
+  const status = rec.status || 'need_data';
+  const winner = (sig || []).filter(s => s.variant !== 'control').sort((a, b) => (b.rps || 0) - (a.rps || 0))[0];
+  const heroEl = document.getElementById('hero');
+  const statusEl = heroEl.querySelector('.hero-status');
+  statusEl.className = 'hero-status ' + status;
+  statusEl.textContent = STATUS_LABELS[status] || status;
+  let body = '';
+  if (winner) {
+    body += `<div class="winner-line">🏆 Лидер: <b>${VARIANT_LABELS[winner.variant] || winner.variant}</b></div>`;
+    body += `<div>RPS <b>${fmt(winner.rps)} ₴</b> · Lift <b class="${winner.lift_vs_control_pct > 0 ? 'lift-pos' : 'lift-neg'}">${winner.lift_vs_control_pct > 0 ? '+' : ''}${fmtPct(winner.lift_vs_control_pct)}</b> над контролем</div>`;
+    body += `<div style="margin-top:8px;color:var(--grey);">Confidence: <b>${winner.confidence_level}</b> · p-value: <b>${(winner.p_value_welch_rps || 0).toFixed(3)}</b></div>`;
+    const progress = Math.min(100, Math.round((rec.sample_progress || 0) * 100));
+    body += `<div class="progress"><div class="progress-bar" style="width:${progress}%"></div></div>`;
+    body += `<div class="progress-label">Прогресс выборки: ${winner.sessions || 0} / 500 (${progress}%)</div>`;
+  } else {
+    body += '<div>Нет данных по ветка пока. Эксперимент только запущен или нет событий.</div>';
+  }
+  document.getElementById('heroBody').innerHTML = body;
+
+  // Anomalies
+  const aBlock = document.getElementById('anomaliesBlock');
+  const anomalies = rec.anomalies || [];
+  if (anomalies.length) {
+    aBlock.innerHTML = anomalies.map(a => `
+      <div class="anomaly">
+        <div class="anomaly-title">⚠ ${a.title}</div>
+        <div class="anomaly-desc">${a.description}</div>
+        <div class="anomaly-action">Действие: ${a.action}</div>
+      </div>
+    `).join('');
+  } else {
+    aBlock.innerHTML = '';
+  }
+}
+
+function renderKPI(sig) {
+  const totalRevenue = sig.reduce((s, r) => s + (Number(r.revenue) || 0), 0);
+  const totalSessions = sig.reduce((s, r) => s + (Number(r.sessions) || 0), 0);
+  const totalPaid = sig.reduce((s, r) => s + (Number(r.paid) || 0), 0);
+  const avgRps = totalSessions > 0 ? totalRevenue / totalSessions : 0;
+  const avgConv = totalSessions > 0 ? totalPaid / totalSessions * 100 : 0;
+  const winner = (sig || []).filter(s => s.variant !== 'control').sort((a, b) => (b.lift_vs_control_pct || 0) - (a.lift_vs_control_pct || 0))[0];
+  document.getElementById('kpiRevenue').textContent = fmtMoney(totalRevenue);
+  document.getElementById('kpiRps').textContent = fmt(avgRps) + ' ₴';
+  document.getElementById('kpiConv').textContent = fmtPct(avgConv);
+  document.getElementById('kpiLift').textContent = winner ? ((winner.lift_vs_control_pct > 0 ? '+' : '') + fmtPct(winner.lift_vs_control_pct)) : '—';
+  document.getElementById('kpiLiftVariant').textContent = winner ? VARIANT_LABELS[winner.variant] : '—';
+}
+
+function renderTable(sig) {
+  const control = sig.find(s => s.variant === 'control');
+  const rows = sig.map(s => {
+    const liftCls = s.variant === 'control' ? 'lift-zero' : (s.lift_vs_control_pct > 0 ? 'lift-pos' : 'lift-neg');
+    const liftStr = s.variant === 'control' ? 'baseline' : ((s.lift_vs_control_pct > 0 ? '+' : '') + fmtPct(s.lift_vs_control_pct));
+    const pv = Number(s.p_value_welch_rps) || 0;
+    const pvCls = s.variant === 'control' ? 'pvalue-no' : (pv < 0.05 ? 'pvalue-sig' : (pv < 0.10 ? 'pvalue-marginal' : 'pvalue-no'));
+    const pvStr = s.variant === 'control' ? '—' : pv.toFixed(3);
+    return `<tr>
+      <td><span class="variant-dot ${s.variant}"></span>${VARIANT_LABELS[s.variant] || s.variant}</td>
+      <td>${fmt(s.sessions)}</td>
+      <td>${fmt(s.paid)}</td>
+      <td>${fmtPct((Number(s.conv_rate) || 0) * 100)}</td>
+      <td>${fmtMoney(s.avg_check)}</td>
+      <td>${fmtMoney(s.revenue)}</td>
+      <td><b>${fmtMoney(s.rps)}</b></td>
+      <td class="${liftCls}">${liftStr}</td>
+      <td><span class="${pvCls}">${pvStr}</span></td>
+      <td>${s.confidence_level || '—'}</td>
+      <td>${renderRecBadge(s.recommendation)}</td>
+    </tr>`;
+  });
+  document.getElementById('cmpBody').innerHTML = rows.length ? rows.join('') : '<tr><td colspan="11" class="empty">Нет данных за период</td></tr>';
+}
+
+function renderRecBadge(r) {
+  if (r === 'ship') return '<span class="pvalue-sig">SHIP</span>';
+  if (r === 'continue') return '<span class="pvalue-marginal">CONTINUE</span>';
+  if (r === 'kill') return '<span style="background:rgba(227,6,19,0.2);color:var(--red-soft);padding:2px 6px;border-radius:4px;font-size:10px;">KILL</span>';
+  if (r === 'baseline') return '<span style="color:var(--ash);">—</span>';
+  return '<span class="pvalue-no">NEED DATA</span>';
+}
+
+function renderChart(daily) {
+  if (!daily.length) {
+    document.getElementById('timeSeries').parentElement.querySelector('h3').nextElementSibling?.remove?.();
+    return;
+  }
+  const ctx = document.getElementById('timeSeries').getContext('2d');
+  const days = [...new Set(daily.map(d => d.day))].sort();
+  const variants = [...new Set(daily.map(d => d.variant))];
+  const colors = { control: '#10B981', A: '#60A5FA', B: '#a5b4fc', C: '#FBBF24' };
+  const datasets = variants.map(v => ({
+    label: VARIANT_LABELS[v] || v,
+    data: days.map(d => {
+      const row = daily.find(x => x.day === d && x.variant === v);
+      return row ? Number(row.rps) : null;
+    }),
+    borderColor: colors[v] || '#888',
+    backgroundColor: (colors[v] || '#888') + '33',
+    tension: 0.3,
+    fill: false,
+    spanGaps: true
+  }));
+  if (state.chart) state.chart.destroy();
+  state.chart = new Chart(ctx, {
+    type: 'line',
+    data: { labels: days, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#ccc', font: { size: 11 } } }
+      },
+      scales: {
+        x: { ticks: { color: '#888', font: { size: 10 } }, grid: { color: '#1a1a1a' } },
+        y: { ticks: { color: '#888', font: { size: 10 }, callback: v => v + ' ₴' }, grid: { color: '#1a1a1a' }, title: { display: true, text: '₴/сессию', color: '#888' } }
+      }
+    }
+  });
+}
+
+async function renderFunnels(sig) {
+  const variants = sig.map(s => s.variant);
+  const funnelData = await Promise.all(variants.map(v =>
+    sb.rpc('upsell_funnel', { p_experiment_id: EXPERIMENT_ID, p_variant: v, p_period_days: state.period })
+      .then(r => ({ variant: v, data: r.data || [] }))
+  ));
+  const html = funnelData.map(fd => {
+    const variantLabel = VARIANT_LABELS[fd.variant] || fd.variant;
+    if (!fd.data.length) {
+      return `<div class="funnel-col"><div class="funnel-col-title">${variantLabel}</div><div class="empty" style="padding:10px;">Нет данных</div></div>`;
+    }
+    const maxVisitors = Math.max(...fd.data.map(s => Number(s.visitors) || 0));
+    const stepsHtml = fd.data.map((s, i) => {
+      const widthPct = maxVisitors > 0 ? (Number(s.visitors) / maxVisitors * 100) : 0;
+      let dropHtml = '';
+      if (i > 0) {
+        const prev = fd.data[i - 1];
+        const lost = (Number(prev.next_count) + Number(prev.took_count)) - Number(s.visitors);
+        const lostPct = (Number(prev.next_count) + Number(prev.took_count)) > 0
+          ? (lost / (Number(prev.next_count) + Number(prev.took_count)) * 100)
+          : 0;
+        if (lostPct > 0.5) {
+          dropHtml = `<div class="funnel-drop">↓ ${lostPct.toFixed(0)}% потерь</div>`;
+        }
+      }
+      return `${dropHtml}<div class="funnel-step">
+        <div class="funnel-step-label">${s.step}${s.took_count > 0 ? ` · took:${s.took_count}` : ''}</div>
+        <div class="funnel-bar"><div class="funnel-bar-fill" style="width:${widthPct}%"></div><span>${fmt(s.visitors)} (${fmtPct(s.conv_to_next_pct)})</span></div>
+      </div>`;
+    }).join('');
+    return `<div class="funnel-col"><div class="funnel-col-title">${variantLabel}</div>${stepsHtml}</div>`;
+  });
+  document.getElementById('funnelRow').innerHTML = html.join('');
+}
+
+function renderRecommendations(rec) {
+  const recs = rec.recommendations || [];
+  if (!recs.length) {
+    document.getElementById('recommendationsBlock').innerHTML = '<div class="empty">Рекомендаций нет.</div>';
+    return;
+  }
+  document.getElementById('recommendationsBlock').innerHTML = recs.map(r => `
+    <div class="rec">
+      <div class="rec-action">${r.action}</div>
+      <div class="rec-title">${r.title}</div>
+      <div class="rec-reasoning">${r.reasoning}</div>
+    </div>
+  `).join('');
+}
+
+// Filter buttons
+document.querySelectorAll('.filter-chip').forEach(b => {
+  b.onclick = () => {
+    const f = b.dataset.filter;
+    const v = b.dataset.value;
+    document.querySelectorAll(`.filter-chip[data-filter="${f}"]`).forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    if (v) state.filters[f] = v;
+    else delete state.filters[f];
+    document.getElementById('filterCount').textContent = Object.keys(state.filters).length ? Object.entries(state.filters).map(([k, v]) => `${k}=${v}`).join(', ') : 'все данные';
+    loadAll();
+  };
+});
+
+// Period buttons
+document.querySelectorAll('.period-btn').forEach(b => {
+  b.onclick = () => {
+    document.querySelectorAll('.period-btn').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    state.period = parseInt(b.dataset.period);
+    document.getElementById('cmpPeriod').textContent = state.period + ' дней';
+    loadAll();
+  };
+});
+
+document.getElementById('btnRefresh').onclick = () => loadAll();
+
+// Initial period
+document.querySelector('.period-btn[data-period="30"]').click();
+
+// Realtime subscription
+sb.channel('upsell_realtime')
+  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'checkout_events' }, () => {
+    clearTimeout(window._debounceLoad);
+    window._debounceLoad = setTimeout(loadAll, 5000);
+  })
+  .subscribe();
+</script>
+
+</body>
+</html>
