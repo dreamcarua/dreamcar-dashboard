@@ -1616,8 +1616,13 @@ function _rpcParams() {
     projectValues = [filters.project.slice(5)];
   }
   return {
+<<<<<<< Updated upstream
     p_from: kyivIsoStart(fromDate),
     p_to: kyivIsoEnd(toDate),
+=======
+    p_from: fromDate + 'T00:00:00Z',
+    p_to: toDate + 'T23:59:59Z',
+>>>>>>> Stashed changes
     p_project_values: projectValues,
     p_customer_type: filters.customer_type || null,
     p_tariff: filters.tariff || null,
