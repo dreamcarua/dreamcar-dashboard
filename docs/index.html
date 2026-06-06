@@ -1244,7 +1244,7 @@ const filters = {
 };
 
 /* Хардкод-список основних проектів — захардкоджуємо для повного покриття */
-const MAIN_PROJECTS = ['OLD','VOLVO','Q7','Mercedes','DreamCar AI','AUDI E-TRON','BMW','Контакт'];
+const MAIN_PROJECTS = ['OLD','VOLVO','Q7','Mercedes','DreamCar AI','AUDI E-TRON','BMW','IPHONE','Контакт'];
 let __projectsList = []; // cached from dashboard_projects table
 
 /* Активні розіграші — модель + start/end + project-substring у БД.
@@ -1255,14 +1255,24 @@ const DEFAULT_MODELS = [
   { id: 'bmw-330e',       name: 'BMW 330E HYBRID',      start: '2026-01-09', end: '2026-01-23', match: 'BMW' },
   { id: 'mercedes-gle',   name: 'MERCEDES GLE COUPE',   start: '2026-02-06', end: '2026-03-01', match: 'Mercedes' },
   { id: 'bmw-x5',         name: 'BMW X5 HYBRID',        start: '2026-03-24', end: '2026-04-19', match: 'BMW' },
-  { id: 'audi-etron',     name: 'AUDI E-TRON',          start: '2026-05-06', end: '2026-05-31', match: 'AUDI E-TRON' }
+  { id: 'audi-etron',     name: 'AUDI E-TRON',          start: '2026-05-06', end: '2026-05-31', match: 'AUDI E-TRON' },
+  // 06.06.2026 — додано на основі public.launches.code='IPHONE17'.
+  // У DCI-order-ref префікс 'iphone' (lowercase), у dashboard_deals.project = 'IPHONE 17 PRO MAX'.
+  { id: 'iphone-17',      name: 'iPhone 17 PRO MAX',    start: '2026-06-06', end: '2026-12-31', match: 'IPHONE' }
 ];
 function loadModels() {
   try {
     const raw = localStorage.getItem('dashboard_active_models');
     if (raw) {
       const arr = JSON.parse(raw);
-      if (Array.isArray(arr) && arr.length) return arr;
+      if (Array.isArray(arr) && arr.length) {
+        // Merge: підтягуємо нові default-моделі що з'явилися після того як юзер зберігав свої налаштування.
+        // Без цього нові проекти (напр. iPhone) не з'являться у юзерів зі старим localStorage.
+        const existingIds = new Set(arr.map(m => m.id));
+        const merged = arr.slice();
+        DEFAULT_MODELS.forEach(d => { if (!existingIds.has(d.id)) merged.push(d); });
+        return merged;
+      }
     }
   } catch {}
   return DEFAULT_MODELS.slice();
