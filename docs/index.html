@@ -484,10 +484,10 @@
     background: var(--steel-2);
     font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     text-align: left;
-    padding: 10px 12px;
+    padding: 7px 10px;
     color: var(--ash);
     font-weight: 500;
     border-bottom: 1px solid var(--steel);
@@ -499,8 +499,9 @@
   thead th.sort-asc::after { content: ' ▲'; color: var(--red); }
   thead th.sort-desc::after { content: ' ▼'; color: var(--red); }
   tbody td {
-    padding: 10px 12px;
-    font-size: 13px;
+    padding: 7px 10px;
+    font-size: 12.5px;
+    line-height: 1.35;
     border-bottom: 1px solid var(--steel-2);
     color: #D0D0D0;
     vertical-align: middle;
@@ -511,6 +512,11 @@
   td.num { font-family: 'JetBrains Mono', monospace; text-align: right; font-variant-numeric: tabular-nums; }
   td.amount { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--white); text-align: right; font-variant-numeric: tabular-nums; }
   td.muted { color: var(--ash); }
+  /* CENTERING FIX: заголовок числової колонки теж right-aligned (інакше великий gap зі стовпчиком чисел) */
+  thead th.num, thead th.amount { text-align: right; }
+  /* Compact details-table rows (UTM_MEDIUM etc) */
+  .dash-card table tbody tr { transition: background 0.1s; }
+  .dash-card table { table-layout: auto; }
 
   /* Pagination */
   .pagination {
@@ -2000,7 +2006,10 @@ function buildTable(containerSelector, opts) {
     const slice = rows.slice((state.page-1)*state.pageSize, state.page*state.pageSize);
 
     const head = '<tr>' + opts.cols.map(c => {
-      const cls = c.key === state.sortKey ? (state.sortAsc ? 'sort-asc' : 'sort-desc') : '';
+      const sortCls = c.key === state.sortKey ? (state.sortAsc ? 'sort-asc' : 'sort-desc') : '';
+      // Inherit cell class (num/amount/mono) so <th> aligns with <td>
+      const inheritCls = (c.class || '').split(/\s+/).filter(x => ['num','amount','mono'].includes(x)).join(' ');
+      const cls = [sortCls, inheritCls].filter(Boolean).join(' ');
       return `<th class="${cls}" data-key="${escapeHtml(c.key)}">${escapeHtml(c.label || c.key)}</th>`;
     }).join('') + '</tr>';
 
