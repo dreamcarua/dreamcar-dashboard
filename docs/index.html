@@ -1744,6 +1744,42 @@ async function loadProjects() {
     const dealProjSet = new Set();
     (dealProjData || []).forEach(r => { if (r.project) dealProjSet.add(r.project); });
 
+    // 06.06.2026 — auto-merge нових проектів з public.launches (source of truth у /projects/).
+    // Раніше треба було вручну додавати у dashboard_projects, тепер усе що створиться у
+    // /projects/ автоматично з'явиться у dropdown "Активний розіграш" і "Проєкт (DB)".
+    try {
+      const { data: launchData } = await sb
+        .from('launches')
+        .select('id, code, name, starts_on, ends_on, status, is_active, color')
+        .in('status', ['active','planning','idea'])
+        .eq('is_active', true)
+        .order('starts_on', { ascending: false });
+      const existingCodes = new Set(__projectsList.map(p => p.code));
+      (launchData || []).forEach(l => {
+        if (existingCodes.has(l.code)) return; // вже є у dashboard_projects
+        // Match: знайти найкращий збіг з реальних dealProjSet значень
+        const candidates = [l.name, l.code, l.name.toUpperCase(), l.code && l.code.replace(/[_-]/g, ' ')];
+        const dealMatches = Array.from(dealProjSet).filter(dp => {
+          const dpU = dp.toUpperCase();
+          return candidates.some(c => c && (dpU.includes(c.toUpperCase()) || c.toUpperCase().includes(dpU)));
+        });
+        const dealValues = dealMatches.length ? dealMatches : [l.name.toUpperCase(), l.name];
+        __projectsList.push({
+          code: l.code || l.id.slice(0, 8),
+          name: l.name,
+          date_start: l.starts_on,
+          date_end: l.ends_on,
+          color: l.color || null,
+          deal_project_values: dealValues,
+          sort_order: 999, // нові — у кінці
+          source: 'launches' // мітка, щоб видно було звідки
+        });
+        existingCodes.add(l.code);
+      });
+    } catch (e) {
+      console.warn('[launches auto-merge] failed:', e);
+    }
+
     const officialValues = new Set();
     __projectsList.forEach(p => (p.deal_project_values || []).forEach(v => officialValues.add(v)));
     const others = Array.from(dealProjSet).filter(p => !officialValues.has(p)).sort((a,b) => a.localeCompare(b));
