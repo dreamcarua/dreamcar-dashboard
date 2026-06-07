@@ -121,11 +121,26 @@ html,body{background:var(--bg);color:var(--white);font-family:'JetBrains Mono','
   </a>
   <div class="topbar-actions">
     <a href="/" class="btn" title="Назад до головного дашборду">📊 ГОЛОВНИЙ</a>
+    <button class="btn period-btn" data-period="today">Сьогодні</button>
+    <button class="btn period-btn" data-period="yesterday">Вчора</button>
     <button class="btn period-btn" data-period="7">7Д</button>
     <button class="btn period-btn" data-period="14">14Д</button>
     <button class="btn period-btn active" data-period="30">30Д</button>
+    <button class="btn period-btn" id="btnCustomRange" data-period="custom" title="Довільний діапазон">📅 Період…</button>
+    <span id="customRangeLabel" style="display:none;font-size:11px;color:#ff6577;align-self:center;font-weight:700;"></span>
     <button class="btn" id="btnRefresh">↻ ОБНОВИТИ</button>
     <span id="lastUpdate" style="font-size:10px;color:var(--ash);"></span>
+  </div>
+  <div id="customRangeDialog" style="display:none;position:fixed;top:80px;right:24px;background:#141414;border:1px solid #2a2a2a;border-radius:10px;padding:18px 20px;box-shadow:0 8px 30px rgba(0,0,0,0.6);z-index:9999;min-width:260px;">
+    <div style="font-size:11px;letter-spacing:1.5px;color:#888;text-transform:uppercase;margin-bottom:10px;">Довільний період</div>
+    <label style="display:block;font-size:12px;color:#ccc;margin-bottom:6px;">Від:</label>
+    <input type="date" id="dateFrom" style="width:100%;padding:8px;background:#0a0a0a;border:1px solid #2a2a2a;color:#fff;border-radius:6px;margin-bottom:10px;">
+    <label style="display:block;font-size:12px;color:#ccc;margin-bottom:6px;">До:</label>
+    <input type="date" id="dateTo" style="width:100%;padding:8px;background:#0a0a0a;border:1px solid #2a2a2a;color:#fff;border-radius:6px;margin-bottom:14px;">
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button id="btnRangeCancel" style="padding:7px 12px;background:transparent;border:1px solid #2a2a2a;color:#ccc;border-radius:6px;cursor:pointer;font-size:12px;">Скасувати</button>
+      <button id="btnRangeApply" style="padding:7px 14px;background:#E30613;border:none;color:#fff;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700;">Застосувати</button>
+    </div>
   </div>
 </div>
 
@@ -233,10 +248,19 @@ const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
 const state = {
-  period: 30,
+  period: 30, // number (днів) АБО {type:'range', from:ISO, to:ISO, days, label}
   filters: {},
   chart: null
 };
+
+// Helpers: 07.06.2026 — обчислення параметрів періоду для RPC і AOV
+function getPeriodDays() {
+  return typeof state.period === 'object' ? state.period.days : state.period;
+}
+function getPeriodSince() {
+  if (typeof state.period === 'object' && state.period.from) return state.period.from;
+  return new Date(Date.now() - state.period * 86400 * 1000).toISOString();
+}
 
 function fmt(n, suf='') { if (n == null) return '—'; return Math.round(n).toLocaleString('uk-UA') + suf; }
 function fmtPct(n) { if (n == null) return '—'; return n.toFixed(1) + '%'; }
@@ -283,9 +307,9 @@ async function loadAll() {
   try {
     const filter = JSON.stringify(state.filters);
     const [sigRes, recRes, dailyRes] = await Promise.all([
-      sb.rpc('upsell_significance', { p_experiment_id: EXPERIMENT_ID, p_period_days: state.period, p_filter: state.filters }),
+      sb.rpc('upsell_significance', { p_experiment_id: EXPERIMENT_ID, p_period_days: getPeriodDays(), p_filter: state.filters }),
       sb.rpc('upsell_recommendation', { p_experiment_id: EXPERIMENT_ID }),
-      sb.rpc('upsell_daily', { p_experiment_id: EXPERIMENT_ID, p_period_days: state.period })
+      sb.rpc('upsell_daily', { p_experiment_id: EXPERIMENT_ID, p_period_days: getPeriodDays() })
     ]);
     if (sigRes.error) console.error(sigRes.error);
     if (recRes.error) console.error(recRes.error);
@@ -444,7 +468,7 @@ async function renderFunnels(sig) {
   //   - показуємо tooltip з drop_reasons
   const variants = sig.map(s => s.variant);
   const funnelData = await Promise.all(variants.map(v =>
-    sb.rpc('upsell_funnel', { p_experiment_id: EXPERIMENT_ID, p_variant: v, p_period_days: state.period })
+    sb.rpc('upsell_funnel', { p_experiment_id: EXPERIMENT_ID, p_variant: v, p_period_days: getPeriodDays() })
       .then(r => ({ variant: v, data: r.data || [] }))
   ));
   const html = funnelData.map(fd => {
@@ -519,8 +543,10 @@ async function renderAOV() {
   const aovRow = document.getElementById('aovRow');
   const leaderboard = document.getElementById('aovLeaderboard');
   try {
-    const since = new Date(Date.now() - state.period * 86400 * 1000).toISOString();
-    const { data, error } = await sb.rpc('upsell_aov_rpv', { p_since: since });
+    const since = getPeriodSince();
+    const until = (typeof state.period === 'object' && state.period.to) ? state.period.to : null;
+    const rpcArgs = until ? { p_since: since, p_until: until } : { p_since: since };
+    const { data, error } = await sb.rpc('upsell_aov_rpv', rpcArgs);
     if (error) throw error;
     if (!data || Object.keys(data).length === 0) {
       aovRow.innerHTML = '<div class="funnel-col"><div class="empty">Немає даних за період</div></div>';
@@ -728,21 +754,83 @@ document.querySelectorAll('.filter-chip').forEach(b => {
   };
 });
 
-// Period buttons
+// Period buttons — 07.06.2026: підтримка today/yesterday/custom + числові періоди
+function setPeriodLabel(label) {
+  const el = document.getElementById('cmpPeriod');
+  if (el) el.textContent = label;
+}
+function applyPeriod(periodKey, customFrom, customTo) {
+  document.querySelectorAll('.period-btn').forEach(x => x.classList.remove('active'));
+  const targetBtn = document.querySelector(`.period-btn[data-period="${periodKey}"]`);
+  if (targetBtn) targetBtn.classList.add('active');
+  const lbl = document.getElementById('customRangeLabel');
+  if (periodKey === 'today') {
+    const d = new Date(); d.setHours(0,0,0,0);
+    state.period = { type: 'range', from: d.toISOString(), to: new Date().toISOString(), days: 1, label: 'Сьогодні' };
+    setPeriodLabel('Сьогодні');
+    lbl.style.display = 'none';
+  } else if (periodKey === 'yesterday') {
+    const d = new Date(); d.setDate(d.getDate() - 1); d.setHours(0,0,0,0);
+    const end = new Date(d); end.setHours(23,59,59,999);
+    state.period = { type: 'range', from: d.toISOString(), to: end.toISOString(), days: 1, label: 'Вчора' };
+    setPeriodLabel('Вчора');
+    lbl.style.display = 'none';
+  } else if (periodKey === 'custom') {
+    const from = customFrom ? new Date(customFrom + 'T00:00:00') : null;
+    const to = customTo ? new Date(customTo + 'T23:59:59') : null;
+    if (!from || !to) return;
+    const days = Math.max(1, Math.round((to - from) / 86400000));
+    const fmt = (d) => d.toLocaleDateString('uk-UA', { day: '2-digit', month: '2-digit' });
+    state.period = { type: 'range', from: from.toISOString(), to: to.toISOString(), days, label: `${fmt(from)} – ${fmt(to)}` };
+    setPeriodLabel(`${fmt(from)} – ${fmt(to)} (${days}д)`);
+    lbl.style.display = 'inline-block';
+    lbl.textContent = `📅 ${fmt(from)} – ${fmt(to)}`;
+  } else {
+    // Числові періоди (7/14/30)
+    const days = parseInt(periodKey, 10);
+    state.period = days;
+    setPeriodLabel(days + ' днів');
+    lbl.style.display = 'none';
+  }
+  loadAll();
+}
 document.querySelectorAll('.period-btn').forEach(b => {
-  b.onclick = () => {
-    document.querySelectorAll('.period-btn').forEach(x => x.classList.remove('active'));
-    b.classList.add('active');
-    state.period = parseInt(b.dataset.period);
-    document.getElementById('cmpPeriod').textContent = state.period + ' днів';
-    loadAll();
-  };
+  if (b.id === 'btnCustomRange') return; // окремий handler нижче
+  b.onclick = () => applyPeriod(b.dataset.period);
+});
+
+// Custom date-range dialog
+const customDlg = document.getElementById('customRangeDialog');
+document.getElementById('btnCustomRange').onclick = (e) => {
+  e.stopPropagation();
+  // Default — останні 7 днів
+  const to = new Date();
+  const from = new Date(); from.setDate(from.getDate() - 6);
+  const isoDate = (d) => d.toISOString().slice(0,10);
+  document.getElementById('dateFrom').value = isoDate(from);
+  document.getElementById('dateTo').value = isoDate(to);
+  customDlg.style.display = customDlg.style.display === 'block' ? 'none' : 'block';
+};
+document.getElementById('btnRangeCancel').onclick = () => { customDlg.style.display = 'none'; };
+document.getElementById('btnRangeApply').onclick = () => {
+  const from = document.getElementById('dateFrom').value;
+  const to = document.getElementById('dateTo').value;
+  if (!from || !to) { alert('Обери обидві дати'); return; }
+  if (from > to) { alert('Дата "Від" має бути не пізніше "До"'); return; }
+  customDlg.style.display = 'none';
+  applyPeriod('custom', from, to);
+};
+// Click outside — закрити dialog
+document.addEventListener('click', (e) => {
+  if (customDlg.style.display !== 'block') return;
+  if (e.target.closest('#customRangeDialog, #btnCustomRange')) return;
+  customDlg.style.display = 'none';
 });
 
 document.getElementById('btnRefresh').onclick = () => loadAll();
 
 // Initial period
-document.querySelector('.period-btn[data-period="30"]').click();
+applyPeriod('30');
 // Підтягнути динамічні фільтри з реальних даних (паралельно з основним load)
 loadDynamicFilters();
 
