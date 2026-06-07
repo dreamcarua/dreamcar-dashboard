@@ -2477,12 +2477,22 @@ async function renderOverview() {
 
       <div class="grid-2">
         <div class="card">
-          <div class="card-head"><h3>Угоди ${granLabel}</h3><span class="meta">${byDay.length} точок</span></div>
+          <div class="card-head" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+            <h3>Угоди ${granLabel}</h3>
+            <div class="gran-toggle" role="group" aria-label="Гранулярність графіку" style="display:inline-flex;gap:4px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:3px;">
+              ${['hour','day','week','month'].map(g => {
+                const active = (filters.granularity || 'day') === g;
+                const label = { hour: 'Година', day: 'День', week: 'Тиждень', month: 'Місяць' }[g];
+                return `<button type="button" class="gran-chip" data-gran="${g}" aria-pressed="${active}" style="padding:5px 12px;border:none;background:${active?'#E30613':'transparent'};color:${active?'#fff':'#aaa'};border-radius:4px;font-size:11px;cursor:pointer;font-weight:${active?'700':'400'};letter-spacing:0.04em;text-transform:uppercase;">${label}</button>`;
+              }).join('')}
+            </div>
+            <span class="meta">${byDay.length} точок</span>
+          </div>
           <div class="chart-container"><canvas id="ch-daily"></canvas></div>
         </div>
         <div class="card">
           <div class="card-head"><h3>Угоди по проектах</h3><span class="meta">топ-7</span></div>
-          <div class="chart-container"><canvas id="ch-proj-overview"></canvas></div>
+          <div id="proj-overview-rows"></div>
         </div>
       </div>
 
@@ -2492,8 +2502,13 @@ async function renderOverview() {
       </div>
     `;
 
-    lineChart('ch-daily',
-      byDay.map(d => filters.granularity === 'month' ? d.date : fmtDate(d.date)),
+    // 07.06.2026: формат label per granularity (година показує і час)
+    const labels = byDay.map(d => {
+      if (filters.granularity === 'month') return d.date;
+      if (filters.granularity === 'hour') return d.date.slice(5).replace('T', ' '); // 06-07 15:00
+      return fmtDate(d.date);
+    });
+    lineChart('ch-daily', labels,
       [
         { label: 'Усі', data: byDay.map(d => d.leads), borderColor: '#3B82F6', backgroundColor: 'rgba(59,130,246,0.1)', tension: 0.3, fill: true },
         { label: 'Оплачені', data: byDay.map(d => d.paid), borderColor: '#10B981', backgroundColor: 'rgba(16,185,129,0.15)', tension: 0.3, fill: true },
@@ -2501,8 +2516,62 @@ async function renderOverview() {
       ],
       { scales: { y1: { position: 'right', grid: { drawOnChartArea: false }, ticks: { color: '#E30613' } } } }
     );
+    // 07.06.2026: inline granularity toggle (Hour/Day/Week/Month) — над графіком
+    c.querySelectorAll('.gran-chip').forEach(btn => {
+      btn.onclick = () => {
+        const g = btn.dataset.gran;
+        filters.granularity = g;
+        const sel = document.getElementById('f-granularity'); if (sel) sel.value = g;
+        renderRoute();
+      };
+    });
 
-    if (byProj7.length) {
+    // 07.06.2026: повністю переписаний "Угоди по проектах" — нативний HTML, без Chart.js spaghetti yAxisID.
+    // Раніше були 3 datasets з різними одиницями виміру (Ліди / Оплачені / Revenue) на одній шкалі → ламана візуалізація.
+    // Тепер: 3 horizontal stacked bars per project з власною шкалою (max окремо по лідах/revenue), з цифрами.
+    const projOverviewBox = document.getElementById('proj-overview-rows');
+    if (projOverviewBox && byProj7.length) {
+      const maxLeads = Math.max(...byProj7.map(p => p.leads), 1);
+      const maxRevenue = Math.max(...byProj7.map(p => p.sum), 1);
+      projOverviewBox.innerHTML = byProj7.map(p => {
+        const convPct = p.leads > 0 ? (p.paid / p.leads * 100) : 0;
+        const leadsPct = (p.leads / maxLeads) * 100;
+        const paidPct = (p.paid / maxLeads) * 100;
+        const revPct = (p.sum / maxRevenue) * 100;
+        const projName = p.key.length > 24 ? p.key.slice(0,22) + '…' : p.key;
+        const fmtN = (n) => Number(n).toLocaleString('uk-UA');
+        return `
+          <div style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;font-size:12px;">
+              <span style="font-weight:700;color:#fff;letter-spacing:0.02em;">${projName}</span>
+              <span style="color:#888;font-size:11px;">конв. <b style="color:#10B981;">${convPct.toFixed(1)}%</b></span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;font-size:11px;">
+              <span style="width:70px;color:#888;">Ліди</span>
+              <div style="flex:1;height:14px;background:rgba(59,130,246,0.08);border-radius:3px;position:relative;overflow:hidden;">
+                <div style="width:${leadsPct}%;height:100%;background:#3B82F6;border-radius:3px;"></div>
+              </div>
+              <span style="width:60px;text-align:right;color:#fff;font-weight:600;">${fmtN(p.leads)}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;font-size:11px;">
+              <span style="width:70px;color:#888;">Оплати</span>
+              <div style="flex:1;height:14px;background:rgba(16,185,129,0.08);border-radius:3px;position:relative;overflow:hidden;">
+                <div style="width:${paidPct}%;height:100%;background:#10B981;border-radius:3px;"></div>
+              </div>
+              <span style="width:60px;text-align:right;color:#fff;font-weight:600;">${fmtN(p.paid)}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:11px;">
+              <span style="width:70px;color:#888;">Revenue</span>
+              <div style="flex:1;height:14px;background:rgba(227,6,19,0.08);border-radius:3px;position:relative;overflow:hidden;">
+                <div style="width:${revPct}%;height:100%;background:#E30613;border-radius:3px;"></div>
+              </div>
+              <span style="width:60px;text-align:right;color:#fff;font-weight:600;">${fmtN(p.sum)} ₴</span>
+            </div>
+          </div>`;
+      }).join('');
+    }
+    // Залишаємо стару Chart.js гілку лише якщо canvas ще десь живе (legacy):
+    if (false && byProj7.length) {
       barChart('ch-proj-overview',
         byProj7.map(p => p.key.length > 18 ? p.key.slice(0,16)+'…' : p.key),
         [
