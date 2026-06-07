@@ -1607,7 +1607,9 @@ async function fetchDealsRange(offset, limit) {
   if (filters.tariff) q = q.eq('tariff', filters.tariff);
   if (filters.pay_provider) q = q.eq('pay_provider', filters.pay_provider);
   // Active model — narrow project by substring (audit P2: skip if explicit deal_project_values from selected project to avoid cross-leak BMW captures BMW X5)
+  // 07.06.2026 FIX: sp було undefined у scope (ReferenceError "Can't find variable: sp" на Safari) → оголошуємо локально
   const m = getActiveModel();
+  const sp = getSelectedProject();
   if (m && m.match && !sp) q = q.ilike('project', '%' + m.match + '%');
   // P1 #10 — UTM free-text filters застосовуються до fetchDealsRange теж
   if (filters.utm_source) q = q.ilike('utm_source', '%' + filters.utm_source + '%');
