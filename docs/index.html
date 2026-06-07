@@ -1759,7 +1759,8 @@ async function loadProjects() {
       const { data: launchData } = await sb
         .from('launches')
         .select('id, code, name, starts_on, ends_on, status, is_active, color')
-        .in('status', ['active','planning','idea'])
+        // 07.06.2026 — додав 'measure' (фаза вимірювання теж потребує аналітики, напр. iPhone 17 PRO MAX)
+        .in('status', ['active','planning','idea','measure'])
         .eq('is_active', true)
         .order('starts_on', { ascending: false });
       const existingCodes = new Set(__projectsList.map(p => p.code));
