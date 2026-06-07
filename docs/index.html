@@ -1300,8 +1300,14 @@ function isPaidSource(src) {
   return PAID_SOURCES.has(s) || /(_paid|_ads|_cpc)/.test(s);
 }
 
-// 06.06.2026 P0 FIX: toISOString() конвертує у UTC. У CET/CEST (UTC+1/+2) 06.06 00:00 LOCAL = 05.06 22:00 UTC → -1 день. Тепер local-форматування.
-const ymd = (d) => { const dd = new Date(d); const y = dd.getFullYear(); const m = String(dd.getMonth()+1).padStart(2,'0'); const day = String(dd.getDate()).padStart(2,'0'); return `${y}-${m}-${day}`; };
+// 07.06.2026 P0 FIX: ymd має повертати ДЕНЬ ЗА КИЇВСЬКОЮ ТЗ незалежно від браузера юзера (Польща CET vs Київ EEST/CEST).
+// Раніше getDate() повертав local day браузера — у Польщі CEST о 23:30 06.06 був би 06.06, але в Києві (на годину пізніше) вже 07.06.
+const ymd = (d) => {
+  const dd = (d instanceof Date) ? d : new Date(d);
+  // toLocaleDateString з timeZone='Europe/Kyiv' завжди дає Київський календарний день
+  // sv-SE формат дає YYYY-MM-DD (стандарт ISO)
+  return dd.toLocaleDateString('sv-SE', { timeZone: 'Europe/Kyiv' });
+};
 const todayYmd = () => ymd(new Date());
 
 function applyPreset(p) {
@@ -1380,12 +1386,22 @@ function setupFilterBar() {
   $('#f-project').addEventListener('change', e => {
     filters.project = e.target.value;
     const sp = getSelectedProject();
+    // 07.06.2026 P0 FIX: project select раніше СЛІПО переписував filters.from/to у дати проекту.
+    // Це ламало "Сьогодні": при iPhone (06.06-06.06) період ставав 06.06-06.06 замість current date.
+    // Тепер тільки звужуємо до перетину з поточним вибраним preset.
     if (sp) {
-      filters.from = sp.date_start;
-      filters.to = sp.date_end;
-      const cf = $('#cd-from'); if (cf) cf.value = sp.date_start;
-      const ct = $('#cd-to'); if (ct) ct.value = sp.date_end;
-      const dp = $('#date-preset'); if (dp) dp.value = 'custom';
+      const dp = $('#date-preset');
+      const currentPreset = dp ? dp.value : 'today';
+      // Якщо preset — конкретна дата/період, лишаємо його. Звуження до проекту відбувається у _rpcParams().
+      // Тільки якщо це "all" або період виходить за межі проекту — підставляємо межі проекту.
+      if (currentPreset === 'all' || !filters.from || !filters.to) {
+        filters.from = sp.date_start;
+        filters.to = sp.date_end;
+        const cf = $('#cd-from'); if (cf) cf.value = sp.date_start;
+        const ct = $('#cd-to'); if (ct) ct.value = sp.date_end;
+        if (dp) dp.value = 'custom';
+      }
+      // Інакше — лишаємо поточний period, _rpcParams() сам зробить перетин з sp.date_start..sp.date_end
     }
     renderRoute();
   });
