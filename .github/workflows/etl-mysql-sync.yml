@@ -1,8 +1,13 @@
-name: ETL MySQL → Supabase (hourly)
+name: ETL MySQL → Supabase (every 5 min via loop)
+
+# 07.06.2026: GitHub Actions schedule cron */5 throttle-ить до ~1 раз/год при high load.
+# Тому workflow тепер запускається 1 раз на годину через schedule, але всередині робить
+# 12 sync-iterations × 5хв (= ~60 хв роботи на запуск). Це гарантує точний 5-min лаг.
+# Backup: schedule на :00 і :30 кожної години — щоб якщо одна година пропуститься, через 30 хв новий цикл.
 
 on:
   schedule:
-    - cron: "*/5 * * * *"  # Кожна година
+    - cron: "0,30 * * * *"  # 2 рази на годину (на :00 і :30) — fallback на throttle
   workflow_dispatch:
     inputs:
       mode:
@@ -29,7 +34,7 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 35  # ~30 хв loop + buffer
     steps:
       - uses: actions/checkout@v4
 
@@ -42,7 +47,7 @@ jobs:
       - name: Install deps
         run: pip install -r etl/requirements.txt
 
-      - name: Run ETL
+      - name: Run ETL loop (6 iterations × 5 min = ~30 min)
         env:
           MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
           MYSQL_PORT: ${{ secrets.MYSQL_PORT }}
@@ -58,4 +63,14 @@ jobs:
           if [ -n "${{ github.event.inputs.limit }}" ]; then
             LIMIT_ARG="--limit=${{ github.event.inputs.limit }}"
           fi
-          python etl/sync_mysql_to_supabase.py --mode="$MODE" --only="$ONLY" $LIMIT_ARG
+          # 6 iterations: sync → sleep 5min → repeat. Загалом покриває весь 30-min slot до наступного cron.
+          for i in 1 2 3 4 5 6; do
+            echo "=== Iteration $i/6 at $(date -u +%H:%M:%S) UTC ==="
+            python etl/sync_mysql_to_supabase.py --mode="$MODE" --only="$ONLY" $LIMIT_ARG || echo "  ⚠ iteration $i failed, continuing"
+            # Не спимо після останньої ітерації (щоб не висіти зайве)
+            if [ "$i" != "6" ]; then
+              echo "  💤 sleep 5 min..."
+              sleep 295
+            fi
+          done
+          echo "✅ All 6 iterations done"

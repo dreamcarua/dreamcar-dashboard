@@ -8,7 +8,8 @@ name: ETL Facebook Ads → Supabase (every 15min)
 
 on:
   schedule:
-    - cron: "*/15 * * * *"
+    # 07.06.2026: GH Actions */15 throttle до 1-2 раз/год. Тепер 2 cron/год + internal loop.
+    - cron: "0,30 * * * *"
   workflow_dispatch:
     inputs:
       mode:
@@ -33,7 +34,7 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 35  # ~30 хв loop + buffer
     steps:
       - uses: actions/checkout@v4
 
@@ -46,7 +47,7 @@ jobs:
       - name: Install deps
         run: pip install -r etl/requirements.txt
 
-      - name: Run FB Ads ETL
+      - name: Run FB Ads ETL loop (2 iterations × 15 min = 30 min)
         env:
           FB_ACCESS_TOKEN:           ${{ secrets.FB_ACCESS_TOKEN }}
           FB_AD_ACCOUNT_IDS:         ${{ secrets.FB_AD_ACCOUNT_IDS }}
@@ -61,4 +62,14 @@ jobs:
           if [ -n "${{ github.event.inputs.until }}" ]; then
             ARGS="$ARGS --until=${{ github.event.inputs.until }}"
           fi
-          python etl/sync_fb_ads.py $ARGS
+          # 2 ітерації × 15 хв — покриває весь 30-min slot до наступного cron.
+          # FB Ads має rate limit 200/h, тому залишаємо 15 хв між ітераціями.
+          for i in 1 2; do
+            echo "=== Iteration $i/2 at $(date -u +%H:%M:%S) UTC ==="
+            python etl/sync_fb_ads.py $ARGS || echo "  ⚠ iteration $i failed, continuing"
+            if [ "$i" != "2" ]; then
+              echo "  💤 sleep 15 min..."
+              sleep 895
+            fi
+          done
+          echo "✅ Done"
