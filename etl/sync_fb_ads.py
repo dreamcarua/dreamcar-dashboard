@@ -292,11 +292,19 @@ def count_actions(actions, target_types):
     return total
 
 
-def transform_row(row, link_map, acct_name, acct_currency):
+def transform_row(row, link_map, acct_name, acct_currency, executor_map=None):
     """FB insight row → dashboard_ads_data row."""
     ad_id = row.get('ad_id') or ''
     link_url = link_map.get(ad_id)
     utm = extract_utm_from_url(link_url)
+    # 07.06.2026: fallback — якщо FB не повертає URL з utm_term, мапимо за ad_account_id
+    # (бо більшість акаунтів веде один виконавець, налаштування FB Ads URL Parameters ще не зроблені)
+    if not utm.get('utm_term') and executor_map:
+        acct = row.get('account_id') or ''
+        if acct in executor_map:
+            utm['utm_term'] = executor_map[acct]
+            utm['utm_source'] = utm.get('utm_source') or 'facebook'
+            utm['utm_medium'] = utm.get('utm_medium') or 'cpc'
 
     # Conversions = leads + completed registrations + purchases
     conv = count_actions(row.get('actions'), [
@@ -402,6 +410,19 @@ def main():
     log(f'🚀 FB Ads ETL — mode={args.mode}, range {since}..{until}')
     log(f'   {len(FB_ACCOUNTS)} ad account(s): {", ".join(FB_ACCOUNTS)}')
 
+    # 07.06.2026: завантажуємо mapping ad_account_id → utm_term (виконавець)
+    # для fallback коли FB API не повертає URL з utm_term у creative.
+    executor_map = {}
+    try:
+        r = requests.get(f'{SB_URL}/rest/v1/ads_account_to_executor?select=ad_account_id,executor_utm_term',
+                         headers=HEADERS_SB, timeout=30)
+        if r.ok:
+            for row in r.json():
+                executor_map[row['ad_account_id']] = row['executor_utm_term']
+            log(f'   📋 executor_map loaded: {len(executor_map)} entries')
+    except Exception as e:
+        log(f'   ⚠ executor_map load failed: {e}')
+
     total = 0
     for raw_acct in FB_ACCOUNTS:
         acct = normalize_account(raw_acct)
@@ -429,7 +450,7 @@ def main():
             log(f'   ❌ insights failed: {e}')
             continue
 
-        rows = [transform_row(r, link_map, name, currency) for r in raw_rows]
+        rows = [transform_row(r, link_map, name, currency, executor_map) for r in raw_rows]
         upserted = upsert_ads(rows)
         total += upserted
 
