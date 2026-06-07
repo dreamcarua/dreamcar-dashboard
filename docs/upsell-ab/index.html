@@ -321,7 +321,7 @@ async function loadAll() {
     const [sigRes, recRes, dailyRes] = await Promise.all([
       sb.rpc('upsell_significance', withDateRange({ p_experiment_id: EXPERIMENT_ID, p_period_days: getPeriodDays(), p_filter: state.filters })),
       sb.rpc('upsell_recommendation', { p_experiment_id: EXPERIMENT_ID }),
-      sb.rpc('upsell_daily', { p_experiment_id: EXPERIMENT_ID, p_period_days: getPeriodDays() })
+      sb.rpc('upsell_daily', withDateRange({ p_experiment_id: EXPERIMENT_ID, p_period_days: getPeriodDays() }))
     ]);
     if (sigRes.error) console.error(sigRes.error);
     if (recRes.error) console.error(recRes.error);
@@ -480,7 +480,7 @@ async function renderFunnels(sig) {
   //   - показуємо tooltip з drop_reasons
   const variants = sig.map(s => s.variant);
   const funnelData = await Promise.all(variants.map(v =>
-    sb.rpc('upsell_funnel', { p_experiment_id: EXPERIMENT_ID, p_variant: v, p_period_days: getPeriodDays() })
+    sb.rpc('upsell_funnel', withDateRange({ p_experiment_id: EXPERIMENT_ID, p_variant: v, p_period_days: getPeriodDays() }))
       .then(r => ({ variant: v, data: r.data || [] }))
   ));
   const html = funnelData.map(fd => {
