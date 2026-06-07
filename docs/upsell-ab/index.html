@@ -201,6 +201,21 @@ html,body{background:var(--bg);color:var(--white);font-family:'JetBrains Mono','
     <div class="funnel-row" id="funnelRow"><div class="funnel-col"><div class="empty">Завантаження…</div></div></div>
   </div>
 
+  <!-- AOV / RPV / Net Lift — 07.06.2026 -->
+  <div class="section">
+    <h3>💰 AOV, Δ-чек і Revenue per Visitor <span class="badge">з нормалізацією на drop-off</span></h3>
+    <div id="aovLeaderboard" style="margin-bottom:18px;"></div>
+    <div class="funnel-row" id="aovRow"><div class="funnel-col"><div class="empty">Завантаження…</div></div></div>
+    <div style="margin-top:14px;padding:14px 18px;background:rgba(245,158,11,0.06);border-left:3px solid #f59e0b;border-radius:6px;font-size:12px;color:#bbb;line-height:1.6;">
+      <b style="color:#fbbf24;">Як читати:</b><br>
+      • <b>AOV</b> — середній чек по гілці (всі payments). <br>
+      • <b>AOV з upsell</b> vs <b>AOV без upsell</b> — порівняння чека тих хто взяв vs відмовився. <b>Δ%</b> — наскільки апсел розгойдав чек.<br>
+      • <b>RPV (Revenue Per Visitor)</b> — головна метрика. Сумарна виручка ÷ кількість відвідувачів на верхів воронки. <b>Враховує "роздратування"</b>: якщо A підвищує чек але виганяє більше людей — RPV впаде.<br>
+      • <b>Net Lift</b> — додатковий дохід на 100 юзерів воронки vs Control. Це грн які ми втрачаємо/заробляємо вмикаючи саме цей варіант апселу.<br>
+      • <b>Sticky variant</b>: визначається перший variant за сесію (як у воронці).
+    </div>
+  </div>
+
   <!-- Recommendations -->
   <div class="section">
     <h3>🤖 Що робити прямо зараз</h3>
@@ -283,6 +298,7 @@ async function loadAll() {
     renderTable(sig);
     renderChart(daily);
     await renderFunnels(sig);
+    await renderAOV();
     renderRecommendations(rec);
     document.getElementById('lastUpdate').textContent = 'Оновлено: ' + new Date().toLocaleTimeString('uk-UA');
   } catch (e) {
@@ -496,6 +512,136 @@ async function renderFunnels(sig) {
     return `<div class="funnel-col"><div class="funnel-col-title">${variantLabel}</div>${stepsHtml}</div>`;
   });
   document.getElementById('funnelRow').innerHTML = html.join('');
+}
+
+// ========== AOV / RPV / Net Lift — 07.06.2026 ==========
+async function renderAOV() {
+  const aovRow = document.getElementById('aovRow');
+  const leaderboard = document.getElementById('aovLeaderboard');
+  try {
+    const since = new Date(Date.now() - state.period * 86400 * 1000).toISOString();
+    const { data, error } = await sb.rpc('upsell_aov_rpv', { p_since: since });
+    if (error) throw error;
+    if (!data || Object.keys(data).length === 0) {
+      aovRow.innerHTML = '<div class="funnel-col"><div class="empty">Немає даних за період</div></div>';
+      leaderboard.innerHTML = '';
+      return;
+    }
+
+    const order = ['control', 'A', 'B'];
+    const labels = {
+      control: '🅢 КОНТРОЛЬ (без апселу)',
+      A: '🅰 A: Пакет дорожче',
+      B: '🅱 B: Кількість + знижка'
+    };
+    const fmt = (n) => {
+      const num = Number(n) || 0;
+      return num.toLocaleString('uk-UA', { maximumFractionDigits: 0 });
+    };
+    const fmtPct = (n) => ((Number(n) || 0)).toFixed(1) + '%';
+    const fmtMoney = (n) => fmt(n) + ' грн';
+
+    // Лідерборд — хто переможе по RPV (головна метрика)
+    const ranked = order
+      .filter(v => data[v])
+      .map(v => ({ key: v, label: labels[v], rpv: Number(data[v].rpv) || 0, netLift: Number(data[v].net_lift_per_100) || 0 }))
+      .sort((a, b) => b.rpv - a.rpv);
+    const winner = ranked[0];
+    const runnerUp = ranked[1];
+    let leaderHtml = '';
+    if (winner && runnerUp) {
+      const gap = winner.rpv - runnerUp.rpv;
+      const winnerVsControl = winner.netLift > 0 ? `+${fmtMoney(winner.netLift)} на 100 юзерів` : `−${fmtMoney(Math.abs(winner.netLift))} на 100`;
+      leaderHtml = `
+        <div style="display:flex;gap:14px;flex-wrap:wrap;padding:14px 18px;background:linear-gradient(135deg,rgba(16,185,129,0.12),rgba(16,185,129,0.02));border:1px solid rgba(16,185,129,0.4);border-radius:10px;">
+          <div style="flex:1;min-width:200px;">
+            <div style="font-size:10px;letter-spacing:1.5px;color:#888;text-transform:uppercase;margin-bottom:4px;">🏆 Переможець по RPV</div>
+            <div style="font-size:18px;font-weight:800;color:#10B981;">${winner.label}</div>
+            <div style="font-size:13px;color:#bbb;margin-top:4px;">RPV ${fmtMoney(winner.rpv)} · ${winnerVsControl} vs Control</div>
+          </div>
+          <div style="flex:1;min-width:200px;">
+            <div style="font-size:10px;letter-spacing:1.5px;color:#888;text-transform:uppercase;margin-bottom:4px;">2-е місце</div>
+            <div style="font-size:14px;color:#ccc;">${runnerUp.label}</div>
+            <div style="font-size:12px;color:#888;margin-top:4px;">RPV ${fmtMoney(runnerUp.rpv)} · відстає на ${fmtMoney(gap)}/відвідувач</div>
+          </div>
+        </div>`;
+    }
+    leaderboard.innerHTML = leaderHtml;
+
+    // 3 колонки з метриками per variant
+    const cols = order.filter(v => data[v]).map(v => {
+      const d = data[v];
+      const rpv = Number(d.rpv) || 0;
+      const aov = Number(d.aov) || 0;
+      const aovNo = Number(d.aov_no_upsell) || 0;
+      const aovWith = Number(d.aov_with_upsell) || 0;
+      const delta = Number(d.aov_delta_pct) || 0;
+      const netLift = Number(d.net_lift_per_100) || 0;
+      const takeRate = (Number(d.upsell_take_rate) || 0) * 100;
+      const conv = (Number(d.conversion_rate) || 0) * 100;
+      const took = Number(d.upsell_took) || 0;
+      const dropped = Number(d.upsell_dropped) || 0;
+
+      const deltaColor = delta > 50 ? '#10B981' : delta > 15 ? '#a3e635' : delta > 0 ? '#fbbf24' : '#FF6A7A';
+      const liftColor = netLift > 0 ? '#10B981' : netLift < 0 ? '#FF6A7A' : '#888';
+      const liftSign = netLift > 0 ? '+' : '';
+      const isControl = v === 'control';
+
+      return `
+        <div class="funnel-col" style="position:relative;">
+          <div class="funnel-col-title">${labels[v]}</div>
+
+          <!-- KPI: RPV (головна) -->
+          <div style="padding:14px 16px;margin-bottom:10px;background:linear-gradient(135deg,rgba(227,6,19,0.12),transparent);border:1px solid rgba(227,6,19,0.35);border-radius:8px;">
+            <div style="font-size:9px;letter-spacing:1.5px;color:#888;text-transform:uppercase;margin-bottom:4px;">💎 Revenue per Visitor</div>
+            <div style="font-size:28px;font-weight:900;color:#fff;line-height:1;">${fmtMoney(rpv)}</div>
+            <div style="font-size:11px;color:#888;margin-top:6px;">з 1 відвідувача воронки</div>
+          </div>
+
+          <!-- KPI: Net Lift -->
+          ${!isControl ? `
+          <div style="padding:11px 14px;margin-bottom:10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-left:3px solid ${liftColor};border-radius:6px;">
+            <div style="font-size:9px;letter-spacing:1.5px;color:#888;text-transform:uppercase;margin-bottom:3px;">Net Lift vs Control</div>
+            <div style="font-size:18px;font-weight:800;color:${liftColor};">${liftSign}${fmtMoney(netLift)}</div>
+            <div style="font-size:10px;color:#888;margin-top:2px;">додаткові гроші на 100 юзерів</div>
+          </div>
+          ` : `
+          <div style="padding:11px 14px;margin-bottom:10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:6px;text-align:center;">
+            <div style="font-size:11px;color:#888;">baseline (0)</div>
+          </div>
+          `}
+
+          <!-- KPI: AOV -->
+          <div style="padding:11px 14px;margin-bottom:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:6px;">
+            <div style="font-size:9px;letter-spacing:1.5px;color:#888;text-transform:uppercase;margin-bottom:3px;">AOV · середній чек</div>
+            <div style="font-size:20px;font-weight:800;color:#fff;">${fmtMoney(aov)}</div>
+          </div>
+
+          <!-- KPI: Δ AOV (without vs with upsell) -->
+          <div style="padding:11px 14px;margin-bottom:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-left:3px solid ${deltaColor};border-radius:6px;">
+            <div style="font-size:9px;letter-spacing:1.5px;color:#888;text-transform:uppercase;margin-bottom:3px;">Δ чек: з апселом vs без</div>
+            <div style="font-size:18px;font-weight:800;color:${deltaColor};">+${delta.toFixed(1)}%</div>
+            <div style="font-size:11px;color:#888;margin-top:4px;">${fmtMoney(aovNo)} → ${fmtMoney(aovWith)}</div>
+          </div>
+
+          <!-- Деталі -->
+          <div style="padding:10px 14px;background:rgba(255,255,255,0.02);border-radius:6px;font-size:11px;color:#aaa;line-height:1.7;">
+            <div><span style="color:#888;">Відвідувачі:</span> <b style="color:#ddd;">${fmt(d.visitors)}</b></div>
+            <div><span style="color:#888;">Успішних оплат:</span> <b style="color:#ddd;">${fmt(d.success_count)}</b> (${fmtPct(conv)})</div>
+            <div><span style="color:#888;">Сумарний дохід:</span> <b style="color:#ddd;">${fmtMoney(d.total_revenue)}</b></div>
+            <div style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.06);">
+              <span style="color:#888;">Прийняли апсел:</span> <b style="color:#a3e635;">${fmt(took)}</b> (${fmtPct(takeRate)})<br>
+              <span style="color:#888;">Відмовились:</span> <b style="color:#FF6A7A;">${fmt(dropped)}</b>
+            </div>
+          </div>
+        </div>`;
+    });
+    aovRow.innerHTML = cols.join('');
+  } catch (e) {
+    console.error('[renderAOV]', e);
+    aovRow.innerHTML = `<div class="funnel-col"><div class="empty">Помилка: ${e.message || e}</div></div>`;
+    leaderboard.innerHTML = '';
+  }
 }
 
 function renderRecommendations(rec) {
