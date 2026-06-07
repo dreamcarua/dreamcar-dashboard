@@ -261,6 +261,18 @@ function getPeriodSince() {
   if (typeof state.period === 'object' && state.period.from) return state.period.from;
   return new Date(Date.now() - state.period * 86400 * 1000).toISOString();
 }
+function getPeriodUntil() {
+  if (typeof state.period === 'object' && state.period.to) return state.period.to;
+  return null; // нехай RPC візьме NOW()
+}
+// Розширює args RPC параметрами дат коли активний range
+function withDateRange(args) {
+  // Завжди передаємо p_since (точну дату початку періоду) щоб RPC не плутала days vs precise dates
+  args.p_since = getPeriodSince();
+  const until = getPeriodUntil();
+  if (until) args.p_until = until;
+  return args;
+}
 
 function fmt(n, suf='') { if (n == null) return '—'; return Math.round(n).toLocaleString('uk-UA') + suf; }
 function fmtPct(n) { if (n == null) return '—'; return n.toFixed(1) + '%'; }
@@ -307,7 +319,7 @@ async function loadAll() {
   try {
     const filter = JSON.stringify(state.filters);
     const [sigRes, recRes, dailyRes] = await Promise.all([
-      sb.rpc('upsell_significance', { p_experiment_id: EXPERIMENT_ID, p_period_days: getPeriodDays(), p_filter: state.filters }),
+      sb.rpc('upsell_significance', withDateRange({ p_experiment_id: EXPERIMENT_ID, p_period_days: getPeriodDays(), p_filter: state.filters })),
       sb.rpc('upsell_recommendation', { p_experiment_id: EXPERIMENT_ID }),
       sb.rpc('upsell_daily', { p_experiment_id: EXPERIMENT_ID, p_period_days: getPeriodDays() })
     ]);
