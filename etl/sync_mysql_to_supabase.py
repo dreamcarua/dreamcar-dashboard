@@ -15,8 +15,25 @@ Env vars:
 """
 import os, sys, json, argparse
 from datetime import datetime, timezone
+try:
+    from zoneinfo import ZoneInfo  # Python 3.9+
+except ImportError:
+    from backports.zoneinfo import ZoneInfo
 import pymysql
 import requests
+
+# 07.06.2026 P0 FIX: MySQL зберігає datetime БЕЗ TZ-info як Київський локальний час.
+# Раніше row['created_at'].isoformat() → Supabase інтерпретував як UTC (+00) → зсув на +3 год.
+# Тепер явно: трактуємо naive timestamp як Europe/Kyiv → конвертуємо у UTC ISO для Postgres.
+KYIV_TZ = ZoneInfo('Europe/Kyiv')
+UTC_TZ = ZoneInfo('UTC')
+
+def kyiv_to_utc_iso(dt):
+    """Convert naive MySQL datetime (Kyiv local) → UTC ISO string for Supabase."""
+    if dt is None: return None
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=KYIV_TZ)  # naive -> Kyiv aware
+    return dt.astimezone(UTC_TZ).isoformat()
 
 # ===== CONFIG =====
 MYSQL_HOST = os.getenv('MYSQL_HOST', 'fincheck.mysql.network')
@@ -138,10 +155,11 @@ def map_deal(row):
         'pay_provider': row.get('pay_provider'),
         'wc_order_id': int(row['wc_order_id']) if row.get('wc_order_id') else None,
         'raw_payload': {k: (str(v) if not isinstance(v, (int, float, str, bool, type(None))) else v) for k, v in row.items()},
-        'created_at': row['created_at'].isoformat() if row.get('created_at') else None,
-        'updated_at': row['updated_at'].isoformat() if row.get('updated_at') else None,
-        'paid_at': row['deal_updated_at'].isoformat() if (status == 'pay' and row.get('deal_updated_at')) else None,
-        'failed_at': row['deal_updated_at'].isoformat() if (status == 'fail' and row.get('deal_updated_at')) else None,
+        # 07.06.2026 P0 FIX: Kyiv local → UTC ISO (раніше naive→Supabase інтерпретувала як UTC = +3h зсув)
+        'created_at': kyiv_to_utc_iso(row.get('created_at')),
+        'updated_at': kyiv_to_utc_iso(row.get('updated_at')),
+        'paid_at':    kyiv_to_utc_iso(row.get('deal_updated_at')) if status == 'pay' else None,
+        'failed_at':  kyiv_to_utc_iso(row.get('deal_updated_at')) if status == 'fail' else None,
     }
 
 
@@ -155,7 +173,7 @@ def map_webhook(row):
         'status_code': 200 if row.get('success') else 500,
         'error_message': row.get('error_message'),
         'processing_ms': int(float(row['processing_time']) * 1000) if row.get('processing_time') else None,
-        'created_at': row['created_at'].isoformat() if row.get('created_at') else None,
+        'created_at': kyiv_to_utc_iso(row.get('created_at')),
     }
 
 
