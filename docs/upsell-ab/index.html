@@ -355,7 +355,8 @@ const STATUS_LABELS = {
   ship: '🟢 ЗАПУСКАЄМО В PRODUCTION',
   continue: '🟡 ПРОДОВЖУЄМО ЕКСПЕРИМЕНТ',
   kill: '🔴 ВІДКАТУЄМО',
-  need_data: '⚪ НАКОПИЧУЄМО ДАНІ'
+  need_data: '⚪ НАКОПИЧУЄМО ДАНІ',
+  srm_blocked: '🚫 SRM DETECTED — НЕ ПРИЙМАТИ РІШЕННЯ' // АУДИТ Pass1 P0
 };
 
 const VARIANT_LABELS = {
@@ -396,9 +397,9 @@ async function loadAll() {
   try {
     const [sigRes, recRes, dailyRes, srmRes] = await Promise.all([
       sb.rpc('upsell_significance', withDateRange({ p_experiment_id: EXPERIMENT_ID, p_period_days: getPeriodDays(), p_filter: state.filters })),
-      sb.rpc('upsell_recommendation', { p_experiment_id: EXPERIMENT_ID }),
+      // АУДИТ Pass1 P0: recommendation тепер приймає dates+filters (раніше hardcoded 30D)
+      sb.rpc('upsell_recommendation', withDateRange({ p_experiment_id: EXPERIMENT_ID, p_period_days: getPeriodDays(), p_filter: state.filters })),
       sb.rpc('upsell_daily', withDateRange({ p_experiment_id: EXPERIMENT_ID, p_period_days: getPeriodDays() })),
-      // АУДИТ Agent 2 P0-1: SRM check — критичний guardrail
       sb.rpc('upsell_srm_check', withDateRange({ p_experiment_id: EXPERIMENT_ID }))
     ]);
     if (isStale()) return; // інший loadAll вже стартував
@@ -441,21 +442,37 @@ function renderSRMBanner(srm) {
   banner.style.display = 'block';
 }
 
-function renderHero(sig, rec) {
-  const status = rec.status || 'need_data';
+function renderHero(sig, rec, srm) {
+  // 07.06.2026 АУДИТ Pass1 P0: SRM override → блокувати "ship" badge коли SRM detected
+  let status = rec.status || 'need_data';
+  if (srm && srm.has_srm) status = 'srm_blocked';
   const winner = (sig || []).filter(s => s.variant !== 'control').sort((a, b) => (b.rps || 0) - (a.rps || 0))[0];
   const heroEl = document.getElementById('hero');
   const statusEl = heroEl.querySelector('.hero-status');
   statusEl.className = 'hero-status ' + status;
-  statusEl.textContent = STATUS_LABELS[status] || status;
+  const STATUS_OVR = Object.assign({}, STATUS_LABELS, { srm_blocked: '🚫 SRM DETECTED — не приймати рішення' });
+  statusEl.textContent = STATUS_OVR[status] || status;
   let body = '';
   if (winner) {
-    body += `<div class="winner-line">🏆 Лідер: <b>${VARIANT_LABELS[winner.variant] || winner.variant}</b></div>`;
-    body += `<div>RPS <b>${fmt(winner.rps)} ₴</b> · Ліфт <b class="${winner.lift_vs_control_pct > 0 ? 'lift-pos' : 'lift-neg'}">${winner.lift_vs_control_pct > 0 ? '+' : ''}${fmtPct(winner.lift_vs_control_pct)}</b> над контролем</div>`;
-    body += `<div style="margin-top:8px;color:var(--grey);">Впевненість: <b>${winner.confidence_level}</b> · p-value: <b>${(winner.p_value_welch_rps || 0).toFixed(3)}</b></div>`;
-    const progress = Math.min(100, Math.round((rec.sample_progress || 0) * 100));
-    body += `<div class="progress"><div class="progress-bar" style="width:${progress}%"></div></div>`;
-    body += `<div class="progress-label">Прогрес вибірки: ${winner.sessions || 0} / 500 (${progress}%)</div>`;
+    // АУДИТ Agent 3 P0: escapeHtml для всіх RPC даних у innerHTML
+    body += `<div class="winner-line">🏆 Лідер: <b>${escapeHtml(VARIANT_LABELS[winner.variant] || winner.variant)}</b></div>`;
+    const liftSign = winner.lift_vs_control_pct > 0 ? '+' : '';
+    const liftArrow = winner.lift_vs_control_pct > 0 ? '▲' : winner.lift_vs_control_pct < 0 ? '▼' : '◆';
+    body += `<div>RPS <b>${fmt(winner.rps)} ₴</b> · Ліфт <b class="${winner.lift_vs_control_pct > 0 ? 'lift-pos' : 'lift-neg'}">${liftArrow} ${liftSign}${fmtPct(winner.lift_vs_control_pct)}</b> над контролем</div>`;
+    const pVal = winner.p_value_welch_rps;
+    const pStr = (pVal == null) ? 'n/a' : Number(pVal).toFixed(3);
+    body += `<div style="margin-top:8px;color:var(--grey);">Впевненість: <b>${escapeHtml(winner.confidence_level || '—')}</b> · p-value: <b>${pStr}</b></div>`;
+    const sp = rec.sample_progress;
+    const progress = sp && typeof sp === 'object' && sp.pct != null
+      ? Math.min(100, Math.round(Number(sp.pct)))
+      : Math.min(100, Math.round((Number(sp) || 0) * 100));
+    const samp = sp && sp.current != null ? sp.current : (winner.sessions || 0);
+    const target = sp && sp.target ? sp.target : 500;
+    body += `<div class="progress" role="progressbar" aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar" style="width:${progress}%"></div></div>`;
+    body += `<div class="progress-label">Прогрес вибірки: ${samp} / ${target} (${progress}%)</div>`;
+    if (rec.alpha_adjusted) {
+      body += `<div style="margin-top:6px;font-size:11px;color:#888;">Bonferroni α=${rec.alpha_adjusted} (для ${rec.n_variants || 1} варіантів)</div>`;
+    }
   } else {
     body += '<div>Поки що немає даних по гілках. Експеримент щойно запущено або немає подій.</div>';
   }
@@ -467,9 +484,9 @@ function renderHero(sig, rec) {
   if (anomalies.length) {
     aBlock.innerHTML = anomalies.map(a => `
       <div class="anomaly">
-        <div class="anomaly-title">⚠ ${a.title}</div>
-        <div class="anomaly-desc">${a.description}</div>
-        <div class="anomaly-action">Дія: ${a.action}</div>
+        <div class="anomaly-title">⚠ ${escapeHtml(a.title)}</div>
+        <div class="anomaly-desc">${escapeHtml(a.description)}</div>
+        <div class="anomaly-action">Дія: ${escapeHtml(a.action)}</div>
       </div>
     `).join('');
   } else {
@@ -833,17 +850,17 @@ async function loadDynamicFilters() {
     if (devices.length) {
       fg('fg-device').innerHTML = '<span>Пристрій:</span>' +
         '<button class="filter-chip on" data-filter="device" data-value="">Всі</button>' +
-        devices.map(d => `<button class="filter-chip" data-filter="device" data-value="${d}">${DEVICE_LABELS[d] || d}</button>`).join('');
+        devices.map(d => `<button class="filter-chip" data-filter="device" data-value="${escapeHtml(d)}">${escapeHtml(DEVICE_LABELS[d] || d)}</button>`).join('');
     }
     if (sources.length) {
       fg('fg-utm').innerHTML = '<span>UTM source:</span>' +
         '<button class="filter-chip on" data-filter="utm_source" data-value="">Всі</button>' +
-        sources.map(s => `<button class="filter-chip" data-filter="utm_source" data-value="${s}">${SOURCE_LABELS[s] || s}</button>`).join('');
+        sources.map(s => `<button class="filter-chip" data-filter="utm_source" data-value="${escapeHtml(s)}">${escapeHtml(SOURCE_LABELS[s] || s)}</button>`).join('');
     }
     if (tariffs.length) {
       fg('fg-tariff').innerHTML = '<span>Тариф:</span>' +
         '<button class="filter-chip on" data-filter="tariff_base" data-value="">Всі</button>' +
-        tariffs.map(t => `<button class="filter-chip" data-filter="tariff_base" data-value="${t}">${TARIFF_LABELS[t] || t}</button>`).join('');
+        tariffs.map(t => `<button class="filter-chip" data-filter="tariff_base" data-value="${escapeHtml(t)}">${escapeHtml(TARIFF_LABELS[t] || t)}</button>`).join('');
     }
     // Прибиндити onclick для нових chips
     document.querySelectorAll('#filterRow .filter-chip').forEach(bindFilterChip);
