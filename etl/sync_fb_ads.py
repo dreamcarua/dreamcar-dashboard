@@ -97,14 +97,76 @@ def get_account_info(acct):
     return data.get('name'), data.get('currency', 'USD')
 
 
+def _extract_url_from_creative(creative):
+    """Спробувати 8 стратегій витягнути URL з ad creative."""
+    if not creative:
+        return None, None
+    # Strategy 1: creative.link_url / template_url
+    url = creative.get('link_url') or creative.get('template_url')
+    if url: return url, 'link_url'
+    spec = creative.get('object_story_spec') or {}
+    # Strategy 2: link_data.link (link ads)
+    link_data = spec.get('link_data') or {}
+    url = link_data.get('link')
+    if url: return url, 'link_data.link'
+    # Strategy 3: link_data.child_attachments[].link (carousel)
+    for child in (link_data.get('child_attachments') or []):
+        if child.get('link'):
+            return child['link'], 'link_data.child_attachments'
+    # Strategy 4: link_data.call_to_action.value.link
+    cta_link = ((link_data.get('call_to_action') or {}).get('value') or {}).get('link')
+    if cta_link: return cta_link, 'link_data.cta'
+    # Strategy 5: video_data.call_to_action.value.link
+    vd = spec.get('video_data') or {}
+    cta = ((vd.get('call_to_action') or {}).get('value') or {}).get('link')
+    if cta: return cta, 'video_data.cta'
+    # Strategy 6: photo_data.url або call_to_action
+    pd = spec.get('photo_data') or {}
+    if pd.get('url'): return pd['url'], 'photo_data.url'
+    pd_cta = ((pd.get('call_to_action') or {}).get('value') or {}).get('link')
+    if pd_cta: return pd_cta, 'photo_data.cta'
+    # Strategy 7: text_data або page_welcome
+    td = spec.get('template_data') or {}
+    if td.get('link'): return td['link'], 'template_data.link'
+    # Strategy 8: asset_feed_spec.link_urls[0].website_url (динамічні)
+    afs = creative.get('asset_feed_spec') or {}
+    link_urls = afs.get('link_urls') or []
+    if link_urls and link_urls[0].get('website_url'):
+        return link_urls[0]['website_url'], 'asset_feed_spec'
+    return None, None
+
+
+def _fetch_post_url(post_id):
+    """Для shared post (effective_object_story_id) — окремий fetch URL."""
+    if not post_id:
+        return None
+    try:
+        data = fb_get(post_id, {'fields': 'permalink_url,call_to_action,attachments{target{url}}'})
+        # CTA link
+        cta = (data.get('call_to_action') or {}).get('value') or {}
+        if cta.get('link'):
+            return cta['link']
+        # Attachments target URL
+        for att in (data.get('attachments', {}).get('data', []) or []):
+            target_url = ((att.get('target') or {}).get('url'))
+            if target_url and 'utm_' in target_url:
+                return target_url
+        return data.get('permalink_url')
+    except Exception as e:
+        log(f'  ⚠ post {post_id} fetch failed: {e}')
+        return None
+
+
 def get_ad_link_urls(acct):
     """
     Fetch link URLs per ad (for UTM extraction).
     Returns: { ad_id: link_url }
     """
     links = {}
+    no_url_count = 0
+    unresolved_post_ids = []  # для другого pass через effective_object_story_id
     params = {
-        'fields': 'id,creative{object_story_spec,asset_feed_spec,effective_object_story_id,link_url,template_url}',
+        'fields': 'id,name,creative{object_story_spec,asset_feed_spec,effective_object_story_id,link_url,template_url}',
         'limit': 200,
     }
     next_url = None
@@ -116,26 +178,32 @@ def get_ad_link_urls(acct):
             data = fb_get(f'{acct}/ads', params)
         for ad in data.get('data', []):
             creative = ad.get('creative') or {}
-            # Strategy 1: creative.link_url
-            url = creative.get('link_url') or creative.get('template_url')
-            # Strategy 2: object_story_spec.link_data.link
-            if not url:
-                spec = creative.get('object_story_spec') or {}
-                link_data = spec.get('link_data') or {}
-                url = link_data.get('link')
-            # Strategy 3: video_data.call_to_action.value.link
-            if not url:
-                spec = creative.get('object_story_spec') or {}
-                vd = spec.get('video_data') or {}
-                cta = vd.get('call_to_action') or {}
-                url = (cta.get('value') or {}).get('link')
+            url, strategy = _extract_url_from_creative(creative)
             if url:
                 links[ad['id']] = url
-        # Paginate
+            else:
+                # Fallback: ad refers to existing post — спробувати дотягнути URL з посту
+                eosi = creative.get('effective_object_story_id')
+                if eosi:
+                    unresolved_post_ids.append((ad['id'], eosi, ad.get('name')))
+                else:
+                    no_url_count += 1
         paging = data.get('paging') or {}
         next_url = paging.get('next')
         if not next_url:
             break
+
+    # 2nd pass: для unresolved ads — fetch URL через post_id
+    if unresolved_post_ids:
+        log(f'  ↻ resolving {len(unresolved_post_ids)} posts for missing URLs...')
+        for ad_id, post_id, ad_name in unresolved_post_ids[:200]:  # cap до 200 викликів
+            url = _fetch_post_url(post_id)
+            if url:
+                links[ad_id] = url
+            else:
+                no_url_count += 1
+
+    log(f'  ✓ resolved {len(links)} URLs, {no_url_count} ads without URL')
     return links
 
 
