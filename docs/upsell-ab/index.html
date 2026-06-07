@@ -18,6 +18,26 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{background:var(--bg);color:var(--white);font-family:'JetBrains Mono','Manrope',system-ui,sans-serif;min-height:100vh;}
+  /* 07.06.2026 АУДИТ Agent 4 P0: mobile responsive + print */
+  @media (max-width: 768px) {
+    .funnel-row { grid-template-columns: 1fr !important; gap: 12px !important; }
+    .kpi-row { grid-template-columns: 1fr 1fr !important; }
+    .compare-table { font-size: 11px; }
+    .compare-table th, .compare-table td { padding: 6px 4px !important; }
+    .topbar-actions .btn { padding: 12px 14px !important; min-height: 44px; font-size: 12px; }
+    .filter-row { flex-direction: column; align-items: stretch; }
+    #customRangeDialog { right: 12px !important; left: 12px !important; width: auto !important; min-width: auto !important; }
+  }
+  @media (max-width: 480px) {
+    .kpi-row { grid-template-columns: 1fr !important; }
+    .topbar { padding: 10px 12px !important; }
+    .container { padding: 14px !important; }
+  }
+  @media print {
+    body { background: #fff !important; color: #000 !important; }
+    .topbar, #btnRefresh, #btnCustomRange, .period-btn, #customRangeDialog, #srmDismiss, #errorBanner { display: none !important; }
+    .hero, .section, .kpi-card, .funnel-col { background: #fff !important; color: #000 !important; border: 1px solid #ccc !important; }
+  }
 
 .topbar{background:var(--bg-2);border-bottom:1px solid var(--line);padding:14px 28px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;}
 .brand-mark{font-family:'Oswald',sans-serif;font-weight:800;font-size:16px;letter-spacing:0.05em;color:#fff;text-decoration:none;}
@@ -128,7 +148,7 @@ html,body{background:var(--bg);color:var(--white);font-family:'JetBrains Mono','
     <button class="btn period-btn active" data-period="30">30Д</button>
     <button class="btn period-btn" id="btnCustomRange" data-period="custom" title="Довільний діапазон">📅 Період…</button>
     <span id="customRangeLabel" style="display:none;font-size:11px;color:#ff6577;align-self:center;font-weight:700;"></span>
-    <button class="btn" id="btnRefresh">↻ ОБНОВИТИ</button>
+    <button class="btn" id="btnRefresh" aria-label="Оновити дані">↻ ОНОВИТИ</button>
     <span id="lastUpdate" style="font-size:10px;color:var(--ash);"></span>
   </div>
   <div id="customRangeDialog" style="display:none;position:fixed;top:80px;right:24px;background:#141414;border:1px solid #2a2a2a;border-radius:10px;padding:18px 20px;box-shadow:0 8px 30px rgba(0,0,0,0.6);z-index:9999;min-width:260px;">
@@ -146,9 +166,28 @@ html,body{background:var(--bg);color:var(--white);font-family:'JetBrains Mono','
 
 <div class="container">
 
+  <!-- SRM Banner — critical guardrail per audit P0 -->
+  <div id="srmBanner" role="alert" aria-live="polite" style="display:none;margin-bottom:18px;padding:16px 20px;background:linear-gradient(135deg,rgba(227,6,19,0.18),rgba(227,6,19,0.04));border:2px solid #E30613;border-radius:10px;">
+    <div style="display:flex;align-items:flex-start;gap:14px;">
+      <div style="font-size:24px;flex-shrink:0;">⚠️</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;letter-spacing:1.5px;color:#FF6A7A;text-transform:uppercase;font-weight:700;margin-bottom:4px;">Sample Ratio Mismatch виявлено</div>
+        <div id="srmMessage" style="color:#fff;font-size:14px;line-height:1.5;margin-bottom:8px;"></div>
+        <div id="srmDetails" style="font-size:12px;color:#ccc;font-family:monospace;"></div>
+      </div>
+      <button id="srmDismiss" type="button" aria-label="Закрити попередження" style="background:transparent;border:1px solid rgba(255,255,255,0.2);color:#ccc;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:11px;">Сховати</button>
+    </div>
+  </div>
+
+  <!-- Live error banner -->
+  <div id="errorBanner" role="alert" aria-live="assertive" style="display:none;margin-bottom:18px;padding:12px 16px;background:rgba(227,6,19,0.12);border-left:4px solid #E30613;border-radius:6px;color:#FF6A7A;font-size:13px;">
+    <span id="errorBannerMessage"></span>
+    <button id="errorBannerRetry" type="button" style="margin-left:12px;padding:4px 10px;background:#E30613;border:none;color:#fff;border-radius:4px;cursor:pointer;font-size:11px;">↻ Повторити</button>
+  </div>
+
   <!-- HERO -->
   <div class="hero" id="hero">
-    <div class="hero-status need_data">Завантаження…</div>
+    <div class="hero-status need_data" role="status" aria-live="polite">Завантаження…</div>
     <h2 id="heroTitle">Експеримент: upsell_window_1</h2>
     <div id="heroBody"></div>
     <div id="anomaliesBlock" class="anomalies"></div>
@@ -247,11 +286,45 @@ const EXPERIMENT_ID = 'upsell_window_1';
 const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
 
+// 07.06.2026 АУДИТ: централізовані константи (попередньо magic numbers по коду)
+const CONFIG = {
+  MIN_SAMPLE: 500,
+  REALTIME_DEBOUNCE_MS: 15000, // було 5000 — занадто агресивно
+  FILTER_DATA_LIMIT: 50000,
+  P_VALUE_SIG: 0.05,
+  P_VALUE_MARGINAL: 0.10,
+  DAY_MS: 86_400_000,
+  SRM_P_THRESHOLD: 0.001,
+};
+
 const state = {
   period: 30, // number (днів) АБО {type:'range', from:ISO, to:ISO, days, label}
   filters: {},
-  chart: null
+  chart: null,
+  loadEpoch: 0, // race condition guard: increment на кожен loadAll, рендери перевіряють
+  errorVisible: false,
 };
+
+// 07.06.2026 АУДИТ Agent 3 P0: XSS захист — escapeHtml для всіх RPC-полів у innerHTML
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"'`=\/]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;','=':'&#61;','/':'&#47;'}[c]));
+}
+window.escapeHtml = escapeHtml; // для глобального доступу
+
+// Error banner
+function showError(msg) {
+  const el = document.getElementById('errorBanner');
+  document.getElementById('errorBannerMessage').textContent = msg;
+  el.style.display = 'block';
+  state.errorVisible = true;
+}
+function hideError() {
+  document.getElementById('errorBanner').style.display = 'none';
+  state.errorVisible = false;
+}
+document.getElementById('errorBannerRetry').onclick = () => { hideError(); loadAll(); };
+document.getElementById('srmDismiss').onclick = () => { document.getElementById('srmBanner').style.display = 'none'; };
 
 // Helpers: 07.06.2026 — обчислення параметрів періоду для RPC і AOV
 function getPeriodDays() {
@@ -316,30 +389,56 @@ const DROP_REASON_LABELS = {
 };
 
 async function loadAll() {
+  // 07.06.2026 АУДИТ: race condition guard (epoch counter)
+  const myEpoch = ++state.loadEpoch;
+  const isStale = () => myEpoch !== state.loadEpoch;
+  hideError();
   try {
-    const filter = JSON.stringify(state.filters);
-    const [sigRes, recRes, dailyRes] = await Promise.all([
+    const [sigRes, recRes, dailyRes, srmRes] = await Promise.all([
       sb.rpc('upsell_significance', withDateRange({ p_experiment_id: EXPERIMENT_ID, p_period_days: getPeriodDays(), p_filter: state.filters })),
       sb.rpc('upsell_recommendation', { p_experiment_id: EXPERIMENT_ID }),
-      sb.rpc('upsell_daily', withDateRange({ p_experiment_id: EXPERIMENT_ID, p_period_days: getPeriodDays() }))
+      sb.rpc('upsell_daily', withDateRange({ p_experiment_id: EXPERIMENT_ID, p_period_days: getPeriodDays() })),
+      // АУДИТ Agent 2 P0-1: SRM check — критичний guardrail
+      sb.rpc('upsell_srm_check', withDateRange({ p_experiment_id: EXPERIMENT_ID }))
     ]);
-    if (sigRes.error) console.error(sigRes.error);
+    if (isStale()) return; // інший loadAll вже стартував
+    if (sigRes.error) { console.error(sigRes.error); showError('Не вдалось завантажити порівняння: ' + sigRes.error.message); }
     if (recRes.error) console.error(recRes.error);
     if (dailyRes.error) console.error(dailyRes.error);
+    if (srmRes.error) console.error('[SRM]', srmRes.error);
+
     const sig = sigRes.data || [];
     const rec = recRes.data || {};
     const daily = dailyRes.data || [];
-    renderHero(sig, rec);
+    const srm = srmRes.data || {};
+
+    renderSRMBanner(srm);
+    renderHero(sig, rec, srm);
     renderKPI(sig);
     renderTable(sig);
     renderChart(daily);
     await renderFunnels(sig);
+    if (isStale()) return;
     await renderAOV();
+    if (isStale()) return;
     renderRecommendations(rec);
     document.getElementById('lastUpdate').textContent = 'Оновлено: ' + new Date().toLocaleTimeString('uk-UA');
   } catch (e) {
     console.error('[load]', e);
+    if (!isStale()) showError('Помилка завантаження: ' + (e?.message || e));
   }
+}
+
+// 07.06.2026 АУДИТ Agent 2 P0-1: SRM banner render
+function renderSRMBanner(srm) {
+  const banner = document.getElementById('srmBanner');
+  if (!srm || !srm.has_srm) { banner.style.display = 'none'; return; }
+  document.getElementById('srmMessage').textContent = srm.message || 'SRM detected.';
+  const variants = (srm.variants || []).map(v =>
+    `${escapeHtml(v.variant)}: ${v.pct}% (${v.observed}/${srm.total}) · очікувалось ${v.expected_pct}%`
+  ).join(' · ');
+  document.getElementById('srmDetails').textContent = `χ²=${srm.chi2}, p=${srm.p_value} · ${variants}`;
+  banner.style.display = 'block';
 }
 
 function renderHero(sig, rec) {
@@ -426,11 +525,20 @@ function renderRecBadge(r) {
 }
 
 function renderChart(daily) {
+  // 07.06.2026 АУДИТ Agent 3 P0: НЕ видаляти canvas! Раніше .nextElementSibling.remove() ламав весь chart назавжди
+  const canvas = document.getElementById('timeSeries');
+  if (!canvas) return; // canvas був видалений (legacy bug recovery)
+  if (state.chart) { state.chart.destroy(); state.chart = null; }
   if (!daily.length) {
-    document.getElementById('timeSeries').parentElement.querySelector('h3').nextElementSibling?.remove?.();
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#888';
+    ctx.font = '14px Manrope, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Немає даних за період', canvas.width / 2, canvas.height / 2);
     return;
   }
-  const ctx = document.getElementById('timeSeries').getContext('2d');
+  const ctx = canvas.getContext('2d');
   const days = [...new Set(daily.map(d => d.day))].sort();
   const variants = [...new Set(daily.map(d => d.variant))];
   const colors = { control: '#10B981', A: '#60A5FA', B: '#a5b4fc', C: '#FBBF24' };
@@ -566,12 +674,16 @@ async function renderAOV() {
       return;
     }
 
-    const order = ['control', 'A', 'B'];
-    const labels = {
-      control: '🅢 КОНТРОЛЬ (без апселу)',
-      A: '🅰 A: Пакет дорожче',
-      B: '🅱 B: Кількість + знижка'
-    };
+    // АУДИТ Agent 3 P0: dynamic order щоб variants C/D/etc також рендерились
+    const order = Object.keys(data).sort((a, b) =>
+      a === 'control' ? -1 : b === 'control' ? 1 : a.localeCompare(b)
+    );
+    const VARIANT_GLYPHS = { control: '🅢', A: '🅰', B: '🅱', C: '🅲', D: '🅳' };
+    const labels = order.reduce((acc, v) => {
+      const base = VARIANT_LABELS[v] || v;
+      acc[v] = `${VARIANT_GLYPHS[v] || '•'} ${base}`;
+      return acc;
+    }, {});
     const fmt = (n) => {
       const num = Number(n) || 0;
       return num.toLocaleString('uk-UA', { maximumFractionDigits: 0 });
@@ -677,7 +789,7 @@ async function renderAOV() {
     aovRow.innerHTML = cols.join('');
   } catch (e) {
     console.error('[renderAOV]', e);
-    aovRow.innerHTML = `<div class="funnel-col"><div class="empty">Помилка: ${e.message || e}</div></div>`;
+    aovRow.innerHTML = `<div class="funnel-col"><div class="empty">Помилка: ${escapeHtml(e.message || String(e))}</div></div>`;
     leaderboard.innerHTML = '';
   }
 }
@@ -688,11 +800,12 @@ function renderRecommendations(rec) {
     document.getElementById('recommendationsBlock').innerHTML = '<div class="empty">Рекомендацій немає.</div>';
     return;
   }
+  // АУДИТ Agent 3 P0: XSS escape для всіх RPC-полів
   document.getElementById('recommendationsBlock').innerHTML = recs.map(r => `
     <div class="rec">
-      <div class="rec-action">${r.action}</div>
-      <div class="rec-title">${r.title}</div>
-      <div class="rec-reasoning">${r.reasoning}</div>
+      <div class="rec-action">${escapeHtml(r.action)}</div>
+      <div class="rec-title">${escapeHtml(r.title)}</div>
+      <div class="rec-reasoning">${escapeHtml(r.reasoning)}</div>
     </div>
   `).join('');
 }
@@ -804,12 +917,36 @@ function applyPeriod(periodKey, customFrom, customTo) {
     setPeriodLabel(days + ' днів');
     lbl.style.display = 'none';
   }
+  syncUrlFromState();
   loadAll();
 }
 document.querySelectorAll('.period-btn').forEach(b => {
   if (b.id === 'btnCustomRange') return; // окремий handler нижче
   b.onclick = () => applyPeriod(b.dataset.period);
 });
+
+// 07.06.2026 АУДИТ Agent 4 P1: URL hash state — bookmark/share friendly
+function syncUrlFromState() {
+  const params = new URLSearchParams();
+  if (typeof state.period === 'object' && state.period.from) {
+    params.set('from', state.period.from.slice(0, 10));
+    params.set('to', state.period.to.slice(0, 10));
+  } else if (typeof state.period === 'number' && state.period !== 30) {
+    params.set('days', String(state.period));
+  }
+  Object.entries(state.filters || {}).forEach(([k, v]) => { if (v) params.set(k, v); });
+  const hash = params.toString();
+  history.replaceState(null, '', hash ? '#' + hash : location.pathname + location.search);
+}
+function loadStateFromUrl() {
+  if (!location.hash) return false;
+  const params = new URLSearchParams(location.hash.slice(1));
+  if (params.has('from') && params.has('to')) {
+    return { type: 'custom', from: params.get('from'), to: params.get('to') };
+  }
+  if (params.has('days')) return { type: 'days', days: parseInt(params.get('days'), 10) };
+  return false;
+}
 
 // Custom date-range dialog
 const customDlg = document.getElementById('customRangeDialog');
@@ -841,16 +978,29 @@ document.addEventListener('click', (e) => {
 
 document.getElementById('btnRefresh').onclick = () => loadAll();
 
-// Initial period
-applyPeriod('30');
+// Initial period — з URL hash якщо є
+const urlState = loadStateFromUrl();
+if (urlState && urlState.type === 'custom') {
+  applyPeriod('custom', urlState.from, urlState.to);
+} else if (urlState && urlState.type === 'days' && [7, 14, 30, 1].includes(urlState.days)) {
+  applyPeriod(String(urlState.days));
+} else {
+  applyPeriod('30');
+}
 // Підтягнути динамічні фільтри з реальних даних (паралельно з основним load)
 loadDynamicFilters();
 
-// Realtime subscription
+// Realtime subscription — 07.06.2026 АУДИТ Agent 2 P0-6: peeking → дебаунс 15с + filter по experiment_id
+let _debounceLoad = null;
 sb.channel('upsell_realtime')
-  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'checkout_events' }, () => {
-    clearTimeout(window._debounceLoad);
-    window._debounceLoad = setTimeout(loadAll, 5000);
+  .on('postgres_changes', {
+    event: 'INSERT',
+    schema: 'public',
+    table: 'checkout_events',
+    filter: `experiment_id=eq.${EXPERIMENT_ID}` // тільки наш експеримент
+  }, () => {
+    clearTimeout(_debounceLoad);
+    _debounceLoad = setTimeout(loadAll, CONFIG.REALTIME_DEBOUNCE_MS);
   })
   .subscribe();
 </script>
