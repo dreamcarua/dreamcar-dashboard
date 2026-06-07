@@ -450,10 +450,15 @@ async function renderFunnels(sig) {
       ? Number(orderedSteps[0].visitors)
       : Math.max(...orderedSteps.map(s => Number(s.visitors) || 0));
 
+    // 07.06.2026 — fix: baseline тепер MAX(visitors) щоб бар ніколи не виходив за 100%.
+    // % від MAX = реальний прохід воронкою. Якщо є tracker bug і next > prev — показуємо "+N нові"
+    // у дужках замість >100% (інакше це візуально нелогічно).
+    const maxVisitors = Math.max(...orderedSteps.map(s => Number(s.visitors) || 0));
     const stepsHtml = orderedSteps.map((s, i) => {
       const visitors = Number(s.visitors) || 0;
-      const pctFromBase = baseline > 0 ? (visitors / baseline * 100) : 0;
-      const widthPct = Math.min(100, pctFromBase); // cap на 100%
+      // % від максимуму — завжди ≤100%
+      const pctFromMax = maxVisitors > 0 ? (visitors / maxVisitors * 100) : 0;
+      const widthPct = Math.min(100, pctFromMax);
       let dropHtml = '';
       if (i > 0) {
         const prev = orderedSteps[i - 1];
@@ -461,7 +466,6 @@ async function renderFunnels(sig) {
         const lost = prevVisitors - visitors;
         if (lost > 0) {
           const lostPct = prevVisitors > 0 ? (lost / prevVisitors * 100) : 0;
-          // dropBreakdown: показуємо чому юзери пішли
           const drops = [];
           if (Number(prev.drop_close) > 0) drops.push(`${prev.drop_close} ${DROP_REASON_LABELS.close_btn}`);
           if (Number(prev.drop_back) > 0) drops.push(`${prev.drop_back} ${DROP_REASON_LABELS.back_btn}`);
@@ -471,16 +475,22 @@ async function renderFunnels(sig) {
           const tooltip = drops.length ? ` title="${drops.join(' · ')}"` : '';
           dropHtml = `<div class="funnel-drop"${tooltip}>↓ −${lost} (−${lostPct.toFixed(0)}%)</div>`;
         } else if (lost < 0) {
-          dropHtml = `<div class="funnel-drop" style="color:var(--ash);" title="Повторні заходи / події з різних шляхів">↻ +${Math.abs(lost)} (повторні заходи)</div>`;
+          dropHtml = `<div class="funnel-drop" style="color:var(--ash);" title="Більше сесій ніж на попередньому кроці — повторні заходи, deep-link entries або session merge у трекері">↻ +${Math.abs(lost)} (нові сесії на цьому кроці)</div>`;
         }
       }
       const stepLabel = STEP_LABELS[s.step] || s.step;
       const tookBadge = Number(s.took_count) > 0
         ? ` <span style="color:var(--green);font-weight:700;">· прийняли апсел: ${s.took_count}</span>`
         : '';
+      // Якщо visitors > перший крок (overflow) — показуємо "+N нові" замість >100%
+      const firstStepVisitors = Number(orderedSteps[0].visitors) || 0;
+      const isOverflow = visitors > firstStepVisitors;
+      const pctLabel = isOverflow
+        ? `<span style="opacity:0.7;color:#fbbf24;" title="Перевищення першого кроку — tracker bug або повторні заходи">+${visitors - firstStepVisitors} нові</span>`
+        : `<span style="opacity:0.7;">(${fmtPct(firstStepVisitors > 0 ? visitors / firstStepVisitors * 100 : 0)})</span>`;
       return `${dropHtml}<div class="funnel-step">
         <div class="funnel-step-label">${stepLabel}${tookBadge}</div>
-        <div class="funnel-bar"><div class="funnel-bar-fill" style="width:${widthPct}%"></div><span>${fmt(visitors)} <span style="opacity:0.7;">(${fmtPct(pctFromBase)})</span></span></div>
+        <div class="funnel-bar"><div class="funnel-bar-fill" style="width:${widthPct}%"></div><span>${fmt(visitors)} ${pctLabel}</span></div>
       </div>`;
     }).join('');
     return `<div class="funnel-col"><div class="funnel-col-title">${variantLabel}</div>${stepsHtml}</div>`;
