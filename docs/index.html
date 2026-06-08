@@ -41,6 +41,9 @@
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+    /* 08.06.2026 R3 P2: явний overflow-y:auto щоб mouse-wheel надійно скролив */
+    overflow-y: auto;
+    min-height: 100vh;
   }
   a { color: inherit; text-decoration: none; }
   button { font-family: inherit; cursor: pointer; }
@@ -346,6 +349,10 @@
   .content {
     padding: 24px;
     max-width: 1700px;
+    /* 08.06.2026 R3 P2: контейнер не повинен бути ширше за свій grid-area, інакше
+       sidebar може зсуватися (BUG #3 з audit: clipped на #content) */
+    min-width: 0;
+    overflow-x: hidden;
   }
   .section-head {
     margin-bottom: 22px;
@@ -1004,9 +1011,9 @@
           <option value="">Усі проєкти</option>
         </select>
       </div>
-      <div>
-        <label>Проєкт (DB)</label>
-        <select id="f-project">
+      <div title="Додатковий фільтр — точне значення поля project у БД (для тонкого налаштування). Більшість випадків - не потрібен, використовуйте 'Активний розіграш'">
+        <label style="opacity:0.7;">Звузити по project (advanced)</label>
+        <select id="f-project" style="opacity:0.85;">
           <option value="">— Усі —</option>
         </select>
       </div>
@@ -1415,11 +1422,20 @@ function setupFilterBar() {
   $('#f-pay-provider').addEventListener('change', e => { filters.pay_provider = e.target.value; renderRoute(); });
   $('#f-traffic-type').addEventListener('change', e => { filters.traffic_type = e.target.value; renderRoute(); });
   $('#f-source-filter').addEventListener('change', e => { filters.source_filter = e.target.value; renderRoute(); });
-  // P1 #10 — UTM free-text фільтри (debounced)
+  // P1 #10 — UTM free-text фільтри (debounced + Enter flush)
   ['utm-source','utm-medium','utm-campaign','utm-term','utm-content'].forEach(f => {
     var el = $('#f-' + f);
+    if (!el) return;
+    var key = f.replace(/-/g, '_');
+    // 08.06.2026 R3 P2: Enter flush — миттєво применяє filter, не чекає 350ms debounce
+    el.addEventListener('keydown', function(ev) {
+      if (ev.key === 'Enter') {
+        ev.preventDefault();
+        filters[key] = el.value.trim() || null;
+        renderRoute();
+      }
+    });
     if (el) el.addEventListener('input', debounce(() => {
-      var key = f.replace(/-/g, '_');
       filters[key] = el.value.trim() || null;
       renderRoute();
     }, 350));
@@ -1471,7 +1487,21 @@ function resetFilters() {
 }
 
 function syncFilterBarFromState() {
-  $('#f-date-range').value = filters.preset || '30d';
+  // 08.06.2026 R3 P2: повна синхронізація ВСІХ UI controls з filters state
+  // Раніше тільки date-range синхронізувався → granularity / status / etc. могли desync (JSON state ≠ UI)
+  const setVal = (sel, val) => { const el = $(sel); if (el && el.value !== val) el.value = val; };
+  setVal('#f-date-range', filters.preset || '30d');
+  setVal('#f-granularity', filters.granularity || 'day');
+  setVal('#f-status', filters.status || '');
+  setVal('#f-customer-type', filters.customer_type || '');
+  setVal('#f-funnel-type', filters.funnel_type || '');
+  setVal('#f-tariff', filters.tariff || '');
+  setVal('#f-pay-provider', filters.pay_provider || '');
+  setVal('#f-traffic-type', filters.traffic_type || '');
+  setVal('#f-source-filter', filters.source_filter || '');
+  setVal('#f-project', filters.project || '');
+  if (filters.from) setVal('#cd-from', filters.from);
+  if (filters.to) setVal('#cd-to', filters.to);
 }
 
 /* ------------ Modals ------------ */
@@ -1486,10 +1516,15 @@ function closeModal(id) {
   el.classList.add('hidden');
 }
 document.addEventListener('click', (e) => {
-  if (e.target.matches('[data-close]') || e.target.matches('.modal-backdrop')) {
-    const m = e.target.closest('[data-modal]') || e.target;
-    if (m && m.id) m.classList.add('hidden');
-  }
+  // 08.06.2026 R3 P2: захист від collision з не-модальними елементами що мають [data-close] чи .modal-backdrop
+  // У минулому ламало theme toggle / nav buttons коли вони випадково мали схожі attributes
+  const isClose = e.target.matches('[data-close]');
+  const isBackdrop = e.target === e.currentTarget ? false : e.target.classList && e.target.classList.contains('modal-backdrop');
+  if (!isClose && !isBackdrop) return;
+  // Не зачіпаємо tb-btn (topbar buttons), nav-item (sidebar), кнопки фільтрів
+  if (e.target.closest('.tb-btn, .nav-item, .filter-bar, .topbar')) return;
+  const m = e.target.closest('[data-modal]') || e.target;
+  if (m && m.id) m.classList.add('hidden');
 });
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') $$('.modal-backdrop').forEach(m => m.classList.add('hidden'));
@@ -1673,7 +1708,9 @@ function _rpcParams() {
     p_project_values: projectValues,
     p_customer_type: filters.customer_type || null,
     p_tariff: filters.tariff || null,
-    p_pay_provider: filters.pay_provider || null
+    p_pay_provider: filters.pay_provider || null,
+    // 08.06.2026 R3: traffic_type тепер передається у всі RPCs (KPI/series/extended)
+    p_traffic_type: filters.traffic_type || null
   };
 }
 
@@ -1697,8 +1734,8 @@ async function aggViaRPC(field) {
   // Раніше: вибір "HUMMER H2" → 0 deals → revenue=0 при 170+ лідах у реальності.
   const baseParams = _rpcParams();
   const skipProjectFilter = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].includes(field);
-  if (skipProjectFilter) delete baseParams.p_project_values;
-  const params = { p_field: field, ...baseParams, p_traffic_type: filters.traffic_type || null };
+  if (skipProjectFilter) baseParams.p_project_values = null;
+  const params = { p_field: field, ...baseParams };
   const { data, error } = await sb.rpc('dashboard_agg_deals_with_traffic', params);
   if (error) throw error;
   return (data || []).map(r => ({
@@ -4496,10 +4533,25 @@ function setupRealtimeSubscription() {
   }
 }
 
+// 08.06.2026 R3 P1: tracking останньої user-активності для guard у debouncedReload
+let __lastUserActivity = Date.now();
+window.addEventListener('input', () => { __lastUserActivity = Date.now(); }, true);
+window.addEventListener('change', () => { __lastUserActivity = Date.now(); }, true);
+window.addEventListener('click', () => { __lastUserActivity = Date.now(); }, true);
+
 const debouncedReload = debounce(() => {
   // Не перезавантажую якщо юзер на CRUD-сторінках чи help
   const r = (location.hash || '#overview').replace('#','');
   if (['mapping','costs','settings','help'].includes(r)) return;
+  // Pause guard: якщо user взаємодіяв з UI < 2s тому — пропускаємо цикл,
+  // не переписуємо view посеред редагування фільтрів.
+  const sinceActivity = Date.now() - __lastUserActivity;
+  if (sinceActivity < 2000) {
+    console.log('[realtime] postponing reload — user active', sinceActivity, 'ms ago');
+    // Retry через 2s
+    setTimeout(() => debouncedReload(), 2200);
+    return;
+  }
   console.log('[realtime] reloading route after', __rtNewDeals, 'new deals');
   renderRoute();
   __rtNewDeals = 0;
