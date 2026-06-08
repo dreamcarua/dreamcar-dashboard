@@ -2124,7 +2124,15 @@ function loadModelsSelect() {
 // Викликається 1 раз на bootstrap після завантаження __projectsList, тільки якщо
 // користувач ще не встановив filter.project (інакше respect його вибір).
 function autoSelectNewestProject() {
-  if (filters.project) return; // user already picked
+  if (filters.project) {
+    // If selected project is expired, allow override — stale filter causes zero results
+    const _selProj = __projectsList.find(p => p.code === filters.project);
+    const _today = todayYmd();
+    if (_selProj && (_selProj.date_end || '') >= _today) return; // still active
+    // Expired project — clear and auto-select fresh one
+    console.log('[dashboard] stale project filter cleared:', filters.project, 'ended:', _selProj && _selProj.date_end);
+    filters.project = null;
+  }
   if (!__projectsList || !__projectsList.length) return;
   const today = todayYmd();
   // Знаходимо найновіший проект, в межах якого попадає сьогодні (active right now).
