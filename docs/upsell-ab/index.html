@@ -784,22 +784,32 @@ async function renderAOV() {
             <div style="font-size:20px;font-weight:800;color:#fff;">${fmtMoney(aov)}</div>
           </div>
 
-          <!-- KPI: Δ AOV (without vs with upsell) -->
+          <!-- KPI: Δ AOV (without vs with upsell) — лише для НЕ-control варіантів.
+               У control немає пропозиції апсел → "Δ з апселом vs без" не існує семантично.
+               08.06.2026 Vadym feedback: раніше показувало +68% у control що логічно неможливо. -->
+          ${!isControl ? `
           <div style="padding:11px 14px;margin-bottom:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-left:3px solid ${deltaColor};border-radius:6px;">
             <div style="font-size:9px;letter-spacing:1.5px;color:#888;text-transform:uppercase;margin-bottom:3px;">Δ чек: з апселом vs без</div>
             <div style="font-size:18px;font-weight:800;color:${deltaColor};">+${delta.toFixed(1)}%</div>
             <div style="font-size:11px;color:#888;margin-top:4px;">${fmtMoney(aovNo)} → ${fmtMoney(aovWith)}</div>
           </div>
+          ` : ''}
 
           <!-- Деталі -->
           <div style="padding:10px 14px;background:rgba(255,255,255,0.02);border-radius:6px;font-size:11px;color:#aaa;line-height:1.7;">
             <div><span style="color:#888;">Відвідувачі:</span> <b style="color:#ddd;">${fmt(d.visitors)}</b></div>
             <div><span style="color:#888;">Успішних оплат:</span> <b style="color:#ddd;">${fmt(d.success_count)}</b> (${fmtPct(conv)})</div>
             <div><span style="color:#888;">Сумарний дохід:</span> <b style="color:#ddd;">${fmtMoney(d.total_revenue)}</b></div>
+            ${!isControl ? `
             <div style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.06);">
               <span style="color:#888;">Прийняли апсел:</span> <b style="color:#a3e635;">${fmt(took)}</b> (${fmtPct(takeRate)})<br>
               <span style="color:#888;">Відмовились:</span> <b style="color:#FF6A7A;">${fmt(dropped)}</b>
             </div>
+            ` : `
+            <div style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.06);font-size:10px;color:#666;font-style:italic;">
+              У контрольному варіанті апсел не пропонується — метрики прийняття/відмови не застосовні.
+            </div>
+            `}
           </div>
         </div>`;
     });
