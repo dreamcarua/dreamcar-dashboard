@@ -914,19 +914,19 @@ function renderRecommendations(rec) {
 }
 
 // 06.06.2026 — динамічні фільтри замість hardcoded.
-// Тягнемо реальні значення з checkout_events за останні 30 днів і формуємо chips
+// 08.06.2026 Vadym fix: RLS на checkout_events блокувала direct .select() → фільтри пусті.
+// Тепер RPC upsell_filter_options() (SECURITY DEFINER) обходить RLS і повертає тільки
+// безпечні distinct values (без PII).
 async function loadDynamicFilters() {
   try {
     const since = new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString();
-    const { data: rows } = await sb
-      .from('checkout_events')
-      .select('device, utm_source, tariff_final')
-      .gte('ts', since)
-      .limit(5000);
-    if (!rows || !rows.length) return;
-    const devices = [...new Set(rows.map(r => r.device).filter(Boolean))].sort();
-    const sources = [...new Set(rows.map(r => r.utm_source).filter(Boolean))].sort();
-    const tariffs = [...new Set(rows.map(r => r.tariff_final).filter(Boolean))].sort();
+    const { data: opts, error } = await sb.rpc('upsell_filter_options', { p_since: since });
+    if (error) { console.warn('[loadDynamicFilters] RPC err:', error); return; }
+    if (!opts) return;
+    const devices = (opts.devices || []).filter(Boolean).slice().sort();
+    const sources = (opts.sources || []).filter(Boolean).slice().sort();
+    const tariffs = (opts.tariffs || []).filter(Boolean).slice().sort();
+    if (!devices.length && !sources.length && !tariffs.length) return;
 
     const fg = id => document.getElementById(id);
     const DEVICE_LABELS = { mobile: '📱 Mobile', desktop: '💻 Desktop', tablet: '📋 Tablet' };
