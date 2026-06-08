@@ -9,6 +9,10 @@
 <title>DreamCar · Upsell A/B/C Dashboard</title>
 <script src="https://brand.dreamcar.ua/assets/global-header.js?v=20260606b" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<!-- FIX 08.06.2026: замінено динамічний import('esm.sh') на статичний UMD скрипт.
+     Причина: на мобільному esm.sh може зависнути/тайм-аутнути → сторінка вічно "ЗАВАНТАЖЕННЯ..."
+     Тепер supabase доступний як window.supabase без await import() -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 :root {
   --bg:#0a0a0a; --bg-2:#141414; --bg-3:#1a1a1a; --line:#1a1a1a; --steel:#2a2a2a;
@@ -287,8 +291,11 @@ const SUPABASE_URL = 'https://wotghlaehnvxyeacznvv.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndvdGdobGFlaG52eHllYWN6bnZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2MDc4NjgsImV4cCI6MjA5NDE4Mzg2OH0.Se-y1WawsdSkMLXj7G_O-Kq-jVfjUOBD3KJOvemCR3A';
 const EXPERIMENT_ID = 'upsell_window_1';
 
-const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
-const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+// FIX 08.06.2026: Видалено динамічний await import('https://esm.sh/@supabase/supabase-js@2')
+// який на мобільному Safari/Chrome міг зависнути (esm.sh CDN нестабільний на mobile).
+// Тепер supabase завантажується як статичний UMD скрипт (cdn.jsdelivr.net) у <head>,
+// і доступний як window.supabase без async import.
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
 // 07.06.2026 АУДИТ: централізовані константи (попередньо magic numbers по коду)
 const CONFIG = {
@@ -328,7 +335,10 @@ function hideError() {
   state.errorVisible = false;
 }
 document.getElementById('errorBannerRetry').onclick = () => { hideError(); loadAll(); };
-document.getElementById('srmDismiss').onclick = () => { document.getElementById('srmBanner').style.display = 'none'; };
+// FIX 08.06.2026: srmDismiss видалено з HTML разом зі SRM banner (08.06 Vadym feedback).
+// Попередній рядок `document.getElementById('srmDismiss').onclick = ...` кидав TypeError:
+// Cannot set properties of null — що вбивало весь JS модуль і лишало сторінку у стані
+// "ЗАВАНТАЖЕННЯ..." назавжди. Рядок видалено.
 
 // Helpers: 07.06.2026 — обчислення параметрів періоду для RPC і AOV
 function getPeriodDays() {
@@ -666,19 +676,6 @@ function renderChart(daily) {
 }
 
 async function renderFunnels(sig) {
-  // 06.06.2026 — повністю переписаний funnel з правильною логікою.
-  // RPC upsell_funnel повертає visitors (distinct sessions на крок), але було два бага:
-  //   1) baseline = max(visitors), а у деяких кроках дублікати events перевищували реальну
-  //      кількість сесій → бар показував >100%
-  //   2) для control крок 'upsell_window_1' показувався як 99% потерь — це нонсенс,
-  //      бо control НЕ повинен мати цей крок (туди потрапляють тільки помилкові events)
-  //
-  // Нова логіка:
-  //   - беремо реальний набір кроків залежно від варіанту (control БЕЗ upsell_window_1)
-  //   - baseline = найбільше значення visitors (зазвичай це phone)
-  //   - drop між кроками рахуємо як абсолютну різницю від попереднього КРОКУ (а не пропорції)
-  //   - якщо current > previous (повторний захід) — показуємо це не як "втрати" а нейтрально
-  //   - показуємо tooltip з drop_reasons
   const variants = sig.map(s => s.variant);
   const funnelData = await Promise.all(variants.map(v =>
     sb.rpc('upsell_funnel', withDateRange({ p_experiment_id: EXPERIMENT_ID, p_variant: v, p_period_days: getPeriodDays() }))
@@ -689,27 +686,20 @@ async function renderFunnels(sig) {
     if (!fd.data.length) {
       return `<div class="funnel-col"><div class="funnel-col-title">${variantLabel}</div><div class="empty" style="padding:10px;">Немає даних</div></div>`;
     }
-    // Фільтруємо: для control НЕ показуємо upsell_window_1 (це помилкові events)
     const expectedSteps = fd.variant === 'control' ? FUNNEL_STEPS_CONTROL : FUNNEL_STEPS;
     const byStep = {};
     fd.data.forEach(s => { byStep[s.step] = s; });
-    // Беремо тільки очікувані кроки в правильному порядку, ігноруючи "сторонні"
     const orderedSteps = expectedSteps
       .map(stepName => byStep[stepName])
       .filter(Boolean);
 
-    // Baseline = visitors найпершого кроку який існує. Якщо першого нема — беремо max.
     const baseline = orderedSteps[0]
       ? Number(orderedSteps[0].visitors)
       : Math.max(...orderedSteps.map(s => Number(s.visitors) || 0));
 
-    // 07.06.2026 — fix: baseline тепер MAX(visitors) щоб бар ніколи не виходив за 100%.
-    // % від MAX = реальний прохід воронкою. Якщо є tracker bug і next > prev — показуємо "+N нові"
-    // у дужках замість >100% (інакше це візуально нелогічно).
     const maxVisitors = Math.max(...orderedSteps.map(s => Number(s.visitors) || 0));
     const stepsHtml = orderedSteps.map((s, i) => {
       const visitors = Number(s.visitors) || 0;
-      // % від максимуму — завжди ≤100%
       const pctFromMax = maxVisitors > 0 ? (visitors / maxVisitors * 100) : 0;
       const widthPct = Math.min(100, pctFromMax);
       let dropHtml = '';
@@ -735,7 +725,6 @@ async function renderFunnels(sig) {
       const tookBadge = Number(s.took_count) > 0
         ? ` <span style="color:var(--green);font-weight:700;">· прийняли апсел: ${s.took_count}</span>`
         : '';
-      // Якщо visitors > перший крок (overflow) — показуємо "+N нові" замість >100%
       const firstStepVisitors = Number(orderedSteps[0].visitors) || 0;
       const isOverflow = visitors > firstStepVisitors;
       const pctLabel = isOverflow
@@ -860,9 +849,6 @@ async function renderAOV() {
             <div style="font-size:20px;font-weight:800;color:#fff;">${fmtMoney(aov)}</div>
           </div>
 
-          <!-- KPI: Δ AOV (without vs with upsell) — лише для НЕ-control варіантів.
-               У control немає пропозиції апсел → "Δ з апселом vs без" не існує семантично.
-               08.06.2026 Vadym feedback: раніше показувало +68% у control що логічно неможливо. -->
           ${!isControl ? `
           <div style="padding:11px 14px;margin-bottom:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-left:3px solid ${deltaColor};border-radius:6px;">
             <div style="font-size:9px;letter-spacing:1.5px;color:#888;text-transform:uppercase;margin-bottom:3px;">Δ чек: з апселом vs без</div>
