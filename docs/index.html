@@ -1320,6 +1320,8 @@ const todayYmd = () => ymd(new Date());
 
 function applyPreset(p) {
   const today = new Date();
+  // 08.06.2026 R6: записуємо filters.preset одразу — щоб syncFilterBarFromState не reset-нула на '30d'
+  filters.preset = p;
   if (p === 'today') { filters.from = todayYmd(); filters.to = todayYmd(); }
   else if (p === 'yesterday') { const d = new Date(today); d.setDate(d.getDate()-1); filters.from = ymd(d); filters.to = ymd(d); }
   else if (p === '7d') { const d = new Date(today); d.setDate(d.getDate()-7); filters.from = ymd(d); filters.to = todayYmd(); }
@@ -1690,8 +1692,13 @@ function _rpcParams() {
   let fromDate = filters.from, toDate = filters.to;
   let projectValues = null;
   if (sp) {
-    if (sp.date_start > fromDate) fromDate = sp.date_start;
-    if (sp.date_end < toDate) toDate = sp.date_end;
+    // 08.06.2026 R6 P0: lifetime проекти (HUMMER 01.01-31.12.30) — clamp до today
+    // щоб RPC не отримував `to` далеко у майбутньому що ламає queries/timeout-ить
+    const today = todayYmd();
+    const spStart = sp.date_start;
+    const spEnd = (sp.date_end && sp.date_end > today) ? today : sp.date_end;
+    if (spStart > fromDate) fromDate = spStart;
+    if (spEnd && spEnd < toDate) toDate = spEnd;
     if (sp.deal_project_values && sp.deal_project_values.length) projectValues = sp.deal_project_values;
   } else if (filters.project && filters.project.startsWith('raw::')) {
     projectValues = [filters.project.slice(5)];
@@ -4341,7 +4348,15 @@ const ROUTE_ALIASES = {
 };
 function getRoute() {
   let h = location.hash.replace(/^#/, '') || 'overview';
-  if (ROUTE_ALIASES[h]) h = ROUTE_ALIASES[h];
+  if (ROUTE_ALIASES[h]) {
+    // 08.06.2026 R6: hash rewrite до canonical (#traffic→#medium, etc.) — щоб bookmarks і active nav match
+    const canonical = ROUTE_ALIASES[h];
+    if (SECTIONS[canonical]) {
+      // Replace hash without triggering hashchange (history.replaceState)
+      try { history.replaceState(null, '', '#' + canonical); } catch(e) {}
+      h = canonical;
+    }
+  }
   return SECTIONS[h] ? h : 'overview';
 }
 
@@ -4553,6 +4568,7 @@ function setupRealtimeSubscription() {
 
 // 08.06.2026 R3 P1: tracking останньої user-активності для guard у debouncedReload
 let __lastUserActivity = Date.now();
+let __pendingRealtimeRetry = null; // R6 fix: prevent timer stacking
 window.addEventListener('input', () => { __lastUserActivity = Date.now(); }, true);
 window.addEventListener('change', () => { __lastUserActivity = Date.now(); }, true);
 window.addEventListener('click', () => { __lastUserActivity = Date.now(); }, true);
@@ -4565,11 +4581,15 @@ const debouncedReload = debounce(() => {
   // не переписуємо view посеред редагування фільтрів.
   const sinceActivity = Date.now() - __lastUserActivity;
   if (sinceActivity < 2000) {
+    if (__pendingRealtimeRetry) return; // вже є очікуваний retry — не нагромаджуємо
     console.log('[realtime] postponing reload — user active', sinceActivity, 'ms ago');
-    // Retry через 2s
-    setTimeout(() => debouncedReload(), 2200);
+    __pendingRealtimeRetry = setTimeout(() => {
+      __pendingRealtimeRetry = null;
+      debouncedReload();
+    }, 2200);
     return;
   }
+  __pendingRealtimeRetry = null;
   console.log('[realtime] reloading route after', __rtNewDeals, 'new deals');
   renderRoute();
   __rtNewDeals = 0;
