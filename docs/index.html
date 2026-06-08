@@ -966,53 +966,259 @@
   }
 
   @media (max-width: 480px) {
-    /* iPhone portrait: ВСЕ stack-ується */
-    .filter-bar {
-      padding: 10px 12px;
-      gap: 6px;
+    /* iPhone portrait: TOPBAR compact + FILTERS bottom-sheet ============= */
+
+    /* ---- TOPBAR redesign ---- */
+    /* Поточний topbar це flex з burger + title + spacer + topbar-actions(7) + badge + user-chip.
+       Усе wraps у вертикаль на 390px → впадає колонкою справа. FIX: compact horizontal row. */
+    .topbar {
+      padding: 6px 10px !important;
+      gap: 6px !important;
+      flex-wrap: nowrap !important;
+      align-items: center !important;
+      min-height: 52px;
     }
-    /* Кожен filter — 100% width (full row) */
+    .topbar .topbar-title {
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .topbar .topbar-title .sep { margin: 0 4px; opacity: 0.5; }
+    .topbar .topbar-spacer { display: none; }
+    /* Live badge: лише точка, без тексту */
+    .topbar .live-badge {
+      padding: 0 !important;
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      justify-content: center;
+      font-size: 0 !important;          /* ховаємо "Live" текст */
+    }
+    .topbar .live-badge .live-dot {
+      width: 8px; height: 8px;
+      margin: 0;
+    }
+    /* User chip: тільки avatar */
+    .topbar #user-chip { gap: 0; padding: 0; }
+    .topbar #user-email { display: none; }
+    .topbar .user-avatar { width: 30px; height: 30px; font-size: 12px; }
+
+    /* TOPBAR ACTIONS → kebab dropdown ⋮
+       Default state: collapsed (показуємо тільки ⋮ trigger).
+       При .open → flex column dropdown під topbar */
+    .topbar-actions {
+      position: absolute;
+      top: 56px;
+      right: 8px;
+      background: var(--black-2);
+      border: 1px solid var(--steel);
+      border-radius: 10px;
+      padding: 6px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      display: none !important;
+      flex-direction: column;
+      gap: 4px;
+      /* R8.1: 1600 щоб бути нижче modal (10000) але вище filter-bar (700)/sidebar (1500) */
+      z-index: 1600;
+      min-width: 180px;
+    }
+    .topbar-actions.open { display: flex !important; }
+    .topbar-actions .tb-btn {
+      width: 100% !important;
+      padding: 10px 12px !important;
+      font-size: 12px !important;
+      text-align: left !important;
+      justify-content: flex-start !important;
+      min-height: 40px;
+    }
+    .topbar-actions .tb-btn .full-label { display: inline !important; }
+    /* Kebab trigger button (інжектиться JS-ом) */
+    .topbar-kebab {
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      width: 36px; height: 36px;
+      background: var(--steel-2);
+      border: 1px solid var(--steel);
+      color: #fff;
+      border-radius: 8px;
+      font-size: 18px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .topbar-kebab:hover { border-color: var(--red); }
+
+    /* ---- FILTER BAR як bottom-sheet drawer ---- */
+    /* Default: повністю прихована, відкривається через FAB Фільтри */
+    .filter-bar {
+      position: fixed !important;
+      left: 0; right: 0; bottom: 0;
+      max-height: 80vh;
+      padding: 14px 16px 80px !important; /* + місце під sticky кнопки */
+      background: var(--black-2);
+      border-top: 1px solid var(--steel);
+      border-radius: 16px 16px 0 0;
+      box-shadow: 0 -8px 32px rgba(0,0,0,0.6);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      transform: translateY(100%);
+      transition: transform 280ms cubic-bezier(.2,.8,.3,1);
+      z-index: 700;
+      gap: 12px !important;
+      flex-direction: column !important;
+      align-items: stretch !important;
+    }
+    .filter-bar.open { transform: translateY(0); }
+    /* Drawer handle (visual top bar) */
+    .filter-bar::before {
+      content: '';
+      position: sticky;
+      top: 0;
+      display: block;
+      width: 48px;
+      height: 4px;
+      margin: 0 auto 12px;
+      background: var(--steel);
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    /* Кожен filter — full width */
     .filter-bar > div {
       flex: 1 1 100% !important;
-    }
-    /* Кнопки Apply/Reset — 100% width, по одній на row */
-    .filter-bar .btn,
-    .filter-bar #f-apply,
-    .filter-bar #f-reset {
-      flex: 1 1 100% !important;
-      padding: 12px 14px;
-      font-size: 13px;
+      width: 100%;
     }
     .filter-bar input,
     .filter-bar select {
-      font-size: 14px;       /* більший — щоб iOS не блокував tap */
-      padding: 10px 12px;
+      width: 100%;
+      box-sizing: border-box;
+      font-size: 14px;
+      padding: 11px 12px;
+      min-height: 44px;
     }
     .filter-bar label {
       font-size: 10px;
       margin-bottom: 4px;
+      display: block;
     }
-    /* KPI — 1 колонка для максимальної читабельності */
+    /* Apply/Reset кнопки — sticky bottom з safe-area */
+    .filter-bar .btn,
+    .filter-bar #f-apply,
+    .filter-bar #f-reset {
+      flex: 1 1 calc(50% - 4px) !important;
+      padding: 12px 16px !important;
+      font-size: 13px !important;
+      min-height: 48px;
+    }
+    /* Sticky row з Apply/Reset внизу filter-bar */
+    .filter-bar-actions {
+      position: sticky;
+      bottom: 0;
+      background: var(--black-2);
+      padding: 12px 0 max(12px, env(safe-area-inset-bottom)) 0;
+      border-top: 1px solid var(--steel);
+      margin: 8px -16px -80px;       /* нейтралізуємо padding-bottom drawer */
+      padding-left: 16px;
+      padding-right: 16px;
+      display: flex !important;
+      gap: 8px;
+      z-index: 2;
+    }
+    /* Backdrop під filter-bar */
+    .filter-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(2px);
+      z-index: 690;
+      display: none;
+      animation: filterBdFade 200ms ease;
+    }
+    .filter-backdrop.open { display: block; }
+    @keyframes filterBdFade { from { opacity: 0; } to { opacity: 1; } }
+
+    /* FAB-style "Фільтри" trigger у нижньому правому куті */
+    .filter-fab {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      padding: 12px 18px;
+      background: linear-gradient(135deg, var(--red), var(--red-deep));
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(227,6,19,0.45);
+      z-index: 600;
+      display: flex !important;
+      align-items: center;
+      gap: 8px;
+      min-height: 48px;
+    }
+    .filter-fab .cnt {
+      /* R8.1: white bg + red text для max контрасту (раніше rgba 0.22 був ледь видно) */
+      background: #fff;
+      color: var(--red);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 800;
+      min-width: 18px;
+      text-align: center;
+    }
+
+    /* ---- Content ---- */
+    .content { padding: 14px 12px 84px !important; }     /* padding-bottom під FAB */
     .kpi-grid { grid-template-columns: 1fr !important; gap: 8px; }
     .kpi { padding: 12px; }
     .kpi-value { font-size: 24px; }
-    /* Section head — заголовок + chips окремими рядками */
     .section-head {
       flex-direction: column;
       align-items: flex-start;
       gap: 8px;
     }
     .section-head h1 { font-size: 16px; }
-    /* Topbar — компактніше */
-    .topbar { padding: 8px 10px; }
-    /* Card — мінімальний padding */
     .card { padding: 10px; }
-    /* Tables більше не зменшуємо — лишаємо overflow-x scroll */
-    /* Charts canvas — обмежуємо висоту */
     canvas { max-height: 280px !important; }
-    /* Settings/modal — full screen */
     .modal { max-width: 100vw !important; max-height: 100vh !important; border-radius: 0 !important; }
+
+    /* Sidebar — як off-canvas drawer (зліва) */
+    .app { grid-template-columns: 1fr !important; }
+    .sidebar {
+      position: fixed !important;
+      top: 0; bottom: 0;
+      left: 0 !important;                /* R8.1: явно 0 (не -240px з 900px MQ) щоб лише transform анімував */
+      width: 86vw !important;
+      max-width: 320px;
+      height: 100vh !important;
+      max-height: none !important;
+      transform: translateX(-100%);
+      transition: transform 240ms cubic-bezier(.2,.8,.3,1) !important;
+      z-index: 1500;
+      border-right: 1px solid var(--steel) !important;
+      box-shadow: 8px 0 24px rgba(0,0,0,0.5);
+      padding: 14px 12px !important;
+      overflow-y: auto !important;
+    }
+    .sidebar.open { transform: translateX(0); }
+    .sidebar-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(2px);
+      z-index: 1400;
+      display: none;
+    }
+    .sidebar-backdrop.open { display: block; }
+    .burger { display: inline-flex !important; align-items: center; justify-content: center; width: 36px; height: 36px; padding: 0; font-size: 18px; flex-shrink: 0; }
   }
+  /* Default: hide mobile-only chrome elements.
+     `.filter-bar-actions` НЕ ховається — це wrapper для існуючих кнопок Apply/Reset,
+     які мають лишатися видимі на desktop. На desktop він просто `display: contents` (transparent flex). */
+  .topbar-kebab, .filter-fab, .filter-backdrop, .sidebar-backdrop { display: none; }
+  .filter-bar-actions { display: contents; }
 </style>
 </head>
 <body>
@@ -1077,6 +1283,8 @@
       DREAM<span style="color:var(--red)">CAR</span><span class="sep">·</span><span class="sec" id="topbar-section">DASHBOARD</span>
     </div>
     <div class="topbar-spacer"></div>
+    <!-- 08.06.2026 Mobile R8: Kebab trigger ⋮ (видимий лише на ≤480px, відкриває dropdown) -->
+    <button class="topbar-kebab" id="topbarKebab" aria-label="Меню дій" type="button">⋮</button>
     <div class="topbar-actions" id="topbar-actions">
       <button class="tb-btn" data-jump="costs" title="Указати затрати вручну">💰 <span class="full-label">Затрати</span></button>
       <button class="tb-btn" id="tb-apply" title="Застосувати фільтри">🔍 <span class="full-label">Застосувати</span></button>
@@ -1199,8 +1407,11 @@
           <option value="month">Місяць</option>
         </select>
       </div>
-      <button class="btn btn-ghost" id="f-reset">✕ Скинути</button>
-      <button class="btn btn-primary" id="f-apply">🔍 Застосувати</button>
+      <!-- 08.06.2026 R8: sticky action row для mobile drawer -->
+      <div class="filter-bar-actions">
+        <button class="btn btn-ghost" id="f-reset">✕ Скинути</button>
+        <button class="btn btn-primary" id="f-apply">🔍 Застосувати</button>
+      </div>
     </div>
     <!-- P1 #10 UTM free-text filters — окремий ряд -->
     <div class="filter-bar" id="filter-bar-utm" style="display:none;padding-top:0;">
@@ -1293,6 +1504,181 @@
     </div>
   </div>
 </div>
+
+<!-- 08.06.2026 R8 Mobile: backdrops для drawers + Floating Filter trigger -->
+<div class="sidebar-backdrop" id="sidebarBackdrop" aria-hidden="true"></div>
+<div class="filter-backdrop" id="filterBackdrop" aria-hidden="true"></div>
+<button class="filter-fab" id="filterFab" type="button" aria-label="Відкрити фільтри">
+  ⚙ Фільтри<span class="cnt" id="filterFabCnt">0</span>
+</button>
+
+<!-- 08.06.2026 R8: Mobile bootstrap (kebab dropdown + filter drawer + sidebar drawer) -->
+<script>
+(function dashboardMobileBootstrap() {
+  function onReady(fn){
+    if (document.readyState !== 'loading') fn();
+    else document.addEventListener('DOMContentLoaded', fn);
+  }
+  onReady(function init() {
+    var burger = document.getElementById('burger');
+    var sidebar = document.getElementById('sidebar');
+    var sidebarBd = document.getElementById('sidebarBackdrop');
+    var kebab = document.getElementById('topbarKebab');
+    var tbActions = document.getElementById('topbar-actions');
+    var filterBar = document.getElementById('filter-bar');
+    var filterBd = document.getElementById('filterBackdrop');
+    var fab = document.getElementById('filterFab');
+    var fabCnt = document.getElementById('filterFabCnt');
+
+    // R8.1: forward declarations — щоб openSidebar() міг викликати closeFilters() etc.
+    function closeSidebar(){
+      if (sidebar) sidebar.classList.remove('open');
+      if (sidebarBd) sidebarBd.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function closeKebab(){
+      if (tbActions) tbActions.classList.remove('open');
+    }
+    function closeFilters(){
+      if (filterBar) filterBar.classList.remove('open');
+      if (filterBd) filterBd.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // ---- Sidebar drawer ----
+    function openSidebar(){
+      closeKebab(); closeFilters();           // R8.1 mutual exclusion
+      if (sidebar) sidebar.classList.add('open');
+      if (sidebarBd) sidebarBd.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    if (burger) burger.addEventListener('click', function(e){
+      e.preventDefault();
+      if (sidebar && sidebar.classList.contains('open')) closeSidebar(); else openSidebar();
+    });
+    if (sidebarBd) sidebarBd.addEventListener('click', closeSidebar);
+    if (sidebar) sidebar.addEventListener('click', function(e){
+      var t = e.target.closest('.nav-item');
+      if (t) closeSidebar();
+    });
+
+    // ---- Kebab dropdown (topbar-actions) ----
+    if (kebab && tbActions) {
+      kebab.addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        if (tbActions.classList.contains('open')) { closeKebab(); return; }
+        closeFilters(); closeSidebar();         // R8.1 mutual exclusion
+        tbActions.classList.add('open');
+      });
+      // Click anywhere else → close (NOT capture-phase — memory rule)
+      document.addEventListener('click', function(e){
+        if (!tbActions.classList.contains('open')) return;
+        if (e.target === kebab || tbActions.contains(e.target)) return;
+        closeKebab();
+      });
+      // Close after action клік (UX expectation)
+      tbActions.addEventListener('click', function(e){
+        if (e.target.closest('.tb-btn')) setTimeout(closeKebab, 100);
+      });
+    }
+
+    // ---- Filter drawer ----
+    function openFilters(){
+      closeKebab(); closeSidebar();           // R8.1 mutual exclusion
+      if (filterBar) filterBar.classList.add('open');
+      if (filterBd) filterBd.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    if (fab) fab.addEventListener('click', function(e){
+      e.preventDefault();
+      if (filterBar && filterBar.classList.contains('open')) closeFilters(); else openFilters();
+    });
+    if (filterBd) filterBd.addEventListener('click', closeFilters);
+    // Apply кнопка → закриває drawer (renderRoute сам спрацює бо event handler уже стоїть)
+    var fApply = document.getElementById('f-apply');
+    if (fApply) fApply.addEventListener('click', function(){ setTimeout(closeFilters, 50); });
+    // R8.1: tb-reset (kebab Reset) також refresh-ає counter після reset
+    var tbReset = document.getElementById('tb-reset');
+    var fReset = document.getElementById('f-reset');
+
+    // R8.1: SWIPE-DOWN to close filter drawer (true mobile UX, handle pill тепер functional)
+    if (filterBar) {
+      var touchY0 = null;
+      var touchY1 = null;
+      filterBar.addEventListener('touchstart', function(e){
+        if (e.touches && e.touches[0]) {
+          touchY0 = e.touches[0].clientY;
+          // Тільки якщо scroll position зверху — інакше це звичайний scroll, не swipe close
+          if (filterBar.scrollTop > 4) touchY0 = null;
+        }
+      }, { passive: true });
+      filterBar.addEventListener('touchmove', function(e){
+        if (touchY0 == null) return;
+        touchY1 = e.touches[0].clientY;
+        var dy = touchY1 - touchY0;
+        if (dy > 0) {
+          filterBar.style.transform = 'translateY(' + dy + 'px)';
+        }
+      }, { passive: true });
+      filterBar.addEventListener('touchend', function(){
+        if (touchY0 == null) { return; }
+        var dy = (touchY1 || touchY0) - touchY0;
+        filterBar.style.transform = '';   // повертаємо CSS transition
+        if (dy > 60) closeFilters();
+        touchY0 = null; touchY1 = null;
+      });
+    }
+
+    // Counter активних фільтрів — підраховуємо НЕ-default selects + non-empty UTM inputs
+    function refreshFilterCount(){
+      if (!fabCnt) return;
+      var cnt = 0;
+      // Selects що мають value НЕ перший option (тобто != "")
+      var selects = filterBar ? filterBar.querySelectorAll('select') : [];
+      selects.forEach(function(s){
+        var v = s.value;
+        // default: '', 'all', '30d' (період), 'all' (інші)
+        if (v && v !== '' && v !== 'all' && v !== '30d') cnt++;
+      });
+      // UTM inputs
+      ['#f-utm-source','#f-utm-medium','#f-utm-campaign','#f-utm-term','#f-utm-content'].forEach(function(sel){
+        var el = document.querySelector(sel);
+        if (el && el.value && el.value.trim() !== '') cnt++;
+      });
+      fabCnt.textContent = cnt;
+      fabCnt.style.display = cnt > 0 ? '' : 'none';
+    }
+    window.__refreshFilterFabCount = refreshFilterCount;   // для external refresh
+
+    if (filterBar) {
+      filterBar.addEventListener('change', refreshFilterCount);
+      filterBar.addEventListener('input', refreshFilterCount);
+    }
+    // R8.1: програмні reset не fire-ять change → ручний refresh
+    if (tbReset) tbReset.addEventListener('click', function(){ setTimeout(refreshFilterCount, 100); });
+    if (fReset) fReset.addEventListener('click', function(){ setTimeout(refreshFilterCount, 100); });
+    refreshFilterCount();
+
+    // ---- Esc закриває всі drawers ----
+    document.addEventListener('keydown', function(e){
+      if (e.key !== 'Escape') return;
+      if (tbActions && tbActions.classList.contains('open')) closeKebab();
+      if (filterBar && filterBar.classList.contains('open')) closeFilters();
+      if (sidebar && sidebar.classList.contains('open')) closeSidebar();
+    });
+
+    // ---- Resize: > 480px → закрити mobile drawers ----
+    var mq = window.matchMedia('(max-width: 480px)');
+    function onMq(){
+      if (!mq.matches) {
+        closeSidebar(); closeFilters(); closeKebab();
+      }
+    }
+    if (mq.addEventListener) mq.addEventListener('change', onMq);
+  });
+})();
+</script>
 
 <script src="assets/js/auth-guard.js" defer></script>
 <script src="app-dashboard-extras.js?v=20260603a" defer></script>
@@ -4636,9 +5022,9 @@ async function onAuthed() {
     });
   });
 
-  $('#burger').addEventListener('click', () => {
-    $('#sidebar').classList.toggle('open');
-  });
+  // 08.06.2026 R8.1: burger handler видалено звідси — він живе у dashboardMobileBootstrap
+  // (line ~1517) разом з backdrop logic. Дубль handler конфліктував:
+  // bootstrap робив add('open'), а цей toggle() видаляв одразу → drawer не відкривався на mobile.
 
   // Collapsible nav groups
   $$('.nav-group-title.clickable').forEach(t => {
