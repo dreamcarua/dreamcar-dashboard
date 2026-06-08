@@ -3091,16 +3091,16 @@ async function renderOverview() {
         </div>
       </div>
 
-      <div class="kpi-row-title">КОНВЕРСІЯ</div>
+      <div class="kpi-row-title">КОНВЕРСІЯ ЧЕКАУТУ</div>
       <div class="kpi-grid">
-        ${kpi('Всього лідів', fmtNum(rows.length), 'усі статуси')}
-        ${kpi('Всього оплат', fmtNum(paid.length), fmtPct(conv) + ' конверсія', 'green')}
-        ${kpi('Унікальних покупців', fmtNum(uniqEmails), 'утм_email', 'blue')}
-        ${kpi('Заработано (оплати)', fmtMoney(sum, 'UAH'), 'сума оплачених', 'green')}
+        ${kpi('Всього замовлень', fmtNum(rows.length), 'усі статуси (pay/pending/fail)')}
+        ${kpi('Оплачено', fmtNum(paid.length), fmtPct(conv) + ' success rate', 'green')}
+        ${kpi('Унікальних покупців', fmtNum(uniqEmails), 'utm_email', 'blue')}
+        ${kpi('Виручка', fmtMoney(sum, 'UAH'), 'сума оплачених', 'green')}
         ${kpi('Середній чек', fmtMoney(avg, 'UAH'), 'revenue / paid', 'blue')}
         ${kpi('Джерел', fmtNum(sources), 'utm_source')}
         ${kpi('Кампаній', fmtNum(campaigns), 'utm_campaign')}
-        ${kpi('Конверсія %', fmtPct(conv), 'paid / total', conv >= 5 ? 'green' : 'amber')}
+        ${kpi('Success rate %', fmtPct(conv), 'paid / total замовлень', conv >= 70 ? 'green' : 'amber')}
       </div>
 
       <div class="kpi-row-title">ЕКОНОМІКА</div>
@@ -3185,14 +3185,14 @@ async function renderOverview() {
               <span style="color:#888;font-size:11px;">конв. <b style="color:#10B981;">${convPct.toFixed(1)}%</b></span>
             </div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;font-size:11px;">
-              <span style="width:70px;color:#888;">Ліди</span>
+              <span style="width:70px;color:#888;">Замовлень</span>
               <div style="flex:1;height:14px;background:rgba(59,130,246,0.08);border-radius:3px;position:relative;overflow:hidden;">
                 <div style="width:${leadsPct}%;height:100%;background:#3B82F6;border-radius:3px;"></div>
               </div>
               <span style="width:60px;text-align:right;color:#fff;font-weight:600;">${fmtN(p.leads)}</span>
             </div>
             <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;font-size:11px;">
-              <span style="width:70px;color:#888;">Оплати</span>
+              <span style="width:70px;color:#888;">Оплачено</span>
               <div style="flex:1;height:14px;background:rgba(16,185,129,0.08);border-radius:3px;position:relative;overflow:hidden;">
                 <div style="width:${paidPct}%;height:100%;background:#10B981;border-radius:3px;"></div>
               </div>
@@ -3280,14 +3280,14 @@ async function renderAnalytics() {
 
       <div class="kpi-grid">
         <div class="kpi-card blue">
-          <div class="kpi-label">Ліди</div>
+          <div class="kpi-label" title="К-сть рядків у dashboard_deals: всі статуси pay/pending/fail. Це NOT маркетингові ліди — це checkout-замовлення">Замовлення</div>
           <div class="kpi-value">${fmtNum(Number(k.total||0))}</div>
           <div class="kpi-meta"><span class="pill ${dltClass(Number(k.total_delta))}">${dlt(Number(k.total_delta))}</span> vs попередній період</div>
         </div>
         <div class="kpi-card green">
-          <div class="kpi-label">Оплати</div>
+          <div class="kpi-label">Оплачено</div>
           <div class="kpi-value">${fmtNum(Number(k.paid||0))}</div>
-          <div class="kpi-meta">${fmtPct(Number(k.paid_rate||0))} конверсія · <span class="pill ${dltClass(Number(k.paid_delta))}">${dlt(Number(k.paid_delta))}</span></div>
+          <div class="kpi-meta">${fmtPct(Number(k.paid_rate||0))} success rate · <span class="pill ${dltClass(Number(k.paid_delta))}">${dlt(Number(k.paid_delta))}</span></div>
         </div>
         <div class="kpi-card red">
           <div class="kpi-label">Виручка UAH</div>
@@ -3368,10 +3368,15 @@ async function renderAnalytics() {
       ], { scales: { y1: { position: 'right', grid: { drawOnChartArea: false }, ticks: { color: '#E30613' } } } });
     }
 
+    // 08.06.2026 P0 PROD FIX (Вадим): "Усі ліди" вводило в оману — це не справжні leads, а
+    // total replacing dashboard_deals (тобто replacing замовлення/checkout records).
+    // Конверсія pay/total = 83% це NORM для checkout, не bug.
+    // Тепер воронка з 3 бари: Замовлення → Pending → Оплачено — наочно показує drop-off.
     const total = Number(k.total||0), paid = Number(k.paid||0);
+    const pending = Math.max(0, total - paid - Number(k.fail||0));
     barChart('ch-funnel',
-      ['Усі ліди', 'Оплачені'],
-      [{ label: 'К-сть', data: [total, paid], backgroundColor: ['#3B82F6','#10B981'] }],
+      ['Замовлення', 'У обробці', 'Оплачено'],
+      [{ label: 'К-сть', data: [total, pending, paid], backgroundColor: ['#3B82F6','#F59E0B','#10B981'] }],
       { legend: false }
     );
 
