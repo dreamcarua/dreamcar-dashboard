@@ -1371,7 +1371,6 @@ function setupFilterBar() {
       filters.to = m.end;
       const cf = $('#cd-from'); if (cf) cf.value = m.start;
       const ct = $('#cd-to'); if (ct) ct.value = m.end;
-      const dp = $('#date-preset'); if (dp) dp.value = 'project-all';
       const dr = $('#f-date-range'); if (dr) dr.value = 'custom';
     } else {
       // 🛡 FIX 03.06.2026: «Усі проєкти» — скинути дати на «Весь період» (all-time)
@@ -1391,8 +1390,10 @@ function setupFilterBar() {
     // Це ламало "Сьогодні": при iPhone (06.06-06.06) період ставав 06.06-06.06 замість current date.
     // Тепер тільки звужуємо до перетину з поточним вибраним preset.
     if (sp) {
-      const dp = $('#date-preset');
-      const currentPreset = dp ? dp.value : 'today';
+      // 08.06.2026 P0 FIX: був wrong selector `#date-preset` — реальний ID `#f-date-range`.
+      // Через це currentPreset завжди = 'today' → condition `=== 'all'` ніколи не спрацьовував.
+      const dr = $('#f-date-range');
+      const currentPreset = dr ? dr.value : 'today';
       // Якщо preset — конкретна дата/період, лишаємо його. Звуження до проекту відбувається у _rpcParams().
       // Тільки якщо це "all" або період виходить за межі проекту — підставляємо межі проекту.
       if (currentPreset === 'all' || !filters.from || !filters.to) {
@@ -1400,7 +1401,7 @@ function setupFilterBar() {
         filters.to = sp.date_end;
         const cf = $('#cd-from'); if (cf) cf.value = sp.date_start;
         const ct = $('#cd-to'); if (ct) ct.value = sp.date_end;
-        if (dp) dp.value = 'custom';
+        if (dr) dr.value = 'custom';
       }
       // Інакше — лишаємо поточний period, _rpcParams() сам зробить перетин з sp.date_start..sp.date_end
     }
@@ -1605,6 +1606,7 @@ function kyivOffset(yyyymmdd) {
   while (lastSunday > 31) lastSunday -= 7;
   if (m === 3)  return (d >= lastSunday) ? '+03:00' : '+02:00';
   if (m === 10) return (d <  lastSunday) ? '+03:00' : '+02:00';
+  return '+02:00'; // 08.06.2026 safety fallback - захист від implicit undefined у edge cases
 }
 function kyivIsoStart(yyyymmdd) { return yyyymmdd + 'T00:00:00' + kyivOffset(yyyymmdd); }
 function kyivIsoEnd(yyyymmdd)   { return yyyymmdd + 'T23:59:59' + kyivOffset(yyyymmdd); }
