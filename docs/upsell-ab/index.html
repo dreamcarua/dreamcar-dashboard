@@ -166,18 +166,10 @@ html,body{background:var(--bg);color:var(--white);font-family:'JetBrains Mono','
 
 <div class="container">
 
-  <!-- SRM Banner — critical guardrail per audit P0 -->
-  <div id="srmBanner" role="alert" aria-live="polite" style="display:none;margin-bottom:18px;padding:16px 20px;background:linear-gradient(135deg,rgba(227,6,19,0.18),rgba(227,6,19,0.04));border:2px solid #E30613;border-radius:10px;">
-    <div style="display:flex;align-items:flex-start;gap:14px;">
-      <div style="font-size:24px;flex-shrink:0;">⚠️</div>
-      <div style="flex:1;">
-        <div style="font-size:13px;letter-spacing:1.5px;color:#FF6A7A;text-transform:uppercase;font-weight:700;margin-bottom:4px;">Sample Ratio Mismatch виявлено</div>
-        <div id="srmMessage" style="color:#fff;font-size:14px;line-height:1.5;margin-bottom:8px;"></div>
-        <div id="srmDetails" style="font-size:12px;color:#ccc;font-family:monospace;"></div>
-      </div>
-      <button id="srmDismiss" type="button" aria-label="Закрити попередження" style="background:transparent;border:1px solid rgba(255,255,255,0.2);color:#ccc;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:11px;">Сховати</button>
-    </div>
-  </div>
+  <!-- 08.06.2026 Vadym feedback: SRM banner прибрано — Вадим постійно змінює налаштування
+       traffic split, цей попередження зайвий. Замінено на блок "Розподіл трафіку" нижче
+       (відсотки сесій + оплат + суми) для інформативного перегляду. -->
+  <div id="srmBanner" style="display:none !important;"></div>
 
   <!-- Live error banner -->
   <div id="errorBanner" role="alert" aria-live="assertive" style="display:none;margin-bottom:18px;padding:12px 16px;background:rgba(227,6,19,0.12);border-left:4px solid #E30613;border-radius:6px;color:#FF6A7A;font-size:13px;">
@@ -217,6 +209,18 @@ html,body{background:var(--bg);color:var(--white);font-family:'JetBrains Mono','
         <span>Тариф:</span>
         <button class="filter-chip on" data-filter="tariff_base" data-value="">Всі</button>
       </div>
+    </div>
+  </div>
+
+  <!-- 08.06.2026 Vadym: Розподіл трафіку — заміна SRM banner на інформативний блок -->
+  <div class="section" id="distSection">
+    <h3>🎯 Розподіл трафіку по гілках <span class="badge">сесії · оплати · виручка</span></h3>
+    <div id="distBody" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;">
+      <div class="empty" style="grid-column:1/-1;">Завантаження…</div>
+    </div>
+    <div id="distHint" style="margin-top:12px;font-size:11px;color:#888;font-style:italic;">
+      Розподіл трафіку контролюється у tracker через <code style="color:#a3e635;">dcSetVariant</code>.
+      Якщо цифри відрізняються від планових — це нормально (постійно регулюємо split).
     </div>
   </div>
 
@@ -415,6 +419,7 @@ async function loadAll() {
 
     renderSRMBanner(srm);
     renderHero(sig, rec, srm);
+    renderDistribution(sig);             // 08.06.2026 Vadym: розподіл трафіку
     renderKPI(sig);
     renderTable(sig);
     renderChart(daily);
@@ -430,16 +435,87 @@ async function loadAll() {
   }
 }
 
-// 07.06.2026 АУДИТ Agent 2 P0-1: SRM banner render
-function renderSRMBanner(srm) {
-  const banner = document.getElementById('srmBanner');
-  if (!srm || !srm.has_srm) { banner.style.display = 'none'; return; }
-  document.getElementById('srmMessage').textContent = srm.message || 'SRM detected.';
-  const variants = (srm.variants || []).map(v =>
-    `${escapeHtml(v.variant)}: ${v.pct}% (${v.observed}/${srm.total}) · очікувалось ${v.expected_pct}%`
-  ).join(' · ');
-  document.getElementById('srmDetails').textContent = `χ²=${srm.chi2}, p=${srm.p_value} · ${variants}`;
-  banner.style.display = 'block';
+// 07.06.2026 АУДИТ Agent 2 P0-1: SRM banner render.
+// 08.06.2026 Vadym: banner прибрано (постійно регулюємо split), залишаємо no-op
+// щоб не зламати інші виклики у hero render.
+function renderSRMBanner(_srm) { /* no-op — див renderDistribution */ }
+
+// 08.06.2026 Vadym: розподіл трафіку — 3 показники per variant:
+// (1) % сесій (хто потрапив у експеримент), (2) % оплат, (3) сума виручки.
+// Кольорові stacked bars + цифри.
+function renderDistribution(sig) {
+  const body = document.getElementById('distBody');
+  if (!body) return;
+  if (!sig || !sig.length) { body.innerHTML = '<div class="empty" style="grid-column:1/-1;">Нема даних за період</div>'; return; }
+
+  const order = ['control', 'A', 'B', 'C'];
+  const COLORS = { control: '#10B981', A: '#60A5FA', B: '#a5b4fc', C: '#FBBF24' };
+  const LABELS = { control: 'Контроль', A: 'Варіант A', B: 'Варіант B', C: 'Варіант C' };
+  const fmt = (n) => Number(n||0).toLocaleString('uk-UA', { maximumFractionDigits: 0 });
+  const fmtMoney = (n) => fmt(n) + ' грн';
+
+  const sorted = sig.slice().sort((a, b) =>
+    (order.indexOf(a.variant) === -1 ? 99 : order.indexOf(a.variant)) -
+    (order.indexOf(b.variant) === -1 ? 99 : order.indexOf(b.variant))
+  );
+
+  const totalSessions = sorted.reduce((s, r) => s + Number(r.sessions || 0), 0);
+  const totalPaid = sorted.reduce((s, r) => s + Number(r.paid || 0), 0);
+  const totalRevenue = sorted.reduce((s, r) => s + Number(r.revenue || 0), 0);
+
+  // 3 sections: Sessions / Paid / Revenue. Per section — список варіантів з % bar + сумою.
+  function renderSection(title, key, total, fmtFn) {
+    const rows = sorted.map(v => {
+      const val = Number(v[key] || 0);
+      const pct = total > 0 ? (val / total * 100) : 0;
+      const color = COLORS[v.variant] || '#888';
+      const label = LABELS[v.variant] || v.variant;
+      return `
+        <div style="margin-bottom:10px;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;font-size:12px;">
+            <span style="color:#ddd;font-weight:600;"><span style="display:inline-block;width:8px;height:8px;background:${color};border-radius:50%;margin-right:6px;vertical-align:middle;"></span>${label}</span>
+            <span style="color:#888;font-family:monospace;font-size:11px;"><b style="color:#fff;">${pct.toFixed(1)}%</b> · ${fmtFn(val)}</span>
+          </div>
+          <div style="height:8px;background:rgba(255,255,255,0.05);border-radius:4px;overflow:hidden;">
+            <div style="height:100%;width:${pct.toFixed(2)}%;background:${color};border-radius:4px;transition:width 200ms;"></div>
+          </div>
+        </div>`;
+    }).join('');
+
+    // vs Control порівняння (тільки для Revenue колонки)
+    let comparison = '';
+    if (key === 'revenue') {
+      const control = sorted.find(s => s.variant === 'control');
+      const controlVal = control ? Number(control.revenue || 0) : 0;
+      const others = sorted.filter(s => s.variant !== 'control');
+      if (controlVal > 0 && others.length) {
+        comparison = '<div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.06);font-size:11px;color:#888;">'
+          + 'vs Контроль: '
+          + others.map(v => {
+              const diff = Number(v.revenue || 0) - controlVal;
+              const sign = diff > 0 ? '+' : '';
+              const col = diff > 0 ? '#10B981' : (diff < 0 ? '#FF6A7A' : '#888');
+              return `<b style="color:${col};">${LABELS[v.variant] || v.variant}: ${sign}${fmtMoney(diff)}</b>`;
+            }).join(' · ')
+          + '</div>';
+      }
+    }
+
+    return `
+      <div style="padding:14px 16px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;">
+          <div style="font-size:11px;letter-spacing:1.5px;color:#888;text-transform:uppercase;font-weight:700;">${title}</div>
+          <div style="font-size:10px;color:#666;font-family:monospace;">Σ ${fmtFn(total)}</div>
+        </div>
+        ${rows}
+        ${comparison}
+      </div>`;
+  }
+
+  body.innerHTML =
+    renderSection('Сесії', 'sessions', totalSessions, fmt) +
+    renderSection('Оплати', 'paid', totalPaid, fmt) +
+    renderSection('Виручка', 'revenue', totalRevenue, fmtMoney);
 }
 
 function renderHero(sig, rec, srm) {
