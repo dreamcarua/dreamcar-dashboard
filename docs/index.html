@@ -1670,7 +1670,13 @@ function _rpcParams() {
 }
 
 async function aggViaRPC(field) {
-  const params = { p_field: field, ..._rpcParams(), p_traffic_type: filters.traffic_type || null };
+  // 08.06.2026 P0 Fix: для UTM-аналітики (Кампанії/Виконавець/Джерела/Оголошення/Контент)
+  // НЕ звужуємо по project — бо кампанії й виконавці перетинають проекти.
+  // Раніше: вибір "HUMMER H2" → 0 deals → revenue=0 при 170+ лідах у реальності.
+  const baseParams = _rpcParams();
+  const skipProjectFilter = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].includes(field);
+  if (skipProjectFilter) delete baseParams.p_project_values;
+  const params = { p_field: field, ...baseParams, p_traffic_type: filters.traffic_type || null };
   const { data, error } = await sb.rpc('dashboard_agg_deals_with_traffic', params);
   if (error) throw error;
   return (data || []).map(r => ({
