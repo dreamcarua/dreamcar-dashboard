@@ -1659,6 +1659,12 @@ function _rpcParams() {
   } else if (filters.project && filters.project.startsWith('raw::')) {
     projectValues = [filters.project.slice(5)];
   }
+  // 08.06.2026 P0 Fix: якщо проект і period не перетинаються (напр. Moto 07.06-15.06 + "Вчора" 06.06)
+  // — обнуляємо діапазон у trivial empty замість інверсії, що ламала RPC (поверталось 3803=все)
+  if (fromDate > toDate) {
+    fromDate = '1900-01-01';
+    toDate = '1900-01-01';
+  }
   return {
     p_from: kyivIsoStart(fromDate),
     p_to: kyivIsoEnd(toDate),
