@@ -3373,7 +3373,7 @@ async function renderAnalytics() {
     // Конверсія pay/total = 83% це NORM для checkout, не bug.
     // Тепер воронка з 3 бари: Замовлення → Pending → Оплачено — наочно показує drop-off.
     const total = Number(k.total||0), paid = Number(k.paid||0);
-    const pending = Math.max(0, total - paid - Number(k.fail||0));
+    const pending = Math.max(0, total - paid); // 08.06.2026 fix: k.fail not returned by dashboard_kpi_with_delta (only has total/paid/*_delta). fail=0 in current data → pending = total - paid is correct.
     barChart('ch-funnel',
       ['Замовлення', 'У обробці', 'Оплачено'],
       [{ label: 'К-сть', data: [total, pending, paid], backgroundColor: ['#3B82F6','#F59E0B','#10B981'] }],
