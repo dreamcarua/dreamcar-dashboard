@@ -3529,6 +3529,26 @@ async function renderCohortRetention() {
 }
 
 /* ---------------- PEOPLE MERGE MAPPING ---------------- */
+// 08.06.2026 R5 P2: scoped click handler для People Mapping (event delegation)
+// Працює тільки на сторінці #people, ігнорує інші routes
+async function __peopleMappingHandler(e) {
+  if ((location.hash || '').replace('#','') !== 'people') return;
+  const editBtn = e.target.closest('[data-edit]');
+  const delBtn = e.target.closest('[data-del]');
+  if (editBtn) {
+    const id = editBtn.dataset.edit;
+    const { data } = await sb.from('dashboard_people_mapping').select('*').eq('id', id).maybeSingle();
+    if (data) openPersonModal(data);
+    return;
+  }
+  if (delBtn) {
+    if (!confirm('Видалити mapping?')) return;
+    const { error } = await sb.from('dashboard_people_mapping').delete().eq('id', delBtn.dataset.del);
+    if (error) { alert('Помилка: ' + error.message); return; }
+    renderPeopleMapping();
+  }
+}
+
 async function renderPeopleMapping() {
   const c = $('#content');
   c.innerHTML = `<div class="section-head"><h1>👥 People Merge (CRM↔ADS)</h1></div>${loadingHTML()}`;
@@ -3601,17 +3621,15 @@ async function renderPeopleMapping() {
     });
 
     $('#people-add').addEventListener('click', () => openPersonModal(null));
-    document.querySelectorAll('[data-edit]').forEach(btn => btn.addEventListener('click', () => {
-      const id = btn.dataset.edit;
-      const row = mappings.find(m => m.id === id);
-      openPersonModal(row);
-    }));
-    document.querySelectorAll('[data-del]').forEach(btn => btn.addEventListener('click', async () => {
-      if (!confirm('Видалити mapping?')) return;
-      const { error } = await sb.from('dashboard_people_mapping').delete().eq('id', btn.dataset.del);
-      if (error) { alert('Помилка: ' + error.message); return; }
-      renderPeopleMapping();
-    }));
+    // 08.06.2026 R5 P2: scope selectors до #content контейнера + delegation замість per-button
+    // Раніше document.querySelectorAll → колізіонило з [data-edit]/[data-del] на інших сторінках,
+    // а re-renderPeopleMapping не cleanup-ал старі listeners → multiple-bind.
+    const content = $('#content');
+    if (content) {
+      // Делегування — стейлес, не накопичується при rerender
+      content.removeEventListener('click', __peopleMappingHandler);
+      content.addEventListener('click', __peopleMappingHandler);
+    }
   } catch (e) { c.innerHTML = errorHTML(e); }
 }
 
