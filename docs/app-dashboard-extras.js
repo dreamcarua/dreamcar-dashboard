@@ -85,10 +85,14 @@
     btn.id = 'dc-theme-btn';
     btn.title = 'Theme toggle';
     btn.textContent = localStorage.getItem('dc-theme') === 'light' ? '🌙' : '☀️';
-    btn.onclick = function () {
+    btn.onclick = function (ev) {
+      // 08.06.2026 P0 defensive fix: stopPropagation щоб не conflict-ити з document click handler
+      // або з any pending renderRoute calls. Theme toggle — pure CSS, не повинен викликати data refetch.
+      if (ev) { ev.stopPropagation(); ev.preventDefault(); }
       var newT = localStorage.getItem('dc-theme') === 'light' ? 'dark' : 'light';
       applyTheme(newT);
       btn.textContent = newT === 'light' ? '🌙' : '☀️';
+      return false;
     };
     actions.insertBefore(btn, actions.firstChild);
   }
