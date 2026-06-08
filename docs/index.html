@@ -1677,6 +1677,20 @@ function _rpcParams() {
   };
 }
 
+// 08.06.2026 R2 P1 Fix: helper для ads_data queries — раніше всі 5 місць брали тільки date range
+// без проектного intersection → spend показувався глобально на per-project сторінках.
+// Тепер всі ads queries проходять через adsBaseRange() що враховує проектний date range.
+function adsBaseRange() {
+  const sp = getSelectedProject();
+  let fromD = filters.from, toD = filters.to;
+  if (sp) {
+    if (sp.date_start > fromD) fromD = sp.date_start;
+    if (sp.date_end < toD) toD = sp.date_end;
+    if (fromD > toD) { fromD = '1900-01-01'; toD = '1900-01-01'; }
+  }
+  return { fromD, toD };
+}
+
 async function aggViaRPC(field) {
   // 08.06.2026 P0 Fix: для UTM-аналітики (Кампанії/Виконавець/Джерела/Оголошення/Контент)
   // НЕ звужуємо по project — бо кампанії й виконавці перетинають проекти.
@@ -2441,10 +2455,11 @@ async function renderOverview() {
 
     let adSpend = 0;
     try {
+      const adsR = adsBaseRange();
       const { data } = await sb.from('dashboard_ads_data')
         .select('spend')
-        .gte('date_start', filters.from)
-        .lte('date_start', filters.to);
+        .gte('date_start', adsR.fromD)
+        .lte('date_start', adsR.toD);
       (data||[]).forEach(r => adSpend += Number(r.spend||0));
     } catch(e) {}
 
@@ -2911,10 +2926,11 @@ async function renderUtmField(field, title, csvName) {
 
     let adMap = new Map();
     try {
+      const adsR = adsBaseRange();
       const { data: ads } = await sb.from('dashboard_ads_data')
         .select(field + ', spend')
-        .gte('date_start', filters.from)
-        .lte('date_start', filters.to);
+        .gte('date_start', adsR.fromD)
+        .lte('date_start', adsR.toD);
       (ads||[]).forEach(a => {
         const k = a[field] || '(none)';
         adMap.set(k, (adMap.get(k)||0) + Number(a.spend||0));
@@ -3020,7 +3036,7 @@ async function renderCampaigns() {
   try {
     const [rows, adsRes] = await Promise.all([
       fetchAllDealsBatched(30000),
-      sb.from('dashboard_ads_data').select('campaign_name, spend, impressions, clicks').gte('date_start', filters.from).lte('date_start', filters.to)
+      (function(){ const r = adsBaseRange(); return sb.from('dashboard_ads_data').select('campaign_name, spend, impressions, clicks').gte('date_start', r.fromD).lte('date_start', r.toD); })()
     ]);
     const agg = aggregateByField(rows, 'utm_campaign');
     const adMap = new Map();
@@ -3761,9 +3777,10 @@ async function renderAdsOverview() {
     // 🛡 FIX 03.06.2026: pagination loop замість одного select (Supabase default limit=1000, ads_data має 6680+ rows → showed 15% data, 455K замість 3.7M spend)
     const rows = [];
     let offset = 0; const BATCH = 1000;
+    const _adsR1 = adsBaseRange();
     while (true) {
       const { data, error } = await sb.from('dashboard_ads_data').select('*')
-        .gte('date_start', filters.from).lte('date_start', filters.to)
+        .gte('date_start', _adsR1.fromD).lte('date_start', _adsR1.toD)
         .order('date_start', { ascending: true })
         .range(offset, offset + BATCH - 1);
       if (error) throw error;
@@ -3829,9 +3846,10 @@ async function renderAdsCampaigns() {
     // 🛡 FIX 03.06.2026: pagination loop (same as ads-overview)
     const allRows = [];
     let offset = 0; const BATCH = 1000;
+    const _adsR2 = adsBaseRange();
     while (true) {
       const { data, error } = await sb.from('dashboard_ads_data').select('*')
-        .gte('date_start', filters.from).lte('date_start', filters.to)
+        .gte('date_start', _adsR2.fromD).lte('date_start', _adsR2.toD)
         .order('date_start', { ascending: true })
         .range(offset, offset + BATCH - 1);
       if (error) throw error;
@@ -4243,8 +4261,18 @@ function openProjectModal(row) {
    ROUTER
    ================================================================= */
 
+// 08.06.2026 R2 P1: route aliases — bookmarks типу #traffic / #ads / #creative тепер працюють
+const ROUTE_ALIASES = {
+  'traffic': 'medium',
+  'ads': 'terms',
+  'creative': 'content',
+  'executor': 'terms',
+  'campaign': 'campaigns',
+  'source': 'sources'
+};
 function getRoute() {
-  const h = location.hash.replace(/^#/, '') || 'overview';
+  let h = location.hash.replace(/^#/, '') || 'overview';
+  if (ROUTE_ALIASES[h]) h = ROUTE_ALIASES[h];
   return SECTIONS[h] ? h : 'overview';
 }
 
