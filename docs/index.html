@@ -1795,7 +1795,14 @@ async function loadProjects() {
       .not('project','is',null)
       .limit(5000);
     const dealProjSet = new Set();
-    (dealProjData || []).forEach(r => { if (r.project) dealProjSet.add(r.project); });
+    // 08.06.2026 R2 P2: filter garbage projects з історичних deals — '🔹', variation selectors, length<=1
+    (dealProjData || []).forEach(r => {
+      if (!r.project) return;
+      const p = r.project.trim();
+      if (p.length <= 1) return; // single char/emoji/variation selector
+      if (!/[A-Za-zА-Яа-яІіЇїЄє0-9]/.test(p)) return; // має містити хоча б 1 letter/digit
+      dealProjSet.add(r.project);
+    });
 
     // 06.06.2026 — auto-merge нових проектів з public.launches (source of truth у /projects/).
     // Раніше треба було вручну додавати у dashboard_projects, тепер усе що створиться у
@@ -1872,7 +1879,14 @@ async function loadTariffs() {
   try {
     const { data } = await sb.from('dashboard_deals').select('tariff').not('tariff','is',null).limit(5000);
     const set = new Set();
-    (data || []).forEach(r => { if (r.tariff) set.add(r.tariff); });
+    // 08.06.2026 R2 P2: filter "Ручна видача x10/x8" — це manual-issuance flags, не реальні tariffs
+    (data || []).forEach(r => {
+      if (!r.tariff) return;
+      const t = r.tariff.trim();
+      if (/ручна\s+видача/i.test(t)) return;
+      if (t.length < 2) return;
+      set.add(r.tariff);
+    });
     const sel = $('#f-tariff');
     const cur = filters.tariff;
     sel.innerHTML = '<option value="">Усі тарифи</option>' +
