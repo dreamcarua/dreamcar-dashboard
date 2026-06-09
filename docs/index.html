@@ -3113,13 +3113,14 @@ async function renderOverview() {
     const profit = sum - adSpend;
     const roas = adSpend > 0 ? sum / adSpend : null;
     const roi = adSpend > 0 ? ((sum - adSpend) / adSpend * 100) : null;
+    // #214 fix: TDZ — leadsCount/totalForConv мають бути ОБ'ЯВЛЕНІ ДО cpl
+    const leadsCount = await fetchLeadsCount();
+    const totalForConv = leadsCount > 0 ? leadsCount : rows.length;
     const cpl = adSpend > 0 && totalForConv > 0 ? adSpend / totalForConv : null;
     const cpa = adSpend > 0 && paid.length > 0 ? adSpend / paid.length : null;
     const byDay = aggregateByDay(rows, filters.granularity);
     const last20 = rows.slice(0, 20);
     const byProj7 = aggregateByField(rows, 'project').slice(0, 7);
-    const leadsCount = await fetchLeadsCount();
-    const totalForConv = leadsCount > 0 ? leadsCount : rows.length;
     const conv = totalForConv ? (paid.length / totalForConv * 100) : 0;
     const granLabel = { day: 'По днях', week: 'По тижнях', month: 'По місяцях' }[filters.granularity || 'day'];
 
