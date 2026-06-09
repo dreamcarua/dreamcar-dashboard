@@ -1356,27 +1356,8 @@
       <button class="tb-btn" id="tb-export-json" title="Показати raw JSON останніх даних">💾 <span class="full-label">JSON</span></button>
       <button class="tb-btn" id="tb-refresh" title="Оновити дані">🔄 <span class="full-label">Оновити</span></button>
       <button class="tb-btn" data-jump="settings" title="Налаштування проєктів">⚙️ <span class="full-label">Settings</span></button>
-      <button class="tb-btn dc-theme-toggle-btn" id="dc-theme-toggle" title="Світла / темна тема" type="button">🌙</button>
     </div>
-    <script>
-      (function(){
-        var KEY='dc-theme';
-        function get(){try{return localStorage.getItem(KEY)||'dark';}catch(_){return 'dark';}}
-        function set(v){try{localStorage.setItem(KEY,v);}catch(_){}apply(v);}
-        function apply(v){
-          document.documentElement.setAttribute('data-dc-theme',v);
-          var b=document.getElementById('dc-theme-toggle');
-          if(b){b.textContent=v==='light'?'☀️':'🌙';b.title=v==='light'?'Темна тема':'Світла тема';}
-        }
-        window.dcToggleTheme=function(){set(get()==='dark'?'light':'dark');};
-        document.addEventListener('DOMContentLoaded',function(){
-          apply(get());
-          var b=document.getElementById('dc-theme-toggle');
-          if(b)b.onclick=window.dcToggleTheme;
-        });
-        window.addEventListener('storage',function(e){if(e.key===KEY&&e.newValue)apply(e.newValue);});
-      })();
-    </script>
+    <!-- #223: видалив свій dc-theme-toggle — global-header.js (brand.dreamcar.ua) вже додає кросс-апі #dc-theme-btn 🌙 з тим самим localStorage ключем 'dc-theme'. CSS світлої теми лишається — спрацьовує і з global toggle. -->
     <div class="live-badge" id="live-badge"><span class="live-dot"></span>Live</div>
     <div class="user-chip" id="user-chip">
       <div class="user-avatar">?</div>
