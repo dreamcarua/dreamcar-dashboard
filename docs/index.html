@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
@@ -3056,6 +3055,30 @@ async function renderProjectsOverview() {
   } catch (e) { c.innerHTML = errorHTML(e); }
 }
 
+
+// PROJECT → order-reference prefix map (deal_project has known mapping bug for 'new' events)
+const PROJECT_REF_MAP = {
+  'MOTORCYCLE': 'DCI-moto',
+  'AUDI E-TRON': 'DCI-audi',
+  'AUDI': 'DCI-audi',
+};
+
+async function fetchLeadsCount() {
+  try {
+    let q = sb.from('dashboard_webhooks')
+      .select('id', { count: 'exact', head: true })
+      .eq('event_type', 'new')
+      .gte('created_at', kyivIsoStart(filters.from))
+      .lte('created_at', kyivIsoEnd(filters.to));
+    if (filters.project && PROJECT_REF_MAP[filters.project]) {
+      q = q.filter('payload->>processed', 'ilike', '%' + PROJECT_REF_MAP[filters.project] + '%');
+    }
+    const { count, error } = await q;
+    if (error) { console.warn('[fetchLeadsCount] error:', error.message); return 0; }
+    return count || 0;
+  } catch(e) { console.warn('[fetchLeadsCount]', e); return 0; }
+}
+
 async function renderOverview() {
   const c = $('#content');
   c.innerHTML = `
@@ -3090,32 +3113,34 @@ async function renderOverview() {
     const profit = sum - adSpend;
     const roas = adSpend > 0 ? sum / adSpend : null;
     const roi = adSpend > 0 ? ((sum - adSpend) / adSpend * 100) : null;
-    const cpl = adSpend > 0 && rows.length > 0 ? adSpend / rows.length : null;
+    const cpl = adSpend > 0 && totalForConv > 0 ? adSpend / totalForConv : null;
     const cpa = adSpend > 0 && paid.length > 0 ? adSpend / paid.length : null;
     const byDay = aggregateByDay(rows, filters.granularity);
     const last20 = rows.slice(0, 20);
     const byProj7 = aggregateByField(rows, 'project').slice(0, 7);
-    const conv = rows.length ? (paid.length / rows.length * 100) : 0;
+    const leadsCount = await fetchLeadsCount();
+    const totalForConv = leadsCount > 0 ? leadsCount : rows.length;
+    const conv = totalForConv ? (paid.length / totalForConv * 100) : 0;
     const granLabel = { day: 'По днях', week: 'По тижнях', month: 'По місяцях' }[filters.granularity || 'day'];
 
     c.innerHTML = `
       <div class="section-head">
         <div>
           <h1>📊 Огляд</h1>
-          <div class="subtitle">${escapeHtml(filters.from)} → ${escapeHtml(filters.to)} · ${fmtNum(rows.length)} угод</div>
+          <div class="subtitle">${escapeHtml(filters.from)} → ${escapeHtml(filters.to)} · ${fmtNum(totalForConv)} лідів · ${fmtNum(paid.length)} оплат</div>
         </div>
       </div>
 
       <div class="kpi-row-title">КОНВЕРСІЯ ЧЕКАУТУ</div>
       <div class="kpi-grid">
-        ${kpi('Всього замовлень', fmtNum(rows.length), 'усі статуси (pay/pending/fail)')}
+        ${kpi('Всього лідів', fmtNum(totalForConv), leadsCount > 0 ? 'нові checkout-стартів (webhooks)' : 'усі статуси (pay/pending/fail)')}
         ${kpi('Оплачено', fmtNum(paid.length), fmtPct(conv) + ' success rate', 'green')}
         ${kpi('Унікальних покупців', fmtNum(uniqEmails), 'utm_email', 'blue')}
         ${kpi('Виручка', fmtMoney(sum, 'UAH'), 'сума оплачених', 'green')}
         ${kpi('Середній чек', fmtMoney(avg, 'UAH'), 'revenue / paid', 'blue')}
         ${kpi('Джерел', fmtNum(sources), 'utm_source')}
         ${kpi('Кампаній', fmtNum(campaigns), 'utm_campaign')}
-        ${kpi('Success rate %', fmtPct(conv), 'paid / total замовлень', conv >= 70 ? 'green' : 'amber')}
+        ${kpi('Success rate %', fmtPct(conv), 'paid / ліди', conv >= 70 ? 'green' : 'amber')}
       </div>
 
       <div class="kpi-row-title">ЕКОНОМІКА</div>
