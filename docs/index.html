@@ -23,12 +23,66 @@
     --ash: #888;
     --ash-2: #BBB;
     --white: #FFF;
+    --bg-2: #141414;
+    --bg-3: #1B1B1B;
     --success: #10B981;
     --warning: #F59E0B;
     --danger: #DC2626;
     --info: #3B82F6;
     --sidebar-w: 220px;
     --topbar-h: 56px;
+  }
+  /* #218/#219 BIG світла тема для Dashboard — token-level overrides */
+  html[data-dc-theme="light"] {
+    --black: #fafafa;
+    --black-2: #ffffff;
+    --steel: #e1e1e6;
+    --steel-2: #ececef;
+    --ash: #6e6e76;
+    --ash-2: #4a4a52;
+    --white: #0a0a0a;
+    --bg-2: #ffffff;
+    --bg-3: #f5f5f7;
+  }
+  html[data-dc-theme="light"] body {
+    background: #fafafa !important;
+    color: #0a0a0a !important;
+  }
+  html[data-dc-theme="light"] :is(.topbar, .sidebar, .modal, .card, .panel, table, thead, tbody, tr, th, td) {
+    background: transparent;
+    color: #0a0a0a;
+    border-color: #e1e1e6 !important;
+  }
+  html[data-dc-theme="light"] :is(.topbar, .sidebar) {
+    background: #ffffff !important;
+  }
+  html[data-dc-theme="light"] thead th, html[data-dc-theme="light"] th {
+    background: #f5f5f7 !important;
+  }
+  html[data-dc-theme="light"] tr:hover { background: #f5f5f7 !important; }
+  html[data-dc-theme="light"] :is(input, select, textarea, button) {
+    background: #ffffff !important;
+    color: #0a0a0a !important;
+    border-color: #d4d4d8 !important;
+  }
+  html[data-dc-theme="light"] [style*="background:var(--bg-2)"],
+  html[data-dc-theme="light"] [style*="background:var(--black-2)"] {
+    background: #ffffff !important;
+    color: #0a0a0a !important;
+  }
+  html[data-dc-theme="light"] [style*="background:var(--bg-3)"],
+  html[data-dc-theme="light"] [style*="background:var(--steel-2)"] {
+    background: #f5f5f7 !important;
+    color: #0a0a0a !important;
+  }
+  html[data-dc-theme="light"] [style*="color:#fff"]:not(.btn-primary):not(.chip-cta):not([style*="background:var(--red)"]) {
+    color: #0a0a0a !important;
+  }
+  /* Theme toggle button */
+  .dc-theme-toggle-btn {
+    background: transparent; border: 1px solid currentColor; color: inherit;
+    cursor: pointer; padding: 4px 10px; border-radius: 6px;
+    font-size: 14px; line-height: 1; margin-left: 8px;
   }
   * { box-sizing: border-box; }
   html, body {
@@ -1292,7 +1346,27 @@
       <button class="tb-btn" id="tb-export-json" title="Показати raw JSON останніх даних">💾 <span class="full-label">JSON</span></button>
       <button class="tb-btn" id="tb-refresh" title="Оновити дані">🔄 <span class="full-label">Оновити</span></button>
       <button class="tb-btn" data-jump="settings" title="Налаштування проєктів">⚙️ <span class="full-label">Settings</span></button>
+      <button class="tb-btn dc-theme-toggle-btn" id="dc-theme-toggle" title="Світла / темна тема" type="button">🌙</button>
     </div>
+    <script>
+      (function(){
+        var KEY='dc-theme';
+        function get(){try{return localStorage.getItem(KEY)||'dark';}catch(_){return 'dark';}}
+        function set(v){try{localStorage.setItem(KEY,v);}catch(_){}apply(v);}
+        function apply(v){
+          document.documentElement.setAttribute('data-dc-theme',v);
+          var b=document.getElementById('dc-theme-toggle');
+          if(b){b.textContent=v==='light'?'☀️':'🌙';b.title=v==='light'?'Темна тема':'Світла тема';}
+        }
+        window.dcToggleTheme=function(){set(get()==='dark'?'light':'dark');};
+        document.addEventListener('DOMContentLoaded',function(){
+          apply(get());
+          var b=document.getElementById('dc-theme-toggle');
+          if(b)b.onclick=window.dcToggleTheme;
+        });
+        window.addEventListener('storage',function(e){if(e.key===KEY&&e.newValue)apply(e.newValue);});
+      })();
+    </script>
     <div class="live-badge" id="live-badge"><span class="live-dot"></span>Live</div>
     <div class="user-chip" id="user-chip">
       <div class="user-avatar">?</div>
