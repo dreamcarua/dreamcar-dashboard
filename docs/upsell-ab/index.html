@@ -80,6 +80,50 @@ html,body{background:var(--bg);color:var(--white);font-family:'JetBrains Mono','
 /* KPI cards */
 .kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
 .kpi-card{background:var(--bg-2);border:1px solid var(--steel);border-radius:12px;padding:20px;}
+
+/* #321 WHALES (P95 outliers) — DreamCar style */
+.whales-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:14px 0 18px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;}
+.whales-toggle{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:var(--bg-3);border:1px solid var(--steel);border-radius:6px;cursor:pointer;color:#fff;text-transform:uppercase;user-select:none;transition:all 0.15s;}
+.whales-toggle:hover{border-color:var(--red);}
+.whales-toggle.on{background:rgba(227,6,19,0.15);border-color:var(--red);color:#fff;}
+.whales-toggle .sw{width:32px;height:16px;border-radius:9px;background:var(--steel);position:relative;transition:background 0.15s;}
+.whales-toggle .sw::after{content:'';position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:#fff;transition:left 0.15s;}
+.whales-toggle.on .sw{background:var(--red);}
+.whales-toggle.on .sw::after{left:18px;}
+.whales-help{font-size:10px;color:var(--ash);letter-spacing:0.08em;text-transform:none;}
+
+.whales-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;}
+.whales-card{background:var(--bg-3);border:1px solid var(--steel);border-radius:10px;padding:16px 18px;position:relative;overflow:hidden;transition:border-color 0.15s;}
+.whales-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:currentColor;opacity:0.7;}
+.whales-card.c-control{color:var(--ash);}
+.whales-card.c-A{color:var(--green);}
+.whales-card.c-B{color:var(--blue);}
+.whales-card.c-C{color:var(--purple);}
+.whales-card-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;}
+.whales-card-title{font-family:'Oswald',sans-serif;font-weight:700;font-size:18px;letter-spacing:0.04em;text-transform:uppercase;color:#fff;}
+.whales-card-meta{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ash);letter-spacing:0.1em;text-transform:uppercase;}
+.whales-metric-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.whales-metric{background:rgba(255,255,255,0.02);border:1px solid var(--line);border-radius:6px;padding:9px 10px;}
+.whales-metric .lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ash);margin-bottom:2px;}
+.whales-metric .val{font-family:'Oswald',sans-serif;font-weight:700;font-size:18px;color:#fff;line-height:1;}
+.whales-metric .val small{font-size:11px;color:var(--ash);font-family:'JetBrains Mono',monospace;font-weight:400;margin-left:4px;}
+.whales-metric.skew-warn{border-color:var(--gold);background:rgba(251,191,36,0.06);}
+.whales-metric.skew-warn .val{color:var(--gold);}
+.whales-metric.skew-warn .lbl{color:var(--gold);}
+.whales-alert{display:flex;align-items:center;gap:8px;background:rgba(227,6,19,0.08);border:1px solid var(--red);border-radius:6px;padding:8px 12px;margin-bottom:10px;font-size:11px;color:#fff;letter-spacing:0.05em;}
+.whales-alert.lo{background:rgba(16,185,129,0.06);border-color:var(--green);color:#fff;}
+.whales-alert.lo strong{color:var(--green);}
+.whales-alert strong{color:var(--red-soft);}
+.whales-list{list-style:none;padding:0;margin:6px 0 0;border-top:1px solid var(--line);padding-top:8px;}
+.whales-list-title{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ash);margin-bottom:6px;}
+.whales-list li{display:flex;justify-content:space-between;padding:4px 0;font-size:11px;color:#ddd;font-family:'JetBrains Mono',monospace;}
+.whales-list li .amount{color:var(--red-soft);font-weight:700;}
+.whales-list li .ts{color:var(--ash);}
+.whales-empty{padding:16px;text-align:center;color:var(--ash);font-size:11px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em;}
+/* Toggle "Без китів" — підсвічує mean_no_whales замість mean (1-й метрик у кожному ряду) */
+body.whales-excluded .whales-metric:nth-child(1) .val{color:var(--ash);}
+body.whales-excluded .whales-metric-row:nth-of-type(2) .whales-metric:nth-child(1) .val{color:var(--red-soft) !important;}
+body.whales-excluded .whales-metric-row:nth-of-type(2) .whales-metric:nth-child(1){border-color:var(--red);background:rgba(227,6,19,0.06);}
 .kpi-label{font-size:10px;color:var(--ash);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:10px;}
 .kpi-value{font-family:'Oswald',sans-serif;font-size:32px;font-weight:800;letter-spacing:0.02em;}
 .kpi-sub{font-size:11px;color:var(--grey);margin-top:6px;}
@@ -282,6 +326,27 @@ html,body{background:var(--bg);color:var(--white);font-family:'JetBrains Mono','
     </div>
   </div>
 
+  <!-- #321 Whales — статистика з виключенням аномалій (P95 outliers) -->
+  <div class="section">
+    <h3>🐋 Кити: аномалії &gt; P95 <span class="badge">статистично надійніше</span></h3>
+    <div class="whales-controls">
+      <div class="whales-toggle" id="whalesToggle" role="switch" aria-checked="false" tabindex="0">
+        <span class="sw"></span><span>З китами / Без китів</span>
+      </div>
+      <span class="whales-help">Toggle перемикає mean у KPI вище → з китами або без (P95 cutoff per-variant)</span>
+    </div>
+    <div class="whales-grid" id="whalesGrid"><div class="whales-empty">Завантаження…</div></div>
+    <div style="margin-top:14px;padding:14px 18px;background:rgba(96,165,250,0.06);border-left:3px solid var(--blue);border-radius:6px;font-size:12px;color:#bbb;line-height:1.6;">
+      <b style="color:var(--blue);">Як читати:</b><br>
+      • <b>Mean</b> — середній чек (мат. очікування). Чутливе до китів.<br>
+      • <b>Median</b> — медіана. <b>Стійка до китів</b> — реальний "центральний клієнт".<br>
+      • <b>Skew %</b> — наскільки mean відрізняється від median. <b>&gt;20% = bimodal або є outlier</b>; орієнтуйся на median.<br>
+      • <b>P95</b> — поріг "кита" (5% найбільших чеків групи). Все вище — outliers.<br>
+      • <b>Mean без китів</b> — реальний AOV без хвоста. Тут видно фактичний вплив апселу.<br>
+      • <b>Share %</b> — частка виручки яку дають кити. Якщо &gt;15% — сценарій залежить від 1-2 покупців.
+    </div>
+  </div>
+
   <!-- Recommendations -->
   <div class="section">
     <h3>🤖 Що робити прямо зараз</h3>
@@ -440,6 +505,8 @@ async function loadAll() {
     await renderFunnels(sig);
     if (isStale()) return;
     await renderAOV();
+    if (isStale()) return;
+    await loadWhales();        // #321
     if (isStale()) return;
     renderRecommendations(rec);
     document.getElementById('lastUpdate').textContent = 'Оновлено: ' + new Date().toLocaleTimeString('uk-UA');
@@ -886,6 +953,88 @@ async function renderAOV() {
     leaderboard.innerHTML = '';
   }
 }
+
+// ========== #321 WHALES (P95 outliers) ==========
+async function loadWhales() {
+  const grid = document.getElementById('whalesGrid');
+  if (!grid) return;
+  try {
+    const since = getPeriodSince();
+    const until = (typeof state.period === 'object' && state.period.to) ? state.period.to : null;
+    const args = until ? { p_since: since, p_until: until } : { p_since: since };
+    const { data, error } = await sb.rpc('upsell_whales_analysis', args);
+    if (error) throw error;
+    renderWhales(data || {});
+  } catch (e) {
+    console.error('[whales]', e);
+    grid.innerHTML = `<div class="whales-empty">Помилка: ${escapeHtml(e.message || String(e))}</div>`;
+  }
+}
+
+function renderWhales(data) {
+  const grid = document.getElementById('whalesGrid');
+  if (!grid) return;
+  const order = ['control', 'A', 'B', 'C'];
+  const labels = { control: 'CONTROL', A: 'VARIANT A', B: 'VARIANT B', C: 'VARIANT C' };
+  const variants = order.filter(v => data && data[v]);
+  if (!variants.length) {
+    grid.innerHTML = '<div class="whales-empty">Немає даних за період</div>';
+    return;
+  }
+  const fmt = n => Number(n || 0).toLocaleString('uk-UA', { maximumFractionDigits: 0 });
+  grid.innerHTML = variants.map(v => {
+    const d = data[v];
+    const skew = Number(d.mean_median_skew_pct || 0);
+    const skewWarn = Math.abs(skew) > 20;
+    const whaleShare = Number(d.whale_share_pct || 0);
+    const whaleCount = Number(d.whale_count || 0);
+    const topWhales = Array.isArray(d.top_whales) ? d.top_whales : [];
+    const skewSign = skew > 0 ? '+' : '';
+    const alertCls = skewWarn ? '' : 'lo';
+    const alertIcon = skewWarn ? '⚠️' : '✅';
+    const alertText = skewWarn
+      ? `<strong>Skew ${skewSign}${skew}%</strong> — є викиди, mean спотворений; орієнтуйся на <b style="color:#fbbf24;">median</b>`
+      : `<strong>Skew ${skewSign}${skew}%</strong> — розподіл стабільний, mean ≈ median`;
+    return `
+      <div class="whales-card c-${escapeHtml(v)}">
+        <div class="whales-card-head">
+          <div class="whales-card-title">${escapeHtml(labels[v] || v)}</div>
+          <div class="whales-card-meta">${fmt(d.payments)} оплат · P95 ${fmt(d.p95)}</div>
+        </div>
+        <div class="whales-alert ${alertCls}"><span>${alertIcon}</span><span>${alertText}</span></div>
+        <div class="whales-metric-row">
+          <div class="whales-metric"><div class="lbl">Mean (середнє)</div><div class="val">${fmt(d.mean)} <small>грн</small></div></div>
+          <div class="whales-metric"><div class="lbl">Median (медіана)</div><div class="val">${fmt(d.median)} <small>грн</small></div></div>
+        </div>
+        <div class="whales-metric-row">
+          <div class="whales-metric ${skewWarn ? 'skew-warn' : ''}"><div class="lbl">Mean БЕЗ китів</div><div class="val">${fmt(d.mean_no_whales)} <small>грн</small></div></div>
+          <div class="whales-metric"><div class="lbl">Кити (${whaleCount})</div><div class="val">${whaleShare}% <small>revenue</small></div></div>
+        </div>
+        ${topWhales.length ? `
+          <div class="whales-list">
+            <div class="whales-list-title">🐋 Top ${topWhales.length} чеків &gt; P95</div>
+            <ul style="list-style:none;padding:0;margin:0;">
+              ${topWhales.map(w => `<li><span class="ts">${escapeHtml(w.ts || '')}</span><span class="amount">${fmt(w.amount)} грн</span></li>`).join('')}
+            </ul>
+          </div>` : ''}
+      </div>`;
+  }).join('');
+}
+
+// Toggle: 1 — підсвічує "Без китів" (mean_no_whales bold), 0 — "З китами" (mean bold).
+(function initWhalesToggle() {
+  const tgl = document.getElementById('whalesToggle');
+  if (!tgl) return;
+  let on = localStorage.getItem('whalesExcluded') === '1';
+  const apply = () => {
+    tgl.classList.toggle('on', on);
+    tgl.setAttribute('aria-checked', String(on));
+    document.body.classList.toggle('whales-excluded', on);
+  };
+  apply();
+  tgl.addEventListener('click', () => { on = !on; localStorage.setItem('whalesExcluded', on ? '1' : '0'); apply(); });
+  tgl.addEventListener('keydown', (e) => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); tgl.click(); } });
+})();
 
 function renderRecommendations(rec) {
   const recs = rec.recommendations || [];
