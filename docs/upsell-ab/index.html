@@ -367,14 +367,15 @@ const EXPERIMENT_ID = 'upsell_window_1';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
 // 07.06.2026 АУДИТ: централізовані константи (попередньо magic numbers по коду)
+// #354 (12.06.2026): MIN_SAMPLE 500 → 200 (Vadym: «200 не кожен день у нас є, але 500 рідко набирається»).
+// SRM_P_THRESHOLD не використовуємо більше — ваги динамічні (Артем змінює split).
 const CONFIG = {
-  MIN_SAMPLE: 500,
-  REALTIME_DEBOUNCE_MS: 15000, // було 5000 — занадто агресивно
+  MIN_SAMPLE: 200,
+  REALTIME_DEBOUNCE_MS: 15000,
   FILTER_DATA_LIMIT: 50000,
   P_VALUE_SIG: 0.05,
   P_VALUE_MARGINAL: 0.10,
   DAY_MS: 86_400_000,
-  SRM_P_THRESHOLD: 0.001,
 };
 
 const state = {
@@ -439,7 +440,7 @@ const STATUS_LABELS = {
   continue: '🟡 ПРОДОВЖУЄМО ЕКСПЕРИМЕНТ',
   kill: '🔴 ВІДКАТУЄМО',
   need_data: '⚪ НАКОПИЧУЄМО ДАНІ',
-  srm_blocked: '🚫 SRM DETECTED — НЕ ПРИЙМАТИ РІШЕННЯ' // АУДИТ Pass1 P0
+  // #354: srm_blocked entry лишається на випадок якщо backend rec.status поверне його, але override-логіка прибрана
 };
 
 // #331 (11.06.2026): фінальні описові назви варіантів від Vadym
@@ -601,15 +602,14 @@ function renderDistribution(sig) {
 }
 
 function renderHero(sig, rec, srm) {
-  // 07.06.2026 АУДИТ Pass1 P0: SRM override → блокувати "ship" badge коли SRM detected
+  // #354 (12.06.2026 Vadym): SRM-override прибрано — ваги задає Артем динамічно, порівнювати з 25%/25%/25%/25% некоректно.
+  // Status визначається рекомендацією (need_data / leader / no_winner), а не SRM.
   let status = rec.status || 'need_data';
-  if (srm && srm.has_srm) status = 'srm_blocked';
   const winner = (sig || []).filter(s => s.variant !== 'control').sort((a, b) => (b.rps || 0) - (a.rps || 0))[0];
   const heroEl = document.getElementById('hero');
   const statusEl = heroEl.querySelector('.hero-status');
   statusEl.className = 'hero-status ' + status;
-  const STATUS_OVR = Object.assign({}, STATUS_LABELS, { srm_blocked: '🚫 SRM DETECTED — не приймати рішення' });
-  statusEl.textContent = STATUS_OVR[status] || status;
+  statusEl.textContent = STATUS_LABELS[status] || status;
   let body = '';
   if (winner) {
     // АУДИТ Agent 3 P0: escapeHtml для всіх RPC даних у innerHTML
@@ -625,7 +625,7 @@ function renderHero(sig, rec, srm) {
       ? Math.min(100, Math.round(Number(sp.pct)))
       : Math.min(100, Math.round((Number(sp) || 0) * 100));
     const samp = sp && sp.current != null ? sp.current : (winner.sessions || 0);
-    const target = sp && sp.target ? sp.target : 500;
+    const target = sp && sp.target ? sp.target : CONFIG.MIN_SAMPLE;
     body += `<div class="progress" role="progressbar" aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar" style="width:${progress}%"></div></div>`;
     body += `<div class="progress-label">Прогрес вибірки: ${samp} / ${target} (${progress}%)</div>`;
     if (rec.alpha_adjusted) {
