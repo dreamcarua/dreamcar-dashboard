@@ -144,7 +144,7 @@ function renderOverview(){
     <div class="card kpi"><div class="lab">Проєктів</div><div class="val">${ps.length}</div><div class="meta">у вибірці</div></div>
     <div class="card kpi"><div class="lab">Витрати</div><div class="val">${(tot.s/1e6).toFixed(2)}М ₴</div><div class="meta">сумарно</div></div>
     <div class="card kpi"><div class="lab">Сер. ROAS pixel</div><div class="val neu">${f2(avgPx)}</div><div class="meta">зважений</div></div>
-    <div class="card kpi"><div class="lab">Сер. ROAS реал</div><div class="val up">${f2(avgReal)}</div><div class="meta">по UTM-мітках</div></div>
+    <div class="card kpi"><div class="lab">Сер. ROAS реал</div><div class="val up">${f2(avgReal)}</div><div class="meta">лише реклама (placement)</div></div>
   </div>
   <div class="chart-card" style="margin-top:13px"><h3 style="margin:2px 0 8px">Витрати vs ROAS по проєктах</h3><div class="chart-box" style="height:320px"><canvas id="cOv"></canvas></div>
     <div class="legend"><span><i class="dot" style="background:${C.red}"></i>Витрати ₴</span><span><i class="dot" style="background:${C.gold}"></i>ROAS pixel</span><span><i class="dot" style="background:${C.green}"></i>ROAS реал</span></div></div>
@@ -175,8 +175,8 @@ function renderTrends(){
       <div class="card kpi"><div class="lab">ROAS pixel / реал</div><div class="val neu">${f2(dl.pixel_roas)} / <span class="up">${f2(dl.real_ad_roas)}</span>${fmtDelta(d.pixel_roas)}</div></div>
       <div class="card kpi"><div class="lab">CPA</div><div class="val">${f2(dl.cpa)} ₴${fmtDelta(d.cpa)}</div></div>
     </div>`;
-    const rc=dl.real_by_campaign||[];
-    if(rc.length){ h+=`<div class="card scroll" style="margin-top:13px"><h3 style="margin:2px 0 8px">💰 Реальна виручка по кампаніях (utm_campaign, за ${(dl.date||'').slice(5)})</h3><table><thead><tr><th>Кампанія</th><th>Оплат</th><th>Виручка ₴</th></tr></thead><tbody>`+rc.map(c=>`<tr><td>${c.campaign}</td><td>${fmt(c.paid)}</td><td>${fmt(c.revenue)}</td></tr>`).join('')+`</tbody></table></div>`; }
+    const rc=dl.real_by_placement||[];
+    if(rc.length){ h+=`<div class="card scroll" style="margin-top:13px"><h3 style="margin:2px 0 8px">💰 Реальна виручка по рекламних плейсментах (utm_medium, за ${(dl.date||'').slice(5)})</h3><div class="note" style="margin:0 0 8px">Лише реклама (placement-мітки Meta). Органіка бренд-акаунтів, Telegram, email — НЕ враховані.</div><table><thead><tr><th>Плейсмент</th><th>Оплат</th><th>Виручка ₴</th></tr></thead><tbody>`+rc.map(c=>`<tr><td>${c.placement}</td><td>${fmt(c.paid)}</td><td>${fmt(c.revenue)}</td></tr>`).join('')+`</tbody></table></div>`; }
   }
   const p=curProject();
   if(!p){ h+=`<div class="note" style="margin-top:13px">Оберіть проєкт у фільтрі вгорі, щоб побачити денну динаміку spend / ROAS.</div>`; el.innerHTML=h; return; }
@@ -240,7 +240,7 @@ function renderCreatives(){
 /* ---------- RECONCILE ---------- */
 function renderReconcile(){
   const el=document.getElementById('tab-reconcile'); const ps=visibleProjects();
-  let h=`<div class="note"><b class="hl">Pixel vs Реал.</b> Pixel — атрибуція Meta. Реал — виручка по UTM-мітках реклами (utm_source=facebook+instagram), <b>без ретеншну/органіки</b>. «Розрив» = наскільки реал відрізняється від пікселя.</div>
+  let h=`<div class="note"><b class="hl">Pixel vs Реал.</b> Pixel — атрибуція Meta. Реал — виручка <b>лише від реклами</b> по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку бренд-акаунтів (account/post/stories), Telegram, email. «Розрив» = наскільки реал відрізняється від пікселя.</div>
    <div class="card scroll"><table><thead><tr><th>Проєкт</th><th>Витрати ₴</th><th>Pixel дохід</th><th>Pixel ROAS</th><th>Реал дохід (реклама)</th><th>Реал ROAS</th><th>Розрив</th></tr></thead><tbody>`;
   ps.forEach(p=>{ const gap=p.gap_pct; h+=`<tr class="${p.is_current?'cur':''}"><td>${p.name}</td><td>${fmt(p.spend)}</td><td>${fmt(p.pixel_revenue)}</td><td>${roasPill(p.pixel_roas)}</td><td>${fmt(p.real_ad_revenue)}</td><td>${roasPill(p.real_ad_roas)}</td><td><span style="color:${gap==null?'#888':gap<0?C.red2:C.green}">${gap==null?'—':(gap>0?'+':'')+gap.toFixed(0)+'%'}</span></td></tr>`; });
   h+=`</tbody></table></div>`;
@@ -308,7 +308,7 @@ fetch('data.json?_='+Date.now()).then(r=>r.json()).then(d=>{
   DATA=d;
   document.getElementById('acc').textContent=d.account||'—';
   try{document.getElementById('gen').textContent=new Date(d.generated).toLocaleString('uk-UA',{timeZone:'Europe/Kyiv',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+' Київ';}catch(e){document.getElementById('gen').textContent=(d.generated||'').slice(0,16);}
-  document.getElementById('foot').innerHTML='Джерело: Meta Marketing API + Supabase (dashboard_projects_with_stats, dashboard_agg_deals_with_traffic). Реал ROAS = виручка по UTM-мітках facebook+instagram. Дані оновлюються щодня автоматично (GitHub Action).';
+  document.getElementById('foot').innerHTML='Джерело: Meta Marketing API + Supabase (dashboard_projects_with_stats, dashboard_agg_deals_with_traffic). Реал ROAS = виручка ЛИШЕ від реклами (placement-мітки utm_medium facebook_*/instagram_*), без органіки/Telegram/email. Дані оновлюються щодня автоматично (GitHub Action).';
   initSelectors(); renderFormula(); renderAll();
 }).catch(e=>{ document.getElementById('foot').textContent='Помилка завантаження data.json: '+e; });
 </script>

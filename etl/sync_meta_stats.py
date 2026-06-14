@@ -10,8 +10,9 @@ sync_meta_stats.py — Meta Ads аналітика по ВСІХ проєкта�
 Джерела:
   - Проєкти: Supabase RPC dashboard_projects_with_stats (усі проєкти + дати; нові підхоплюються самі).
   - Піксель + сегменти + креативи: Meta Marketing API (акаунт DreamCar.ua UAH).
-  - Реальна виручка від реклами: Supabase RPC dashboard_agg_deals_with_traffic
-    (по UTM-мітках utm_source = facebook + instagram; без ретеншну/органіки).
+  - Реальна виручка ВІД РЕКЛАМИ: Supabase RPC dashboard_agg_deals_with_traffic,
+    по placement-мітках utm_medium (facebook_*/instagram_*/messenger_*) — лише реклама,
+    БЕЗ органіки бренд-акаунтів (account/post/stories), Telegram, email.
 
 ENV:
   FB_ACCESS_TOKEN, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY (як у sync_fb_ads.py)
@@ -28,8 +29,10 @@ SB_KEY = os.getenv('SUPABASE_SERVICE_ROLE_KEY', '') or os.getenv('SUPABASE_ANON_
 ACCOUNT = os.getenv('META_ANALYTICS_ACCOUNT', '4136058269783354').replace('act_', '')
 OUT_PATH = os.path.join(os.path.dirname(__file__), '..', 'docs', 'meta-analytics', 'data.json')
 
-# проєкти-аліаси dashboard project code -> чи поточний цикл (для підсвітки)
-AD_SOURCE_MARKS = ('facebook', 'instagram')   # рекламні UTM-мітки (Meta paid)
+# Атрибуція реклами Meta — по placement-мітках utm_medium ({{placement}}), НЕ по utm_source.
+# utm_source=facebook/instagram включає ОРГАНІКУ (акаунти бренду без реклами) — її треба виключати.
+# Реклама: facebook_*/instagram_*/messenger_* (feed/stories/reels/...). Органіка: account/post/stories/∅.
+AD_MEDIUM_PREFIXES = ('facebook_', 'instagram_', 'messenger_')
 SEG_BREAKDOWNS = {
     'platform': 'publisher_platform',
     'age': 'age',
@@ -295,18 +298,6 @@ def adsets(since, until, top=8):
     out.sort(key=lambda x: -x['spend'])
     return out[:top]
 
-def real_by_campaign(since, until, top=8):
-    """Реальна виручка по utm_campaign (за період) — звідки реальні оплати."""
-    body = {'p_field': 'utm_campaign', 'p_from': f'{since}T00:00:00+03:00', 'p_to': f'{until}T23:59:59+03:00',
-            'p_project_values': None, 'p_customer_type': None, 'p_tariff': None,
-            'p_pay_provider': None, 'p_traffic_type': None}
-    data = sb_rpc('dashboard_agg_deals_with_traffic', body) or []
-    out = [{'campaign': str(r.get('key') or '—'), 'revenue': round(_num(r.get('sum_amount'))),
-            'paid': int(_num(r.get('paid')))} for r in data]
-    out = [o for o in out if o['revenue'] > 0]
-    out.sort(key=lambda x: -x['revenue'])
-    return out[:top]
-
 # ---------------- Supabase RPC ----------------
 def sb_rpc(fn, body):
     try:
@@ -332,16 +323,26 @@ def get_projects():
     out.sort(key=lambda p: p['date_start'])
     return out
 
-def real_ad_revenue(since, until):
-    body = {'p_field': 'utm_source', 'p_from': f'{since}T00:00:00+03:00', 'p_to': f'{until}T23:59:59+03:00',
+def _is_ad_medium(k):
+    return str(k or '').lower().startswith(AD_MEDIUM_PREFIXES)
+
+def _agg_medium(since, until):
+    body = {'p_field': 'utm_medium', 'p_from': f'{since}T00:00:00+03:00', 'p_to': f'{until}T23:59:59+03:00',
             'p_project_values': None, 'p_customer_type': None, 'p_tariff': None,
             'p_pay_provider': None, 'p_traffic_type': None}
-    data = sb_rpc('dashboard_agg_deals_with_traffic', body) or []
-    rev = 0.0
-    for r in data:
-        if str(r.get('key', '')).lower() in AD_SOURCE_MARKS:
-            rev += _num(r.get('sum_amount'))
-    return round(rev)
+    return sb_rpc('dashboard_agg_deals_with_traffic', body) or []
+
+def real_ad_revenue(since, until):
+    """Виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*),
+    БЕЗ органіки (account/post/stories) та інших каналів (telegram/email)."""
+    return round(sum(_num(r.get('sum_amount')) for r in _agg_medium(since, until) if _is_ad_medium(r.get('key'))))
+
+def real_by_placement(since, until, top=8):
+    """Реальна виручка по рекламних плейсментах Meta (utm_medium) — звідки реальні оплати від реклами."""
+    out = [{'placement': str(r.get('key')), 'revenue': round(_num(r.get('sum_amount'))), 'paid': int(_num(r.get('paid')))}
+           for r in _agg_medium(since, until) if _is_ad_medium(r.get('key'))]
+    out.sort(key=lambda x: -x['revenue'])
+    return out[:top]
 
 def daily_snapshot(active_names):
     """Зріз за ВЧОРА (повна доба, Київ) — account-level Meta + реал по UTM + РЕАЛЬНІ оголошення за добу.
@@ -383,7 +384,7 @@ def daily_snapshot(active_names):
         'real_ad_revenue': real,
         'real_ad_roas': round(real / spend, 2) if spend else None,
         'deltas': deltas,
-        'real_by_campaign': real_by_campaign(yd, yd),
+        'real_by_placement': real_by_placement(yd, yd),
         'active_cycles': active_names,
         'top_creatives': top[:3],
         'weak_creatives': weak[:3],
@@ -550,7 +551,7 @@ def main():
     payload = {
         'generated': datetime.now(timezone.utc).isoformat(),
         'account': ACCOUNT, 'currency': 'UAH',
-        'note': 'Реал ROAS = виручка по UTM-мітках facebook+instagram (без ретеншну/органіки).',
+        'note': 'Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.',
         'daily': daily,
         'projects': built,
     }
