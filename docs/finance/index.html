@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Фінанси · DreamCar</title>
+<meta name="color-scheme" content="dark">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<script src="https://brand.dreamcar.ua/assets/global-header.js?v=20260606b" defer></script>
+<script src="/assets/js/auth-guard.js?v=20260614" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Manrope:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0a;--bg-2:#141414;--bg-3:#1a1a1a;--line:#2a2a2a;--white:#fff;--ash:#888;--grey:#bbb;--red:#E30613;--gold:#FBBF24;--green:#10B981;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:var(--bg);color:var(--white);font-family:'Manrope','JetBrains Mono',system-ui,sans-serif;min-height:100vh;line-height:1.5;}
+.topbar{background:#141414;border-bottom:2px solid var(--red);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:40;flex-wrap:wrap;gap:8px}
+.brandmark{font-family:'Oswald',sans-serif;font-weight:700;font-size:18px;letter-spacing:.06em;color:#fff;text-decoration:none}
+.brandmark .r{color:var(--red)}.brandmark .mm{font-size:10px;color:#888;letter-spacing:.18em;margin-left:9px;font-family:'JetBrains Mono',monospace;text-transform:uppercase}
+.backlink{color:#aaa;text-decoration:none;font-size:11.5px;font-family:'JetBrains Mono',monospace;letter-spacing:.06em;border:1px solid #2a2a2a;padding:8px 13px;border-radius:6px;text-transform:uppercase;min-height:36px;display:inline-flex;align-items:center}
+.backlink:hover{border-color:var(--red);color:#fff}
+.wrap{max-width:1400px;margin:0 auto;padding:24px 20px 60px}
+.title{font-family:'Oswald',sans-serif;font-size:28px;font-weight:700;letter-spacing:-.3px;margin-bottom:4px}
+.title .r{color:var(--red)}
+.sub{color:var(--ash);font-size:13px;margin-bottom:22px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;border-bottom:1px solid var(--line);padding-bottom:0}
+.tab{background:var(--bg-2);border:1px solid var(--line);border-bottom:none;color:var(--grey);font-size:12.5px;font-weight:600;padding:11px 16px;border-radius:6px 6px 0 0;cursor:pointer;font-family:inherit;transition:.15s;letter-spacing:.04em;text-transform:uppercase;min-height:44px;display:flex;align-items:center;gap:6px}
+.tab:hover{color:#fff;background:#1a1a1a}
+.tab.on{background:var(--bg-3);color:#fff;border-color:var(--red);border-bottom:1px solid var(--bg-3);margin-bottom:-1px}
+.tab .cnt{background:#2a2a2a;color:#bbb;font-size:10px;padding:1px 7px;border-radius:10px;font-family:'JetBrains Mono',monospace}
+.tab.on .cnt{background:var(--red);color:#fff}
+.pane{display:none}.pane.on{display:block}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.btn{background:var(--red);color:#fff;border:none;font-family:'Manrope',sans-serif;font-size:12.5px;font-weight:700;padding:10px 16px;border-radius:6px;cursor:pointer;text-transform:uppercase;letter-spacing:.04em;min-height:40px;display:inline-flex;align-items:center;gap:6px;transition:.15s}
+.btn:hover{background:#B8050F}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--grey)}
+.btn.ghost:hover{border-color:var(--red);color:#fff}
+.search{flex:1;max-width:300px;background:#0f0f0f;border:1px solid var(--line);color:#fff;padding:10px 14px;border-radius:6px;font-size:13px;font-family:'JetBrains Mono',monospace}
+.tbl-card{background:var(--bg-2);border:1px solid var(--line);border-radius:10px;overflow:auto;max-height:calc(100vh - 280px);position:relative}
+table{width:100%;border-collapse:collapse;font-size:13px;font-family:'JetBrains Mono',monospace}
+thead th{background:#0f0f0f;color:#bbb;font-weight:600;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:12px 12px;text-align:right;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;box-shadow:0 1px 0 var(--line);min-height:44px}
+thead th:first-child,tbody td:first-child{text-align:left}
+tbody td{padding:10px 12px;text-align:right;border-bottom:1px solid #1a1a1a;color:#ddd;vertical-align:middle}
+tbody tr:hover td{background:rgba(227,6,19,.06)}
+.cat-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 9px;border-radius:5px;font-size:11.5px;font-weight:600;background:rgba(255,255,255,.05);border:1px solid var(--line)}
+.cat-pill .ic{font-size:14px}
+.cat-pill.fixed{border-color:var(--green);background:rgba(16,185,129,.1)}
+.parent-cat td{background:rgba(227,6,19,.04)}
+.sub-cat td:first-child{padding-left:32px}
+.act{display:inline-flex;gap:5px}
+.iconbtn{background:transparent;border:1px solid var(--line);color:var(--grey);width:30px;height:30px;border-radius:5px;cursor:pointer;font-size:14px;display:inline-flex;align-items:center;justify-content:center;transition:.15s}
+.iconbtn:hover{border-color:var(--red);color:#fff;background:rgba(227,6,19,.1)}
+.iconbtn.del:hover{border-color:#f87171;color:#f87171;background:rgba(239,68,68,.1)}
+.muted{color:#888}.pos{color:#34d399;font-weight:600}.neg{color:#fca5a5;font-weight:600}
+.empty{padding:60px 20px;text-align:center;color:#888;font-size:13px;font-style:italic}
+
+/* MODAL */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.modal.on{display:flex}
+.modal-card{background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:24px;max-width:540px;width:100%;max-height:90vh;overflow:auto}
+.modal-card h3{font-family:'Oswald',sans-serif;font-size:21px;font-weight:600;margin-bottom:18px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:11px;letter-spacing:.1em;color:#aaa;text-transform:uppercase;margin-bottom:6px;font-family:'JetBrains Mono',monospace}
+.field input,.field select,.field textarea{width:100%;background:#0f0f0f;border:1px solid var(--line);color:#fff;padding:10px 12px;border-radius:6px;font-size:13px;font-family:'JetBrains Mono',monospace;min-height:40px}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--red);outline:none}
+.field textarea{min-height:70px;resize:vertical}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:480px){.field-row{grid-template-columns:1fr}}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+.error-msg{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#fca5a5;padding:10px 12px;border-radius:6px;font-size:12px;margin:8px 0}
+.note{background:rgba(96,165,250,.07);border:1px solid rgba(96,165,250,.25);color:#93c5fd;padding:10px 13px;border-radius:8px;font-size:12px;margin-bottom:14px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brandmark" href="/"><span class="r">DREAM</span>CAR<span class="mm">Фінанси</span></a>
+  <a class="backlink" href="/win-analysis/">→ Win-Analysis</a>
+</div>
+
+<div class="wrap">
+  <div class="title">ФІНАНСИ · <span class="r">P&amp;L</span></div>
+  <div class="sub">Категорії витрат · Фіксовані щомісячні · Per-project витрати · Призовий фонд</div>
+
+  <div class="note">
+    <b>Як це використовувати:</b> категорії визначаєш один раз. Fixed Monthly — overhead компанії (Cloudflare, Claude API, ФОП) — розноситься pro-rata по запусках за дні. Project Costs — витрати конкретно під запуск. Призовий фонд — у <code>launches.prize_cost_uah</code> (через таб "Запуски").
+  </div>
+
+  <div class="tabs">
+    <button class="tab on" data-pane="categories">📁 Категорії <span class="cnt" id="c-categories">…</span></button>
+    <button class="tab" data-pane="fixed">⚙️ Fixed Monthly <span class="cnt" id="c-fixed">…</span></button>
+    <button class="tab" data-pane="project">💸 Project Costs <span class="cnt" id="c-project">…</span></button>
+    <button class="tab" data-pane="launches">🏆 Запуски (приз) <span class="cnt" id="c-launches">…</span></button>
+  </div>
+
+  <!-- CATEGORIES PANE -->
+  <div class="pane on" id="pane-categories">
+    <div class="toolbar">
+      <input class="search" id="searchCat" placeholder="🔍 Пошук категорії…">
+      <button class="btn" onclick="openCategoryModal()">+ Нова категорія</button>
+    </div>
+    <div class="tbl-card">
+      <table id="tblCat"><thead><tr>
+        <th data-key="sort_order">Order</th><th>Іконка</th><th data-key="name" style="text-align:left">Назва</th>
+        <th data-key="code">Код</th><th>Тип</th><th>Sub of</th><th>Дії</th>
+      </tr></thead><tbody><tr><td colspan="7" class="empty">завантаження…</td></tr></tbody></table>
+    </div>
+  </div>
+
+  <!-- FIXED MONTHLY PANE -->
+  <div class="pane" id="pane-fixed">
+    <div class="toolbar">
+      <input class="search" id="searchFixed" placeholder="🔍 Пошук…">
+      <button class="btn" onclick="openFixedModal()">+ Нова fixed-витрата</button>
+    </div>
+    <div class="tbl-card">
+      <table id="tblFixed"><thead><tr>
+        <th style="text-align:left">Label</th><th>Категорія</th><th>UAH/міс</th>
+        <th>Valid From</th><th>Valid To</th><th>Дії</th>
+      </tr></thead><tbody><tr><td colspan="6" class="empty">завантаження…</td></tr></tbody></table>
+    </div>
+  </div>
+
+  <!-- PROJECT COSTS PANE -->
+  <div class="pane" id="pane-project">
+    <div class="toolbar">
+      <input class="search" id="searchProj" placeholder="🔍 Пошук…">
+      <button class="btn" onclick="openProjectModal()">+ Нова витрата</button>
+    </div>
+    <div class="tbl-card">
+      <table id="tblProj"><thead><tr>
+        <th style="text-align:left">Опис</th><th>Запуск</th><th>Категорія</th><th>UAH</th>
+        <th>Дата</th><th>Vendor</th><th>Дії</th>
+      </tr></thead><tbody><tr><td colspan="7" class="empty">завантаження…</td></tr></tbody></table>
+    </div>
+  </div>
+
+  <!-- LAUNCHES (PRIZE) PANE -->
+  <div class="pane" id="pane-launches">
+    <div class="toolbar">
+      <input class="search" id="searchLaunch" placeholder="🔍 Пошук запуску…">
+      <span class="muted" style="font-size:12px;font-family:'JetBrains Mono',monospace">prize_cost_uah у launches</span>
+    </div>
+    <div class="tbl-card">
+      <table id="tblLaunch"><thead><tr>
+        <th style="text-align:left">Запуск</th><th>Status</th><th>Старт</th><th>Призовий фонд (UAH)</th>
+        <th>Дата покупки</th><th>Notes</th><th>Дії</th>
+      </tr></thead><tbody><tr><td colspan="7" class="empty">завантаження…</td></tr></tbody></table>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL: Category -->
+<div class="modal" id="modalCat">
+  <div class="modal-card">
+    <h3 id="modalCatTitle">Нова категорія</h3>
+    <div id="catError"></div>
+    <div class="field"><label>Назва *</label><input id="catName" type="text" placeholder="напр. SMM реклама"></div>
+    <div class="field-row">
+      <div class="field"><label>Код (унікальний) *</label><input id="catCode" type="text" placeholder="UPPERCASE_SNAKE"></div>
+      <div class="field"><label>Іконка emoji</label><input id="catIcon" type="text" placeholder="🎬" maxlength="4"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Колір</label><input id="catColor" type="color" value="#888888"></div>
+      <div class="field"><label>Sort order</label><input id="catSort" type="number" value="100" min="1"></div>
+    </div>
+    <div class="field"><label>Батьківська категорія</label><select id="catParent"><option value="">(корінь)</option></select></div>
+    <div class="field"><label><input id="catFixed" type="checkbox"> Це fixed-overhead (для Fixed Monthly tab)</label></div>
+    <div class="modal-actions"><button class="btn ghost" onclick="closeModal('modalCat')">Скасувати</button><button class="btn" onclick="saveCategory()">Зберегти</button></div>
+  </div>
+</div>
+
+<!-- MODAL: Fixed -->
+<div class="modal" id="modalFixed">
+  <div class="modal-card">
+    <h3 id="modalFixedTitle">Нова fixed-витрата</h3>
+    <div id="fixedError"></div>
+    <div class="field"><label>Категорія *</label><select id="fixedCat"></select></div>
+    <div class="field"><label>Label *</label><input id="fixedLabel" type="text" placeholder="напр. Cloudflare Workers Paid"></div>
+    <div class="field"><label>Сума UAH / місяць *</label><input id="fixedAmount" type="number" min="0" step="0.01"></div>
+    <div class="field-row">
+      <div class="field"><label>Valid from *</label><input id="fixedFrom" type="date"></div>
+      <div class="field"><label>Valid to (NULL = досі)</label><input id="fixedTo" type="date"></div>
+    </div>
+    <div class="field"><label>Notes</label><textarea id="fixedNotes" placeholder="опис, account, invoice link"></textarea></div>
+    <div class="modal-actions"><button class="btn ghost" onclick="closeModal('modalFixed')">Скасувати</button><button class="btn" onclick="saveFixed()">Зберегти</button></div>
+  </div>
+</div>
+
+<!-- MODAL: Project Cost -->
+<div class="modal" id="modalProj">
+  <div class="modal-card">
+    <h3 id="modalProjTitle">Нова витрата запуску</h3>
+    <div id="projError"></div>
+    <div class="field"><label>Запуск *</label><select id="projLaunch"></select></div>
+    <div class="field"><label>Категорія *</label><select id="projCat"></select></div>
+    <div class="field"><label>Опис *</label><input id="projDesc" type="text" placeholder="що це за витрата"></div>
+    <div class="field-row">
+      <div class="field"><label>Сума UAH *</label><input id="projAmount" type="number" min="0" step="0.01"></div>
+      <div class="field"><label>Дата *</label><input id="projDate" type="date"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Vendor</label><input id="projVendor" type="text" placeholder="хто виставив рахунок"></div>
+      <div class="field"><label>Invoice #</label><input id="projInvoice" type="text" placeholder="номер інвойсу"></div>
+    </div>
+    <div class="modal-actions"><button class="btn ghost" onclick="closeModal('modalProj')">Скасувати</button><button class="btn" onclick="saveProject()">Зберегти</button></div>
+  </div>
+</div>
+
+<!-- MODAL: Launch (Prize) -->
+<div class="modal" id="modalLaunch">
+  <div class="modal-card">
+    <h3 id="modalLaunchTitle">Редагувати призовий фонд</h3>
+    <div id="launchError"></div>
+    <div class="field"><label>Запуск (read-only)</label><input id="launchName" type="text" readonly style="opacity:.6"></div>
+    <div class="field"><label>Призовий фонд UAH</label><input id="launchPrize" type="number" min="0" step="0.01" placeholder="ринкова ціна авто + оформлення"></div>
+    <div class="field"><label>Дата покупки</label><input id="launchPrizeDate" type="date"></div>
+    <div class="field"><label>Notes (марка/модель/VIN)</label><textarea id="launchPrizeNotes"></textarea></div>
+    <div class="modal-actions"><button class="btn ghost" onclick="closeModal('modalLaunch')">Скасувати</button><button class="btn" onclick="saveLaunchPrize()">Зберегти</button></div>
+  </div>
+</div>
+
+<script>
+const HQ = (window.HQ_CONFIG || {});
+const SB_URL = HQ.SUPABASE_URL || 'https://wotghlaehnvxyeacznvv.supabase.co';
+const SB_KEY = HQ.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndvdGdobGFlaG52eHllYWN6bnZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU0MTM3MzAsImV4cCI6MjA1MTAwOTczMH0._BS6ABYSP_ZGfk_QbVFCk0PIUVMUd_X86VuJX59nIs8';
+const sb = window.supabase.createClient(SB_URL, SB_KEY, { auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+
+let DATA = { cats: [], fixed: [], proj: [], launches: [] };
+let edit = { cat: null, fixed: null, proj: null, launch: null };
+
+function fmtUAH(v){ if(v==null) return '—'; return new Intl.NumberFormat('uk-UA').format(Math.round(Number(v))) + ' ₴'; }
+function fmtDate(s){ if(!s) return '—'; const [y,m,d] = s.split('-'); return `${d}.${m}.${y}`; }
+function esc(s){ return String(s||'').replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+// === Tabs ===
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('on'));
+  t.classList.add('on');
+  document.querySelectorAll('.pane').forEach(x => x.classList.remove('on'));
+  document.getElementById('pane-' + t.dataset.pane).classList.add('on');
+}));
+
+// === LOAD ===
+async function loadAll() {
+  try {
+    const [cats, fixed, proj, launches] = await Promise.all([
+      sb.from('cost_categories').select('*').order('sort_order'),
+      sb.from('fixed_monthly_costs').select('*, cost_categories(code,name,icon,color)').order('valid_from', { ascending: false }),
+      sb.from('project_costs').select('*, cost_categories(code,name,icon,color), launches(name,code)').order('spent_at', { ascending: false }).limit(500),
+      sb.from('launches').select('id,name,code,status,starts_on,prize_cost_uah,prize_purchased_at,prize_notes').order('starts_on', { ascending: false })
+    ]);
+    if (cats.error) throw cats.error;
+    if (fixed.error) throw fixed.error;
+    if (proj.error) throw proj.error;
+    if (launches.error) throw launches.error;
+    DATA.cats = cats.data || [];
+    DATA.fixed = fixed.data || [];
+    DATA.proj = proj.data || [];
+    DATA.launches = launches.data || [];
+    document.getElementById('c-categories').textContent = DATA.cats.length;
+    document.getElementById('c-fixed').textContent = DATA.fixed.length;
+    document.getElementById('c-project').textContent = DATA.proj.length;
+    document.getElementById('c-launches').textContent = DATA.launches.length;
+    renderCategories();
+    renderFixed();
+    renderProject();
+    renderLaunches();
+    populateSelects();
+  } catch (e) {
+    console.error('[finance] load', e);
+    alert('Помилка завантаження: ' + (e.message || e));
+  }
+}
+
+function populateSelects() {
+  const sortedCats = DATA.cats.slice().sort((a,b) => a.sort_order - b.sort_order);
+  const opts = '<option value="">— виберіть категорію —</option>' + sortedCats.filter(c => !c.is_archived).map(c => `<option value="${c.id}">${c.icon||''} ${esc(c.name)}</option>`).join('');
+  document.getElementById('catParent').innerHTML = '<option value="">(корінь)</option>' + sortedCats.filter(c => !c.parent_id).map(c => `<option value="${c.id}">${c.icon||''} ${esc(c.name)}</option>`).join('');
+  document.getElementById('fixedCat').innerHTML = opts;
+  document.getElementById('projCat').innerHTML = opts;
+  const launchOpts = '<option value="">— виберіть запуск —</option>' + DATA.launches.map(l => `<option value="${l.id}">${esc(l.name)} (${l.status})</option>`).join('');
+  document.getElementById('projLaunch').innerHTML = launchOpts;
+}
+
+// === RENDER CATEGORIES ===
+function renderCategories() {
+  const tbody = document.querySelector('#tblCat tbody');
+  if (!DATA.cats.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty">Немає категорій</td></tr>'; return; }
+  const q = (document.getElementById('searchCat').value || '').toLowerCase();
+  // Tree-flatten: parent first, then children
+  const byParent = {};
+  DATA.cats.forEach(c => { const p = c.parent_id || '_root'; (byParent[p] = byParent[p] || []).push(c); });
+  Object.values(byParent).forEach(arr => arr.sort((a,b)=>a.sort_order-b.sort_order));
+  const flat = [];
+  (byParent['_root'] || []).forEach(p => {
+    if (!q || p.name.toLowerCase().includes(q) || p.code.toLowerCase().includes(q)) {
+      flat.push({ ...p, _sub: false });
+      (byParent[p.id] || []).forEach(s => {
+        if (!q || s.name.toLowerCase().includes(q) || s.code.toLowerCase().includes(q)) flat.push({ ...s, _sub: true, _parentName: p.name });
+      });
+    }
+  });
+  // Also orphans (parent_id existing but parent filtered out)
+  const html = flat.map(c => `
+    <tr class="${c._sub ? 'sub-cat' : 'parent-cat'}">
+      <td>${c.sort_order}</td>
+      <td style="font-size:18px;text-align:center">${c.icon || '💸'}</td>
+      <td style="text-align:left">${c._sub ? '↳ ' : ''}<b>${esc(c.name)}</b>${c.is_archived ? ' <span class="muted">(archived)</span>' : ''}</td>
+      <td><code style="font-size:10.5px;color:#aaa">${esc(c.code)}</code></td>
+      <td>${c.is_fixed ? '<span class="cat-pill fixed">⚙️ fixed</span>' : '<span class="cat-pill">variable</span>'}</td>
+      <td class="muted" style="font-size:11px">${c._parentName ? esc(c._parentName) : '—'}</td>
+      <td class="act">
+        <button class="iconbtn" title="Редагувати" onclick="editCategory('${c.id}')">✎</button>
+        <button class="iconbtn del" title="${c.is_archived ? 'Відновити' : 'Архівувати'}" onclick="toggleArchiveCat('${c.id}', ${c.is_archived})">${c.is_archived ? '↺' : '🗑'}</button>
+      </td>
+    </tr>
+  `).join('');
+  tbody.innerHTML = html || '<tr><td colspan="7" class="empty">Не знайдено</td></tr>';
+}
+document.getElementById('searchCat').addEventListener('input', () => renderCategories());
+
+// === RENDER FIXED ===
+function renderFixed() {
+  const tbody = document.querySelector('#tblFixed tbody');
+  if (!DATA.fixed.length) { tbody.innerHTML = '<tr><td colspan="6" class="empty">Немає fixed-витрат. Додай першу — це Cloudflare/ФОП/API тощо.</td></tr>'; return; }
+  const q = (document.getElementById('searchFixed').value || '').toLowerCase();
+  const filtered = DATA.fixed.filter(r => !q || (r.label||'').toLowerCase().includes(q));
+  const html = filtered.map(r => {
+    const cat = r.cost_categories;
+    const active = !r.valid_to || new Date(r.valid_to) >= new Date();
+    return `
+    <tr>
+      <td style="text-align:left"><b>${esc(r.label)}</b>${active ? '' : ' <span class="muted">(closed)</span>'}</td>
+      <td>${cat ? `<span class="cat-pill">${cat.icon || '💸'} ${esc(cat.name)}</span>` : '—'}</td>
+      <td><b>${fmtUAH(r.amount_uah)}</b></td>
+      <td>${fmtDate(r.valid_from)}</td>
+      <td>${r.valid_to ? fmtDate(r.valid_to) : '<span class="pos">досі</span>'}</td>
+      <td class="act">
+        <button class="iconbtn" title="Редагувати" onclick="editFixed('${r.id}')">✎</button>
+        <button class="iconbtn del" title="Видалити" onclick="delFixed('${r.id}')">🗑</button>
+      </td>
+    </tr>
+    `;
+  }).join('');
+  tbody.innerHTML = html || '<tr><td colspan="6" class="empty">Не знайдено</td></tr>';
+}
+document.getElementById('searchFixed').addEventListener('input', () => renderFixed());
+
+// === RENDER PROJECT COSTS ===
+function renderProject() {
+  const tbody = document.querySelector('#tblProj tbody');
+  if (!DATA.proj.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty">Немає витрат. Додай витрату коли купуєш креатив, оплачуєш блогера тощо.</td></tr>'; return; }
+  const q = (document.getElementById('searchProj').value || '').toLowerCase();
+  const filtered = DATA.proj.filter(r => !q || (r.description||'').toLowerCase().includes(q) || (r.vendor||'').toLowerCase().includes(q));
+  const html = filtered.map(r => `
+    <tr>
+      <td style="text-align:left"><b>${esc(r.description)}</b>${r.invoice_number ? `<br><span class="muted" style="font-size:10.5px">#${esc(r.invoice_number)}</span>` : ''}</td>
+      <td><span class="cat-pill">${r.launches?.name ? esc(r.launches.name) : '<span class="muted">no launch</span>'}</span></td>
+      <td>${r.cost_categories ? `<span class="cat-pill">${r.cost_categories.icon||''} ${esc(r.cost_categories.name).slice(0,16)}</span>` : '—'}</td>
+      <td><b>${fmtUAH(r.amount_uah)}</b></td>
+      <td>${fmtDate(r.spent_at)}</td>
+      <td class="muted">${esc(r.vendor || '—')}</td>
+      <td class="act">
+        <button class="iconbtn" title="Редагувати" onclick="editProject('${r.id}')">✎</button>
+        <button class="iconbtn del" title="Видалити" onclick="delProject('${r.id}')">🗑</button>
+      </td>
+    </tr>
+  `).join('');
+  tbody.innerHTML = html || '<tr><td colspan="7" class="empty">Не знайдено</td></tr>';
+}
+document.getElementById('searchProj').addEventListener('input', () => renderProject());
+
+// === RENDER LAUNCHES ===
+function renderLaunches() {
+  const tbody = document.querySelector('#tblLaunch tbody');
+  const q = (document.getElementById('searchLaunch').value || '').toLowerCase();
+  const filtered = DATA.launches.filter(r => !q || (r.name||'').toLowerCase().includes(q));
+  if (!filtered.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty">Не знайдено</td></tr>'; return; }
+  const html = filtered.map(r => `
+    <tr>
+      <td style="text-align:left"><b>${esc(r.name)}</b> <span class="muted" style="font-size:10.5px">${esc(r.code||'')}</span></td>
+      <td><span class="cat-pill">${esc(r.status||'—')}</span></td>
+      <td>${fmtDate(r.starts_on)}</td>
+      <td><b>${r.prize_cost_uah ? fmtUAH(r.prize_cost_uah) : '<span class="muted">не заповнено</span>'}</b></td>
+      <td>${fmtDate(r.prize_purchased_at)}</td>
+      <td class="muted" style="font-size:11.5px">${esc((r.prize_notes||'').slice(0,40))}</td>
+      <td class="act"><button class="iconbtn" title="Редагувати приз" onclick="editLaunchPrize('${r.id}')">✎</button></td>
+    </tr>
+  `).join('');
+  tbody.innerHTML = html;
+}
+document.getElementById('searchLaunch').addEventListener('input', () => renderLaunches());
+
+// === MODALS ===
+function openModal(id){ document.getElementById(id).classList.add('on'); }
+function closeModal(id){ document.getElementById(id).classList.remove('on'); }
+document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('on'); }));
+
+function showErr(id, msg){ document.getElementById(id).innerHTML = msg ? `<div class="error-msg">${esc(msg)}</div>` : ''; }
+
+// CATEGORY CRUD
+function openCategoryModal() {
+  edit.cat = null;
+  document.getElementById('modalCatTitle').textContent = 'Нова категорія';
+  ['catName','catCode','catIcon','catColor','catSort','catParent'].forEach(id => {
+    const el = document.getElementById(id);
+    if (id === 'catColor') el.value = '#888888';
+    else if (id === 'catSort') el.value = 100;
+    else el.value = '';
+  });
+  document.getElementById('catFixed').checked = false;
+  showErr('catError', null);
+  openModal('modalCat');
+}
+function editCategory(id) {
+  const c = DATA.cats.find(x => x.id === id);
+  if (!c) return;
+  edit.cat = c;
+  document.getElementById('modalCatTitle').textContent = 'Редагувати: ' + c.name;
+  document.getElementById('catName').value = c.name;
+  document.getElementById('catCode').value = c.code;
+  document.getElementById('catIcon').value = c.icon || '';
+  document.getElementById('catColor').value = c.color || '#888888';
+  document.getElementById('catSort').value = c.sort_order;
+  document.getElementById('catParent').value = c.parent_id || '';
+  document.getElementById('catFixed').checked = !!c.is_fixed;
+  showErr('catError', null);
+  openModal('modalCat');
+}
+async function saveCategory() {
+  const name = document.getElementById('catName').value.trim();
+  const code = document.getElementById('catCode').value.trim().toUpperCase().replace(/\s+/g,'_');
+  if (!name) return showErr('catError', 'Введи назву');
+  if (!code) return showErr('catError', 'Введи код');
+  const payload = {
+    name, code,
+    icon: document.getElementById('catIcon').value.trim() || '💸',
+    color: document.getElementById('catColor').value,
+    sort_order: parseInt(document.getElementById('catSort').value) || 100,
+    parent_id: document.getElementById('catParent').value || null,
+    is_fixed: document.getElementById('catFixed').checked
+  };
+  try {
+    const r = edit.cat
+      ? await sb.from('cost_categories').update(payload).eq('id', edit.cat.id)
+      : await sb.from('cost_categories').insert(payload);
+    if (r.error) throw r.error;
+    closeModal('modalCat');
+    await loadAll();
+  } catch (e) { showErr('catError', e.message || e); }
+}
+async function toggleArchiveCat(id, current) {
+  if (!confirm(current ? 'Відновити категорію?' : 'Архівувати? Її не буде у виборі нових записів, але історія залишиться.')) return;
+  try {
+    const r = await sb.from('cost_categories').update({ is_archived: !current }).eq('id', id);
+    if (r.error) throw r.error;
+    await loadAll();
+  } catch (e) { alert(e.message || e); }
+}
+
+// FIXED CRUD
+function openFixedModal() {
+  edit.fixed = null;
+  document.getElementById('modalFixedTitle').textContent = 'Нова fixed-витрата';
+  ['fixedCat','fixedLabel','fixedAmount','fixedFrom','fixedTo','fixedNotes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('fixedFrom').value = new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Kyiv' });
+  showErr('fixedError', null);
+  openModal('modalFixed');
+}
+function editFixed(id) {
+  const f = DATA.fixed.find(x => x.id === id);
+  if (!f) return;
+  edit.fixed = f;
+  document.getElementById('modalFixedTitle').textContent = 'Редагувати: ' + f.label;
+  document.getElementById('fixedCat').value = f.category_id;
+  document.getElementById('fixedLabel').value = f.label;
+  document.getElementById('fixedAmount').value = f.amount_uah;
+  document.getElementById('fixedFrom').value = f.valid_from;
+  document.getElementById('fixedTo').value = f.valid_to || '';
+  document.getElementById('fixedNotes').value = f.notes || '';
+  showErr('fixedError', null);
+  openModal('modalFixed');
+}
+async function saveFixed() {
+  const category_id = document.getElementById('fixedCat').value;
+  const label = document.getElementById('fixedLabel').value.trim();
+  const amount_uah = parseFloat(document.getElementById('fixedAmount').value);
+  const valid_from = document.getElementById('fixedFrom').value;
+  const valid_to = document.getElementById('fixedTo').value || null;
+  if (!category_id) return showErr('fixedError', 'Вибери категорію');
+  if (!label) return showErr('fixedError', 'Введи label');
+  if (!(amount_uah > 0)) return showErr('fixedError', 'Сума має бути > 0');
+  if (!valid_from) return showErr('fixedError', 'Введи valid_from');
+  const payload = { category_id, label, amount_uah, valid_from, valid_to, notes: document.getElementById('fixedNotes').value.trim() || null };
+  try {
+    const r = edit.fixed
+      ? await sb.from('fixed_monthly_costs').update(payload).eq('id', edit.fixed.id)
+      : await sb.from('fixed_monthly_costs').insert(payload);
+    if (r.error) throw r.error;
+    closeModal('modalFixed');
+    await loadAll();
+  } catch (e) { showErr('fixedError', e.message || e); }
+}
+async function delFixed(id) {
+  if (!confirm('Видалити fixed-витрату? Минулі дні розноситься вже не будуть.')) return;
+  try { const r = await sb.from('fixed_monthly_costs').delete().eq('id', id); if (r.error) throw r.error; await loadAll(); } catch (e) { alert(e.message); }
+}
+
+// PROJECT CRUD
+function openProjectModal() {
+  edit.proj = null;
+  document.getElementById('modalProjTitle').textContent = 'Нова витрата запуску';
+  ['projLaunch','projCat','projDesc','projAmount','projVendor','projInvoice'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('projDate').value = new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Kyiv' });
+  showErr('projError', null);
+  openModal('modalProj');
+}
+function editProject(id) {
+  const p = DATA.proj.find(x => x.id === id);
+  if (!p) return;
+  edit.proj = p;
+  document.getElementById('modalProjTitle').textContent = 'Редагувати: ' + p.description;
+  document.getElementById('projLaunch').value = p.launch_id || '';
+  document.getElementById('projCat').value = p.category_id;
+  document.getElementById('projDesc').value = p.description;
+  document.getElementById('projAmount').value = p.amount_uah;
+  document.getElementById('projDate').value = p.spent_at;
+  document.getElementById('projVendor').value = p.vendor || '';
+  document.getElementById('projInvoice').value = p.invoice_number || '';
+  showErr('projError', null);
+  openModal('modalProj');
+}
+async function saveProject() {
+  const launch_id = document.getElementById('projLaunch').value;
+  const category_id = document.getElementById('projCat').value;
+  const description = document.getElementById('projDesc').value.trim();
+  const amount_uah = parseFloat(document.getElementById('projAmount').value);
+  const spent_at = document.getElementById('projDate').value;
+  if (!launch_id) return showErr('projError', 'Вибери запуск');
+  if (!category_id) return showErr('projError', 'Вибери категорію');
+  if (!description) return showErr('projError', 'Введи опис');
+  if (!(amount_uah > 0)) return showErr('projError', 'Сума > 0');
+  if (!spent_at) return showErr('projError', 'Введи дату');
+  const payload = { launch_id, category_id, description, amount_uah, spent_at,
+    vendor: document.getElementById('projVendor').value.trim() || null,
+    invoice_number: document.getElementById('projInvoice').value.trim() || null };
+  try {
+    const r = edit.proj
+      ? await sb.from('project_costs').update(payload).eq('id', edit.proj.id)
+      : await sb.from('project_costs').insert(payload);
+    if (r.error) throw r.error;
+    closeModal('modalProj');
+    await loadAll();
+  } catch (e) { showErr('projError', e.message || e); }
+}
+async function delProject(id) {
+  if (!confirm('Видалити цю витрату назавжди?')) return;
+  try { const r = await sb.from('project_costs').delete().eq('id', id); if (r.error) throw r.error; await loadAll(); } catch (e) { alert(e.message); }
+}
+
+// LAUNCH PRIZE
+function editLaunchPrize(id) {
+  const l = DATA.launches.find(x => x.id === id);
+  if (!l) return;
+  edit.launch = l;
+  document.getElementById('launchName').value = l.name;
+  document.getElementById('launchPrize').value = l.prize_cost_uah || '';
+  document.getElementById('launchPrizeDate').value = l.prize_purchased_at || '';
+  document.getElementById('launchPrizeNotes').value = l.prize_notes || '';
+  showErr('launchError', null);
+  openModal('modalLaunch');
+}
+async function saveLaunchPrize() {
+  const prize = document.getElementById('launchPrize').value;
+  const payload = {
+    prize_cost_uah: prize ? parseFloat(prize) : null,
+    prize_purchased_at: document.getElementById('launchPrizeDate').value || null,
+    prize_notes: document.getElementById('launchPrizeNotes').value.trim() || null
+  };
+  try {
+    const r = await sb.from('launches').update(payload).eq('id', edit.launch.id);
+    if (r.error) throw r.error;
+    closeModal('modalLaunch');
+    await loadAll();
+  } catch (e) { showErr('launchError', e.message || e); }
+}
+
+window.openCategoryModal = openCategoryModal;
+window.editCategory = editCategory;
+window.toggleArchiveCat = toggleArchiveCat;
+window.openFixedModal = openFixedModal;
+window.editFixed = editFixed;
+window.delFixed = delFixed;
+window.openProjectModal = openProjectModal;
+window.editProject = editProject;
+window.delProject = delProject;
+window.editLaunchPrize = editLaunchPrize;
+window.closeModal = closeModal;
+window.saveCategory = saveCategory;
+window.saveFixed = saveFixed;
+window.saveProject = saveProject;
+window.saveLaunchPrize = saveLaunchPrize;
+
+window.addEventListener('dc-auth-ok', loadAll);
+setTimeout(() => { if (!DATA.cats.length) loadAll(); }, 1500);
+</script>
+</body>
+</html>

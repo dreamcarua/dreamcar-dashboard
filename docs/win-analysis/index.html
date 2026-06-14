@@ -84,7 +84,7 @@ tbody tr.gold td{background:rgba(251,191,36,.04)}
 
 <div class="topbar">
   <a class="brandmark" href="/"><span class="r">DREAM</span>CAR<span class="mm">Win-Analysis</span></a>
-  <a class="backlink" href="/">← ДАШБОРД</a>
+  <div style="display:flex;gap:8px"><a class="backlink" href="/finance/">💰 ФІНАНСИ</a><a class="backlink" href="/">← ДАШБОРД</a></div>
 </div>
 
 <div class="wrap">
@@ -96,12 +96,12 @@ tbody tr.gold td{background:rgba(251,191,36,.04)}
     <div class="live-pill" id="liveStatus"><span class="dot"></span><span id="liveDate">завантаження…</span></div>
   </div>
 
-  <!-- Aggregate KPI -->
+  <!-- Aggregate KPI — v4 з повним P&L -->
   <div class="kpi-grid" id="kpiRow">
     <div class="kpi"><div class="lab">Запусків</div><div class="val" id="kCount">…</div><div class="meta" id="kCountMeta">завантаження</div></div>
     <div class="kpi"><div class="lab">Сума виручки</div><div class="val" id="kRev">…</div><div class="meta" id="kRevMeta"></div></div>
-    <div class="kpi"><div class="lab">Витрати на рекламу</div><div class="val" id="kSpend">…</div><div class="meta" id="kSpendMeta"></div></div>
-    <div class="kpi"><div class="lab">Чистий прибуток</div><div class="val" id="kProfit">…</div><div class="meta" id="kProfitMeta"></div></div>
+    <div class="kpi"><div class="lab">Усі витрати</div><div class="val" id="kTotalCost">…</div><div class="meta" id="kTotalCostMeta"></div></div>
+    <div class="kpi"><div class="lab">TRUE Net Profit</div><div class="val" id="kTrueNet">…</div><div class="meta" id="kTrueNetMeta"></div></div>
     <div class="kpi"><div class="lab">Середній ROAS</div><div class="val" id="kRoas">…</div><div class="meta" id="kRoasMeta"></div></div>
   </div>
 
@@ -143,20 +143,21 @@ tbody tr.gold td{background:rgba(251,191,36,.04)}
           <th data-key="name">Назва</th>
           <th data-key="status">Статус</th>
           <th data-key="starts_on">Старт</th>
-          <th data-key="days_duration">Дні</th>
           <th data-key="leads_count">Ліди</th>
           <th data-key="paid_count">Оплати</th>
           <th data-key="conversion_pct">Conv %</th>
           <th data-key="revenue_total">Revenue</th>
-          <th data-key="ad_spend">Spend</th>
-          <th data-key="manual_costs">Manual</th>
-          <th data-key="net_profit">Profit</th>
-          <th data-key="profit_margin_pct">Margin %</th>
+          <th data-key="ad_spend">Ads</th>
+          <th data-key="prize_cost">🏆 Приз</th>
+          <th data-key="fixed_allocated">⚙️ Fixed</th>
+          <th data-key="project_costs_total">Project</th>
+          <th data-key="total_cost">Всі витрати</th>
+          <th data-key="true_net_profit">TRUE Net</th>
+          <th data-key="true_net_margin_pct">Margin %</th>
           <th data-key="roas">ROAS</th>
-          <th data-key="cpa">CPA</th>
-          <th data-key="aov">AOV</th>
+          <th data-key="true_cac">True CAC</th>
         </tr></thead>
-        <tbody id="tbody"><tr><td colspan="15" style="text-align:center;padding:30px;color:#888">завантаження P&amp;L…</td></tr></tbody>
+        <tbody id="tbody"><tr><td colspan="16" style="text-align:center;padding:30px;color:#888">завантаження P&amp;L…</td></tr></tbody>
       </table>
     </div>
   </div>
@@ -206,18 +207,20 @@ async function load() {
 }
 
 function aggKPI() {
-  const totals = { count: DATA.length, rev: 0, spend: 0, manual: 0, profit: 0, leadsAll: 0, paidAll: 0, activeCnt: 0, completedCnt: 0 };
+  const totals = { count: DATA.length, rev: 0, spend: 0, projCosts: 0, prize: 0, fixed: 0, totalCost: 0, trueNet: 0, leadsAll: 0, paidAll: 0, activeCnt: 0, completedCnt: 0 };
   DATA.forEach(r => {
     totals.rev += Number(r.revenue_total || 0);
     totals.spend += Number(r.ad_spend || 0);
-    totals.manual += Number(r.manual_costs || 0);
-    totals.profit += Number(r.net_profit || 0);
+    totals.projCosts += Number(r.project_costs_total || 0);
+    totals.prize += Number(r.prize_cost || 0);
+    totals.fixed += Number(r.fixed_allocated || 0);
+    totals.totalCost += Number(r.total_cost || 0);
+    totals.trueNet += Number(r.true_net_profit || 0);
     totals.leadsAll += Number(r.leads_count || 0);
     totals.paidAll += Number(r.paid_count || 0);
     if (r.status === 'active') totals.activeCnt++;
     if (r.status === 'completed') totals.completedCnt++;
   });
-  // 14.06.2026 #392.5 finance audit — weighted avgRoas (SUM rev / SUM spend), не arithmetic mean.
   const avgRoas = totals.spend > 0 ? totals.rev / totals.spend : null;
   return { ...totals, avgRoas };
 }
@@ -228,13 +231,13 @@ function renderKPI() {
   document.getElementById('kCountMeta').textContent = `${k.activeCnt} активних · ${k.completedCnt} завершено`;
   document.getElementById('kRev').textContent = fmtMoney(k.rev);
   document.getElementById('kRevMeta').textContent = `${fmtInt(k.paidAll)} оплат / ${fmtInt(k.leadsAll)} лідів`;
-  document.getElementById('kSpend').textContent = fmtMoney(k.spend);
-  document.getElementById('kSpendMeta').textContent = `+ manual ${fmtMoney(k.manual)}`;
-  document.getElementById('kProfit').textContent = fmtMoney(k.profit);
-  const profEl = document.getElementById('kProfit');
-  profEl.style.color = k.profit >= 0 ? '#10B981' : '#f87171';
-  document.getElementById('kProfitMeta').className = 'meta ' + (k.profit >= 0 ? 'pos' : 'neg');
-  document.getElementById('kProfitMeta').textContent = k.rev > 0 ? `margin ${(k.profit / k.rev * 100).toFixed(1)}%` : '—';
+  document.getElementById('kTotalCost').textContent = fmtMoney(k.totalCost);
+  document.getElementById('kTotalCostMeta').textContent = `Ads ${fmtMoney(k.spend)} · Приз ${fmtMoney(k.prize)} · Fixed ${fmtMoney(k.fixed)} · Project ${fmtMoney(k.projCosts)}`;
+  document.getElementById('kTrueNet').textContent = fmtMoney(k.trueNet);
+  const tn = document.getElementById('kTrueNet');
+  tn.style.color = k.trueNet >= 0 ? '#10B981' : '#f87171';
+  document.getElementById('kTrueNetMeta').className = 'meta ' + (k.trueNet >= 0 ? 'pos' : 'neg');
+  document.getElementById('kTrueNetMeta').textContent = k.rev > 0 ? `true margin ${(k.trueNet / k.rev * 100).toFixed(1)}%` : '—';
   document.getElementById('kRoas').textContent = k.avgRoas != null ? '×' + k.avgRoas.toFixed(2) : '—';
   document.getElementById('kRoasMeta').textContent = k.avgRoas != null ? (k.avgRoas >= 3 ? 'добре' : k.avgRoas >= 1.5 ? 'окей' : 'слабко') : 'spend не матчиться';
 }
@@ -327,25 +330,27 @@ function renderTable() {
     const statusLow = (r.status || '').toLowerCase();
     const goldClass = r.status === 'active' ? 'gold' : '';
     const isPartial = (r.status === 'active' || r.status === 'measure') && Number(r.elapsed_days) < Number(r.days_duration);
+    const trueProfCls = Number(r.true_net_profit || 0) >= 0 ? 'pos' : 'neg';
     return `<tr class="${goldClass}">
       <td><b>${(r.name || '—')}</b> <span class="muted" style="font-size:10.5px">${r.code || ''}</span></td>
       <td><span class="pill pill-${statusLow}">${r.status || '—'}</span>${isPartial ? '<span class="partial-mark" title="метрики обчислені для elapsed/total днів — не до фіналу">⏳ ' + r.elapsed_days + '/' + r.days_duration + '</span>' : ''}</td>
       <td>${fmtDate(r.starts_on)}</td>
-      <td>${fmtInt(r.days_duration)}</td>
       <td>${fmtInt(r.leads_count)}</td>
       <td>${fmtInt(r.paid_count)}</td>
       <td>${fmtPct(r.conversion_pct)}</td>
-      <td>${fmtMoney(r.revenue_total)}</td>
+      <td><b>${fmtMoney(r.revenue_total)}</b></td>
       <td>${fmtMoney(r.ad_spend)}</td>
-      <td>${fmtMoney(r.manual_costs)}</td>
-      <td class="${profCls}">${fmtMoney(r.net_profit)}</td>
-      <td class="${profCls}">${fmtPct(r.profit_margin_pct)}</td>
+      <td>${r.prize_cost > 0 ? fmtMoney(r.prize_cost) : '<span class="muted">—</span>'}</td>
+      <td>${r.fixed_allocated > 0 ? fmtMoney(r.fixed_allocated) : '<span class="muted">—</span>'}</td>
+      <td>${r.project_costs_total > 0 ? fmtMoney(r.project_costs_total) : '<span class="muted">—</span>'}</td>
+      <td><b>${fmtMoney(r.total_cost)}</b></td>
+      <td class="${trueProfCls}"><b>${fmtMoney(r.true_net_profit)}</b></td>
+      <td class="${trueProfCls}">${fmtPct(r.true_net_margin_pct)}</td>
       <td>${r.roas != null ? '×'+fmtNum(r.roas) : '—'}</td>
-      <td>${fmtMoney(r.cpa)}</td>
-      <td>${fmtMoney(r.aov)}</td>
+      <td>${fmtMoney(r.true_cac)}</td>
     </tr>`;
   }).join('');
-  document.getElementById('tbody').innerHTML = html || '<tr><td colspan="15" style="text-align:center;padding:30px;color:#888">Немає даних</td></tr>';
+  document.getElementById('tbody').innerHTML = html || '<tr><td colspan="16" style="text-align:center;padding:30px;color:#888">Немає даних</td></tr>';
   // Update sort indicator
   document.querySelectorAll('thead th').forEach(t => t.classList.toggle('sort', t.dataset.key === SORT.key));
 }
