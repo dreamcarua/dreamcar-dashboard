@@ -39,6 +39,7 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           TG_BOT_TOKEN:              ${{ secrets.TG_BOT_TOKEN }}
           TG_CHAT_ID:                ${{ secrets.TG_CHAT_ID }}
+          GH_TEAM_NOTIFY_TOKEN:      ${{ secrets.GH_TEAM_NOTIFY_TOKEN }}
         run: python etl/sync_meta_stats.py
 
       - name: Commit data.json if changed

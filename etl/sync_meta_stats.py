@@ -40,34 +40,97 @@ SEG_BREAKDOWNS = {
 
 TG_TOKEN = os.getenv('TG_BOT_TOKEN', '')
 TG_CHAT = os.getenv('TG_CHAT_ID', '')
+GH_TEAM_TOKEN = os.getenv('GH_TEAM_NOTIFY_TOKEN', '')   # Варіант A: міст cowork-notify (write до dreamcar-team)
+VADYM_ID = 'aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaaa'        # CEO (created_by/assignee)
+SEV_PRIORITY = {'cri': 'p1', 'mod': 'p2', 'inf': 'p4'}
 
 def log(m): print(f'[{datetime.now(timezone.utc):%H:%M:%S}] {m}', flush=True)
 
-def post_tg_digest(payload):
-    """Фаза 3: щоденний дайджест у Telegram (якщо задано TG_BOT_TOKEN + TG_CHAT_ID)."""
-    if not TG_TOKEN or not TG_CHAT:
-        log('  ℹ TG digest пропущено (нема TG_BOT_TOKEN/TG_CHAT_ID)')
-        return
-    cur = [p for p in payload['projects'] if p.get('is_current')]
-    if not cur:
-        cur = payload['projects'][-2:]
-    lines = ['📊 <b>Meta Ads — щоденний дайджест</b>', f'<i>оновлено {datetime.now(timezone.utc).astimezone().strftime("%d.%m %H:%M")}</i>', '']
+def _kyiv_now():
+    try:
+        from zoneinfo import ZoneInfo
+        return datetime.now(ZoneInfo('Europe/Kyiv'))
+    except Exception:
+        return datetime.now(timezone.utc)
+
+def build_digest(payload):
+    cur = [p for p in payload['projects'] if p.get('is_current')] or payload['projects'][-2:]
+    lines = ['📊 <b>Meta Ads — щоденний дайджест</b>', f'<i>{_kyiv_now():%d.%m %H:%M} Київ</i>', '']
     for p in cur:
-        lines.append(f'🏁 <b>{p["name"]}</b> · витрати {int(p.get("spend",0)):,} ₴'.replace(',', ' '))
-        lines.append(f'   ROAS: піксель {p.get("pixel_roas")} · реал {p.get("real_ad_roas")} · CPA {p.get("cpa")} ₴')
+        sp = f'{int(p.get("spend",0)):,}'.replace(',', ' ')
+        lines.append(f'🏁 <b>{p["name"]}</b> · {sp} ₴')
+        lines.append(f'   ROAS піксель {p.get("pixel_roas")} · реал {p.get("real_ad_roas")} · CPA {p.get("cpa")} ₴')
         for r in (p.get('recommendations') or [])[:2]:
             mark = '🔴' if r['sev'] == 'cri' else ('🟡' if r['sev'] == 'mod' else 'ℹ️')
             lines.append(f'   {mark} {r["text"]}')
         lines.append('')
     lines.append('🔗 dashboard.dreamcar.ua/meta-analytics/')
-    text = '\n'.join(lines)
+    return '\n'.join(lines)
+
+def post_tg_digest(payload):
+    """Фаза 3. B: пряма відправка (TG_BOT_TOKEN+TG_CHAT_ID). A: міст cowork-notify (GH_TEAM_NOTIFY_TOKEN)."""
+    text = build_digest(payload)
+    if TG_TOKEN and TG_CHAT:
+        try:
+            r = requests.post(f'https://api.telegram.org/bot{TG_TOKEN}/sendMessage',
+                json={'chat_id': TG_CHAT, 'text': text, 'parse_mode': 'HTML', 'disable_web_page_preview': True}, timeout=30)
+            log(f'  {"✅" if r.status_code == 200 else "⚠"} TG (direct): {r.status_code}'); return
+        except Exception as e:
+            log(f'  ⚠ TG direct exc: {e}')
+    if GH_TEAM_TOKEN:
+        import base64
+        fn = f'cowork-notify/{_kyiv_now():%Y-%m-%d-%H%M}-meta-digest.json'
+        content = json.dumps({'text': text, 'type': 'info', 'link': 'https://dashboard.dreamcar.ua/meta-analytics/'}, ensure_ascii=False)
+        try:
+            r = requests.put(f'https://api.github.com/repos/dreamcarua/dreamcar-team/contents/{fn}',
+                headers={'Authorization': f'Bearer {GH_TEAM_TOKEN}', 'Accept': 'application/vnd.github+json'},
+                json={'message': 'meta digest', 'content': base64.b64encode(content.encode()).decode(), 'branch': 'main'}, timeout=30)
+            log(f'  {"✅" if r.status_code in (200, 201) else "⚠"} TG (bridge): {r.status_code}'); return
+        except Exception as e:
+            log(f'  ⚠ TG bridge exc: {e}')
+    log('  ℹ TG digest пропущено (нема TG_BOT_TOKEN/TG_CHAT_ID або GH_TEAM_NOTIFY_TOKEN)')
+
+def _sb_get(path):
     try:
-        r = requests.post(f'https://api.telegram.org/bot{TG_TOKEN}/sendMessage',
-                          json={'chat_id': TG_CHAT, 'text': text, 'parse_mode': 'HTML',
-                                'disable_web_page_preview': True}, timeout=30)
-        log(f'  {"✅" if r.status_code == 200 else "⚠"} TG digest: {r.status_code}')
+        r = requests.get(f'{SB_URL}/rest/v1/{path}', headers={'apikey': SB_KEY, 'Authorization': f'Bearer {SB_KEY}'}, timeout=30)
+        if r.status_code == 200: return r.json()
     except Exception as e:
-        log(f'  ⚠ TG digest exc: {e}')
+        log(f'  ⚠ sb_get: {e}')
+    return None
+
+def create_tasks(payload):
+    """Авто-задачі у team_tasks з КРИТИЧНИХ рекомендацій поточних циклів (service-role + дедуп по title)."""
+    if not SB_KEY:
+        return
+    import urllib.parse
+    created = 0
+    for p in payload['projects']:
+        if not p.get('is_current'):
+            continue
+        for r in (p.get('recommendations') or []):
+            if r['sev'] != 'cri':
+                continue
+            title = f"Meta · {p['name']}: {r['text'][:70]}"
+            ex = _sb_get(f"team_tasks?select=id&title=eq.{urllib.parse.quote(title)}&status=neq.done&limit=1")
+            if ex:
+                continue
+            body = {'title': title,
+                    'description': f"{r['text']}\n\nПроєкт: {p['name']} ({p['date_from']}→{p['date_to']})\n"
+                                   f"ROAS піксель {p.get('pixel_roas')} · реал {p.get('real_ad_roas')}\n\n"
+                                   f"https://dashboard.dreamcar.ua/meta-analytics/",
+                    'priority': SEV_PRIORITY.get(r['sev'], 'p3'),
+                    'assignee_id': VADYM_ID, 'created_by': VADYM_ID,
+                    'tags': ['meta', 'etl', 'recommendation']}
+            try:
+                resp = requests.post(f'{SB_URL}/rest/v1/team_tasks',
+                    headers={'apikey': SB_KEY, 'Authorization': f'Bearer {SB_KEY}',
+                             'Content-Type': 'application/json', 'Prefer': 'return=minimal'},
+                    json=body, timeout=30)
+                if resp.status_code in (200, 201): created += 1
+                else: log(f'  ⚠ task {resp.status_code}: {resp.text[:120]}')
+            except Exception as e:
+                log(f'  ⚠ task exc: {e}')
+    log(f'  ✓ задач створено: {created}')
 
 # ---------------- Meta Graph API ----------------
 def fb_get(path, params=None):
@@ -289,6 +352,7 @@ def main():
     with open(OUT_PATH, 'w', encoding='utf-8') as f:
         json.dump(payload, f, ensure_ascii=False, indent=1)
     log(f'✅ data.json: {len(built)} проєктів -> {OUT_PATH}')
+    create_tasks(payload)
     post_tg_digest(payload)
 
 if __name__ == '__main__':
