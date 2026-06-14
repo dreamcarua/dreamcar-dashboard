@@ -90,6 +90,7 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
   <div class="tabs">
     <button class="tab on" data-pane="categories">📁 Категорії <span class="cnt" id="c-categories">…</span></button>
     <button class="tab" data-pane="fixed">⚙️ Fixed Monthly <span class="cnt" id="c-fixed">…</span></button>
+    <button class="tab" data-pane="percent">📊 % з угод <span class="cnt" id="c-percent">…</span></button>
     <button class="tab" data-pane="project">💸 Project Costs <span class="cnt" id="c-project">…</span></button>
     <button class="tab" data-pane="launches">🏆 Запуски (приз) <span class="cnt" id="c-launches">…</span></button>
   </div>
@@ -119,6 +120,23 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
         <th style="text-align:left">Label</th><th>Категорія</th><th>UAH/міс</th>
         <th>Valid From</th><th>Valid To</th><th>Дії</th>
       </tr></thead><tbody><tr><td colspan="6" class="empty">завантаження…</td></tr></tbody></table>
+    </div>
+  </div>
+
+  <!-- PERCENT RATES PANE -->
+  <div class="pane" id="pane-percent">
+    <div class="toolbar">
+      <input class="search" id="searchPct" placeholder="🔍 Пошук…">
+      <button class="btn" onclick="openPercentModal()">+ Нова % ставка</button>
+    </div>
+    <div class="note" style="background:rgba(251,191,36,.06);border-color:rgba(251,191,36,.3);color:#fbbf24">
+      <b>Як це працює:</b> кожна % ставка нараховується на КОЖНУ paid угоду у періоді запуску. Наприклад банк 2.5% + ФОП 5% + ЗСУ 1% = разом ~8.5% від кожної оплати. Можна обмежити <code>applies_to</code> на конкретний pay_provider (LiqPay/Fondy/etc).
+    </div>
+    <div class="tbl-card">
+      <table id="tblPct"><thead><tr>
+        <th style="text-align:left">Label</th><th>Категорія</th><th>Rate %</th>
+        <th>Applies to</th><th>Valid From</th><th>Valid To</th><th>Дії</th>
+      </tr></thead><tbody><tr><td colspan="7" class="empty">завантаження…</td></tr></tbody></table>
     </div>
   </div>
 
@@ -189,6 +207,34 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
   </div>
 </div>
 
+<!-- MODAL: Percent Rate -->
+<div class="modal" id="modalPct">
+  <div class="modal-card">
+    <h3 id="modalPctTitle">Нова % ставка</h3>
+    <div id="pctError"></div>
+    <div class="field"><label>Категорія *</label><select id="pctCat"></select></div>
+    <div class="field"><label>Label *</label><input id="pctLabel" type="text" placeholder="напр. LiqPay 2.5% комісія"></div>
+    <div class="field-row">
+      <div class="field"><label>Rate % *</label><input id="pctRate" type="number" min="0" max="100" step="0.01" placeholder="2.5"></div>
+      <div class="field"><label>Applies to</label>
+        <select id="pctApplies">
+          <option value="all">Усі paid угоди</option>
+          <option value="liqpay">Тільки LiqPay</option>
+          <option value="fondy">Тільки Fondy</option>
+          <option value="wayforpay">Тільки WayForPay</option>
+          <option value="sendpulse">Тільки SendPulse</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Valid from *</label><input id="pctFrom" type="date"></div>
+      <div class="field"><label>Valid to (NULL = досі)</label><input id="pctTo" type="date"></div>
+    </div>
+    <div class="field"><label>Notes</label><textarea id="pctNotes"></textarea></div>
+    <div class="modal-actions"><button class="btn ghost" onclick="closeModal('modalPct')">Скасувати</button><button class="btn" onclick="savePercent()">Зберегти</button></div>
+  </div>
+</div>
+
 <!-- MODAL: Project Cost -->
 <div class="modal" id="modalProj">
   <div class="modal-card">
@@ -228,8 +274,8 @@ const SB_URL = HQ.SUPABASE_URL || 'https://wotghlaehnvxyeacznvv.supabase.co';
 const SB_KEY = HQ.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndvdGdobGFlaG52eHllYWN6bnZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU0MTM3MzAsImV4cCI6MjA1MTAwOTczMH0._BS6ABYSP_ZGfk_QbVFCk0PIUVMUd_X86VuJX59nIs8';
 const sb = window.supabase.createClient(SB_URL, SB_KEY, { auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 
-let DATA = { cats: [], fixed: [], proj: [], launches: [] };
-let edit = { cat: null, fixed: null, proj: null, launch: null };
+let DATA = { cats: [], fixed: [], percent: [], proj: [], launches: [] };
+let edit = { cat: null, fixed: null, percent: null, proj: null, launch: null };
 
 function fmtUAH(v){ if(v==null) return '—'; return new Intl.NumberFormat('uk-UA').format(Math.round(Number(v))) + ' ₴'; }
 function fmtDate(s){ if(!s) return '—'; const [y,m,d] = s.split('-'); return `${d}.${m}.${y}`; }
@@ -246,26 +292,31 @@ document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () =>
 // === LOAD ===
 async function loadAll() {
   try {
-    const [cats, fixed, proj, launches] = await Promise.all([
+    const [cats, fixed, percent, proj, launches] = await Promise.all([
       sb.from('cost_categories').select('*').order('sort_order'),
       sb.from('fixed_monthly_costs').select('*, cost_categories(code,name,icon,color)').order('valid_from', { ascending: false }),
+      sb.from('percent_rates').select('*, cost_categories(code,name,icon,color)').order('valid_from', { ascending: false }),
       sb.from('project_costs').select('*, cost_categories(code,name,icon,color), launches(name,code)').order('spent_at', { ascending: false }).limit(500),
       sb.from('launches').select('id,name,code,status,starts_on,prize_cost_uah,prize_purchased_at,prize_notes').order('starts_on', { ascending: false })
     ]);
     if (cats.error) throw cats.error;
     if (fixed.error) throw fixed.error;
+    if (percent.error) throw percent.error;
     if (proj.error) throw proj.error;
     if (launches.error) throw launches.error;
     DATA.cats = cats.data || [];
     DATA.fixed = fixed.data || [];
+    DATA.percent = percent.data || [];
     DATA.proj = proj.data || [];
     DATA.launches = launches.data || [];
     document.getElementById('c-categories').textContent = DATA.cats.length;
     document.getElementById('c-fixed').textContent = DATA.fixed.length;
+    document.getElementById('c-percent').textContent = DATA.percent.length;
     document.getElementById('c-project').textContent = DATA.proj.length;
     document.getElementById('c-launches').textContent = DATA.launches.length;
     renderCategories();
     renderFixed();
+    renderPercent();
     renderProject();
     renderLaunches();
     populateSelects();
@@ -277,10 +328,19 @@ async function loadAll() {
 
 function populateSelects() {
   const sortedCats = DATA.cats.slice().sort((a,b) => a.sort_order - b.sort_order);
-  const opts = '<option value="">— виберіть категорію —</option>' + sortedCats.filter(c => !c.is_archived).map(c => `<option value="${c.id}">${c.icon||''} ${esc(c.name)}</option>`).join('');
+  const allOpts = '<option value="">— виберіть категорію —</option>' + sortedCats.filter(c => !c.is_archived).map(c => `<option value="${c.id}">${c.icon||''} ${esc(c.name)}</option>`).join('');
+  // Filter: fixed-type categories тільки для Fixed Monthly modal
+  const fixedOnly = sortedCats.filter(c => !c.is_archived && c.cost_type === 'fixed_monthly');
+  const fixedOpts = '<option value="">— виберіть категорію —</option>' + fixedOnly.map(c => `<option value="${c.id}">${c.icon||''} ${esc(c.name)}</option>`).join('');
+  const variableOnly = sortedCats.filter(c => !c.is_archived && c.cost_type === 'variable');
+  const variableOpts = '<option value="">— виберіть категорію —</option>' + variableOnly.map(c => `<option value="${c.id}">${c.icon||''} ${esc(c.name)}</option>`).join('');
+  const percentOnly = sortedCats.filter(c => !c.is_archived && c.cost_type === 'percent');
+  const percentOpts = '<option value="">— виберіть категорію —</option>' + percentOnly.map(c => `<option value="${c.id}">${c.icon||''} ${esc(c.name)}</option>`).join('');
+
   document.getElementById('catParent').innerHTML = '<option value="">(корінь)</option>' + sortedCats.filter(c => !c.parent_id).map(c => `<option value="${c.id}">${c.icon||''} ${esc(c.name)}</option>`).join('');
-  document.getElementById('fixedCat').innerHTML = opts;
-  document.getElementById('projCat').innerHTML = opts;
+  document.getElementById('fixedCat').innerHTML = fixedOpts.length > 100 ? fixedOpts : allOpts;
+  document.getElementById('pctCat').innerHTML = percentOpts.length > 100 ? percentOpts : allOpts;
+  document.getElementById('projCat').innerHTML = variableOpts.length > 100 ? variableOpts : allOpts;
   const launchOpts = '<option value="">— виберіть запуск —</option>' + DATA.launches.map(l => `<option value="${l.id}">${esc(l.name)} (${l.status})</option>`).join('');
   document.getElementById('projLaunch').innerHTML = launchOpts;
 }
@@ -348,6 +408,34 @@ function renderFixed() {
   tbody.innerHTML = html || '<tr><td colspan="6" class="empty">Не знайдено</td></tr>';
 }
 document.getElementById('searchFixed').addEventListener('input', () => renderFixed());
+
+// === RENDER PERCENT RATES ===
+function renderPercent() {
+  const tbody = document.querySelector('#tblPct tbody');
+  if (!DATA.percent.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty">Немає % ставок. Додай: банк, ФОП, ЗСУ, бухгалтерія.</td></tr>'; return; }
+  const q = (document.getElementById('searchPct').value || '').toLowerCase();
+  const filtered = DATA.percent.filter(r => !q || (r.label||'').toLowerCase().includes(q));
+  const html = filtered.map(r => {
+    const cat = r.cost_categories;
+    const active = !r.valid_to || new Date(r.valid_to) >= new Date();
+    return `
+    <tr>
+      <td style="text-align:left"><b>${esc(r.label)}</b>${active ? '' : ' <span class="muted">(closed)</span>'}</td>
+      <td>${cat ? `<span class="cat-pill">${cat.icon || '💸'} ${esc(cat.name)}</span>` : '—'}</td>
+      <td><b>${Number(r.rate_pct).toFixed(2)}%</b></td>
+      <td><span class="cat-pill">${esc(r.applies_to)}</span></td>
+      <td>${fmtDate(r.valid_from)}</td>
+      <td>${r.valid_to ? fmtDate(r.valid_to) : '<span class="pos">досі</span>'}</td>
+      <td class="act">
+        <button class="iconbtn" title="Редагувати" onclick="editPercent('${r.id}')">✎</button>
+        <button class="iconbtn del" title="Видалити" onclick="delPercent('${r.id}')">🗑</button>
+      </td>
+    </tr>
+    `;
+  }).join('');
+  tbody.innerHTML = html || '<tr><td colspan="7" class="empty">Не знайдено</td></tr>';
+}
+document.getElementById('searchPct').addEventListener('input', () => renderPercent());
 
 // === RENDER PROJECT COSTS ===
 function renderProject() {
@@ -509,6 +597,57 @@ async function delFixed(id) {
   try { const r = await sb.from('fixed_monthly_costs').delete().eq('id', id); if (r.error) throw r.error; await loadAll(); } catch (e) { alert(e.message); }
 }
 
+// PERCENT CRUD
+function openPercentModal() {
+  edit.percent = null;
+  document.getElementById('modalPctTitle').textContent = 'Нова % ставка';
+  ['pctCat','pctLabel','pctRate','pctTo','pctNotes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('pctApplies').value = 'all';
+  document.getElementById('pctFrom').value = new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Kyiv' });
+  showErr('pctError', null);
+  openModal('modalPct');
+}
+function editPercent(id) {
+  const r = DATA.percent.find(x => x.id === id);
+  if (!r) return;
+  edit.percent = r;
+  document.getElementById('modalPctTitle').textContent = 'Редагувати: ' + r.label;
+  document.getElementById('pctCat').value = r.category_id;
+  document.getElementById('pctLabel').value = r.label;
+  document.getElementById('pctRate').value = r.rate_pct;
+  document.getElementById('pctApplies').value = r.applies_to || 'all';
+  document.getElementById('pctFrom').value = r.valid_from;
+  document.getElementById('pctTo').value = r.valid_to || '';
+  document.getElementById('pctNotes').value = r.notes || '';
+  showErr('pctError', null);
+  openModal('modalPct');
+}
+async function savePercent() {
+  const category_id = document.getElementById('pctCat').value;
+  const label = document.getElementById('pctLabel').value.trim();
+  const rate_pct = parseFloat(document.getElementById('pctRate').value);
+  const applies_to = document.getElementById('pctApplies').value;
+  const valid_from = document.getElementById('pctFrom').value;
+  const valid_to = document.getElementById('pctTo').value || null;
+  if (!category_id) return showErr('pctError', 'Вибери категорію');
+  if (!label) return showErr('pctError', 'Введи label');
+  if (!(rate_pct >= 0 && rate_pct <= 100)) return showErr('pctError', 'Rate має бути 0-100');
+  if (!valid_from) return showErr('pctError', 'Введи valid_from');
+  const payload = { category_id, label, rate_pct, applies_to, valid_from, valid_to, notes: document.getElementById('pctNotes').value.trim() || null };
+  try {
+    const r = edit.percent
+      ? await sb.from('percent_rates').update(payload).eq('id', edit.percent.id)
+      : await sb.from('percent_rates').insert(payload);
+    if (r.error) throw r.error;
+    closeModal('modalPct');
+    await loadAll();
+  } catch (e) { showErr('pctError', e.message || e); }
+}
+async function delPercent(id) {
+  if (!confirm('Видалити % ставку? З історії перерахується після наступного reload.')) return;
+  try { const r = await sb.from('percent_rates').delete().eq('id', id); if (r.error) throw r.error; await loadAll(); } catch (e) { alert(e.message); }
+}
+
 // PROJECT CRUD
 function openProjectModal() {
   edit.proj = null;
@@ -594,6 +733,10 @@ window.toggleArchiveCat = toggleArchiveCat;
 window.openFixedModal = openFixedModal;
 window.editFixed = editFixed;
 window.delFixed = delFixed;
+window.openPercentModal = openPercentModal;
+window.editPercent = editPercent;
+window.delPercent = delPercent;
+window.savePercent = savePercent;
 window.openProjectModal = openProjectModal;
 window.editProject = editProject;
 window.delProject = delProject;
