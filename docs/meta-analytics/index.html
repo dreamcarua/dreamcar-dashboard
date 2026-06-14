@@ -7,6 +7,18 @@
 <script src="https://brand.dreamcar.ua/assets/global-header.js?v=20260606b" defer></script>
 <!-- 14.06.2026 #392.1 — auth-guard з SSO bridge (раніше публічна сторінка з закритою аналітикою!) -->
 <script src="/assets/js/auth-guard.js?v=20260614" defer></script>
+<script>
+/* 14.06.2026 #392.3 — inherit фільтри з головної. TTL 1h. */
+(function dcSyncFromMain(){
+  try {
+    const raw = sessionStorage.getItem('dc-active-filters');
+    if (!raw) return;
+    const s = JSON.parse(raw); if (!s || Date.now() - (s.ts || 0) > 3600000) return;
+    window.__dcInheritedFilters = s;
+    console.log('[dc-sync] inherited from main dashboard:', s);
+  } catch {}
+})();
+</script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

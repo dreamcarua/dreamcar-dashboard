@@ -183,11 +183,158 @@
     });
   }
 
+  /* ====== #392.3 Active Launch Pulse — sticky pill row під topbar ======
+     Показує всі активні запуски (status='active' у public.launches) як клікабельні
+     pill-картки. Клік → вибрати проект у filter-bar (drill-down).
+     Render = 1 SELECT раз на bootstrap + auto-refresh кожні 5 хв. */
+
+  // Inject CSS для Pulse
+  var pulseCss = document.createElement('style');
+  pulseCss.id = 'dc-pulse-css';
+  pulseCss.textContent = [
+    '.dc-pulse { display: flex; gap: 8px; padding: 8px 16px; background: linear-gradient(90deg,#0f0f0f 0%, #141414 60%, #0f0f0f 100%); border-bottom: 1px solid #2a2a2a; overflow-x: auto; white-space: nowrap; position: sticky; top: 56px; z-index: 35; align-items: center; scrollbar-width: thin; }',
+    '.dc-pulse-label { font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: .14em; color: #888; text-transform: uppercase; margin-right: 4px; }',
+    '.dc-pulse-card { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 999px; font-size: 12px; color: #fff; cursor: pointer; transition: all .15s; }',
+    '.dc-pulse-card:hover { border-color: #E30613; transform: translateY(-1px); background: #1f1f1f; }',
+    '.dc-pulse-card.active { border-color: #10B981; box-shadow: 0 0 0 1px #10B981; }',
+    '.dc-pulse-card .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }',
+    '.dc-pulse-card .dot.active { background: #10B981; animation: dcPulse 1.6s ease-in-out infinite; }',
+    '.dc-pulse-card .dot.completed { background: #888; }',
+    '.dc-pulse-card .dot.measure { background: #FBBF24; }',
+    '@keyframes dcPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,.6);} 50% { box-shadow: 0 0 0 6px rgba(16,185,129,0);} }',
+    '.dc-pulse-card .nm { font-weight: 700; letter-spacing: .02em; }',
+    '.dc-pulse-card .meta { color: #888; font-family: "JetBrains Mono", monospace; font-size: 10px; }',
+    '.dc-pulse-empty { color: #888; font-size: 12px; font-style: italic; }',
+    'html.light-theme .dc-pulse { background: #FAFAFA !important; border-bottom-color: #E5E5E5 !important; }',
+    'html.light-theme .dc-pulse-card { background: #FFF !important; color: #111 !important; border-color: #D5D5D5 !important; }',
+    '@media (max-width: 768px) { .dc-pulse { padding: 6px 12px; top: 52px; } .dc-pulse-label { display: none; } }',
+  ].join('\n');
+  document.head.appendChild(pulseCss);
+
+  // Compute days until end_on (Kyiv)
+  function daysLeft(endIso) {
+    if (!endIso) return null;
+    var todayY = new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Kyiv' });
+    var today = new Date(todayY + 'T00:00:00+03:00').getTime();
+    var end = new Date(endIso + 'T23:59:59+03:00').getTime();
+    return Math.round((end - today) / 86400000);
+  }
+
+  async function fetchActiveLaunches() {
+    if (!window.supabase || !window.supabase.from) return [];
+    try {
+      var sb = window.supabase;
+      var r = await sb.from('launches')
+        .select('id,name,code,status,starts_on,ends_on,is_active,budget_plan,budget_actual,deal_aliases')
+        .eq('is_active', true)
+        .in('status', ['active', 'measure'])
+        .order('starts_on', { ascending: false })
+        .limit(6);
+      if (r.error) { console.warn('[dc-pulse] launches fetch error:', r.error.message); return []; }
+      return r.data || [];
+    } catch (e) { console.warn('[dc-pulse]', e); return []; }
+  }
+
+  function renderPulse(launches) {
+    var bar = document.getElementById('dc-pulse-bar');
+    if (!bar) return;
+    if (!launches.length) {
+      bar.innerHTML = '<span class="dc-pulse-label">Запуски</span><span class="dc-pulse-empty">Немає активних запусків</span>';
+      return;
+    }
+    var currentProject = (window.filters && window.filters.project) || null;
+    var html = '<span class="dc-pulse-label">Активні запуски</span>';
+    launches.forEach(function (l) {
+      var d = daysLeft(l.ends_on);
+      var meta = d == null ? '' : (d < 0 ? 'завершено' : d === 0 ? 'фінал сьогодні' : 'D-' + d);
+      var st = (l.status || '').toLowerCase();
+      var aliases = Array.isArray(l.deal_aliases) ? l.deal_aliases.map(function(a){return String(a).toUpperCase()}) : [];
+      var isActive = currentProject && (aliases.indexOf(String(currentProject).toUpperCase()) !== -1 || (l.code && l.code.toUpperCase() === String(currentProject).toUpperCase()));
+      html += '<div class="dc-pulse-card' + (isActive ? ' active' : '') + '" data-id="' + l.id + '" data-code="' + (l.code || '') + '" data-alias="' + (aliases[0] || l.code || l.name) + '" title="' + (l.name || '') + ' · ' + meta + '">' +
+        '<span class="dot ' + (st === 'active' ? 'active' : st === 'measure' ? 'measure' : 'completed') + '"></span>' +
+        '<span class="nm">' + ((l.name || '').slice(0, 20)) + '</span>' +
+        '<span class="meta">' + meta + '</span>' +
+      '</div>';
+    });
+    bar.innerHTML = html;
+    bar.querySelectorAll('.dc-pulse-card').forEach(function (card) {
+      card.addEventListener('click', function () {
+        var alias = card.dataset.alias;
+        var projSelect = document.getElementById('f-project') || document.getElementById('f-model');
+        if (projSelect) {
+          for (var i = 0; i < projSelect.options.length; i++) {
+            var opt = projSelect.options[i];
+            if (opt.value && opt.value.toUpperCase() === alias.toUpperCase()) {
+              projSelect.value = opt.value;
+              projSelect.dispatchEvent(new Event('change', { bubbles: true }));
+              break;
+            }
+          }
+        }
+      });
+    });
+  }
+
+  function injectPulseBar() {
+    if (document.getElementById('dc-pulse-bar')) return;
+    var filterBar = document.getElementById('filter-bar');
+    var topbar = document.querySelector('.topbar');
+    var bar = document.createElement('div');
+    bar.id = 'dc-pulse-bar';
+    bar.className = 'dc-pulse';
+    bar.innerHTML = '<span class="dc-pulse-label">Завантаження…</span>';
+    if (filterBar && filterBar.parentNode) {
+      filterBar.parentNode.insertBefore(bar, filterBar);
+    } else if (topbar && topbar.parentNode) {
+      topbar.parentNode.insertBefore(bar, topbar.nextSibling);
+    } else {
+      document.body.insertBefore(bar, document.body.firstChild);
+    }
+  }
+
+  async function refreshPulse() {
+    injectPulseBar();
+    var launches = await fetchActiveLaunches();
+    renderPulse(launches);
+  }
+
+  // Refresh при зміні filter (project) щоб active card підсвічувалась
+  document.addEventListener('change', function (e) {
+    if (e.target && (e.target.id === 'f-project' || e.target.id === 'f-model')) {
+      setTimeout(refreshPulse, 100);
+    }
+  });
+
+  /* ====== #392.3 Cross-page filter state propagation ======
+     SMM/Retention/Tasks→Dashboard: коли юзер тиц на /upsell-ab/ або /meta-analytics/,
+     передаємо вибраний період і проект через sessionStorage (single-origin) +
+     URL hash для linkable share. */
+  function persistFilters() {
+    if (!window.filters) return;
+    try {
+      sessionStorage.setItem('dc-active-filters', JSON.stringify({
+        project: window.filters.project, from: window.filters.from, to: window.filters.to,
+        preset: window.filters.preset, ts: Date.now()
+      }));
+    } catch {}
+  }
+  document.addEventListener('change', function (e) {
+    if (e.target && /^f-/.test(e.target.id || '')) setTimeout(persistFilters, 200);
+  });
+  document.addEventListener('click', function (e) {
+    if (e.target && e.target.id && /apply|reset/.test(e.target.id)) setTimeout(persistFilters, 200);
+  });
+
   /* ====== Init ====== */
   function init() {
     injectThemeButton();
     injectViewsButton();
     ensureTray();
+    refreshPulse();
+    // Auto-refresh Pulse кожні 5 хв
+    if (!window.__dcPulseTimer) {
+      window.__dcPulseTimer = setInterval(refreshPulse, 300000);
+    }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
