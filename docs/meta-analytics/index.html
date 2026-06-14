@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Meta Ads Аналітика по проєктах · DreamCar</title>
 <script src="https://brand.dreamcar.ua/assets/global-header.js?v=20260606b" defer></script>
+<!-- 14.06.2026 #392.1 — auth-guard з SSO bridge (раніше публічна сторінка з закритою аналітикою!) -->
+<script src="/assets/js/auth-guard.js?v=20260614" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -105,7 +107,7 @@ h1,h2,h3,.kpi .val{font-family:'Oswald','Manrope',sans-serif}
     <h1>Meta Ads Аналітика — DreamCar.ua UAH</h1>
     <div class="sub">Акаунт 4136058269783354 · поділ по проєктах за логікою дашборду (діапазони дат) · дані Meta Marketing API</div>
   </div>
-  <div class="live">оновлено <b>14.06.2026</b><br>піксель: вбудовано · реальні: <span id="realStatus">завантаження з Supabase…</span></div>
+  <div class="live">оновлено <b id="liveDate">…</b><br>піксель: вбудовано · реальні: <span id="realStatus">завантаження з Supabase…</span></div>
 </header>
 
 <div class="tabs">
@@ -135,7 +137,7 @@ h1,h2,h3,.kpi .val{font-family:'Oswald','Manrope',sans-serif}
       <tbody id="projRows"></tbody>
     </table>
   </div>
-  <p style="font-size:12.5px;margin-top:8px;color:var(--mut)">Стовпець «ROAS реал» рахується client-side із <code>Supabase → dashboard_deals</code> (оплачені угоди, UAH) — той самий патерн, що й решта дашборду. Якщо порожньо — дані ще вантажаться або недоступні.</p>
+  <p style="font-size:12.5px;margin-top:8px;color:var(--mut)">«ROAS реал» = виручка від <b>рекламного (платного) трафіку</b> ÷ витрати на рекламу. Тільки дохід, що згенерували оголошення — <b>без ретеншну, органіки й інших каналів</b>. Джерело: Supabase RPC <code>dashboard_kpi_summary</code> (traffic_type=paid).</p>
 </div>
 
 <div class="tabc" id="tab-cycle">
@@ -228,10 +230,10 @@ h1,h2,h3,.kpi .val{font-family:'Oswald','Manrope',sans-serif}
 </div>
 
 <div class="tabc" id="tab-reconcile">
-  <div class="note"><b class="hl">Навіщо звірка.</b> ROAS Meta — це <b>піксель</b> (вікно атрибуції default, схильний завищувати: подвійний рахунок між оголошеннями, view-through). Реальна правда — оплати з <code>crm_deals</code> по UTM. Показуємо обидва: pixel і реал.</div>
+  <div class="note"><b class="hl">Навіщо звірка.</b> <b>ROAS реал</b> = реальна виручка <b>лише від платного трафіку</b> (CRM/Supabase) ÷ витрати на рекламу — тобто дохід саме від оголошень, без ретеншну/органіки. Піксель Meta часто <b>недооцінює</b> рекламні конверсії, тому реал зазвичай вищий за піксельний.</div>
   <div class="card scroll">
     <table>
-      <thead><tr><th>Проєкт</th><th>Витрати ₴</th><th>Pixel дохід ₴</th><th>Pixel ROAS</th><th>Реал дохід ₴ <span class="realbadge">crm_deals</span></th><th>Реал ROAS</th><th>Розрив</th></tr></thead>
+      <thead><tr><th>Проєкт</th><th>Витрати ₴</th><th>Pixel дохід ₴</th><th>Pixel ROAS</th><th>Реал дохід (реклама) ₴ <span class="realbadge">платний трафік</span></th><th>Реал ROAS</th><th>Розрив vs pixel</th></tr></thead>
       <tbody id="recRows"></tbody>
     </table>
   </div>
@@ -345,28 +347,32 @@ document.querySelectorAll('.tabbtn').forEach(b=>b.addEventListener('click',()=>{
 const SB_URL='https://wotghlaehnvxyeacznvv.supabase.co';
 const SB_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndvdGdobGFlaG52eHllYWN6bnZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2MDc4NjgsImV4cCI6MjA5NDE4Mzg2OH0.Se-y1WawsdSkMLXj7G_O-Kq-jVfjUOBD3KJOvemCR3A';
 let sb=null; try{ sb=window.supabase.createClient(SB_URL,SB_ANON); }catch(e){}
-async function realRev(p){
+async function adRev(p){
   if(!sb) return null;
-  const {data,error}=await sb.rpc('dashboard_kpi_summary',{p_from:p.df+'T00:00:00+03:00',p_to:p.dt+'T23:59:59+03:00',p_project_values:null,p_customer_type:null,p_tariff:null,p_pay_provider:null,p_traffic_type:null});
-  if(error||!data||!data[0]) return null;
-  const v=data[0].revenue;
-  return (v==null)?null:Number(v);
+  try{
+    const {data,error}=await sb.rpc('dashboard_kpi_summary',{p_from:p.df+'T00:00:00+03:00',p_to:p.dt+'T23:59:59+03:00',p_project_values:null,p_customer_type:null,p_tariff:null,p_pay_provider:null,p_traffic_type:'paid'});
+    if(error||!data||!data[0]) return null;
+    const v=data[0].revenue; return (v==null)?null:Number(v);
+  }catch(e){ return null; }
+}
+function fillReal(p,real){
+  const rroas=real/p.spend; const gap=(rroas/p.roas-1)*100;
+  const cls=rroas>=5?'pill-g':rroas>=3?'pill-y':'pill-r';
+  document.querySelectorAll(`.realcell[data-key="${p.key}"]`).forEach(e=>e.innerHTML=`<span class="pill ${cls}">${rroas.toFixed(2)}</span>`);
+  document.querySelectorAll(`.realrev[data-key="${p.key}"]`).forEach(e=>e.textContent=fmt(Math.round(real)));
+  document.querySelectorAll(`.realroas[data-key="${p.key}"]`).forEach(e=>e.innerHTML=`<span class="pill ${cls}">${rroas.toFixed(2)}</span>`);
+  document.querySelectorAll(`.realgap[data-key="${p.key}"]`).forEach(e=>{const c=gap<0?'#f87171':'#10B981';e.innerHTML=`<span style="color:${c}">${gap>0?'+':''}${gap.toFixed(0)}%</span>`;});
 }
 async function loadReal(){
  const st=document.getElementById('realStatus');
  if(!sb){ if(st) st.textContent='Supabase не завантажився'; return; }
- let ok=false;
- await Promise.all(DATA.projects.map(async p=>{
-   let real=null; try{ real=await realRev(p); }catch(e){ real=null; }
-   if(real!=null){ ok=true; const rroas=real/p.spend; const gap=(rroas/p.roas-1)*100;
-     const cls=rroas>=5?'pill-g':rroas>=3?'pill-y':'pill-r';
-     document.querySelectorAll(`.realcell[data-key="${p.key}"]`).forEach(e=>e.innerHTML=`<span class="pill ${cls}">${rroas.toFixed(2)}</span>`);
-     document.querySelectorAll(`.realrev[data-key="${p.key}"]`).forEach(e=>e.textContent=fmt(Math.round(real)));
-     document.querySelectorAll(`.realroas[data-key="${p.key}"]`).forEach(e=>e.innerHTML=`<span class="pill ${cls}">${rroas.toFixed(2)}</span>`);
-     document.querySelectorAll(`.realgap[data-key="${p.key}"]`).forEach(e=>e.innerHTML=`<span style="color:${gap<0?'#f87171':'#4ade80'}">${gap>0?'+':''}${gap.toFixed(0)}%</span>`);
-   }
- }));
- if(st) st.innerHTML=ok?'<b>реальні продажі ✅</b>':'дані недоступні';
+ const N=DATA.projects.length; let done=0, ok=0;
+ if(st) st.textContent='реальні (платний трафік)…';
+ DATA.projects.forEach(async p=>{
+   const real=await adRev(p); done++;
+   if(real!=null && real>0){ ok++; fillReal(p,real); }
+   if(st){ st.innerHTML = done<N ? `завантаження ${done}/${N}…` : (ok?'<b>реальні (реклама) ✅</b>':'дані недоступні'); }
+ });
 }
 loadReal();
 </script>
