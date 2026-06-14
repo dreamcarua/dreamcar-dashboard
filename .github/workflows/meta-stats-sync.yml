@@ -43,10 +43,10 @@ jobs:
         run: |
           git config user.name  "dreamcar-bot"
           git config user.email "bot@dreamcar.ua"
-          if git diff --quiet -- docs/meta-analytics/data.json; then
+          git add docs/meta-analytics/data.json
+          if git diff --cached --quiet; then
             echo "no changes in data.json"; exit 0
           fi
-          git add docs/meta-analytics/data.json
           git commit -m "chore(meta-stats): оновлення data.json [skip ci]"
           # rebase щоб не зіткнутись із паралельними пушами дашборд-чату
           for i in 1 2 3; do

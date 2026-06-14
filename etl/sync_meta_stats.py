@@ -75,11 +75,19 @@ def _roas(purchase_roas):
     except Exception: return 0.0
 
 def insights(level, since, until, breakdown=None, limit=None):
+    base = 'spend,impressions,clicks,ctr,cpc,reach,frequency'
+    if level == 'ad':
+        base += ',ad_name,ad_id'
+    # Meta: platform_position не комбінується з action_type-полями (actions).
+    # Лишаємо purchase_roas (працює), але прибираємо actions для цього breakdown.
+    if breakdown == 'platform_position':
+        fields = base + ',purchase_roas'
+    else:
+        fields = base + ',actions,purchase_roas'
     params = {
         'level': level,
         'time_range': json.dumps({'since': since, 'until': until}),
-        'fields': 'spend,impressions,clicks,ctr,cpc,reach,frequency,actions,purchase_roas' +
-                  (',ad_name,ad_id' if level == 'ad' else ''),
+        'fields': fields,
         'limit': limit or 500,
     }
     if breakdown:
