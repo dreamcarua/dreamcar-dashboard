@@ -38,7 +38,36 @@ SEG_BREAKDOWNS = {
 }
 # placement (platform_position) вимкнено: Meta API блокує його з action-полями на цьому акаунті.
 
+TG_TOKEN = os.getenv('TG_BOT_TOKEN', '')
+TG_CHAT = os.getenv('TG_CHAT_ID', '')
+
 def log(m): print(f'[{datetime.now(timezone.utc):%H:%M:%S}] {m}', flush=True)
+
+def post_tg_digest(payload):
+    """Фаза 3: щоденний дайджест у Telegram (якщо задано TG_BOT_TOKEN + TG_CHAT_ID)."""
+    if not TG_TOKEN or not TG_CHAT:
+        log('  ℹ TG digest пропущено (нема TG_BOT_TOKEN/TG_CHAT_ID)')
+        return
+    cur = [p for p in payload['projects'] if p.get('is_current')]
+    if not cur:
+        cur = payload['projects'][-2:]
+    lines = ['📊 <b>Meta Ads — щоденний дайджест</b>', f'<i>оновлено {datetime.now(timezone.utc).astimezone().strftime("%d.%m %H:%M")}</i>', '']
+    for p in cur:
+        lines.append(f'🏁 <b>{p["name"]}</b> · витрати {int(p.get("spend",0)):,} ₴'.replace(',', ' '))
+        lines.append(f'   ROAS: піксель {p.get("pixel_roas")} · реал {p.get("real_ad_roas")} · CPA {p.get("cpa")} ₴')
+        for r in (p.get('recommendations') or [])[:2]:
+            mark = '🔴' if r['sev'] == 'cri' else ('🟡' if r['sev'] == 'mod' else 'ℹ️')
+            lines.append(f'   {mark} {r["text"]}')
+        lines.append('')
+    lines.append('🔗 dashboard.dreamcar.ua/meta-analytics/')
+    text = '\n'.join(lines)
+    try:
+        r = requests.post(f'https://api.telegram.org/bot{TG_TOKEN}/sendMessage',
+                          json={'chat_id': TG_CHAT, 'text': text, 'parse_mode': 'HTML',
+                                'disable_web_page_preview': True}, timeout=30)
+        log(f'  {"✅" if r.status_code == 200 else "⚠"} TG digest: {r.status_code}')
+    except Exception as e:
+        log(f'  ⚠ TG digest exc: {e}')
 
 # ---------------- Meta Graph API ----------------
 def fb_get(path, params=None):
@@ -260,6 +289,7 @@ def main():
     with open(OUT_PATH, 'w', encoding='utf-8') as f:
         json.dump(payload, f, ensure_ascii=False, indent=1)
     log(f'✅ data.json: {len(built)} проєктів -> {OUT_PATH}')
+    post_tg_digest(payload)
 
 if __name__ == '__main__':
     main()

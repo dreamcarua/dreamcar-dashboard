@@ -271,7 +271,7 @@ document.querySelectorAll('.tb').forEach(b=>b.addEventListener('click',()=>{
 fetch('data.json?_='+Date.now()).then(r=>r.json()).then(d=>{
   DATA=d;
   document.getElementById('acc').textContent=d.account||'—';
-  document.getElementById('gen').textContent=(d.generated||'').slice(0,16).replace('T',' ');
+  try{document.getElementById('gen').textContent=new Date(d.generated).toLocaleString('uk-UA',{timeZone:'Europe/Kyiv',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+' Київ';}catch(e){document.getElementById('gen').textContent=(d.generated||'').slice(0,16);}
   document.getElementById('foot').innerHTML='Джерело: Meta Marketing API + Supabase (dashboard_projects_with_stats, dashboard_agg_deals_with_traffic). Реал ROAS = виручка по UTM-мітках facebook+instagram. Дані оновлюються щодня автоматично (GitHub Action).';
   initSelectors(); renderFormula(); renderAll();
 }).catch(e=>{ document.getElementById('foot').textContent='Помилка завантаження data.json: '+e; });
