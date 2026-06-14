@@ -2474,8 +2474,28 @@ async function loadProjects() {
         .eq('is_active', true)
         .order('starts_on', { ascending: false });
       const existingCodes = new Set(__projectsList.map(p => p.code));
+      // #390 (14.06.2026): дедуп по NAME + ALIASES — не тільки по code.
+      // dashboard_projects.code='iphone_17_jun2026' ≠ launches.code='IPHONE17' → раніше дубль.
+      // Тепер блокуємо коли launch.name АБО будь-який launch.deal_alias вже існує у списку.
+      const existingNames = new Set(
+        __projectsList.map(p => (p.name || '').toUpperCase().trim()).filter(Boolean)
+      );
+      const existingAliases = new Set();
+      __projectsList.forEach(p => {
+        (p.deal_project_values || []).forEach(v => {
+          if (v) existingAliases.add(String(v).toUpperCase().trim());
+        });
+      });
       (launchData || []).forEach(l => {
-        if (existingCodes.has(l.code)) return; // вже є у dashboard_projects
+        if (existingCodes.has(l.code)) return; // вже є у dashboard_projects (по code)
+        // #390: skip якщо name збігається з вже існуючим (case-insensitive)
+        const lName = (l.name || '').toUpperCase().trim();
+        if (lName && existingNames.has(lName)) return;
+        // #390: skip якщо будь-який alias collide з existing aliases (Мото→MOTORCYCLE)
+        const lAliases = Array.isArray(l.deal_aliases)
+          ? l.deal_aliases.map(a => String(a || '').toUpperCase().trim()).filter(Boolean)
+          : [];
+        if (lAliases.some(a => existingAliases.has(a))) return;
         // 07.06.2026: пріоритет — explicit deal_aliases (для випадків коли name='Мото?' ≠ project='MOTORCYCLE')
         let dealValues;
         if (Array.isArray(l.deal_aliases) && l.deal_aliases.length) {
