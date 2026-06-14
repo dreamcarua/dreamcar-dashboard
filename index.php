@@ -394,6 +394,7 @@ $logger->log('Загрузка главной страницы дашборда'
             <button class="nav-btn" data-section="content">🎨 Объявления</button>
             <button class="nav-btn" data-section="table">📋 Таблица</button>
             <button class="nav-btn" data-section="help">❓ Справка</button>
+            <a class="nav-btn" href="meta-analytics/" target="_blank" rel="noopener" style="text-decoration:none">📈 Meta Ads</a>
         </nav>
 
         <!-- Секция: Детальная аналитика -->
