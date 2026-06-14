@@ -269,10 +269,23 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
 </div>
 
 <script>
-const HQ = (window.HQ_CONFIG || {});
-const SB_URL = HQ.SUPABASE_URL || 'https://wotghlaehnvxyeacznvv.supabase.co';
-const SB_KEY = HQ.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndvdGdobGFlaG52eHllYWN6bnZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU0MTM3MzAsImV4cCI6MjA1MTAwOTczMH0._BS6ABYSP_ZGfk_QbVFCk0PIUVMUd_X86VuJX59nIs8';
-const sb = window.supabase.createClient(SB_URL, SB_KEY, { auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+// 14.06.2026 — НЕ створюємо свого клієнта з hardcoded ключем (invalid → "Invalid API key").
+// Замість цього чекаємо на готовий window.supabase від auth-guard.js (він підвантажує
+// валідний anon з team.dreamcar.ua/hq/config.js).
+let sb = null;
+async function getSb() {
+  if (sb) return sb;
+  // auth-guard.js робить window.supabase = createClient(...) після успішної загрузки.
+  // Чекаємо до 8 секунд щоб з'явився правильний клієнт.
+  for (let i = 0; i < 80; i++) {
+    if (window.supabase && typeof window.supabase.from === 'function') {
+      sb = window.supabase;
+      return sb;
+    }
+    await new Promise(r => setTimeout(r, 100));
+  }
+  throw new Error('Supabase client не готовий (auth-guard.js не завантажився)');
+}
 
 let DATA = { cats: [], fixed: [], percent: [], proj: [], launches: [] };
 let edit = { cat: null, fixed: null, percent: null, proj: null, launch: null };
@@ -292,6 +305,7 @@ document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () =>
 // === LOAD ===
 async function loadAll() {
   try {
+    await getSb(); // ensure global `sb` is set
     const [cats, fixed, percent, proj, launches] = await Promise.all([
       sb.from('cost_categories').select('*').order('sort_order'),
       sb.from('fixed_monthly_costs').select('*, cost_categories(code,name,icon,color)').order('valid_from', { ascending: false }),
@@ -747,8 +761,18 @@ window.saveFixed = saveFixed;
 window.saveProject = saveProject;
 window.saveLaunchPrize = saveLaunchPrize;
 
-window.addEventListener('dc-auth-ok', loadAll);
-setTimeout(() => { if (!DATA.cats.length) loadAll(); }, 1500);
+// Init: дочекатися готового window.supabase від auth-guard, потім load.
+async function init() {
+  try {
+    await getSb(); // populate global `sb` для всіх CRUD-функцій
+    await loadAll();
+  } catch (e) {
+    console.error('[finance] init', e);
+    alert('Помилка ініціалізації: ' + (e.message || e));
+  }
+}
+window.addEventListener('dc-auth-ok', init);
+setTimeout(() => { if (!DATA.cats.length) init(); }, 2000);
 </script>
 </body>
 </html>
