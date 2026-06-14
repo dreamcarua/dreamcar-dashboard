@@ -326,29 +326,19 @@
     if (e.target && e.target.id && /apply|reset/.test(e.target.id)) setTimeout(persistFilters, 200);
   });
 
-  /* ====== Init ====== */
+  /* ====== Init ======
+     14.06.2026 — Pulse повністю прибрано. Функції залишені на випадок потреби,
+     але ВИКЛИКАТИ їх init() БІЛЬШЕ НЕ БУДЕ. Pulse перекривав filter-bar через sticky positioning. */
   function init() {
     injectThemeButton();
     injectViewsButton();
     ensureTray();
-    refreshPulse();
-    // 14.06.2026 #392.5 — Auto-refresh Pulse кожні 5 хв з visibility/unload cleanup (prev — leak inf).
-    function startPulseTimer() {
-      if (window.__dcPulseTimer) return;
-      window.__dcPulseTimer = setInterval(refreshPulse, 300000);
-    }
-    function stopPulseTimer() {
-      if (window.__dcPulseTimer) { clearInterval(window.__dcPulseTimer); window.__dcPulseTimer = null; }
-    }
-    startPulseTimer();
-    if (!window.__dcPulseLifecycleBound) {
-      window.__dcPulseLifecycleBound = true;
-      document.addEventListener('visibilitychange', function () {
-        if (document.hidden) stopPulseTimer();
-        else { refreshPulse(); startPulseTimer(); }
-      });
-      window.addEventListener('beforeunload', stopPulseTimer);
-    }
+    // Cleanup: якщо у DOM ще є старий Pulse (з stale кешованого JS) — видалити.
+    var oldPulse = document.getElementById('dc-pulse-bar');
+    if (oldPulse) oldPulse.remove();
+    var oldStyle = document.getElementById('dc-pulse-css');
+    if (oldStyle) oldStyle.remove();
+    if (window.__dcPulseTimer) { clearInterval(window.__dcPulseTimer); window.__dcPulseTimer = null; }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
