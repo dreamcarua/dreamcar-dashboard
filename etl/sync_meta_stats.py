@@ -244,22 +244,29 @@ def creative_thumbs(crv, n=6, embed=False):
     import base64
     if not embed:
         return crv
+    ok = 0
     for c in crv[:n]:
         aid = c.get('ad_id')
         if not aid:
             continue
-        d = fb_get(aid, {'fields': 'creative{thumbnail_url}'})
-        url = ((d or {}).get('creative') or {}).get('thumbnail_url') if d else None
+        d = fb_get(aid, {'fields': 'creative{thumbnail_url,image_url}'})
+        cr = (d or {}).get('creative') or {}
+        url = cr.get('thumbnail_url') or cr.get('image_url')
         if not url:
             continue
         url = url.replace('p64x64', 'p200x200')
         try:
-            r = requests.get(url, timeout=20)
-            if r.status_code == 200 and r.content and len(r.content) < 80000:
+            r = requests.get(url, timeout=25, headers={
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'})
+            if r.status_code == 200 and r.content and len(r.content) < 200000:
                 c['thumb'] = 'data:image/jpeg;base64,' + base64.b64encode(r.content).decode()
-        except Exception:
-            pass
+                ok += 1
+            else:
+                log(f'    ⚠ thumb {aid}: HTTP {r.status_code}, {len(r.content)}b')
+        except Exception as e:
+            log(f'    ⚠ thumb {aid} exc: {e}')
         time.sleep(0.2)
+    log(f'  ✓ прев\'ю вшито: {ok}/{min(n, len(crv))}')
     return crv
 
 def daily_series(since, until):
