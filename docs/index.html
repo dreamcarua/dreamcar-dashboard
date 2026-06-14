@@ -1995,10 +1995,22 @@ function setupFilterBar() {
         renderRoute();
       }
     });
-    if (el) el.addEventListener('input', debounce(() => {
-      filters[key] = el.value.trim() || null;
-      renderRoute();
-    }, 350));
+    // 14.06.2026 #392.1: debounce 350→600ms + onBlur flush. Раніше короткий debounce створював
+    // повний renderRoute() кожні 2-3 натискання, навіть коли користувач продовжував друкувати.
+    if (el) {
+      el.addEventListener('input', debounce(() => {
+        const v = el.value.trim() || null;
+        if (filters[key] === v) return; // skip no-op
+        filters[key] = v;
+        renderRoute();
+      }, 600));
+      el.addEventListener('blur', () => {
+        const v = el.value.trim() || null;
+        if (filters[key] === v) return;
+        filters[key] = v;
+        renderRoute();
+      });
+    }
   });
   $('#f-combo-type').addEventListener('change', e => { filters.combo_type = e.target.value; renderRoute(); });
   $('#f-granularity').addEventListener('change', e => { filters.granularity = e.target.value; renderRoute(); });
@@ -3149,8 +3161,11 @@ const PROJECT_REF_MAP = {
   'AUDI': 'DCI-audi',
 };
 
+// 14.06.2026 #392.1 — graceful fallback. На активному трафіку dashboard_webhooks
+// (185k+ rows) HEAD count повертає 503 (Supabase REST throttle на full-table scan).
+// Раніше silent → 0 leads, KPI ламався. Тепер 1 retry + чітке логування.
 async function fetchLeadsCount() {
-  try {
+  const buildQuery = () => {
     let q = sb.from('dashboard_webhooks')
       .select('id', { count: 'exact', head: true })
       .eq('event_type', 'new')
@@ -3159,10 +3174,27 @@ async function fetchLeadsCount() {
     if (filters.project && PROJECT_REF_MAP[filters.project]) {
       q = q.filter('payload->>processed', 'ilike', '%' + PROJECT_REF_MAP[filters.project] + '%');
     }
-    const { count, error } = await q;
-    if (error) { console.warn('[fetchLeadsCount] error:', error.message); return 0; }
-    return count || 0;
-  } catch(e) { console.warn('[fetchLeadsCount]', e); return 0; }
+    return q;
+  };
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const { count, error } = await buildQuery();
+      if (!error) return count || 0;
+      const msg = String(error.message || '');
+      const is503 = msg.includes('503') || msg.toLowerCase().includes('unavailable');
+      if (is503 && attempt === 0) {
+        console.warn('[fetchLeadsCount] 503 — retry once after 800ms');
+        await new Promise(r => setTimeout(r, 800));
+        continue;
+      }
+      console.warn('[fetchLeadsCount] error (attempt', attempt+1, '):', msg);
+      return null; // null → callers рендерять «—» замість «0», щоб не вводити у оману
+    } catch(e) {
+      console.warn('[fetchLeadsCount] exception:', e);
+      return null;
+    }
+  }
+  return null;
 }
 
 async function renderOverview() {
@@ -5243,25 +5275,28 @@ let __rtChannel = null;
 let __rtNewDeals = 0;
 let __rtLastEvent = null;
 
+// 14.06.2026 #392.1 — Realtime НЕ робить auto-reload (раніше: повний renderRoute() кожні
+// 3-5с при активному трафіку 1000-3000 deals/день = сотні full RPC re-fetch/день).
+// Тепер: лічильник «+N нових» у LIVE badge → клік юзера = manual refresh. Якщо юзер
+// неактивний >60с — soft refresh через debouncedReload (раніше було завжди).
 function setupRealtimeSubscription() {
   if (!sb || !sb.channel) return;
   try {
     __rtChannel = sb.channel('dashboard-deals-rt')
       .on('postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'dashboard_deals' },
-        (payload) => {
+        () => {
           __rtNewDeals++;
           __rtLastEvent = new Date();
           updateLiveBadge();
-          // Debounced reload (3 сек після останнього нового deal)
-          debouncedReload();
+          maybeSoftReload();
         })
       .on('postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'dashboard_deals' },
-        (payload) => {
+        () => {
           __rtLastEvent = new Date();
           updateLiveBadge();
-          debouncedReload();
+          maybeSoftReload();
         })
       .subscribe((status) => {
         console.log('[realtime] subscription:', status);
@@ -5272,12 +5307,39 @@ function setupRealtimeSubscription() {
   }
 }
 
+// Soft reload — тільки якщо юзер мовчав >60с (е-ink CEO режим / залишив відкритим).
+// Інакше — тихо тримаємо badge з лічильником.
+function maybeSoftReload() {
+  const idleMs = Date.now() - __lastUserActivity;
+  if (idleMs > 60000) debouncedReload();
+}
+
+// Hook клік на LIVE badge → manual refresh нових даних (заміна автоматичного reload)
+function bindLiveBadgeClick() {
+  const el = document.querySelector('#live-badge');
+  if (!el || el.__rtBound) return;
+  el.__rtBound = true;
+  el.style.cursor = 'pointer';
+  el.title = 'Клік щоб підвантажити нові угоди';
+  el.addEventListener('click', () => {
+    if (__rtNewDeals === 0) return;
+    console.log('[realtime] manual refresh — ', __rtNewDeals, 'new deals');
+    __rtNewDeals = 0;
+    renderRoute();
+    updateLiveBadge();
+  });
+}
+
 // 08.06.2026 R3 P1: tracking останньої user-активності для guard у debouncedReload
+// 14.06.2026 #392.1: capture-phase → bubble-phase. Capture-phase глобально ламає stopPropagation
+// у дітях (порушення HARD RULE per memory `no-document-capture-click`). Bubble дає той самий
+// `last user activity` timestamp без міни під майбутні модалки.
 let __lastUserActivity = Date.now();
 let __pendingRealtimeRetry = null; // R6 fix: prevent timer stacking
-window.addEventListener('input', () => { __lastUserActivity = Date.now(); }, true);
-window.addEventListener('change', () => { __lastUserActivity = Date.now(); }, true);
-window.addEventListener('click', () => { __lastUserActivity = Date.now(); }, true);
+const __markActivity = () => { __lastUserActivity = Date.now(); };
+window.addEventListener('input', __markActivity);
+window.addEventListener('change', __markActivity);
+window.addEventListener('click', __markActivity);
 
 const debouncedReload = debounce(() => {
   // Не перезавантажую якщо юзер на CRUD-сторінках чи help
@@ -5306,7 +5368,20 @@ function updateLiveBadge() {
   if (!el) return;
   const lastAgo = __rtLastEvent ? Math.round((Date.now() - __rtLastEvent.getTime())/1000) : null;
   el.classList.add('on');
-  el.title = __rtLastEvent ? `Останній deal: ${lastAgo}s тому, +${__rtNewDeals} нових у черзі` : 'Підключено · очікую угоди';
+  el.title = __rtLastEvent ? `Останній deal: ${lastAgo}s тому, +${__rtNewDeals} нових у черзі · клік щоб оновити` : 'Підключено · очікую угоди';
+  // 14.06.2026 #392.1 — показуємо лічильник прямо у badge коли є нові
+  const counter = el.querySelector('.rt-new') || (() => {
+    const s = document.createElement('span'); s.className = 'rt-new';
+    s.style.cssText = 'margin-left:6px;background:#E30613;color:#fff;font-size:10px;font-weight:800;padding:1px 6px;border-radius:8px;display:none;';
+    el.appendChild(s); return s;
+  })();
+  if (__rtNewDeals > 0) {
+    counter.textContent = '+' + __rtNewDeals;
+    counter.style.display = 'inline-block';
+  } else {
+    counter.style.display = 'none';
+  }
+  bindLiveBadgeClick();
 }
 
 function setupAutoRefreshIndicator() {

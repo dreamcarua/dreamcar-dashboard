@@ -8,6 +8,8 @@
 <meta http-equiv="Pragma" content="no-cache">
 <title>DreamCar · Upsell A/B/C Dashboard</title>
 <script src="https://brand.dreamcar.ua/assets/global-header.js?v=20260606b" defer></script>
+<!-- 14.06.2026 #392.1 — централізована auth-захист + SSO bridge для /upsell-ab/ (раніше публічна сторінка!). -->
+<script src="/assets/js/auth-guard.js?v=20260614" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <!-- FIX 08.06.2026: замінено динамічний import('esm.sh') на статичний UMD скрипт.
      Причина: на мобільному esm.sh може зависнути/тайм-аутнути → сторінка вічно "ЗАВАНТАЖЕННЯ..."
@@ -416,7 +418,15 @@ function getPeriodDays() {
 }
 function getPeriodSince() {
   if (typeof state.period === 'object' && state.period.from) return state.period.from;
-  return new Date(Date.now() - state.period * 86400 * 1000).toISOString();
+  // 14.06.2026 #392.1 — повертаємо ПОВНИЙ ДЕНЬ у Києвом, не moving 24h window.
+  // Раніше: `Date.now() - days*86400*1000` → UTC ISO → відсікало ~3 год сьогоднішніх даних.
+  // Тепер: 00:00 Київ N днів тому. HARD RULE per memory `kyiv-timezone-everywhere`.
+  const days = state.period;
+  const todayKyivYmd = new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Kyiv' }); // YYYY-MM-DD
+  const [y, m, d] = todayKyivYmd.split('-').map(Number);
+  // start of (today - days) у Київському дні. Київ червень 2026 = UTC+3 (EEST).
+  const startMs = Date.UTC(y, m-1, d, 0, 0, 0) - days * 86400000 - 3 * 3600000;
+  return new Date(startMs).toISOString();
 }
 function getPeriodUntil() {
   if (typeof state.period === 'object' && state.period.to) return state.period.to;
@@ -1059,7 +1069,10 @@ function renderRecommendations(rec) {
 // безпечні distinct values (без PII).
 async function loadDynamicFilters() {
   try {
-    const since = new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString();
+    // 14.06.2026 #392.1 — 30 днів у Київському дні (раніше moving UTC window).
+    const _todayKyiv = new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Kyiv' });
+    const [_y, _m, _d] = _todayKyiv.split('-').map(Number);
+    const since = new Date(Date.UTC(_y, _m-1, _d, 0, 0, 0) - 30 * 86400000 - 3 * 3600000).toISOString();
     const { data: opts, error } = await sb.rpc('upsell_filter_options', { p_since: since });
     if (error) { console.warn('[loadDynamicFilters] RPC err:', error); return; }
     if (!opts) return;

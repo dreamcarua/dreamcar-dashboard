@@ -168,6 +168,22 @@
     return window.supabase;
   }
 
+  // 14.06.2026 #392.1 — SSO bridge усередині auth-guard (раніше було тільки в index.html).
+  // Юзер з HQ робить redirect з #sso=<base64({access_token,refresh_token})>. Парсимо ДО getSession,
+  // інакше getSession поверне null → loop denied. HARD RULE per memory `sso-bridge-required-per-page`.
+  async function applySsoFromHash(sb) {
+    try {
+      const m = location.hash.match(/#sso=([^&]+)/);
+      if (!m) return;
+      const sso = JSON.parse(atob(decodeURIComponent(m[1])));
+      if (sso.access_token && sso.refresh_token) {
+        await sb.auth.setSession({ access_token: sso.access_token, refresh_token: sso.refresh_token });
+        history.replaceState(null, '', location.pathname + location.search);
+        console.log('[dc-auth] ✓ SSO bridge: session set from HQ');
+      }
+    } catch (e) { console.warn('[dc-auth] SSO bridge skip:', e); }
+  }
+
   async function check() {
     injectStyles();
     buildOverlay('checking');
@@ -176,6 +192,7 @@
         ensureSupabase(),
         new Promise((_, rej) => setTimeout(() => rej(new Error('SDK timeout')), 8000))
       ]);
+      await applySsoFromHash(sb);
       const { data: { session } } = await Promise.race([
         sb.auth.getSession(),
         new Promise((_, rej) => setTimeout(() => rej(new Error('Session timeout')), 6000))

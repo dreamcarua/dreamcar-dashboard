@@ -374,6 +374,14 @@ async function loadReal(){
    if(st){ st.innerHTML = done<N ? `завантаження ${done}/${N}…` : (ok?'<b>реальні (реклама) ✅</b>':'дані недоступні'); }
  });
 }
+// 14.06.2026 #392.1 — Live дата у Europe/Kyiv (раніше hardcoded "14.06.2026")
+(function setLiveDate(){
+  const dEl = document.getElementById('liveDate');
+  if (!dEl) return;
+  const ymd = new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Kyiv' });
+  const [y,m,d] = ymd.split('-');
+  dEl.textContent = `${d}.${m}.${y}`;
+})();
 loadReal();
 </script>
 </body>
