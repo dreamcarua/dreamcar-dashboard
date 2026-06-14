@@ -271,12 +271,19 @@ def real_ad_revenue(since, until):
     return round(rev)
 
 def daily_snapshot(active_names):
-    """Зріз за ВЧОРА (повна доба, Київ) — account-level Meta + реал по UTM. Для щоденного дайджесту."""
+    """Зріз за ВЧОРА (повна доба, Київ) — account-level Meta + реал по UTM + РЕАЛЬНІ оголошення за добу.
+    Лідер/слабкі рахуються з ad-level за вчора (не з кумулятиву циклу — інакше у зріз протікають
+    старі оголошення з перекритих за датами кампаній)."""
     y = (_kyiv_now().date().toordinal() - 1)
     yd = datetime.fromordinal(y).strftime('%Y-%m-%d')
     px = account_pixel(yd, yd) or {}
     spend = px.get('spend') or 0
     real = real_ad_revenue(yd, yd)
+    # оголошення, що РЕАЛЬНО крутилися вчора
+    crv = creatives(yd, yd, top=200)
+    top = [c for c in crv if c['spend'] >= 300 and c['purchases'] >= 1]
+    top.sort(key=lambda c: -c['roas'])
+    weak = sorted([c for c in crv if c['roas'] < BREAKEVEN and c['spend'] >= 500], key=lambda c: -c['spend'])
     return {
         'date': yd,
         'spend': spend,
@@ -289,6 +296,8 @@ def daily_snapshot(active_names):
         'real_ad_revenue': real,
         'real_ad_roas': round(real / spend, 2) if spend else None,
         'active_cycles': active_names,
+        'top_creatives': top[:3],
+        'weak_creatives': weak[:3],
     }
 
 # ---------------- recommendations (Фаза 2) ----------------
