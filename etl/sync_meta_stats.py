@@ -32,11 +32,11 @@ OUT_PATH = os.path.join(os.path.dirname(__file__), '..', 'docs', 'meta-analytics
 AD_SOURCE_MARKS = ('facebook', 'instagram')   # рекламні UTM-мітки (Meta paid)
 SEG_BREAKDOWNS = {
     'platform': 'publisher_platform',
-    'placement': 'platform_position',
     'age': 'age',
     'gender': 'gender',
     'device': 'impression_device',
 }
+# placement (platform_position) вимкнено: Meta API блокує його з action-полями на цьому акаунті.
 
 def log(m): print(f'[{datetime.now(timezone.utc):%H:%M:%S}] {m}', flush=True)
 
