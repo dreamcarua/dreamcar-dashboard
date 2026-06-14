@@ -1450,13 +1450,12 @@
           <option value="organic">🌱 Органічний</option>
         </select>
       </div>
-      <div>
+      <!-- 14.06.2026 (Vadym): "Джерела" (source-filter) видалено як зайвий.
+           Залишаємо hidden щоб JS-стан не падав з undefined. -->
+      <div style="display:none;">
         <label>Джерела</label>
         <select id="f-source-filter">
           <option value="">Усі</option>
-          <option value="both">🟢 Загальні (CRM+ADS)</option>
-          <option value="crm">🔵 CRM-only (органіка)</option>
-          <option value="ads">🟡 ADS-only (без лідів)</option>
         </select>
       </div>
       <div id="f-combo-wrap" style="display:none">
