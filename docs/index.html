@@ -1815,8 +1815,7 @@ const filters = {
   combo_type: 'all'
 };
 
-/* Хардкод-список основних проектів — захардкоджуємо для повного покриття */
-const MAIN_PROJECTS = ['OLD','VOLVO','Q7','Mercedes','DreamCar AI','AUDI E-TRON','BMW','IPHONE','Контакт'];
+// 14.06.2026 #392.2 — MAIN_PROJECTS видалено (dead code після #98 — auto-fetch з public.launches).
 let __projectsList = []; // cached from dashboard_projects table
 
 /* Активні розіграші — модель + start/end + project-substring у БД.
@@ -2679,19 +2678,7 @@ function aggregateByDay(rows, granularity) {
   return Array.from(map.values()).sort((a,b) => a.date.localeCompare(b.date));
 }
 
-function aggregateByMonth(rows) {
-  const map = new Map();
-  rows.forEach(r => {
-    if (!r.created_at) return;
-    const m = r.created_at.slice(0,7);
-    if (!map.has(m)) map.set(m, { month: m, leads: 0, paid: 0, sum: 0 });
-    const a = map.get(m);
-    a.leads++;
-    if (r.status === 'pay') { a.paid++; a.sum += Number(r.amount||0); }
-  });
-  return Array.from(map.values()).sort((a,b) => a.month.localeCompare(b.month));
-}
-
+// 14.06.2026 #392.2 — aggregateByMonth видалено (нікому не викликається; grep 1 match — сама функція).
 function aggregateCombos(rows) {
   const map = new Map();
   rows.forEach(r => {
@@ -2723,6 +2710,14 @@ function setSectionTitle(t) { $('#topbar-section').textContent = t.toUpperCase()
 const loadingHTML = (msg='Завантаження…') => `<div class="state"><span class="spinner"></span>${msg}</div>`;
 const emptyHTML = (msg='Немає даних') => `<div class="state">📭 ${msg}</div>`;
 const errorHTML = (err) => `<div class="state error">⚠️ Помилка: ${escapeHtml(String(err.message || err))}<br><br><button class="btn" onclick="window.__retry()">↻ Повторити</button></div>`;
+// 14.06.2026 #392.2 — helper для повторюваного pattern `c.querySelector('.state').outerHTML = errorHTML(e)` (8 копій).
+function renderError(container, err) {
+  console.error(err);
+  if (!container) return;
+  const state = container.querySelector('.state');
+  if (state) { state.outerHTML = errorHTML(err); return; }
+  container.innerHTML = errorHTML(err);
+}
 const kpi = (label, value, sub='', cls='') => `<div class="kpi ${cls}">
   <div class="kpi-label">${escapeHtml(label)}</div>
   <div class="kpi-value">${value}</div>
@@ -3367,18 +3362,7 @@ async function renderOverview() {
           </div>`;
       }).join('');
     }
-    // Залишаємо стару Chart.js гілку лише якщо canvas ще десь живе (legacy):
-    if (false && byProj7.length) {
-      barChart('ch-proj-overview',
-        byProj7.map(p => p.key.length > 18 ? p.key.slice(0,16)+'…' : p.key),
-        [
-          { label: 'Ліди', data: byProj7.map(p=>p.leads), backgroundColor: '#3B82F6' },
-          { label: 'Оплачені', data: byProj7.map(p=>p.paid), backgroundColor: '#10B981' },
-          { label: 'Revenue', data: byProj7.map(p=>p.sum), backgroundColor: '#E30613', yAxisID: 'y1' }
-        ],
-        { horizontal: true, scales: { y1: { position: 'top', grid: { drawOnChartArea: false } } } }
-      );
-    }
+    // 14.06.2026 #392.2 — legacy Chart.js `if (false && byProj7.length)` блок видалено.
 
     buildTable('#t-recent', {
       rows: last20,
@@ -3397,7 +3381,7 @@ async function renderOverview() {
       ],
       search: false
     });
-  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
+  } catch (e) { renderError(c, e); }
 }
 
 /* ---------------- ANALYTICS ---------------- */
@@ -3880,7 +3864,7 @@ async function renderCampaigns() {
         { key: 'conv', label: 'Conv %', class: 'num', fmt: v => fmtPct(v) }
       ]
     });
-  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
+  } catch (e) { renderError(c, e); }
 }
 
 /* ---------------- COMBOS ---------------- */
@@ -3956,7 +3940,7 @@ async function renderCombos() {
       csvFile: 'combos-'+type+'.csv',
       cols
     });
-  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
+  } catch (e) { renderError(c, e); }
 }
 
 /* ---------------- DEALS TABLE ---------------- */
@@ -3999,7 +3983,7 @@ async function renderDeals() {
         { key: 'wc_order_id', label: 'WC Order', fmt: v => v ? `<code style="font-size:10px">${v}</code>` : '—' }
       ]
     });
-  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
+  } catch (e) { renderError(c, e); }
 }
 
 /* ---------------- WEBHOOKS ---------------- */
@@ -4054,7 +4038,7 @@ async function renderWebhooks() {
         { key: 'id', label: 'ID', fmt: v => `<code style="font-size:10px;color:var(--ash)">${escapeHtml(String(v||'')).slice(0,8)}…</code>` }
       ]
     });
-  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
+  } catch (e) { renderError(c, e); }
 }
 
 /* ---------------- UTM MAPPING (CRUD) ---------------- */
@@ -4626,7 +4610,7 @@ async function renderAdsOverview() {
       ],
       { scales: { y1: { position: 'right', grid: { drawOnChartArea: false } } } }
     );
-  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
+  } catch (e) { renderError(c, e); }
 }
 
 /* ---------------- ADS CAMPAIGNS ---------------- */
@@ -4689,7 +4673,7 @@ async function renderAdsCampaigns() {
         { key: 'conversions', label: 'Conv', class: 'num', fmt: fmtNum }
       ]
     });
-  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
+  } catch (e) { renderError(c, e); }
 }
 
 /* ---------------- COMING SOON ---------------- */
@@ -4946,7 +4930,7 @@ async function renderSettings() {
     // P1 #13 — Projects CRUD
     await loadProjectsCRUD();
     $('#proj-add').onclick = () => openProjectModal(null);
-  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
+  } catch (e) { renderError(c, e); }
 }
 
 async function loadProjectsCRUD() {
