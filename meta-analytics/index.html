@@ -156,6 +156,7 @@
   </div>
   <div class="rec rd"><div class="rt">⚠️ iPhone: заробив, але «згорів» на комплаєнсі</div>
   <p>Ціна покупки 29,66 ₴ — <b>дешевша за KTM</b> (45,43 ₴) при рівному ROAS. Концепт «1-денний флеш на гаджет» працює. АЛЕ майже всі iPhone-креативи Meta позначила DISAPPROVED/WITH_ISSUES (бренд «iPhone» + лотерейна лексика). Гроші є — акаунт ризикував. На майбутнє: комплаєнс-варіант обов'язковий (див. вкладку Креативи).</p></div>
+  <div class="rec lo"><div class="rt">📊 Хто купував: iPhone vs KTM — приз міняє аудиторію</div><p>KTM-мото = 93% чоловіки, жінки майже не конвертять (ROAS 3,29). А iPhone-флеш зайшов і жінкам: <b>жінки ROAS 5,56</b> проти чоловіків 5,97 — майже нарівні. Тобто гаджет-приз розширює аудиторію на жінок, мото — звужує до чоловіків. Враховувати при виборі призу й таргетингу циклу.</p></div>
 </div>
 
 <div class="tabc" id="tab-segments">
@@ -170,7 +171,14 @@
     <div class="chart-card"><h3 style="margin-top:2px">Стать</h3><div class="chart-box"><canvas id="cGender"></canvas></div>
       <div class="legend-row"><span><i class="dot" style="background:#3b82f6"></i>Чоловіки 93% · ROAS 6,2</span><span><i class="dot" style="background:#ec4899"></i>Жінки · ROAS 3,3</span></div></div>
   </div>
+  <div class="two" style="margin-top:13px">
+    <div class="chart-card"><h3 style="margin-top:2px">Пристрій (KTM)</h3><div class="chart-box"><canvas id="cDevice"></canvas></div>
+      <div class="legend-row"><span><i class="dot" style="background:#3b82f6"></i>iPhone 72k ₴</span><span><i class="dot" style="background:#22c55e"></i>Android 62k ₴</span></div></div>
+    <div class="chart-card"><h3 style="margin-top:2px">Instagram-частка по ВСІХ проєктах</h3><div class="chart-box"><canvas id="cProjPlat"></canvas></div>
+      <div class="legend-row"><span><i class="dot" style="background:#ec4899"></i>IG частка %</span><span><i class="dot" style="background:#22c55e"></i>IG ROAS</span><span><i class="dot" style="background:#3b82f6"></i>FB ROAS</span></div></div>
+  </div>
   <h3>Інсайти по сегментах</h3>
+  <div class="rec hi"><div class="rt">④ Instagram домінує у КОЖНОМУ проєкті (79-87%)</div><p>Структурний патерн усіх 8 циклів: IG = 79-87% бюджету завжди. Facebook зазвичай має трохи вищий ROAS, але мізерний обсяг. AN дрібний, але часто з найвищим ROAS (тест окремим adset). Висновок стабільний: <b>IG — ядро обсягу, FB — канал ефективності</b>.</p></div>
   <div class="rec hi"><div class="rt">① Instagram несе все</div><p>87% бюджету й найкращий ROAS (6,14). У межах IG: <b>Reels — топ-ROAS (6,86)</b>, Stories 6,05, Feed 5,65. Facebook вдвічі менший за ефективністю обсягу. Висновок: лити в IG Reels/Stories, FB тримати як додатковий.</p></div>
   <div class="rec hi"><div class="rt">② Аудиторія — чоловіки 25-34</div><p>Чоловіки = 93% покупок, ROAS <b>6,20</b> проти 3,29 у жінок. Ядро віку <b>25-34</b> (1 551 покупка, ROAS 6,34) + 18-24 (6,37). 45-54 найслабші (4,60). Можна тестово виключати жінок 45+ або вузити на чол. 18-44.</p></div>
   <div class="rec md"><div class="rt">③ 100% мобайл</div><p>iPhone (72k ₴) і Android (62k ₴) майже порівну, десктоп ~0. Креатив і лендінг — mobile-first, вертикаль 9:16.</p></div>
@@ -257,7 +265,10 @@ const DATA={
   age:[["18-24",15243,368,6.37],["25-34",71148,1551,6.34],["35-44",39253,843,5.49],["45-54",6323,117,4.60],["55-64",851,22,5.70],["65+",1341,27,6.66]],
   gender:[["Чоловіки",125244,2784,6.20],["Жінки",8598,140,3.29],["Невідомо",319,4,4.07]],
  },
- iphonePlat:[["Instagram",26460,881,5.79],["Facebook",5761,187,6.70],["Threads",311,6,2.31],["AN",59,1,1.18]]
+ iphonePlat:[["Instagram",26460,881,5.79],["Facebook",5761,187,6.70],["Threads",311,6,2.31],["AN",59,1,1.18]],
+ iphoneGender:[["Чоловіки",27499,895,5.97],["Жінки",5049,179,5.56],["Невідомо",44,4,5.37]],
+ ktmDevice:[["iPhone",71729,1602,6.03],["Android",62194,1317,5.98],["Desktop",186,5,6.97]],
+ projPlat:[["Volvo",81.6,4.11,5.24],["Q7",82.1,7.30,9.28],["BMW330",87.4,4.31,5.28],["GLE",84.3,5.65,6.33],["X5",79.2,6.54,6.82],["e-tron",80.7,4.15,4.89],["iPhone",81.2,5.79,6.70],["KTM",82.5,6.14,5.37]]
 };
 const fmt=n=>n.toLocaleString('uk-UA');
 Chart.defaults.color="#8b949e";Chart.defaults.font.family="-apple-system,Segoe UI,Roboto,sans-serif";
@@ -302,6 +313,12 @@ mkChart('cPlatform',{type:'doughnut',data:{labels:DATA.ktm.platform.map(r=>r[0])
 segBar('cPlacement',DATA.ktm.placement,8);
 segBar('cAge',DATA.ktm.age,8);
 mkChart('cGender',{type:'doughnut',data:{labels:DATA.ktm.gender.map(r=>r[0]),datasets:[{data:DATA.ktm.gender.map(r=>Math.round(r[1])),backgroundColor:['#3b82f6','#ec4899','#8b949e'],borderColor:'#161b22',borderWidth:3}]},options:{maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'bottom',labels:{boxWidth:11,padding:10}}}}});
+mkChart('cDevice',{type:'doughnut',data:{labels:DATA.ktmDevice.map(r=>r[0]),datasets:[{data:DATA.ktmDevice.map(r=>Math.round(r[1])),backgroundColor:['#3b82f6','#22c55e','#8b949e'],borderColor:'#161b22',borderWidth:3}]},options:{maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'bottom',labels:{boxWidth:11,padding:10}}}}});
+mkChart('cProjPlat',{data:{labels:DATA.projPlat.map(r=>r[0]),datasets:[
+ {type:'bar',label:'IG частка %',data:DATA.projPlat.map(r=>r[1]),backgroundColor:'#ec4899aa',yAxisID:'y',borderRadius:4,order:3},
+ {type:'line',label:'IG ROAS',data:DATA.projPlat.map(r=>r[2]),borderColor:'#22c55e',backgroundColor:'#22c55e',yAxisID:'y1',tension:.25,pointRadius:3,order:1},
+ {type:'line',label:'FB ROAS',data:DATA.projPlat.map(r=>r[3]),borderColor:'#3b82f6',backgroundColor:'#3b82f6',yAxisID:'y1',tension:.25,pointRadius:3,borderDash:[4,3],order:2}]},
+ options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{...gx,min:0,max:100,title:{display:true,text:'IG %'}},y1:{position:'right',grid:{drawOnChartArea:false},min:0,max:10,title:{display:true,text:'ROAS'}},x:{...gx,ticks:{font:{size:10}}}}}});
 
 mkChart('cFormat',{type:'bar',data:{labels:['🎬 Відео (продаж)','🖼 Динам. фото','🎬 Мем-відео'],datasets:[{label:'ROAS',data:[8.2,6.3,4.9],backgroundColor:['#a855f7cc','#06b6d4cc','#f59e0bcc'],borderRadius:6}]},options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{...gx,min:0,max:10,title:{display:true,text:'ROAS'}},x:gx}}});
 
