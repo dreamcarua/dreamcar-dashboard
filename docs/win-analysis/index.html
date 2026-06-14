@@ -52,7 +52,7 @@ html,body{background:var(--bg);color:var(--white);font-family:'Manrope','JetBrai
 
 .tbl-card{background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:6px;overflow:auto}
 table{width:100%;border-collapse:collapse;font-size:13px;font-family:'JetBrains Mono',monospace}
-thead th{background:#0f0f0f;color:#aaa;font-weight:600;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:11px 12px;text-align:right;border-bottom:1px solid var(--line);position:sticky;top:0;cursor:pointer;user-select:none}
+thead th{background:#0f0f0f;color:#bbb;font-weight:600;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:13px 12px;text-align:right;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;cursor:pointer;user-select:none;min-height:44px;box-shadow:0 1px 0 var(--line)}
 thead th:first-child,tbody td:first-child{text-align:left}
 thead th:hover{color:#fff}
 thead th.sort{color:var(--red)}
@@ -60,14 +60,16 @@ tbody td{padding:10px 12px;text-align:right;border-bottom:1px solid #1a1a1a;colo
 tbody tr:hover td{background:rgba(227,6,19,.04)}
 tbody tr.gold td{background:rgba(251,191,36,.04)}
 .pill{font-family:'Manrope',sans-serif;font-weight:700;padding:2px 8px;border-radius:5px;font-size:11px;display:inline-block;letter-spacing:.02em}
-.pill-active{background:rgba(16,185,129,.13);color:#10B981}
-.pill-completed{background:rgba(139,148,158,.13);color:#aeb6c0}
-.pill-measure{background:rgba(251,191,36,.13);color:#FBBF24}
-.pill-idea{background:rgba(59,130,246,.13);color:#60A5FA}
-.pill-cancelled,.pill-paused{background:rgba(239,68,68,.13);color:#f87171}
-.pos{color:#10B981!important;font-weight:600}
-.neg{color:#f87171!important;font-weight:600}
-.muted{color:#888}
+/* 14.06.2026 #392.5 — WCAG AA: light pill text on dark tinted bg ≥4.5:1 */
+.pill-active{background:rgba(16,185,129,.22);color:#34d399}
+.pill-completed{background:rgba(180,190,200,.18);color:#d5dde6}
+.pill-measure{background:rgba(251,191,36,.22);color:#fcd34d}
+.pill-idea{background:rgba(96,165,250,.22);color:#93c5fd}
+.pill-cancelled,.pill-paused{background:rgba(239,68,68,.22);color:#fca5a5}
+.pos{color:#34d399!important;font-weight:600}
+.neg{color:#fca5a5!important;font-weight:600}
+.muted{color:#999}
+.partial-mark{display:inline-block;background:rgba(251,191,36,.18);color:#fcd34d;font-size:9.5px;font-weight:700;padding:1px 5px;border-radius:4px;margin-left:5px;font-family:'JetBrains Mono',monospace;letter-spacing:.05em}
 
 .foot{margin-top:30px;padding-top:14px;border-top:1px solid var(--line);color:var(--ash);font-size:11.5px;line-height:1.6;font-family:'JetBrains Mono',monospace}
 .foot b{color:#fff;font-weight:600}
@@ -104,7 +106,13 @@ tbody tr.gold td{background:rgba(251,191,36,.04)}
   </div>
 
   <div class="note">
-    <b>Як рахується.</b> Revenue = `dashboard_deals.amount` з `status=pay` у період запуску (за <code>deal_aliases</code> матчингом). Spend = `dashboard_ads_data.spend` коли utm_campaign містить alias. Manual costs = `dashboard_manual_costs.amount` для project=alias. ROAS = revenue / ad_spend. Net = rev − spend − manual.
+    <b>Як рахується (v3 — 14.06.2026 finance audit).</b><br>
+    <b>Revenue</b> рахується по <code>paid_at</code> (не created_at), тільки UAH-угоди (EUR/USD виключені).<br>
+    <b>Spend</b> матчиться по utm_campaign з <i>word-boundary</i> tokenize-regex <code>\m...\M</code> (не plain ILIKE — щоб не плутати <code>X5</code> ↔ <code>AUDIQ5</code>).<br>
+    <b>True ROI %</b> = (rev − spend − manual) / (spend + manual) × 100. Враховує manual у знаменнику.<br>
+    <b>True CAC</b> = (spend + manual) / paid_count. ROAS і CPL/CPA — класичні (тільки ad_spend).<br>
+    <b>⏳ partial</b> позначка біля статусу — активні запуски ще не завершились, метрики обчислені на <code>elapsed_days/days_duration</code>.<br>
+    <b>Не врахована</b> вартість призу (cost of car) — Net Profit показує доходи мінус операційні витрати, без фонду авто.
   </div>
 
   <!-- Chart: ROAS per project -->
@@ -122,6 +130,7 @@ tbody tr.gold td{background:rgba(251,191,36,.04)}
   <!-- Forecast block -->
   <div class="sec">
     <h2><span class="n">3</span> Прогноз до фіналу (активні запуски)</h2>
+    <div class="note" style="background:rgba(96,165,250,.08);border-color:rgba(96,165,250,.3);color:#93c5fd"><b style="color:#93c5fd">⚠️ Наївна лінійна екстраполяція.</b> Розіграші DreamCar мають hockey-stick: 40-60% revenue приходить у фінальний тиждень. Цей прогноз СИСТЕМАТИЧНО занижує fact для активних запусків. Реальні цифри можуть бути ×1.5-2 від показаного.</div>
     <div class="chart-card" id="forecastCard"><div style="color:#888;text-align:center;padding:32px 0;">завантаження прогнозу…</div></div>
   </div>
 
@@ -198,7 +207,6 @@ async function load() {
 
 function aggKPI() {
   const totals = { count: DATA.length, rev: 0, spend: 0, manual: 0, profit: 0, leadsAll: 0, paidAll: 0, activeCnt: 0, completedCnt: 0 };
-  let roasAcc = 0, roasN = 0;
   DATA.forEach(r => {
     totals.rev += Number(r.revenue_total || 0);
     totals.spend += Number(r.ad_spend || 0);
@@ -208,9 +216,10 @@ function aggKPI() {
     totals.paidAll += Number(r.paid_count || 0);
     if (r.status === 'active') totals.activeCnt++;
     if (r.status === 'completed') totals.completedCnt++;
-    if (r.roas != null && Number(r.roas) > 0) { roasAcc += Number(r.roas); roasN++; }
   });
-  return { ...totals, avgRoas: roasN > 0 ? roasAcc / roasN : null };
+  // 14.06.2026 #392.5 finance audit — weighted avgRoas (SUM rev / SUM spend), не arithmetic mean.
+  const avgRoas = totals.spend > 0 ? totals.rev / totals.spend : null;
+  return { ...totals, avgRoas };
 }
 
 function renderKPI() {
@@ -317,9 +326,10 @@ function renderTable() {
     const profCls = Number(r.net_profit || 0) >= 0 ? 'pos' : 'neg';
     const statusLow = (r.status || '').toLowerCase();
     const goldClass = r.status === 'active' ? 'gold' : '';
+    const isPartial = (r.status === 'active' || r.status === 'measure') && Number(r.elapsed_days) < Number(r.days_duration);
     return `<tr class="${goldClass}">
       <td><b>${(r.name || '—')}</b> <span class="muted" style="font-size:10.5px">${r.code || ''}</span></td>
-      <td><span class="pill pill-${statusLow}">${r.status || '—'}</span></td>
+      <td><span class="pill pill-${statusLow}">${r.status || '—'}</span>${isPartial ? '<span class="partial-mark" title="метрики обчислені для elapsed/total днів — не до фіналу">⏳ ' + r.elapsed_days + '/' + r.days_duration + '</span>' : ''}</td>
       <td>${fmtDate(r.starts_on)}</td>
       <td>${fmtInt(r.days_duration)}</td>
       <td>${fmtInt(r.leads_count)}</td>

@@ -331,9 +331,22 @@
     injectViewsButton();
     ensureTray();
     refreshPulse();
-    // Auto-refresh Pulse кожні 5 хв
-    if (!window.__dcPulseTimer) {
+    // 14.06.2026 #392.5 — Auto-refresh Pulse кожні 5 хв з visibility/unload cleanup (prev — leak inf).
+    function startPulseTimer() {
+      if (window.__dcPulseTimer) return;
       window.__dcPulseTimer = setInterval(refreshPulse, 300000);
+    }
+    function stopPulseTimer() {
+      if (window.__dcPulseTimer) { clearInterval(window.__dcPulseTimer); window.__dcPulseTimer = null; }
+    }
+    startPulseTimer();
+    if (!window.__dcPulseLifecycleBound) {
+      window.__dcPulseLifecycleBound = true;
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) stopPulseTimer();
+        else { refreshPulse(); startPulseTimer(); }
+      });
+      window.addEventListener('beforeunload', stopPulseTimer);
     }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
