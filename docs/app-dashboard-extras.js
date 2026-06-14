@@ -192,7 +192,7 @@
   var pulseCss = document.createElement('style');
   pulseCss.id = 'dc-pulse-css';
   pulseCss.textContent = [
-    '.dc-pulse { display: flex; gap: 8px; padding: 8px 16px; background: linear-gradient(90deg,#0f0f0f 0%, #141414 60%, #0f0f0f 100%); border-bottom: 1px solid #2a2a2a; overflow-x: auto; white-space: nowrap; position: sticky; top: 56px; z-index: 35; align-items: center; scrollbar-width: thin; }',
+    '.dc-pulse { display: flex; gap: 8px; padding: 8px 16px; background: linear-gradient(90deg,#0f0f0f 0%, #141414 60%, #0f0f0f 100%); border-bottom: 1px solid #2a2a2a; overflow-x: auto; white-space: nowrap; position: relative; z-index: 1; align-items: center; scrollbar-width: thin; }',
     '.dc-pulse-label { font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: .14em; color: #888; text-transform: uppercase; margin-right: 4px; }',
     '.dc-pulse-card { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 999px; font-size: 12px; color: #fff; cursor: pointer; transition: all .15s; }',
     '.dc-pulse-card:hover { border-color: #E30613; transform: translateY(-1px); background: #1f1f1f; }',
@@ -207,7 +207,7 @@
     '.dc-pulse-empty { color: #888; font-size: 12px; font-style: italic; }',
     'html.light-theme .dc-pulse { background: #FAFAFA !important; border-bottom-color: #E5E5E5 !important; }',
     'html.light-theme .dc-pulse-card { background: #FFF !important; color: #111 !important; border-color: #D5D5D5 !important; }',
-    '@media (max-width: 768px) { .dc-pulse { padding: 6px 12px; top: 52px; } .dc-pulse-label { display: none; } }',
+    '@media (max-width: 768px) { .dc-pulse { padding: 6px 12px; } .dc-pulse-label { display: none; } }',
   ].join('\n');
   document.head.appendChild(pulseCss);
 
@@ -279,17 +279,17 @@
   function injectPulseBar() {
     if (document.getElementById('dc-pulse-bar')) return;
     var filterBar = document.getElementById('filter-bar');
-    var topbar = document.querySelector('.topbar');
+    var utmBar = document.getElementById('filter-bar-utm');
     var bar = document.createElement('div');
     bar.id = 'dc-pulse-bar';
     bar.className = 'dc-pulse';
     bar.innerHTML = '<span class="dc-pulse-label">Завантаження…</span>';
-    if (filterBar && filterBar.parentNode) {
-      filterBar.parentNode.insertBefore(bar, filterBar);
-    } else if (topbar && topbar.parentNode) {
-      topbar.parentNode.insertBefore(bar, topbar.nextSibling);
+    // 14.06.2026 (Vadym): pulse ПІСЛЯ utm-bar (внизу), не зверху — щоб не перекривати фільтри.
+    var anchor = utmBar || filterBar;
+    if (anchor && anchor.parentNode) {
+      anchor.parentNode.insertBefore(bar, anchor.nextSibling);
     } else {
-      document.body.insertBefore(bar, document.body.firstChild);
+      document.body.appendChild(bar);
     }
   }
 
