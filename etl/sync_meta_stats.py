@@ -238,17 +238,25 @@ def creatives(since, until, top=12):
     out.sort(key=lambda x: -x['roas'])
     return out[:top]
 
-def creative_thumbs(crv, n=6):
-    """Підтягнути thumbnail_url для топ-N оголошень (для прев'ю на сторінці)."""
+def creative_thumbs(crv, n=6, embed=False):
+    """Прев'ю топ-N оголошень. Для поточних циклів (embed=True) — завантажити й вшити base64
+    (fbcdn URL хотлінк-захищені й з expiry, на сторонньому домені не вантажаться)."""
+    import base64
+    if not embed:
+        return crv
     for c in crv[:n]:
         aid = c.get('ad_id')
         if not aid:
             continue
         d = fb_get(aid, {'fields': 'creative{thumbnail_url}'})
+        url = ((d or {}).get('creative') or {}).get('thumbnail_url') if d else None
+        if not url:
+            continue
+        url = url.replace('p64x64', 'p200x200')
         try:
-            t = (d or {}).get('creative', {}).get('thumbnail_url')
-            if t:
-                c['thumb'] = t.replace('p64x64', 'p200x200')
+            r = requests.get(url, timeout=20)
+            if r.status_code == 200 and r.content and len(r.content) < 80000:
+                c['thumb'] = 'data:image/jpeg;base64,' + base64.b64encode(r.content).decode()
         except Exception:
             pass
         time.sleep(0.2)
@@ -478,8 +486,14 @@ def build_project(proj):
     for name, bd in SEG_BREAKDOWNS.items():
         segs[name] = segment(bd, since, until)
         time.sleep(0.4)
-    crv = creatives(since, until)
-    crv = creative_thumbs(crv)
+    is_cur = until >= today
+    # для поточного циклу — вікно останніх 7 днів (тільки активні оголошення/аудиторії, без протікання старих кампаній)
+    as_since = since
+    if is_cur:
+        d7 = (datetime.strptime(today, '%Y-%m-%d') - timedelta(days=7)).strftime('%Y-%m-%d')
+        as_since = max(since, d7)
+    crv = creatives(as_since if is_cur else since, until)
+    crv = creative_thumbs(crv, embed=is_cur)
     real = real_ad_revenue(since, until)
     spend = px.get('spend') or 0
     real_roas = round(real / spend, 2) if spend else None
@@ -487,11 +501,7 @@ def build_project(proj):
     gap = round((real / pix_rev - 1) * 100, 1) if pix_rev else None
     # денні криві
     series = daily_series(since, until)
-    # adset-розбивка: для поточного циклу — останні 7 днів (тільки активні аудиторії, без протікання)
-    as_since = since
-    if until >= today:
-        d7 = (datetime.strptime(today, '%Y-%m-%d') - timedelta(days=7)).strftime('%Y-%m-%d')
-        as_since = max(since, d7)
+    # adset-розбивка (те саме вікно для поточних циклів)
     adset_rows = adsets(as_since, until)
     out = {
         'code': proj['code'], 'name': proj['name'], 'car_model': proj.get('car_model'),

@@ -168,7 +168,7 @@ function renderTrends(){
   const dl=DATA.daily; let h='';
   if(dl){
     const d=dl.deltas||{};
-    h+=`<div class="note">Денний зріз за <b class="hl">${(dl.date||'').split('-').reverse().join('.')}</b> (по акаунту), дельта — до ${(dl.prev_date||'').slice(5)}. Активні цикли: <b>${(dl.active_cycles||[]).join(', ')||'—'}</b></div>
+    h+=`<div class="note">Денний зріз за <b class="hl">${(dl.date||'').split('-').reverse().join('.')}</b> (по акаунту), дельта — до ${(dl.prev_date||'').slice(5).split('-').reverse().join('.')}. Активні цикли: <b>${(dl.active_cycles||[]).join(', ')||'—'}</b></div>
     <div class="grid k4">
       <div class="card kpi"><div class="lab">Витрати вчора</div><div class="val">${fmt(dl.spend)} ₴${fmtDelta(d.spend)}</div></div>
       <div class="card kpi"><div class="lab">Покупки</div><div class="val">${fmt(dl.purchases)}${fmtDelta(d.purchases)}</div></div>
@@ -231,7 +231,7 @@ function renderCreatives(){
   if(!p){ el.innerHTML=`<div class="note">Оберіть проєкт, щоб побачити топ-креативи.</div>`; return; }
   const cr=(p.creatives||[]);
   if(!cr.length){ el.innerHTML=`<div class="empty">Немає даних по креативах для «${p.name}».</div>`; return; }
-  let h=`<div class="note"><b class="hl">${p.name}</b> — топ креативи за ROAS. <span style="color:#888">Прев'ю — для топ-оголошень.</span></div><div class="card scroll"><table><thead><tr><th>#</th><th>Прев'ю</th><th>Креатив</th><th>Витрати ₴</th><th>Покупки</th><th>ROAS</th><th>CTR</th></tr></thead><tbody>`;
+  let h=`<div class="note"><b class="hl">${p.name}</b> — топ креативи за ROAS${p.is_current?` <span style="color:#888;font-weight:400">(поточний цикл — останні 7 днів, активні оголошення)</span>`:''}. <span style="color:#888">Прев'ю — для топ-оголошень.</span></div><div class="card scroll"><table><thead><tr><th>#</th><th>Прев'ю</th><th>Креатив</th><th>Витрати ₴</th><th>Покупки</th><th>ROAS</th><th>CTR</th></tr></thead><tbody>`;
   cr.forEach((c,i)=>{ const tw=c.thumb?`<img src="${c.thumb}" loading="lazy" style="width:44px;height:44px;object-fit:cover;border-radius:6px;border:1px solid var(--steel)">`:'<span style="color:#555">—</span>'; h+=`<tr><td>${i+1}</td><td>${tw}</td><td>${c.name}</td><td>${fmt(c.spend)}</td><td>${fmt(c.purchases)}</td><td>${roasPill(c.roas)}</td><td>${f2(c.ctr)}%</td></tr>`; });
   h+=`</tbody></table></div>`;
   el.innerHTML=h;
