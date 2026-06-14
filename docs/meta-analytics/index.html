@@ -149,7 +149,7 @@ h1,h2,h3,.kpi .val{font-family:'Oswald','Manrope',sans-serif}
       <tbody id="projRows"></tbody>
     </table>
   </div>
-  <p style="font-size:12.5px;margin-top:8px;color:var(--mut)">«ROAS реал» = виручка від <b>рекламного (платного) трафіку</b> ÷ витрати на рекламу. Тільки дохід, що згенерували оголошення — <b>без ретеншну, органіки й інших каналів</b>. Джерело: Supabase RPC <code>dashboard_kpi_summary</code> (traffic_type=paid).</p>
+  <p style="font-size:12.5px;margin-top:8px;color:var(--mut)">«ROAS реал» = реальна виручка по <b>рекламних UTM-мітках</b> (utm_source = facebook + instagram) ÷ витрати на рекламу. Лише дохід від оголошень — <b>без ретеншну</b> (telegram/email/sms) й інших каналів. Джерело: Supabase RPC <code>dashboard_agg_deals_with_traffic</code> по мітках.</p>
 </div>
 
 <div class="tabc" id="tab-cycle">
@@ -242,10 +242,10 @@ h1,h2,h3,.kpi .val{font-family:'Oswald','Manrope',sans-serif}
 </div>
 
 <div class="tabc" id="tab-reconcile">
-  <div class="note"><b class="hl">Навіщо звірка.</b> <b>ROAS реал</b> = реальна виручка <b>лише від платного трафіку</b> (CRM/Supabase) ÷ витрати на рекламу — тобто дохід саме від оголошень, без ретеншну/органіки. Піксель Meta часто <b>недооцінює</b> рекламні конверсії, тому реал зазвичай вищий за піксельний.</div>
+  <div class="note"><b class="hl">Навіщо звірка.</b> <b>ROAS реал</b> = виручка по <b>UTM-мітках реклами</b> (utm_source = facebook + instagram), ÷ витрати на рекламу. Тільки дохід від оголошень — <b>без ретеншну</b> (telegram/email/sms) й органіки. Піксель Meta то завищує, то занижує — реал по мітках точніший.</div>
   <div class="card scroll">
     <table>
-      <thead><tr><th>Проєкт</th><th>Витрати ₴</th><th>Pixel дохід ₴</th><th>Pixel ROAS</th><th>Реал дохід (реклама) ₴ <span class="realbadge">платний трафік</span></th><th>Реал ROAS</th><th>Розрив vs pixel</th></tr></thead>
+      <thead><tr><th>Проєкт</th><th>Витрати ₴</th><th>Pixel дохід ₴</th><th>Pixel ROAS</th><th>Реал дохід (реклама) ₴ <span class="realbadge">FB+IG мітки</span></th><th>Реал ROAS</th><th>Розрив vs pixel</th></tr></thead>
       <tbody id="recRows"></tbody>
     </table>
   </div>
@@ -359,12 +359,14 @@ document.querySelectorAll('.tabbtn').forEach(b=>b.addEventListener('click',()=>{
 const SB_URL='https://wotghlaehnvxyeacznvv.supabase.co';
 const SB_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndvdGdobGFlaG52eHllYWN6bnZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2MDc4NjgsImV4cCI6MjA5NDE4Mzg2OH0.Se-y1WawsdSkMLXj7G_O-Kq-jVfjUOBD3KJOvemCR3A';
 let sb=null; try{ sb=window.supabase.createClient(SB_URL,SB_ANON); }catch(e){}
+const AD_MARKS=['facebook','instagram'];
 async function adRev(p){
   if(!sb) return null;
   try{
-    const {data,error}=await sb.rpc('dashboard_kpi_summary',{p_from:p.df+'T00:00:00+03:00',p_to:p.dt+'T23:59:59+03:00',p_project_values:null,p_customer_type:null,p_tariff:null,p_pay_provider:null,p_traffic_type:'paid'});
-    if(error||!data||!data[0]) return null;
-    const v=data[0].revenue; return (v==null)?null:Number(v);
+    const {data,error}=await sb.rpc('dashboard_agg_deals_with_traffic',{p_field:'utm_source',p_from:p.df+'T00:00:00+03:00',p_to:p.dt+'T23:59:59+03:00',p_project_values:null,p_customer_type:null,p_tariff:null,p_pay_provider:null,p_traffic_type:null});
+    if(error||!data) return null;
+    let rev=0; data.forEach(r=>{ if(AD_MARKS.includes(r.key)) rev+=Number(r.sum_amount||0); });
+    return rev>0?rev:null;
   }catch(e){ return null; }
 }
 function fillReal(p,real){
