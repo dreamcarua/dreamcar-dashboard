@@ -7,16 +7,18 @@
 <script src="https://brand.dreamcar.ua/assets/global-header.js?v=20260606b" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Manrope:wght@400;600;700;800&family=Oswald:wght@600;700&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#0d1117;--card:#161b22;--card2:#1c2230;--line:#2a3240;--txt:#e6edf3;--mut:#8b949e;
-    --acc:#3b82f6;--grn:#22c55e;--red:#ef4444;--yel:#f59e0b;--pur:#a855f7;--cyan:#06b6d4;--pink:#ec4899}
+  :root{--bg:#0a0a0a;--card:#141414;--card2:#1a1a1a;--line:#2a2a2a;--txt:#ffffff;--mut:#888888;
+    --acc:#E30613;--grn:#10B981;--red:#E30613;--yel:#FBBF24;--pur:#FBBF24;--cyan:#60A5FA;--pink:#FF6A7A}
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:var(--bg);
+  body{font-family:'Manrope','JetBrains Mono',system-ui,sans-serif;background:var(--bg);
     color:var(--txt);line-height:1.5;padding:24px 18px 80px}
   .wrap{max-width:1200px;margin:0 auto}
   header{border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:16px;display:flex;
     justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px}
-  .badge{display:inline-block;background:rgba(59,130,246,.15);color:#7cb1ff;font-size:11.5px;font-weight:600;
+  .badge{display:inline-block;background:rgba(59,130,246,.15);color:#FF6A7A;font-size:11.5px;font-weight:600;
     padding:4px 10px;border-radius:20px;margin-bottom:9px}
   h1{font-size:23px;font-weight:740;letter-spacing:-.4px}
   .sub{color:var(--mut);font-size:13px;margin-top:5px}
@@ -32,8 +34,8 @@
   h2{font-size:18px;font-weight:700;margin:30px 0 12px;display:flex;align-items:center;gap:9px}
   h2 .n{background:var(--card2);color:var(--acc);font-size:12.5px;width:25px;height:25px;display:inline-flex;
     align-items:center;justify-content:center;border-radius:7px;border:1px solid var(--line)}
-  h3{font-size:14.5px;font-weight:650;margin:18px 0 9px;color:#cdd9e5}
-  p{color:#c4cdd6;font-size:14px;margin:8px 0}
+  h3{font-size:14.5px;font-weight:650;margin:18px 0 9px;color:#dddddd}
+  p{color:#cccccc;font-size:14px;margin:8px 0}
   .grid{display:grid;gap:13px}.kpis{grid-template-columns:repeat(4,1fr)}
   @media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}}
   .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px 16px}
@@ -51,24 +53,24 @@
   tbody tr:hover{background:rgba(255,255,255,.025)}
   tr.cur td{background:rgba(168,85,247,.07)}
   .tag{font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:20px;white-space:nowrap}
-  .t-cur{background:rgba(168,85,247,.18);color:#c99bf5}.t-hist{background:rgba(139,148,158,.13);color:#aeb6c0}
-  .t-vid{background:rgba(168,85,247,.16);color:#c99bf5}.t-img{background:rgba(6,182,212,.15);color:#56cfe1}
+  .t-cur{background:rgba(168,85,247,.18);color:#FBBF24}.t-hist{background:rgba(139,148,158,.13);color:#aeb6c0}
+  .t-vid{background:rgba(168,85,247,.16);color:#FBBF24}.t-img{background:rgba(6,182,212,.15);color:#60A5FA}
   .pill{font-weight:700;padding:2px 7px;border-radius:6px;font-size:12px}
   .pill-g{background:rgba(34,197,94,.13);color:#4ade80}.pill-y{background:rgba(245,158,11,.14);color:#fbbf24}
   .pill-r{background:rgba(239,68,68,.14);color:#f87171}
   .scroll{overflow-x:auto}
   .rec{border-left:3px solid var(--line);padding:12px 15px;background:var(--card2);border-radius:0 10px 10px 0;margin:10px 0}
   .rec.hi{border-color:var(--grn)}.rec.md{border-color:var(--yel)}.rec.lo{border-color:var(--acc)}.rec.rd{border-color:var(--red)}
-  .rec .rt{font-weight:680;font-size:14.5px}.rec p{margin:5px 0 0;font-size:13px;color:#aab4be}
+  .rec .rt{font-weight:680;font-size:14.5px}.rec p{margin:5px 0 0;font-size:13px;color:#aaaaaa}
   ul{margin:8px 0 8px 2px;list-style:none}
-  li{padding:5px 0 5px 20px;position:relative;font-size:13.5px;color:#c4cdd6}
+  li{padding:5px 0 5px 20px;position:relative;font-size:13.5px;color:#cccccc}
   li:before{content:"";position:absolute;left:3px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--acc)}
-  .note{background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.25);border-radius:10px;padding:12px 15px;font-size:13px;color:#b9c6d6;margin:11px 0}
+  .note{background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.25);border-radius:10px;padding:12px 15px;font-size:13px;color:#bbbbbb;margin:11px 0}
   .warn{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.3)}
   .split2{display:grid;grid-template-columns:1fr 1fr;gap:13px}@media(max-width:760px){.split2{grid-template-columns:1fr}}
   .pcard{border-radius:12px;padding:16px;border:1px solid var(--line)}
-  .pcard.ip{background:linear-gradient(150deg,#0e1b2a,#0d1117);border-color:#1d3b5a}
-  .pcard.kt{background:linear-gradient(150deg,#1c1430,#0d1117);border-color:#3a2a52}
+  .pcard.ip{background:linear-gradient(150deg,#0e1b2a,#0a0a0a);border-color:#1d3b5a}
+  .pcard.kt{background:linear-gradient(150deg,#1c1430,#0a0a0a);border-color:#3a2a52}
   .pcard h4{font-size:15px;margin-bottom:3px;display:flex;justify-content:space-between;align-items:center}
   .pcard .pdates{font-size:11.5px;color:var(--mut);margin-bottom:10px}
   .prow{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05)}
@@ -78,16 +80,24 @@
   .dot{width:9px;height:9px;border-radius:50%}
   .foot{margin-top:34px;padding-top:14px;border-top:1px solid var(--line);color:var(--mut);font-size:12px}
   b.hl{color:#fff}
-  .chip{display:inline-block;background:var(--card2);border:1px solid var(--line);border-radius:20px;padding:3px 10px;font-size:12px;color:#c4cdd6;margin:3px 3px 3px 0}
+  .chip{display:inline-block;background:var(--card2);border:1px solid var(--line);border-radius:20px;padding:3px 10px;font-size:12px;color:#cccccc;margin:3px 3px 3px 0}
   .flow{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}@media(max-width:900px){.flow{grid-template-columns:1fr}}
   .step{background:var(--card2);border:1px solid var(--line);border-radius:11px;padding:13px 14px;position:relative}
   .step .sn{position:absolute;top:-9px;left:13px;background:var(--acc);color:#fff;font-size:11px;font-weight:700;width:22px;height:22px;border-radius:7px;display:flex;align-items:center;justify-content:center}
   .step h4{font-size:13.5px;margin:7px 0 5px;color:#fff}
-  .step .ex{font-size:12px;color:#9fb0c0;font-style:italic;background:#11161f;border-radius:7px;padding:7px 9px;margin-top:6px}
+  .step .ex{font-size:12px;color:#aaaaaa;font-style:italic;background:#11161f;border-radius:7px;padding:7px 9px;margin-top:6px}
   .realbadge{font-size:11px;padding:2px 8px;border-radius:20px;background:rgba(245,158,11,.15);color:#fbbf24}
+.topbar{background:#141414;border-bottom:2px solid #E30613;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:40;flex-wrap:wrap;gap:8px}
+.brandmark{font-family:'Oswald',sans-serif;font-weight:700;font-size:17px;letter-spacing:.06em;color:#fff;text-decoration:none}
+.brandmark .r{color:#E30613}.brandmark .mm{font-size:10px;color:#888;letter-spacing:.18em;margin-left:9px;font-family:'JetBrains Mono',monospace}
+.backlink{color:#aaa;text-decoration:none;font-size:11.5px;font-family:'JetBrains Mono',monospace;letter-spacing:.06em;border:1px solid #2a2a2a;padding:6px 12px;border-radius:6px;text-transform:uppercase}
+.backlink:hover{border-color:#E30613;color:#fff}
+h1,h2,h3,.kpi .val{font-family:'Oswald','Manrope',sans-serif}
+.tabbtn{text-transform:uppercase;letter-spacing:.04em;font-size:12px}
 </style>
 </head>
 <body>
+<div class="topbar"><a class="brandmark" href="/"><span class="r">DREAM</span>CAR<span class="mm">Meta Analytics</span></a><a class="backlink" href="/">← Дашборд</a></div>
 <div class="wrap">
 <header>
   <div>
@@ -117,7 +127,7 @@
   <div class="chart-card" style="margin-top:13px">
     <h3 style="margin-top:2px">Витрати vs ROAS по проєктах (хронологія)</h3>
     <div class="chart-box" style="height:320px"><canvas id="cProjects"></canvas></div>
-    <div class="legend-row"><span><i class="dot" style="background:#3b82f6"></i>Витрати ₴</span><span><i class="dot" style="background:#22c55e"></i>ROAS (pixel)</span><span><i class="dot" style="background:#f59e0b"></i>CPA ₴</span></div>
+    <div class="legend-row"><span><i class="dot" style="background:#E30613"></i>Витрати ₴</span><span><i class="dot" style="background:#10B981"></i>ROAS (pixel)</span><span><i class="dot" style="background:#FBBF24"></i>CPA ₴</span></div>
   </div>
   <div class="card scroll" style="margin-top:13px">
     <table>
@@ -165,19 +175,19 @@
   <div class="note">Сегменти по поточному KTM-запуску (07–14.06). Той самий розклад автоматично будується для будь-якого проєкту після розширення ETL (поле сегментів). Абсолютні суми — за date-window 07–14.06 (~134k ₴); частки і ROAS — надійні.</div>
   <div class="two">
     <div class="chart-card"><h3 style="margin-top:2px">Платформа (FB / IG / Threads / AN)</h3><div class="chart-box"><canvas id="cPlatform"></canvas></div>
-      <div class="legend-row"><span><i class="dot" style="background:#ec4899"></i>Instagram 87%</span><span><i class="dot" style="background:#3b82f6"></i>Facebook</span><span><i class="dot" style="background:#06b6d4"></i>Threads</span></div></div>
+      <div class="legend-row"><span><i class="dot" style="background:#FF6A7A"></i>Instagram 87%</span><span><i class="dot" style="background:#E30613"></i>Facebook</span><span><i class="dot" style="background:#60A5FA"></i>Threads</span></div></div>
     <div class="chart-card"><h3 style="margin-top:2px">Плейсмент × ROAS</h3><div class="chart-box"><canvas id="cPlacement"></canvas></div></div>
   </div>
   <div class="two" style="margin-top:13px">
     <div class="chart-card"><h3 style="margin-top:2px">Вік × витрати × ROAS</h3><div class="chart-box"><canvas id="cAge"></canvas></div></div>
     <div class="chart-card"><h3 style="margin-top:2px">Стать</h3><div class="chart-box"><canvas id="cGender"></canvas></div>
-      <div class="legend-row"><span><i class="dot" style="background:#3b82f6"></i>Чоловіки 93% · ROAS 6,2</span><span><i class="dot" style="background:#ec4899"></i>Жінки · ROAS 3,3</span></div></div>
+      <div class="legend-row"><span><i class="dot" style="background:#E30613"></i>Чоловіки 93% · ROAS 6,2</span><span><i class="dot" style="background:#FF6A7A"></i>Жінки · ROAS 3,3</span></div></div>
   </div>
   <div class="two" style="margin-top:13px">
     <div class="chart-card"><h3 style="margin-top:2px">Пристрій (KTM)</h3><div class="chart-box"><canvas id="cDevice"></canvas></div>
-      <div class="legend-row"><span><i class="dot" style="background:#3b82f6"></i>iPhone 72k ₴</span><span><i class="dot" style="background:#22c55e"></i>Android 62k ₴</span></div></div>
+      <div class="legend-row"><span><i class="dot" style="background:#E30613"></i>iPhone 72k ₴</span><span><i class="dot" style="background:#10B981"></i>Android 62k ₴</span></div></div>
     <div class="chart-card"><h3 style="margin-top:2px">Instagram-частка по ВСІХ проєктах</h3><div class="chart-box"><canvas id="cProjPlat"></canvas></div>
-      <div class="legend-row"><span><i class="dot" style="background:#ec4899"></i>IG частка %</span><span><i class="dot" style="background:#22c55e"></i>IG ROAS</span><span><i class="dot" style="background:#3b82f6"></i>FB ROAS</span></div></div>
+      <div class="legend-row"><span><i class="dot" style="background:#FF6A7A"></i>IG частка %</span><span><i class="dot" style="background:#10B981"></i>IG ROAS</span><span><i class="dot" style="background:#E30613"></i>FB ROAS</span></div></div>
   </div>
   <h3>Інсайти по сегментах</h3>
   <div class="rec hi"><div class="rt">④ Instagram домінує у КОЖНОМУ проєкті (79-87%)</div><p>Структурний патерн усіх 8 циклів: IG = 79-87% бюджету завжди. Facebook зазвичай має трохи вищий ROAS, але мізерний обсяг. AN дрібний, але часто з найвищим ROAS (тест окремим adset). Висновок стабільний: <b>IG — ядро обсягу, FB — канал ефективності</b>.</p></div>
@@ -273,7 +283,7 @@ const DATA={
  projPlat:[["Volvo",81.6,4.11,5.24],["Q7",82.1,7.30,9.28],["BMW330",87.4,4.31,5.28],["GLE",84.3,5.65,6.33],["X5",79.2,6.54,6.82],["e-tron",80.7,4.15,4.89],["iPhone",81.2,5.79,6.70],["KTM",82.5,6.14,5.37]]
 };
 const fmt=n=>n.toLocaleString('uk-UA');
-Chart.defaults.color="#8b949e";Chart.defaults.font.family="-apple-system,Segoe UI,Roboto,sans-serif";
+Chart.defaults.color="#888888";Chart.defaults.font.family="-apple-system,Segoe UI,Roboto,sans-serif";
 const gx={grid:{color:"#222a35"}};const charts={};
 
 let tS=0,tP=0,tR=0;
@@ -282,7 +292,7 @@ kTotSpend.textContent=(tS/1e6).toFixed(2)+"М ₴";
 kTotPurch.textContent=fmt(tP);
 kAvgRoas.textContent=(tR/tS).toFixed(2);
 projRows.innerHTML=DATA.projects.map(p=>`<tr class="${p.cur?'cur':''}"><td>${p.name} ${p.cur?'<span class=\"tag t-cur\">цикл</span>':'<span class=\"tag t-hist\">архів</span>'}</td>
-<td style="text-align:right;color:#8b949e;font-size:12px">${p.df.slice(5)}→${p.dt.slice(5)}</td>
+<td style="text-align:right;color:#888888;font-size:12px">${p.df.slice(5)}→${p.dt.slice(5)}</td>
 <td>${fmt(Math.round(p.spend))}</td><td>${fmt(p.purch)}</td><td>${p.cpa}</td>
 <td><span class="pill ${p.roas>=5?'pill-g':p.roas>=4?'pill-y':'pill-r'}">${p.roas.toFixed(2)}</span></td>
 <td>${fmt(p.revenue)}</td><td class="realcell" data-key="${p.key}">—</td></tr>`).join('');
@@ -295,34 +305,34 @@ function mkChart(id,cfg){if(document.getElementById(id))charts[id]=new Chart(doc
 
 const pl=DATA.projects.map(p=>p.name);
 mkChart('cProjects',{data:{labels:pl,datasets:[
- {type:'bar',label:'Витрати ₴',data:DATA.projects.map(p=>Math.round(p.spend)),backgroundColor:DATA.projects.map(p=>p.cur?'#a855f7cc':'#3b82f6aa'),yAxisID:'y',borderRadius:5,order:3},
- {type:'line',label:'ROAS',data:DATA.projects.map(p=>p.roas),borderColor:'#22c55e',backgroundColor:'#22c55e',yAxisID:'y1',tension:.3,pointRadius:4,order:1},
- {type:'line',label:'CPA ₴',data:DATA.projects.map(p=>p.cpa),borderColor:'#f59e0b',backgroundColor:'#f59e0b',yAxisID:'y2',tension:.3,pointRadius:3,borderDash:[4,3],order:2},
+ {type:'bar',label:'Витрати ₴',data:DATA.projects.map(p=>Math.round(p.spend)),backgroundColor:DATA.projects.map(p=>p.cur?'#FBBF24cc':'#E30613aa'),yAxisID:'y',borderRadius:5,order:3},
+ {type:'line',label:'ROAS',data:DATA.projects.map(p=>p.roas),borderColor:'#10B981',backgroundColor:'#10B981',yAxisID:'y1',tension:.3,pointRadius:4,order:1},
+ {type:'line',label:'CPA ₴',data:DATA.projects.map(p=>p.cpa),borderColor:'#FBBF24',backgroundColor:'#FBBF24',yAxisID:'y2',tension:.3,pointRadius:3,borderDash:[4,3],order:2},
 ]},options:{maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false}},
  scales:{y:{...gx,title:{display:true,text:'Витрати ₴'}},y1:{position:'right',grid:{drawOnChartArea:false},min:0,max:9,title:{display:true,text:'ROAS'}},y2:{display:false},x:{...gx,ticks:{font:{size:10}}}}}});
 
-mkChart('cCycleDonut',{type:'doughnut',data:{labels:['KTM 80%','iPhone 20%'],datasets:[{data:[127017,32591],backgroundColor:['#a855f7','#3b82f6'],borderColor:'#161b22',borderWidth:3}]},options:{maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'bottom',labels:{boxWidth:11,padding:12}}}}});
+mkChart('cCycleDonut',{type:'doughnut',data:{labels:['KTM 80%','iPhone 20%'],datasets:[{data:[127017,32591],backgroundColor:['#FBBF24','#E30613'],borderColor:'#141414',borderWidth:3}]},options:{maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'bottom',labels:{boxWidth:11,padding:12}}}}});
 mkChart('cCyclePlat',{type:'bar',data:{labels:['Instagram','Facebook','Threads'],datasets:[
- {label:'iPhone',data:[5.79,6.70,2.31],backgroundColor:'#3b82f6cc',borderRadius:4},
- {label:'KTM',data:[6.14,5.37,5.20],backgroundColor:'#a855f7cc',borderRadius:4}]},
+ {label:'iPhone',data:[5.79,6.70,2.31],backgroundColor:'#E30613cc',borderRadius:4},
+ {label:'KTM',data:[6.14,5.37,5.20],backgroundColor:'#FBBF24cc',borderRadius:4}]},
  options:{maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:11}}},scales:{y:{...gx,min:0,max:8,title:{display:true,text:'ROAS'}},x:gx}}});
 
 function segBar(id,rows,roasMax){mkChart(id,{data:{labels:rows.map(r=>r[0]),datasets:[
- {type:'bar',label:'Витрати ₴',data:rows.map(r=>Math.round(r[1])),backgroundColor:'#3b82f6aa',yAxisID:'y',borderRadius:4,order:2},
- {type:'line',label:'ROAS',data:rows.map(r=>r[3]),borderColor:'#22c55e',backgroundColor:'#22c55e',yAxisID:'y1',tension:.25,pointRadius:4,order:1}]},
+ {type:'bar',label:'Витрати ₴',data:rows.map(r=>Math.round(r[1])),backgroundColor:'#E30613aa',yAxisID:'y',borderRadius:4,order:2},
+ {type:'line',label:'ROAS',data:rows.map(r=>r[3]),borderColor:'#10B981',backgroundColor:'#10B981',yAxisID:'y1',tension:.25,pointRadius:4,order:1}]},
  options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{...gx},y1:{position:'right',grid:{drawOnChartArea:false},min:0,max:roasMax||8,title:{display:true,text:'ROAS'}},x:gx}}});}
-mkChart('cPlatform',{type:'doughnut',data:{labels:DATA.ktm.platform.map(r=>r[0]),datasets:[{data:DATA.ktm.platform.map(r=>Math.round(r[1])),backgroundColor:['#ec4899','#3b82f6','#06b6d4','#8b949e'],borderColor:'#161b22',borderWidth:3}]},options:{maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'bottom',labels:{boxWidth:11,padding:10}}}}});
+mkChart('cPlatform',{type:'doughnut',data:{labels:DATA.ktm.platform.map(r=>r[0]),datasets:[{data:DATA.ktm.platform.map(r=>Math.round(r[1])),backgroundColor:['#FF6A7A','#E30613','#60A5FA','#888888'],borderColor:'#141414',borderWidth:3}]},options:{maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'bottom',labels:{boxWidth:11,padding:10}}}}});
 segBar('cPlacement',DATA.ktm.placement,8);
 segBar('cAge',DATA.ktm.age,8);
-mkChart('cGender',{type:'doughnut',data:{labels:DATA.ktm.gender.map(r=>r[0]),datasets:[{data:DATA.ktm.gender.map(r=>Math.round(r[1])),backgroundColor:['#3b82f6','#ec4899','#8b949e'],borderColor:'#161b22',borderWidth:3}]},options:{maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'bottom',labels:{boxWidth:11,padding:10}}}}});
-mkChart('cDevice',{type:'doughnut',data:{labels:DATA.ktmDevice.map(r=>r[0]),datasets:[{data:DATA.ktmDevice.map(r=>Math.round(r[1])),backgroundColor:['#3b82f6','#22c55e','#8b949e'],borderColor:'#161b22',borderWidth:3}]},options:{maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'bottom',labels:{boxWidth:11,padding:10}}}}});
+mkChart('cGender',{type:'doughnut',data:{labels:DATA.ktm.gender.map(r=>r[0]),datasets:[{data:DATA.ktm.gender.map(r=>Math.round(r[1])),backgroundColor:['#E30613','#FF6A7A','#888888'],borderColor:'#141414',borderWidth:3}]},options:{maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'bottom',labels:{boxWidth:11,padding:10}}}}});
+mkChart('cDevice',{type:'doughnut',data:{labels:DATA.ktmDevice.map(r=>r[0]),datasets:[{data:DATA.ktmDevice.map(r=>Math.round(r[1])),backgroundColor:['#E30613','#10B981','#888888'],borderColor:'#141414',borderWidth:3}]},options:{maintainAspectRatio:false,cutout:'58%',plugins:{legend:{position:'bottom',labels:{boxWidth:11,padding:10}}}}});
 mkChart('cProjPlat',{data:{labels:DATA.projPlat.map(r=>r[0]),datasets:[
- {type:'bar',label:'IG частка %',data:DATA.projPlat.map(r=>r[1]),backgroundColor:'#ec4899aa',yAxisID:'y',borderRadius:4,order:3},
- {type:'line',label:'IG ROAS',data:DATA.projPlat.map(r=>r[2]),borderColor:'#22c55e',backgroundColor:'#22c55e',yAxisID:'y1',tension:.25,pointRadius:3,order:1},
- {type:'line',label:'FB ROAS',data:DATA.projPlat.map(r=>r[3]),borderColor:'#3b82f6',backgroundColor:'#3b82f6',yAxisID:'y1',tension:.25,pointRadius:3,borderDash:[4,3],order:2}]},
+ {type:'bar',label:'IG частка %',data:DATA.projPlat.map(r=>r[1]),backgroundColor:'#FF6A7Aaa',yAxisID:'y',borderRadius:4,order:3},
+ {type:'line',label:'IG ROAS',data:DATA.projPlat.map(r=>r[2]),borderColor:'#10B981',backgroundColor:'#10B981',yAxisID:'y1',tension:.25,pointRadius:3,order:1},
+ {type:'line',label:'FB ROAS',data:DATA.projPlat.map(r=>r[3]),borderColor:'#E30613',backgroundColor:'#E30613',yAxisID:'y1',tension:.25,pointRadius:3,borderDash:[4,3],order:2}]},
  options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{...gx,min:0,max:100,title:{display:true,text:'IG %'}},y1:{position:'right',grid:{drawOnChartArea:false},min:0,max:10,title:{display:true,text:'ROAS'}},x:{...gx,ticks:{font:{size:10}}}}}});
 
-mkChart('cFormat',{type:'bar',data:{labels:['🎬 Відео (продаж)','🖼 Динам. фото','🎬 Мем-відео'],datasets:[{label:'ROAS',data:[8.2,6.3,4.9],backgroundColor:['#a855f7cc','#06b6d4cc','#f59e0bcc'],borderRadius:6}]},options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{...gx,min:0,max:10,title:{display:true,text:'ROAS'}},x:gx}}});
+mkChart('cFormat',{type:'bar',data:{labels:['🎬 Відео (продаж)','🖼 Динам. фото','🎬 Мем-відео'],datasets:[{label:'ROAS',data:[8.2,6.3,4.9],backgroundColor:['#FBBF24cc','#60A5FAcc','#FBBF24cc'],borderRadius:6}]},options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{...gx,min:0,max:10,title:{display:true,text:'ROAS'}},x:gx}}});
 
 document.querySelectorAll('.tabbtn').forEach(b=>b.addEventListener('click',()=>{
  document.querySelectorAll('.tabbtn').forEach(x=>x.classList.remove('on'));
@@ -337,11 +347,9 @@ const SB_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJl
 let sb=null; try{ sb=window.supabase.createClient(SB_URL,SB_ANON); }catch(e){}
 async function realRev(p){
   if(!sb) return null;
-  const start=p.df+'T00:00:00+03:00', end=p.dt+'T23:59:59+03:00';
-  const {data,error}=await sb.from('dashboard_deals').select('amount.sum()')
-    .gte('created_at',start).lte('created_at',end).not('paid_at','is',null).eq('currency','UAH');
+  const {data,error}=await sb.rpc('dashboard_kpi_summary',{p_from:p.df+'T00:00:00+03:00',p_to:p.dt+'T23:59:59+03:00',p_project_values:null,p_customer_type:null,p_tariff:null,p_pay_provider:null,p_traffic_type:null});
   if(error||!data||!data[0]) return null;
-  const v=(data[0].sum!=null)?data[0].sum:Object.values(data[0])[0];
+  const v=data[0].revenue;
   return (v==null)?null:Number(v);
 }
 async function loadReal(){
@@ -358,7 +366,7 @@ async function loadReal(){
      document.querySelectorAll(`.realgap[data-key="${p.key}"]`).forEach(e=>e.innerHTML=`<span style="color:${gap<0?'#f87171':'#4ade80'}">${gap>0?'+':''}${gap.toFixed(0)}%</span>`);
    }
  }));
- if(st) st.innerHTML=ok?'<b>з Supabase ✅</b>':'дані недоступні';
+ if(st) st.innerHTML=ok?'<b>реальні продажі ✅</b>':'дані недоступні';
 }
 loadReal();
 </script>
