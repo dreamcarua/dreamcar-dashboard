@@ -270,6 +270,27 @@ def real_ad_revenue(since, until):
             rev += _num(r.get('sum_amount'))
     return round(rev)
 
+def daily_snapshot(active_names):
+    """Зріз за ВЧОРА (повна доба, Київ) — account-level Meta + реал по UTM. Для щоденного дайджесту."""
+    y = (_kyiv_now().date().toordinal() - 1)
+    yd = datetime.fromordinal(y).strftime('%Y-%m-%d')
+    px = account_pixel(yd, yd) or {}
+    spend = px.get('spend') or 0
+    real = real_ad_revenue(yd, yd)
+    return {
+        'date': yd,
+        'spend': spend,
+        'impressions': px.get('impressions'),
+        'clicks': px.get('clicks'),
+        'purchases': px.get('purchases'),
+        'pixel_roas': px.get('pixel_roas'),
+        'cpa': px.get('cpa'),
+        'frequency': px.get('frequency'),
+        'real_ad_revenue': real,
+        'real_ad_roas': round(real / spend, 2) if spend else None,
+        'active_cycles': active_names,
+    }
+
 # ---------------- recommendations (Фаза 2) ----------------
 BREAKEVEN = 2.0     # беззбитковий ad-ROAS (висока маржа токенів DreamCar)
 TARGET_ROAS = 5.0   # робоча ціль
@@ -409,10 +430,18 @@ def main():
     # позначити поточні (date_end >= today)
     for b in built:
         b['is_current'] = b['date_to'] >= today or b['date_from'][:7] == today[:7]
+    # денний зріз (за вчора) для щоденного дайджесту
+    active = [b['name'] for b in built if b['date_to'] >= today]
+    try:
+        daily = daily_snapshot(active)
+        log(f'  ✓ daily {daily["date"]}: spend {daily["spend"]} · pxROAS {daily["pixel_roas"]} · realROAS {daily["real_ad_roas"]}')
+    except Exception as e:
+        log(f'  ⚠ daily snapshot failed: {e}'); daily = None
     payload = {
         'generated': datetime.now(timezone.utc).isoformat(),
         'account': ACCOUNT, 'currency': 'UAH',
         'note': 'Реал ROAS = виручка по UTM-мітках facebook+instagram (без ретеншну/органіки).',
+        'daily': daily,
         'projects': built,
     }
     os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
