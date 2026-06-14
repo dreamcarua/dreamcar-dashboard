@@ -254,7 +254,7 @@ def creative_thumbs(crv, n=6, embed=False):
         url = cr.get('thumbnail_url') or cr.get('image_url')
         if not url:
             continue
-        url = url.replace('p64x64', 'p200x200')
+        # НЕ міняти параметри розміру в URL — це ламає підпис (oh=) і дає 403
         try:
             r = requests.get(url, timeout=25, headers={
                 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'})
