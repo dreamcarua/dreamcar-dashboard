@@ -98,6 +98,7 @@
 
   <div class="tabs">
     <button class="tb on" data-tab="overview">🗂 Огляд</button>
+    <button class="tb" data-tab="trends">📈 Тренди</button>
     <button class="tb" data-tab="segments">🎯 Сегменти</button>
     <button class="tb" data-tab="creatives">🎬 Креативи</button>
     <button class="tb" data-tab="reconcile">⚖️ Pixel ↔ Реал</button>
@@ -106,6 +107,7 @@
   </div>
 
   <div class="tabc on" id="tab-overview"></div>
+  <div class="tabc" id="tab-trends"></div>
   <div class="tabc" id="tab-segments"></div>
   <div class="tabc" id="tab-creatives"></div>
   <div class="tabc" id="tab-reconcile"></div>
@@ -159,6 +161,36 @@ function renderOverview(){
    options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{...gx,title:{display:true,text:'₴'}},y1:{position:'right',grid:{drawOnChartArea:false},min:0,title:{display:true,text:'ROAS'}},x:{...gx,ticks:{font:{size:9}}}}}});
 }
 
+/* ---------- TRENDS ---------- */
+function fmtDelta(v){ if(v==null) return ''; const up=v>=0; return `<span style="color:${up?C.green:C.red2};font-size:11px;margin-left:5px">${up?'▲':'▼'}${Math.abs(v).toFixed(0)}%</span>`; }
+function renderTrends(){
+  const el=document.getElementById('tab-trends');
+  const dl=DATA.daily; let h='';
+  if(dl){
+    const d=dl.deltas||{};
+    h+=`<div class="note">Денний зріз за <b class="hl">${(dl.date||'').split('-').reverse().join('.')}</b> (по акаунту), дельта — до ${(dl.prev_date||'').slice(5)}. Активні цикли: <b>${(dl.active_cycles||[]).join(', ')||'—'}</b></div>
+    <div class="grid k4">
+      <div class="card kpi"><div class="lab">Витрати вчора</div><div class="val">${fmt(dl.spend)} ₴${fmtDelta(d.spend)}</div></div>
+      <div class="card kpi"><div class="lab">Покупки</div><div class="val">${fmt(dl.purchases)}${fmtDelta(d.purchases)}</div></div>
+      <div class="card kpi"><div class="lab">ROAS pixel / реал</div><div class="val neu">${f2(dl.pixel_roas)} / <span class="up">${f2(dl.real_ad_roas)}</span>${fmtDelta(d.pixel_roas)}</div></div>
+      <div class="card kpi"><div class="lab">CPA</div><div class="val">${f2(dl.cpa)} ₴${fmtDelta(d.cpa)}</div></div>
+    </div>`;
+    const rc=dl.real_by_campaign||[];
+    if(rc.length){ h+=`<div class="card scroll" style="margin-top:13px"><h3 style="margin:2px 0 8px">💰 Реальна виручка по кампаніях (utm_campaign, за ${(dl.date||'').slice(5)})</h3><table><thead><tr><th>Кампанія</th><th>Оплат</th><th>Виручка ₴</th></tr></thead><tbody>`+rc.map(c=>`<tr><td>${c.campaign}</td><td>${fmt(c.paid)}</td><td>${fmt(c.revenue)}</td></tr>`).join('')+`</tbody></table></div>`; }
+  }
+  const p=curProject();
+  if(!p){ h+=`<div class="note" style="margin-top:13px">Оберіть проєкт у фільтрі вгорі, щоб побачити денну динаміку spend / ROAS.</div>`; el.innerHTML=h; return; }
+  const s=p.series||[];
+  if(!s.length){ h+=`<div class="empty">Немає денних даних для «${p.name}».</div>`; el.innerHTML=h; return; }
+  h+=`<div class="chart-card" style="margin-top:13px"><h3 style="margin:2px 0 8px">${p.name} — динаміка по днях</h3><div class="chart-box" style="height:320px"><canvas id="cTr"></canvas></div>
+    <div class="legend"><span><i class="dot" style="background:${C.red}"></i>Витрати ₴</span><span><i class="dot" style="background:${C.gold}"></i>ROAS pixel</span></div></div>`;
+  el.innerHTML=h;
+  mk('cTr',{data:{labels:s.map(x=>(x.date||'').slice(5)),datasets:[
+    {type:'bar',label:'Витрати',data:s.map(x=>Math.round(x.spend||0)),backgroundColor:'#E3061399',yAxisID:'y',borderRadius:4,order:2},
+    {type:'line',label:'ROAS',data:s.map(x=>x.roas),borderColor:C.gold,backgroundColor:C.gold,yAxisID:'y1',tension:.3,pointRadius:2,order:1}]},
+   options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{...gx,title:{display:true,text:'₴'}},y1:{position:'right',grid:{drawOnChartArea:false},min:0,title:{display:true,text:'ROAS'}},x:{...gx,ticks:{font:{size:9}}}}}});
+}
+
 /* ---------- SEGMENTS ---------- */
 function segChart(id,rows,donut){
   if(!rows||!rows.length)return;
@@ -182,6 +214,10 @@ function renderSegments(){
      <div class="chart-card"><h3 style="margin:2px 0 6px">Пристрій</h3><div class="chart-box"><canvas id="sDev"></canvas></div></div>
    </div>
    ${(s.placement&&s.placement.length)?`<div class="chart-card" style="margin-top:13px"><h3 style="margin:2px 0 6px">Плейсмент (розподіл витрат)</h3><div class="chart-box"><canvas id="sPlace"></canvas></div></div>`:''}`;
+  if(p.adsets&&p.adsets.length){
+    const win=p.is_current?` <span style="color:#888;font-weight:400">(останні 7 днів${p.adsets_window?`, з ${p.adsets_window.slice(5)}`:''} — активні аудиторії)</span>`:'';
+    el.insertAdjacentHTML('beforeend',`<div class="card scroll" style="margin-top:13px"><h3 style="margin:2px 0 8px">👥 Аудиторії / adset${win}</h3><table><thead><tr><th>Adset</th><th>Витрати ₴</th><th>Покупки</th><th>CPA ₴</th><th>ROAS</th><th>CTR</th></tr></thead><tbody>`+p.adsets.map(a=>`<tr><td>${a.name}</td><td>${fmt(a.spend)}</td><td>${fmt(a.purchases)}</td><td>${f2(a.cpa)}</td><td>${roasPill(a.roas)}</td><td>${f2(a.ctr)}%</td></tr>`).join('')+`</tbody></table></div>`);
+  }
   segChart('sPlat',s.platform,true);
   segChart('sAge',s.age,false);
   segChart('sGen',s.gender,true);
@@ -195,8 +231,8 @@ function renderCreatives(){
   if(!p){ el.innerHTML=`<div class="note">Оберіть проєкт, щоб побачити топ-креативи.</div>`; return; }
   const cr=(p.creatives||[]);
   if(!cr.length){ el.innerHTML=`<div class="empty">Немає даних по креативах для «${p.name}».</div>`; return; }
-  let h=`<div class="note"><b class="hl">${p.name}</b> — топ креативи за ROAS.</div><div class="card scroll"><table><thead><tr><th>#</th><th>Креатив</th><th>Витрати ₴</th><th>Покупки</th><th>ROAS</th><th>CTR</th></tr></thead><tbody>`;
-  cr.forEach((c,i)=>{ h+=`<tr><td>${i+1}</td><td>${c.name}</td><td>${fmt(c.spend)}</td><td>${fmt(c.purchases)}</td><td>${roasPill(c.roas)}</td><td>${f2(c.ctr)}%</td></tr>`; });
+  let h=`<div class="note"><b class="hl">${p.name}</b> — топ креативи за ROAS. <span style="color:#888">Прев'ю — для топ-оголошень.</span></div><div class="card scroll"><table><thead><tr><th>#</th><th>Прев'ю</th><th>Креатив</th><th>Витрати ₴</th><th>Покупки</th><th>ROAS</th><th>CTR</th></tr></thead><tbody>`;
+  cr.forEach((c,i)=>{ const tw=c.thumb?`<img src="${c.thumb}" loading="lazy" style="width:44px;height:44px;object-fit:cover;border-radius:6px;border:1px solid var(--steel)">`:'<span style="color:#555">—</span>'; h+=`<tr><td>${i+1}</td><td>${tw}</td><td>${c.name}</td><td>${fmt(c.spend)}</td><td>${fmt(c.purchases)}</td><td>${roasPill(c.roas)}</td><td>${f2(c.ctr)}%</td></tr>`; });
   h+=`</tbody></table></div>`;
   el.innerHTML=h;
 }
@@ -243,7 +279,7 @@ function renderFormula(){
   <div class="note">Формат: <b class="hl">2-3 вертикальні відео + 5-6 фото + 1 мем</b>. Гачок ≤3 сек, субтитри, дедлайн на фінальному кадрі. Тестувати креативи всередині одного ad set.</div>`;
 }
 
-const RENDER={overview:renderOverview,segments:renderSegments,creatives:renderCreatives,reconcile:renderReconcile,recs:renderRecs,formula:renderFormula};
+const RENDER={overview:renderOverview,trends:renderTrends,segments:renderSegments,creatives:renderCreatives,reconcile:renderReconcile,recs:renderRecs,formula:renderFormula};
 let curTab='overview';
 function renderAll(){ RENDER[curTab](); }
 
