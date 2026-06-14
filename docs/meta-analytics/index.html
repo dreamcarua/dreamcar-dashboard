@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Meta Ads Аналітика по проєктах · DreamCar</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://brand.dreamcar.ua/assets/global-header.js?v=20260606b" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
   :root{--bg:#0d1117;--card:#161b22;--card2:#1c2230;--line:#2a3240;--txt:#e6edf3;--mut:#8b949e;
     --acc:#3b82f6;--grn:#22c55e;--red:#ef4444;--yel:#f59e0b;--pur:#a855f7;--cyan:#06b6d4;--pink:#ec4899}
@@ -93,7 +95,7 @@
     <h1>Meta Ads Аналітика — DreamCar.ua UAH</h1>
     <div class="sub">Акаунт 4136058269783354 · поділ по проєктах за логікою дашборду (діапазони дат) · дані Meta Marketing API</div>
   </div>
-  <div class="live">оновлено <b>14.06.2026</b><br>піксель: вбудовано · реальні (UTM): <span id="realStatus">перевірка endpoint…</span></div>
+  <div class="live">оновлено <b>14.06.2026</b><br>піксель: вбудовано · реальні: <span id="realStatus">завантаження з Supabase…</span></div>
 </header>
 
 <div class="tabs">
@@ -123,7 +125,7 @@
       <tbody id="projRows"></tbody>
     </table>
   </div>
-  <p style="font-size:12.5px;margin-top:8px;color:var(--mut)">Стовпець «ROAS реал» підвантажується з <code>crm_deals</code> (реальні оплати по UTM) через endpoint <code>/api/meta_analytics.php</code>. Доки не задеплоєно — показано «—».</p>
+  <p style="font-size:12.5px;margin-top:8px;color:var(--mut)">Стовпець «ROAS реал» рахується client-side із <code>Supabase → dashboard_deals</code> (оплачені угоди, UAH) — той самий патерн, що й решта дашборду. Якщо порожньо — дані ще вантажаться або недоступні.</p>
 </div>
 
 <div class="tabc" id="tab-cycle">
@@ -244,7 +246,7 @@
   </div>
 </div>
 
-<div class="foot" id="footNote">Джерело: Meta Marketing API (Ads MCP) · акаунт 4136058269783354 · поділ по проєктах за датами (логіка CrmDeal). Pixel-дані вбудовано станом на 14.06.2026; реальна виручка — з crm_deals через /api/meta_analytics.php. ROAS pixel = вартість покупок Meta / витрати.</div>
+<div class="foot" id="footNote">Джерело: Meta Marketing API (Ads MCP) · акаунт 4136058269783354 · поділ по проєктах за датами (логіка CrmDeal). Pixel-дані вбудовано станом на 14.06.2026; реальна виручка — client-side із Supabase (dashboard_deals, оплачені UAH-угоди). ROAS pixel = вартість покупок Meta / витрати.</div>
 </div>
 
 <script>
@@ -330,26 +332,33 @@ document.querySelectorAll('.tabbtn').forEach(b=>b.addEventListener('click',()=>{
  window.scrollTo({top:0,behavior:'smooth'});
 }));
 
+const SB_URL='https://wotghlaehnvxyeacznvv.supabase.co';
+const SB_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndvdGdobGFlaG52eHllYWN6bnZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2MDc4NjgsImV4cCI6MjA5NDE4Mzg2OH0.Se-y1WawsdSkMLXj7G_O-Kq-jVfjUOBD3KJOvemCR3A';
+let sb=null; try{ sb=window.supabase.createClient(SB_URL,SB_ANON); }catch(e){}
+async function realRev(p){
+  if(!sb) return null;
+  const start=p.df+'T00:00:00+03:00', end=p.dt+'T23:59:59+03:00';
+  const {data,error}=await sb.from('dashboard_deals').select('amount.sum()')
+    .gte('created_at',start).lte('created_at',end).not('paid_at','is',null).eq('currency','UAH');
+  if(error||!data||!data[0]) return null;
+  const v=(data[0].sum!=null)?data[0].sum:Object.values(data[0])[0];
+  return (v==null)?null:Number(v);
+}
 async function loadReal(){
- const _q=new URLSearchParams(location.search);const _ut=_q.get('utm_term');
- const _utq=_ut?('&utm_term='+encodeURIComponent(_ut)):'';
- try{
-  const res=await Promise.all(DATA.projects.map(p=>
-    fetch(`/api/meta_analytics.php?action=real_revenue&date_from=${p.df}&date_to=${p.dt}${_utq}`)
-      .then(r=>r.ok?r.json():null).catch(()=>null)));
-  let ok=false;
-  res.forEach((r,i)=>{
-    if(r&&r.success&&r.paid_amount!=null){ok=true;
-      const p=DATA.projects[i];const real=+r.paid_amount;const rroas=real/p.spend;
-      const gap=((rroas/p.roas-1)*100);
-      document.querySelectorAll(`.realcell[data-key="${p.key}"]`).forEach(e=>e.innerHTML=`<span class="pill ${rroas>=5?'pill-g':rroas>=3?'pill-y':'pill-r'}">${rroas.toFixed(2)}</span>`);
-      document.querySelectorAll(`.realrev[data-key="${p.key}"]`).forEach(e=>e.textContent=fmt(Math.round(real)));
-      document.querySelectorAll(`.realroas[data-key="${p.key}"]`).forEach(e=>e.innerHTML=`<span class="pill ${rroas>=5?'pill-g':rroas>=3?'pill-y':'pill-r'}">${rroas.toFixed(2)}</span>`);
-      document.querySelectorAll(`.realgap[data-key="${p.key}"]`).forEach(e=>e.innerHTML=`<span style="color:${gap<0?'#f87171':'#4ade80'}">${gap>0?'+':''}${gap.toFixed(0)}%</span>`);
-    }
-  });
-  realStatus.innerHTML=ok?'<b>підключено ✅</b>':'endpoint не задеплоєно';
- }catch(e){realStatus.textContent='endpoint не задеплоєно';}
+ const st=document.getElementById('realStatus');
+ if(!sb){ if(st) st.textContent='Supabase не завантажився'; return; }
+ let ok=false;
+ await Promise.all(DATA.projects.map(async p=>{
+   let real=null; try{ real=await realRev(p); }catch(e){ real=null; }
+   if(real!=null){ ok=true; const rroas=real/p.spend; const gap=(rroas/p.roas-1)*100;
+     const cls=rroas>=5?'pill-g':rroas>=3?'pill-y':'pill-r';
+     document.querySelectorAll(`.realcell[data-key="${p.key}"]`).forEach(e=>e.innerHTML=`<span class="pill ${cls}">${rroas.toFixed(2)}</span>`);
+     document.querySelectorAll(`.realrev[data-key="${p.key}"]`).forEach(e=>e.textContent=fmt(Math.round(real)));
+     document.querySelectorAll(`.realroas[data-key="${p.key}"]`).forEach(e=>e.innerHTML=`<span class="pill ${cls}">${rroas.toFixed(2)}</span>`);
+     document.querySelectorAll(`.realgap[data-key="${p.key}"]`).forEach(e=>e.innerHTML=`<span style="color:${gap<0?'#f87171':'#4ade80'}">${gap>0?'+':''}${gap.toFixed(0)}%</span>`);
+   }
+ }));
+ if(st) st.innerHTML=ok?'<b>з Supabase ✅</b>':'дані недоступні';
 }
 loadReal();
 </script>
