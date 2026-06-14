@@ -81,7 +81,7 @@ def insights(level, since, until, breakdown=None, limit=None):
     # Meta: platform_position не комбінується з action_type-полями (actions).
     # Лишаємо purchase_roas (працює), але прибираємо actions для цього breakdown.
     if breakdown == 'platform_position':
-        fields = base + ',purchase_roas'
+        fields = base  # platform_position конфліктує з усіма action-полями -> тільки spend/clicks
     else:
         fields = base + ',actions,purchase_roas'
     params = {
