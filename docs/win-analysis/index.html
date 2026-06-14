@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Win-Analysis · P&L по запусках · DreamCar</title>
+<meta name="color-scheme" content="dark">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<script src="https://brand.dreamcar.ua/assets/global-header.js?v=20260606b" defer></script>
+<script src="/assets/js/auth-guard.js?v=20260614" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Manrope:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0a;--bg-2:#141414;--bg-3:#1a1a1a;--line:#2a2a2a;--steel:#2a2a2a;
+  --white:#fff;--ash:#888;--grey:#aaa;--red:#E30613;--gold:#FBBF24;--green:#10B981;
+  --blue:#60A5FA;--purple:#a5b4fc;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:var(--bg);color:var(--white);font-family:'Manrope','JetBrains Mono',system-ui,sans-serif;min-height:100vh;line-height:1.5;}
+.topbar{background:#141414;border-bottom:2px solid var(--red);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:40;flex-wrap:wrap;gap:8px}
+.brandmark{font-family:'Oswald',sans-serif;font-weight:700;font-size:18px;letter-spacing:.06em;color:#fff;text-decoration:none}
+.brandmark .r{color:var(--red)}.brandmark .mm{font-size:10px;color:#888;letter-spacing:.18em;margin-left:9px;font-family:'JetBrains Mono',monospace;text-transform:uppercase}
+.backlink{color:#aaa;text-decoration:none;font-size:11.5px;font-family:'JetBrains Mono',monospace;letter-spacing:.06em;border:1px solid #2a2a2a;padding:6px 12px;border-radius:6px;text-transform:uppercase}
+.backlink:hover{border-color:var(--red);color:#fff}
+
+.wrap{max-width:1400px;margin:0 auto;padding:28px 20px 80px}
+.intro{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:14px;padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:22px}
+.title-block .h{font-family:'Oswald',sans-serif;font-size:30px;font-weight:700;letter-spacing:-.4px}
+.title-block .h .r{color:var(--red)}
+.title-block .sub{color:var(--ash);font-size:13.5px;margin-top:4px}
+.live-pill{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--ash);letter-spacing:.1em;text-transform:uppercase;padding:6px 11px;border:1px solid var(--line);border-radius:6px;background:#0f0f0f}
+.live-pill .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#10B981;margin-right:6px;vertical-align:middle;animation:dcPulse 1.6s ease-in-out infinite}
+@keyframes dcPulse{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.6);}50%{box-shadow:0 0 0 6px rgba(16,185,129,0);}}
+
+.kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:22px}
+@media(max-width:1100px){.kpi-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:640px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:linear-gradient(180deg,#181818 0%,#0f0f0f 100%);border:1px solid var(--line);border-radius:10px;padding:16px}
+.kpi .lab{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:#888;text-transform:uppercase;margin-bottom:6px}
+.kpi .val{font-family:'Oswald',sans-serif;font-weight:700;font-size:27px;letter-spacing:-.3px;color:#fff}
+.kpi .meta{font-size:11.5px;color:var(--ash);margin-top:3px;font-family:'JetBrains Mono',monospace}
+.kpi .meta.pos{color:#10B981}
+.kpi .meta.neg{color:#f87171}
+
+.sec{margin-top:30px}
+.sec h2{font-family:'Oswald',sans-serif;font-size:19px;font-weight:600;letter-spacing:.02em;display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.sec h2 .n{background:var(--bg-3);color:var(--red);font-size:11.5px;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;border:1px solid var(--line);font-family:'JetBrains Mono',monospace}
+
+.chart-card{background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:18px}
+.chart-box{position:relative;height:340px}
+
+.tbl-card{background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:6px;overflow:auto}
+table{width:100%;border-collapse:collapse;font-size:13px;font-family:'JetBrains Mono',monospace}
+thead th{background:#0f0f0f;color:#aaa;font-weight:600;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:11px 12px;text-align:right;border-bottom:1px solid var(--line);position:sticky;top:0;cursor:pointer;user-select:none}
+thead th:first-child,tbody td:first-child{text-align:left}
+thead th:hover{color:#fff}
+thead th.sort{color:var(--red)}
+tbody td{padding:10px 12px;text-align:right;border-bottom:1px solid #1a1a1a;color:#ddd}
+tbody tr:hover td{background:rgba(227,6,19,.04)}
+tbody tr.gold td{background:rgba(251,191,36,.04)}
+.pill{font-family:'Manrope',sans-serif;font-weight:700;padding:2px 8px;border-radius:5px;font-size:11px;display:inline-block;letter-spacing:.02em}
+.pill-active{background:rgba(16,185,129,.13);color:#10B981}
+.pill-completed{background:rgba(139,148,158,.13);color:#aeb6c0}
+.pill-measure{background:rgba(251,191,36,.13);color:#FBBF24}
+.pill-idea{background:rgba(59,130,246,.13);color:#60A5FA}
+.pill-cancelled,.pill-paused{background:rgba(239,68,68,.13);color:#f87171}
+.pos{color:#10B981!important;font-weight:600}
+.neg{color:#f87171!important;font-weight:600}
+.muted{color:#888}
+
+.foot{margin-top:30px;padding-top:14px;border-top:1px solid var(--line);color:var(--ash);font-size:11.5px;line-height:1.6;font-family:'JetBrains Mono',monospace}
+.foot b{color:#fff;font-weight:600}
+
+.note{background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.25);border-radius:8px;padding:11px 14px;font-size:12.5px;color:#cca;margin:12px 0}
+.note b{color:#FBBF24}
+
+.dbg{margin:24px 0;padding:14px;background:#0f0f0f;border:1px dashed var(--line);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#888;white-space:pre-wrap;display:none}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brandmark" href="/"><span class="r">DREAM</span>CAR<span class="mm">Win-Analysis</span></a>
+  <a class="backlink" href="/">← ДАШБОРД</a>
+</div>
+
+<div class="wrap">
+  <div class="intro">
+    <div class="title-block">
+      <div class="h">WIN-<span class="r">ANALYSIS</span></div>
+      <div class="sub">P&amp;L по всіх запусках DreamCar · revenue / spend / profit / ROAS</div>
+    </div>
+    <div class="live-pill" id="liveStatus"><span class="dot"></span><span id="liveDate">завантаження…</span></div>
+  </div>
+
+  <!-- Aggregate KPI -->
+  <div class="kpi-grid" id="kpiRow">
+    <div class="kpi"><div class="lab">Запусків</div><div class="val" id="kCount">…</div><div class="meta" id="kCountMeta">завантаження</div></div>
+    <div class="kpi"><div class="lab">Сума виручки</div><div class="val" id="kRev">…</div><div class="meta" id="kRevMeta"></div></div>
+    <div class="kpi"><div class="lab">Витрати на рекламу</div><div class="val" id="kSpend">…</div><div class="meta" id="kSpendMeta"></div></div>
+    <div class="kpi"><div class="lab">Чистий прибуток</div><div class="val" id="kProfit">…</div><div class="meta" id="kProfitMeta"></div></div>
+    <div class="kpi"><div class="lab">Середній ROAS</div><div class="val" id="kRoas">…</div><div class="meta" id="kRoasMeta"></div></div>
+  </div>
+
+  <div class="note">
+    <b>Як рахується.</b> Revenue = `dashboard_deals.amount` з `status=pay` у період запуску (за <code>deal_aliases</code> матчингом). Spend = `dashboard_ads_data.spend` коли utm_campaign містить alias. Manual costs = `dashboard_manual_costs.amount` для project=alias. ROAS = revenue / ad_spend. Net = rev − spend − manual.
+  </div>
+
+  <!-- Chart: ROAS per project -->
+  <div class="sec">
+    <h2><span class="n">1</span> ROI по запусках</h2>
+    <div class="chart-card"><div class="chart-box"><canvas id="ch-roi"></canvas></div></div>
+  </div>
+
+  <!-- Chart: Revenue stacked vs Spend -->
+  <div class="sec">
+    <h2><span class="n">2</span> Виручка vs Витрати (по запусках)</h2>
+    <div class="chart-card"><div class="chart-box"><canvas id="ch-revspend"></canvas></div></div>
+  </div>
+
+  <!-- Forecast block -->
+  <div class="sec">
+    <h2><span class="n">3</span> Прогноз до фіналу (активні запуски)</h2>
+    <div class="chart-card" id="forecastCard"><div style="color:#888;text-align:center;padding:32px 0;">завантаження прогнозу…</div></div>
+  </div>
+
+  <!-- Full P&L table -->
+  <div class="sec">
+    <h2><span class="n">4</span> P&amp;L таблиця</h2>
+    <div class="tbl-card">
+      <table id="tbl">
+        <thead><tr>
+          <th data-key="name">Назва</th>
+          <th data-key="status">Статус</th>
+          <th data-key="starts_on">Старт</th>
+          <th data-key="days_duration">Дні</th>
+          <th data-key="leads_count">Ліди</th>
+          <th data-key="paid_count">Оплати</th>
+          <th data-key="conversion_pct">Conv %</th>
+          <th data-key="revenue_total">Revenue</th>
+          <th data-key="ad_spend">Spend</th>
+          <th data-key="manual_costs">Manual</th>
+          <th data-key="net_profit">Profit</th>
+          <th data-key="profit_margin_pct">Margin %</th>
+          <th data-key="roas">ROAS</th>
+          <th data-key="cpa">CPA</th>
+          <th data-key="aov">AOV</th>
+        </tr></thead>
+        <tbody id="tbody"><tr><td colspan="15" style="text-align:center;padding:30px;color:#888">завантаження P&amp;L…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="foot">
+    <b>Win-Analysis Hub</b> · #392.4 · 14.06.2026 · RPC <code>dashboard_project_pnl()</code> · усі суми у ₴ (UAH) · TZ Europe/Kyiv<br>
+    Прогноз будується для активних (<code>status='active'</code>) запусків як лінійна екстраполяція revenue до дати <code>ends_on</code>.
+  </div>
+
+  <pre class="dbg" id="dbg"></pre>
+</div>
+
+<script>
+const HQ = (window.HQ_CONFIG || {});
+const SB_URL = HQ.SUPABASE_URL || 'https://wotghlaehnvxyeacznvv.supabase.co';
+const SB_KEY = HQ.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndvdGdobGFlaG52eHllYWN6bnZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU0MTM3MzAsImV4cCI6MjA1MTAwOTczMH0._BS6ABYSP_ZGfk_QbVFCk0PIUVMUd_X86VuJX59nIs8';
+const sb = window.supabase.createClient(SB_URL, SB_KEY, { auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+
+// Set live date
+const ymd = new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Kyiv' });
+const [yy,mm,dd] = ymd.split('-');
+document.getElementById('liveDate').textContent = `live · ${dd}.${mm}.${yy}`;
+
+function fmtMoney(v) {
+  if (v == null) return '—';
+  const n = Math.round(Number(v));
+  return new Intl.NumberFormat('uk-UA').format(n) + ' ₴';
+}
+function fmtInt(v) { if (v == null) return '—'; return new Intl.NumberFormat('uk-UA').format(Math.round(Number(v))); }
+function fmtPct(v) { if (v == null) return '—'; return (Number(v).toFixed(1)) + '%'; }
+function fmtNum(v) { if (v == null) return '—'; return Number(v).toFixed(2); }
+function fmtDate(s) { if (!s) return '—'; const [y,m,d] = s.split('-'); return `${d}.${m}.${y}`; }
+
+let DATA = [];
+let SORT = { key: 'starts_on', dir: 'desc' };
+
+async function load() {
+  try {
+    const { data, error } = await sb.rpc('dashboard_project_pnl');
+    if (error) throw error;
+    DATA = (data || []).slice();
+    renderAll();
+  } catch (e) {
+    console.error('[win-analysis] load', e);
+    document.getElementById('tbody').innerHTML = `<tr><td colspan="15" style="text-align:center;padding:30px;color:#f87171">Помилка: ${e.message || e}</td></tr>`;
+  }
+}
+
+function aggKPI() {
+  const totals = { count: DATA.length, rev: 0, spend: 0, manual: 0, profit: 0, leadsAll: 0, paidAll: 0, activeCnt: 0, completedCnt: 0 };
+  let roasAcc = 0, roasN = 0;
+  DATA.forEach(r => {
+    totals.rev += Number(r.revenue_total || 0);
+    totals.spend += Number(r.ad_spend || 0);
+    totals.manual += Number(r.manual_costs || 0);
+    totals.profit += Number(r.net_profit || 0);
+    totals.leadsAll += Number(r.leads_count || 0);
+    totals.paidAll += Number(r.paid_count || 0);
+    if (r.status === 'active') totals.activeCnt++;
+    if (r.status === 'completed') totals.completedCnt++;
+    if (r.roas != null && Number(r.roas) > 0) { roasAcc += Number(r.roas); roasN++; }
+  });
+  return { ...totals, avgRoas: roasN > 0 ? roasAcc / roasN : null };
+}
+
+function renderKPI() {
+  const k = aggKPI();
+  document.getElementById('kCount').textContent = fmtInt(k.count);
+  document.getElementById('kCountMeta').textContent = `${k.activeCnt} активних · ${k.completedCnt} завершено`;
+  document.getElementById('kRev').textContent = fmtMoney(k.rev);
+  document.getElementById('kRevMeta').textContent = `${fmtInt(k.paidAll)} оплат / ${fmtInt(k.leadsAll)} лідів`;
+  document.getElementById('kSpend').textContent = fmtMoney(k.spend);
+  document.getElementById('kSpendMeta').textContent = `+ manual ${fmtMoney(k.manual)}`;
+  document.getElementById('kProfit').textContent = fmtMoney(k.profit);
+  const profEl = document.getElementById('kProfit');
+  profEl.style.color = k.profit >= 0 ? '#10B981' : '#f87171';
+  document.getElementById('kProfitMeta').className = 'meta ' + (k.profit >= 0 ? 'pos' : 'neg');
+  document.getElementById('kProfitMeta').textContent = k.rev > 0 ? `margin ${(k.profit / k.rev * 100).toFixed(1)}%` : '—';
+  document.getElementById('kRoas').textContent = k.avgRoas != null ? '×' + k.avgRoas.toFixed(2) : '—';
+  document.getElementById('kRoasMeta').textContent = k.avgRoas != null ? (k.avgRoas >= 3 ? 'добре' : k.avgRoas >= 1.5 ? 'окей' : 'слабко') : 'spend не матчиться';
+}
+
+let chRoi, chRevSpend;
+
+function renderCharts() {
+  // Sort by revenue desc, top 12
+  const top = DATA.filter(r => Number(r.revenue_total || 0) > 0).sort((a,b)=>Number(b.revenue_total||0) - Number(a.revenue_total||0)).slice(0,12);
+  const labels = top.map(r => r.name && r.name.length > 14 ? r.name.slice(0,12)+'…' : r.name || '—');
+
+  // Chart 1: ROAS bars
+  const roasData = top.map(r => Number(r.roas || 0));
+  const profitColors = top.map(r => Number(r.net_profit || 0) >= 0 ? '#10B981' : '#f87171');
+  if (chRoi) chRoi.destroy();
+  chRoi = new Chart(document.getElementById('ch-roi'), {
+    type: 'bar',
+    data: { labels, datasets: [{ label: 'ROAS', data: roasData, backgroundColor: profitColors, borderRadius: 4 }] },
+    options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#888', font: { family: 'JetBrains Mono', size: 10 } } }, x: { grid: { display: false }, ticks: { color: '#888', font: { family: 'JetBrains Mono', size: 10 } } } }, responsive: true, maintainAspectRatio: false }
+  });
+
+  // Chart 2: Revenue vs Spend stacked
+  const revData = top.map(r => Number(r.revenue_total || 0));
+  const spendData = top.map(r => -Number(r.ad_spend || 0) - Number(r.manual_costs || 0));
+  if (chRevSpend) chRevSpend.destroy();
+  chRevSpend = new Chart(document.getElementById('ch-revspend'), {
+    type: 'bar',
+    data: { labels, datasets: [
+      { label: 'Revenue', data: revData, backgroundColor: '#E30613', borderRadius: 4 },
+      { label: 'Spend + Manual', data: spendData, backgroundColor: '#888', borderRadius: 4 }
+    ] },
+    options: { plugins: { legend: { labels: { color: '#aaa', font: { family: 'Manrope', size: 11 } } } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#888', callback: v => fmtInt(v), font: { family: 'JetBrains Mono', size: 10 } } }, x: { grid: { display: false }, ticks: { color: '#888', font: { family: 'JetBrains Mono', size: 10 } } } }, responsive: true, maintainAspectRatio: false }
+  });
+}
+
+function renderForecast() {
+  // Для активних — лінійна екстраполяція revenue до ends_on
+  const active = DATA.filter(r => r.status === 'active' || r.status === 'measure');
+  const card = document.getElementById('forecastCard');
+  if (!active.length) {
+    card.innerHTML = '<div style="color:#888;text-align:center;padding:24px 0;">Немає активних запусків</div>';
+    return;
+  }
+  const todayY = new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Kyiv' });
+  const todayMs = new Date(todayY + 'T00:00:00+03:00').getTime();
+  const html = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;">' + active.map(r => {
+    const startMs = new Date(r.starts_on + 'T00:00:00+03:00').getTime();
+    const endMs = new Date((r.ends_on || todayY) + 'T23:59:59+03:00').getTime();
+    const elapsedDays = Math.max(1, Math.round((todayMs - startMs) / 86400000));
+    const totalDays = Math.max(1, Math.round((endMs - startMs) / 86400000) + 1);
+    const remainDays = Math.max(0, totalDays - elapsedDays);
+    const rev = Number(r.revenue_total || 0);
+    const pacePerDay = rev / elapsedDays;
+    const projected = rev + pacePerDay * remainDays;
+    const planTarget = Number(r.budget_plan || 0);
+    const gapPct = planTarget > 0 ? ((projected / planTarget - 1) * 100) : null;
+    const onTrack = planTarget > 0 ? (projected >= planTarget) : true;
+    const dColor = onTrack ? '#10B981' : '#FBBF24';
+    return `
+      <div style="background:#0f0f0f;border:1px solid #2a2a2a;border-radius:10px;padding:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <div style="font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;">${(r.name || '—').slice(0,28)}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:${dColor};">D-${remainDays}</div>
+        </div>
+        <div style="font-size:11.5px;color:#888;font-family:'JetBrains Mono',monospace;margin-bottom:10px;">${fmtDate(r.starts_on)} → ${fmtDate(r.ends_on)} · ${elapsedDays}/${totalDays} днів</div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #1a1a1a;font-size:12px;"><span style="color:#aaa;">Поточно</span><b>${fmtMoney(rev)}</b></div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #1a1a1a;font-size:12px;"><span style="color:#aaa;">Темп/день</span><b>${fmtMoney(pacePerDay)}</b></div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #1a1a1a;font-size:12.5px;"><span style="color:#aaa;">Прогноз до фіналу</span><b style="color:${dColor};">${fmtMoney(projected)}</b></div>
+        ${planTarget > 0 ? `<div style="display:flex;justify-content:space-between;padding:5px 0;font-size:12px;"><span style="color:#aaa;">vs план ${fmtMoney(planTarget)}</span><b style="color:${onTrack ? '#10B981':'#f87171'};">${gapPct >= 0 ? '+' : ''}${gapPct.toFixed(0)}%</b></div>` : ''}
+      </div>
+    `;
+  }).join('') + '</div>';
+  card.innerHTML = html;
+}
+
+function renderTable() {
+  const dir = SORT.dir === 'asc' ? 1 : -1;
+  const sorted = DATA.slice().sort((a,b) => {
+    const va = a[SORT.key], vb = b[SORT.key];
+    if (va == null && vb == null) return 0;
+    if (va == null) return 1;
+    if (vb == null) return -1;
+    if (typeof va === 'number' || (typeof va === 'string' && /^-?\d/.test(va))) {
+      return (Number(va) - Number(vb)) * dir;
+    }
+    return String(va).localeCompare(String(vb)) * dir;
+  });
+  const html = sorted.map(r => {
+    const profCls = Number(r.net_profit || 0) >= 0 ? 'pos' : 'neg';
+    const statusLow = (r.status || '').toLowerCase();
+    const goldClass = r.status === 'active' ? 'gold' : '';
+    return `<tr class="${goldClass}">
+      <td><b>${(r.name || '—')}</b> <span class="muted" style="font-size:10.5px">${r.code || ''}</span></td>
+      <td><span class="pill pill-${statusLow}">${r.status || '—'}</span></td>
+      <td>${fmtDate(r.starts_on)}</td>
+      <td>${fmtInt(r.days_duration)}</td>
+      <td>${fmtInt(r.leads_count)}</td>
+      <td>${fmtInt(r.paid_count)}</td>
+      <td>${fmtPct(r.conversion_pct)}</td>
+      <td>${fmtMoney(r.revenue_total)}</td>
+      <td>${fmtMoney(r.ad_spend)}</td>
+      <td>${fmtMoney(r.manual_costs)}</td>
+      <td class="${profCls}">${fmtMoney(r.net_profit)}</td>
+      <td class="${profCls}">${fmtPct(r.profit_margin_pct)}</td>
+      <td>${r.roas != null ? '×'+fmtNum(r.roas) : '—'}</td>
+      <td>${fmtMoney(r.cpa)}</td>
+      <td>${fmtMoney(r.aov)}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('tbody').innerHTML = html || '<tr><td colspan="15" style="text-align:center;padding:30px;color:#888">Немає даних</td></tr>';
+  // Update sort indicator
+  document.querySelectorAll('thead th').forEach(t => t.classList.toggle('sort', t.dataset.key === SORT.key));
+}
+
+document.querySelectorAll('thead th').forEach(t => {
+  t.addEventListener('click', () => {
+    const k = t.dataset.key;
+    if (SORT.key === k) SORT.dir = SORT.dir === 'asc' ? 'desc' : 'asc';
+    else { SORT.key = k; SORT.dir = 'desc'; }
+    renderTable();
+  });
+});
+
+function renderAll() {
+  renderKPI();
+  renderCharts();
+  renderForecast();
+  renderTable();
+}
+
+window.addEventListener('dc-auth-ok', load);
+// Якщо auth-guard уже резолвнувся до того як ми додали listener
+setTimeout(() => {
+  if (!DATA.length) load();
+}, 1500);
+</script>
+</body>
+</html>
