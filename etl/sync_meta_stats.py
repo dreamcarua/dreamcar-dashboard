@@ -271,26 +271,93 @@ def real_ad_revenue(since, until):
     return round(rev)
 
 # ---------------- recommendations (Фаза 2) ----------------
+BREAKEVEN = 2.0     # беззбитковий ad-ROAS (висока маржа токенів DreamCar)
+TARGET_ROAS = 5.0   # робоча ціль
+FREQ_WARN = 4.5
+FREQ_CRIT = 6.5
+CPA_WARN = 60.0     # ₴ — комфортний поріг ціни покупки
+
+def _sp(n):  # форматування грошей
+    return f'{int(n):,}'.replace(',', ' ')
+
+def _seg_pick(rows, total, min_share=0.05):
+    """повертає (best, worst) сегменти за ROAS серед значущих (частка>=min_share, >=3 покупки)."""
+    if not rows or not total:
+        return None, None
+    sig = [r for r in rows if r[1] >= total * min_share and r[2] >= 3]
+    if len(sig) < 2:
+        return (sig[0] if sig else None), None
+    return max(sig, key=lambda r: r[3]), min(sig, key=lambda r: r[3])
+
 def recommend(p):
+    """Корисні, конкретні, пріоритезовані рекомендації. Тільки sev='cri' стає задачею."""
     recs = []
+    spend = p.get('spend') or 0
     px = p.get('pixel_roas') or 0
-    if px and px < 3:
-        recs.append({'sev': 'cri', 'text': f'Піксельний ROAS {px} низький — переглянути креативи/аудиторію.'})
+    real = p.get('real_ad_roas')
     freq = p.get('frequency') or 0
-    if freq >= 5:
-        recs.append({'sev': 'mod', 'text': f'Частота {freq} висока — ризик вигорання, ротувати креатив/розширити аудиторію.'})
-    # найгірші креативи
-    losers = [c for c in p.get('creatives', []) if c['roas'] < 3 and c['spend'] > 500]
+    cur = p.get('is_current')
+    crv = p.get('creatives') or []
+    segs = p.get('segments') or {}
+
+    # 1) Збиткові креативи -> ЗАДАЧА
+    losers = sorted([c for c in crv if (c.get('roas') or 0) < BREAKEVEN and (c.get('spend') or 0) > 1000],
+                    key=lambda c: -(c.get('spend') or 0))
     if losers:
-        recs.append({'sev': 'cri', 'text': f'{len(losers)} креатив(и) з ROAS<3 зливають бюджет — вимкнути.'})
-    # сегмент-лідер
-    seg = p.get('segments', {}).get('platform', [])
-    if seg:
-        best = max(seg, key=lambda x: x[3] if x[1] > 100 else 0)
-        recs.append({'sev': 'inf', 'text': f'Найкраща платформа: {best[0]} (ROAS {best[3]}) — пріоритет бюджету.'})
-    gap = p.get('gap_pct')
-    if gap is not None and gap < -20:
-        recs.append({'sev': 'mod', 'text': f'Піксель завищує на {abs(gap):.0f}% vs реальні продажі — не переоцінювати.'})
+        waste = sum(c['spend'] for c in losers)
+        names = ', '.join(f'«{c["name"][:32]}» (ROAS {c["roas"]})' for c in losers[:3])
+        recs.append({'sev': 'cri', 'text': f'Вимкнути {len(losers)} збитков. креатив(ів): {names}. Зливають ~{_sp(waste)} ₴ при ROAS<{BREAKEVEN}.'})
+
+    # 2) Вигорання частоти
+    if freq >= FREQ_CRIT:
+        recs.append({'sev': 'cri', 'text': f'Частота {freq} — аудиторія вигоряє. Терміново освіжити креативи або розширити аудиторію/гео.'})
+    elif freq >= FREQ_WARN:
+        recs.append({'sev': 'mod', 'text': f'Частота {freq} близько до порогу вигорання — ротувати креатив кожні 4-5 днів або розширити аудиторію.'})
+
+    # 3) Масштабування (тільки поточні, здорові, із запасом частоти)
+    if cur and px >= TARGET_ROAS and 0 < freq < 3.5:
+        recs.append({'sev': 'mod', 'text': f'ROAS {px} при низькій частоті {freq} — є запас охоплення. Підняти денний бюджет на 20-30%.'})
+
+    # 4) Лідер-креатив -> масштабувати
+    winners = [c for c in crv if (c.get('roas') or 0) >= TARGET_ROAS and (c.get('spend') or 0) > 500]
+    if winners:
+        w = max(winners, key=lambda c: c['roas'])
+        recs.append({'sev': 'inf', 'text': f'Лідер: «{w["name"][:38]}» ROAS {w["roas"]}, CTR {w.get("ctr")}% — масштабувати й дублювати в інші adset.'})
+
+    # 5) Стать — звуження
+    gen = {str(r[0]).lower(): r for r in segs.get('gender', [])}
+    male, female = gen.get('male'), gen.get('female')
+    if male and female and male[1] > 100 and female[1] > 100:
+        if male[3] >= female[3] * 1.5:
+            sf = female[1] / spend * 100 if spend else 0
+            recs.append({'sev': 'mod', 'text': f'Чоловіки ROAS {male[3]} vs жінки {female[3]}. Жінки (~{sf:.0f}% бюджету) тягнуть униз — тестово звузити на чоловіків.'})
+        elif female[3] >= male[3] * 1.5:
+            recs.append({'sev': 'mod', 'text': f'Жінки ROAS {female[3]} vs чоловіки {male[3]} — цей приз краще заходить жінкам, посилити жіночу аудиторію.'})
+
+    # 6) Платформа — перерозподіл
+    b, w2 = _seg_pick(segs.get('platform', []), spend)
+    if b and w2 and b[0] != w2[0] and b[3] >= w2[3] * 1.4:
+        recs.append({'sev': 'inf', 'text': f'{b[0]} ROAS {b[3]} (найкраще) проти {w2[0]} {w2[3]} — змістити бюджет на {b[0]}.'})
+
+    # 7) Вік — ядро
+    ab, _ = _seg_pick(segs.get('age', []), spend)
+    if ab:
+        recs.append({'sev': 'inf', 'text': f'Найефективніший вік: {ab[0]} (ROAS {ab[3]}) — пріоритет у таргетингу.'})
+
+    # 8) Pixel vs Real
+    if real and px:
+        if real >= px * 1.3:
+            recs.append({'sev': 'inf', 'text': f'Реальний ad-ROAS {real} > піксель {px} — реклама ефективніша, ніж показує піксель (він недооцінює конверсії).'})
+        elif real <= px * 0.7:
+            recs.append({'sev': 'mod', 'text': f'Піксель завищує: реальний ad-ROAS лише {real} vs піксель {px}. Орієнтуватись на реальний.'})
+
+    # 9) CPA
+    cpa = p.get('cpa')
+    if cur and cpa and cpa > CPA_WARN:
+        recs.append({'sev': 'mod', 'text': f'Ціна покупки {cpa} ₴ — вище комфортного ({int(CPA_WARN)} ₴). Шукати дешевші зв\'язки (плейсмент/аудиторія/креатив).'})
+
+    order = {'cri': 0, 'mod': 1, 'inf': 2}
+    recs.sort(key=lambda r: order.get(r['sev'], 3))
     return recs
 
 # ---------------- main ----------------
