@@ -1,5 +1,5 @@
 {
- "generated": "2026-06-14T16:05:21.897521+00:00",
+ "generated": "2026-06-14T16:15:36.881903+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка по UTM-мітках facebook+instagram (без ретеншну/органіки).",
@@ -136,9 +136,9 @@
    "pixel_roas": 4.76,
    "cpa": 52.93,
    "pixel_revenue": 11571450,
-   "real_ad_revenue": 0,
-   "real_ad_roas": 0.0,
-   "gap_pct": -100.0,
+   "real_ad_revenue": 3492555,
+   "real_ad_roas": 1.44,
+   "gap_pct": -69.8,
    "segments": {
     "platform": [
      [
@@ -294,8 +294,7 @@
      "spend": 4.94,
      "purchases": 1,
      "roas": 192.11,
-     "ctr": 1.89,
-     "thumb": "https://scontent-iad6-1.xx.fbcdn.net/v/t15.5256-10/526609421_2051985768664599_7772450554877292613_n.jpg?_nc_cat=106&ccb=1-7&_nc_ohc=sdz3KZF3t70Q7kNvwEprv53&_nc_oc=Ado-o5VXGV8IcqCs3fGd0XFhaodB4_u1zl2K5xKJOEZMllVPflWP31kzg56MYJXcjgU&_nc_zt=23&_nc_ht=scontent-iad6-1.xx&edm=AAwGEdEEAAAA&_nc_gid=Ai6Ue2-acyMzt0qk92v61g&_nc_tpa=Q5bMBQEMEWuIvuJaEj0EQifVeh7v6FimYRT17Xb4Ox5D7KkMUEqkHvLfN9t1gr0GzZmCyG2x3N04QJEsPg&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=d2b52d&_nc_sid=58080a&oh=00_Af8nmZXKsXToYvrqGFT8GLVv3Oz763Kuce2Y0amxfD8OKQ&oe=6A349DEF"
+     "ctr": 1.89
     },
     {
      "name": "ad_post_id_1053961103594337_1507",
@@ -303,8 +302,7 @@
      "spend": 63.55,
      "purchases": 3,
      "roas": 163.6,
-     "ctr": 2.13,
-     "thumb": "https://scontent-iad3-2.xx.fbcdn.net/v/t15.5256-10/520173864_4237795716507340_5306849276453518474_n.jpg?_nc_cat=111&ccb=1-7&_nc_ohc=g49qHJQm9AYQ7kNvwFvdcjS&_nc_oc=Adqe6XlOShR6QBHZo1G6tiovfpK3cZPjnx7vNXkEafrKQlqwgYArfYV20LSrRbtuCpo&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&edm=AAwGEdEEAAAA&_nc_gid=_vUj8dao_zW7AUp-ePnOkA&_nc_tpa=Q5bMBQFFTFNWJrOynTtNIvZveOXTP1a-plmE2S-rqKDUX3VX0s5GEOuaU4WOlwmPGhdhGbrL35BKuQ-jfw&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=5fad0e&_nc_sid=58080a&oh=00_Af-mxV1GCaFAKF2uJOylj4PTiBVT2HCGfSUUP8vory3Ixg&oe=6A34A7C5"
+     "ctr": 2.13
     },
     {
      "name": "ad300_image_199",
@@ -312,8 +310,7 @@
      "spend": 14.2,
      "purchases": 1,
      "roas": 119.65,
-     "ctr": 2.74,
-     "thumb": "https://scontent-iad3-2.xx.fbcdn.net/v/t45.1600-4/525621984_1410204530272626_6601538188144497251_n.png?_nc_cat=105&ccb=1-7&_nc_ohc=SNO_T0cXOIkQ7kNvwHlTqRB&_nc_oc=Adr_bytnB4OfR8W17BH9gpspbSLh-JsKxH2FhSMJDM7UTXCCw4MrWW8tPfTA7Tf3Plg&_nc_zt=1&_nc_ht=scontent-iad3-2.xx&edm=AAwGEdEEAAAA&_nc_gid=Mis9agM7TNBG4Fd2WNkgLA&_nc_tpa=Q5bMBQFnhZ4nxnb3haaJr0J3z8Ix3XbBpDMQ9xXd6cJq80yT5ZXLHT6RAPV4k_U-Tj3yuIupac4_ntvKeA&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=52f3c4&_nc_sid=58080a&oh=00_Af-dRdq-HPAbp_2gaCUtcnsgkzbA3I2332WgcYxE6RQuXg&oe=6A3494D2"
+     "ctr": 2.74
     },
     {
      "name": "Нова реклама з ціллю «Продажі» – копія",
@@ -321,8 +318,7 @@
      "spend": 18.05,
      "purchases": 3,
      "roas": 82.94,
-     "ctr": 3.45,
-     "thumb": "https://scontent-iad3-1.xx.fbcdn.net/v/t15.5256-10/491699190_1397277371713028_5522031271033979448_n.jpg?_nc_cat=108&ccb=1-7&_nc_ohc=otCE-WKSjPEQ7kNvwE6TjPc&_nc_oc=Adq4pjJDaxIxajS0urrc7i9W1Clz_OzZRnq1CkGKWSBx-To3X-FjqxfxY5AhCKyTfMk&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&edm=AAwGEdEEAAAA&_nc_gid=bQOu5As7TpSLw4mdC2KQQw&_nc_tpa=Q5bMBQGMzQk3ZcV5IihMK5I958WHjrUOuaY3Ve-jqRXc0a3QHawupvYUfC9hYlcq7hIUfFluIAOAyi59hg&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=a7ce7f&_nc_sid=58080a&oh=00_Af87lYJ13LkeM7Bg56-uPjeqiNsFiA_Yyb7MfzOlH85WYA&oe=6A34974B"
+     "ctr": 3.45
     },
     {
      "name": "ad453_video_10p",
@@ -330,8 +326,7 @@
      "spend": 2.76,
      "purchases": 1,
      "roas": 72.1,
-     "ctr": 4.17,
-     "thumb": "https://scontent-iad3-1.xx.fbcdn.net/v/t15.5256-10/536647713_730994206254369_4736428649091193272_n.jpg?_nc_cat=101&ccb=1-7&_nc_ohc=TH9lndLEuMEQ7kNvwGdq4Go&_nc_oc=AdpLj3a0mvs6n3TccFsgIa2Ag-effpAcLFxilUXRbWyQpDskwBH6j6z_DILeQA8HpMU&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&edm=AAwGEdEEAAAA&_nc_gid=OJsuV6hesZtNpE6rmfSZOw&_nc_tpa=Q5bMBQG_Wf-KINs6F-c155zs9c4NdqdXDaQ1eaLFTBqDKDHQ3ifN4V3-yd1O5txu6l56ivHRbKIVOoXq1g&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=5fad0e&_nc_sid=58080a&oh=00_Af-4EjklTunSbHXBkUpfsLniLbiTaV4qHINTwyQXRnVk3Q&oe=6A34A2D0"
+     "ctr": 4.17
     },
     {
      "name": "ad_post_id_1055591056764675_1707",
@@ -339,8 +334,7 @@
      "spend": 25.17,
      "purchases": 1,
      "roas": 67.5,
-     "ctr": 1.68,
-     "thumb": "https://scontent-iad6-1.xx.fbcdn.net/v/t15.5256-10/520468021_1053725573548559_8928399567031858760_n.jpg?_nc_cat=102&ccb=1-7&_nc_ohc=AGqvaXb2lz4Q7kNvwHN0n2G&_nc_oc=AdozIDZXSt95cF1Ce7dS3EDlABoUnKVFeGtxOeLqqIoUO4moht1EPUDSqRqcTmQka5Q&_nc_zt=23&_nc_ht=scontent-iad6-1.xx&edm=AAwGEdEEAAAA&_nc_gid=TEGkpIrLw8UoviPNpQch1g&_nc_tpa=Q5bMBQH4pOqEocBmDkEiIASN5MvhB_bRSIegZBHBrAP9u0BlMRrlN731vuq_pZfg7wE26ATr5mxwTFAXHQ&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=5fad0e&_nc_sid=58080a&oh=00_Af80qRRVOsBO9kTOIneuKi4a7r9a6EGeGDvnrsACTFO6Dg&oe=6A34AC7A"
+     "ctr": 1.68
     },
     {
      "name": "ad452_video_10p",
@@ -680,6 +674,10 @@
      "text": "Чоловіки ROAS 5.15 vs жінки 2.69. Жінки (~16% бюджету) тягнуть униз — тестово звузити на чоловіків."
     },
     {
+     "sev": "mod",
+     "text": "Піксель завищує: реальний ad-ROAS лише 1.44 vs піксель 4.76. Орієнтуватись на реальний."
+    },
+    {
      "sev": "inf",
      "text": "Лідер: «Нова реклама з ціллю «Продажі» – копія» ROAS 51.18, CTR 1.55% — масштабувати й дублювати в інші adset."
     },
@@ -858,8 +856,7 @@
      "spend": 22.85,
      "purchases": 2,
      "roas": 31.51,
-     "ctr": 8.47,
-     "thumb": "https://scontent-iad6-1.xx.fbcdn.net/v/t15.5256-10/567309726_2037173517123764_8792192404162626112_n.jpg?_nc_cat=109&ccb=1-7&_nc_ohc=0DS3JnwbPF0Q7kNvwGLMVoV&_nc_oc=AdpBKNG7VRIQdtF4tBzA-mcbdDbozkoNpz_l6KM8vsrFQpwxWYIGHQDwFAshIfTnfII&_nc_zt=23&_nc_ht=scontent-iad6-1.xx&edm=AAwGEdEEAAAA&_nc_gid=Sa_yb813x0u99TErEfMbFQ&_nc_tpa=Q5bMBQGrDQq2yovrGiuh1FajX57TUWDFsQ86cejPwDzjxmruyV4SE0Vpqh7ueT_i0nReOIDUMVEVhPGkyA&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=5fad0e&_nc_sid=58080a&oh=00_Af-UUp637c6zamai8Rd8tE2hecOxhcVUSKcqkgbhsR2ZZQ&oe=6A34A9DB"
+     "ctr": 8.47
     },
     {
      "name": "Video Iphone + Ipad",
@@ -867,8 +864,7 @@
      "spend": 9.5,
      "purchases": 1,
      "roas": 31.47,
-     "ctr": 10.64,
-     "thumb": "https://scontent-iad3-2.xx.fbcdn.net/v/t15.5256-10/587298835_2372564646498594_7792518417961106773_n.jpg?_nc_cat=111&ccb=1-7&_nc_ohc=kRsl5KILqBgQ7kNvwFV7X9C&_nc_oc=AdrXokm4q06Ho88sO2G7Doq0QGNpx-cVEc7A4yxYzxbULKa8dJ59UT-SMKYDt1zhiLA&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&edm=AAwGEdEEAAAA&_nc_gid=VeFU5QPUlvnwRf20Wkyx0A&_nc_tpa=Q5bMBQGMds9q5ZaMKX5vwyQDVM3CcvdG-zzRDhKULGgAqbJmMvoP635dt5D1GN-VfB_-I659t1E7LiI-iw&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=b696e2&_nc_sid=58080a&oh=00_Af_qCe21Ex7tTqjO9C9prLUgHRVpUwfPJQGLqtzYTC0_Lw&oe=6A34B19A"
+     "ctr": 10.64
     },
     {
      "name": "Video 1",
@@ -876,8 +872,7 @@
      "spend": 59.35,
      "purchases": 3,
      "roas": 26.89,
-     "ctr": 3.16,
-     "thumb": "https://scontent-iad3-1.xx.fbcdn.net/v/t15.5256-10/562966706_31756783430631903_6246203711685225140_n.jpg?_nc_cat=110&ccb=1-7&_nc_ohc=PJCOEUPCgOMQ7kNvwELVuXA&_nc_oc=Adq9c0y856oKX3KQrImOb1mu-BE7PILwRG89iKFvisWSVrm2TZeS0xsMKcS9Tql4Krs&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&edm=AAwGEdEEAAAA&_nc_gid=k8suuJtGUn6telRuAIZnag&_nc_tpa=Q5bMBQFyEI-HXiWzovvlomlYYGcfWcIyUgA5S9Dr-WPn-8yNDcbUjjXfiVDXBBCJxjxsrJhbsjk5Z0VYlA&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=5fad0e&_nc_sid=58080a&oh=00_Af9NL8K_z1q04yES2uWbwN7M_snpRAhWvR6BwQ7VSi_5rw&oe=6A34AB25"
+     "ctr": 3.16
     },
     {
      "name": "Ad 1 можлив",
@@ -885,8 +880,7 @@
      "spend": 487.29,
      "purchases": 5,
      "roas": 25.85,
-     "ctr": 1.16,
-     "thumb": "https://scontent-iad3-2.xx.fbcdn.net/v/t15.5256-10/569946261_1869948817230737_7599897770532410704_n.jpg?_nc_cat=105&ccb=1-7&_nc_ohc=OzenThrEQ8cQ7kNvwHhhC9g&_nc_oc=AdojXj4MUh0QkVAZa8UpbO0Wf-y1o6TMeevahg75TGGE55YD_zt8p4v1c35qY-PmgX0&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&edm=AAwGEdEEAAAA&_nc_gid=Tppw0cTA3YWM3c-mnV5bTQ&_nc_tpa=Q5bMBQFXKFSVfGM7NmaJm-YStIqnS_aOLgf0Y23XTBkiz2wNcZfMoaxdnnon9CzHEl2vOTFG59jpTnaMiA&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=5fad0e&_nc_sid=58080a&oh=00_Af-EMwlQ8lHqa3PBtqGkr0NAQT6d_5DiphnA0BLaiCX6Tw&oe=6A3492F2"
+     "ctr": 1.16
     },
     {
      "name": "Video 8",
@@ -894,8 +888,7 @@
      "spend": 12.57,
      "purchases": 1,
      "roas": 23.79,
-     "ctr": 10.0,
-     "thumb": "https://scontent-iad6-1.xx.fbcdn.net/v/t15.5256-10/567210187_863938785961692_4838843922450733333_n.jpg?_nc_cat=100&ccb=1-7&_nc_ohc=bgzdHxofDK0Q7kNvwEwh4L7&_nc_oc=AdrGx0v6EFlGrvQ7ayMn9bfwrtKanaFTEY12fyT40ghzUiKcCBCGP4y9UBK-JOJjOs4&_nc_zt=23&_nc_ht=scontent-iad6-1.xx&edm=AAwGEdEEAAAA&_nc_gid=_yNGITclO98uFl3WlHyMGA&_nc_tpa=Q5bMBQHq1-SEJqENQCRV8Tv8VeScgGuWFkySWZ485kWXcCJoj2T8R5fQdcQ0JPDYbg2lseJS8uNesmp5eg&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=5fad0e&_nc_sid=58080a&oh=00_Af9dS2LoM61IwA9VlXAWPV2OfShqmkyHTbDdhqzNeeDhkA&oe=6A3495AF"
+     "ctr": 10.0
     },
     {
      "name": "Video 3",
@@ -903,8 +896,7 @@
      "spend": 699.41,
      "purchases": 35,
      "roas": 19.68,
-     "ctr": 2.76,
-     "thumb": "https://scontent-iad3-1.xx.fbcdn.net/v/t15.5256-10/563191252_25607049612235437_9078110508549180359_n.jpg?_nc_cat=104&ccb=1-7&_nc_ohc=38VHCxy0KZAQ7kNvwEqsTIO&_nc_oc=AdrC7iM60KEGT4OwHBNunH-Amb2qxpOUc-H-YcODpk5OPAravfQknVjlgwb3t-NXNBM&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&edm=AAwGEdEEAAAA&_nc_gid=ukHKFjlpfawfO2mVZb-uEA&_nc_tpa=Q5bMBQHLUCy66m4lDeyfhWEsqy-LsXVCTfZ7rzBZk1fjMFa2w95SqVLXnHLAiNCEXaTSAzE_p9vhQRjoQA&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=5fad0e&_nc_sid=58080a&oh=00_Af9GqZZZ1c8K_AHGBMyRVjxBnZ0Nz0McY3EMt9eC7Dhklw&oe=6A34A923"
+     "ctr": 2.76
     },
     {
      "name": "Banner 4",
@@ -1422,8 +1414,7 @@
      "spend": 2682.22,
      "purchases": 149,
      "roas": 23.93,
-     "ctr": 2.59,
-     "thumb": "https://external-iad3-1.xx.fbcdn.net/emg1/v/t13/138561043263229528?url=https%3A%2F%2Fwww.facebook.com%2Fads%2Fimage%2F%3Fd%3DAQIW0tcN-_q6VGSJshbu1O4XC2Ii6pr2-EKfF_j9zDx8m578gMBGcJs1UVv2aKwgFYw2w1RA6qHPi8DTRUXSduACSGtMrxC-1VPwdQFSd7afaXMg8aYwQ0XbUDPGGiAp_5uL2dDetiQyGW1FiWre_o-W&fb_obo=1&utld=facebook.com&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&edm=AAwGEdEEAAAA&_nc_gid=6GLfdFbr3wVtNyfn_BNmBg&_nc_oc=AdpvfHP_C04aKVyY01jsY2Na2cOUF21IRunDmYRZbm_KFmxkTsIjtFXur9z3_9MIpxA&ccb=13-1&oh=06_Q3_AAaxhSkVauUw-dnstypACMIf2Z4-7l0tA9kyv92J8Li_m&oe=6A30AA92&_nc_sid=58080a"
+     "ctr": 2.59
     },
     {
      "name": "Нова реклама з ціллю «Продажі»",
@@ -1431,8 +1422,7 @@
      "spend": 648.6,
      "purchases": 25,
      "roas": 18.03,
-     "ctr": 2.02,
-     "thumb": "https://external-iad3-1.xx.fbcdn.net/emg1/v/t13/12959924139041757429?url=https%3A%2F%2Fwww.facebook.com%2Fads%2Fimage%2F%3Fd%3DAQKv3oSQRTt3zy1Hgd2oJ1F4MZkwYse3ha2bEDTv7Z2ijQJRH_wiKjO725D2R_zwNMS5GcSFRGmNLZBTcOw2CxBW-Oobr3ji_dBmqW1XBEoUu_zBASU3feeJkDcOSl7qOKSlZvx0NfZtbPVFhG67fNxr&fb_obo=1&utld=facebook.com&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&edm=AAwGEdEEAAAA&_nc_gid=yuSJXlHDlCziK52PiCMGNQ&_nc_oc=AdrKSLRMKTpDxlqg2TN1Ih19KvKlLT1vWktblctUU9bYA_8GL5UDQcec6UxtsGmTBMk&ccb=13-1&oh=06_Q3_AAfRF5fJIZjQGjvAB9Q-_EAuueUzcTs9fCEibueNuQai1&oe=6A30AEBA&_nc_sid=58080a"
+     "ctr": 2.02
     },
     {
      "name": "Нова реклама з ціллю «Продажі» – копія",
@@ -1440,8 +1430,7 @@
      "spend": 2201.37,
      "purchases": 95,
      "roas": 18.03,
-     "ctr": 2.0,
-     "thumb": "https://external-iad3-1.xx.fbcdn.net/emg1/v/t13/6103805944330364761?url=https%3A%2F%2Fwww.facebook.com%2Fads%2Fimage%2F%3Fd%3DAQIuMYQ3s2ZmT54e878bVvzsyyjx9SjAB1yGjL_YdMJs-U56vNTcwiIzvBG3XcvAfmEQmnt97PuB2Dh_lQrx_kb-0jOwRoPc3c5ITluX8RlUwRRZ3u4WXJUZ2J5PAU5r9fch8HykmxT9eTe_blRyrakY&fb_obo=1&utld=facebook.com&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&edm=AAwGEdEEAAAA&_nc_gid=rn6rxh2PEEXmd-IltFbKXw&_nc_oc=Adp_gaGqD0rNoQyH6QQHh7PfStsjs_bPZ7q0z-FOcduQekcousHF1pg36Wn0M1u2grE&ccb=13-1&oh=06_Q3_AAQq8T99eZde0G4E2GmjVQ7hb4yvgVLgEGbMcaXFeAkgk&oe=6A30A9F4&_nc_sid=58080a"
+     "ctr": 2.0
     },
     {
      "name": "Нова реклама з ціллю «Продажі» – копія",
@@ -1449,8 +1438,7 @@
      "spend": 1414.9,
      "purchases": 66,
      "roas": 15.4,
-     "ctr": 1.88,
-     "thumb": "https://external-iad3-1.xx.fbcdn.net/emg1/v/t13/17719504128595491308?url=https%3A%2F%2Fwww.facebook.com%2Fads%2Fimage%2F%3Fd%3DAQLo0WqiEUp_qqzyeKDvP52HvRb8rQCcfXEg5U-EW1ha4I-tDlAR87HALXHTMrKJ25e2Y4cKbqyz54J9ykW5FHoUAFHE8DYF-Eqldqn3tvObeQkhW_S5IJ1bExLgintpFmioQ-pi_2UL5HyTLe6zWw4i&fb_obo=1&utld=facebook.com&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&edm=AAwGEdEEAAAA&_nc_gid=SUymgwtSnHKOqVkOlVH6ZA&_nc_oc=AdoUPm5c7Z5q9LyW_vGF2ob0sV_U03kkjfiJH6AGEq6-TeyviSHHlR9LqRVdHi9Y7J8&ccb=13-1&oh=06_Q3_AASdHIgH5KSIV9OiEgpg6f4XFH5SJi2g98GNNa2yXgjie&oe=6A309ADE&_nc_sid=58080a"
+     "ctr": 1.88
     },
     {
      "name": "Нова реклама з ціллю «Продажі» – копія",
@@ -1458,8 +1446,7 @@
      "spend": 441.2,
      "purchases": 27,
      "roas": 12.18,
-     "ctr": 2.55,
-     "thumb": "https://external-iad3-1.xx.fbcdn.net/emg1/v/t13/470877186170527148?url=https%3A%2F%2Fwww.facebook.com%2Fads%2Fimage%2F%3Fd%3DAQIaq-cWRI6jnqQd8UQaEijbUJnMWT2qHMj1T6zHh2IUy3BKmdJ5r7U_hLcc27zQXZcjgnvPBxQRXjuFu6APCuIvLidOwNBqozvU1qzMdvaqSe2ybOq1Pi3vU6GcN8f9jJ8rwGds0QBGjk8zvoRxRM_K&fb_obo=1&utld=facebook.com&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&edm=AAwGEdEEAAAA&_nc_gid=LyrfFXGGJahEQJm7dc_BSw&_nc_oc=Adr0PQNKKXmEHbGRe6ZiiauTGbDRpdHuiua3xg5fUybaL0HsujzyX0yJjRqtHozVc2w&ccb=13-1&oh=06_Q3_AAcYO6gIj-3JWHNSCd5yYeArejU4ptLxRNyYFArA7fRaK&oe=6A30AE2B&_nc_sid=58080a"
+     "ctr": 2.55
     },
     {
      "name": "Нова реклама з ціллю «Продажі» – копія",
@@ -1467,8 +1454,7 @@
      "spend": 748.11,
      "purchases": 30,
      "roas": 11.95,
-     "ctr": 2.14,
-     "thumb": "https://external-iad3-1.xx.fbcdn.net/emg1/v/t13/12671142730714808047?url=https%3A%2F%2Fwww.facebook.com%2Fads%2Fimage%2F%3Fd%3DAQJiSMuF4Dbj2yAM-qwxKetEdpMHn7gvRiwgzGdXVxy7-OArhs6LQNSsWFg1FEmCfzv6alqdlstJHpNZdA2plUu8FkyE6xw-8-lXIOUszKlRW6miZtcLE33oAkXzQTdq1bCJImE55IxVH3sNQzvxA-ZD&fb_obo=1&utld=facebook.com&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&edm=AAwGEdEEAAAA&_nc_gid=wGGTZLcrCc1K4K6quTvHVw&_nc_oc=Adp8MNssDOfo83u3P31IFz0y4qc6MzbIPa4DaOxXs-yBl9sE5KtA_9ybRwy59YkMey0&ccb=13-1&oh=06_Q3_AAXZMxWQ6D0X5bheo4kjA-tasTzjiERLG43a1Q009GW6d&oe=6A30C3FC&_nc_sid=58080a"
+     "ctr": 2.14
     },
     {
      "name": "Нова реклама з ціллю «Продажі» – копія",
@@ -1888,8 +1874,7 @@
      "spend": 20000.0,
      "purchases": 691,
      "roas": 16.19,
-     "ctr": 1.69,
-     "thumb": "https://scontent-iad3-2.xx.fbcdn.net/v/t15.5256-10/619819163_25880192408285485_1907002132027870759_n.jpg?_nc_cat=103&ccb=1-7&_nc_ohc=O-3sMnweO1wQ7kNvwGzOv3H&_nc_oc=AdqtXVrcJK7AvhmjiEpA77JA_u9u7BnBNkEHgqbMttSwdAmW0rdiSI370D-o_eA-YF0&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&edm=AAwGEdEEAAAA&_nc_gid=NI48_vFnw6pcO32NnP4P_w&_nc_tpa=Q5bMBQGbMm8kSXQn3QwH7LsDPF5c4ipCVLl-rLwxmVwwo5Ds7nzV4WNMjii7y14VfJ9Whq_k0g7jxMmzZg&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=a7ce7f&_nc_sid=58080a&oh=00_Af9ilyjBqw-yJlM-iUWFweeag3vFNQNWEWcrr_DS3GteSA&oe=6A34A0D5"
+     "ctr": 1.69
     },
     {
      "name": "Нова реклама з ціллю «Продажі»",
@@ -1897,8 +1882,7 @@
      "spend": 5000.0,
      "purchases": 114,
      "roas": 9.78,
-     "ctr": 1.08,
-     "thumb": "https://scontent-iad6-1.xx.fbcdn.net/v/t15.5256-10/618791880_2121813158580092_8247654341853452938_n.jpg?_nc_cat=100&ccb=1-7&_nc_ohc=bqBRhqJbF20Q7kNvwGEX3b7&_nc_oc=Ado9i9AL6JG6oPd0RTDX-ojgAYAf5G8ZwGd2aX71xIFUl5kQRtUJWS1TOUB7HuPv4xo&_nc_zt=23&_nc_ht=scontent-iad6-1.xx&edm=AAwGEdEEAAAA&_nc_gid=yFaFbvctgMBZIjp34yLGIg&_nc_tpa=Q5bMBQEM0LVLyra3WchSxMK_XUZB91AnUC66zOeV37SwmJHDCkZcIUkWPzkVWMeNrKKoSrhcU8R6130nDw&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=a7ce7f&_nc_sid=58080a&oh=00_Af9NZC5qkDUd3EgSND-UtNjV5M0MavFxJvIPWNR_3gWOGA&oe=6A3487DB"
+     "ctr": 1.08
     },
     {
      "name": "Нова реклама з ціллю «Продажі»",
@@ -1906,8 +1890,7 @@
      "spend": 21818.43,
      "purchases": 445,
      "roas": 8.14,
-     "ctr": 0.94,
-     "thumb": "https://scontent-iad3-2.xx.fbcdn.net/v/t15.5256-10/617692784_4521220318106454_8145248819673374690_n.jpg?_nc_cat=105&ccb=1-7&_nc_ohc=5_P_Y7-s7G8Q7kNvwE_zdHo&_nc_oc=Adr9Y8oA2TxqHpVLUI1TckCgk10TljG86TqPFJcerqzzhTMXP7KVSJgk02XF1RyodOE&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&edm=AAwGEdEEAAAA&_nc_gid=ALurKyarssbzTpN44CxI1Q&_nc_tpa=Q5bMBQF2RljDeG8qjrgSsfhzLS4rSiGlOE1BGYHBRbRCcgY-q2FK90Q0REzmMvUm-W2AImPBYvd81M0DUA&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=a7ce7f&_nc_sid=58080a&oh=00_Af8BoCMAfgEk_14rATe5jy2oCTEwy8hHhpH4Q0Y2jMtzJg&oe=6A34A01C"
+     "ctr": 0.94
     },
     {
      "name": "Нова реклама з ціллю «Продажі»",
@@ -1915,8 +1898,7 @@
      "spend": 10000.0,
      "purchases": 150,
      "roas": 5.25,
-     "ctr": 1.4,
-     "thumb": "https://scontent-iad3-2.xx.fbcdn.net/v/t15.5256-10/617122828_1652986816065744_1698419896859087954_n.jpg?_nc_cat=105&ccb=1-7&_nc_ohc=6aVpbFqKMxAQ7kNvwECCgvf&_nc_oc=AdrygNtqTrecErbaaq8K8L1m3O44TmI2zWt28G8Iws08rFo00T-tQDbXzD0CExQ9-58&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&edm=AAwGEdEEAAAA&_nc_gid=6dFvIQxuPwCkPUDZIiFHCw&_nc_tpa=Q5bMBQEEVPw5Tn5EawrPAZ-BoHEwhsMzAmP9dV4JwAA5G3D0D2l-d0IM5vaD04HGRik1f0QPR5advRSTcA&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=a7ce7f&_nc_sid=58080a&oh=00_Af_eA0I1aOx4VmsFR8uWBS1bpiRg9tMF0ogdkQpaQa_Sag&oe=6A34A3B2"
+     "ctr": 1.4
     },
     {
      "name": "Нова реклама з ціллю «Продажі» – копія",
@@ -1924,8 +1906,7 @@
      "spend": 615.34,
      "purchases": 9,
      "roas": 4.32,
-     "ctr": 1.89,
-     "thumb": "https://scontent-iad3-2.xx.fbcdn.net/v/t45.1600-4/612305788_26143408941918450_1915695993241273380_n.png?_nc_cat=105&ccb=1-7&_nc_ohc=ONjH2MhiEhkQ7kNvwFEzXO9&_nc_oc=AdpHrIys8b5uj3QEism5R5C5oxa20HPnZq3ClKRgtQruIWB8iWUxmaj_X4YnACBTR7Q&_nc_zt=1&_nc_ht=scontent-iad3-2.xx&edm=AAwGEdEEAAAA&_nc_gid=EAKb_fPf__mAvgAmimr7Fg&_nc_tpa=Q5bMBQFuZjy0CsIOr4DNxlpM3wcyjPhN1TDqwJA-LUBC3u16mD-aZ8m9fgwCiiVwxNV_s8ygFQ1vLqAF-w&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=52f3c4&_nc_sid=58080a&oh=00_Af-W2zZsoTPQEfqCoyDUeTC3IE8JCMk5NYmQFmqIAtUxng&oe=6A3493FA"
+     "ctr": 1.89
     },
     {
      "name": "Нова реклама з ціллю «Продажі»",
@@ -1933,8 +1914,7 @@
      "spend": 32892.46,
      "purchases": 225,
      "roas": 3.5,
-     "ctr": 1.91,
-     "thumb": "https://external-iad3-1.xx.fbcdn.net/emg1/v/t13/14255234247106535543?url=https%3A%2F%2Fwww.facebook.com%2Fads%2Fimage%2F%3Fd%3DAQKZktz-l1a0xzerC6xI1ZHqMFOQyXh3MdthJAffOyY4kdvfM7frvWA1Lpd9HFTDD7TVBtvFVZ7HXqwg0LcssTZAkwPon0syEF4wFDGa5kmxYZcjSdqYS6EIIhmCuLWonhenVc321CLC9mdMKxLQTR1m&fb_obo=1&utld=facebook.com&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&edm=AAwGEdEEAAAA&_nc_gid=RKhxh6ggl8nmL90RqypoIQ&_nc_oc=AdppwrYkdL5kA7GMCuMM8idrsIfn2IrraPfKXlKfIBWHoXupF5jduT9wMwsyO11Vwvo&ccb=13-1&oh=06_Q3_AAZX8URILRqh4mozIcRHwHmAljk7ciHU4YBjG-D7jQKMz&oe=6A30BD7D&_nc_sid=58080a"
+     "ctr": 1.91
     },
     {
      "name": "Нова реклама з ціллю «Продажі»",
@@ -2338,8 +2318,7 @@
      "spend": 1741.07,
      "purchases": 19,
      "roas": 20.03,
-     "ctr": 1.32,
-     "thumb": "https://scontent-iad3-2.xx.fbcdn.net/v/t45.1600-4/637160798_26531708923088448_6607598187825517493_n.png?_nc_cat=111&ccb=1-7&_nc_ohc=_qew7izgsjkQ7kNvwGqZlUl&_nc_oc=AdryM72SfBaM3mkVMftYzhAGsu4ttME8chufH5aWnbIarOGv2UzSDQNCWljywSq4PYo&_nc_zt=1&_nc_ht=scontent-iad3-2.xx&edm=AAwGEdEEAAAA&_nc_gid=1pXLmpWew6bhEvW5Wm3tWg&_nc_tpa=Q5bMBQGqhuxBebM_OmZ62sURELL_31CZEd8od-mvfY-L5bUnxxn5JHS5xMQx62BT0CyfVXf-Q_Pahwu65g&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=52f3c4&_nc_sid=58080a&oh=00_Af8oeYqAZgwdJgbqKCu9o-VzIsnTR40EWUGdHiLpebR-_g&oe=6A349868"
+     "ctr": 1.32
     },
     {
      "name": "Нова реклама з ціллю «Продажі»",
@@ -2347,8 +2326,7 @@
      "spend": 97.2,
      "purchases": 1,
      "roas": 18.5,
-     "ctr": 1.67,
-     "thumb": "https://scontent-iad3-2.xx.fbcdn.net/v/t45.1600-4/639027977_26531708993088441_7915419819311618207_n.png?_nc_cat=111&ccb=1-7&_nc_ohc=i5_TOdZlRCkQ7kNvwGgqs9N&_nc_oc=AdpV3xFzbByBVxVp5PVfJ7YejTCFetszyFdWJ6VjOmmjzFuTCAIMiXNKFj2COofV0wE&_nc_zt=1&_nc_ht=scontent-iad3-2.xx&edm=AAwGEdEEAAAA&_nc_gid=RG49XooRjRZJ6ncq9lBhwQ&_nc_tpa=Q5bMBQEa6gkS1taGPvAq5xd2Y16a3dUt1i_3yKLapiN3TJNtQgFZPcTLpwLfBzt3cdoAKOnJVcQcFJOc5g&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=52f3c4&_nc_sid=58080a&oh=00_Af_iEoGV_5P9tMlZItejsEfRN5mLXZfLl7QPLPXZxI9LoA&oe=6A34879D"
+     "ctr": 1.67
     },
     {
      "name": "Нова реклама з ціллю «Продажі» – копія",
@@ -2356,8 +2334,7 @@
      "spend": 695.75,
      "purchases": 36,
      "roas": 16.32,
-     "ctr": 2.31,
-     "thumb": "https://scontent-iad3-1.xx.fbcdn.net/v/t45.1600-4/630937299_26460519463540728_1417503025720162555_n.png?_nc_cat=108&ccb=1-7&_nc_ohc=kNnXhiF5bbAQ7kNvwFSRPxU&_nc_oc=Ado-cYzaoaGZccDYSk_lUaaqRlIrWSzErXOrAKFj87Vhl6x-Had-SQM8sRXPhNPLpsY&_nc_zt=1&_nc_ht=scontent-iad3-1.xx&edm=AAwGEdEEAAAA&_nc_gid=sEHzs4GIbb_FL-SFXwSHAA&_nc_tpa=Q5bMBQFRsZqXtQvOpeDMqaUJvPbZY3P8jdoxzg-0NUHPZhSlT4m5bvwbwPKZN8NOUexvnLGHvR79b81JuA&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=52f3c4&_nc_sid=58080a&oh=00_Af-V-6d-2Yn4NiEbZSXwbIpUIS9FAn3ByAKpraVL69QdOg&oe=6A349111"
+     "ctr": 2.31
     },
     {
      "name": "картинка",
@@ -2365,8 +2342,7 @@
      "spend": 1520.51,
      "purchases": 40,
      "roas": 14.84,
-     "ctr": 2.49,
-     "thumb": "https://scontent-iad6-1.xx.fbcdn.net/v/t45.1600-4/636705982_26498519126407428_5670451673165514548_n.png?_nc_cat=100&ccb=1-7&_nc_ohc=KuaVL3uGAeMQ7kNvwFz0DRk&_nc_oc=AdoBlfQDI0Abbko4DW46ELHlooftSEy4L7tPtzVS0Jqp8sCD18PaB1cw8-1pWuKi-4M&_nc_zt=1&_nc_ht=scontent-iad6-1.xx&edm=AAwGEdEEAAAA&_nc_gid=PslDehsoll6i4swEVbXOuw&_nc_tpa=Q5bMBQHl0w36vzQi6LgZMyZZnDdJsGk74SWQjXzDwYmgJYgrNzjV5i2fqLHRocoZZG9NVnq8ckSJK8b8QA&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=52f3c4&_nc_sid=58080a&oh=00_Af8TmWM_TqD9b9GaBlhWrJ25HOSxt9L80m7jxl0Z2-LyeQ&oe=6A34ABE4"
+     "ctr": 2.49
     },
     {
      "name": "Нова реклама з ціллю «Продажі» – копія",
@@ -2374,8 +2350,7 @@
      "spend": 2859.08,
      "purchases": 102,
      "roas": 13.86,
-     "ctr": 2.63,
-     "thumb": "https://scontent-iad6-1.xx.fbcdn.net/v/t15.5256-10/628817408_1556063088989346_7439828815247259533_n.jpg?_nc_cat=107&ccb=1-7&_nc_ohc=Fk0oA6zxQksQ7kNvwFwvY9M&_nc_oc=AdrsWzQ2o_toj-sNRV4eJ5C92YSqsWiq5er-Ba05fFfGyQKhEvYEeK5ktgjff3iJM_U&_nc_zt=23&_nc_ht=scontent-iad6-1.xx&edm=AAwGEdEEAAAA&_nc_gid=YlsallwDsVCgng4HNzSE6Q&_nc_tpa=Q5bMBQF2rcytrkMAO-tqSSAx3fDVFfgkZB76SUxFtT1SaRo-o7SFRoocv58b-8oq8JHSDhNGjBrSgH1XJw&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=5fad0e&_nc_sid=58080a&oh=00_Af9yyeycu2KokqyeIVifhfZGDIJaJfvBlvoehlwXWOq-Sw&oe=6A34A327"
+     "ctr": 2.63
     },
     {
      "name": "Нова реклама з ціллю «Продажі» – копія",
@@ -2383,8 +2358,7 @@
      "spend": 659.57,
      "purchases": 24,
      "roas": 13.5,
-     "ctr": 2.12,
-     "thumb": "https://scontent-iad3-1.xx.fbcdn.net/v/t15.5256-10/631403935_1538418330789490_6588678922021171780_n.jpg?_nc_cat=104&ccb=1-7&_nc_ohc=5x8sQO-trBYQ7kNvwGEnlHZ&_nc_oc=AdrK_kpKab5nDmyuwxoOj4Vjjfyafz0n887DqSnRKmWlBZf_HxLVQXk4IO49iNQkD8E&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&edm=AAwGEdEEAAAA&_nc_gid=SiC9lfuxeIEw6eOqD1Yefg&_nc_tpa=Q5bMBQFNZqT9-tdpo3OTebefrGwEGrI9fbT_atGKsf3gZfJy3nDQYyeBgQmFY_1daOfS4Mwhd0-TtutSjg&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=5fad0e&_nc_sid=58080a&oh=00_Af9MiwcsXPj0grmHU-NGfvi8nR8_pMIw3tLyaBGhHVwAEw&oe=6A348CD5"
+     "ctr": 2.12
     },
     {
      "name": "АІшне без голосу",
@@ -2855,8 +2829,7 @@
      "spend": 2829.04,
      "purchases": 188,
      "roas": 33.99,
-     "ctr": 3.31,
-     "thumb": "https://scontent-iad6-1.xx.fbcdn.net/v/t45.1600-4/653993305_26840421355550535_9142914467518674137_n.png?_nc_cat=109&ccb=1-7&_nc_ohc=ORiBeT15_wsQ7kNvwHsZhmp&_nc_oc=Adqje4S55PWuNojj9pyoJNt9iP3pSyxk1yPHVtqeKTKcayQd8YDOpQJwkzaZ67VbySw&_nc_zt=1&_nc_ht=scontent-iad6-1.xx&edm=AAwGEdEEAAAA&_nc_gid=XEccXMP74kFbvXtbTdXKmA&_nc_tpa=Q5bMBQEvQ9s3SpY5gCRIszX5LTc5oWnn8IWszGbrGpKxKnMaXWbk8rXtazDtjPdu5CUCdCiIZFe0PXfwRw&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=52f3c4&_nc_sid=58080a&oh=00_Af-NB54_JrdFlGeEair7lHz9eLbYvEqcO0SE_ZDmt7xgaA&oe=6A34B3FE"
+     "ctr": 3.31
     },
     {
      "name": "Нова реклама з ціллю «Продажі»",
@@ -2864,8 +2837,7 @@
      "spend": 4146.86,
      "purchases": 320,
      "roas": 33.66,
-     "ctr": 4.46,
-     "thumb": "https://scontent-iad3-1.xx.fbcdn.net/v/t45.1600-4/655558726_26840421685550502_1469737844988996198_n.png?_nc_cat=101&ccb=1-7&_nc_ohc=YtRNhQn-ug0Q7kNvwGtKnz0&_nc_oc=AdoR_thy9NjitvKnEDjIA0Clu7fk4UyMTCnqJlNP27Se6zas4JT0NN0oVWvC6T4jCe0&_nc_zt=1&_nc_ht=scontent-iad3-1.xx&edm=AAwGEdEEAAAA&_nc_gid=YEvcRJF1xpuVOVVj9Ov3fg&_nc_tpa=Q5bMBQFaqg0if4x2avKnQZEoZmVGAiBj9BPTKtUrNKOtCCgulW_quKgMlT5j939vsvLJA81W4jqffJuzuQ&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=52f3c4&_nc_sid=58080a&oh=00_Af-taWCY7bjxZluw3LU-IBuO5OA9O_EDOI9xsAUib6rNIQ&oe=6A34B979"
+     "ctr": 4.46
     },
     {
      "name": "Нова реклама з ціллю «Продажі» – копія – копія",
@@ -2873,8 +2845,7 @@
      "spend": 4702.34,
      "purchases": 343,
      "roas": 33.49,
-     "ctr": 4.07,
-     "thumb": "https://scontent-iad3-1.xx.fbcdn.net/v/t45.1600-4/657145159_26840421705550500_9109057436316880657_n.png?_nc_cat=104&ccb=1-7&_nc_ohc=3yDzCgp9UeYQ7kNvwEqBoD1&_nc_oc=Adp4wre94r85Ut6cPkWPl1dZiVSPFwfzCuSSzCqtCBz6eJhaEoc3eb860IrlKE1x2rk&_nc_zt=1&_nc_ht=scontent-iad3-1.xx&edm=AAwGEdEEAAAA&_nc_gid=nD3qjmbSsi05fgN5OeIyog&_nc_tpa=Q5bMBQEFLUJduOKmIhe4IC_sa6b2soFX93tbiKcvI47nO7qK6dCD3_MD--qSTVfFJ_Y3Bt0ssPZJQB9qjQ&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=52f3c4&_nc_sid=58080a&oh=00_Af-XWVYCGxglg4XfJqcFUvL7OeRxgTScH4SpRtOu-VXSfg&oe=6A348CA1"
+     "ctr": 4.07
     },
     {
      "name": "Нова реклама з ціллю «Продажі» – копія – копія",
@@ -2882,8 +2853,7 @@
      "spend": 7218.94,
      "purchases": 556,
      "roas": 33.35,
-     "ctr": 2.38,
-     "thumb": "https://scontent-iad3-2.xx.fbcdn.net/v/t45.1600-4/656952864_26840421502217187_5741231053291892886_n.png?_nc_cat=105&ccb=1-7&_nc_ohc=XbVkjGvzbUYQ7kNvwELSltJ&_nc_oc=AdpF00oqn2s6nW0QLosqy4TUV9lO68Z6FH2wm9aEXv-IL83vLCUtraHk7v6gSHH4ro8&_nc_zt=1&_nc_ht=scontent-iad3-2.xx&edm=AAwGEdEEAAAA&_nc_gid=aj_Z0mCLR9TV02q5IS1eTg&_nc_tpa=Q5bMBQFkkqVkW2f_imLAbYzhi_g-vN3e13cUXZPdmjpgDfS6TMn212_PzV7_1mfDgHqDHD1TkZAldBCWew&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=52f3c4&_nc_sid=58080a&oh=00_Af-7NoX0ItSA23APpC3UlkDURi-iIUm4YNEBiGh5wrK7rA&oe=6A349867"
+     "ctr": 2.38
     },
     {
      "name": "Нова реклама з ціллю «Продажі» – копія – копія",
@@ -2891,8 +2861,7 @@
      "spend": 3153.56,
      "purchases": 258,
      "roas": 33.09,
-     "ctr": 3.43,
-     "thumb": "https://scontent-iad3-2.xx.fbcdn.net/v/t45.1600-4/655905685_26840421165550554_5424263231060060101_n.png?_nc_cat=103&ccb=1-7&_nc_ohc=404TlQeC3F8Q7kNvwHY0y9A&_nc_oc=AdqNDG9Q5UHRdhWYc2aZYPXHnGkGa4fHr07LeSDz13qmSeSlbAP8APnaPEq4asSzgEo&_nc_zt=1&_nc_ht=scontent-iad3-2.xx&edm=AAwGEdEEAAAA&_nc_gid=2agiUL8W2lix0l2h9B23ug&_nc_tpa=Q5bMBQE1zD_oWQ353nRkG3iwbH1N2KwaKQOTrLhCEUbtp6g4_WmNYOWdp-w0KyYC_2hlWH-x5pEXSqA56Q&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=52f3c4&_nc_sid=58080a&oh=00_Af-Q9ocXTP7Wkz83-K_5HEN1LT9-_l3UgZLq6jpd-STTug&oe=6A34BF35"
+     "ctr": 3.43
     },
     {
      "name": "Нова реклама з ціллю «Продажі» – копія – копія",
@@ -2900,8 +2869,7 @@
      "spend": 2505.77,
      "purchases": 173,
      "roas": 29.61,
-     "ctr": 3.71,
-     "thumb": "https://scontent-iad3-2.xx.fbcdn.net/v/t45.1600-4/656339867_26840421328883871_8887501068377164960_n.png?_nc_cat=105&ccb=1-7&_nc_ohc=ZzWsCkVF9dEQ7kNvwE0qyQt&_nc_oc=AdqiPBm3-8QxqbU47fdKx76-e1iYN6SMBJTDylbytIBKpw-gRU7e57oka5KjbMgzZH0&_nc_zt=1&_nc_ht=scontent-iad3-2.xx&edm=AAwGEdEEAAAA&_nc_gid=cIpq7Gr1FU87Go3afr-lNg&_nc_tpa=Q5bMBQFe4Z3AK3Ye3C5tlOR3Wlhd6ApcTYKq-Da7RFIzlZOzvO_UFtxRjkVuKhsnptI0Afm0ok96k8Xg5g&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=52f3c4&_nc_sid=58080a&oh=00_Af-SEl5AAGKEmQv4urG97L0pM_SZw1_tmVMuqMRiZCgggg&oe=6A3497EB"
+     "ctr": 3.71
     },
     {
      "name": "Нова реклама з ціллю «Продажі» – копія – копія",
@@ -3398,8 +3366,7 @@
      "spend": 2667.83,
      "purchases": 30,
      "roas": 14.58,
-     "ctr": 1.47,
-     "thumb": "https://scontent-iad6-1.xx.fbcdn.net/v/t45.1600-4/700476184_27450078881251443_2393082477194567214_n.png?_nc_cat=107&ccb=1-7&_nc_ohc=qcEMeP0NAd4Q7kNvwEQ4kG3&_nc_oc=AdoefMfXAnjvzDJshMap5O5ziXWaYeLYtB3g8K-D0CtJFIR0I9W8G0_MRmX3yJXqSDQ&_nc_zt=1&_nc_ht=scontent-iad6-1.xx&edm=AAwGEdEEAAAA&_nc_gid=zF0dkPfJSyxTJn0g1uOIDg&_nc_tpa=Q5bMBQFnHCgaoO35DWnn3o6P82LCbnOFzK_5iGCxILwgNqZWBu62yq2lvVUjUUTco_FhTQRAgNYJb-zMCQ&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=52f3c4&_nc_sid=58080a&oh=00_Af-O0N9yWjrawGDXcAbEmxyzUAUJfBYOoeHtO7T3kI4-lg&oe=6A34BE62"
+     "ctr": 1.47
     },
     {
      "name": "x2_картинка – копія",
@@ -3407,8 +3374,7 @@
      "spend": 1609.56,
      "purchases": 29,
      "roas": 11.38,
-     "ctr": 1.38,
-     "thumb": "https://scontent-iad3-2.xx.fbcdn.net/v/t45.1600-4/710496800_27625233123736017_1403200186983671865_n.png?_nc_cat=111&ccb=1-7&_nc_ohc=2S2buaK9W4gQ7kNvwHt163t&_nc_oc=AdpVjCnxVUuZ2DAVh8jWk6lbvaSKrOEvgDSGrY9RNCR4JQjgy3xRipMJMVSIHIxnI8A&_nc_zt=1&_nc_ht=scontent-iad3-2.xx&edm=AAwGEdEEAAAA&_nc_gid=jbyr3C0-BgrccfG0RQfv3g&_nc_tpa=Q5bMBQHSgGddIRujRvpQv5IDjRvTMZvicBzqBWijThOLFQdkNV7OEJ6Z0Fvc1NUjCMfsXGHzO0dkWRTdPA&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=52f3c4&_nc_sid=58080a&oh=00_Af-Klg3_afB_OfYqTrr1zXK1KcNk664RFR3LDd5c72toSA&oe=6A34A2BE"
+     "ctr": 1.38
     },
     {
      "name": "x2",
@@ -3416,8 +3382,7 @@
      "spend": 18578.94,
      "purchases": 340,
      "roas": 10.71,
-     "ctr": 1.5,
-     "thumb": "https://scontent-iad6-1.xx.fbcdn.net/v/t51.82787-10/710474422_18426906055126101_8426044101924989260_n.jpg?_nc_cat=107&ccb=1-7&_nc_ohc=uvaOHtnBFrEQ7kNvwF4J-XM&_nc_oc=AdqoEpa1aKqOy9k1oksHA433ZyUXo07N7GmoVMu8G-QWcmaONaCZoYjj5Kbd-OB2E6Q&_nc_zt=23&_nc_ht=scontent-iad6-1.xx&edm=AAwGEdEEAAAA&_nc_gid=FxD0l4cHLLIPO9mvCeLSiw&_nc_tpa=Q5bMBQF7XNc5JjCOUwTOWGUefg5UauHYIzrOB-CmbP0QZ4w7WGbgFMOE_23BrGhLK8FG-5PRjhZIH1vGaQ&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=5fad0e&_nc_sid=58080a&oh=00_Af-M8SEyK5OlWAtVlud2iropjNbHt9khUJprePWgFgCjug&oe=6A34910A"
+     "ctr": 1.5
     },
     {
      "name": "x2_картинка – копія",
@@ -3425,8 +3390,7 @@
      "spend": 5630.78,
      "purchases": 88,
      "roas": 9.32,
-     "ctr": 1.71,
-     "thumb": "https://scontent-iad3-1.xx.fbcdn.net/v/t45.1600-4/709053789_27625233090402687_9065717387957351352_n.png?_nc_cat=101&ccb=1-7&_nc_ohc=3HRZDXfjU-0Q7kNvwEEgUzD&_nc_oc=AdrN6MyEwGfJyZkltEw7R2FK7tP-SpC7V50Z2crhcWODbMVBlwQMV0l-bCl4AcZ6Ahg&_nc_zt=1&_nc_ht=scontent-iad3-1.xx&edm=AAwGEdEEAAAA&_nc_gid=kkioI_EyPrxMZf1RBHK93g&_nc_tpa=Q5bMBQEvvjhEma9zIQwvbUFSPwQFmwSt87ANBytNkBxODHaaM-7I-EVt1MO77w6ejQZm7Qd9sf3gs1kRzQ&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=52f3c4&_nc_sid=58080a&oh=00_Af-yA9rY4b-MwgVNPkIxmV1MEV43XTAdmutZ_3Rz8Ol6Lg&oe=6A3487D8"
+     "ctr": 1.71
     },
     {
      "name": "x2_картинка – копія",
@@ -3434,8 +3398,7 @@
      "spend": 447.39,
      "purchases": 8,
      "roas": 8.5,
-     "ctr": 1.79,
-     "thumb": "https://scontent-iad3-1.xx.fbcdn.net/v/t45.1600-4/709053789_27625233090402687_9065717387957351352_n.png?_nc_cat=101&ccb=1-7&_nc_ohc=3HRZDXfjU-0Q7kNvwEEgUzD&_nc_oc=AdrN6MyEwGfJyZkltEw7R2FK7tP-SpC7V50Z2crhcWODbMVBlwQMV0l-bCl4AcZ6Ahg&_nc_zt=1&_nc_ht=scontent-iad3-1.xx&edm=AAwGEdEEAAAA&_nc_gid=w6GGloSuVLiNuOAJMio64Q&_nc_tpa=Q5bMBQHUpO8s8fY1Bx01ERK1BMvGoOm_YRw-iPO0Gj7scYqfyccy2jNd7epiExGUrUXIl3Sb6sGXB-tkGw&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=52f3c4&_nc_sid=58080a&oh=00_Af8LvEGYF9kPPIHaqLzftsTinnsSqoHsAMCaIMMc71T8wg&oe=6A3487D8"
+     "ctr": 1.79
     },
     {
      "name": "x2",
@@ -3443,8 +3406,7 @@
      "spend": 12246.17,
      "purchases": 224,
      "roas": 8.01,
-     "ctr": 1.74,
-     "thumb": "https://scontent-iad6-1.xx.fbcdn.net/v/t51.82787-10/710474422_18426906055126101_8426044101924989260_n.jpg?_nc_cat=107&ccb=1-7&_nc_ohc=uvaOHtnBFrEQ7kNvwF4J-XM&_nc_oc=AdqoEpa1aKqOy9k1oksHA433ZyUXo07N7GmoVMu8G-QWcmaONaCZoYjj5Kbd-OB2E6Q&_nc_zt=23&_nc_ht=scontent-iad6-1.xx&edm=AAwGEdEEAAAA&_nc_gid=-IUmVmWSFehXEBP8o2AcQg&_nc_tpa=Q5bMBQGKZx2rZRI2QefmAll2zfSL-7v0HikKjAgmh-rjEY8KgS4858WLIjoVno4coS--VCn_rSKznjH6fg&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=5fad0e&_nc_sid=58080a&oh=00_Af94mrxXfRYsGhJA8BwPOjhQEKMQubyUJdTDPcwnzfgGXw&oe=6A34910A"
+     "ctr": 1.74
     },
     {
      "name": "x2_картинка – копія",
@@ -3921,8 +3883,7 @@
      "spend": 666.58,
      "purchases": 43,
      "roas": 19.03,
-     "ctr": 4.23,
-     "thumb": "https://scontent-iad6-1.xx.fbcdn.net/v/t15.5256-10/717637476_1036294422436524_4234274891689600039_n.jpg?_nc_cat=109&ccb=1-7&_nc_ohc=c6ASEyMhDQ0Q7kNvwEUvIyE&_nc_oc=Adpejv8z9bTwdM8aoCgPhpbQvqZf_SX_opgrpn_nXIecWfuEmViEGouxSxB3Udwd658&_nc_zt=23&_nc_ht=scontent-iad6-1.xx&edm=AAwGEdEEAAAA&_nc_gid=3OSd9u2lf6JKPyigzBLxxQ&_nc_tpa=Q5bMBQHrzvMOiroqd06uYG0SXx1EwKHJwmRIMJoGiTSpY-DFLH2F5HaJB7uXoVIx0_kQ8xclx1sl9PNw2Q&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=a7ce7f&_nc_sid=58080a&oh=00_Af9uL8ywieTlw_bCYHi2nxOisGXbiT8GizRe4exvC2AWHA&oe=6A34992A"
+     "ctr": 4.23
     },
     {
      "name": "iphone 1 день перший пост",
@@ -3930,8 +3891,7 @@
      "spend": 3852.25,
      "purchases": 233,
      "roas": 11.12,
-     "ctr": 3.17,
-     "thumb": "https://scontent-iad3-2.xx.fbcdn.net/v/t15.5256-10/719109452_852359004592297_5654701065493568725_n.jpg?_nc_cat=111&ccb=1-7&_nc_ohc=R27ptZVOfokQ7kNvwGmYk6v&_nc_oc=AdrrxFeOzb0T8MHpS8IDSwohVS5vhbDsFpS3620KBETWsDslnJRPsxZo3zXkZYtb96A&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&edm=AAwGEdEEAAAA&_nc_gid=IXBE26K1-h_Dc-5kNECZfg&_nc_tpa=Q5bMBQEDFUcDBD65jSIwY0kA-ZGKz3R0moOnHVdpDdzF9gvbaW77VEHZ5rHbh_vFGDVzGyiqDhiUKRMMvA&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=a7ce7f&_nc_sid=58080a&oh=00_Af_0euRaW5r6oJD2xGkFUJLhoPctILoozJyhenLsvZ8Umg&oe=6A348B89"
+     "ctr": 3.17
     },
     {
      "name": "iphone_картинка_з_кавою",
@@ -3939,8 +3899,7 @@
      "spend": 3209.31,
      "purchases": 118,
      "roas": 6.42,
-     "ctr": 2.1,
-     "thumb": "https://scontent-iad3-2.xx.fbcdn.net/v/t45.1600-4/716090045_27722622267330435_8861638355099039084_n.png?_nc_cat=103&ccb=1-7&_nc_ohc=Lexc6Y3Yi_gQ7kNvwGvzqwn&_nc_oc=AdpQtmCRTSnYhayHKTGdfV7MxOa2WGsF7nYyliVRuyzjuZM4sD_jx_kYN1CQ4JXKEWs&_nc_zt=1&_nc_ht=scontent-iad3-2.xx&edm=AAwGEdEEAAAA&_nc_gid=nGhoeh6erbpEChgJ5iwLjg&_nc_tpa=Q5bMBQHp2SJXGoRGpZehAWVp8rg097GxHibi8wT0w8D6lYC9TesVP0akNYCsHjIL7WESVMn1xSV781faEQ&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=52f3c4&_nc_sid=58080a&oh=00_Af9vwpoRqTzURyiN0MCcAmXS_YtOI3vCTeLq4e4A9UqgYw&oe=6A34A082"
+     "ctr": 2.1
     },
     {
      "name": "iphone 1 день другий пост прокидайся",
@@ -3948,8 +3907,7 @@
      "spend": 2088.6,
      "purchases": 71,
      "roas": 5.97,
-     "ctr": 2.03,
-     "thumb": "https://scontent-iad6-1.xx.fbcdn.net/v/t15.5256-10/717257182_1000012173004022_4346249121074724943_n.jpg?_nc_cat=106&ccb=1-7&_nc_ohc=Ov9cYci5bi0Q7kNvwHwugLS&_nc_oc=AdoexL32EXU726BbhB8kEK43W2lPHMER6W4P9bSWYV3QHbVZhEZlkoh_DP0pSPWPls0&_nc_zt=23&_nc_ht=scontent-iad6-1.xx&edm=AAwGEdEEAAAA&_nc_gid=XTbHCI2cfsrinmGysXJvoA&_nc_tpa=Q5bMBQHcumtdsQzKO-bzV2yuxnctdkCulQl8bMJfy2wARqOAW2lKbAXjE_H5GdZ7tjA9mdtMz76eY0ax4w&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=a7ce7f&_nc_sid=58080a&oh=00_Af81cw4Il-UUM2PUVlZ088pvY_xMUru5Jp90uOpF9Kd_Rw&oe=6A34AEA5"
+     "ctr": 2.03
     },
     {
      "name": "iphone_картинка_з_кавою2",
@@ -3957,8 +3915,7 @@
      "spend": 2156.12,
      "purchases": 71,
      "roas": 5.78,
-     "ctr": 2.78,
-     "thumb": "https://scontent-iad3-1.xx.fbcdn.net/v/t45.1600-4/715969908_27722622303997098_3759478271792985987_n.png?_nc_cat=101&ccb=1-7&_nc_ohc=rur1vzSSHzAQ7kNvwGNRRze&_nc_oc=AdoSNocSsbHqFI1AUBbdDW3lNTJDpA0UyFt5XUXrlidCOUfOldERmkk6d6iFIR6dtSs&_nc_zt=1&_nc_ht=scontent-iad3-1.xx&edm=AAwGEdEEAAAA&_nc_gid=LFUJlib5SnONwqcw5g5TMA&_nc_tpa=Q5bMBQGkjZCQlalTEMkbDpmh5aeLeLu6LmXklUpq_SmqRIdWz0CVj1gVQOCnPJf7va6nH03NorpNRIXXxQ&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=52f3c4&_nc_sid=58080a&oh=00_Af9mbWZOgt2Xu12LJphxJXYQ4GypvXg0MFq3MZmMn9RRnw&oe=6A34AD98"
+     "ctr": 2.78
     },
     {
      "name": "iphone_картинка_в_машині",
@@ -3966,8 +3923,7 @@
      "spend": 11161.88,
      "purchases": 312,
      "roas": 4.85,
-     "ctr": 1.8,
-     "thumb": "https://scontent-iad6-1.xx.fbcdn.net/v/t45.1600-4/716841553_27722622330663762_4840609806207117258_n.png?_nc_cat=107&ccb=1-7&_nc_ohc=yZ8fmMh46O8Q7kNvwEyHUTI&_nc_oc=Adoy9fm8FDaOfAMKIAIPsdx19cD3I40O2VXeAKncWCAiXA4ICgN11MDM6QHYExpvCJ4&_nc_zt=1&_nc_ht=scontent-iad6-1.xx&edm=AAwGEdEEAAAA&_nc_gid=PP3hZfa8R0WYYgBCTEQHGA&_nc_tpa=Q5bMBQGABQBLKV5V57sJ3NA_ez1ND6_vocZapEN1yLA9lBVxhf-PG6SZ24rJt9f6btKSio3j4BO_aPTqZg&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=52f3c4&_nc_sid=58080a&oh=00_Af8a8cqjPSxeK8-yYPvi33AXK-IIMfOybv-I_12vmY67sA&oe=6A3493D2"
+     "ctr": 1.8
     },
     {
      "name": "iphone 1 день другий пост прокидайся – копія",
@@ -4048,42 +4004,42 @@
    "car_model": null,
    "date_from": "2026-06-06",
    "date_to": "2026-06-14",
-   "spend": 180444.38,
-   "impressions": 1442357,
-   "clicks": 29596,
+   "spend": 180642.85,
+   "impressions": 1443741,
+   "clicks": 29622,
    "ctr": 2.05,
    "reach": 258029,
-   "frequency": 5.59,
-   "purchases": 4235,
+   "frequency": 5.6,
+   "purchases": 4238,
    "pixel_roas": 5.82,
-   "cpa": 42.61,
-   "pixel_revenue": 1051061,
+   "cpa": 42.62,
+   "pixel_revenue": 1051505,
    "real_ad_revenue": 968684,
-   "real_ad_roas": 5.37,
-   "gap_pct": -7.8,
+   "real_ad_roas": 5.36,
+   "gap_pct": -7.9,
    "segments": {
     "platform": [
      [
       "instagram",
-      148702.55,
-      3546,
-      5.92
+      148873.64,
+      3549,
+      5.91
      ],
      [
       "facebook",
-      30171.03,
+      30215.16,
       648,
       5.45
      ],
      [
       "threads",
-      1115.87,
+      1117.09,
       27,
-      4.36
+      4.35
      ],
      [
       "audience_network",
-      454.94,
+      455.17,
       9,
       3.76
      ],
@@ -4097,37 +4053,37 @@
     "age": [
      [
       "25-34",
-      95248.88,
-      2265,
+      95354.22,
+      2268,
       6.03
      ],
      [
       "35-44",
-      54154.17,
+      54213.34,
       1259,
-      5.5
+      5.49
      ],
      [
       "18-24",
-      18911.14,
+      18929.95,
       459,
-      6.32
+      6.31
      ],
      [
       "45-54",
-      9081.71,
+      9094.35,
       181,
       4.77
      ],
      [
       "65+",
-      1815.29,
+      1817.42,
       38,
       5.64
      ],
      [
       "55-64",
-      1231.08,
+      1231.46,
       29,
       4.72
      ],
@@ -4141,19 +4097,19 @@
     "gender": [
      [
       "male",
-      165545.52,
-      3887,
-      5.98
+      165727.49,
+      3889,
+      5.97
      ],
      [
       "female",
-      14507.33,
-      339,
+      14523.78,
+      340,
       4.15
      ],
      [
       "unknown",
-      391.53,
+      391.58,
       9,
       4.37
      ]
@@ -4161,25 +4117,25 @@
     "device": [
      [
       "iphone",
-      99067.59,
-      2390,
+      99174.63,
+      2391,
       5.81
      ],
      [
       "android_smartphone",
-      80916.7,
-      1829,
+      81026.21,
+      1831,
       5.84
      ],
      [
       "desktop",
-      231.81,
+      231.94,
       8,
-      6.96
+      6.95
      ],
      [
       "android_tablet",
-      153.21,
+      153.22,
       2,
       1.48
      ],
@@ -4199,40 +4155,12 @@
    },
    "creatives": [
     {
-     "name": "iphone 1 день перший пост – копія",
-     "ad_id": "120248926759330624",
-     "spend": 666.58,
-     "purchases": 44,
-     "roas": 19.05,
-     "ctr": 4.23,
-     "thumb": "https://scontent-iad6-1.xx.fbcdn.net/v/t15.5256-10/717637476_1036294422436524_4234274891689600039_n.jpg?_nc_cat=109&ccb=1-7&_nc_ohc=c6ASEyMhDQ0Q7kNvwEUvIyE&_nc_oc=Adpejv8z9bTwdM8aoCgPhpbQvqZf_SX_opgrpn_nXIecWfuEmViEGouxSxB3Udwd658&_nc_zt=23&_nc_ht=scontent-iad6-1.xx&edm=AAwGEdEEAAAA&_nc_gid=-CHPeisHY1VK6LIhMJCJzw&_nc_tpa=Q5bMBQFszX7vrX0HueN7sQHNl6FosGLBEUQK_7GMmoC_GVbgbGFqTDRSxwsPst9hz4dh6Y3TOWvLiT6uFQ&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=a7ce7f&_nc_sid=58080a&oh=00_Af9aZxALXk4Ndb6K8D6s5kR4iGX7Twho5lu01uCwJ2Dl9g&oe=6A34992A"
-    },
-    {
-     "name": "iphone 1 день другий пост прокидайся – копія",
-     "ad_id": "120248964968580624",
-     "spend": 39.89,
-     "purchases": 1,
-     "roas": 12.81,
-     "ctr": 4.03,
-     "thumb": "https://scontent-iad6-1.xx.fbcdn.net/v/t15.5256-10/719027165_1662686078358043_1591142585089407472_n.jpg?_nc_cat=102&ccb=1-7&_nc_ohc=MsX8Nc6F5XcQ7kNvwFgjvAb&_nc_oc=Adr6-wzllbTMz50OxgEcN5srxXJ6tTTa1rMzPB8nALZHf2wnXnfVIunb3Uqu5PN3t40&_nc_zt=23&_nc_ht=scontent-iad6-1.xx&edm=AAwGEdEEAAAA&_nc_gid=ktKgVQb-IgQ2Gh913GoXGQ&_nc_tpa=Q5bMBQGhR09j6y4R7TZxOHXnQWYo1gkjIbfpTV3lGxm-EUuGIk9-bpmyHIm-sMZtZrPBoBxlBS6IfrWvhA&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=a7ce7f&_nc_sid=58080a&oh=00_Af-SWOVattS3-QEFro-XiyhGESeEc2XJoyo5sjZYPkd4Eg&oe=6A349A49"
-    },
-    {
      "name": "KTM пост про х2 на тариф",
      "ad_id": "120249208734640624",
      "spend": 4032.75,
      "purchases": 116,
      "roas": 11.47,
-     "ctr": 2.52,
-     "thumb": "https://scontent-iad3-1.xx.fbcdn.net/v/t15.5256-10/720611467_2895383130795968_2856932816335976693_n.jpg?_nc_cat=110&ccb=1-7&_nc_ohc=QvxTtUn97MYQ7kNvwHLxAs3&_nc_oc=AdogkLzZ9FvRsMuc-MI6CmHLMrinDHL7PvCko3QHli7DMPX6vIX2WtQwEpRJccoeY1w&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&edm=AAwGEdEEAAAA&_nc_gid=4x_esrq8WX_Q56GjaBv9jA&_nc_tpa=Q5bMBQGWebE9Qfd5-lKEEPjd1C8yokyOFCXubMiW3Ot7l3q-2-hERw62VvXimoN68RBj4NY_xeW0UkrVmQ&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=a7ce7f&_nc_sid=58080a&oh=00_Af-4KjIR-96QfetP_Wm13ICoZ_r9o9Mdg-kwmLuPeY83IQ&oe=6A34B1E4"
-    },
-    {
-     "name": "iphone 1 день перший пост",
-     "ad_id": "120248896736950624",
-     "spend": 3852.25,
-     "purchases": 234,
-     "roas": 11.14,
-     "ctr": 3.17,
-     "thumb": "https://scontent-iad3-2.xx.fbcdn.net/v/t15.5256-10/719109452_852359004592297_5654701065493568725_n.jpg?_nc_cat=111&ccb=1-7&_nc_ohc=R27ptZVOfokQ7kNvwGmYk6v&_nc_oc=AdrrxFeOzb0T8MHpS8IDSwohVS5vhbDsFpS3620KBETWsDslnJRPsxZo3zXkZYtb96A&_nc_zt=23&_nc_ht=scontent-iad3-2.xx&edm=AAwGEdEEAAAA&_nc_gid=sWgxNrKaNDGcsok9254YSQ&_nc_tpa=Q5bMBQGQKvx_gbQVKTXnq4jlnAXUK0YMhltN7I4mDnjJu_2RfDs9VmyYDrikssacWyOJgNx3Urq_Fa89oA&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=a7ce7f&_nc_sid=58080a&oh=00_Af8bLxyiqfe5q9vOkjEKSfQmiDhLDoa5miAMLRPQdSxJFg&oe=6A348B89"
+     "ctr": 2.52
     },
     {
      "name": "KTM х2 на пакет",
@@ -4240,46 +4168,28 @@
      "spend": 10583.3,
      "purchases": 243,
      "roas": 9.58,
-     "ctr": 2.15,
-     "thumb": "https://scontent-iad3-1.xx.fbcdn.net/v/t15.5256-10/720039520_1737204837460484_6111784384978598418_n.jpg?_nc_cat=104&ccb=1-7&_nc_ohc=lrJitvqe5wkQ7kNvwGFvBHu&_nc_oc=AdpOpLw_fTvee3mGfvStSa13us2FqvUHbazPi2v97Yq3xbIXbzsA1icCGErPJa1jvKg&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&edm=AAwGEdEEAAAA&_nc_gid=65mpZSCGTbuEhDsTy53Dpw&_nc_tpa=Q5bMBQEnIlocrvFjxj7IFoOp1L2RQtXABhGEPN4_K9hh87UbZrwPMaalGm2hmCZbU3XXGbULM7ogAR9p-w&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=a7ce7f&_nc_sid=58080a&oh=00_Af8ReZmeEgvfmAwurq3BTusj70IE_8rZQE722F___-H8iA&oe=6A34AB2E"
+     "ctr": 2.15
     },
     {
      "name": "KTM перший пост",
      "ad_id": "120249028734040624",
-     "spend": 10339.36,
+     "spend": 10360.86,
      "purchases": 355,
-     "roas": 9.05,
-     "ctr": 2.08,
-     "thumb": "https://scontent-iad3-1.xx.fbcdn.net/v/t15.5256-10/717496088_1675180927138888_2705592605529881379_n.jpg?_nc_cat=101&ccb=1-7&_nc_ohc=_iYklVEM5ZAQ7kNvwH4Xi0j&_nc_oc=AdqGWRqyw1j_Fr-ORAO_idrHH4SbM53mUT818SPz83TcLtyyDit0NYuKfiO8qsEJ-RY&_nc_zt=23&_nc_ht=scontent-iad3-1.xx&edm=AAwGEdEEAAAA&_nc_gid=UnRTKCsvVLD0idVmEcWfyg&_nc_tpa=Q5bMBQFhbxKUl4_jHQeywB2zHgExgW6evPAsN8jeC5HtDSLXUEuBYCVpiILaNYc0LZRil--VE0uSCnRg6A&stp=c0.5000x0.5000f_dst-emg0_p200x200_q75_tt6&ur=a7ce7f&_nc_sid=58080a&oh=00_Af8hHS0rKpUMw9WLIWrt3AwjL1NLcEiMCbU7UKwoyit2Tg&oe=6A349A23"
+     "roas": 9.03,
+     "ctr": 2.08
     },
     {
      "name": "KTM_картинка – копія",
      "ad_id": "120249030813310624",
-     "spend": 5358.57,
+     "spend": 5360.9,
      "purchases": 132,
      "roas": 7.18,
      "ctr": 2.18
     },
     {
-     "name": "iphone 1 день перший пост – копія – копія",
-     "ad_id": "120248964968600624",
-     "spend": 80.02,
-     "purchases": 2,
-     "roas": 6.86,
-     "ctr": 0.94
-    },
-    {
-     "name": "iphone_картинка_з_кавою",
-     "ad_id": "120248897652380624",
-     "spend": 3209.31,
-     "purchases": 118,
-     "roas": 6.43,
-     "ctr": 2.1
-    },
-    {
      "name": "KTM_картинка – копія",
      "ad_id": "120249030813320624",
-     "spend": 6159.05,
+     "spend": 6161.07,
      "purchases": 179,
      "roas": 6.34,
      "ctr": 2.56
@@ -4299,6 +4209,46 @@
      "purchases": 65,
      "roas": 6.13,
      "ctr": 2.21
+    },
+    {
+     "name": "KTM перший пост",
+     "ad_id": "120249041160450624",
+     "spend": 7713.59,
+     "purchases": 197,
+     "roas": 6.09,
+     "ctr": 1.63
+    },
+    {
+     "name": "KTM_картинка",
+     "ad_id": "120249028734060624",
+     "spend": 5393.74,
+     "purchases": 134,
+     "roas": 6.04,
+     "ctr": 2.54
+    },
+    {
+     "name": "KTM_картинка – копія",
+     "ad_id": "120249041160490624",
+     "spend": 4192.17,
+     "purchases": 99,
+     "roas": 6.02,
+     "ctr": 1.92
+    },
+    {
+     "name": "KTM пост про тариф",
+     "ad_id": "120249184349970624",
+     "spend": 534.38,
+     "purchases": 7,
+     "roas": 6.0,
+     "ctr": 1.01
+    },
+    {
+     "name": "KTM х2",
+     "ad_id": "120249471767080624",
+     "spend": 3720.67,
+     "purchases": 72,
+     "roas": 5.81,
+     "ctr": 1.67
     }
    ],
    "series": [
@@ -4360,36 +4310,36 @@
     },
     {
      "date": "2026-06-14",
-     "spend": 26870.23,
-     "purchases": 394,
+     "spend": 27068.7,
+     "purchases": 397,
      "roas": 3.31,
-     "cpa": 68.2
+     "cpa": 68.18
     }
    ],
    "adsets": [
     {
      "name": "KTM moto",
-     "spend": 72084.49,
-     "purchases": 1678,
+     "spend": 72180.4,
+     "purchases": 1680,
      "roas": 6.26,
      "ctr": 2.13,
      "cpa": 42.96
     },
     {
      "name": "KTM moto на мото аудиторію",
-     "spend": 62277.63,
-     "purchases": 1276,
+     "spend": 62378.84,
+     "purchases": 1277,
      "roas": 5.69,
      "ctr": 1.96,
-     "cpa": 48.81
+     "cpa": 48.85
     },
     {
      "name": "мем на широку",
-     "spend": 3773.87,
+     "spend": 3775.22,
      "purchases": 67,
      "roas": 4.66,
      "ctr": 2.58,
-     "cpa": 56.33
+     "cpa": 56.35
     },
     {
      "name": "мем на мото – копія",
@@ -4420,15 +4370,15 @@
    "recommendations": [
     {
      "sev": "mod",
-     "text": "Сумарна частота 5.59 за цикл близько до порогу вигорання — ротувати креатив кожні 4-5 днів або розширити аудиторію."
+     "text": "Сумарна частота 5.6 за цикл близько до порогу вигорання — ротувати креатив кожні 4-5 днів або розширити аудиторію."
     },
     {
      "sev": "inf",
-     "text": "Лідер: «iphone 1 день перший пост – копія» ROAS 19.05, CTR 4.23% — масштабувати й дублювати в інші adset."
+     "text": "Лідер: «KTM пост про х2 на тариф» ROAS 11.47, CTR 2.52% — масштабувати й дублювати в інші adset."
     },
     {
      "sev": "inf",
-     "text": "Найефективніший вік: 18-24 (ROAS 6.32) — пріоритет у таргетингу."
+     "text": "Найефективніший вік: 18-24 (ROAS 6.31) — пріоритет у таргетингу."
     }
    ],
    "is_current": true
