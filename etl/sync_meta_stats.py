@@ -18,7 +18,7 @@ ENV:
   META_ANALYTICS_ACCOUNT (опц., дефолт 4136058269783354)
 """
 import os, sys, json, time
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import requests
 
 FB_API_VERSION = 'v21.0'
@@ -166,10 +166,12 @@ def _roas(purchase_roas):
     try: return _num(purchase_roas[0].get('value'))
     except Exception: return 0.0
 
-def insights(level, since, until, breakdown=None, limit=None):
+def insights(level, since, until, breakdown=None, limit=None, time_increment=None):
     base = 'spend,impressions,clicks,ctr,cpc,reach,frequency'
     if level == 'ad':
         base += ',ad_name,ad_id'
+    elif level == 'adset':
+        base += ',adset_name,adset_id'
     # Meta: platform_position не комбінується з action_type-полями (actions).
     # Лишаємо purchase_roas (працює), але прибираємо actions для цього breakdown.
     if breakdown == 'platform_position':
@@ -184,6 +186,8 @@ def insights(level, since, until, breakdown=None, limit=None):
     }
     if breakdown:
         params['breakdowns'] = breakdown
+    if time_increment:
+        params['time_increment'] = time_increment
     rows, data = [], fb_get(f'act_{ACCOUNT}/insights', params)
     while data and 'data' in data:
         rows.extend(data['data'])
@@ -227,11 +231,65 @@ def creatives(since, until, top=12):
         spend = _num(r.get('spend'))
         if spend < 1: continue
         out.append({
-            'name': r.get('ad_name') or r.get('ad_id') or '—',
+            'name': r.get('ad_name') or r.get('ad_id') or '—', 'ad_id': r.get('ad_id'),
             'spend': round(spend, 2), 'purchases': _actions_purchases(r.get('actions')),
             'roas': round(_roas(r.get('purchase_roas')), 2), 'ctr': round(_num(r.get('ctr')), 2),
         })
     out.sort(key=lambda x: -x['roas'])
+    return out[:top]
+
+def creative_thumbs(crv, n=6):
+    """Підтягнути thumbnail_url для топ-N оголошень (для прев'ю на сторінці)."""
+    for c in crv[:n]:
+        aid = c.get('ad_id')
+        if not aid:
+            continue
+        d = fb_get(aid, {'fields': 'creative{thumbnail_url}'})
+        try:
+            t = (d or {}).get('creative', {}).get('thumbnail_url')
+            if t:
+                c['thumb'] = t.replace('p64x64', 'p200x200')
+        except Exception:
+            pass
+        time.sleep(0.2)
+    return crv
+
+def daily_series(since, until):
+    """Денні криві (account-level) у межах циклу — для трендів spend/ROAS/CPA."""
+    rows = insights('account', since, until, time_increment=1)
+    out = []
+    for r in rows:
+        sp = _num(r.get('spend')); pur = _actions_purchases(r.get('actions')); roas = _roas(r.get('purchase_roas'))
+        out.append({'date': r.get('date_start'), 'spend': round(sp, 2), 'purchases': pur,
+                    'roas': round(roas, 2), 'cpa': round(sp / pur, 2) if pur else None})
+    out.sort(key=lambda x: x['date'])
+    return out[-30:]  # не більше 30 точок
+
+def adsets(since, until, top=8):
+    """Розбивка по adset (аудиторіях) — куди перекидати бюджет."""
+    rows = insights('adset', since, until)
+    out = []
+    for r in rows:
+        sp = _num(r.get('spend'))
+        if sp < 1:
+            continue
+        pur = _actions_purchases(r.get('actions')); roas = _roas(r.get('purchase_roas'))
+        out.append({'name': r.get('adset_name') or r.get('adset_id') or '—',
+                    'spend': round(sp, 2), 'purchases': pur, 'roas': round(roas, 2),
+                    'ctr': round(_num(r.get('ctr')), 2), 'cpa': round(sp / pur, 2) if pur else None})
+    out.sort(key=lambda x: -x['spend'])
+    return out[:top]
+
+def real_by_campaign(since, until, top=8):
+    """Реальна виручка по utm_campaign (за період) — звідки реальні оплати."""
+    body = {'p_field': 'utm_campaign', 'p_from': f'{since}T00:00:00+03:00', 'p_to': f'{until}T23:59:59+03:00',
+            'p_project_values': None, 'p_customer_type': None, 'p_tariff': None,
+            'p_pay_provider': None, 'p_traffic_type': None}
+    data = sb_rpc('dashboard_agg_deals_with_traffic', body) or []
+    out = [{'campaign': str(r.get('key') or '—'), 'revenue': round(_num(r.get('sum_amount'))),
+            'paid': int(_num(r.get('paid')))} for r in data]
+    out = [o for o in out if o['revenue'] > 0]
+    out.sort(key=lambda x: -x['revenue'])
     return out[:top]
 
 # ---------------- Supabase RPC ----------------
@@ -276,9 +334,22 @@ def daily_snapshot(active_names):
     старі оголошення з перекритих за датами кампаній)."""
     y = (_kyiv_now().date().toordinal() - 1)
     yd = datetime.fromordinal(y).strftime('%Y-%m-%d')
+    yd2 = datetime.fromordinal(y - 1).strftime('%Y-%m-%d')   # позавчора (для дельт)
     px = account_pixel(yd, yd) or {}
+    px2 = account_pixel(yd2, yd2) or {}
     spend = px.get('spend') or 0
     real = real_ad_revenue(yd, yd)
+
+    def _delta(a, b):
+        if a is None or not b:
+            return None
+        return round((a - b) / b * 100, 1)
+    deltas = {
+        'spend': _delta(spend, px2.get('spend')),
+        'pixel_roas': _delta(px.get('pixel_roas'), px2.get('pixel_roas')),
+        'purchases': _delta(px.get('purchases'), px2.get('purchases')),
+        'cpa': _delta(px.get('cpa'), px2.get('cpa')),
+    }
     # оголошення, що РЕАЛЬНО крутилися вчора
     crv = creatives(yd, yd, top=200)
     top = [c for c in crv if c['spend'] >= 300 and c['purchases'] >= 1]
@@ -286,6 +357,7 @@ def daily_snapshot(active_names):
     weak = sorted([c for c in crv if c['roas'] < BREAKEVEN and c['spend'] >= 500], key=lambda c: -c['spend'])
     return {
         'date': yd,
+        'prev_date': yd2,
         'spend': spend,
         'impressions': px.get('impressions'),
         'clicks': px.get('clicks'),
@@ -295,6 +367,8 @@ def daily_snapshot(active_names):
         'frequency': px.get('frequency'),
         'real_ad_revenue': real,
         'real_ad_roas': round(real / spend, 2) if spend else None,
+        'deltas': deltas,
+        'real_by_campaign': real_by_campaign(yd, yd),
         'active_cycles': active_names,
         'top_creatives': top[:3],
         'weak_creatives': weak[:3],
@@ -405,17 +479,27 @@ def build_project(proj):
         segs[name] = segment(bd, since, until)
         time.sleep(0.4)
     crv = creatives(since, until)
+    crv = creative_thumbs(crv)
     real = real_ad_revenue(since, until)
     spend = px.get('spend') or 0
     real_roas = round(real / spend, 2) if spend else None
     pix_rev = px.get('pixel_revenue') or 0
     gap = round((real / pix_rev - 1) * 100, 1) if pix_rev else None
+    # денні криві
+    series = daily_series(since, until)
+    # adset-розбивка: для поточного циклу — останні 7 днів (тільки активні аудиторії, без протікання)
+    as_since = since
+    if until >= today:
+        d7 = (datetime.strptime(today, '%Y-%m-%d') - timedelta(days=7)).strftime('%Y-%m-%d')
+        as_since = max(since, d7)
+    adset_rows = adsets(as_since, until)
     out = {
         'code': proj['code'], 'name': proj['name'], 'car_model': proj.get('car_model'),
         'date_from': since, 'date_to': until,
         **px,
         'real_ad_revenue': real, 'real_ad_roas': real_roas, 'gap_pct': gap,
         'segments': segs, 'creatives': crv,
+        'series': series, 'adsets': adset_rows, 'adsets_window': as_since,
     }
     out['recommendations'] = recommend(out)
     return out
