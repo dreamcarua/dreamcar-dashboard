@@ -123,7 +123,7 @@
       <tbody id="projRows"></tbody>
     </table>
   </div>
-  <p style="font-size:12.5px;margin-top:8px;color:var(--mut)">Стовпець «ROAS реал» підвантажується з <code>crm_deals</code> (реальні оплати по UTM) через endpoint <code>api/meta_analytics.php</code>. Доки не задеплоєно — показано «—».</p>
+  <p style="font-size:12.5px;margin-top:8px;color:var(--mut)">Стовпець «ROAS реал» підвантажується з <code>crm_deals</code> (реальні оплати по UTM) через endpoint <code>/api/meta_analytics.php</code>. Доки не задеплоєно — показано «—».</p>
 </div>
 
 <div class="tabc" id="tab-cycle">
@@ -236,7 +236,7 @@
   </div>
 </div>
 
-<div class="foot" id="footNote">Джерело: Meta Marketing API (Ads MCP) · акаунт 4136058269783354 · поділ по проєктах за датами (логіка CrmDeal). Pixel-дані вбудовано станом на 14.06.2026; реальна виручка — з crm_deals через api/meta_analytics.php. ROAS pixel = вартість покупок Meta / витрати.</div>
+<div class="foot" id="footNote">Джерело: Meta Marketing API (Ads MCP) · акаунт 4136058269783354 · поділ по проєктах за датами (логіка CrmDeal). Pixel-дані вбудовано станом на 14.06.2026; реальна виручка — з crm_deals через /api/meta_analytics.php. ROAS pixel = вартість покупок Meta / витрати.</div>
 </div>
 
 <script>
@@ -314,9 +314,11 @@ document.querySelectorAll('.tabbtn').forEach(b=>b.addEventListener('click',()=>{
 }));
 
 async function loadReal(){
+ const _q=new URLSearchParams(location.search);const _ut=_q.get('utm_term');
+ const _utq=_ut?('&utm_term='+encodeURIComponent(_ut)):'';
  try{
   const res=await Promise.all(DATA.projects.map(p=>
-    fetch(`api/meta_analytics.php?action=real_revenue&date_from=${p.df}&date_to=${p.dt}`)
+    fetch(`/api/meta_analytics.php?action=real_revenue&date_from=${p.df}&date_to=${p.dt}${_utq}`)
       .then(r=>r.ok?r.json():null).catch(()=>null)));
   let ok=false;
   res.forEach((r,i)=>{
