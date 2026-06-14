@@ -224,12 +224,13 @@
     if (!window.supabase || !window.supabase.from) return [];
     try {
       var sb = window.supabase;
+      // 14.06.2026 Vadym: показуємо ВСІ активні (крім архіву) щоб CEO бачив pipeline
       var r = await sb.from('launches')
         .select('id,name,code,status,starts_on,ends_on,is_active,budget_plan,budget_actual,deal_aliases')
         .eq('is_active', true)
-        .in('status', ['active', 'measure'])
+        .in('status', ['idea', 'planning', 'active', 'measure', 'completed'])
         .order('starts_on', { ascending: false })
-        .limit(6);
+        .limit(10);
       if (r.error) { console.warn('[dc-pulse] launches fetch error:', r.error.message); return []; }
       return r.data || [];
     } catch (e) { console.warn('[dc-pulse]', e); return []; }

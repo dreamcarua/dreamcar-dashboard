@@ -2271,8 +2271,10 @@ function kyivOffset(yyyymmdd) {
   if (m === 10) return (d <  lastSunday) ? '+03:00' : '+02:00';
   return '+02:00'; // 08.06.2026 safety fallback - захист від implicit undefined у edge cases
 }
-function kyivIsoStart(yyyymmdd) { return yyyymmdd + 'T00:00:00' + kyivOffset(yyyymmdd); }
-function kyivIsoEnd(yyyymmdd)   { return yyyymmdd + 'T23:59:59' + kyivOffset(yyyymmdd); }
+// 14.06.2026 — null guard. Раніше `null + 'T00:00:00+03:00'` = string 'nullT00:00:00+03:00' → RPC падало
+// з "invalid input syntax for type timestamp". Коли filters.from/to null (date_range='all') — повертаємо null.
+function kyivIsoStart(yyyymmdd) { return yyyymmdd ? (yyyymmdd + 'T00:00:00' + kyivOffset(yyyymmdd)) : null; }
+function kyivIsoEnd(yyyymmdd)   { return yyyymmdd ? (yyyymmdd + 'T23:59:59' + kyivOffset(yyyymmdd)) : null; }
 
 /* ------------ Supabase fetch helpers ------------ */
 async function fetchDealsRange(offset, limit) {
