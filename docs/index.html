@@ -2489,8 +2489,9 @@ async function loadProjects() {
       const { data: launchData } = await sb
         .from('launches')
         .select('id, code, name, starts_on, ends_on, status, is_active, color, deal_aliases')
-        // 07.06.2026 — додав 'measure' (фаза вимірювання теж потребує аналітики, напр. iPhone 17 PRO MAX)
-        .in('status', ['active','planning','idea','measure'])
+        // 14.06.2026 (Vadym): прибрав idea/planning — на цих стадіях ще немає даних для аналітики.
+        // Показуємо тільки active → measure → completed → archived (вони можуть мати spend/leads).
+        .in('status', ['active','measure','completed','archived'])
         .eq('is_active', true)
         .order('starts_on', { ascending: false });
       const existingCodes = new Set(__projectsList.map(p => p.code));
