@@ -214,6 +214,10 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
     <div class="tbl-card" style="margin-bottom:18px"><table id="tblAcctFlow"><thead><tr>
       <th style="text-align:left">Рахунок</th><th>Надходження</th><th>Витрати</th><th>Чистий</th>
     </tr></thead><tbody><tr><td colspan="4" class="empty">завантаження…</td></tr></tbody></table></div>
+    <div class="toolbar" style="margin-top:8px"><div class="grp"><b style="font-family:'Oswald';font-size:16px">🔄 Внутрішні перекази (між власними рахунками)</b></div></div>
+    <div class="tbl-card" style="margin-bottom:18px"><table id="tblIntFlow"><thead><tr>
+      <th style="text-align:left">Рахунок</th><th>Надійшло (внутр.)</th><th>Відправлено (внутр.)</th><th>Нетто</th>
+    </tr></thead><tbody><tr><td colspan="4" class="empty">завантаження…</td></tr></tbody></table></div>
     <div class="toolbar"><div class="grp"><b style="font-family:'Oswald';font-size:16px">Останні операції</b></div></div>
     <div class="tbl-card">
       <table id="tblRecent"><thead><tr>
@@ -545,7 +549,8 @@ function periodRange(){
 async function loadCashflow(){ const pr=periodRange();
   try{ const r=await sb.rpc('kasa_cashflow',{p_from:pr.from,p_to:pr.to,p_gran:pr.gran}); DATA.cf=r.data||[]; }catch(e){ DATA.cf=[]; }
   try{ const af=await sb.rpc('kasa_account_cashflow',{p_from:pr.from,p_to:pr.to}); DATA.acctFlow={}; (af.data||[]).forEach(x=>{DATA.acctFlow[x.account_id]={inflow:Number(x.inflow),outflow:Number(x.outflow)};}); }catch(e){ DATA.acctFlow={}; }
-  renderOverview(); renderAcctFlow(); }
+  try{ const ifl=await sb.rpc('kasa_internal_flow',{p_from:pr.from,p_to:pr.to}); DATA.intFlow={}; (ifl.data||[]).forEach(x=>{DATA.intFlow[x.account_id]={moved_in:Number(x.moved_in),moved_out:Number(x.moved_out)};}); }catch(e){ DATA.intFlow={}; }
+  renderOverview(); renderAcctFlow(); renderIntFlow(); }
 function renderAcctFlow(){
   const tb=document.querySelector('#tblAcctFlow tbody'); if(!tb) return;
   const af=DATA.acctFlow||{};
@@ -823,6 +828,18 @@ async function doSearch(){
 }
 function clearSearch(){document.getElementById('schText').value='';document.getElementById('schMin').value='';document.getElementById('schMax').value='';document.querySelector('#tblSearch tbody').innerHTML='<tr><td colspan="5" class="empty">введи запит і натисни «Знайти»</td></tr>';}
 window.doSearch=doSearch; window.clearSearch=clearSearch;
+
+function renderIntFlow(){
+  const tb=document.querySelector('#tblIntFlow tbody'); if(!tb) return;
+  const af=DATA.intFlow||{};
+  const rows=DATA.accounts.filter(a=>a.is_active).map(a=>({a,f:af[a.id]||{moved_in:0,moved_out:0}})).filter(x=>x.f.moved_in||x.f.moved_out).sort((x,y)=>(y.f.moved_in+y.f.moved_out)-(x.f.moved_in+x.f.moved_out));
+  if(!rows.length){ tb.innerHTML='<tr><td colspan="4" class="empty">Внутрішніх переказів за період немає</td></tr>'; return; }
+  let ti=0,to=0;
+  let html=rows.map(({a,f})=>{const net=f.moved_in-f.moved_out;ti+=f.moved_in;to+=f.moved_out;
+    return `<tr><td style="text-align:left">${esc(a.icon||'')} ${esc(a.name)}</td><td class="in">+${fmtUAH(f.moved_in)}</td><td class="out">−${fmtUAH(f.moved_out)}</td><td class="${net>=0?'in':'out'}">${net>=0?'+':'−'}${fmtUAH(Math.abs(net))}</td></tr>`;}).join('');
+  html+=`<tr style="border-top:2px solid var(--line)"><td style="text-align:left"><b>Разом переміщено</b></td><td class="in">+${fmtUAH(ti)}</td><td class="out">−${fmtUAH(to)}</td><td class="muted">${Math.abs(ti-to)<2?'збалансовано':fmtUAH(ti-to)}</td></tr>`;
+  tb.innerHTML=html;
+}
 
 // ---- auth gate ----
 async function boot(user){
