@@ -475,10 +475,10 @@ function periodStart(){
 }
 function renderOverview(){
   const from=periodStart();
-  const inSum=DATA.tx.filter(t=>t.direction==='in'&&t.occurred_at>=from).reduce((s,t)=>s+Number(t.amount_uah),0);
-  const outSum=DATA.tx.filter(t=>t.direction==='out'&&t.occurred_at>=from).reduce((s,t)=>s+Number(t.amount_uah),0);
+  const inSum=DATA.tx.filter(t=>t.direction==='in'&&t.occurred_at>=from&&!t.is_internal).reduce((s,t)=>s+Number(t.amount_uah),0);
+  const outSum=DATA.tx.filter(t=>t.direction==='out'&&t.occurred_at>=from&&!t.is_internal).reduce((s,t)=>s+Number(t.amount_uah),0);
   const months={};
-  DATA.tx.filter(t=>t.occurred_at>=from).forEach(t=>{
+  DATA.tx.filter(t=>t.occurred_at>=from&&!t.is_internal).forEach(t=>{
     const m=t.occurred_at.slice(0,7); months[m]=months[m]||{in:0,out:0};
     months[m][t.direction]+=Number(t.amount_uah);
   });
@@ -498,7 +498,7 @@ function renderOverview(){
   const tb=document.querySelector('#tblRecent tbody');
   tb.innerHTML=recent.length?recent.map(r=>{
     if(r.k==='tx'){const t=r.row,a=acctById(t.account_id),c=catById(t.category_id),l=launchById(t.launch_id);
-      return `<tr><td>${fmtDate(t.occurred_at)}</td><td style="text-align:left">${esc(t.description||'—')}</td><td><span class="pill">${a?esc(a.icon+' '+a.name):'—'}</span></td><td>${c?esc((c.icon||'')+' '+c.name):'—'}</td><td>${l?esc(l.name):'—'}</td><td class="${t.direction==='in'?'in':'out'}">${t.direction==='in'?'+':'−'}${fmtUAH(t.amount_uah)}</td></tr>`;}
+      return `<tr><td>${fmtDate(t.occurred_at)}</td><td style="text-align:left">${t.is_internal?'<span class="badge" style="border-color:#888;color:#aaa">\ud83d\udd04 \u0432\u043d\u0443\u0442\u0440.</span> ':''}${esc(t.description||'—')}</td><td><span class="pill">${a?esc(a.icon+' '+a.name):'—'}</span></td><td>${c?esc((c.icon||'')+' '+c.name):'—'}</td><td>${l?esc(l.name):'—'}</td><td class="${t.direction==='in'?'in':'out'}">${t.direction==='in'?'+':'−'}${fmtUAH(t.amount_uah)}</td></tr>`;}
     const t=r.row,f=acctById(t.from_account_id),to=acctById(t.to_account_id);
     return `<tr><td>${fmtDate(t.occurred_at)}</td><td style="text-align:left">🔄 ${esc(t.description||'Переказ')}</td><td colspan="3"><span class="pill">${f?esc(f.name):'?'}</span> → <span class="pill">${to?esc(to.name):'?'}</span></td><td class="muted">${fmtUAH(t.amount_uah)}</td></tr>`;
   }).join(''):'<tr><td colspan="6" class="empty">Ще немає операцій</td></tr>';
@@ -522,7 +522,7 @@ function txRow(t,withSource){
   const a=acctById(t.account_id),c=catById(t.category_id),l=launchById(t.launch_id);
   return `<tr>
    <td>${fmtDate(t.occurred_at)}</td>
-   <td style="text-align:left">${esc(t.description||'—')}</td>
+   <td style="text-align:left">${t.is_internal?'<span class="badge" style="border-color:#888;color:#aaa">\ud83d\udd04 \u0432\u043d\u0443\u0442\u0440.</span> ':''}${esc(t.description||'—')}</td>
    <td class="muted">${esc(t.counterparty||'—')}</td>
    <td><span class="pill">${a?esc(a.icon+' '+a.name):'—'}</span></td>
    <td>${c?esc((c.icon||'')+' '+c.name):'<span class="muted">—</span>'}</td>
@@ -570,7 +570,7 @@ function renderTransfers(){
   let rows=DATA.transfers;
   if(q)rows=rows.filter(t=>(t.description||'').toLowerCase().includes(q));
   document.querySelector('#tblTr tbody').innerHTML=rows.length?rows.map(t=>{const f=acctById(t.from_account_id),to=acctById(t.to_account_id);
-    return `<tr><td>${fmtDate(t.occurred_at)}</td><td style="text-align:left">${esc(t.description||'—')}</td><td><span class="pill">${f?esc(f.name):'?'}</span></td><td><span class="pill">${to?esc(to.name):'?'}</span></td><td class="muted">${t.fee_uah>0?fmtUAH(t.fee_uah):'—'}</td><td>${fmtUAH(t.amount_uah)}</td><td class="act"><button class="iconbtn del" onclick="delTransfer('${t.id}')">🗑</button></td></tr>`;}).join(''):'<tr><td colspan="7" class="empty">Переказів ще немає</td></tr>';
+    return `<tr><td>${fmtDate(t.occurred_at)}</td><td style="text-align:left">${t.is_internal?'<span class="badge" style="border-color:#888;color:#aaa">\ud83d\udd04 \u0432\u043d\u0443\u0442\u0440.</span> ':''}${esc(t.description||'—')}</td><td><span class="pill">${f?esc(f.name):'?'}</span></td><td><span class="pill">${to?esc(to.name):'?'}</span></td><td class="muted">${t.fee_uah>0?fmtUAH(t.fee_uah):'—'}</td><td>${fmtUAH(t.amount_uah)}</td><td class="act"><button class="iconbtn del" onclick="delTransfer('${t.id}')">🗑</button></td></tr>`;}).join(''):'<tr><td colspan="7" class="empty">Переказів ще немає</td></tr>';
 }
 document.getElementById('searchTr').addEventListener('input',renderTransfers);
 
