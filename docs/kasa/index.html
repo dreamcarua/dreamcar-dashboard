@@ -192,11 +192,17 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
       <div class="grp">
         <label class="muted" style="font-size:11px;font-family:'JetBrains Mono'">Період:</label>
         <select class="selin" id="ovPeriod">
+          <option value="today">Сьогодні</option>
+          <option value="yesterday">Вчора</option>
+          <option value="7">7 днів</option>
           <option value="30">30 днів</option>
           <option value="90">90 днів</option>
           <option value="365" selected>12 місяців</option>
           <option value="all">Весь час</option>
+          <option value="custom">Довільний діапазон</option>
         </select>
+        <input type="date" id="ovFrom" class="selin" style="display:none">
+        <input type="date" id="ovTo" class="selin" style="display:none">
       </div>
       <button class="btn ghost" onclick="loadAll()">↻ Оновити</button>
     </div>
@@ -480,14 +486,13 @@ function periodStart(){
   const d=new Date();d.setDate(d.getDate()-Number(v));return d.toISOString().slice(0,10);
 }
 function renderOverview(){
-  const from=periodStart();
   const inSum=(DATA.cf||[]).reduce((s,r)=>s+Number(r.inflow),0);
   const outSum=(DATA.cf||[]).reduce((s,r)=>s+Number(r.outflow),0);
   const _cf=(DATA.cf||[]);
-  const labels=_cf.map(r=>r.month);
+  const labels=_cf.map(r=>r.bucket);
   const inData=_cf.map(r=>Math.round(Number(r.inflow))), outData=_cf.map(r=>Math.round(Number(r.outflow)));
   if(cfChart)cfChart.destroy();
-  cfChart=new Chart(document.getElementById('cashflowChart'),{type:'bar',data:{labels:labels.map(m=>{const[y,mm]=m.split('-');return mm+'.'+y.slice(2)}),datasets:[
+  cfChart=new Chart(document.getElementById('cashflowChart'),{type:'bar',data:{labels:labels.map(fmtBucket),datasets:[
     {label:'Надходження',data:inData,backgroundColor:'#10B981'},
     {label:'Витрати',data:outData,backgroundColor:'#E30613'}]},
     options:{maintainAspectRatio:false,plugins:{legend:{labels:{color:'#bbb',font:{size:11}}},title:{display:true,text:`Грошовий потік · надх ${fmtUAH(inSum)} / витр ${fmtUAH(outSum)}`,color:'#fff',font:{size:13}}},
@@ -505,10 +510,27 @@ function renderOverview(){
     return `<tr><td>${fmtDate(t.occurred_at)}</td><td style="text-align:left">🔄 ${esc(t.description||'Переказ')}</td><td colspan="3"><span class="pill">${f?esc(f.name):'?'}</span> → <span class="pill">${to?esc(to.name):'?'}</span></td><td class="muted">${fmtUAH(t.amount_uah)}</td></tr>`;
   }).join(''):'<tr><td colspan="6" class="empty">Ще немає операцій</td></tr>';
 }
-document.getElementById('ovPeriod').addEventListener('change',loadCashflow);
-async function loadCashflow(){ const pf=periodStart();
-  try{ const r=await sb.rpc('kasa_monthly_cashflow',{p_from:pf}); DATA.cf=r.data||[]; }catch(e){ DATA.cf=[]; }
-  try{ const af=await sb.rpc('kasa_account_cashflow',{p_from:pf}); DATA.acctFlow={}; (af.data||[]).forEach(x=>{DATA.acctFlow[x.account_id]={inflow:Number(x.inflow),outflow:Number(x.outflow)};}); }catch(e){ DATA.acctFlow={}; }
+document.getElementById('ovPeriod').addEventListener('change',()=>{const c=document.getElementById('ovPeriod').value==='custom';document.getElementById('ovFrom').style.display=c?'inline-block':'none';document.getElementById('ovTo').style.display=c?'inline-block':'none';loadCashflow();});
+document.getElementById('ovFrom').addEventListener('change',loadCashflow);
+document.getElementById('ovTo').addEventListener('change',loadCashflow);
+function fmtBucket(m){const p=String(m).split('-');return p.length===3?p[2]+'.'+p[1]:p[1]+'.'+p[0].slice(2);}
+function periodRange(){
+  const today=todayKyiv();
+  const back=(n)=>{const x=new Date();x.setDate(x.getDate()-n);return x.toLocaleDateString('sv-SE',{timeZone:'Europe/Kyiv'});};
+  const v=document.getElementById('ovPeriod').value;
+  if(v==='today')return{from:today,to:today,gran:'day'};
+  if(v==='yesterday'){const y=back(1);return{from:y,to:y,gran:'day'};}
+  if(v==='7')return{from:back(6),to:today,gran:'day'};
+  if(v==='30')return{from:back(29),to:today,gran:'day'};
+  if(v==='90')return{from:back(89),to:today,gran:'day'};
+  if(v==='365')return{from:back(364),to:today,gran:'month'};
+  if(v==='all')return{from:'2020-01-01',to:today,gran:'month'};
+  if(v==='custom'){const ff=document.getElementById('ovFrom').value||back(29),tt=document.getElementById('ovTo').value||today;const days=(new Date(tt)-new Date(ff))/86400000;return{from:ff,to:tt,gran:days<=92?'day':'month'};}
+  return{from:back(364),to:today,gran:'month'};
+}
+async function loadCashflow(){ const pr=periodRange();
+  try{ const r=await sb.rpc('kasa_cashflow',{p_from:pr.from,p_to:pr.to,p_gran:pr.gran}); DATA.cf=r.data||[]; }catch(e){ DATA.cf=[]; }
+  try{ const af=await sb.rpc('kasa_account_cashflow',{p_from:pr.from,p_to:pr.to}); DATA.acctFlow={}; (af.data||[]).forEach(x=>{DATA.acctFlow[x.account_id]={inflow:Number(x.inflow),outflow:Number(x.outflow)};}); }catch(e){ DATA.acctFlow={}; }
   renderOverview(); renderAcctFlow(); }
 function renderAcctFlow(){
   const tb=document.querySelector('#tblAcctFlow tbody'); if(!tb) return;
