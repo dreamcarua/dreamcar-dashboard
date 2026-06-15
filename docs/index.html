@@ -2412,7 +2412,7 @@ async function trafficTypeRPC() {
 }
 
 async function kpiSummaryRPC() {
-  const { data, error } = await sb.rpc('dashboard_kpi_summary', _rpcParams());
+  let { data, error } = await sb.rpc('dashboard_kpi_summary_cached', _rpcParams()); if (error) { console.warn('[kpi] cached fallback', error); ({ data, error } = await sb.rpc('dashboard_kpi_summary', _rpcParams())); if (error) throw error; }
   if (error) throw error;
   const r = (data || [])[0] || {};
   return {
