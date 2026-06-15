@@ -207,7 +207,7 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
     <div class="toolbar"><div class="grp"><b style="font-family:'Oswald';font-size:16px">Останні операції</b></div></div>
     <div class="tbl-card">
       <table id="tblRecent"><thead><tr>
-        <th>Дата</th><th style="text-align:left">Опис</th><th>Рахунок</th><th>Категорія</th><th>Запуск</th><th>Сума</th>
+        <th>Дата</th><th style="text-align:left">Опис</th><th>Рахунок</th><th>Категорія</th><th>Проєкт</th><th>Сума</th>
       </tr></thead><tbody><tr><td colspan="6" class="empty">завантаження…</td></tr></tbody></table>
     </div>
   </div>
@@ -224,7 +224,7 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
       </div>
     </div>
     <div class="tbl-card"><table id="tblBank"><thead><tr>
-      <th>Дата</th><th style="text-align:left">Опис</th><th>Контрагент</th><th>Рахунок</th><th>Категорія</th><th>Запуск</th><th>Джерело</th><th>Сума</th><th>Дії</th>
+      <th>Дата</th><th style="text-align:left">Опис</th><th>Контрагент</th><th>Рахунок</th><th>Категорія</th><th>Проєкт</th><th>Джерело</th><th>Сума</th><th>Дії</th>
     </tr></thead><tbody></tbody></table></div>
   </div>
 
@@ -236,7 +236,7 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
       <button class="btn" onclick="openTxModal('cash')">+ Готівкова операція</button>
     </div>
     <div class="tbl-card"><table id="tblCash"><thead><tr>
-      <th>Дата</th><th style="text-align:left">Опис</th><th>Контрагент</th><th>Рахунок</th><th>Категорія</th><th>Запуск</th><th>Сума</th><th>Дії</th>
+      <th>Дата</th><th style="text-align:left">Опис</th><th>Контрагент</th><th>Рахунок</th><th>Категорія</th><th>Проєкт</th><th>Сума</th><th>Дії</th>
     </tr></thead><tbody></tbody></table></div>
   </div>
 
@@ -307,7 +307,7 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
   <div class="field"><label>Контрагент</label><input id="txCp" type="text" placeholder="хто платник/отримувач"></div>
   <div class="field-row">
     <div class="field"><label>Категорія</label><select id="txCat"></select></div>
-    <div class="field"><label>Запуск</label><select id="txLaunch"></select></div>
+    <div class="field"><label>Проєкт</label><select id="txLaunch"></select></div>
   </div>
   <div class="modal-actions"><button class="btn ghost" onclick="closeModal('modalTx')">Скасувати</button><button class="btn" onclick="saveTx()">Зберегти</button></div>
 </div></div>
@@ -585,7 +585,7 @@ function renderAccounts(){
 
 function populateSelects(){
   const catOpts='<option value="">— категорія —</option>'+DATA.cats.map(c=>`<option value="${c.id}">${esc((c.icon||'')+' '+c.name)}</option>`).join('');
-  const lnOpts='<option value="">— запуск —</option>'+DATA.launches.map(l=>`<option value="${l.id}">${esc(l.name)} (${l.status})</option>`).join('');
+  const lnOpts='<option value="">— проєкт —</option>'+DATA.launches.map(l=>`<option value="${l.id}">${esc(l.name)} (${l.status})</option>`).join('');
   document.getElementById('txCat').innerHTML=catOpts;
   document.getElementById('txLaunch').innerHTML=lnOpts;
   const allAcc=DATA.accounts.filter(a=>a.is_active);

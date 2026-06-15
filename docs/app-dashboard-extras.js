@@ -184,7 +184,7 @@
   }
 
   /* ====== #392.3 Active Launch Pulse — sticky pill row під topbar ======
-     Показує всі активні запуски (status='active' у public.launches) як клікабельні
+     Показує всі активні проєкти (status='active' у public.launches) як клікабельні
      pill-картки. Клік → вибрати проект у filter-bar (drill-down).
      Render = 1 SELECT раз на bootstrap + auto-refresh кожні 5 хв. */
 
@@ -240,11 +240,11 @@
     var bar = document.getElementById('dc-pulse-bar');
     if (!bar) return;
     if (!launches.length) {
-      bar.innerHTML = '<span class="dc-pulse-label">Запуски</span><span class="dc-pulse-empty">Немає активних запусків</span>';
+      bar.innerHTML = '<span class="dc-pulse-label">Проєкти</span><span class="dc-pulse-empty">Немає активних проєктів</span>';
       return;
     }
     var currentProject = (window.filters && window.filters.project) || null;
-    var html = '<span class="dc-pulse-label">Активні запуски</span>';
+    var html = '<span class="dc-pulse-label">Активні проєкти</span>';
     launches.forEach(function (l) {
       var d = daysLeft(l.ends_on);
       var meta = d == null ? '' : (d < 0 ? 'завершено' : d === 0 ? 'фінал сьогодні' : 'D-' + d);

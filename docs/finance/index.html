@@ -275,7 +275,7 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
 
 <div class="wrap">
   <div class="title">ФІНАНСИ · <span class="r">P&amp;L</span></div>
-  <div class="sub">Real-time приходи + витрати + P&amp;L по запусках. Управління категоріями та fixed-overhead — у вкладках.</div>
+  <div class="sub">Real-time приходи + витрати + P&amp;L по проєктах. Управління категоріями та fixed-overhead — у вкладках.</div>
 
   <div class="tabs">
     <button class="tab on" data-pane="overview">📈 Огляд</button>
@@ -283,7 +283,7 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
     <button class="tab" data-pane="fixed">⚙️ Fixed Monthly <span class="cnt" id="c-fixed">…</span></button>
     <button class="tab" data-pane="percent">📊 % з угод <span class="cnt" id="c-percent">…</span></button>
     <button class="tab" data-pane="project">💸 Project Costs <span class="cnt" id="c-project">…</span></button>
-    <button class="tab" data-pane="launches">🏆 Запуски (приз) <span class="cnt" id="c-launches">…</span></button>
+    <button class="tab" data-pane="launches">🏆 Проєкти (приз) <span class="cnt" id="c-launches">…</span></button>
   </div>
 
   <!-- OVERVIEW PANE -->
@@ -334,11 +334,11 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
 
     <!-- P&L TABLE -->
     <div class="pnl-card">
-      <h4>📋 P&L по запусках <span class="meta" id="pnlMeta" style="font-size:11px;font-family:'JetBrains Mono',monospace;color:#6B7280;text-transform:none;letter-spacing:0">сортування: net profit ↓</span></h4>
+      <h4>📋 P&L по проєктах <span class="meta" id="pnlMeta" style="font-size:11px;font-family:'JetBrains Mono',monospace;color:#6B7280;text-transform:none;letter-spacing:0">сортування: net profit ↓</span></h4>
       <div class="scroll">
         <table class="pnl" id="pnlTbl">
           <thead><tr>
-            <th>Запуск</th>
+            <th>Проєкт</th>
             <th>Revenue</th>
             <th>Ad Spend</th>
             <th>% з угод</th>
@@ -432,7 +432,7 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
     </div>
     <div class="tbl-card">
       <table id="tblProj"><thead><tr>
-        <th style="text-align:left">Опис</th><th>Запуск</th><th>Категорія</th><th>UAH</th>
+        <th style="text-align:left">Опис</th><th>Проєкт</th><th>Категорія</th><th>UAH</th>
         <th>Дата</th><th>Vendor</th><th>Дії</th>
       </tr></thead><tbody><tr><td colspan="7" class="empty">завантаження…</td></tr></tbody></table>
     </div>
@@ -441,12 +441,12 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
   <!-- LAUNCHES (PRIZE) PANE -->
   <div class="pane" id="pane-launches">
     <div class="toolbar">
-      <input class="search" id="searchLaunch" placeholder="🔍 Пошук запуску…">
+      <input class="search" id="searchLaunch" placeholder="🔍 Пошук проєкту…">
       <span class="muted" style="font-size:12px;font-family:'JetBrains Mono',monospace">prize_cost_uah у launches</span>
     </div>
     <div class="tbl-card">
       <table id="tblLaunch"><thead><tr>
-        <th style="text-align:left">Запуск</th><th>Status</th><th>Старт</th><th>Призовий фонд (UAH)</th>
+        <th style="text-align:left">Проєкт</th><th>Status</th><th>Старт</th><th>Призовий фонд (UAH)</th>
         <th>Дата покупки</th><th>Notes</th><th>Дії</th>
       </tr></thead><tbody><tr><td colspan="7" class="empty">завантаження…</td></tr></tbody></table>
     </div>
@@ -524,9 +524,9 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
 <!-- MODAL: Project Cost -->
 <div class="modal" id="modalProj">
   <div class="modal-card">
-    <h3 id="modalProjTitle">Нова витрата запуску</h3>
+    <h3 id="modalProjTitle">Нова витрата проєкту</h3>
     <div id="projError"></div>
-    <div class="field"><label>Запуск *</label><select id="projLaunch"></select></div>
+    <div class="field"><label>Проєкт *</label><select id="projLaunch"></select></div>
     <div class="field"><label>Категорія *</label><select id="projCat"></select></div>
     <div class="field"><label>Опис *</label><input id="projDesc" type="text" placeholder="що це за витрата"></div>
     <div class="field-row">
@@ -546,7 +546,7 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
   <div class="modal-card">
     <h3 id="modalLaunchTitle">Редагувати призовий фонд</h3>
     <div id="launchError"></div>
-    <div class="field"><label>Запуск (read-only)</label><input id="launchName" type="text" readonly style="opacity:.6"></div>
+    <div class="field"><label>Проєкт (read-only)</label><input id="launchName" type="text" readonly style="opacity:.6"></div>
     <div class="field"><label>Призовий фонд UAH</label><input id="launchPrize" type="number" min="0" step="0.01" placeholder="ринкова ціна авто + оформлення"></div>
     <div class="field"><label>Дата покупки</label><input id="launchPrizeDate" type="date"></div>
     <div class="field"><label>Notes (марка/модель/VIN)</label><textarea id="launchPrizeNotes"></textarea></div>
@@ -643,7 +643,7 @@ function populateSelects() {
   document.getElementById('fixedCat').innerHTML = fixedOpts.length > 100 ? fixedOpts : allOpts;
   document.getElementById('pctCat').innerHTML = percentOpts.length > 100 ? percentOpts : allOpts;
   document.getElementById('projCat').innerHTML = variableOpts.length > 100 ? variableOpts : allOpts;
-  const launchOpts = '<option value="">— виберіть запуск —</option>' + DATA.launches.map(l => `<option value="${l.id}">${esc(l.name)} (${l.status})</option>`).join('');
+  const launchOpts = '<option value="">— виберіть проєкт —</option>' + DATA.launches.map(l => `<option value="${l.id}">${esc(l.name)} (${l.status})</option>`).join('');
   document.getElementById('projLaunch').innerHTML = launchOpts;
 }
 
@@ -848,7 +848,7 @@ function drawCost(pnl) {
 
 function renderPnL(pnl, fromISO, toISO) {
   const tbody = document.querySelector('#pnlTbl tbody');
-  // Тільки запуски що ПЕРЕТИНАЮТЬСЯ з періодом (intersect)
+  // Тільки проєкти що ПЕРЕТИНАЮТЬСЯ з періодом (intersect)
   const rows = pnl.filter(p => {
     if (!p.starts_on) return Number(p.revenue_total||0) > 0;
     const s = p.starts_on, e = p.ends_on || '2099-12-31';
@@ -890,7 +890,7 @@ function renderPnL(pnl, fromISO, toISO) {
     </tr>`;
   }).join('');
   document.getElementById('pnlFoot').innerHTML = `
-    <td>Σ Усі запуски (${rows.length})</td>
+    <td>Σ Усі проєкти (${rows.length})</td>
     <td>${shortUAH(tRev)}</td>
     <td>${shortUAH(tAd)}</td>
     <td>${shortUAH(tPct)}</td>
@@ -910,7 +910,7 @@ function renderPnL(pnl, fromISO, toISO) {
 function renderTopProjects(pnl) {
   const cont = document.getElementById('topProjects');
   const rows = pnl.filter(p => Number(p.revenue_total||0) > 0).sort((a,b)=>Number(b.true_net_profit||0)-Number(a.true_net_profit||0));
-  if (!rows.length) { cont.innerHTML = '<div class="muted" style="font-size:12px">Немає активних запусків з виручкою.</div>'; return; }
+  if (!rows.length) { cont.innerHTML = '<div class="muted" style="font-size:12px">Немає активних проєктів з виручкою.</div>'; return; }
   const top = rows.slice(0, 3); const bottom = rows.slice(-2).reverse().filter(r => !top.includes(r));
   const renderRow = (p, badge) => `
     <div class="fc-row">
@@ -937,10 +937,10 @@ function renderInsights(summary, curRev, prevRev, pnl, fromISO, toISO) {
   }
   // 3. ROI > 500
   const winners = (pnl||[]).filter(p => Number(p.true_roi_pct||0) > 500 && Number(p.revenue_total||0) > 0);
-  if (winners.length) ins.push({ cls:'good', ic:'🚀', html:`<b>${winners.length}</b> ${winners.length===1?'запуск з':'запуски з'} ROI > 500%. Топ — <b>${esc(winners[0].name)}</b> (${Number(winners[0].true_roi_pct).toFixed(0)}%).` });
+  if (winners.length) ins.push({ cls:'good', ic:'🚀', html:`<b>${winners.length}</b> ${winners.length===1?'проєкт з':'проєкти з'} ROI > 500%. Топ — <b>${esc(winners[0].name)}</b> (${Number(winners[0].true_roi_pct).toFixed(0)}%).` });
   // 4. Negative profit
   const losers = (pnl||[]).filter(p => Number(p.true_net_profit||0) < 0);
-  if (losers.length) ins.push({ cls:'bad', ic:'⚠️', html:`<b>${losers.length}</b> ${losers.length===1?'запуск з':'запусків з'} негативним прибутком: ${losers.slice(0,2).map(l=>esc(l.name)).join(', ')}. Розглянути коригування.` });
+  if (losers.length) ins.push({ cls:'bad', ic:'⚠️', html:`<b>${losers.length}</b> ${losers.length===1?'проєкт з':'проєктів з'} негативним прибутком: ${losers.slice(0,2).map(l=>esc(l.name)).join(', ')}. Розглянути коригування.` });
   // 5. CAC vs AOV
   if (summary && summary.tCac != null && summary.tAov != null && summary.tCac > 0) {
     const ratio = summary.tAov / summary.tCac;
@@ -949,14 +949,14 @@ function renderInsights(summary, curRev, prevRev, pnl, fromISO, toISO) {
   }
   // 6. Завершені проекти без активних — нагадування
   const active = (pnl||[]).filter(p => p.status==='active' || p.status==='measure');
-  if (!active.some(p => Number(p.revenue_total||0) > 0)) ins.push({ cls:'warn', ic:'🛠', html:`Усі активні запуски ще без виручки. Перевір трекінг або поточний funnel.` });
+  if (!active.some(p => Number(p.revenue_total||0) > 0)) ins.push({ cls:'warn', ic:'🛠', html:`Усі активні проєкти ще без виручки. Перевір трекінг або поточний funnel.` });
   // Render
   document.getElementById('insightsGrid').innerHTML = ins.length ? ins.map(i => `<div class="insight ${i.cls}"><span class="ic">${i.ic}</span><div class="body">${i.html}</div></div>`).join('') : '<div class="muted" style="font-size:12px;grid-column:1/-1;text-align:center;padding:10px">Не вистачає даних для автоматичних інсайтів</div>';
 }
 
 function renderKpi(periodRev, periodPaid, prevRev, summary, days) {
   // periodRev/periodPaid — фактичні приходи за період (з RPC, не lifetime).
-  // summary — totals з P&L таблиці (lifetime по запусках, що перетинаються) для cost структури.
+  // summary — totals з P&L таблиці (lifetime по проєктах, що перетинаються) для cost структури.
   const tCost = summary?.tCost || 0;
   const tMargin = summary?.tMargin;
   // Margin беремо з PnL (бо total_cost з lifetime), AOV/CAC з period.
@@ -1497,7 +1497,7 @@ async function delPercent(id) {
 // PROJECT CRUD
 function openProjectModal() {
   edit.proj = null;
-  document.getElementById('modalProjTitle').textContent = 'Нова витрата запуску';
+  document.getElementById('modalProjTitle').textContent = 'Нова витрата проєкту';
   ['projLaunch','projCat','projDesc','projAmount','projVendor','projInvoice'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('projDate').value = new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Kyiv' });
   showErr('projError', null);
@@ -1524,7 +1524,7 @@ async function saveProject() {
   const description = document.getElementById('projDesc').value.trim();
   const amount_uah = parseFloat(document.getElementById('projAmount').value);
   const spent_at = document.getElementById('projDate').value;
-  if (!launch_id) return showErr('projError', 'Вибери запуск');
+  if (!launch_id) return showErr('projError', 'Вибери проєкт');
   if (!category_id) return showErr('projError', 'Вибери категорію');
   if (!description) return showErr('projError', 'Введи опис');
   if (!(amount_uah > 0)) return showErr('projError', 'Сума > 0');
