@@ -2591,15 +2591,21 @@ function getSelectedProject() {
 
 async function loadTariffs() {
   try {
-    const { data } = await sb.from('dashboard_deals').select('tariff').not('tariff','is',null).limit(5000);
+    // #412b: читаємо з matview (~10мс) замість distinct sql (~3с)
+    const { data, error } = await sb.from('mv_dashboard_filter_options').select('val').eq('field', 'tariff');
+    let rows = data;
+    if (error || !rows) {
+      // fallback на старий шлях
+      const r = await sb.from('dashboard_deals').select('tariff').not('tariff','is',null).limit(5000);
+      rows = (r.data || []).map(x => ({ val: x.tariff }));
+    }
     const set = new Set();
-    // 08.06.2026 R2 P2: filter "Ручна видача x10/x8" — це manual-issuance flags, не реальні tariffs
-    (data || []).forEach(r => {
-      if (!r.tariff) return;
-      const t = r.tariff.trim();
+    (rows || []).forEach(r => {
+      if (!r.val) return;
+      const t = r.val.trim();
       if (/ручна\s+видача/i.test(t)) return;
       if (t.length < 2) return;
-      set.add(r.tariff);
+      set.add(r.val);
     });
     const sel = $('#f-tariff');
     const cur = filters.tariff;
@@ -2611,9 +2617,15 @@ async function loadTariffs() {
 
 async function loadPayProviders() {
   try {
-    const { data } = await sb.from('dashboard_deals').select('pay_provider').not('pay_provider','is',null).limit(5000);
+    // #412b: matview (~10мс) замість distinct sql (~3с)
+    const { data, error } = await sb.from('mv_dashboard_filter_options').select('val').eq('field', 'pay_provider');
+    let rows = data;
+    if (error || !rows) {
+      const r = await sb.from('dashboard_deals').select('pay_provider').not('pay_provider','is',null).limit(5000);
+      rows = (r.data || []).map(x => ({ val: x.pay_provider }));
+    }
     const set = new Set();
-    (data || []).forEach(r => { if (r.pay_provider) set.add(r.pay_provider); });
+    (rows || []).forEach(r => { if (r.val) set.add(r.val); });
     const sel = $('#f-pay-provider');
     const cur = filters.pay_provider;
     sel.innerHTML = '<option value="">Усі</option>' +
