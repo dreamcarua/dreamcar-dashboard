@@ -532,7 +532,7 @@ function renderOverview(){
   const tb=document.querySelector('#tblRecent tbody');
   tb.innerHTML=recent.length?recent.map(r=>{
     if(r.k==='tx'){const t=r.row,a=acctById(t.account_id),c=catById(t.category_id),l=launchById(t.launch_id);
-      return `<tr><td>${fmtDT(t.occurred_ts,t.occurred_at)}</td><td style="text-align:left">${t.is_internal?'<span class="badge" style="border-color:#888;color:#aaa">\ud83d\udd04 \u0432\u043d\u0443\u0442\u0440.</span> ':''}${esc(t.description||'—')}</td><td><span class="pill">${a?esc(a.icon+' '+a.name):'—'}</span></td><td>${c?esc((c.icon||'')+' '+c.name):'—'}</td><td>${l?esc(l.name):'—'}</td><td class="${t.direction==='in'?'in':'out'}">${t.direction==='in'?'+':'−'}${fmtUAH(t.amount_uah)}</td></tr>`;}
+      return `<tr><td>${fmtDT(t.occurred_ts,t.occurred_at)}</td><td style="text-align:left">${t.is_internal?'<span class="badge" style="border-color:#888;color:#aaa">\ud83d\udd04 \u0432\u043d\u0443\u0442\u0440.</span> ':''}${t.div_to?`<span class="badge" style="border-color:#caa600;color:#ffd633">💰 ${t.div_to==='split'?'Порівну':(t.div_to==='vadym'?'Вадим':'Артем')}</span> `:(t.excl_pnl?'<span class="badge" style="border-color:#888;color:#aaa">↪ поза P&L</span> ':'')}${esc(t.description||'—')}</td><td><span class="pill">${a?esc(a.icon+' '+a.name):'—'}</span></td><td>${c?esc((c.icon||'')+' '+c.name):'—'}</td><td>${l?esc(l.name):'—'}</td><td class="${t.direction==='in'?'in':'out'}">${t.direction==='in'?'+':'−'}${fmtUAH(t.amount_uah)}</td></tr>`;}
     const t=r.row,f=acctById(t.from_account_id),to=acctById(t.to_account_id);
     return `<tr><td>${fmtDT(t.occurred_ts,t.occurred_at)}</td><td style="text-align:left">🔄 ${esc(t.description||'Переказ')}</td><td colspan="3"><span class="pill">${f?esc(f.name):'?'}</span> → <span class="pill">${to?esc(to.name):'?'}</span></td><td class="muted">${fmtUAH(t.amount_uah)}</td></tr>`;
   }).join(''):'<tr><td colspan="6" class="empty">Ще немає операцій</td></tr>';
@@ -585,7 +585,7 @@ function txRow(t,withSource){
   const a=acctById(t.account_id),c=catById(t.category_id),l=launchById(t.launch_id);
   return `<tr>
    <td>${fmtDT(t.occurred_ts,t.occurred_at)}</td>
-   <td style="text-align:left">${t.is_internal?'<span class="badge" style="border-color:#888;color:#aaa">\ud83d\udd04 \u0432\u043d\u0443\u0442\u0440.</span> ':''}${esc(t.description||'—')}</td>
+   <td style="text-align:left">${t.is_internal?'<span class="badge" style="border-color:#888;color:#aaa">\ud83d\udd04 \u0432\u043d\u0443\u0442\u0440.</span> ':''}${t.div_to?`<span class="badge" style="border-color:#caa600;color:#ffd633">💰 ${t.div_to==='split'?'Порівну':(t.div_to==='vadym'?'Вадим':'Артем')}</span> `:(t.excl_pnl?'<span class="badge" style="border-color:#888;color:#aaa">↪ поза P&L</span> ':'')}${esc(t.description||'—')}</td>
    <td class="muted">${esc(t.counterparty||'—')}</td>
    <td><span class="pill">${a?esc(a.icon+' '+a.name):'—'}</span></td>
    <td>${c?esc((c.icon||'')+' '+c.name):'<span class="muted">—</span>'}</td>
@@ -642,7 +642,7 @@ function renderTransfers(){
   let rows=DATA.transfers;
   if(q)rows=rows.filter(t=>(t.description||'').toLowerCase().includes(q));
   document.querySelector('#tblTr tbody').innerHTML=rows.length?rows.map(t=>{const f=acctById(t.from_account_id),to=acctById(t.to_account_id);
-    return `<tr><td>${fmtDT(t.occurred_ts,t.occurred_at)}</td><td style="text-align:left">${t.is_internal?'<span class="badge" style="border-color:#888;color:#aaa">\ud83d\udd04 \u0432\u043d\u0443\u0442\u0440.</span> ':''}${esc(t.description||'—')}</td><td><span class="pill">${f?esc(f.name):'?'}</span></td><td><span class="pill">${to?esc(to.name):'?'}</span></td><td class="muted">${t.fee_uah>0?fmtUAH(t.fee_uah):'—'}</td><td>${fmtUAH(t.amount_uah)}</td><td class="act"><button class="iconbtn del" onclick="delTransfer('${t.id}')">🗑</button></td></tr>`;}).join(''):'<tr><td colspan="7" class="empty">Переказів ще немає</td></tr>';
+    return `<tr><td>${fmtDT(t.occurred_ts,t.occurred_at)}</td><td style="text-align:left">${t.is_internal?'<span class="badge" style="border-color:#888;color:#aaa">\ud83d\udd04 \u0432\u043d\u0443\u0442\u0440.</span> ':''}${t.div_to?`<span class="badge" style="border-color:#caa600;color:#ffd633">💰 ${t.div_to==='split'?'Порівну':(t.div_to==='vadym'?'Вадим':'Артем')}</span> `:(t.excl_pnl?'<span class="badge" style="border-color:#888;color:#aaa">↪ поза P&L</span> ':'')}${esc(t.description||'—')}</td><td><span class="pill">${f?esc(f.name):'?'}</span></td><td><span class="pill">${to?esc(to.name):'?'}</span></td><td class="muted">${t.fee_uah>0?fmtUAH(t.fee_uah):'—'}</td><td>${fmtUAH(t.amount_uah)}</td><td class="act"><button class="iconbtn del" onclick="delTransfer('${t.id}')">🗑</button></td></tr>`;}).join(''):'<tr><td colspan="7" class="empty">Переказів ще немає</td></tr>';
 }
 document.getElementById('searchTr').addEventListener('input',renderTransfers);
 
@@ -697,6 +697,8 @@ function editTransaction(id){
   document.getElementById('txAmount').value=t.amount_uah;document.getElementById('txDate').value=t.occurred_at;
   document.getElementById('txDesc').value=t.description||'';document.getElementById('txCp').value=t.counterparty||'';
   document.getElementById('txCat').value=t.category_id||'';document.getElementById('txLaunch').value=t.launch_id||'';
+  if(t.div_to){ setDir('move'); document.getElementById('txMoveTo').value='dividends'; document.getElementById('txDivWho').value=t.div_to; moveToggle(); }
+  else if(t.excl_pnl && t.direction==='out'){ setDir('move'); document.getElementById('txMoveTo').value='cash'; moveToggle(); }
   openModal('modalTx');
 }
 async function saveTx(){
@@ -849,7 +851,7 @@ async function doSearch(){
   try{ const r=await sb.rpc('kasa_search',{p_text:text||null,p_min:min,p_max:max,p_limit:300}); if(r.error) throw r.error;
     const rows=r.data||[];
     tb.innerHTML=rows.length?rows.map(t=>{const a=acctById(t.account_id);
-      return `<tr><td>${fmtDT(t.occurred_ts,t.occurred_at)}</td><td style="text-align:left">${t.is_internal?'<span class="badge" style="border-color:#888;color:#aaa">🔄</span> ':''}${esc(t.description||'—')}</td><td class="muted">${esc(t.counterparty||'—')}</td><td><span class="pill">${a?esc(a.icon+' '+a.name):'—'}</span></td><td class="${t.direction==='in'?'in':'out'}">${t.direction==='in'?'+':'−'}${fmtUAH(t.amount_uah)}</td></tr>`;
+      return `<tr><td>${fmtDT(t.occurred_ts,t.occurred_at)}</td><td style="text-align:left">${t.is_internal?'<span class="badge" style="border-color:#888;color:#aaa">🔄</span> ':''}${t.div_to?`<span class="badge" style="border-color:#caa600;color:#ffd633">💰 ${t.div_to==='split'?'Порівну':(t.div_to==='vadym'?'Вадим':'Артем')}</span> `:(t.excl_pnl?'<span class="badge" style="border-color:#888;color:#aaa">↪ поза P&L</span> ':'')}${esc(t.description||'—')}</td><td class="muted">${esc(t.counterparty||'—')}</td><td><span class="pill">${a?esc(a.icon+' '+a.name):'—'}</span></td><td class="${t.direction==='in'?'in':'out'}">${t.direction==='in'?'+':'−'}${fmtUAH(t.amount_uah)}</td></tr>`;
     }).join(''):'<tr><td colspan="5" class="empty">нічого не знайдено</td></tr>';
   }catch(e){ tb.innerHTML='<tr><td colspan="5" class="empty">помилка: '+esc(e.message||e)+'</td></tr>'; }
 }
@@ -887,7 +889,7 @@ async function saveMove(){
       if(!cash) return showErr('txErr','Немає активного рахунку Готівка');
       if(editTx){ const r1=await sb.from('kasa_transactions').update({excl_pnl:true}).eq('id',editTx.id); if(r1.error) throw r1.error; }
       else { const r1=await sb.from('kasa_transactions').insert({account_id:fromId,direction:'out',amount_uah:amount,occurred_at,description:desc,source:'manual',excl_pnl:true,created_by:ME}); if(r1.error) throw r1.error; }
-      if(cash.id!==fromId){ const r2=await sb.from('kasa_transactions').insert({account_id:cash.id,direction:'in',amount_uah:amount,occurred_at,description:desc||'Переміщення в готівку',source:'manual',excl_pnl:true,created_by:ME}); if(r2.error) throw r2.error; }
+      if(cash.id!==fromId && !(editTx&&editTx.excl_pnl)){ const r2=await sb.from('kasa_transactions').insert({account_id:cash.id,direction:'in',amount_uah:amount,occurred_at,description:desc||'Переміщення в готівку',source:'manual',excl_pnl:true,created_by:ME}); if(r2.error) throw r2.error; }
     }
     closeModal('modalTx'); await loadAll();
   }catch(e){ showErr('txErr',e.message||e); }
