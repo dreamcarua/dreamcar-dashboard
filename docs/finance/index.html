@@ -6,7 +6,7 @@
 <title>Фінанси · DreamCar</title>
 <meta name="color-scheme" content="dark">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta name="finance-build" content="20260615-rpc-overview">
+<meta name="finance-build" content="20260615-bg-pnl">
 <script src="https://brand.dreamcar.ua/assets/global-header.js?v=20260606b" defer></script>
 <script src="/assets/js/auth-guard.js?v=20260614" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -864,25 +864,36 @@ async function reloadOverview() {
     if (status) status.style.display = 'block';
     document.getElementById('trendMeta').textContent = `${OV.from} → ${OV.to}`;
     const days = daysBetween(OV.from, OV.to);
-    const [rpc, pnl] = await Promise.all([
-      fetchOverviewRPC(OV.from, OV.to),
-      fetchPnl()
-    ]);
-    OV.pnl = pnl;
+
+    // Phase 1 (швидко ~1с): RPC overview + KPI + trend + forecast + insights.
+    // Не чекаємо PnL — він повільний (15-20с) і важливий лише для нижніх блоків.
+    const rpc = await fetchOverviewRPC(OV.from, OV.to);
     OV.rpc = rpc;
     const periodRev = Number(rpc?.revenue || 0);
     const periodPaid = Number(rpc?.paid || 0);
     const prevRev = Number(rpc?.prev_revenue || 0);
-    // Daily series — нормалізуємо у формат [{day, revenue}]
     const daily = (rpc?.daily || []).map(d => ({ day: d.day, revenue: Number(d.revenue||0) }));
     drawTrend(daily);
-    drawCost(pnl);
-    const summary = renderPnL(pnl, OV.from, OV.to);
-    renderKpi(periodRev, periodPaid, prevRev, summary, days);
-    renderForecast(summary, daily, periodRev);
-    renderTopProjects(pnl);
-    renderInsights(summary, periodRev, prevRev, pnl, OV.from, OV.to);
-    if (status) status.style.display = 'none';
+    // KPI з proxy margin 91.5% (буде уточнено після PnL)
+    renderKpi(periodRev, periodPaid, prevRev, null, days);
+    renderForecast(null, daily, periodRev);
+    renderInsights(null, periodRev, prevRev, [], OV.from, OV.to);
+    if (status) status.innerHTML = '<span class="loading-bar">Підвантажую P&amp;L по запусках (це може зайняти 15-20с)…</span>';
+
+    // Phase 2 (повільно у фоні): PnL → точні margin/cost + cost-структура + ranking.
+    fetchPnl().then(pnl => {
+      OV.pnl = pnl;
+      drawCost(pnl);
+      const summary = renderPnL(pnl, OV.from, OV.to);
+      renderKpi(periodRev, periodPaid, prevRev, summary, days);
+      renderForecast(summary, daily, periodRev);
+      renderTopProjects(pnl);
+      renderInsights(summary, periodRev, prevRev, pnl, OV.from, OV.to);
+      if (status) status.style.display = 'none';
+    }).catch(e => {
+      console.error('[overview] pnl bg fail', e);
+      if (status) status.innerHTML = `<span class="loading-bar" style="color:#fca5a5">P&amp;L не вдалося підвантажити: ${esc(e.message||e)}</span>`;
+    });
   } catch (e) {
     console.error('[overview]', e);
     if (status) status.style.display = 'none';
