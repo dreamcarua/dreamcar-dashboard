@@ -1,5 +1,6 @@
 <html lang="uk">
 <head>
+<script>window.__pageLoadTs=Date.now();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- 06.06.2026 — SECURITY: НЕ кешувати HTML щоб не залипали баги в браузерах -->
@@ -5319,6 +5320,8 @@ function setupRealtimeSubscription() {
 // Soft reload — тільки якщо юзер мовчав >60с (е-ink CEO режим / залишив відкритим).
 // Інакше — тихо тримаємо badge з лічильником.
 function maybeSoftReload() {
+  // #427.6 (15.06.2026 Vadym): не перерендерувати у перші 15 сек page load — usability/flicker fix
+  if (Date.now() - (window.__pageLoadTs||0) < 15000) return;
   const idleMs = Date.now() - __lastUserActivity;
   if (idleMs > 60000) debouncedReload();
 }
