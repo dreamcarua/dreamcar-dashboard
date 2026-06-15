@@ -1,11 +1,8 @@
+<!DOCTYPE html>
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- 06.06.2026 — SECURITY: НЕ кешувати HTML щоб не залипали баги в браузерах -->
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
 <title>DreamCar · Dashboard</title>
 <meta name="description" content="UTM-аналітика, реклама і фінанси DreamCar — internal dashboard">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,76 +20,12 @@
     --ash: #888;
     --ash-2: #BBB;
     --white: #FFF;
-    --bg-2: #141414;
-    --bg-3: #1B1B1B;
     --success: #10B981;
     --warning: #F59E0B;
     --danger: #DC2626;
     --info: #3B82F6;
     --sidebar-w: 220px;
     --topbar-h: 56px;
-  }
-  /* #218/#219 BIG світла тема для Dashboard — token-level overrides + #220 контраст */
-  html[data-dc-theme="light"] {
-    --black: #fafafa;
-    --black-2: #ffffff;
-    --steel: #e1e1e6;
-    --steel-2: #ececef;
-    --ash: #3c3c43;     /* #220: darker for WCAG AAA on light bg */
-    --ash-2: #6b6b73;
-    --white: #0a0a0a;
-    --bg-2: #ffffff;
-    --bg-3: #f5f5f7;
-  }
-  /* #220: inline color:var(--ash/grey) у dashboard стає темним */
-  html[data-dc-theme="light"] [style*="color:var(--ash"] { color: #3c3c43 !important; }
-  html[data-dc-theme="light"] .sidebar :is(a, span, div, h1, h2, h3, h4, label) { color: #0a0a0a !important; }
-  html[data-dc-theme="light"] .sidebar :is(.section-title, .muted, small) { color: #3c3c43 !important; }
-  /* #221: accent text contrast — темніші warning/success/info */
-  html[data-dc-theme="light"] { --warning: #a16207; --success: #047857; --info: #1e40af; --danger: #b91c1c; }
-  html[data-dc-theme="light"] [style*="color:var(--warning"] { color: #a16207 !important; }
-  html[data-dc-theme="light"] [style*="color:var(--success"] { color: #047857 !important; }
-  html[data-dc-theme="light"] [style*="color:var(--info"] { color: #1e40af !important; }
-  html[data-dc-theme="light"] [style*="color:var(--danger"] { color: #b91c1c !important; }
-  html[data-dc-theme="light"] body {
-    background: #fafafa !important;
-    color: #0a0a0a !important;
-  }
-  html[data-dc-theme="light"] :is(.topbar, .sidebar, .modal, .card, .panel, table, thead, tbody, tr, th, td) {
-    background: transparent;
-    color: #0a0a0a;
-    border-color: #e1e1e6 !important;
-  }
-  html[data-dc-theme="light"] :is(.topbar, .sidebar) {
-    background: #ffffff !important;
-  }
-  html[data-dc-theme="light"] thead th, html[data-dc-theme="light"] th {
-    background: #f5f5f7 !important;
-  }
-  html[data-dc-theme="light"] tr:hover { background: #f5f5f7 !important; }
-  html[data-dc-theme="light"] :is(input, select, textarea, button) {
-    background: #ffffff !important;
-    color: #0a0a0a !important;
-    border-color: #d4d4d8 !important;
-  }
-  html[data-dc-theme="light"] [style*="background:var(--bg-2)"],
-  html[data-dc-theme="light"] [style*="background:var(--black-2)"] {
-    background: #ffffff !important;
-    color: #0a0a0a !important;
-  }
-  html[data-dc-theme="light"] [style*="background:var(--bg-3)"],
-  html[data-dc-theme="light"] [style*="background:var(--steel-2)"] {
-    background: #f5f5f7 !important;
-    color: #0a0a0a !important;
-  }
-  html[data-dc-theme="light"] [style*="color:#fff"]:not(.btn-primary):not(.chip-cta):not([style*="background:var(--red)"]) {
-    color: #0a0a0a !important;
-  }
-  /* Theme toggle button */
-  .dc-theme-toggle-btn {
-    background: transparent; border: 1px solid currentColor; color: inherit;
-    cursor: pointer; padding: 4px 10px; border-radius: 6px;
-    font-size: 14px; line-height: 1; margin-left: 8px;
   }
   * { box-sizing: border-box; }
   html, body {
@@ -104,9 +37,6 @@
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
-    /* 08.06.2026 R3 P2: явний overflow-y:auto щоб mouse-wheel надійно скролив */
-    overflow-y: auto;
-    min-height: 100vh;
   }
   a { color: inherit; text-decoration: none; }
   button { font-family: inherit; cursor: pointer; }
@@ -151,28 +81,6 @@
     color: var(--success);
     text-transform: uppercase;
   }
-  /* renderAnalytics KPI variant — colored left border to differentiate page */
-  .kpi-card {
-    padding: 14px 16px;
-    background: var(--steel-2);
-    border: 1px solid var(--steel);
-    border-left: 3px solid var(--steel);
-    border-radius: 6px;
-    display: flex; flex-direction: column; gap: 6px;
-    transition: border-color 120ms;
-  }
-  .kpi-card:hover { border-color: var(--ash); }
-  .kpi-card.blue   { border-left-color: #3b82f6; }
-  .kpi-card.green  { border-left-color: var(--success, #10b981); }
-  .kpi-card.red    { border-left-color: var(--red, #E30613); }
-  .kpi-card.amber  { border-left-color: #f59e0b; }
-  .kpi-card .kpi-label { font-size: 10px; letter-spacing: 0.16em; color: var(--ash-2); text-transform: uppercase; font-family: 'JetBrains Mono', monospace; }
-  .kpi-card .kpi-value { font-size: 26px; font-weight: 700; color: var(--white); font-family: 'Oswald', sans-serif; line-height: 1.1; }
-  .kpi-card .kpi-meta  { font-size: 11px; color: var(--ash); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-  .kpi-card .pill { display: inline-block; padding: 1px 6px; border-radius: 8px; font-size: 10px; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
-  .kpi-card .pill.up { background: rgba(16,185,129,0.15); color: var(--success, #10b981); }
-  .kpi-card .pill.dn { background: rgba(227,6,19,0.15); color: var(--red, #E30613); }
-  .kpi-card .pill.flat { background: rgba(170,170,170,0.15); color: var(--ash); }
   .live-dot {
     width: 8px; height: 8px;
     background: var(--success);
@@ -412,10 +320,6 @@
   .content {
     padding: 24px;
     max-width: 1700px;
-    /* 08.06.2026 R3 P2: контейнер не повинен бути ширше за свій grid-area, інакше
-       sidebar може зсуватися (BUG #3 з audit: clipped на #content) */
-    min-width: 0;
-    overflow-x: hidden;
   }
   .section-head {
     margin-bottom: 22px;
@@ -554,10 +458,10 @@
     background: var(--steel-2);
     font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     text-align: left;
-    padding: 7px 10px;
+    padding: 10px 12px;
     color: var(--ash);
     font-weight: 500;
     border-bottom: 1px solid var(--steel);
@@ -569,9 +473,8 @@
   thead th.sort-asc::after { content: ' ▲'; color: var(--red); }
   thead th.sort-desc::after { content: ' ▼'; color: var(--red); }
   tbody td {
-    padding: 7px 10px;
-    font-size: 12.5px;
-    line-height: 1.35;
+    padding: 10px 12px;
+    font-size: 13px;
     border-bottom: 1px solid var(--steel-2);
     color: #D0D0D0;
     vertical-align: middle;
@@ -582,11 +485,6 @@
   td.num { font-family: 'JetBrains Mono', monospace; text-align: right; font-variant-numeric: tabular-nums; }
   td.amount { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--white); text-align: right; font-variant-numeric: tabular-nums; }
   td.muted { color: var(--ash); }
-  /* CENTERING FIX: заголовок числової колонки теж right-aligned (інакше великий gap зі стовпчиком чисел) */
-  thead th.num, thead th.amount { text-align: right; }
-  /* Compact details-table rows (UTM_MEDIUM etc) */
-  .dash-card table tbody tr { transition: background 0.1s; }
-  .dash-card table { table-layout: auto; }
 
   /* Pagination */
   .pagination {
@@ -733,16 +631,7 @@
     .tb-btn .full-label { display: none; }
   }
   @media (max-width: 900px) {
-    /* 08.06.2026 Mobile fix: НЕ ховаємо topbar-actions повністю — лише компактимо
-       (Вадим з мобільного потребує CSV/JSON/Refresh/Settings кнопки) */
-    .topbar-actions { gap: 4px; flex-wrap: wrap; }
-    .topbar-actions .tb-btn { padding: 5px 7px; font-size: 10px; }
-  }
-  @media (max-width: 480px) {
-    /* Тільки найважливіші кнопки на portrait phone — приховуємо ⭐ Saved views і user email текст */
-    .topbar-actions { gap: 3px; }
-    .topbar-actions .tb-btn { padding: 4px 6px; font-size: 10px; }
-    .topbar #user-email { display: none; }
+    .topbar-actions { display: none; }
   }
 
   /* Help section */
@@ -978,310 +867,6 @@
 
   /* Filter row spacing */
   .filter-bar > div { display: flex; flex-direction: column; gap: 0; }
-
-  /* ============================================
-     08.06.2026 Mobile responsive — повний пакет
-     iPhone 14 Pro / Plus = ~390-430px portrait
-     iPad / 768px = tablet
-     ============================================ */
-  @media (max-width: 768px) {
-    /* Filter bar — кожне поле 50% width (2 cols) */
-    .filter-bar {
-      padding: 12px 14px;
-      gap: 8px 10px;
-    }
-    .filter-bar > div {
-      flex: 1 1 calc(50% - 6px);
-      min-width: 0;
-    }
-    .filter-bar input,
-    .filter-bar select {
-      width: 100%;
-      box-sizing: border-box;
-      font-size: 13px;       /* iOS не зумить input коли font-size>=16px, але 13px для compact */
-      padding: 8px 10px;
-    }
-    /* Кнопки Apply/Reset стандартно займають full row */
-    .filter-bar .btn,
-    .filter-bar #f-apply,
-    .filter-bar #f-reset {
-      flex: 1 1 calc(50% - 6px);
-      padding: 10px 12px;
-      font-size: 12px;
-      white-space: nowrap;
-    }
-    /* KPI grid — вже 1fr 1fr з 900px breakpoint */
-    .kpi-grid { gap: 10px; }
-    .kpi { padding: 14px 12px; }
-    .kpi-value { font-size: 22px; }
-    .kpi-label { font-size: 10px; }
-    /* Section heads — wrap chips */
-    .section-head { gap: 8px; }
-    .section-head h1 { font-size: 18px; }
-    /* Tables — horizontal scroll wrapper */
-    .card, table { overflow-x: auto; }
-    table { font-size: 11px; }
-    th, td { padding: 6px 8px !important; }
-    /* Chart cards — full width */
-    .card { padding: 12px; }
-    /* Content — менший padding */
-    .content { padding: 14px 12px; }
-  }
-
-  @media (max-width: 480px) {
-    /* iPhone portrait: TOPBAR compact + FILTERS bottom-sheet ============= */
-
-    /* ---- TOPBAR redesign ---- */
-    /* Поточний topbar це flex з burger + title + spacer + topbar-actions(7) + badge + user-chip.
-       Усе wraps у вертикаль на 390px → впадає колонкою справа. FIX: compact horizontal row. */
-    .topbar {
-      padding: 6px 10px !important;
-      gap: 6px !important;
-      flex-wrap: nowrap !important;
-      align-items: center !important;
-      min-height: 52px;
-    }
-    .topbar .topbar-title {
-      font-size: 12px;
-      letter-spacing: 0.04em;
-      flex: 1 1 auto;
-      min-width: 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .topbar .topbar-title .sep { margin: 0 4px; opacity: 0.5; }
-    .topbar .topbar-spacer { display: none; }
-    /* Live badge: лише точка, без тексту */
-    .topbar .live-badge {
-      padding: 0 !important;
-      width: 24px; height: 24px;
-      border-radius: 50%;
-      justify-content: center;
-      font-size: 0 !important;          /* ховаємо "Live" текст */
-    }
-    .topbar .live-badge .live-dot {
-      width: 8px; height: 8px;
-      margin: 0;
-    }
-    /* User chip: тільки avatar */
-    .topbar #user-chip { gap: 0; padding: 0; }
-    .topbar #user-email { display: none; }
-    .topbar .user-avatar { width: 30px; height: 30px; font-size: 12px; }
-
-    /* TOPBAR ACTIONS → kebab dropdown ⋮
-       Default state: collapsed (показуємо тільки ⋮ trigger).
-       При .open → flex column dropdown під topbar */
-    .topbar-actions {
-      position: absolute;
-      top: 56px;
-      right: 8px;
-      background: var(--black-2);
-      border: 1px solid var(--steel);
-      border-radius: 10px;
-      padding: 6px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-      display: none !important;
-      flex-direction: column;
-      gap: 4px;
-      /* R8.1: 1600 щоб бути нижче modal (10000) але вище filter-bar (700)/sidebar (1500) */
-      z-index: 1600;
-      min-width: 180px;
-    }
-    .topbar-actions.open { display: flex !important; }
-    .topbar-actions .tb-btn {
-      width: 100% !important;
-      padding: 10px 12px !important;
-      font-size: 12px !important;
-      text-align: left !important;
-      justify-content: flex-start !important;
-      min-height: 40px;
-    }
-    .topbar-actions .tb-btn .full-label { display: inline !important; }
-    /* Kebab trigger button (інжектиться JS-ом) */
-    .topbar-kebab {
-      display: inline-flex !important;
-      align-items: center;
-      justify-content: center;
-      width: 36px; height: 36px;
-      background: var(--steel-2);
-      border: 1px solid var(--steel);
-      color: #fff;
-      border-radius: 8px;
-      font-size: 18px;
-      cursor: pointer;
-      flex-shrink: 0;
-    }
-    .topbar-kebab:hover { border-color: var(--red); }
-
-    /* ---- FILTER BAR як bottom-sheet drawer ---- */
-    /* Default: повністю прихована, відкривається через FAB Фільтри */
-    .filter-bar {
-      position: fixed !important;
-      left: 0; right: 0; bottom: 0;
-      max-height: 80vh;
-      padding: 14px 16px 80px !important; /* + місце під sticky кнопки */
-      background: var(--black-2);
-      border-top: 1px solid var(--steel);
-      border-radius: 16px 16px 0 0;
-      box-shadow: 0 -8px 32px rgba(0,0,0,0.6);
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      transform: translateY(100%);
-      transition: transform 280ms cubic-bezier(.2,.8,.3,1);
-      z-index: 700;
-      gap: 12px !important;
-      flex-direction: column !important;
-      align-items: stretch !important;
-    }
-    .filter-bar.open { transform: translateY(0); }
-    /* Drawer handle (visual top bar) */
-    .filter-bar::before {
-      content: '';
-      position: sticky;
-      top: 0;
-      display: block;
-      width: 48px;
-      height: 4px;
-      margin: 0 auto 12px;
-      background: var(--steel);
-      border-radius: 2px;
-      flex-shrink: 0;
-    }
-    /* Кожен filter — full width */
-    .filter-bar > div {
-      flex: 1 1 100% !important;
-      width: 100%;
-    }
-    .filter-bar input,
-    .filter-bar select {
-      width: 100%;
-      box-sizing: border-box;
-      font-size: 14px;
-      padding: 11px 12px;
-      min-height: 44px;
-    }
-    .filter-bar label {
-      font-size: 10px;
-      margin-bottom: 4px;
-      display: block;
-    }
-    /* Apply/Reset кнопки — sticky bottom з safe-area */
-    .filter-bar .btn,
-    .filter-bar #f-apply,
-    .filter-bar #f-reset {
-      flex: 1 1 calc(50% - 4px) !important;
-      padding: 12px 16px !important;
-      font-size: 13px !important;
-      min-height: 48px;
-    }
-    /* Sticky row з Apply/Reset внизу filter-bar */
-    .filter-bar-actions {
-      position: sticky;
-      bottom: 0;
-      background: var(--black-2);
-      padding: 12px 0 max(12px, env(safe-area-inset-bottom)) 0;
-      border-top: 1px solid var(--steel);
-      margin: 8px -16px -80px;       /* нейтралізуємо padding-bottom drawer */
-      padding-left: 16px;
-      padding-right: 16px;
-      display: flex !important;
-      gap: 8px;
-      z-index: 2;
-    }
-    /* Backdrop під filter-bar */
-    .filter-backdrop {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.55);
-      backdrop-filter: blur(2px);
-      z-index: 690;
-      display: none;
-      animation: filterBdFade 200ms ease;
-    }
-    .filter-backdrop.open { display: block; }
-    @keyframes filterBdFade { from { opacity: 0; } to { opacity: 1; } }
-
-    /* FAB-style "Фільтри" trigger у нижньому правому куті */
-    .filter-fab {
-      position: fixed;
-      right: 16px;
-      bottom: 16px;
-      padding: 12px 18px;
-      background: linear-gradient(135deg, var(--red), var(--red-deep));
-      color: #fff;
-      border: none;
-      border-radius: 50px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 6px 20px rgba(227,6,19,0.45);
-      z-index: 600;
-      display: flex !important;
-      align-items: center;
-      gap: 8px;
-      min-height: 48px;
-    }
-    .filter-fab .cnt {
-      /* R8.1: white bg + red text для max контрасту (раніше rgba 0.22 був ледь видно) */
-      background: #fff;
-      color: var(--red);
-      padding: 2px 8px;
-      border-radius: 10px;
-      font-size: 11px;
-      font-weight: 800;
-      min-width: 18px;
-      text-align: center;
-    }
-
-    /* ---- Content ---- */
-    .content { padding: 14px 12px 84px !important; }     /* padding-bottom під FAB */
-    .kpi-grid { grid-template-columns: 1fr !important; gap: 8px; }
-    .kpi { padding: 12px; }
-    .kpi-value { font-size: 24px; }
-    .section-head {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 8px;
-    }
-    .section-head h1 { font-size: 16px; }
-    .card { padding: 10px; }
-    canvas { max-height: 280px !important; }
-    .modal { max-width: 100vw !important; max-height: 100vh !important; border-radius: 0 !important; }
-
-    /* Sidebar — як off-canvas drawer (зліва) */
-    .app { grid-template-columns: 1fr !important; }
-    .sidebar {
-      position: fixed !important;
-      top: 0; bottom: 0;
-      left: 0 !important;                /* R8.1: явно 0 (не -240px з 900px MQ) щоб лише transform анімував */
-      width: 86vw !important;
-      max-width: 320px;
-      height: 100vh !important;
-      max-height: none !important;
-      transform: translateX(-100%);
-      transition: transform 240ms cubic-bezier(.2,.8,.3,1) !important;
-      z-index: 1500;
-      border-right: 1px solid var(--steel) !important;
-      box-shadow: 8px 0 24px rgba(0,0,0,0.5);
-      padding: 14px 12px !important;
-      overflow-y: auto !important;
-    }
-    .sidebar.open { transform: translateX(0); }
-    .sidebar-backdrop {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.55);
-      backdrop-filter: blur(2px);
-      z-index: 1400;
-      display: none;
-    }
-    .sidebar-backdrop.open { display: block; }
-    .burger { display: inline-flex !important; align-items: center; justify-content: center; width: 36px; height: 36px; padding: 0; font-size: 18px; flex-shrink: 0; }
-  }
-  /* Default: hide mobile-only chrome elements.
-     `.filter-bar-actions` НЕ ховається — це wrapper для існуючих кнопок Apply/Reset,
-     які мають лишатися видимі на desktop. На desktop він просто `display: contents` (transparent flex). */
-  .topbar-kebab, .filter-fab, .filter-backdrop, .sidebar-backdrop { display: none; }
-  .filter-bar-actions { display: contents; }
 </style>
 </head>
 <body>
@@ -1291,7 +876,6 @@
     <div class="nav-group">
       <div class="nav-group-title">Аналітика</div>
       <div class="nav-item" data-route="overview"><span class="icon">📊</span>Огляд</div>
-      <div class="nav-item" data-route="projects"><span class="icon">🏎️</span>Проекти</div>
       <div class="nav-item" data-route="analytics"><span class="icon">💰</span>Аналітика</div>
       <div class="nav-item" data-route="combos"><span class="icon">🔗</span>Комбінації</div>
       <div class="nav-item" data-route="sources"><span class="icon">📍</span>Джерела</div>
@@ -1302,21 +886,9 @@
     </div>
 
     <div class="nav-group">
-      <div class="nav-group-title">Стратегія</div>
-      <a class="nav-item" href="/finance/" style="color:inherit;text-decoration:none;display:flex;align-items:center;"><span class="icon">💰</span>Фінанси (P&L)</a>
-      <a class="nav-item" href="/kasa/" style="color:inherit;text-decoration:none;display:flex;align-items:center;"><span class="icon">🧾</span>Каса</a>
-    </div>
-
-    <div class="nav-group">
-      <div class="nav-group-title">Експерименти</div>
-      <a class="nav-item" href="/upsell-ab/" style="color:inherit;text-decoration:none;display:flex;align-items:center;"><span class="icon">🧪</span>Upsell A/B/C</a>
-    </div>
-
-    <div class="nav-group">
       <div class="nav-group-title">Facebook Ads</div>
       <div class="nav-item" data-route="ads-overview"><span class="icon">💸</span>Ads Overview</div>
       <div class="nav-item" data-route="ads-campaigns"><span class="icon">📊</span>Ads Campaigns</div>
-      <a class="nav-item" href="/meta-analytics/" style="color:inherit;text-decoration:none;display:flex;align-items:center;"><span class="icon">📈</span>Meta по проєктах</a>
     </div>
 
     <div class="nav-group collapsible" id="grp-maint">
@@ -1325,8 +897,6 @@
         <div class="nav-item" data-route="deals"><span class="icon">📋</span>Таблиця</div>
         <div class="nav-item" data-route="webhooks"><span class="icon">🪝</span>Webhook логи</div>
         <div class="nav-item" data-route="mapping"><span class="icon">🗺</span>UTM Mapping</div>
-        <div class="nav-item" data-route="people"><span class="icon">👥</span>People Merge</div>
-        <div class="nav-item" data-route="cohort"><span class="icon">📈</span>Cohort Retention</div>
         <div class="nav-item" data-route="costs"><span class="icon">💰</span>Manual Costs</div>
       </div>
     </div>
@@ -1353,8 +923,6 @@
       DREAM<span style="color:var(--red)">CAR</span><span class="sep">·</span><span class="sec" id="topbar-section">DASHBOARD</span>
     </div>
     <div class="topbar-spacer"></div>
-    <!-- 08.06.2026 Mobile R8: Kebab trigger ⋮ (видимий лише на ≤480px, відкриває dropdown) -->
-    <button class="topbar-kebab" id="topbarKebab" aria-label="Меню дій" type="button">⋮</button>
     <div class="topbar-actions" id="topbar-actions">
       <button class="tb-btn" data-jump="costs" title="Указати затрати вручну">💰 <span class="full-label">Затрати</span></button>
       <button class="tb-btn" id="tb-apply" title="Застосувати фільтри">🔍 <span class="full-label">Застосувати</span></button>
@@ -1364,8 +932,7 @@
       <button class="tb-btn" id="tb-refresh" title="Оновити дані">🔄 <span class="full-label">Оновити</span></button>
       <button class="tb-btn" data-jump="settings" title="Налаштування проєктів">⚙️ <span class="full-label">Settings</span></button>
     </div>
-    <!-- #223: видалив свій dc-theme-toggle — global-header.js (brand.dreamcar.ua) вже додає кросс-апі #dc-theme-btn 🌙 з тим самим localStorage ключем 'dc-theme'. CSS світлої теми лишається — спрацьовує і з global toggle. -->
-    <div class="live-badge" id="live-badge"><span class="live-dot"></span>Live</div>
+    <div class="live-badge"><span class="live-dot"></span>Live</div>
     <div class="user-chip" id="user-chip">
       <div class="user-avatar">?</div>
       <span id="user-email">guest</span>
@@ -1397,9 +964,9 @@
           <option value="">Усі проєкти</option>
         </select>
       </div>
-      <div title="Додатковий фільтр — точне значення поля project у БД (для тонкого налаштування). Більшість випадків - не потрібен, використовуйте 'Активний розіграш'" style="display:none;">
-        <label style="opacity:0.7;">Звузити по project (advanced)</label>
-        <select id="f-project" style="opacity:0.85;">
+      <div>
+        <label>Проєкт (DB)</label>
+        <select id="f-project">
           <option value="">— Усі —</option>
         </select>
       </div>
@@ -1450,12 +1017,13 @@
           <option value="organic">🌱 Органічний</option>
         </select>
       </div>
-      <!-- 14.06.2026 (Vadym): "Джерела" (source-filter) видалено як зайвий.
-           Залишаємо hidden щоб JS-стан не падав з undefined. -->
-      <div style="display:none;">
+      <div>
         <label>Джерела</label>
         <select id="f-source-filter">
           <option value="">Усі</option>
+          <option value="both">🟢 Загальні (CRM+ADS)</option>
+          <option value="crm">🔵 CRM-only (органіка)</option>
+          <option value="ads">🟡 ADS-only (без лідів)</option>
         </select>
       </div>
       <div id="f-combo-wrap" style="display:none">
@@ -1471,25 +1039,13 @@
       <div>
         <label>Granul.</label>
         <select id="f-granularity">
-          <option value="hour">Година</option>
           <option value="day">День</option>
           <option value="week">Тиждень</option>
           <option value="month">Місяць</option>
         </select>
       </div>
-      <!-- 08.06.2026 R8: sticky action row для mobile drawer -->
-      <div class="filter-bar-actions">
-        <button class="btn btn-ghost" id="f-reset">✕ Скинути</button>
-        <button class="btn btn-primary" id="f-apply">🔍 Застосувати</button>
-      </div>
-    </div>
-    <!-- P1 #10 UTM free-text filters — окремий ряд -->
-    <div class="filter-bar" id="filter-bar-utm" style="display:none;padding-top:0;">
-      <div><label>UTM Source</label><input type="text" id="f-utm-source" placeholder="напр. facebook" autocomplete="off"/></div>
-      <div><label>UTM Medium</label><input type="text" id="f-utm-medium" placeholder="напр. cpc" autocomplete="off"/></div>
-      <div><label>UTM Campaign</label><input type="text" id="f-utm-campaign" placeholder="part of name" autocomplete="off"/></div>
-      <div><label>UTM Term</label><input type="text" id="f-utm-term" placeholder="executor" autocomplete="off"/></div>
-      <div><label>UTM Content</label><input type="text" id="f-utm-content" placeholder="creative" autocomplete="off"/></div>
+      <button class="btn btn-ghost" id="f-reset">✕ Скинути</button>
+      <button class="btn btn-primary" id="f-apply">🔍 Застосувати</button>
     </div>
 
     <div class="content" id="content">
@@ -1575,183 +1131,7 @@
   </div>
 </div>
 
-<!-- 08.06.2026 R8 Mobile: backdrops для drawers + Floating Filter trigger -->
-<div class="sidebar-backdrop" id="sidebarBackdrop" aria-hidden="true"></div>
-<div class="filter-backdrop" id="filterBackdrop" aria-hidden="true"></div>
-<button class="filter-fab" id="filterFab" type="button" aria-label="Відкрити фільтри">
-  ⚙ Фільтри<span class="cnt" id="filterFabCnt">0</span>
-</button>
-
-<!-- 08.06.2026 R8: Mobile bootstrap (kebab dropdown + filter drawer + sidebar drawer) -->
-<script>
-(function dashboardMobileBootstrap() {
-  function onReady(fn){
-    if (document.readyState !== 'loading') fn();
-    else document.addEventListener('DOMContentLoaded', fn);
-  }
-  onReady(function init() {
-    var burger = document.getElementById('burger');
-    var sidebar = document.getElementById('sidebar');
-    var sidebarBd = document.getElementById('sidebarBackdrop');
-    var kebab = document.getElementById('topbarKebab');
-    var tbActions = document.getElementById('topbar-actions');
-    var filterBar = document.getElementById('filter-bar');
-    var filterBd = document.getElementById('filterBackdrop');
-    var fab = document.getElementById('filterFab');
-    var fabCnt = document.getElementById('filterFabCnt');
-
-    // R8.1: forward declarations — щоб openSidebar() міг викликати closeFilters() etc.
-    function closeSidebar(){
-      if (sidebar) sidebar.classList.remove('open');
-      if (sidebarBd) sidebarBd.classList.remove('open');
-      document.body.style.overflow = '';
-    }
-    function closeKebab(){
-      if (tbActions) tbActions.classList.remove('open');
-    }
-    function closeFilters(){
-      if (filterBar) filterBar.classList.remove('open');
-      if (filterBd) filterBd.classList.remove('open');
-      document.body.style.overflow = '';
-    }
-
-    // ---- Sidebar drawer ----
-    function openSidebar(){
-      closeKebab(); closeFilters();           // R8.1 mutual exclusion
-      if (sidebar) sidebar.classList.add('open');
-      if (sidebarBd) sidebarBd.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-    if (burger) burger.addEventListener('click', function(e){
-      e.preventDefault();
-      if (sidebar && sidebar.classList.contains('open')) closeSidebar(); else openSidebar();
-    });
-    if (sidebarBd) sidebarBd.addEventListener('click', closeSidebar);
-    if (sidebar) sidebar.addEventListener('click', function(e){
-      var t = e.target.closest('.nav-item');
-      if (t) closeSidebar();
-    });
-
-    // ---- Kebab dropdown (topbar-actions) ----
-    if (kebab && tbActions) {
-      kebab.addEventListener('click', function(e){
-        e.preventDefault();
-        e.stopPropagation();
-        if (tbActions.classList.contains('open')) { closeKebab(); return; }
-        closeFilters(); closeSidebar();         // R8.1 mutual exclusion
-        tbActions.classList.add('open');
-      });
-      // Click anywhere else → close (NOT capture-phase — memory rule)
-      document.addEventListener('click', function(e){
-        if (!tbActions.classList.contains('open')) return;
-        if (e.target === kebab || tbActions.contains(e.target)) return;
-        closeKebab();
-      });
-      // Close after action клік (UX expectation)
-      tbActions.addEventListener('click', function(e){
-        if (e.target.closest('.tb-btn')) setTimeout(closeKebab, 100);
-      });
-    }
-
-    // ---- Filter drawer ----
-    function openFilters(){
-      closeKebab(); closeSidebar();           // R8.1 mutual exclusion
-      if (filterBar) filterBar.classList.add('open');
-      if (filterBd) filterBd.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-    if (fab) fab.addEventListener('click', function(e){
-      e.preventDefault();
-      if (filterBar && filterBar.classList.contains('open')) closeFilters(); else openFilters();
-    });
-    if (filterBd) filterBd.addEventListener('click', closeFilters);
-    // Apply кнопка → закриває drawer (renderRoute сам спрацює бо event handler уже стоїть)
-    var fApply = document.getElementById('f-apply');
-    if (fApply) fApply.addEventListener('click', function(){ setTimeout(closeFilters, 50); });
-    // R8.1: tb-reset (kebab Reset) також refresh-ає counter після reset
-    var tbReset = document.getElementById('tb-reset');
-    var fReset = document.getElementById('f-reset');
-
-    // R8.1: SWIPE-DOWN to close filter drawer (true mobile UX, handle pill тепер functional)
-    if (filterBar) {
-      var touchY0 = null;
-      var touchY1 = null;
-      filterBar.addEventListener('touchstart', function(e){
-        if (e.touches && e.touches[0]) {
-          touchY0 = e.touches[0].clientY;
-          // Тільки якщо scroll position зверху — інакше це звичайний scroll, не swipe close
-          if (filterBar.scrollTop > 4) touchY0 = null;
-        }
-      }, { passive: true });
-      filterBar.addEventListener('touchmove', function(e){
-        if (touchY0 == null) return;
-        touchY1 = e.touches[0].clientY;
-        var dy = touchY1 - touchY0;
-        if (dy > 0) {
-          filterBar.style.transform = 'translateY(' + dy + 'px)';
-        }
-      }, { passive: true });
-      filterBar.addEventListener('touchend', function(){
-        if (touchY0 == null) { return; }
-        var dy = (touchY1 || touchY0) - touchY0;
-        filterBar.style.transform = '';   // повертаємо CSS transition
-        if (dy > 60) closeFilters();
-        touchY0 = null; touchY1 = null;
-      });
-    }
-
-    // Counter активних фільтрів — підраховуємо НЕ-default selects + non-empty UTM inputs
-    function refreshFilterCount(){
-      if (!fabCnt) return;
-      var cnt = 0;
-      // Selects що мають value НЕ перший option (тобто != "")
-      var selects = filterBar ? filterBar.querySelectorAll('select') : [];
-      selects.forEach(function(s){
-        var v = s.value;
-        // default: '', 'all', '30d' (період), 'all' (інші)
-        if (v && v !== '' && v !== 'all' && v !== '30d') cnt++;
-      });
-      // UTM inputs
-      ['#f-utm-source','#f-utm-medium','#f-utm-campaign','#f-utm-term','#f-utm-content'].forEach(function(sel){
-        var el = document.querySelector(sel);
-        if (el && el.value && el.value.trim() !== '') cnt++;
-      });
-      fabCnt.textContent = cnt;
-      fabCnt.style.display = cnt > 0 ? '' : 'none';
-    }
-    window.__refreshFilterFabCount = refreshFilterCount;   // для external refresh
-
-    if (filterBar) {
-      filterBar.addEventListener('change', refreshFilterCount);
-      filterBar.addEventListener('input', refreshFilterCount);
-    }
-    // R8.1: програмні reset не fire-ять change → ручний refresh
-    if (tbReset) tbReset.addEventListener('click', function(){ setTimeout(refreshFilterCount, 100); });
-    if (fReset) fReset.addEventListener('click', function(){ setTimeout(refreshFilterCount, 100); });
-    refreshFilterCount();
-
-    // ---- Esc закриває всі drawers ----
-    document.addEventListener('keydown', function(e){
-      if (e.key !== 'Escape') return;
-      if (tbActions && tbActions.classList.contains('open')) closeKebab();
-      if (filterBar && filterBar.classList.contains('open')) closeFilters();
-      if (sidebar && sidebar.classList.contains('open')) closeSidebar();
-    });
-
-    // ---- Resize: > 480px → закрити mobile drawers ----
-    var mq = window.matchMedia('(max-width: 480px)');
-    function onMq(){
-      if (!mq.matches) {
-        closeSidebar(); closeFilters(); closeKebab();
-      }
-    }
-    if (mq.addEventListener) mq.addEventListener('change', onMq);
-  });
-})();
-</script>
-
 <script src="assets/js/auth-guard.js" defer></script>
-<script src="app-dashboard-extras.js?v=20260614-pulse-removed" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://brand.dreamcar.ua/assets/global-header.js" defer></script>
 
@@ -1820,8 +1200,8 @@ const filters = {
   combo_type: 'all'
 };
 
-// 14.06.2026 #392.2 — MAIN_PROJECTS видалено (dead code після #98 — auto-fetch з public.launches).
-let __projectsList = []; // cached from dashboard_projects table
+/* Хардкод-список основних проектів — захардкоджуємо для повного покриття */
+const MAIN_PROJECTS = ['OLD','VOLVO','Q7','Mercedes','DreamCar AI','AUDI E-TRON','BMW','Контакт'];
 
 /* Активні розіграші — модель + start/end + project-substring у БД.
    Зберігаємо у localStorage щоб юзер міг редагувати через Settings. */
@@ -1831,24 +1211,14 @@ const DEFAULT_MODELS = [
   { id: 'bmw-330e',       name: 'BMW 330E HYBRID',      start: '2026-01-09', end: '2026-01-23', match: 'BMW' },
   { id: 'mercedes-gle',   name: 'MERCEDES GLE COUPE',   start: '2026-02-06', end: '2026-03-01', match: 'Mercedes' },
   { id: 'bmw-x5',         name: 'BMW X5 HYBRID',        start: '2026-03-24', end: '2026-04-19', match: 'BMW' },
-  { id: 'audi-etron',     name: 'AUDI E-TRON',          start: '2026-05-06', end: '2026-05-31', match: 'AUDI E-TRON' },
-  // 06.06.2026 — додано на основі public.launches.code='IPHONE17'.
-  // У DCI-order-ref префікс 'iphone' (lowercase), у dashboard_deals.project = 'IPHONE 17 PRO MAX'.
-  { id: 'iphone-17',      name: 'iPhone 17 PRO MAX',    start: '2026-06-06', end: '2026-12-31', match: 'IPHONE' }
+  { id: 'audi-etron',     name: 'AUDI E-TRON',          start: '2026-05-06', end: '2026-05-31', match: 'AUDI E-TRON' }
 ];
 function loadModels() {
   try {
     const raw = localStorage.getItem('dashboard_active_models');
     if (raw) {
       const arr = JSON.parse(raw);
-      if (Array.isArray(arr) && arr.length) {
-        // Merge: підтягуємо нові default-моделі що з'явилися після того як юзер зберігав свої налаштування.
-        // Без цього нові проекти (напр. iPhone) не з'являться у юзерів зі старим localStorage.
-        const existingIds = new Set(arr.map(m => m.id));
-        const merged = arr.slice();
-        DEFAULT_MODELS.forEach(d => { if (!existingIds.has(d.id)) merged.push(d); });
-        return merged;
-      }
+      if (Array.isArray(arr) && arr.length) return arr;
     }
   } catch {}
   return DEFAULT_MODELS.slice();
@@ -1870,20 +1240,11 @@ function isPaidSource(src) {
   return PAID_SOURCES.has(s) || /(_paid|_ads|_cpc)/.test(s);
 }
 
-// 07.06.2026 P0 FIX: ymd має повертати ДЕНЬ ЗА КИЇВСЬКОЮ ТЗ незалежно від браузера юзера (Польща CET vs Київ EEST/CEST).
-// Раніше getDate() повертав local day браузера — у Польщі CEST о 23:30 06.06 був би 06.06, але в Києві (на годину пізніше) вже 07.06.
-const ymd = (d) => {
-  const dd = (d instanceof Date) ? d : new Date(d);
-  // toLocaleDateString з timeZone='Europe/Kyiv' завжди дає Київський календарний день
-  // sv-SE формат дає YYYY-MM-DD (стандарт ISO)
-  return dd.toLocaleDateString('sv-SE', { timeZone: 'Europe/Kyiv' });
-};
+const ymd = (d) => { const dd = new Date(d); dd.setHours(0,0,0,0); return dd.toISOString().slice(0,10); };
 const todayYmd = () => ymd(new Date());
 
 function applyPreset(p) {
   const today = new Date();
-  // 08.06.2026 R6: записуємо filters.preset одразу — щоб syncFilterBarFromState не reset-нула на '30d'
-  filters.preset = p;
   if (p === 'today') { filters.from = todayYmd(); filters.to = todayYmd(); }
   else if (p === 'yesterday') { const d = new Date(today); d.setDate(d.getDate()-1); filters.from = ymd(d); filters.to = ymd(d); }
   else if (p === '7d') { const d = new Date(today); d.setDate(d.getDate()-7); filters.from = ymd(d); filters.to = todayYmd(); }
@@ -1933,89 +1294,15 @@ function setupFilterBar() {
     applyPreset(v);
     if (v !== 'custom') renderRoute();
   });
-  $('#f-model').addEventListener('change', e => {
-    filters.model = e.target.value;
-    const m = getActiveModel();
-    if (m && m.start && m.end) {
-      // Вибрано конкретний проект → встановити його date range
-      filters.from = m.start;
-      filters.to = m.end;
-      const cf = $('#cd-from'); if (cf) cf.value = m.start;
-      const ct = $('#cd-to'); if (ct) ct.value = m.end;
-      const dr = $('#f-date-range'); if (dr) dr.value = 'custom';
-    } else {
-      // 🛡 FIX 03.06.2026: «Усі проєкти» — скинути дати на «Весь період» (all-time)
-      // Раніше дати залишались від попередньо вибраного проекту → цифри не оновлювались
-      filters.from = '2019-01-01';
-      filters.to = todayYmd();
-      const cf = $('#cd-from'); if (cf) cf.value = filters.from;
-      const ct = $('#cd-to'); if (ct) ct.value = filters.to;
-      const dr = $('#f-date-range'); if (dr) dr.value = 'all';
-    }
-    renderRoute();
-  });
-  $('#f-project').addEventListener('change', e => {
-    filters.project = e.target.value;
-    const sp = getSelectedProject();
-    // 07.06.2026 P0 FIX: project select раніше СЛІПО переписував filters.from/to у дати проекту.
-    // Це ламало "Сьогодні": при iPhone (06.06-06.06) період ставав 06.06-06.06 замість current date.
-    // Тепер тільки звужуємо до перетину з поточним вибраним preset.
-    if (sp) {
-      // 08.06.2026 P0 FIX: був wrong selector `#date-preset` — реальний ID `#f-date-range`.
-      // Через це currentPreset завжди = 'today' → condition `=== 'all'` ніколи не спрацьовував.
-      const dr = $('#f-date-range');
-      const currentPreset = dr ? dr.value : 'today';
-      // Якщо preset — конкретна дата/період, лишаємо його. Звуження до проекту відбувається у _rpcParams().
-      // Тільки якщо це "all" або період виходить за межі проекту — підставляємо межі проекту.
-      if (currentPreset === 'all' || !filters.from || !filters.to) {
-        filters.from = sp.date_start;
-        filters.to = sp.date_end;
-        const cf = $('#cd-from'); if (cf) cf.value = sp.date_start;
-        const ct = $('#cd-to'); if (ct) ct.value = sp.date_end;
-        if (dr) dr.value = 'custom';
-      }
-      // Інакше — лишаємо поточний period, _rpcParams() сам зробить перетин з sp.date_start..sp.date_end
-    }
-    renderRoute();
-  });
-  // All non-date filters: write → renderRoute immediately (audit P1 — was waiting for Apply, asymmetric UX)
-  $('#f-status').addEventListener('change', e => { filters.status = e.target.value; renderRoute(); });
-  $('#f-customer-type').addEventListener('change', e => { filters.customer_type = e.target.value; renderRoute(); });
-  $('#f-funnel-type').addEventListener('change', e => { filters.funnel_type = e.target.value; renderRoute(); });
-  $('#f-tariff').addEventListener('change', e => { filters.tariff = e.target.value; renderRoute(); });
-  $('#f-pay-provider').addEventListener('change', e => { filters.pay_provider = e.target.value; renderRoute(); });
-  $('#f-traffic-type').addEventListener('change', e => { filters.traffic_type = e.target.value; renderRoute(); });
-  $('#f-source-filter').addEventListener('change', e => { filters.source_filter = e.target.value; renderRoute(); });
-  // P1 #10 — UTM free-text фільтри (debounced + Enter flush)
-  ['utm-source','utm-medium','utm-campaign','utm-term','utm-content'].forEach(f => {
-    var el = $('#f-' + f);
-    if (!el) return;
-    var key = f.replace(/-/g, '_');
-    // 08.06.2026 R3 P2: Enter flush — миттєво применяє filter, не чекає 350ms debounce
-    el.addEventListener('keydown', function(ev) {
-      if (ev.key === 'Enter') {
-        ev.preventDefault();
-        filters[key] = el.value.trim() || null;
-        renderRoute();
-      }
-    });
-    // 14.06.2026 #392.1: debounce 350→600ms + onBlur flush. Раніше короткий debounce створював
-    // повний renderRoute() кожні 2-3 натискання, навіть коли користувач продовжував друкувати.
-    if (el) {
-      el.addEventListener('input', debounce(() => {
-        const v = el.value.trim() || null;
-        if (filters[key] === v) return; // skip no-op
-        filters[key] = v;
-        renderRoute();
-      }, 600));
-      el.addEventListener('blur', () => {
-        const v = el.value.trim() || null;
-        if (filters[key] === v) return;
-        filters[key] = v;
-        renderRoute();
-      });
-    }
-  });
+  $('#f-model').addEventListener('change', e => { filters.model = e.target.value; renderRoute(); });
+  $('#f-project').addEventListener('change', e => { filters.project = e.target.value; });
+  $('#f-status').addEventListener('change', e => { filters.status = e.target.value; });
+  $('#f-customer-type').addEventListener('change', e => { filters.customer_type = e.target.value; });
+  $('#f-funnel-type').addEventListener('change', e => { filters.funnel_type = e.target.value; });
+  $('#f-tariff').addEventListener('change', e => { filters.tariff = e.target.value; });
+  $('#f-pay-provider').addEventListener('change', e => { filters.pay_provider = e.target.value; });
+  $('#f-traffic-type').addEventListener('change', e => { filters.traffic_type = e.target.value; });
+  $('#f-source-filter').addEventListener('change', e => { filters.source_filter = e.target.value; });
   $('#f-combo-type').addEventListener('change', e => { filters.combo_type = e.target.value; renderRoute(); });
   $('#f-granularity').addEventListener('change', e => { filters.granularity = e.target.value; renderRoute(); });
   $('#f-reset').addEventListener('click', () => resetFilters());
@@ -2041,13 +1328,11 @@ function setupFilterBar() {
 }
 
 function resetFilters() {
-  applyPreset('today');
+  applyPreset('30d');
   filters.project = ''; filters.status = '';
   filters.customer_type = ''; filters.funnel_type = '';
   filters.tariff = ''; filters.pay_provider = '';
   filters.traffic_type = ''; filters.source_filter = '';
-  filters.utm_source = null; filters.utm_medium = null; filters.utm_campaign = null; filters.utm_term = null; filters.utm_content = null;
-  ['f-utm-source','f-utm-medium','f-utm-campaign','f-utm-term','f-utm-content'].forEach(id => { var el = $('#' + id); if (el) el.value = ''; });
   filters.combo_type = 'all';
   filters.model = '';
   filters.granularity = 'day';
@@ -2063,21 +1348,7 @@ function resetFilters() {
 }
 
 function syncFilterBarFromState() {
-  // 08.06.2026 R3 P2: повна синхронізація ВСІХ UI controls з filters state
-  // Раніше тільки date-range синхронізувався → granularity / status / etc. могли desync (JSON state ≠ UI)
-  const setVal = (sel, val) => { const el = $(sel); if (el && el.value !== val) el.value = val; };
-  setVal('#f-date-range', filters.preset || '30d');
-  setVal('#f-granularity', filters.granularity || 'day');
-  setVal('#f-status', filters.status || '');
-  setVal('#f-customer-type', filters.customer_type || '');
-  setVal('#f-funnel-type', filters.funnel_type || '');
-  setVal('#f-tariff', filters.tariff || '');
-  setVal('#f-pay-provider', filters.pay_provider || '');
-  setVal('#f-traffic-type', filters.traffic_type || '');
-  setVal('#f-source-filter', filters.source_filter || '');
-  setVal('#f-project', filters.project || '');
-  if (filters.from) setVal('#cd-from', filters.from);
-  if (filters.to) setVal('#cd-to', filters.to);
+  $('#f-date-range').value = filters.preset || '30d';
 }
 
 /* ------------ Modals ------------ */
@@ -2092,15 +1363,10 @@ function closeModal(id) {
   el.classList.add('hidden');
 }
 document.addEventListener('click', (e) => {
-  // 08.06.2026 R3 P2: захист від collision з не-модальними елементами що мають [data-close] чи .modal-backdrop
-  // У минулому ламало theme toggle / nav buttons коли вони випадково мали схожі attributes
-  const isClose = e.target.matches('[data-close]');
-  const isBackdrop = e.target === e.currentTarget ? false : e.target.classList && e.target.classList.contains('modal-backdrop');
-  if (!isClose && !isBackdrop) return;
-  // Не зачіпаємо tb-btn (topbar buttons), nav-item (sidebar), кнопки фільтрів
-  if (e.target.closest('.tb-btn, .nav-item, .filter-bar, .topbar')) return;
-  const m = e.target.closest('[data-modal]') || e.target;
-  if (m && m.id) m.classList.add('hidden');
+  if (e.target.matches('[data-close]') || e.target.matches('.modal-backdrop')) {
+    const m = e.target.closest('[data-modal]') || e.target;
+    if (m && m.id) m.classList.add('hidden');
+  }
 });
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') $$('.modal-backdrop').forEach(m => m.classList.add('hidden'));
@@ -2184,128 +1450,27 @@ function loadModelsSelect() {
   const sel = $('#f-model');
   if (!sel) return;
   const cur = filters.model;
-  // SYNC with dashboard_projects table (all 7 projects including archived)
-  const src = (__projectsList && __projectsList.length)
-    ? __projectsList.map(p => ({
-        id: p.code,
-        name: p.name,
-        start: p.date_start,
-        end: p.date_end,
-        match: (p.deal_project_values && p.deal_project_values[0]) || ''
-      }))
-    : ACTIVE_MODELS;
-  // Keep ACTIVE_MODELS in sync for legacy `getActiveModel()` reads
-  if (src !== ACTIVE_MODELS) ACTIVE_MODELS = src;
   sel.innerHTML = '<option value="">Усі проєкти</option>' +
-    src.map(m => `<option value="${escapeHtml(m.id)}">${escapeHtml(m.name)} (${(m.start||'').slice(5).replace('-','.')}–${(m.end||'').slice(5).replace('-','.')})</option>`).join('');
+    ACTIVE_MODELS.map(m => `<option value="${escapeHtml(m.id)}">${escapeHtml(m.name)} (${m.start.slice(5).replace('-','.')}–${m.end.slice(5).replace('-','.')})</option>`).join('');
   if (cur) sel.value = cur;
 }
-
-// 08.06.2026 (Вадим): auto-select найновіший активний проект + entire period.
-// Викликається 1 раз на bootstrap після завантаження __projectsList, тільки якщо
-// користувач ще не встановив filter.project (інакше respect його вибір).
-function autoSelectNewestProject() {
-  if (filters.project) {
-    // If selected project is expired, allow override — stale filter causes zero results
-    const _selProj = __projectsList.find(p => p.code === filters.project);
-    const _today = todayYmd();
-    if (_selProj && (_selProj.date_end || '') >= _today) return; // still active
-    // Expired project — clear and auto-select fresh one
-    console.log('[dashboard] stale project filter cleared:', filters.project, 'ended:', _selProj && _selProj.date_end);
-    filters.project = null;
-  }
-  if (!__projectsList || !__projectsList.length) return;
-  const today = todayYmd();
-  // Знаходимо найновіший проект, в межах якого попадає сьогодні (active right now).
-  // Якщо немає — найновіший майбутній (planning). Якщо немає — найновіший завершений.
-  let active = null;
-  let upcoming = null;
-  let recent = null;
-  for (const p of __projectsList) {
-    const ds = p.date_start || '1900-01-01';
-    const de = p.date_end || '2999-12-31';
-    if (ds <= today && today <= de) {
-      // currently running
-      if (!active || ds > active.date_start) active = p;
-    } else if (ds > today) {
-      // future
-      if (!upcoming || ds < upcoming.date_start) upcoming = p;
-    } else {
-      // past
-      if (!recent || de > recent.date_end) recent = p;
-    }
-  }
-  const pick = active || upcoming || recent;
-  if (!pick) return;
-  // Lifetime проекти (HUMMER 01.01-31.12.30) пропускаємо — це не "поточний"
-  if ((pick.date_end || '') >= '2030-01-01') return;
-  filters.project = pick.code;
-  filters.from = pick.date_start;
-  // 08.06.2026 P0 FIX: null date_end (ongoing project like MOTO) — null > todayYmd() = false → filters.to = null → breaks kyivIsoEnd
-  filters.to = (!pick.date_end || pick.date_end > todayYmd()) ? todayYmd() : pick.date_end;
-  filters.preset = 'custom';
-  const fm = $('#f-model'); if (fm) fm.value = pick.code;
-  const fp = $('#f-project'); if (fp) fp.value = pick.code;
-  const dr = $('#f-date-range'); if (dr) dr.value = 'custom';
-  const cf = $('#cd-from'); if (cf) cf.value = filters.from;
-  const ct = $('#cd-to'); if (ct) ct.value = filters.to;
-  console.log('[dashboard] auto-selected newest active project:', pick.code, filters.from, '→', filters.to);
-}
-
-/* ------------ Timezone helpers (Kyiv CET/CEST) ------------ */
-/* Returns Kyiv timezone offset string (+02:00 or +03:00) for a YYYY-MM-DD date.
-   Europe/Kyiv is in CEST (+3) from last Sunday of March to last Sunday of October. */
-function kyivOffset(yyyymmdd) {
-  if (!yyyymmdd) return '+03:00';
-  const [y, m, d] = yyyymmdd.split('-').map(Number);
-  if (m > 3 && m < 10) return '+03:00';
-  if (m < 3 || m > 10) return '+02:00';
-  // March or October — compute last Sunday precisely
-  const d1 = new Date(Date.UTC(y, m - 1, 1));
-  const firstDow = d1.getUTCDay();
-  const firstSunday = 1 + ((7 - firstDow) % 7);
-  let lastSunday = firstSunday + 28;
-  while (lastSunday > 31) lastSunday -= 7;
-  if (m === 3)  return (d >= lastSunday) ? '+03:00' : '+02:00';
-  if (m === 10) return (d <  lastSunday) ? '+03:00' : '+02:00';
-  return '+02:00'; // 08.06.2026 safety fallback - захист від implicit undefined у edge cases
-}
-// 14.06.2026 — null guard. Раніше `null + 'T00:00:00+03:00'` = string 'nullT00:00:00+03:00' → RPC падало
-// з "invalid input syntax for type timestamp". Коли filters.from/to null (date_range='all') — повертаємо null.
-function kyivIsoStart(yyyymmdd) { return yyyymmdd ? (yyyymmdd + 'T00:00:00' + kyivOffset(yyyymmdd)) : null; }
-function kyivIsoEnd(yyyymmdd)   { return yyyymmdd ? (yyyymmdd + 'T23:59:59' + kyivOffset(yyyymmdd)) : null; }
 
 /* ------------ Supabase fetch helpers ------------ */
 async function fetchDealsRange(offset, limit) {
   let q = sb.from('dashboard_deals')
-    .select('id,sendpulse_deal_id,status,amount,currency,project,utm_source,utm_medium,utm_campaign,utm_term,utm_content,customer_email,customer_phone,customer_type,tariff,pay_provider,wc_order_id,created_at,paid_at,failed_at')
-    .gte('created_at', kyivIsoStart(filters.from))
-    .lte('created_at', kyivIsoEnd(filters.to))
+    .select('id,sendpulse_deal_id,status,amount,currency,project,utm_source,utm_medium,utm_campaign,utm_term,utm_content,customer_email,customer_type,tariff,pay_provider,created_at,paid_at')
+    .gte('created_at', filters.from + 'T00:00:00Z')
+    .lte('created_at', filters.to + 'T23:59:59Z')
     .order('created_at', { ascending: false })
-    .order('id', { ascending: false })
     .range(offset, offset + limit - 1);
-  // 08.06.2026 P0 FIX: use deal_project_values (like _rpcParams) — not raw filters.project code
-  // MOTO code !== 'MOTORCYCLE' in dashboard_deals → was returning 0 rows when auto-selected
-  const m = getActiveModel();
-  const sp = getSelectedProject();
-  if (sp && sp.deal_project_values && sp.deal_project_values.length) {
-    q = q.in('project', sp.deal_project_values);
-  } else if (filters.project && filters.project.startsWith('raw::')) {
-    q = q.eq('project', filters.project.slice(5));
-  } else if (filters.project) {
-    q = q.eq('project', filters.project);  // fallback: exact match
-  }
+  if (filters.project) q = q.eq('project', filters.project);
   if (filters.status) q = q.eq('status', filters.status);
   if (filters.customer_type) q = q.eq('customer_type', filters.customer_type);
   if (filters.tariff) q = q.eq('tariff', filters.tariff);
   if (filters.pay_provider) q = q.eq('pay_provider', filters.pay_provider);
-  if (m && m.match && !sp) q = q.ilike('project', '%' + m.match + '%');
-  // P1 #10 — UTM free-text filters застосовуються до fetchDealsRange теж
-  if (filters.utm_source) q = q.ilike('utm_source', '%' + filters.utm_source + '%');
-  if (filters.utm_medium) q = q.ilike('utm_medium', '%' + filters.utm_medium + '%');
-  if (filters.utm_campaign) q = q.ilike('utm_campaign', '%' + filters.utm_campaign + '%');
-  if (filters.utm_term) q = q.ilike('utm_term', '%' + filters.utm_term + '%');
-  if (filters.utm_content) q = q.ilike('utm_content', '%' + filters.utm_content + '%');
+  // Active model — narrow project by substring
+  const m = getActiveModel();
+  if (m && m.match) q = q.ilike('project', '%' + m.match + '%');
   return q;
 }
 
@@ -2325,57 +1490,26 @@ function _rpcParams() {
   let fromDate = filters.from, toDate = filters.to;
   let projectValues = null;
   if (sp) {
-    // 08.06.2026 R6 P0: lifetime проекти (HUMMER 01.01-31.12.30) — clamp до today
-    // щоб RPC не отримував `to` далеко у майбутньому що ламає queries/timeout-ить
-    const today = todayYmd();
-    const spStart = sp.date_start;
-    const spEnd = (sp.date_end && sp.date_end > today) ? today : sp.date_end;
-    if (spStart > fromDate) fromDate = spStart;
-    if (spEnd && spEnd < toDate) toDate = spEnd;
+    if (sp.date_start > fromDate) fromDate = sp.date_start;
+    if (sp.date_end < toDate) toDate = sp.date_end;
     if (sp.deal_project_values && sp.deal_project_values.length) projectValues = sp.deal_project_values;
   } else if (filters.project && filters.project.startsWith('raw::')) {
     projectValues = [filters.project.slice(5)];
   }
-  // 08.06.2026 P0 Fix: якщо проект і period не перетинаються (напр. Moto 07.06-15.06 + "Вчора" 06.06)
-  // — обнуляємо діапазон у trivial empty замість інверсії, що ламала RPC (поверталось 3803=все)
-  if (fromDate > toDate) {
-    fromDate = '1900-01-01';
-    toDate = '1900-01-01';
+  // Active model fallback (legacy localStorage)
+  const m = getActiveModel();
+  if (!sp && m && m.match) {
+    // can't apply substring on server side here; skip — RPC ignores models
   }
   return {
-    p_from: kyivIsoStart(fromDate),
-    p_to: kyivIsoEnd(toDate),
-    p_project_values: projectValues,
-    p_customer_type: filters.customer_type || null,
-    p_tariff: filters.tariff || null,
-    p_pay_provider: filters.pay_provider || null,
-    // 08.06.2026 R3: traffic_type тепер передається у всі RPCs (KPI/series/extended)
-    p_traffic_type: filters.traffic_type || null
+    p_from: fromDate + 'T00:00:00Z',
+    p_to: toDate + 'T23:59:59Z',
+    p_project_values: projectValues
   };
 }
 
-// 08.06.2026 R2 P1 Fix: helper для ads_data queries — раніше всі 5 місць брали тільки date range
-// без проектного intersection → spend показувався глобально на per-project сторінках.
-// Тепер всі ads queries проходять через adsBaseRange() що враховує проектний date range.
-function adsBaseRange() {
-  const sp = getSelectedProject();
-  let fromD = filters.from, toD = filters.to;
-  if (sp) {
-    if (sp.date_start > fromD) fromD = sp.date_start;
-    if (sp.date_end < toD) toD = sp.date_end;
-    if (fromD > toD) { fromD = '1900-01-01'; toD = '1900-01-01'; }
-  }
-  return { fromD, toD };
-}
-
 async function aggViaRPC(field) {
-  // 08.06.2026 P0 Fix: для UTM-аналітики (Кампанії/Виконавець/Джерела/Оголошення/Контент)
-  // НЕ звужуємо по project — бо кампанії й виконавці перетинають проекти.
-  // Раніше: вибір "HUMMER H2" → 0 deals → revenue=0 при 170+ лідах у реальності.
-  const baseParams = _rpcParams();
-  const skipProjectFilter = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].includes(field);
-  if (skipProjectFilter) baseParams.p_project_values = null;
-  const params = { p_field: field, ...baseParams };
+  const params = { p_field: field, ..._rpcParams() };
   const { data, error } = await sb.rpc('dashboard_agg_deals_with_traffic', params);
   if (error) throw error;
   return (data || []).map(r => ({
@@ -2412,8 +1546,13 @@ async function trafficTypeRPC() {
 }
 
 async function kpiSummaryRPC() {
-  const { data, error } = await sb.rpc('dashboard_kpi_summary', _rpcParams());
-  if (error) throw error;
+  // #412c: cached версія (15хв TTL у БД, 92с→13мс на cache hit)
+  let { data, error } = await sb.rpc('dashboard_kpi_summary_cached', _rpcParams());
+  if (error) {
+    console.warn('[kpi] cached fail, fallback', error);
+    ({ data, error } = await sb.rpc('dashboard_kpi_summary', _rpcParams()));
+    if (error) throw error;
+  }
   const r = (data || [])[0] || {};
   return {
     total: Number(r.total||0),
@@ -2452,161 +1591,32 @@ async function fetchAllDealsBatched(maxRows=30000) {
   return applyClientFilters(all);
 }
 
-function _fmtProjDate(s) {
-  if (!s) return '';
-  const [y,m,d] = s.split('-');
-  return `${d}.${m}.${y.slice(2)}`;
-}
-
 async function loadProjects() {
   try {
-    const { data: projData } = await sb
-      .from('dashboard_projects')
-      .select('*')
-      .order('sort_order', { ascending: true });
-    __projectsList = projData || [];
-
-    const { data: dealProjData } = await sb
-      .from('dashboard_deals')
-      .select('project')
-      .not('project','is',null)
-      .limit(5000);
-    const dealProjSet = new Set();
-    // 08.06.2026 R2 P2: filter garbage projects з історичних deals — '🔹', variation selectors, length<=1
-    (dealProjData || []).forEach(r => {
-      if (!r.project) return;
-      const p = r.project.trim();
-      if (p.length <= 1) return; // single char/emoji/variation selector
-      if (!/[A-Za-zА-Яа-яІіЇїЄє0-9]/.test(p)) return; // має містити хоча б 1 letter/digit
-      dealProjSet.add(r.project);
-    });
-
-    // 06.06.2026 — auto-merge нових проектів з public.launches (source of truth у /projects/).
-    // Раніше треба було вручну додавати у dashboard_projects, тепер усе що створиться у
-    // /projects/ автоматично з'явиться у dropdown "Активний розіграш" і "Проєкт (DB)".
-    try {
-      const { data: launchData } = await sb
-        .from('launches')
-        .select('id, code, name, starts_on, ends_on, status, is_active, color, deal_aliases')
-        // 14.06.2026 (Vadym): прибрав idea/planning — на цих стадіях ще немає даних для аналітики.
-        // Показуємо тільки active → measure → completed → archived (вони можуть мати spend/leads).
-        .in('status', ['active','measure','completed','archived'])
-        .eq('is_active', true)
-        .order('starts_on', { ascending: false });
-      const existingCodes = new Set(__projectsList.map(p => p.code));
-      // #390 (14.06.2026): дедуп по NAME + ALIASES — не тільки по code.
-      // dashboard_projects.code='iphone_17_jun2026' ≠ launches.code='IPHONE17' → раніше дубль.
-      // Тепер блокуємо коли launch.name АБО будь-який launch.deal_alias вже існує у списку.
-      const existingNames = new Set(
-        __projectsList.map(p => (p.name || '').toUpperCase().trim()).filter(Boolean)
-      );
-      const existingAliases = new Set();
-      __projectsList.forEach(p => {
-        (p.deal_project_values || []).forEach(v => {
-          if (v) existingAliases.add(String(v).toUpperCase().trim());
-        });
-      });
-      (launchData || []).forEach(l => {
-        if (existingCodes.has(l.code)) return; // вже є у dashboard_projects (по code)
-        // #390: skip якщо name збігається з вже існуючим (case-insensitive)
-        const lName = (l.name || '').toUpperCase().trim();
-        if (lName && existingNames.has(lName)) return;
-        // #390: skip якщо будь-який alias collide з existing aliases (Мото→MOTORCYCLE)
-        const lAliases = Array.isArray(l.deal_aliases)
-          ? l.deal_aliases.map(a => String(a || '').toUpperCase().trim()).filter(Boolean)
-          : [];
-        if (lAliases.some(a => existingAliases.has(a))) return;
-        // 07.06.2026: пріоритет — explicit deal_aliases (для випадків коли name='Мото?' ≠ project='MOTORCYCLE')
-        let dealValues;
-        if (Array.isArray(l.deal_aliases) && l.deal_aliases.length) {
-          dealValues = l.deal_aliases;
-        } else {
-          // Fallback: substring matching по name/code
-          const candidates = [l.name, l.code, l.name.toUpperCase(), l.code && l.code.replace(/[_-]/g, ' ')];
-          const dealMatches = Array.from(dealProjSet).filter(dp => {
-            const dpU = dp.toUpperCase();
-            return candidates.some(c => c && (dpU.includes(c.toUpperCase()) || c.toUpperCase().includes(dpU)));
-          });
-          dealValues = dealMatches.length ? dealMatches : [l.name.toUpperCase(), l.name];
-        }
-        __projectsList.push({
-          code: l.code || l.id.slice(0, 8),
-          name: l.name,
-          date_start: l.starts_on,
-          date_end: l.ends_on,
-          color: l.color || null,
-          deal_project_values: dealValues,
-          sort_order: 999, // нові — у кінці
-          source: 'launches' // мітка, щоб видно було звідки
-        });
-        existingCodes.add(l.code);
-      });
-    } catch (e) {
-      console.warn('[launches auto-merge] failed:', e);
-    }
-
-    const officialValues = new Set();
-    __projectsList.forEach(p => (p.deal_project_values || []).forEach(v => officialValues.add(v)));
-    const others = Array.from(dealProjSet).filter(p => !officialValues.has(p)).sort((a,b) => a.localeCompare(b));
-
-    // 08.06.2026 (Вадим feedback): сортування проектів old→new по date_start
-    // (раніше new→old → юзер бачив HUMMER lifetime на початку, що плутає).
-    __projectsList.sort((a, b) => {
-      const ad = a.date_start || '1900-01-01';
-      const bd = b.date_start || '1900-01-01';
-      if (ad < bd) return -1;
-      if (ad > bd) return 1;
-      return 0;
-    });
-
+    const { data } = await sb.from('dashboard_deals').select('project').not('project','is',null).limit(5000);
+    const set = new Set(MAIN_PROJECTS);
+    (data || []).forEach(r => { if (r.project) set.add(r.project); });
+    const main = MAIN_PROJECTS.filter(p => set.has(p));
+    const others = Array.from(set).filter(p => !MAIN_PROJECTS.includes(p)).sort((a,b) => a.localeCompare(b));
     const sel = $('#f-project');
     const cur = filters.project;
-    const mainOpts = __projectsList.map(p => {
-      const dr = `${_fmtProjDate(p.date_start)}-${_fmtProjDate(p.date_end)}`;
-      return `<option value="${escapeHtml(p.code)}">${escapeHtml(p.name)} (${dr})</option>`;
-    }).join('');
     sel.innerHTML =
-      '<option value="">- Усі проекти -</option>' +
-      (mainOpts ? `<optgroup label="Основні проекти">${mainOpts}</optgroup>` : '') +
+      '<option value="">— Усі проекти —</option>' +
+      '<optgroup label="Основні проекти">' +
+        main.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('') +
+      '</optgroup>' +
       (others.length ? '<optgroup label="Інші">' +
-        others.map(p => `<option value="raw::${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('') +
+        others.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('') +
       '</optgroup>' : '');
     if (cur) sel.value = cur;
-    // resync f-model dropdown with the now-loaded __projectsList
-    if (typeof loadModelsSelect === 'function') loadModelsSelect();
-    // 08.06.2026 (Вадим): дефолт на найновіший активний проект + увесь період того проекту
-    if (typeof autoSelectNewestProject === 'function') {
-      autoSelectNewestProject();
-      // Якщо filters змінилися — оновити render
-      if (typeof renderRoute === 'function' && filters.project) renderRoute();
-    }
   } catch (e) { console.warn('projects load failed', e); }
-}
-
-function getSelectedProject() {
-  if (!filters.project) return null;
-  if (filters.project.startsWith('raw::')) return null;
-  return __projectsList.find(p => p.code === filters.project) || null;
 }
 
 async function loadTariffs() {
   try {
-    // #412b: читаємо з matview (~10мс) замість distinct sql (~3с)
-    const { data, error } = await sb.from('mv_dashboard_filter_options').select('val').eq('field', 'tariff');
-    let rows = data;
-    if (error || !rows) {
-      // fallback на старий шлях
-      const r = await sb.from('dashboard_deals').select('tariff').not('tariff','is',null).limit(5000);
-      rows = (r.data || []).map(x => ({ val: x.tariff }));
-    }
+    const { data } = await sb.from('dashboard_deals').select('tariff').not('tariff','is',null).limit(5000);
     const set = new Set();
-    (rows || []).forEach(r => {
-      if (!r.val) return;
-      const t = r.val.trim();
-      if (/ручна\s+видача/i.test(t)) return;
-      if (t.length < 2) return;
-      set.add(r.val);
-    });
+    (data || []).forEach(r => { if (r.tariff) set.add(r.tariff); });
     const sel = $('#f-tariff');
     const cur = filters.tariff;
     sel.innerHTML = '<option value="">Усі тарифи</option>' +
@@ -2617,15 +1627,9 @@ async function loadTariffs() {
 
 async function loadPayProviders() {
   try {
-    // #412b: matview (~10мс) замість distinct sql (~3с)
-    const { data, error } = await sb.from('mv_dashboard_filter_options').select('val').eq('field', 'pay_provider');
-    let rows = data;
-    if (error || !rows) {
-      const r = await sb.from('dashboard_deals').select('pay_provider').not('pay_provider','is',null).limit(5000);
-      rows = (r.data || []).map(x => ({ val: x.pay_provider }));
-    }
+    const { data } = await sb.from('dashboard_deals').select('pay_provider').not('pay_provider','is',null).limit(5000);
     const set = new Set();
-    (rows || []).forEach(r => { if (r.val) set.add(r.val); });
+    (data || []).forEach(r => { if (r.pay_provider) set.add(r.pay_provider); });
     const sel = $('#f-pay-provider');
     const cur = filters.pay_provider;
     sel.innerHTML = '<option value="">Усі</option>' +
@@ -2661,27 +1665,18 @@ function bucketKey(dateStr, granularity) {
   if (!dateStr) return null;
   const d = new Date(dateStr);
   if (isNaN(d)) return null;
-  // 07.06.2026: всі buckets за Київською TZ (для консистентності)
-  // Hour bucket: YYYY-MM-DDTHH:00 (Київ)
-  if (granularity === 'hour') {
-    // Витягуємо Київський рік-місяць-день і годину
-    const parts = d.toLocaleString('sv-SE', { timeZone: 'Europe/Kyiv', hour12: false }); // 2026-06-07 15:30:00
-    return parts.slice(0, 13).replace(' ', 'T') + ':00'; // 2026-06-07T15:00
-  }
   if (granularity === 'month') {
-    const parts = d.toLocaleDateString('sv-SE', { timeZone: 'Europe/Kyiv' }); // 2026-06-07
-    return parts.slice(0, 7); // 2026-06
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
   }
   if (granularity === 'week') {
-    // Київський день, потім перенесення на понеділок
-    const kyivDate = d.toLocaleDateString('sv-SE', { timeZone: 'Europe/Kyiv' });
-    const tmp = new Date(kyivDate + 'T00:00:00');
+    // ISO week start (Monday)
+    const tmp = new Date(d);
+    tmp.setHours(0,0,0,0);
     const day = tmp.getDay() || 7;
-    if (day !== 1) tmp.setDate(tmp.getDate() - (day - 1));
-    return tmp.toISOString().slice(0, 10);
+    if (day !== 1) tmp.setDate(tmp.getDate() - (day-1));
+    return tmp.toISOString().slice(0,10);
   }
-  // day (default) — Київський календарний день
-  return d.toLocaleDateString('sv-SE', { timeZone: 'Europe/Kyiv' });
+  return dateStr.slice(0,10);
 }
 
 function aggregateByDay(rows, granularity) {
@@ -2698,7 +1693,19 @@ function aggregateByDay(rows, granularity) {
   return Array.from(map.values()).sort((a,b) => a.date.localeCompare(b.date));
 }
 
-// 14.06.2026 #392.2 — aggregateByMonth видалено (нікому не викликається; grep 1 match — сама функція).
+function aggregateByMonth(rows) {
+  const map = new Map();
+  rows.forEach(r => {
+    if (!r.created_at) return;
+    const m = r.created_at.slice(0,7);
+    if (!map.has(m)) map.set(m, { month: m, leads: 0, paid: 0, sum: 0 });
+    const a = map.get(m);
+    a.leads++;
+    if (r.status === 'pay') { a.paid++; a.sum += Number(r.amount||0); }
+  });
+  return Array.from(map.values()).sort((a,b) => a.month.localeCompare(b.month));
+}
+
 function aggregateCombos(rows) {
   const map = new Map();
   rows.forEach(r => {
@@ -2730,14 +1737,6 @@ function setSectionTitle(t) { $('#topbar-section').textContent = t.toUpperCase()
 const loadingHTML = (msg='Завантаження…') => `<div class="state"><span class="spinner"></span>${msg}</div>`;
 const emptyHTML = (msg='Немає даних') => `<div class="state">📭 ${msg}</div>`;
 const errorHTML = (err) => `<div class="state error">⚠️ Помилка: ${escapeHtml(String(err.message || err))}<br><br><button class="btn" onclick="window.__retry()">↻ Повторити</button></div>`;
-// 14.06.2026 #392.2 — helper для повторюваного pattern `c.querySelector('.state').outerHTML = errorHTML(e)` (8 копій).
-function renderError(container, err) {
-  console.error(err);
-  if (!container) return;
-  const state = container.querySelector('.state');
-  if (state) { state.outerHTML = errorHTML(err); return; }
-  container.innerHTML = errorHTML(err);
-}
 const kpi = (label, value, sub='', cls='') => `<div class="kpi ${cls}">
   <div class="kpi-label">${escapeHtml(label)}</div>
   <div class="kpi-value">${value}</div>
@@ -2805,10 +1804,7 @@ function buildTable(containerSelector, opts) {
     const slice = rows.slice((state.page-1)*state.pageSize, state.page*state.pageSize);
 
     const head = '<tr>' + opts.cols.map(c => {
-      const sortCls = c.key === state.sortKey ? (state.sortAsc ? 'sort-asc' : 'sort-desc') : '';
-      // Inherit cell class (num/amount/mono) so <th> aligns with <td>
-      const inheritCls = (c.class || '').split(/\s+/).filter(x => ['num','amount','mono'].includes(x)).join(' ');
-      const cls = [sortCls, inheritCls].filter(Boolean).join(' ');
+      const cls = c.key === state.sortKey ? (state.sortAsc ? 'sort-asc' : 'sort-desc') : '';
       return `<th class="${cls}" data-key="${escapeHtml(c.key)}">${escapeHtml(c.label || c.key)}</th>`;
     }).join('') + '</tr>';
 
@@ -2834,10 +1830,6 @@ function buildTable(containerSelector, opts) {
     cont.innerHTML = `
       <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center;flex-wrap:wrap;">
         ${opts.search !== false ? `<input type="search" placeholder="🔍 Пошук…" class="t-search" style="background:var(--steel-2);color:#fff;border:1px solid var(--steel);border-radius:6px;padding:6px 10px;font-size:12px;width:240px;" value="${escapeHtml(state.search)}">` : ''}
-        <select class="t-pagesize" style="background:var(--steel-2);color:#fff;border:1px solid var(--steel);border-radius:6px;padding:6px 8px;font-size:12px;cursor:pointer;">
-          ${[25,50,100,200,500].map(n => `<option value="${n}" ${state.pageSize===n?'selected':''}>${n}/page</option>`).join('')}
-          <option value="999999" ${state.pageSize>=99999?'selected':''}>усі</option>
-        </select>
         <div style="flex:1"></div>
         <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ash);letter-spacing:0.1em;">${fmtNum(total)} rows</span>
         ${opts.csvFile ? `<button class="btn btn-sm t-csv">⬇ CSV</button>` : ''}
@@ -2881,10 +1873,6 @@ function buildTable(containerSelector, opts) {
     const search = $('.t-search', cont);
     if (search) {
       search.addEventListener('input', debounce(() => { state.search = search.value; state.page = 1; render(); }, 250));
-    }
-    const psSel = $('.t-pagesize', cont);
-    if (psSel) {
-      psSel.addEventListener('change', () => { state.pageSize = parseInt(psSel.value); state.page = 1; render(); });
     }
     if (opts.rowClick) {
       $$('tbody tr.lead-row', cont).forEach(tr => {
@@ -3019,7 +2007,6 @@ function doughnutChart(canvasId, labels, data, colors) {
    ================================================================= */
 
 const SECTIONS = {
-  'projects': renderProjectsOverview,
   'overview': renderOverview,
   'analytics': renderAnalytics,
   'sources': () => renderUtmField('utm_source', '📍 Джерела', 'sources.csv'),
@@ -3031,8 +2018,6 @@ const SECTIONS = {
   'deals': renderDeals,
   'webhooks': renderWebhooks,
   'mapping': renderMapping,
-  'people': renderPeopleMapping,
-  'cohort': renderCohortRetention,
   'costs': renderCosts,
   'ads-overview': renderAdsOverview,
   'ads-campaigns': renderAdsCampaigns,
@@ -3045,173 +2030,19 @@ const SECTIONS = {
 
 const SECTION_TITLES = {
   'overview': 'Огляд', 'analytics': 'Аналітика',
-  'projects': '🏎️ Проекти', 'sources': 'Джерела', 'medium': 'Тип трафіка', 'campaigns': 'Кампанії',
+  'sources': 'Джерела', 'medium': 'Тип трафіка', 'campaigns': 'Кампанії',
   'content': 'Оголошення', 'terms': 'Виконавець', 'combos': 'Комбінації',
   'deals': 'Таблиця', 'webhooks': 'Webhooks', 'mapping': 'UTM Mapping',
-  'costs': 'Manual Costs', 'people': '👥 People Merge', 'cohort': '📈 Cohort Retention', 'ads-overview': 'Ads Overview',
+  'costs': 'Manual Costs', 'ads-overview': 'Ads Overview',
   'ads-campaigns': 'Ads Campaigns', 'cards': 'Cards', 'usdt': 'USDT',
   'payroll': 'Payroll', 'settings': 'Settings', 'help': 'Допомога'
 };
 
-const UTM_SECTIONS = new Set(['overview','analytics','projects','sources','medium','campaigns','content','terms','combos','deals']);
+const UTM_SECTIONS = new Set(['overview','analytics','sources','medium','campaigns','content','terms','combos','deals']);
 const ADS_SECTIONS = new Set(['ads-overview','ads-campaigns']);
 const NOFILTER_SECTIONS = new Set(['webhooks','mapping','costs','cards','usdt','payroll','settings','help']);
 
 /* ---------------- OVERVIEW ---------------- */
-/* ---------------- PROJECTS OVERVIEW ---------------- */
-async function renderProjectsOverview() {
-  const c = $('#content');
-  c.innerHTML = `<div class="section-head"><h1>🏎️ Проекти</h1></div>${loadingHTML()}`;
-  try {
-    const [projRes, uniqRes, globRes] = await Promise.all([
-      sb.rpc('dashboard_projects_with_stats'),
-      sb.rpc('dashboard_unique_buyers_total'),
-      sb.rpc('dashboard_globals').then(r => r.error ? null : (r.data||[])[0])
-    ]);
-    if (projRes.error) throw projRes.error;
-    const rows = (projRes.data || []).map(r => ({
-      code: r.code, name: r.name, car_model: r.car_model,
-      date_start: r.date_start, date_end: r.date_end,
-      status: r.status, color: r.color,
-      leads: Number(r.leads), paid: Number(r.paid),
-      fail: Number(r.fail), pending: Number(r.pending),
-      revenue: Number(r.revenue), buyers: Number(r.buyers),
-      conv_rate: Number(r.conv_rate), avg_check: Number(r.avg_check),
-      ad_spend: Number(r.ad_spend || 0),
-      ad_campaigns: Number(r.ad_campaigns || 0),
-      ad_impressions: Number(r.ad_impressions || 0),
-      ad_clicks: Number(r.ad_clicks || 0),
-      manual_spend: Number(r.manual_spend || 0),
-      total_spend: Number(r.total_spend || 0),
-      roi_pct: r.roi_pct != null ? Number(r.roi_pct) : null,
-      cac: r.cac != null ? Number(r.cac) : null
-    }));
-
-    const totals = rows.reduce((a,r) => ({
-      leads: a.leads + r.leads, paid: a.paid + r.paid,
-      revenue: a.revenue + r.revenue,
-      ad_spend: a.ad_spend + r.ad_spend,
-      total_spend: a.total_spend + r.total_spend
-    }), { leads: 0, paid: 0, revenue: 0, ad_spend: 0, total_spend: 0 });
-    const avgConv = totals.leads > 0 ? (totals.paid / totals.leads * 100) : 0;
-    const avgAov = totals.paid > 0 ? (totals.revenue / totals.paid) : 0;
-    const trueUniqBuyers = Number(((uniqRes.data || [])[0] || {}).unique_buyers || 0);
-    const totalRoiPct = totals.total_spend > 0 ? ((totals.revenue - totals.total_spend) / totals.total_spend * 100) : null;
-    const avgCac = totals.paid > 0 && totals.total_spend > 0 ? (totals.total_spend / totals.paid) : null;
-    const bestProj = rows.reduce((best, r) => r.revenue > (best?.revenue || 0) ? r : best, null);
-    const bestConv = rows.reduce((best, r) => r.conv_rate > (best?.conv_rate || 0) ? r : best, null);
-
-    c.innerHTML = `
-      <div class="section-head">
-        <div><h1>🏎️ Проекти</h1><div class="subtitle">${rows.length} проектів · full-lifetime stats</div></div>
-      </div>
-
-      <div class="kpi-grid">
-        ${kpi('Усього лідів', fmtNum(totals.leads), 'across всіх проектів', 'blue')}
-        ${kpi('Усього оплат', fmtNum(totals.paid), fmtPct(avgConv) + ' конв.', 'green')}
-        ${kpi('Виручка lifetime', fmtMoney(totals.revenue), 'UAH', 'red')}
-        ${kpi('Сер. чек', fmtMoney(avgAov), 'AOV', 'amber')}
-        ${kpi('Унік. покупців', fmtNum(trueUniqBuyers), globRes ? `30d: ${fmtNum(Number(globRes.unique_buyers_30d||0))}` : 'без double-count', 'purple')}
-        ${kpi('Реклама (sum spend)', fmtMoney(totals.ad_spend), 'FB Ads + manual', 'amber')}
-        ${kpi('ROI lifetime', totalRoiPct != null ? (totalRoiPct >= 0 ? '+' : '') + totalRoiPct.toFixed(0) + '%' : '—', avgCac != null ? 'CAC ' + fmtMoney(avgCac) : '', 'green')}
-        ${kpi('Топ за виручкою', bestProj ? bestProj.name : '—', bestProj ? fmtMoney(bestProj.revenue) : '', 'red')}
-      </div>
-
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-head"><h3>Revenue по проектах</h3></div>
-          <div class="chart-container"><canvas id="ch-proj-rev"></canvas></div>
-        </div>
-        <div class="card">
-          <div class="card-head"><h3>Conv % по проектах</h3></div>
-          <div class="chart-container"><canvas id="ch-proj-conv"></canvas></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-head"><h3>Усі проекти — деталі</h3></div>
-        <div id="t-projects"></div>
-      </div>
-    `;
-
-    const reversedRows = [...rows].reverse();
-    barChart('ch-proj-rev',
-      reversedRows.map(r => r.name),
-      [{ label: 'Виручка UAH', data: reversedRows.map(r => r.revenue), backgroundColor: reversedRows.map(r => r.color || '#E30613') }],
-      { legend: false }
-    );
-    barChart('ch-proj-conv',
-      reversedRows.map(r => r.name),
-      [{ label: 'Конв %', data: reversedRows.map(r => r.conv_rate), backgroundColor: '#10B981' }],
-      { legend: false }
-    );
-
-    buildTable('#t-projects', {
-      rows, pageSize: 50, sortKey: 'date_start', sortDir: 'desc',
-      csvFile: 'projects.csv',
-      cols: [
-        { key: 'name', label: 'Проект', fmt: (v, r) => `<strong style="color:${r.color||'#fff'}">${escapeHtml(v)}</strong>` },
-        { key: 'date_start', label: 'Старт', fmt: v => `<span class="mono">${v}</span>` },
-        { key: 'date_end', label: 'Фініш', fmt: v => `<span class="mono">${v}</span>` },
-        { key: 'status', label: 'Статус', fmt: v => `<span class="pill ${v==='active'?'pay':v==='archived'?'pending':'fail'}">${escapeHtml(v)}</span>` },
-        { key: 'leads', label: 'Ліди', class: 'num', fmt: fmtNum },
-        { key: 'paid', label: 'Оплати', class: 'num', fmt: fmtNum },
-        { key: 'revenue', label: 'Виручка', class: 'num', fmt: fmtMoney },
-        { key: 'ad_spend', label: 'Реклама', class: 'num', fmt: v => v > 0 ? fmtMoney(v) : '—' },
-        { key: 'roi_pct', label: 'ROI %', class: 'num', fmt: v => v == null ? '—' : `<span class="pill ${v >= 0 ? 'pay' : 'fail'}">${v >= 0 ? '+' : ''}${v.toFixed(0)}%</span>` },
-        { key: 'cac', label: 'CAC', class: 'num', fmt: v => v == null ? '—' : fmtMoney(v) },
-        { key: 'buyers', label: 'Покупців', class: 'num', fmt: fmtNum },
-        { key: 'conv_rate', label: 'Конв %', class: 'num', fmt: fmtPct },
-        { key: 'avg_check', label: 'AOV', class: 'num', fmt: fmtMoney }
-      ]
-    });
-  } catch (e) { c.innerHTML = errorHTML(e); }
-}
-
-
-// PROJECT → order-reference prefix map (deal_project has known mapping bug for 'new' events)
-const PROJECT_REF_MAP = {
-  'MOTORCYCLE': 'DCI-moto',
-  'AUDI E-TRON': 'DCI-audi',
-  'AUDI': 'DCI-audi',
-};
-
-// 14.06.2026 #392.1 — graceful fallback. На активному трафіку dashboard_webhooks
-// (185k+ rows) HEAD count повертає 503 (Supabase REST throttle на full-table scan).
-// Раніше silent → 0 leads, KPI ламався. Тепер 1 retry + чітке логування.
-async function fetchLeadsCount() {
-  const buildQuery = () => {
-    let q = sb.from('dashboard_webhooks')
-      .select('id', { count: 'exact', head: true })
-      .eq('event_type', 'new')
-      .gte('created_at', kyivIsoStart(filters.from))
-      .lte('created_at', kyivIsoEnd(filters.to));
-    if (filters.project && PROJECT_REF_MAP[filters.project]) {
-      q = q.filter('payload->>processed', 'ilike', '%' + PROJECT_REF_MAP[filters.project] + '%');
-    }
-    return q;
-  };
-  for (let attempt = 0; attempt < 2; attempt++) {
-    try {
-      const { count, error } = await buildQuery();
-      if (!error) return count || 0;
-      const msg = String(error.message || '');
-      const is503 = msg.includes('503') || msg.toLowerCase().includes('unavailable');
-      if (is503 && attempt === 0) {
-        console.warn('[fetchLeadsCount] 503 — retry once after 800ms');
-        await new Promise(r => setTimeout(r, 800));
-        continue;
-      }
-      console.warn('[fetchLeadsCount] error (attempt', attempt+1, '):', msg);
-      return null; // null → callers рендерять «—» замість «0», щоб не вводити у оману
-    } catch(e) {
-      console.warn('[fetchLeadsCount] exception:', e);
-      return null;
-    }
-  }
-  return null;
-}
-
 async function renderOverview() {
   const c = $('#content');
   c.innerHTML = `
@@ -3235,46 +2066,42 @@ async function renderOverview() {
 
     let adSpend = 0;
     try {
-      const adsR = adsBaseRange();
       const { data } = await sb.from('dashboard_ads_data')
         .select('spend')
-        .gte('date_start', adsR.fromD)
-        .lte('date_start', adsR.toD);
+        .gte('date_start', filters.from)
+        .lte('date_start', filters.to);
       (data||[]).forEach(r => adSpend += Number(r.spend||0));
     } catch(e) {}
 
     const profit = sum - adSpend;
     const roas = adSpend > 0 ? sum / adSpend : null;
     const roi = adSpend > 0 ? ((sum - adSpend) / adSpend * 100) : null;
-    // #214 fix: TDZ — leadsCount/totalForConv мають бути ОБ'ЯВЛЕНІ ДО cpl
-    const leadsCount = await fetchLeadsCount();
-    const totalForConv = leadsCount > 0 ? leadsCount : rows.length;
-    const cpl = adSpend > 0 && totalForConv > 0 ? adSpend / totalForConv : null;
+    const cpl = adSpend > 0 && rows.length > 0 ? adSpend / rows.length : null;
     const cpa = adSpend > 0 && paid.length > 0 ? adSpend / paid.length : null;
     const byDay = aggregateByDay(rows, filters.granularity);
     const last20 = rows.slice(0, 20);
     const byProj7 = aggregateByField(rows, 'project').slice(0, 7);
-    const conv = totalForConv ? (paid.length / totalForConv * 100) : 0;
+    const conv = rows.length ? (paid.length / rows.length * 100) : 0;
     const granLabel = { day: 'По днях', week: 'По тижнях', month: 'По місяцях' }[filters.granularity || 'day'];
 
     c.innerHTML = `
       <div class="section-head">
         <div>
           <h1>📊 Огляд</h1>
-          <div class="subtitle">${escapeHtml(filters.from)} → ${escapeHtml(filters.to)} · ${fmtNum(totalForConv)} лідів · ${fmtNum(paid.length)} оплат</div>
+          <div class="subtitle">${escapeHtml(filters.from)} → ${escapeHtml(filters.to)} · ${fmtNum(rows.length)} угод</div>
         </div>
       </div>
 
-      <div class="kpi-row-title">КОНВЕРСІЯ ЧЕКАУТУ</div>
+      <div class="kpi-row-title">КОНВЕРСІЯ</div>
       <div class="kpi-grid">
-        ${kpi('Всього лідів', fmtNum(totalForConv), leadsCount > 0 ? 'нові checkout-стартів (webhooks)' : 'усі статуси (pay/pending/fail)')}
-        ${kpi('Оплачено', fmtNum(paid.length), fmtPct(conv) + ' success rate', 'green')}
-        ${kpi('Унікальних покупців', fmtNum(uniqEmails), 'utm_email', 'blue')}
-        ${kpi('Виручка', fmtMoney(sum, 'UAH'), 'сума оплачених', 'green')}
+        ${kpi('Всього лідів', fmtNum(rows.length), 'усі статуси')}
+        ${kpi('Всього оплат', fmtNum(paid.length), fmtPct(conv) + ' конверсія', 'green')}
+        ${kpi('Унікальних покупців', fmtNum(uniqEmails), 'утм_email', 'blue')}
+        ${kpi('Заработано (оплати)', fmtMoney(sum, 'UAH'), 'сума оплачених', 'green')}
         ${kpi('Середній чек', fmtMoney(avg, 'UAH'), 'revenue / paid', 'blue')}
         ${kpi('Джерел', fmtNum(sources), 'utm_source')}
         ${kpi('Кампаній', fmtNum(campaigns), 'utm_campaign')}
-        ${kpi('Success rate %', fmtPct(conv), 'paid / ліди', conv >= 70 ? 'green' : 'amber')}
+        ${kpi('Конверсія %', fmtPct(conv), 'paid / total', conv >= 5 ? 'green' : 'amber')}
       </div>
 
       <div class="kpi-row-title">ЕКОНОМІКА</div>
@@ -3289,22 +2116,12 @@ async function renderOverview() {
 
       <div class="grid-2">
         <div class="card">
-          <div class="card-head" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-            <h3>Угоди ${granLabel}</h3>
-            <div class="gran-toggle" role="group" aria-label="Гранулярність графіку" style="display:inline-flex;gap:4px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:3px;">
-              ${['hour','day','week','month'].map(g => {
-                const active = (filters.granularity || 'day') === g;
-                const label = { hour: 'Година', day: 'День', week: 'Тиждень', month: 'Місяць' }[g];
-                return `<button type="button" class="gran-chip" data-gran="${g}" aria-pressed="${active}" style="padding:5px 12px;border:none;background:${active?'#E30613':'transparent'};color:${active?'#fff':'#aaa'};border-radius:4px;font-size:11px;cursor:pointer;font-weight:${active?'700':'400'};letter-spacing:0.04em;text-transform:uppercase;">${label}</button>`;
-              }).join('')}
-            </div>
-            <span class="meta">${byDay.length} точок</span>
-          </div>
+          <div class="card-head"><h3>Угоди ${granLabel}</h3><span class="meta">${byDay.length} точок</span></div>
           <div class="chart-container"><canvas id="ch-daily"></canvas></div>
         </div>
         <div class="card">
           <div class="card-head"><h3>Угоди по проектах</h3><span class="meta">топ-7</span></div>
-          <div id="proj-overview-rows"></div>
+          <div class="chart-container"><canvas id="ch-proj-overview"></canvas></div>
         </div>
       </div>
 
@@ -3314,13 +2131,8 @@ async function renderOverview() {
       </div>
     `;
 
-    // 07.06.2026: формат label per granularity (година показує і час)
-    const labels = byDay.map(d => {
-      if (filters.granularity === 'month') return d.date;
-      if (filters.granularity === 'hour') return d.date.slice(5).replace('T', ' '); // 06-07 15:00
-      return fmtDate(d.date);
-    });
-    lineChart('ch-daily', labels,
+    lineChart('ch-daily',
+      byDay.map(d => filters.granularity === 'month' ? d.date : fmtDate(d.date)),
       [
         { label: 'Усі', data: byDay.map(d => d.leads), borderColor: '#3B82F6', backgroundColor: 'rgba(59,130,246,0.1)', tension: 0.3, fill: true },
         { label: 'Оплачені', data: byDay.map(d => d.paid), borderColor: '#10B981', backgroundColor: 'rgba(16,185,129,0.15)', tension: 0.3, fill: true },
@@ -3328,61 +2140,18 @@ async function renderOverview() {
       ],
       { scales: { y1: { position: 'right', grid: { drawOnChartArea: false }, ticks: { color: '#E30613' } } } }
     );
-    // 07.06.2026: inline granularity toggle (Hour/Day/Week/Month) — над графіком
-    c.querySelectorAll('.gran-chip').forEach(btn => {
-      btn.onclick = () => {
-        const g = btn.dataset.gran;
-        filters.granularity = g;
-        const sel = document.getElementById('f-granularity'); if (sel) sel.value = g;
-        renderRoute();
-      };
-    });
 
-    // 07.06.2026: повністю переписаний "Угоди по проектах" — нативний HTML, без Chart.js spaghetti yAxisID.
-    // Раніше були 3 datasets з різними одиницями виміру (Ліди / Оплачені / Revenue) на одній шкалі → ламана візуалізація.
-    // Тепер: 3 horizontal stacked bars per project з власною шкалою (max окремо по лідах/revenue), з цифрами.
-    const projOverviewBox = document.getElementById('proj-overview-rows');
-    if (projOverviewBox && byProj7.length) {
-      const maxLeads = Math.max(...byProj7.map(p => p.leads), 1);
-      const maxRevenue = Math.max(...byProj7.map(p => p.sum), 1);
-      projOverviewBox.innerHTML = byProj7.map(p => {
-        const convPct = p.leads > 0 ? (p.paid / p.leads * 100) : 0;
-        const leadsPct = (p.leads / maxLeads) * 100;
-        const paidPct = (p.paid / maxLeads) * 100;
-        const revPct = (p.sum / maxRevenue) * 100;
-        const projName = p.key.length > 24 ? p.key.slice(0,22) + '…' : p.key;
-        const fmtN = (n) => Number(n).toLocaleString('uk-UA');
-        return `
-          <div style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
-            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;font-size:12px;">
-              <span style="font-weight:700;color:#fff;letter-spacing:0.02em;">${projName}</span>
-              <span style="color:#888;font-size:11px;">конв. <b style="color:#10B981;">${convPct.toFixed(1)}%</b></span>
-            </div>
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;font-size:11px;">
-              <span style="width:70px;color:#888;">Замовлень</span>
-              <div style="flex:1;height:14px;background:rgba(59,130,246,0.08);border-radius:3px;position:relative;overflow:hidden;">
-                <div style="width:${leadsPct}%;height:100%;background:#3B82F6;border-radius:3px;"></div>
-              </div>
-              <span style="width:60px;text-align:right;color:#fff;font-weight:600;">${fmtN(p.leads)}</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;font-size:11px;">
-              <span style="width:70px;color:#888;">Оплачено</span>
-              <div style="flex:1;height:14px;background:rgba(16,185,129,0.08);border-radius:3px;position:relative;overflow:hidden;">
-                <div style="width:${paidPct}%;height:100%;background:#10B981;border-radius:3px;"></div>
-              </div>
-              <span style="width:60px;text-align:right;color:#fff;font-weight:600;">${fmtN(p.paid)}</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:8px;font-size:11px;">
-              <span style="width:70px;color:#888;">Revenue</span>
-              <div style="flex:1;height:14px;background:rgba(227,6,19,0.08);border-radius:3px;position:relative;overflow:hidden;">
-                <div style="width:${revPct}%;height:100%;background:#E30613;border-radius:3px;"></div>
-              </div>
-              <span style="width:60px;text-align:right;color:#fff;font-weight:600;">${fmtN(p.sum)} ₴</span>
-            </div>
-          </div>`;
-      }).join('');
+    if (byProj7.length) {
+      barChart('ch-proj-overview',
+        byProj7.map(p => p.key.length > 18 ? p.key.slice(0,16)+'…' : p.key),
+        [
+          { label: 'Ліди', data: byProj7.map(p=>p.leads), backgroundColor: '#3B82F6' },
+          { label: 'Оплачені', data: byProj7.map(p=>p.paid), backgroundColor: '#10B981' },
+          { label: 'Revenue', data: byProj7.map(p=>p.sum), backgroundColor: '#E30613', yAxisID: 'y1' }
+        ],
+        { horizontal: true, scales: { y1: { position: 'top', grid: { drawOnChartArea: false } } } }
+      );
     }
-    // 14.06.2026 #392.2 — legacy Chart.js `if (false && byProj7.length)` блок видалено.
 
     buildTable('#t-recent', {
       rows: last20,
@@ -3401,7 +2170,7 @@ async function renderOverview() {
       ],
       search: false
     });
-  } catch (e) { renderError(c, e); }
+  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
 }
 
 /* ---------------- ANALYTICS ---------------- */
@@ -3409,223 +2178,94 @@ async function renderAnalytics() {
   const c = $('#content');
   c.innerHTML = `<div class="section-head"><h1>📈 Аналітика</h1></div>${loadingHTML()}`;
   try {
-    const params = _rpcParams();
-    const isToday = (filters.from === filters.to);
-    // Extended KPI params (без p_traffic_type — не підтримується)
-    const extParams = { p_from: params.p_from, p_to: params.p_to, p_project_values: params.p_project_values, p_customer_type: params.p_customer_type, p_tariff: params.p_tariff, p_pay_provider: params.p_pay_provider };
-    const [kpiDelta, daily, hourly, mediums, campaigns, sources, trafficSplit, extKpi] = await Promise.all([
-      sb.rpc('dashboard_kpi_with_delta', params).then(r => r.error ? null : (r.data||[])[0]),
-      dailySeriesRPC(),
-      isToday ? sb.rpc('dashboard_hourly_series', params).then(r => r.error ? [] : (r.data||[])) : Promise.resolve([]),
-      aggViaRPC('utm_medium'),
-      aggViaRPC('utm_campaign'),
-      aggViaRPC('utm_source'),
-      trafficTypeRPC(),
-      sb.rpc('dashboard_extended_kpi', extParams).then(r => r.error ? null : (r.data||[])[0])
-    ]);
+    const rows = await fetchAllDealsBatched(30000);
+    const byStatus = {};
+    rows.forEach(r => byStatus[r.status||'unknown'] = (byStatus[r.status||'unknown']||0) + 1);
+    const byProj = aggregateByField(rows, 'project').slice(0, 10);
+    const totalLeads = rows.length;
+    const pending = rows.filter(r => r.status==='pending').length;
+    const paid = rows.filter(r => r.status==='pay').length;
+    const fail = rows.filter(r => r.status==='fail').length;
 
-    const k = kpiDelta || {};
-    const dlt = v => v == null ? '' : (v >= 0 ? `▲ +${v}%` : `▼ ${v}%`);
-    const dltClass = v => v == null ? '' : (v >= 0 ? 'pay' : 'fail');
-
-    const topMediums = mediums.slice(0, 5);
-    const topCampaigns = campaigns.filter(c => c.key !== '(none)' && c.key !== '').slice(0, 10);
-    const topSources = sources.filter(s => s.key !== '(none)' && s.key !== '').slice(0, 10);
-
-    const seriesData = isToday ? hourly.map(h => ({ x: h.hour, leads: Number(h.leads), paid: Number(h.paid), revenue: Number(h.revenue) }))
-                               : daily.map(d => ({ x: d.day, leads: d.leads, paid: d.paid, revenue: d.revenue }));
-    const xLabels = seriesData.map(d => isToday ? new Date(d.x).getHours() + ':00' : d.x);
+    const byMonth = aggregateByMonth(rows);
 
     c.innerHTML = `
       <div class="section-head">
-        <div><h1>📈 Аналітика</h1><div class="subtitle">${filters.from} → ${filters.to} · ${isToday ? 'погодинна' : 'щоденна'} деталізація</div></div>
-      </div>
-
-      <div class="kpi-grid">
-        <div class="kpi-card blue">
-          <div class="kpi-label" title="К-сть рядків у dashboard_deals: всі статуси pay/pending/fail. Це NOT маркетингові ліди — це checkout-замовлення">Замовлення</div>
-          <div class="kpi-value">${fmtNum(Number(k.total||0))}</div>
-          <div class="kpi-meta"><span class="pill ${dltClass(Number(k.total_delta))}">${dlt(Number(k.total_delta))}</span> vs попередній період</div>
-        </div>
-        <div class="kpi-card green">
-          <div class="kpi-label">Оплачено</div>
-          <div class="kpi-value">${fmtNum(Number(k.paid||0))}</div>
-          <div class="kpi-meta">${fmtPct(Number(k.paid_rate||0))} success rate · <span class="pill ${dltClass(Number(k.paid_delta))}">${dlt(Number(k.paid_delta))}</span></div>
-        </div>
-        <div class="kpi-card red">
-          <div class="kpi-label">Виручка UAH</div>
-          <div class="kpi-value">${fmtMoney(Number(k.revenue||0))}</div>
-          <div class="kpi-meta"><span class="pill ${dltClass(Number(k.revenue_delta))}">${dlt(Number(k.revenue_delta))}</span> vs попередній</div>
-        </div>
-        <div class="kpi-card amber">
-          <div class="kpi-label">Сер. чек (AOV)</div>
-          <div class="kpi-value">${fmtMoney(Number(k.aov||0))}</div>
-          <div class="kpi-meta">${fmtNum(Number(k.buyers||0))} унік. покупців</div>
-        </div>
+        <div><h1>📈 Аналітика</h1><div class="subtitle">${fmtNum(rows.length)} угод</div></div>
       </div>
 
       <div class="grid-2">
         <div class="card">
-          <div class="card-head"><h3>${isToday ? 'Сьогодні погодинно' : 'Динаміка по днях'}</h3></div>
-          <div class="chart-container"><canvas id="ch-trend"></canvas></div>
+          <div class="card-head"><h3>Розподіл за статусами</h3></div>
+          <div class="chart-container short"><canvas id="ch-status"></canvas></div>
         </div>
         <div class="card">
-          <div class="card-head"><h3>🔻 Воронка</h3></div>
+          <div class="card-head"><h3>Воронка</h3></div>
           <div class="chart-container short"><canvas id="ch-funnel"></canvas></div>
         </div>
       </div>
 
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-head"><h3>💸 Платний vs 🌱 Органічний</h3></div>
-          <div class="chart-container short"><canvas id="ch-tt"></canvas></div>
-        </div>
-        <div class="card">
-          <div class="card-head"><h3>🏆 Топ-5 каналів (utm_medium)</h3></div>
-          <div class="chart-container short"><canvas id="ch-medium"></canvas></div>
-        </div>
-      </div>
-
-      ${extKpi ? `
-      <div class="kpi-grid" style="margin-top: 12px;">
-        <div class="kpi-card blue">
-          <div class="kpi-label">⏱ Час до оплати (median)</div>
-          <div class="kpi-value">${extKpi.median_minutes != null ? extKpi.median_minutes + ' хв' : '—'}</div>
-          <div class="kpi-meta">p90: ${extKpi.p90_minutes != null ? extKpi.p90_minutes + ' хв' : '—'}</div>
-        </div>
-        <div class="kpi-card green">
-          <div class="kpi-label">🔁 Повторні покупці</div>
-          <div class="kpi-value">${extKpi.total_buyers > 0 ? Math.round((Number(extKpi.repeat_buyers)/Number(extKpi.total_buyers))*100) + '%' : '—'}</div>
-          <div class="kpi-meta">${fmtNum(Number(extKpi.repeat_buyers||0))} з ${fmtNum(Number(extKpi.total_buyers||0))} покупців</div>
-        </div>
-        <div class="kpi-card amber">
-          <div class="kpi-label">📊 Median check</div>
-          <div class="kpi-value">${fmtMoney(Number(extKpi.median_amount||0))}</div>
-          <div class="kpi-meta">avg (AOV) ▸ ${fmtMoney(Number(k.aov||0))}</div>
-        </div>
-        <div class="kpi-card red">
-          <div class="kpi-label">💱 Currency split</div>
-          <div class="kpi-value" style="font-size:14px;line-height:1.5;">
-            ${Number(extKpi.uah_revenue||0)>0?'UAH ' + fmtMoney(Number(extKpi.uah_revenue)) + '<br>':''}${Number(extKpi.usd_revenue||0)>0?'USD ' + fmtMoney(Number(extKpi.usd_revenue),'USD') + '<br>':''}${Number(extKpi.eur_revenue||0)>0?'EUR ' + fmtMoney(Number(extKpi.eur_revenue),'EUR'):''}${Number(extKpi.uah_revenue||0)===0 && Number(extKpi.usd_revenue||0)===0 && Number(extKpi.eur_revenue||0)===0 ? '<span style="color:var(--ash);font-size:12px">немає paid угод</span>' : ''}
-          </div>
-          <div class="kpi-meta">розкладка виручки</div>
-        </div>
-      </div>` : ''}
-
       <div class="card">
-        <div class="card-head"><h3>🎯 Топ-10 кампаній</h3><span class="meta">${campaigns.length} усього</span></div>
-        <div id="t-campaigns"></div>
+        <div class="card-head"><h3>Cohort по місяцях</h3><span class="meta">${byMonth.length} міс.</span></div>
+        <div class="chart-container"><canvas id="ch-cohort"></canvas></div>
       </div>
 
       <div class="card">
-        <div class="card-head"><h3>📍 Топ-10 джерел</h3></div>
-        <div id="t-sources"></div>
+        <div class="card-head"><h3>Топ-10 проектів</h3></div>
+        <div class="chart-container"><canvas id="ch-projects"></canvas></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>Деталі по проектах</h3></div>
+        <div id="t-proj"></div>
       </div>
     `;
 
-    if (seriesData.length) {
-      lineChart('ch-trend', xLabels, [
-        { label: 'Ліди', data: seriesData.map(d => d.leads), borderColor: '#3B82F6', backgroundColor: 'rgba(59,130,246,0.10)', tension: 0.3, fill: true },
-        { label: 'Оплачені', data: seriesData.map(d => d.paid), borderColor: '#10B981', backgroundColor: 'rgba(16,185,129,0.15)', tension: 0.3, fill: true },
-        { label: 'Revenue', data: seriesData.map(d => d.revenue), borderColor: '#E30613', backgroundColor: 'transparent', tension: 0.3, yAxisID: 'y1' }
-      ], { scales: { y1: { position: 'right', grid: { drawOnChartArea: false }, ticks: { color: '#E30613' } } } });
-    }
+    const statusColors = { pay:'#10B981', new:'#3B82F6', pending:'#F59E0B', fail:'#DC2626', refunded:'#A855F7', unknown:'#888' };
+    const sKeys = Object.keys(byStatus);
+    doughnutChart('ch-status', sKeys, sKeys.map(k=>byStatus[k]), sKeys.map(k=>statusColors[k]||'#888'));
 
-    // 08.06.2026 P0 PROD FIX (Вадим): "Усі ліди" вводило в оману — це не справжні leads, а
-    // total replacing dashboard_deals (тобто replacing замовлення/checkout records).
-    // Конверсія pay/total = 83% це NORM для checkout, не bug.
-    // Тепер воронка з 3 бари: Замовлення → Pending → Оплачено — наочно показує drop-off.
-    const total = Number(k.total||0), paid = Number(k.paid||0);
-    const pending = Math.max(0, total - paid); // 08.06.2026 fix: k.fail not returned by dashboard_kpi_with_delta (only has total/paid/*_delta). fail=0 in current data → pending = total - paid is correct.
     barChart('ch-funnel',
-      ['Замовлення', 'У обробці', 'Оплачено'],
-      [{ label: 'К-сть', data: [total, pending, paid], backgroundColor: ['#3B82F6','#F59E0B','#10B981'] }],
+      ['Усі ліди','Pending','Paid','Fail'],
+      [{ label: 'К-сть', data: [totalLeads, pending, paid, fail], backgroundColor: ['#3B82F6','#F59E0B','#10B981','#DC2626'] }],
       { legend: false }
     );
 
-    doughnutChart('ch-tt',
-      ['💸 Платний','🌱 Органічний'],
-      [trafficSplit.paid.leads, trafficSplit.organic.leads],
-      ['#F59E0B','#10B981']
+    lineChart('ch-cohort',
+      byMonth.map(m => m.month),
+      [
+        { label: 'Ліди', data: byMonth.map(m => m.leads), borderColor: '#3B82F6', backgroundColor: 'rgba(59,130,246,0.10)', tension: 0.3, fill: true },
+        { label: 'Оплачені', data: byMonth.map(m => m.paid), borderColor: '#10B981', backgroundColor: 'rgba(16,185,129,0.15)', tension: 0.3, fill: true },
+        { label: 'Revenue', data: byMonth.map(m => m.sum), borderColor: '#E30613', backgroundColor: 'transparent', tension: 0.3, yAxisID: 'y1' }
+      ],
+      { scales: { y1: { position: 'right', grid: { drawOnChartArea: false }, ticks: { color: '#E30613' } } } }
     );
 
-    if (topMediums.length) {
-      barChart('ch-medium',
-        topMediums.map(m => m.key.length > 15 ? m.key.slice(0,12)+'...' : m.key),
-        [{ label: 'Виручка', data: topMediums.map(m => m.sum), backgroundColor: '#E30613' }],
-        { legend: false }
-      );
-    }
+    barChart('ch-projects',
+      byProj.map(p => p.key),
+      [
+        { label: 'Ліди', data: byProj.map(p=>p.leads), backgroundColor: '#3B82F6' },
+        { label: 'Оплачені', data: byProj.map(p=>p.paid), backgroundColor: '#10B981' }
+      ]
+    );
 
-    // P2 #14 — Hourly Heatmap (day-of-week × hour)
-    try {
-      const { data: hmData } = await sb.rpc('dashboard_hourly_heatmap', {
-        p_from: kyivIsoStart(filters.from), p_to: kyivIsoEnd(filters.to),
-        p_project_values: _rpcParams().p_project_values
-      });
-      const matrix = {};
-      let maxLeads = 0;
-      (hmData || []).forEach(r => {
-        if (!matrix[r.dow]) matrix[r.dow] = {};
-        matrix[r.dow][r.hour] = Number(r.leads || 0);
-        if (matrix[r.dow][r.hour] > maxLeads) maxLeads = matrix[r.dow][r.hour];
-      });
-      const dowNames = { 1:'ПН', 2:'ВТ', 3:'СР', 4:'ЧТ', 5:'ПТ', 6:'СБ', 7:'НД' };
-      const cellColor = v => {
-        if (!v || !maxLeads) return 'rgba(255,255,255,0.04)';
-        const intensity = v / maxLeads;
-        return `rgba(227, 6, 19, ${0.15 + intensity * 0.7})`;
-      };
-      const hours = Array.from({length: 24}, (_, i) => i);
-      const headerHTML = '<th style="background:var(--steel-2);padding:6px;font-size:10px;color:var(--ash);">DOW</th>' +
-        hours.map(h => `<th style="padding:4px 6px;font-size:10px;color:var(--ash);">${h}</th>`).join('');
-      const bodyHTML = [1,2,3,4,5,6,7].map(d => {
-        const cells = hours.map(h => {
-          const v = (matrix[d] || {})[h] || 0;
-          const tc = v > maxLeads * 0.5 ? '#fff' : 'var(--ash)';
-          return `<td title="${dowNames[d]} ${h}:00 → ${v} лідів" style="background:${cellColor(v)};padding:4px 6px;text-align:center;color:${tc};font-size:11px;cursor:pointer;" data-dh="${d}-${h}">${v||''}</td>`;
-        }).join('');
-        return `<tr><td style="background:var(--steel-2);padding:4px 8px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#fff;font-weight:600;">${dowNames[d]}</td>${cells}</tr>`;
-      }).join('');
-      const heatmapHtml = `<div class="card" style="margin-top:14px;">
-        <div class="card-head"><h3>🕐 Hourly Heatmap (день × година, Київ-час)</h3><span class="meta">max ${maxLeads} лідів/cell</span></div>
-        <div style="overflow-x:auto;padding:8px;">
-          <table style="width:100%;border-collapse:separate;border-spacing:2px;color:#fff;">
-            <thead><tr>${headerHTML}</tr></thead>
-            <tbody>${bodyHTML}</tbody>
-          </table>
-          <div style="margin-top:8px;font-size:11px;color:var(--ash);">Чим темніше — тим більше лідів того дня тижня у ту годину. Дивись де піки → плануй пости/реклaмy.</div>
-        </div>
-      </div>`;
-      const tCampaignsCard = document.querySelector('#t-campaigns')?.closest('.card');
-      if (tCampaignsCard) tCampaignsCard.insertAdjacentHTML('beforebegin', heatmapHtml);
-    } catch (e) { console.warn('heatmap error', e); }
-
-    buildTable('#t-campaigns', {
-      rows: topCampaigns, pageSize: 10, sortKey: 'sum',
-      csvFile: 'top-campaigns.csv',
+    buildTable('#t-proj', {
+      rows: byProj,
+      pageSize: 25,
+      sortKey: 'sum',
+      csvFile: 'projects.csv',
       cols: [
-        { key: 'key', label: 'Кампанія', fmt: v => `<span class="mono" style="font-size:12px">${escapeHtml(v)}</span>` },
+        { key: 'key', label: 'Проект', fmt: v => escapeHtml(v) },
         { key: 'leads', label: 'Ліди', class: 'num', fmt: fmtNum },
-        { key: 'paid', label: 'Оплати', class: 'num', fmt: fmtNum },
-        { key: 'sum', label: 'Виручка', class: 'num', fmt: fmtMoney },
-        { key: 'conv', label: 'Конв %', class: 'num', fmt: fmtPct }
+        { key: 'paid', label: 'Paid', class: 'num', fmt: fmtNum },
+        { key: 'fail', label: 'Fail', class: 'num', fmt: fmtNum },
+        { key: 'buyers', label: 'Унік.', class: 'num', fmt: fmtNum },
+        { key: 'sum', label: 'Сума', class: 'amount', fmt: v => fmtMoney(v) },
+        { key: 'avg', label: 'Середній', class: 'amount', fmt: v => fmtMoney(v) },
+        { key: 'conv', label: 'Conv %', class: 'num', fmt: v => fmtPct(v) }
       ]
     });
-
-    buildTable('#t-sources', {
-      rows: topSources, pageSize: 10, sortKey: 'sum',
-      csvFile: 'top-sources.csv',
-      cols: [
-        { key: 'key', label: 'Джерело', fmt: v => `<span class="mono" style="font-size:12px">${escapeHtml(v)}</span>` },
-        { key: 'traffic_type', label: 'Тип', fmt: v => `<span class="pill ${v.includes('Платний')?'pending':'pay'}">${escapeHtml(v)}</span>` },
-        { key: 'leads', label: 'Ліди', class: 'num', fmt: fmtNum },
-        { key: 'paid', label: 'Оплати', class: 'num', fmt: fmtNum },
-        { key: 'sum', label: 'Виручка', class: 'num', fmt: fmtMoney },
-        { key: 'conv', label: 'Конв %', class: 'num', fmt: fmtPct }
-      ]
-    });
-  } catch (e) { c.innerHTML = errorHTML(e); }
+  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
 }
 
 /* ---------------- TRAFFIC TYPE (medium → платний / органічний) ---------------- */
@@ -3701,13 +2341,13 @@ async function renderUtmField(field, title, csvName) {
   try {
     const agg = await aggViaRPC(field);
 
+    // Attach ad spend (only fetch ads, no deals)
     let adMap = new Map();
     try {
-      const adsR = adsBaseRange();
       const { data: ads } = await sb.from('dashboard_ads_data')
         .select(field + ', spend')
-        .gte('date_start', adsR.fromD)
-        .lte('date_start', adsR.toD);
+        .gte('date_start', filters.from)
+        .lte('date_start', filters.to);
       (ads||[]).forEach(a => {
         const k = a[field] || '(none)';
         adMap.set(k, (adMap.get(k)||0) + Number(a.spend||0));
@@ -3749,15 +2389,9 @@ async function renderUtmField(field, title, csvName) {
         <div><h1>${escapeHtml(title)}</h1><div class="subtitle">${aggView.length} значень · ${fmtNum(totalLeads)} лідів${filters.source_filter ? ' · фільтр: '+filters.source_filter : ''}</div></div>
       </div>
 
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-head"><h3>Топ-10 за виручкою</h3></div>
-          <div class="chart-container"><canvas id="ch-top"></canvas></div>
-        </div>
-        <div class="card">
-          <div class="card-head"><h3>Розподіл по виручці</h3></div>
-          <div class="chart-container short"><canvas id="ch-top-doughnut"></canvas></div>
-        </div>
+      <div class="card">
+        <div class="card-head"><h3>Топ-10 за виручкою</h3></div>
+        <div class="chart-container"><canvas id="ch-top"></canvas></div>
       </div>
 
       <div class="card">
@@ -3774,12 +2408,6 @@ async function renderUtmField(field, title, csvName) {
           { label: 'Paid', data: topPaid.map(a=>a.paid), backgroundColor: '#10B981', yAxisID: 'y1' }
         ],
         { scales: { y1: { position: 'right', grid: { drawOnChartArea: false } } } }
-      );
-      // P1 #9 — Source-distribution doughnut по виручці (раніше було тільки у old)
-      doughnutChart('ch-top-doughnut',
-        topPaid.map(a => a.key.length > 18 ? a.key.slice(0,15)+'...' : a.key),
-        topPaid.map(a => a.sum),
-        ['#E30613','#FF1A2B','#FF6577','#F59E0B','#FBBF24','#10B981','#3B82F6','#8B5CF6','#EC4899','#06B6D4']
       );
     }
 
@@ -3813,7 +2441,7 @@ async function renderCampaigns() {
   try {
     const [rows, adsRes] = await Promise.all([
       fetchAllDealsBatched(30000),
-      (function(){ const r = adsBaseRange(); return sb.from('dashboard_ads_data').select('campaign_name, spend, impressions, clicks').gte('date_start', r.fromD).lte('date_start', r.toD); })()
+      sb.from('dashboard_ads_data').select('campaign_name, spend, impressions, clicks').gte('date_start', filters.from).lte('date_start', filters.to)
     ]);
     const agg = aggregateByField(rows, 'utm_campaign');
     const adMap = new Map();
@@ -3884,7 +2512,7 @@ async function renderCampaigns() {
         { key: 'conv', label: 'Conv %', class: 'num', fmt: v => fmtPct(v) }
       ]
     });
-  } catch (e) { renderError(c, e); }
+  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
 }
 
 /* ---------------- COMBOS ---------------- */
@@ -3960,7 +2588,7 @@ async function renderCombos() {
       csvFile: 'combos-'+type+'.csv',
       cols
     });
-  } catch (e) { renderError(c, e); }
+  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
 }
 
 /* ---------------- DEALS TABLE ---------------- */
@@ -3984,26 +2612,18 @@ async function renderDeals() {
       rowClick: openLeadDetailsModal,
       cols: [
         { key: 'created_at', label: 'Дата', fmt: v => `<span class="mono">${fmtDateTime(v)}</span>` },
-        { key: 'paid_at', label: 'Оплачено', fmt: v => v ? `<span class="mono" style="font-size:10px;color:var(--success);">${fmtDateTime(v)}</span>` : '—' },
         { key: 'sendpulse_deal_id', label: 'Deal ID', fmt: v => `<code>${escapeHtml(v||'')}</code>` },
         { key: 'customer_email', label: 'Email', fmt: v => `<span class="mono" style="font-size:11px">${escapeHtml(v||'—')}</span>` },
-        { key: 'customer_type', label: 'Тип', fmt: v => v === 'returning' ? '<span class="pill pay">↻ повторний</span>' : v === 'new' ? '<span class="pill new">🆕 новий</span>' : '—' },
         { key: 'project', label: 'Проект', fmt: v => escapeHtml(v||'—') },
         { key: 'tariff', label: 'Тариф', fmt: v => escapeHtml(v||'—') },
         { key: 'utm_source', label: 'Source', fmt: v => `<span class="mono" style="font-size:11px">${escapeHtml(v||'—')}</span>` },
-        { key: 'utm_medium', label: 'Medium', fmt: v => `<span class="mono" style="font-size:11px">${escapeHtml(v||'—')}</span>` },
         { key: 'utm_campaign', label: 'Campaign', fmt: v => `<span class="mono" style="font-size:11px">${escapeHtml(v||'—')}</span>` },
-        { key: 'utm_term', label: 'Term', fmt: v => `<span class="mono" style="font-size:10px">${escapeHtml(v||'—')}</span>` },
-        { key: 'utm_content', label: 'Content', fmt: v => `<span class="mono" style="font-size:10px">${escapeHtml(v||'—')}</span>` },
         { key: 'pay_provider', label: 'Provider', fmt: v => escapeHtml(v||'—') },
-        { key: 'currency', label: 'Curr', fmt: v => `<span class="mono">${escapeHtml(v||'UAH')}</span>` },
         { key: 'amount', label: 'Сума', class: 'amount', fmt: (v,r) => fmtMoney(v, r.currency) },
-        { key: 'status', label: 'Статус', fmt: statusPill },
-        { key: 'customer_phone', label: 'Phone', fmt: v => v ? `<span class="mono" style="font-size:10px">${escapeHtml(v)}</span>` : '—' },
-        { key: 'wc_order_id', label: 'WC Order', fmt: v => v ? `<code style="font-size:10px">${v}</code>` : '—' }
+        { key: 'status', label: 'Статус', fmt: statusPill }
       ]
     });
-  } catch (e) { renderError(c, e); }
+  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
 }
 
 /* ---------------- WEBHOOKS ---------------- */
@@ -4011,33 +2631,15 @@ async function renderWebhooks() {
   const c = $('#content');
   c.innerHTML = `<div class="section-head"><h1>🪝 Webhook логи</h1></div>${loadingHTML()}`;
   try {
-    const [logsRes, healthRes] = await Promise.all([
-      sb.from('dashboard_webhooks').select('id,source,event_type,status_code,created_at,processing_ms').order('created_at', { ascending: false }).limit(500),
-      sb.rpc('dashboard_webhook_health')
-    ]);
-    if (logsRes.error) throw logsRes.error;
-    const data = logsRes.data;
-    const health = healthRes.error ? [] : (healthRes.data || []);
-    const healthCards = health.map(h => {
-      const stale = h.last_1h === 0 ? '<span style="color:#DC2626;font-size:10px;">⚠ NO RECENT</span>' : '<span style="color:#10B981;font-size:10px;">✓ LIVE</span>';
-      const rateCls = h.success_rate_pct >= 95 ? 'pay' : h.success_rate_pct >= 80 ? 'pending' : 'fail';
-      return `<div class="kpi-card" style="background:var(--steel-2);border:1px solid var(--steel);border-radius:6px;padding:14px;">
-        <div style="font-size:10px;color:var(--ash);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">${escapeHtml(h.source)} ${stale}</div>
-        <div style="font-size:22px;font-weight:700;color:#fff;font-family:'Oswald',sans-serif;">${fmtNum(h.total)} <span style="font-size:14px;color:var(--ash);">за 24h</span></div>
-        <div style="font-size:11px;color:var(--ash);margin-top:6px;display:flex;gap:8px;flex-wrap:wrap;">
-          <span class="pill ${rateCls}">${h.success_rate_pct ?? '—'}% success</span>
-          <span class="pill pay">${fmtNum(h.success)} ✓</span>
-          <span class="pill fail">${fmtNum(h.failed)} ✗</span>
-          <span class="pill default">avg ${h.avg_processing_ms ?? '—'}ms</span>
-          <span class="pill default">last 1h: ${h.last_1h}</span>
-        </div>
-      </div>`;
-    }).join('');
+    const { data, error } = await sb.from('dashboard_webhooks')
+      .select('id,source,event_type,status_code,created_at')
+      .order('created_at', { ascending: false })
+      .limit(500);
+    if (error) throw error;
     c.innerHTML = `
       <div class="section-head">
-        <div><h1>🪝 Webhook логи</h1><div class="subtitle">останні ${(data||[]).length} подій · health за 24h</div></div>
+        <div><h1>🪝 Webhook логи</h1><div class="subtitle">останні ${(data||[]).length} подій</div></div>
       </div>
-      ${health.length ? `<div class="kpi-grid" style="margin-bottom:16px;">${healthCards}</div>` : ''}
       <div class="card"><div id="t-wh"></div></div>
     `;
     buildTable('#t-wh', {
@@ -4054,11 +2656,10 @@ async function renderWebhooks() {
           const cls = v >= 200 && v < 300 ? 'pay' : v >= 400 ? 'fail' : 'pending';
           return `<span class="pill ${cls}">${v}</span>`;
         }},
-        { key: 'processing_ms', label: 'ms', class: 'num', fmt: v => v ? `<span class="mono">${v}</span>` : '—' },
         { key: 'id', label: 'ID', fmt: v => `<code style="font-size:10px;color:var(--ash)">${escapeHtml(String(v||'')).slice(0,8)}…</code>` }
       ]
     });
-  } catch (e) { renderError(c, e); }
+  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
 }
 
 /* ---------------- UTM MAPPING (CRUD) ---------------- */
@@ -4183,235 +2784,6 @@ async function renderMapping() {
 }
 
 /* ---------------- MANUAL COSTS (CRUD) ---------------- */
-/* ---------------- COHORT RETENTION HEATMAP ---------------- */
-async function renderCohortRetention() {
-  const c = $('#content');
-  c.innerHTML = `<div class="section-head"><h1>📈 Cohort Retention</h1></div>${loadingHTML()}`;
-  try {
-    const { data, error } = await sb.rpc('dashboard_cohort_retention', { p_months_back: 12, p_project_values: null });
-    if (error) throw error;
-    const rows = data || [];
-
-    // Build matrix
-    const cohorts = {};
-    rows.forEach(r => {
-      if (!cohorts[r.cohort_month]) cohorts[r.cohort_month] = { cohort_month: r.cohort_month, size: r.cohort_size, retention: {} };
-      cohorts[r.cohort_month].retention[r.month_offset] = r.retained_buyers;
-    });
-    const cohortList = Object.values(cohorts).sort((a, b) => b.cohort_month.localeCompare(a.cohort_month));
-    const maxOffset = Math.max(0, ...rows.map(r => r.month_offset));
-
-    // Cell color helper
-    const cellColor = pct => {
-      if (pct == null) return 'transparent';
-      const intensity = Math.min(1, pct / 50);
-      const r = Math.round(255 - (255 - 16) * intensity);
-      const g = Math.round(255 - (255 - 185) * intensity);
-      const b = Math.round(255 - (255 - 129) * intensity);
-      return `rgb(${r},${g},${b})`;
-    };
-
-    const headerCells = ['<th style="position:sticky;left:0;background:var(--steel-2);padding:8px 12px;text-align:left;font-size:11px;color:var(--ash);">Cohort</th><th style="padding:8px;font-size:11px;color:var(--ash);">Size</th>'];
-    for (let i = 0; i <= maxOffset; i++) headerCells.push(`<th style="padding:8px;font-size:11px;color:var(--ash);min-width:60px;">M+${i}</th>`);
-
-    const bodyRows = cohortList.map(c => {
-      const cells = [`<td style="position:sticky;left:0;background:var(--steel-2);padding:8px 12px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#fff;">${c.cohort_month.slice(0, 7)}</td>`,
-                     `<td style="padding:8px;text-align:center;font-size:12px;color:var(--ash);">${fmtNum(c.size)}</td>`];
-      for (let i = 0; i <= maxOffset; i++) {
-        const retained = c.retention[i];
-        if (retained == null) {
-          cells.push(`<td style="padding:8px;text-align:center;color:var(--ash-2);font-size:11px;">—</td>`);
-        } else {
-          const pct = c.size > 0 ? (retained / c.size * 100) : 0;
-          const bg = cellColor(pct);
-          const textColor = pct > 25 ? '#fff' : '#1f1f1f';
-          cells.push(`<td title="${fmtNum(retained)} з ${fmtNum(c.size)}" style="padding:8px;text-align:center;background:${bg};color:${textColor};font-weight:600;font-size:12px;">${pct.toFixed(0)}%</td>`);
-        }
-      }
-      return `<tr>${cells.join('')}</tr>`;
-    }).join('');
-
-    c.innerHTML = `
-      <div class="section-head">
-        <div><h1>📈 Cohort Retention</h1><div class="subtitle">Що з покупцями через M+N місяців · ${cohortList.length} cohorts · daily refresh</div></div>
-      </div>
-      <div class="card" style="overflow-x:auto;">
-        <table style="width:100%;border-collapse:collapse;color:#fff;">
-          <thead><tr>${headerCells.join('')}</tr></thead>
-          <tbody>${bodyRows}</tbody>
-        </table>
-      </div>
-      <div class="card" style="margin-top:18px;background:rgba(59,130,246,0.05);border-color:#3b82f6;">
-        <div class="card-head"><h3 style="color:#3b82f6;">ℹ️ Як читати</h3></div>
-        <div style="padding:12px 16px;font-size:13px;color:var(--ash);line-height:1.7;">
-          <p><b>Cohort</b> = місяць ПЕРШОЇ оплати клієнта.</p>
-          <p><b>M+N</b> = скільки % з cohort повернулось на N-й місяць.</p>
-          <p><b>M+0</b> завжди 100% (за визначенням — це сам місяць cohort).</p>
-          <p>Тренд "M+1 повертаються" → є loyalty. Якщо M+3 теж високий → flywheel.</p>
-        </div>
-      </div>
-    `;
-  } catch (e) { c.innerHTML = errorHTML(e); }
-}
-
-/* ---------------- PEOPLE MERGE MAPPING ---------------- */
-// 08.06.2026 R5 P2: scoped click handler для People Mapping (event delegation)
-// Працює тільки на сторінці #people, ігнорує інші routes
-async function __peopleMappingHandler(e) {
-  if ((location.hash || '').replace('#','') !== 'people') return;
-  const editBtn = e.target.closest('[data-edit]');
-  const delBtn = e.target.closest('[data-del]');
-  if (editBtn) {
-    const id = editBtn.dataset.edit;
-    const { data } = await sb.from('dashboard_people_mapping').select('*').eq('id', id).maybeSingle();
-    if (data) openPersonModal(data);
-    return;
-  }
-  if (delBtn) {
-    if (!confirm('Видалити mapping?')) return;
-    const { error } = await sb.from('dashboard_people_mapping').delete().eq('id', delBtn.dataset.del);
-    if (error) { alert('Помилка: ' + error.message); return; }
-    renderPeopleMapping();
-  }
-}
-
-async function renderPeopleMapping() {
-  const c = $('#content');
-  c.innerHTML = `<div class="section-head"><h1>👥 People Merge (CRM↔ADS)</h1></div>${loadingHTML()}`;
-  try {
-    const [mappingsRes, breakdownRes] = await Promise.all([
-      sb.from('dashboard_people_mapping').select('*').order('person_name'),
-      sb.rpc('dashboard_agg_by_person', { p_from: kyivIsoStart(filters.from), p_to: kyivIsoEnd(filters.to), p_project_values: _rpcParams().p_project_values })
-    ]);
-    if (mappingsRes.error) throw mappingsRes.error;
-    const mappings = mappingsRes.data || [];
-    const breakdown = breakdownRes.error ? [] : (breakdownRes.data || []);
-
-    c.innerHTML = `
-      <div class="section-head">
-        <div><h1>👥 People Merge (CRM↔ADS)</h1><div class="subtitle">Мапінг "ці значення = одна людина". ${mappings.length} mapping rules</div></div>
-        <button class="tb-btn" id="people-add" style="background:var(--red);color:#fff;border-color:var(--red);">+ Додати людину</button>
-      </div>
-      <div class="card">
-        <div class="card-head"><h3>📊 Breakdown за поточний період</h3><span class="meta">${breakdown.length} людей · ${filters.from} → ${filters.to}</span></div>
-        <div id="t-people-breakdown"></div>
-      </div>
-      <div class="card" style="margin-top:18px;">
-        <div class="card-head"><h3>📋 Mapping rules</h3><span class="meta">CRUD</span></div>
-        <div id="t-people-rules"></div>
-      </div>
-      <div class="card" style="margin-top:18px; background:rgba(245,158,11,0.06); border-color:#F59E0B;">
-        <div class="card-head"><h3 style="color:#F59E0B;">ℹ️ Як працює</h3></div>
-        <div style="padding:12px 16px;font-size:13px;color:var(--ash);line-height:1.7;">
-          <p><b>Семантика:</b> люди мають різні tagи у CRM і FB Ads. Наприклад Vadym CRM = <code>dreamcar.ua uah</code> Ads = <code>Vadym_Volvo</code> BM.</p>
-          <p><b>Як використовувати:</b> для кожної людини зазначай список значень з CRM (utm_source/medium/campaign...) + список значень з FB Ads. Тоді breakdown агрегує по людях, а не по UTM-значеннях.</p>
-          <p><b>ROI:</b> формула <code>(revenue - spend) / spend × 100%</code>. CPA: <code>spend / paid_count</code>. CPL: <code>spend / leads</code>.</p>
-        </div>
-      </div>
-    `;
-
-    buildTable('#t-people-breakdown', {
-      rows: breakdown.map(r => ({
-        person: r.person, leads: Number(r.leads), paid: Number(r.paid),
-        revenue: Number(r.revenue), spend: Number(r.spend),
-        roi_pct: r.roi_pct != null ? Number(r.roi_pct) : null,
-        cpa: r.cpa != null ? Number(r.cpa) : null,
-        cpl: r.cpl != null ? Number(r.cpl) : null
-      })),
-      pageSize: 50,
-      sortKey: 'revenue', sortAsc: false,
-      csvFile: 'people-breakdown.csv',
-      cols: [
-        { key: 'person', label: 'Людина', fmt: v => `<strong style="color:#fff;">${escapeHtml(v)}</strong>` },
-        { key: 'leads', label: 'Ліди', class: 'num', fmt: fmtNum },
-        { key: 'paid', label: 'Оплати', class: 'num', fmt: fmtNum },
-        { key: 'revenue', label: 'Виручка', class: 'num', fmt: fmtMoney },
-        { key: 'spend', label: 'Spend', class: 'num', fmt: v => v > 0 ? fmtMoney(v) : '—' },
-        { key: 'roi_pct', label: 'ROI %', class: 'num', fmt: v => v == null ? '—' : `<span class="pill ${v >= 0 ? 'pay' : 'fail'}">${v >= 0 ? '+' : ''}${v.toFixed(0)}%</span>` },
-        { key: 'cpa', label: 'CPA', class: 'num', fmt: v => v == null ? '—' : fmtMoney(v) },
-        { key: 'cpl', label: 'CPL', class: 'num', fmt: v => v == null ? '—' : fmtMoney(v) }
-      ]
-    });
-    buildTable('#t-people-rules', {
-      rows: mappings.map(m => ({ ...m, _id: m.id })),
-      pageSize: 50,
-      sortKey: 'person_name', sortAsc: true,
-      cols: [
-        { key: 'person_name', label: 'Людина', fmt: v => `<strong>${escapeHtml(v)}</strong>` },
-        { key: 'field', label: 'Field', fmt: v => `<code>${escapeHtml(v)}</code>` },
-        { key: 'crm_values', label: 'CRM values', fmt: v => (v || []).map(x => `<span class="pill default">${escapeHtml(x)}</span>`).join(' ') || '—' },
-        { key: 'ads_values', label: 'ADS values', fmt: v => (v || []).map(x => `<span class="pill new">${escapeHtml(x)}</span>`).join(' ') || '—' },
-        { key: 'notes', label: 'Notes', fmt: v => escapeHtml(v || '—') },
-        { key: '_id', label: 'Дії', fmt: (v) => `<button class="tb-btn" data-edit="${v}" style="padding:3px 8px;font-size:11px;">✏️</button> <button class="tb-btn" data-del="${v}" style="padding:3px 8px;font-size:11px;color:#DC2626;">🗑</button>` }
-      ]
-    });
-
-    $('#people-add').addEventListener('click', () => openPersonModal(null));
-    // 08.06.2026 R5 P2: scope selectors до #content контейнера + delegation замість per-button
-    // Раніше document.querySelectorAll → колізіонило з [data-edit]/[data-del] на інших сторінках,
-    // а re-renderPeopleMapping не cleanup-ал старі listeners → multiple-bind.
-    const content = $('#content');
-    if (content) {
-      // Делегування — стейлес, не накопичується при rerender
-      content.removeEventListener('click', __peopleMappingHandler);
-      content.addEventListener('click', __peopleMappingHandler);
-    }
-  } catch (e) { c.innerHTML = errorHTML(e); }
-}
-
-function openPersonModal(row) {
-  const isEdit = !!row;
-  const modal = document.createElement('div');
-  modal.className = 'modal-backdrop';
-  modal.style.display = 'flex';
-  modal.innerHTML = `
-    <div class="modal" style="max-width:560px;width:100%;background:var(--bg-2);border:1px solid var(--red);border-radius:10px;padding:24px;">
-      <h2 style="font-family:Oswald;text-transform:uppercase;margin-bottom:18px;color:#fff;">${isEdit ? '✏️ Редагувати' : '+ Додати'} людину</h2>
-      <div style="display:grid;gap:12px;">
-        <div><label style="font-size:11px;color:var(--ash);text-transform:uppercase;letter-spacing:0.1em;">Ім'я</label>
-          <input id="p-name" type="text" placeholder="Vadym / Artem / Aleksandr" value="${row?.person_name || ''}" style="width:100%;background:var(--bg);border:1px solid var(--steel);color:#fff;padding:8px 10px;border-radius:6px;font-size:13px;"/></div>
-        <div><label style="font-size:11px;color:var(--ash);text-transform:uppercase;letter-spacing:0.1em;">Field</label>
-          <select id="p-field" style="width:100%;background:var(--bg);border:1px solid var(--steel);color:#fff;padding:8px 10px;border-radius:6px;font-size:13px;">
-            ${['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].map(f => `<option value="${f}" ${row?.field===f?'selected':''}>${f}</option>`).join('')}
-          </select></div>
-        <div><label style="font-size:11px;color:var(--ash);text-transform:uppercase;letter-spacing:0.1em;">CRM values (через кому)</label>
-          <textarea id="p-crm" placeholder="vadym, dreamcar.ua uah, vadym_personal" style="width:100%;background:var(--bg);border:1px solid var(--steel);color:#fff;padding:8px 10px;border-radius:6px;font-size:13px;min-height:50px;">${(row?.crm_values || []).join(', ')}</textarea></div>
-        <div><label style="font-size:11px;color:var(--ash);text-transform:uppercase;letter-spacing:0.1em;">ADS values (через кому)</label>
-          <textarea id="p-ads" placeholder="Vadym_Volvo, Vadym_Audi_2026" style="width:100%;background:var(--bg);border:1px solid var(--steel);color:#fff;padding:8px 10px;border-radius:6px;font-size:13px;min-height:50px;">${(row?.ads_values || []).join(', ')}</textarea></div>
-        <div><label style="font-size:11px;color:var(--ash);text-transform:uppercase;letter-spacing:0.1em;">Notes (опц.)</label>
-          <input id="p-notes" type="text" placeholder="чим він займається" value="${row?.notes || ''}" style="width:100%;background:var(--bg);border:1px solid var(--steel);color:#fff;padding:8px 10px;border-radius:6px;font-size:13px;"/></div>
-      </div>
-      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:20px;">
-        <button class="tb-btn" data-act="cancel">Скасувати</button>
-        <button class="tb-btn" data-act="save" style="background:var(--red);color:#fff;border-color:var(--red);">${isEdit ? 'Зберегти' : 'Створити'}</button>
-      </div>
-    </div>
-  `;
-  document.body.appendChild(modal);
-  modal.addEventListener('click', async (e) => {
-    if (e.target === modal) { modal.remove(); return; }
-    const act = e.target.dataset?.act;
-    if (act === 'cancel') { modal.remove(); return; }
-    if (act === 'save') {
-      const name = modal.querySelector('#p-name').value.trim();
-      if (!name) { alert('Ім\'я обов\'язкове'); return; }
-      const data = {
-        person_name: name,
-        field: modal.querySelector('#p-field').value,
-        crm_values: modal.querySelector('#p-crm').value.split(',').map(s => s.trim()).filter(Boolean),
-        ads_values: modal.querySelector('#p-ads').value.split(',').map(s => s.trim()).filter(Boolean),
-        notes: modal.querySelector('#p-notes').value.trim() || null
-      };
-      const res = isEdit
-        ? await sb.from('dashboard_people_mapping').update(data).eq('id', row.id)
-        : await sb.from('dashboard_people_mapping').insert(data);
-      if (res.error) { alert('Помилка: ' + res.error.message); return; }
-      modal.remove();
-      renderPeopleMapping();
-    }
-  });
-}
-
 async function renderCosts() {
   const c = $('#content');
   c.innerHTML = `<div class="section-head"><h1>💰 Manual Costs</h1></div>${loadingHTML()}`;
@@ -4421,34 +2793,11 @@ async function renderCosts() {
     const rows = data || [];
     const total = rows.reduce((a,r) => a + Number(r.amount||0), 0);
 
-    // P1 #12 — Aggregations by group + timeline
-    const byCategory = new Map();
-    const byDay = new Map();
-    rows.forEach(r => {
-      const cat = (r.category || 'other').toLowerCase().trim();
-      byCategory.set(cat, (byCategory.get(cat) || 0) + Number(r.amount || 0));
-      const d = r.date;
-      if (d) byDay.set(d, (byDay.get(d) || 0) + Number(r.amount || 0));
-    });
-    const catRows = Array.from(byCategory.entries()).sort((a,b)=>b[1]-a[1]);
-    const dayRows = Array.from(byDay.entries()).sort((a,b)=>a[0].localeCompare(b[0]));
-
     c.innerHTML = `
       <div class="section-head">
         <div><h1>💰 Manual Costs</h1><div class="subtitle">${rows.length} записів · сумарно ${fmtMoney(total)}</div></div>
         <button class="btn btn-primary" id="add-cost">+ Додати витрату</button>
       </div>
-
-      ${catRows.length ? `<div class="grid-2">
-        <div class="card">
-          <div class="card-head"><h3>Розподіл по категоріям</h3></div>
-          <div class="chart-container short"><canvas id="ch-costs-by-cat"></canvas></div>
-        </div>
-        <div class="card">
-          <div class="card-head"><h3>По днях</h3></div>
-          <div class="chart-container short"><canvas id="ch-costs-by-day"></canvas></div>
-        </div>
-      </div>` : ''}
 
       <div class="card" id="form-card" style="display:none">
         <div class="card-head"><h3 id="form-title">Нова витрата</h3></div>
@@ -4470,23 +2819,6 @@ async function renderCosts() {
 
       <div class="card"><div id="t-costs"></div></div>
     `;
-
-    // P1 #12 — render aggregation charts
-    if (catRows.length) {
-      setTimeout(() => {
-        doughnutChart('ch-costs-by-cat',
-          catRows.slice(0,10).map(r => r[0]),
-          catRows.slice(0,10).map(r => r[1]),
-          ['#E30613','#FF1A2B','#F59E0B','#10B981','#3B82F6','#8B5CF6','#EC4899','#06B6D4','#FBBF24','#84CC16']
-        );
-        if (dayRows.length > 0) {
-          lineChart('ch-costs-by-day',
-            dayRows.map(r => r[0]),
-            [{ label: 'UAH', data: dayRows.map(r => r[1]), borderColor: '#F59E0B', backgroundColor: 'rgba(245,158,11,0.15)', fill: true, tension: 0.3 }]
-          );
-        }
-      }, 50);
-    }
 
     buildTable('#t-costs', {
       rows,
@@ -4569,22 +2901,10 @@ async function renderAdsOverview() {
   const c = $('#content');
   c.innerHTML = `<div class="section-head"><h1>💸 Ads Overview</h1></div>${loadingHTML()}`;
   try {
-    // 🛡 FIX 03.06.2026: pagination loop замість одного select (Supabase default limit=1000, ads_data має 6680+ rows → showed 15% data, 455K замість 3.7M spend)
-    const rows = [];
-    let offset = 0; const BATCH = 1000;
-    const _adsR1 = adsBaseRange();
-    while (true) {
-      const { data, error } = await sb.from('dashboard_ads_data').select('*')
-        .gte('date_start', _adsR1.fromD).lte('date_start', _adsR1.toD)
-        .order('date_start', { ascending: true })
-        .range(offset, offset + BATCH - 1);
-      if (error) throw error;
-      if (!data || !data.length) break;
-      rows.push(...data);
-      if (data.length < BATCH) break;
-      offset += BATCH;
-      if (offset > 50000) break; // safety
-    }
+    const { data, error } = await sb.from('dashboard_ads_data').select('*')
+      .gte('date_start', filters.from).lte('date_start', filters.to);
+    if (error) throw error;
+    const rows = data || [];
     const sumSpend = rows.reduce((a,r)=>a+Number(r.spend||0),0);
     const sumImpr = rows.reduce((a,r)=>a+Number(r.impressions||0),0);
     const sumClicks = rows.reduce((a,r)=>a+Number(r.clicks||0),0);
@@ -4630,7 +2950,7 @@ async function renderAdsOverview() {
       ],
       { scales: { y1: { position: 'right', grid: { drawOnChartArea: false } } } }
     );
-  } catch (e) { renderError(c, e); }
+  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
 }
 
 /* ---------------- ADS CAMPAIGNS ---------------- */
@@ -4638,25 +2958,12 @@ async function renderAdsCampaigns() {
   const c = $('#content');
   c.innerHTML = `<div class="section-head"><h1>📊 Ads Campaigns</h1></div>${loadingHTML()}`;
   try {
-    // 🛡 FIX 03.06.2026: pagination loop (same as ads-overview)
-    const allRows = [];
-    let offset = 0; const BATCH = 1000;
-    const _adsR2 = adsBaseRange();
-    while (true) {
-      const { data, error } = await sb.from('dashboard_ads_data').select('*')
-        .gte('date_start', _adsR2.fromD).lte('date_start', _adsR2.toD)
-        .order('date_start', { ascending: true })
-        .range(offset, offset + BATCH - 1);
-      if (error) throw error;
-      if (!data || !data.length) break;
-      allRows.push(...data);
-      if (data.length < BATCH) break;
-      offset += BATCH;
-      if (offset > 50000) break;
-    }
+    const { data, error } = await sb.from('dashboard_ads_data').select('*')
+      .gte('date_start', filters.from).lte('date_start', filters.to);
+    if (error) throw error;
 
     const map = new Map();
-    (allRows).forEach(r => {
+    (data||[]).forEach(r => {
       const k = r.campaign_name || '(none)';
       if (!map.has(k)) map.set(k, { campaign_name: k, ad_account_name: r.ad_account_name, spend: 0, impressions: 0, clicks: 0, conversions: 0 });
       const x = map.get(k);
@@ -4693,7 +3000,7 @@ async function renderAdsCampaigns() {
         { key: 'conversions', label: 'Conv', class: 'num', fmt: fmtNum }
       ]
     });
-  } catch (e) { renderError(c, e); }
+  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
 }
 
 /* ---------------- COMING SOON ---------------- */
@@ -4913,16 +3220,8 @@ async function renderSettings() {
         </div>
       </div>
 
-      <div class="card" id="projects-crud-card" style="margin-top:18px;">
-        <div class="card-head">
-          <h3>🏎️ Проекти (CRUD)</h3>
-          <button class="btn btn-primary" id="proj-add">+ Додати проект</button>
-        </div>
-        <div id="t-projects-crud"></div>
-      </div>
-
       ${team.length ? `
-        <div class="card" style="margin-top:18px;">
+        <div class="card">
           <div class="card-head"><h3>👥 Команда (${team.length})</h3></div>
           <div class="table-wrap">
             <table>
@@ -4946,136 +3245,15 @@ async function renderSettings() {
       await sb.auth.signOut();
       location.reload();
     };
-
-    // P1 #13 — Projects CRUD
-    await loadProjectsCRUD();
-    $('#proj-add').onclick = () => openProjectModal(null);
-  } catch (e) { renderError(c, e); }
-}
-
-async function loadProjectsCRUD() {
-  const { data, error } = await sb.from('dashboard_projects').select('*').order('sort_order');
-  if (error) { $('#t-projects-crud').innerHTML = errorHTML(error); return; }
-  const rows = (data || []).map(p => ({
-    ...p,
-    deal_values_str: (p.deal_project_values || []).join(', ')
-  }));
-  buildTable('#t-projects-crud', {
-    rows,
-    pageSize: 25, sortKey: 'sort_order', sortAsc: true,
-    cols: [
-      { key: 'sort_order', label: '#', class: 'num', fmt: v => v ?? '—' },
-      { key: 'name', label: 'Назва', fmt: (v, r) => `<strong style="color:${r.color || '#fff'}">${escapeHtml(v)}</strong>` },
-      { key: 'code', label: 'Code', fmt: v => `<code>${escapeHtml(v)}</code>` },
-      { key: 'car_model', label: 'Авто', fmt: v => escapeHtml(v || '—') },
-      { key: 'date_start', label: 'Старт', fmt: v => `<span class="mono">${v}</span>` },
-      { key: 'date_end', label: 'Фініш', fmt: v => `<span class="mono">${v}</span>` },
-      { key: 'status', label: 'Статус', fmt: v => `<span class="pill ${v==='active'?'pay':v==='archived'?'default':'pending'}">${escapeHtml(v)}</span>` },
-      { key: 'deal_values_str', label: 'deal.project values', fmt: v => `<span class="mono" style="font-size:11px">${escapeHtml(v || '—')}</span>` },
-      { key: 'id', label: 'Дії', fmt: v => `<button class="btn btn-sm" data-proj-edit="${v}" style="margin-right:6px;">✏️</button><button class="btn btn-sm" data-proj-del="${v}" style="color:#DC2626;">🗑</button>` }
-    ]
-  });
-  document.querySelectorAll('[data-proj-edit]').forEach(btn => btn.addEventListener('click', () => {
-    const row = (data || []).find(p => p.id === btn.dataset.projEdit);
-    openProjectModal(row);
-  }));
-  document.querySelectorAll('[data-proj-del]').forEach(btn => btn.addEventListener('click', async () => {
-    if (!confirm('Видалити проект? (deals залишаться, але втратять mapping)')) return;
-    const { error } = await sb.from('dashboard_projects').delete().eq('id', btn.dataset.projDel);
-    if (error) { alert('Помилка: ' + error.message); return; }
-    loadProjectsCRUD();
-  }));
-}
-
-function openProjectModal(row) {
-  const isEdit = !!row;
-  const modal = document.createElement('div');
-  modal.className = 'modal-backdrop';
-  modal.style.display = 'flex';
-  modal.innerHTML = `
-    <div class="modal" style="max-width:640px;width:100%;background:var(--bg-2);border:1px solid var(--red);border-radius:10px;padding:24px;">
-      <h2 style="font-family:Oswald;text-transform:uppercase;margin-bottom:18px;color:#fff;">${isEdit ? '✏️ Редагувати' : '+ Створити'} проект</h2>
-      <div class="form-row">
-        <div><label>Code (slug)</label><input id="pr-code" type="text" placeholder="bmw_x5_hybrid" value="${escapeHtml(row?.code || '')}" ${isEdit ? 'readonly' : ''}/></div>
-        <div><label>Назва</label><input id="pr-name" type="text" placeholder="BMW X5 HYBRID" value="${escapeHtml(row?.name || '')}"/></div>
-      </div>
-      <div class="form-row">
-        <div><label>Авто (car_model)</label><input id="pr-car" type="text" placeholder="BMW X5 Hybrid" value="${escapeHtml(row?.car_model || '')}"/></div>
-        <div><label>Колір</label><input id="pr-color" type="color" value="${row?.color || '#E30613'}" style="height:34px;"/></div>
-      </div>
-      <div class="form-row">
-        <div><label>Старт</label><input id="pr-start" type="date" value="${row?.date_start || ''}"/></div>
-        <div><label>Фініш</label><input id="pr-end" type="date" value="${row?.date_end || ''}"/></div>
-      </div>
-      <div class="form-row">
-        <div><label>Статус</label><select id="pr-status">
-          <option value="active" ${row?.status==='active'?'selected':''}>active</option>
-          <option value="completed" ${row?.status==='completed'?'selected':''}>completed</option>
-          <option value="archived" ${row?.status==='archived'?'selected':''}>archived</option>
-        </select></div>
-        <div><label>Sort order</label><input id="pr-sort" type="number" value="${row?.sort_order ?? 99}"/></div>
-      </div>
-      <div><label>deal.project values (через кому) — як deals у CRM позначають цей проект</label><textarea id="pr-vals" placeholder="BMW X5 HYBRID, BMW X5" style="min-height:50px;">${(row?.deal_project_values || []).join(', ')}</textarea></div>
-      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:18px;">
-        <button class="btn" data-act="cancel">Скасувати</button>
-        <button class="btn btn-primary" data-act="save">${isEdit ? 'Зберегти' : 'Створити'}</button>
-      </div>
-    </div>
-  `;
-  document.body.appendChild(modal);
-  modal.addEventListener('click', async (e) => {
-    if (e.target === modal) { modal.remove(); return; }
-    const act = e.target.dataset?.act;
-    if (act === 'cancel') { modal.remove(); return; }
-    if (act === 'save') {
-      const data = {
-        code: modal.querySelector('#pr-code').value.trim(),
-        name: modal.querySelector('#pr-name').value.trim(),
-        car_model: modal.querySelector('#pr-car').value.trim() || null,
-        color: modal.querySelector('#pr-color').value,
-        date_start: modal.querySelector('#pr-start').value,
-        date_end: modal.querySelector('#pr-end').value,
-        status: modal.querySelector('#pr-status').value,
-        sort_order: parseInt(modal.querySelector('#pr-sort').value) || 99,
-        deal_project_values: modal.querySelector('#pr-vals').value.split(',').map(s=>s.trim()).filter(Boolean)
-      };
-      if (!data.code || !data.name || !data.date_start || !data.date_end) { alert("Обов'язкові: code, name, дати"); return; }
-      const res = isEdit
-        ? await sb.from('dashboard_projects').update(data).eq('id', row.id)
-        : await sb.from('dashboard_projects').insert(data);
-      if (res.error) { alert('Помилка: ' + res.error.message); return; }
-      modal.remove();
-      loadProjectsCRUD();
-      // Refresh MV after change
-      sb.rpc('dashboard_projects_with_stats').catch(()=>{});
-    }
-  });
+  } catch (e) { console.error(e); c.querySelector('.state').outerHTML = errorHTML(e); }
 }
 
 /* =================================================================
    ROUTER
    ================================================================= */
 
-// 08.06.2026 R2 P1: route aliases — bookmarks типу #traffic / #ads / #creative тепер працюють
-const ROUTE_ALIASES = {
-  'traffic': 'medium',
-  'ads': 'terms',
-  'creative': 'content',
-  'executor': 'terms',
-  'campaign': 'campaigns',
-  'source': 'sources'
-};
 function getRoute() {
-  let h = location.hash.replace(/^#/, '') || 'overview';
-  if (ROUTE_ALIASES[h]) {
-    // 08.06.2026 R6: hash rewrite до canonical (#traffic→#medium, etc.) — щоб bookmarks і active nav match
-    const canonical = ROUTE_ALIASES[h];
-    if (SECTIONS[canonical]) {
-      // Replace hash without triggering hashchange (history.replaceState)
-      try { history.replaceState(null, '', '#' + canonical); } catch(e) {}
-      h = canonical;
-    }
-  }
+  const h = location.hash.replace(/^#/, '') || 'overview';
   return SECTIONS[h] ? h : 'overview';
 }
 
@@ -5085,9 +3263,6 @@ async function renderRoute() {
   $$('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.route === route));
   setSectionTitle(SECTION_TITLES[route] || route);
   $('#filter-bar').classList.toggle('hidden', !UTM_SECTIONS.has(route) && !ADS_SECTIONS.has(route));
-  // P1 #10 — показуємо UTM free-text row на UTM-сторінках і таблиці угод
-  var utmBar = $('#filter-bar-utm');
-  if (utmBar) utmBar.style.display = UTM_SECTIONS.has(route) ? '' : 'none';
   // combo type select — only on combos section
   const comboWrap = $('#f-combo-wrap');
   if (comboWrap) comboWrap.style.display = (route === 'combos') ? '' : 'none';
@@ -5112,112 +3287,20 @@ window.addEventListener('hashchange', renderRoute);
 async function bootstrap() {
   if (window.supabase && window.supabase.auth) {
     sb = window.supabase;
-    // SSO bridge: token у URL fragment з HQ login (cross-domain shared session)
-    try {
-      const m = location.hash.match(/#sso=([^&]+)/);
-      if (m) {
-        const sso = JSON.parse(atob(decodeURIComponent(m[1])));
-        if (sso.access_token && sso.refresh_token) {
-          await sb.auth.setSession({ access_token: sso.access_token, refresh_token: sso.refresh_token });
-          // Очистити fragment — токен не повинен залишатись у URL
-          history.replaceState(null, '', location.pathname);
-          console.log('[sso] session set from HQ bridge');
-        }
-      }
-    } catch (e) { console.warn('[sso bridge]', e); }
     try {
       const { data: { session } } = await sb.auth.getSession();
       if (session?.user) {
-        // 03.06.2026 — role check + alias resolve (multiple Google accounts на одного юзера)
-        try {
-          let pu = null;
-          try {
-            const rpc = await sb.rpc('resolve_user_by_auth', { p_auth_id: session.user.id });
-            pu = (rpc.data && rpc.data[0]) || null;
-          } catch (e) { console.warn('[resolve_user_by_auth]', e); }
-          if (!pu) {
-            const direct = await sb.from('users').select('id,name,role,email').eq('auth_id', session.user.id).maybeSingle();
-            pu = direct.data;
-          }
-          if (!pu) { showLoginGate('⚠ Профіль не знайдено для ' + session.user.email + '. Звернися до CEO.'); return; }
-          if (!['ceo','coo','lead'].includes(pu.role)) {
-            showLoginGate('⚠ Доступ лише для CEO / COO / Lead. Твоя роль: ' + pu.role);
-            return;
-          }
-          currentUser = { ...session.user, name: pu.name, role: pu.role, public_id: pu.id };
-        } catch (e) { console.warn('[auth-role-check]', e); currentUser = session.user; }
+        currentUser = session.user;
         await onAuthed();
         return;
       }
     } catch (e) { console.warn(e); }
   }
-  // Немає session — show login gate
-  showLoginGate();
   window.addEventListener('dc-auth-ok', async (ev) => {
     sb = window.supabase;
     currentUser = ev.detail.user;
-    hideLoginGate();
     await onAuthed();
   });
-}
-
-function showLoginGate(errMsg) {
-  if (document.getElementById('dc-login-gate')) {
-    if (errMsg) document.getElementById('dc-login-error').textContent = errMsg;
-    return;
-  }
-  const ov = document.createElement('div');
-  ov.id = 'dc-login-gate';
-  ov.style.cssText = 'position:fixed;inset:0;background:#0a0a0a;z-index:999998;display:flex;align-items:center;justify-content:center;font-family:Manrope,sans-serif;color:#fff;filter:none;backdrop-filter:none;-webkit-backdrop-filter:none;transform:translateZ(0);will-change:transform;';
-  // Гарантовано прибрати inherited blur з усіх child elements
-  if(!document.getElementById('dc-login-gate-css')){
-    var st = document.createElement('style');
-    st.id = 'dc-login-gate-css';
-    st.textContent = '#dc-login-gate, #dc-login-gate *{filter:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;-webkit-filter:none!important;}';
-    document.head.appendChild(st);
-  }
-  ov.innerHTML =
-    '<div style="max-width:420px;padding:40px 28px;background:#141414;border:1px solid #2a2a2a;border-radius:14px;text-align:center;">' +
-      '<div style="font-family:Oswald,sans-serif;font-size:26px;letter-spacing:.08em;margin-bottom:8px;">DREAM<span style="color:#E30613;">CAR</span> · DASHBOARD</div>' +
-      '<div style="color:#888;font-size:13px;margin-bottom:24px;">🔒 Закрита бізнес-аналітика</div>' +
-      '<div style="background:rgba(245,158,11,0.08);border-left:3px solid #F59E0B;padding:10px 14px;border-radius:0 6px 6px 0;margin-bottom:20px;font-size:12px;text-align:left;line-height:1.5;">Доступ лише для <b>CEO / COO / Lead</b>. Обери спосіб входу:</div>' +
-      // 08.06.2026 Mobile fix: Google OAuth кнопка ПЕРША (швидше для мобільних, не треба переходити на HQ)
-      '<button id="dc-login-google-btn" style="width:100%;padding:13px 20px;background:#fff;color:#202124;border:1px solid #dadce0;border-radius:8px;font-family:Manrope,sans-serif;font-size:14px;font-weight:600;letter-spacing:.04em;cursor:pointer;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:10px;">' +
-        '<svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>' +
-        '<span>Увійти через Google</span>' +
-      '</button>' +
-      '<button id="dc-login-tg-btn" style="width:100%;padding:13px 20px;background:linear-gradient(135deg,#0088cc,#229ED9);color:#fff;border:none;border-radius:8px;font-family:Manrope,sans-serif;font-size:14px;font-weight:600;letter-spacing:.04em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;">' +
-        '<svg width="18" height="18" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.022c.242-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.94z"/></svg>' +
-        '<span>Увійти через Telegram</span>' +
-      '</button>' +
-      '<div id="dc-login-error" style="color:#FF6A7A;font-size:12px;margin-top:14px;min-height:18px;">' + (errMsg || '') + '</div>' +
-      '<div style="font-size:11px;color:#555;margin-top:18px;font-family:JetBrains Mono,monospace;">Google = пряма авторизація · TG = через @dreamcar_team_bot</div>' +
-    '</div>';
-  document.body.appendChild(ov);
-  document.getElementById('dc-login-tg-btn').onclick = function () {
-    const ret = encodeURIComponent(window.location.pathname + window.location.hash);
-    window.location.href = 'https://team.dreamcar.ua/hq/?next=' + ret + '&dashboard=1';
-  };
-  document.getElementById('dc-login-google-btn').onclick = async function () {
-    try {
-      const { error } = await sb.auth.signInWithOAuth({
-        provider: 'google',
-        options: { redirectTo: location.origin + location.pathname + location.hash }
-      });
-      if (error) {
-        const errEl = document.getElementById('dc-login-error');
-        if (errEl) errEl.textContent = 'Google login error: ' + error.message;
-      }
-    } catch(e) {
-      const errEl = document.getElementById('dc-login-error');
-      if (errEl) errEl.textContent = 'Google login failed: ' + (e.message || 'unknown');
-    }
-  };
-}
-
-function hideLoginGate() {
-  const el = document.getElementById('dc-login-gate');
-  if (el) el.remove();
 }
 
 async function onAuthed() {
@@ -5226,7 +3309,7 @@ async function onAuthed() {
   const av = $('.user-avatar');
   if (av) av.textContent = (email[0] || '?').toUpperCase();
 
-  applyPreset('today');
+  applyPreset('30d');
   setupFilterBar();
   bindSettingsModalHandlers();
   loadModelsSelect();
@@ -5248,9 +3331,9 @@ async function onAuthed() {
     });
   });
 
-  // 08.06.2026 R8.1: burger handler видалено звідси — він живе у dashboardMobileBootstrap
-  // (line ~1517) разом з backdrop logic. Дубль handler конфліктував:
-  // bootstrap робив add('open'), а цей toggle() видаляв одразу → drawer не відкривався на mobile.
+  $('#burger').addEventListener('click', () => {
+    $('#sidebar').classList.toggle('open');
+  });
 
   // Collapsible nav groups
   $$('.nav-group-title.clickable').forEach(t => {
@@ -5279,28 +3362,25 @@ let __rtChannel = null;
 let __rtNewDeals = 0;
 let __rtLastEvent = null;
 
-// 14.06.2026 #392.1 — Realtime НЕ робить auto-reload (раніше: повний renderRoute() кожні
-// 3-5с при активному трафіку 1000-3000 deals/день = сотні full RPC re-fetch/день).
-// Тепер: лічильник «+N нових» у LIVE badge → клік юзера = manual refresh. Якщо юзер
-// неактивний >60с — soft refresh через debouncedReload (раніше було завжди).
 function setupRealtimeSubscription() {
   if (!sb || !sb.channel) return;
   try {
     __rtChannel = sb.channel('dashboard-deals-rt')
       .on('postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'dashboard_deals' },
-        () => {
+        (payload) => {
           __rtNewDeals++;
           __rtLastEvent = new Date();
           updateLiveBadge();
-          maybeSoftReload();
+          // Debounced reload (3 сек після останнього нового deal)
+          debouncedReload();
         })
       .on('postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'dashboard_deals' },
-        () => {
+        (payload) => {
           __rtLastEvent = new Date();
           updateLiveBadge();
-          maybeSoftReload();
+          debouncedReload();
         })
       .subscribe((status) => {
         console.log('[realtime] subscription:', status);
@@ -5311,57 +3391,10 @@ function setupRealtimeSubscription() {
   }
 }
 
-// Soft reload — тільки якщо юзер мовчав >60с (е-ink CEO режим / залишив відкритим).
-// Інакше — тихо тримаємо badge з лічильником.
-function maybeSoftReload() {
-  const idleMs = Date.now() - __lastUserActivity;
-  if (idleMs > 60000) debouncedReload();
-}
-
-// Hook клік на LIVE badge → manual refresh нових даних (заміна автоматичного reload)
-function bindLiveBadgeClick() {
-  const el = document.querySelector('#live-badge');
-  if (!el || el.__rtBound) return;
-  el.__rtBound = true;
-  el.style.cursor = 'pointer';
-  el.title = 'Клік щоб підвантажити нові угоди';
-  el.addEventListener('click', () => {
-    if (__rtNewDeals === 0) return;
-    console.log('[realtime] manual refresh — ', __rtNewDeals, 'new deals');
-    __rtNewDeals = 0;
-    renderRoute();
-    updateLiveBadge();
-  });
-}
-
-// 08.06.2026 R3 P1: tracking останньої user-активності для guard у debouncedReload
-// 14.06.2026 #392.1: capture-phase → bubble-phase. Capture-phase глобально ламає stopPropagation
-// у дітях (порушення HARD RULE per memory `no-document-capture-click`). Bubble дає той самий
-// `last user activity` timestamp без міни під майбутні модалки.
-let __lastUserActivity = Date.now();
-let __pendingRealtimeRetry = null; // R6 fix: prevent timer stacking
-const __markActivity = () => { __lastUserActivity = Date.now(); };
-window.addEventListener('input', __markActivity);
-window.addEventListener('change', __markActivity);
-window.addEventListener('click', __markActivity);
-
 const debouncedReload = debounce(() => {
   // Не перезавантажую якщо юзер на CRUD-сторінках чи help
   const r = (location.hash || '#overview').replace('#','');
   if (['mapping','costs','settings','help'].includes(r)) return;
-  // Pause guard: якщо user взаємодіяв з UI < 2s тому — пропускаємо цикл,
-  // не переписуємо view посеред редагування фільтрів.
-  const sinceActivity = Date.now() - __lastUserActivity;
-  if (sinceActivity < 2000) {
-    if (__pendingRealtimeRetry) return; // вже є очікуваний retry — не нагромаджуємо
-    console.log('[realtime] postponing reload — user active', sinceActivity, 'ms ago');
-    __pendingRealtimeRetry = setTimeout(() => {
-      __pendingRealtimeRetry = null;
-      debouncedReload();
-    }, 2200);
-    return;
-  }
-  __pendingRealtimeRetry = null;
   console.log('[realtime] reloading route after', __rtNewDeals, 'new deals');
   renderRoute();
   __rtNewDeals = 0;
@@ -5372,20 +3405,7 @@ function updateLiveBadge() {
   if (!el) return;
   const lastAgo = __rtLastEvent ? Math.round((Date.now() - __rtLastEvent.getTime())/1000) : null;
   el.classList.add('on');
-  el.title = __rtLastEvent ? `Останній deal: ${lastAgo}s тому, +${__rtNewDeals} нових у черзі · клік щоб оновити` : 'Підключено · очікую угоди';
-  // 14.06.2026 #392.1 — показуємо лічильник прямо у badge коли є нові
-  const counter = el.querySelector('.rt-new') || (() => {
-    const s = document.createElement('span'); s.className = 'rt-new';
-    s.style.cssText = 'margin-left:6px;background:#E30613;color:#fff;font-size:10px;font-weight:800;padding:1px 6px;border-radius:8px;display:none;';
-    el.appendChild(s); return s;
-  })();
-  if (__rtNewDeals > 0) {
-    counter.textContent = '+' + __rtNewDeals;
-    counter.style.display = 'inline-block';
-  } else {
-    counter.style.display = 'none';
-  }
-  bindLiveBadgeClick();
+  el.title = __rtLastEvent ? `Останній deal: ${lastAgo}s тому, +${__rtNewDeals} нових у черзі` : 'Підключено · очікую угоди';
 }
 
 function setupAutoRefreshIndicator() {
