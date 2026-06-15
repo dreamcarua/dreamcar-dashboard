@@ -7,7 +7,8 @@
 <meta name="color-scheme" content="dark">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <script src="https://brand.dreamcar.ua/assets/global-header.js?v=20260606b" defer></script>
-<script src="/assets/js/auth-guard.js?v=20260614" defer></script>
+<script src="/assets/js/auth-guard.js?v=20260615-win"></script>
+<meta name="win-build" content="20260615-fix">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -106,13 +107,14 @@ tbody tr.gold td{background:rgba(251,191,36,.04)}
   </div>
 
   <div class="note">
-    <b>Як рахується (v3 — 14.06.2026 finance audit).</b><br>
-    <b>Revenue</b> рахується по <code>paid_at</code> (не created_at), тільки UAH-угоди (EUR/USD виключені).<br>
-    <b>Spend</b> матчиться по utm_campaign з <i>word-boundary</i> tokenize-regex <code>\m...\M</code> (не plain ILIKE — щоб не плутати <code>X5</code> ↔ <code>AUDIQ5</code>).<br>
-    <b>True ROI %</b> = (rev − spend − manual) / (spend + manual) × 100. Враховує manual у знаменнику.<br>
-    <b>True CAC</b> = (spend + manual) / paid_count. ROAS і CPL/CPA — класичні (тільки ad_spend).<br>
-    <b>⏳ partial</b> позначка біля статусу — активні запуски ще не завершились, метрики обчислені на <code>elapsed_days/days_duration</code>.<br>
-    <b>Не врахована</b> вартість призу (cost of car) — Net Profit показує доходи мінус операційні витрати, без фонду авто.
+    <b>Як рахується (v7 — 15.06.2026 #400).</b><br>
+    <b>Revenue</b> — по <code>paid_at</code>, UAH-угоди, ANY(aliases) match з <code>dashboard_deals.project</code>.<br>
+    <b>Ad spend</b> — трирівневий attribution: L1 ILIKE substring з utm_campaign АБО campaign_name; L2 period-fallback (рівномірно ділить непривʼязані витрати між активними у той день запусками); lifetime/idea запуски виключені.<br>
+    <b>% з угод</b> = per-paid SUM(amount × rate%), беремо <code>percent_rates</code> у валідному вікні + matched pay_provider.<br>
+    <b>Fixed allocated</b> = pro-rata по місяцях через weighted active days.<br>
+    <b>True ROI %</b> = (revenue − total_cost) / total_cost × 100. <b>True CAC</b> = total_cost / paid_count.<br>
+    <b>⏳ partial</b> — активні запуски ще йдуть, метрики обчислені на <code>elapsed_days/days_duration</code>.<br>
+    <b>Призовий фонд</b> вже включено у total_cost з <code>launches.prize_cost_uah</code>.
   </div>
 
   <!-- Chart: ROAS per project -->
@@ -172,10 +174,20 @@ tbody tr.gold td{background:rgba(251,191,36,.04)}
 </div>
 
 <script>
-const HQ = (window.HQ_CONFIG || {});
-const SB_URL = HQ.SUPABASE_URL || 'https://wotghlaehnvxyeacznvv.supabase.co';
-const SB_KEY = HQ.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndvdGdobGFlaG52eHllYWN6bnZ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU0MTM3MzAsImV4cCI6MjA1MTAwOTczMH0._BS6ABYSP_ZGfk_QbVFCk0PIUVMUd_X86VuJX59nIs8';
-const sb = window.supabase.createClient(SB_URL, SB_KEY, { auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+// #404 — НЕ створюємо власний sb клієнт з hardcoded JWT (старий ключ міг протухнути).
+// Чекаємо валідний window.supabase від auth-guard.js.
+let sb = null;
+async function getSb() {
+  if (sb) return sb;
+  for (let i = 0; i < 80; i++) {
+    if (window.supabase && typeof window.supabase.from === 'function') {
+      sb = window.supabase;
+      return sb;
+    }
+    await new Promise(r => setTimeout(r, 100));
+  }
+  throw new Error('Supabase client не готовий (auth-guard.js не завантажився)');
+}
 
 // Set live date
 const ymd = new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Kyiv' });
@@ -197,6 +209,7 @@ let SORT = { key: 'starts_on', dir: 'desc' };
 
 async function load() {
   try {
+    await getSb();
     const { data, error } = await sb.rpc('dashboard_project_pnl');
     if (error) throw error;
     DATA = (data || []).slice();
