@@ -6,7 +6,7 @@
 <title>Фінанси · DreamCar</title>
 <meta name="color-scheme" content="dark">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta name="finance-build" content="20260615-cat-tree">
+<meta name="finance-build" content="20260615-trend-spend">
 <script src="https://brand.dreamcar.ua/assets/global-header.js?v=20260606b" defer></script>
 <script src="/assets/js/auth-guard.js?v=20260614" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -267,7 +267,7 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
     <!-- CHARTS row 1 -->
     <div class="chart-grid">
       <div class="chart-card">
-        <h4>💰 Revenue & Profit Trend <span class="meta" id="trendMeta">за період</span></h4>
+        <h4>💰 Виручка та витрати на рекламу <span class="meta" id="trendMeta">за період</span></h4>
         <div class="chart-canvas-wrap"><canvas id="chTrend"></canvas></div>
       </div>
       <div class="chart-card">
@@ -667,30 +667,29 @@ function chartCommon() {
   };
 }
 
-function drawTrend(daily) {
+function drawTrend(daily, dailyAds) {
   const ctx = document.getElementById('chTrend').getContext('2d');
   if (OV.charts.trend) OV.charts.trend.destroy();
-  // Cumulative profit ~91.5% margin proxy (true margin з PNL)
   const labels = daily.map(d => d.day.slice(5));
   const revenues = daily.map(d => d.revenue);
-  let cum = 0; const cumProfit = revenues.map(v => { cum += v*0.915; return Math.round(cum); });
-  const grad = ctx.createLinearGradient(0,0,0,240);
-  grad.addColorStop(0,'rgba(251,191,36,0.35)'); grad.addColorStop(1,'rgba(251,191,36,0)');
+  // align ads by day index — даних рівно стільки ж скільки днів (RPC заповнює дірки 0)
+  const adsByDay = {};
+  (dailyAds || []).forEach(a => { adsByDay[a.day] = Number(a.spend || 0); });
+  const spends = daily.map(d => adsByDay[d.day] || 0);
   OV.charts.trend = new Chart(ctx, {
     data: {
       labels,
       datasets: [
-        { type:'bar', label:'Revenue', data: revenues, backgroundColor: 'rgba(227,6,19,0.55)', borderColor:'#E30613', borderWidth:1, borderRadius:3, order:2, yAxisID:'y' },
-        { type:'line', label:'Cumulative profit', data: cumProfit, borderColor:'#FBBF24', backgroundColor: grad, fill: true, tension: 0.35, pointRadius:0, pointHoverRadius:4, borderWidth:2, order:1, yAxisID:'y1' }
+        { type:'bar', label:'Виручка', data: revenues, backgroundColor: 'rgba(227,6,19,0.65)', borderColor:'#E30613', borderWidth:1, borderRadius:3, order:1 },
+        { type:'bar', label:'Реклама', data: spends, backgroundColor: 'rgba(251,191,36,0.7)', borderColor:'#FBBF24', borderWidth:1, borderRadius:3, order:2 }
       ]
     },
     options: {
       ...chartCommon(),
       interaction: { mode: 'index', intersect: false },
       scales: {
-        x: chartCommon().scales.x,
-        y: { ...chartCommon().scales.y, position: 'left', title: { display:false } },
-        y1: { ...chartCommon().scales.y, position: 'right', grid: { display: false } }
+        x: { ...chartCommon().scales.x, stacked: false },
+        y: { ...chartCommon().scales.y, position: 'left', stacked: false, beginAtZero: true }
       }
     }
   });
@@ -917,7 +916,8 @@ async function reloadOverview() {
     const periodPaid = Number(rpc?.paid || 0);
     const prevRev = Number(rpc?.prev_revenue || 0);
     const daily = (rpc?.daily || []).map(d => ({ day: d.day, revenue: Number(d.revenue||0) }));
-    drawTrend(daily);
+    const dailyAds = (rpc?.daily_ads || []).map(a => ({ day: a.day, spend: Number(a.spend||0) }));
+    drawTrend(daily, dailyAds);
     // KPI з proxy margin 91.5% (буде уточнено після PnL)
     renderKpi(periodRev, periodPaid, prevRev, null, days);
     renderForecast(null, daily, periodRev);
