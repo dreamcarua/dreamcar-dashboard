@@ -377,6 +377,7 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
     <div class="field"><label>Банк *</label><select id="bankBank" onchange="bankToggle()"><option value="monobank">monobank</option><option value="privatbank">ПриватБанк</option></select></div>
     <div class="field"><label>ФОП / лейбл *</label><input id="bankLabel" type="text" placeholder="напр. Спірін"></div>
   </div>
+  <div class="field"><label>\u041f\u0406\u0411 \u0432\u043b\u0430\u0441\u043d\u0438\u043a\u0430 (\u0434\u043b\u044f mono \u2014 \u0437\u0432\u0456\u0440\u043a\u0430 \u0432\u043d\u0443\u0442\u0440\u0456\u0448\u043d\u0456\u0445 \u043f\u0435\u0440\u0435\u043a\u0430\u0437\u0456\u0432)</label><input id="bankOwner" type="text" placeholder="\u043d\u0430\u043f\u0440. \u0421\u043f\u0456\u0440\u0456\u043d \u042e\u0440\u0456\u0439 \u041f\u0435\u0442\u0440\u043e\u0432\u0438\u0447"></div>
   <div class="field" id="bankPidWrap" style="display:none"><label>Privat Автоклієнт ID *</label><input id="bankPid" type="text"></div>
   <div class="field"><label id="bankTokLbl">Токен *</label><input id="bankToken" type="text" placeholder="вставити токен"></div>
   <div class="field"><label>Активний</label><select id="bankActive"><option value="true">Так</option><option value="false">Ні</option></select></div>
@@ -745,17 +746,17 @@ function bankToggle(){ const isP=document.getElementById('bankBank').value==='pr
   document.getElementById('bankPidWrap').style.display=isP?'block':'none';
   document.getElementById('bankTokLbl').textContent=isP?'Автоклієнт Token *':'Особистий токен *'; }
 function openBank(){ editBankRow=null; document.getElementById('bankTitle').textContent='Нове підключення'; showErr('bankErr',null);
-  document.getElementById('bankBank').value='monobank'; document.getElementById('bankLabel').value=''; document.getElementById('bankPid').value=''; document.getElementById('bankToken').value=''; document.getElementById('bankActive').value='true'; bankToggle(); openModal('modalBank'); }
+  document.getElementById('bankBank').value='monobank'; document.getElementById('bankLabel').value=''; document.getElementById('bankPid').value=''; document.getElementById('bankToken').value=''; document.getElementById('bankOwner').value=''; document.getElementById('bankActive').value='true'; bankToggle(); openModal('modalBank'); }
 function editBank(id){ const b=BANKS.find(x=>x.id===id); if(!b) return; editBankRow=b;
   document.getElementById('bankTitle').textContent='Редагувати: '+b.label; showErr('bankErr',null);
-  document.getElementById('bankBank').value=b.bank; document.getElementById('bankLabel').value=b.label; document.getElementById('bankPid').value=b.privat_id||''; document.getElementById('bankToken').value=b.token||''; document.getElementById('bankActive').value=String(b.is_active); bankToggle(); openModal('modalBank'); }
+  document.getElementById('bankBank').value=b.bank; document.getElementById('bankLabel').value=b.label; document.getElementById('bankPid').value=b.privat_id||''; document.getElementById('bankToken').value=b.token||''; document.getElementById('bankOwner').value=b.owner_name||''; document.getElementById('bankActive').value=String(b.is_active); bankToggle(); openModal('modalBank'); }
 async function saveBank(){
   const bank=document.getElementById('bankBank').value, label=document.getElementById('bankLabel').value.trim();
   const token=document.getElementById('bankToken').value.trim(), pid=document.getElementById('bankPid').value.trim();
   if(!label) return showErr('bankErr','Вкажи лейбл (ФОП)');
   if(!token) return showErr('bankErr','Встав токен');
   if(bank==='privatbank' && !pid) return showErr('bankErr','Privat потребує Автоклієнт ID');
-  const payload={bank,label,token,privat_id:bank==='privatbank'?pid:null,is_active:document.getElementById('bankActive').value==='true'};
+  const payload={bank,label,token,privat_id:bank==='privatbank'?pid:null,owner_name:document.getElementById('bankOwner').value.trim()||null,is_active:document.getElementById('bankActive').value==='true'};
   try{ const r=editBankRow?await sb.from('kasa_bank_creds').update(payload).eq('id',editBankRow.id):await sb.from('kasa_bank_creds').insert(payload);
     if(r.error) throw r.error; closeModal('modalBank'); await loadBanks(); }catch(e){ showErr('bankErr',e.message||e); }
 }
