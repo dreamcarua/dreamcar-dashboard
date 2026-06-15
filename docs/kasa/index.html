@@ -273,7 +273,7 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
     <div class="acct-grid" id="divAccts"></div>
     <div class="toolbar">
       <input class="search" id="searchDiv" placeholder="🔍 Пошук…">
-      <button class="btn gold" style="background:var(--gold);color:#1a1a1a" onclick="openTransfer('toDiv')">+ Виплата дивідендів</button>
+      <button class="btn gold" style="background:var(--gold);color:#1a1a1a" onclick="openDivPayout()">+ Виплата дивідендів</button>
     </div>
     <div class="tbl-card"><table id="tblDiv"><thead><tr>
       <th>Дата</th><th style="text-align:left">Опис</th><th>Звідки</th><th>Кому</th><th>Сума</th><th>Дії</th>
@@ -490,7 +490,7 @@ function renderAll(){
 }
 
 function renderKpis(){
-  const bank=bookTotal('bank'),cash=bookTotal('cash'),div=bookTotal('dividends');
+  const bank=bookTotal('bank'),cash=bookTotal('cash'),div=(DATA.divTotal||0);
   const oper=bank+cash;
   const k=document.getElementById('kpis');
   k.innerHTML=`
@@ -518,7 +518,7 @@ function renderOverview(){
     options:{maintainAspectRatio:false,plugins:{legend:{labels:{color:'#bbb',font:{size:11}}},title:{display:true,text:`Грошовий потік · надх ${fmtUAH(inSum)} / витр ${fmtUAH(outSum)}`,color:'#fff',font:{size:13}}},
     scales:{x:{ticks:{color:'#888'},grid:{color:'#1a1a1a'}},y:{ticks:{color:'#888'},grid:{color:'#1a1a1a'}}}}});
   if(bkChart)bkChart.destroy();
-  bkChart=new Chart(document.getElementById('bookChart'),{type:'doughnut',data:{labels:['Безготівка','Готівка','Дивіденди'],datasets:[{data:[Math.round(bookTotal('bank')),Math.round(bookTotal('cash')),Math.round(bookTotal('dividends'))],backgroundColor:['#60a5fa','#10B981','#FBBF24'],borderColor:'#141414',borderWidth:2}]},
+  bkChart=new Chart(document.getElementById('bookChart'),{type:'doughnut',data:{labels:['Безготівка','Готівка','Дивіденди'],datasets:[{data:[Math.round(bookTotal('bank')),Math.round(bookTotal('cash')),Math.round(DATA.divTotal||0)],backgroundColor:['#60a5fa','#10B981','#FBBF24'],borderColor:'#141414',borderWidth:2}]},
     options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#bbb',font:{size:11}}},title:{display:true,text:'Розподіл коштів',color:'#fff',font:{size:13}}}}});
   const recent=[...DATA.tx.filter(t=>{const _a=acctById(t.account_id);return _a&&_a.is_active;}).map(t=>({k:'tx',d:(t.occurred_ts||t.occurred_at),row:t})),...DATA.transfers.filter(tr=>{const fa=acctById(tr.from_account_id),ta=acctById(tr.to_account_id);return (fa&&fa.is_active)||(ta&&ta.is_active);}).map(t=>({k:'tr',d:(t.occurred_ts||t.occurred_at),row:t}))]
     .sort((a,b)=>new Date(b.d)-new Date(a.d)).slice(0,15);
@@ -552,7 +552,8 @@ async function loadCashflow(){ const pr=periodRange();
   try{ const r=await sb.rpc('kasa_cashflow',{p_from:pr.from,p_to:pr.to,p_gran:pr.gran}); DATA.cf=r.data||[]; }catch(e){ DATA.cf=[]; }
   try{ const af=await sb.rpc('kasa_account_cashflow',{p_from:pr.from,p_to:pr.to}); DATA.acctFlow={}; (af.data||[]).forEach(x=>{DATA.acctFlow[x.account_id]={inflow:Number(x.inflow),outflow:Number(x.outflow)};}); }catch(e){ DATA.acctFlow={}; }
   try{ const ifl=await sb.rpc('kasa_internal_flow',{p_from:pr.from,p_to:pr.to}); DATA.intFlow={}; (ifl.data||[]).forEach(x=>{DATA.intFlow[x.account_id]={moved_in:Number(x.moved_in),moved_out:Number(x.moved_out)};}); }catch(e){ DATA.intFlow={}; }
-  renderOverview(); renderAcctFlow(); renderIntFlow(); }
+  try{ const dvr=await sb.rpc('kasa_dividends',{p_from:pr.from,p_to:pr.to}); DATA.div={vadym:0,artem:0}; (dvr.data||[]).forEach(x=>{DATA.div[x.who]=Number(x.amt)||0;}); DATA.divTotal=(DATA.div.vadym||0)+(DATA.div.artem||0); }catch(e){ DATA.div={vadym:0,artem:0}; DATA.divTotal=0; }
+  renderOverview(); renderAcctFlow(); renderIntFlow(); renderKpis(); renderDiv(); }
 function renderAcctFlow(){
   const tb=document.querySelector('#tblAcctFlow tbody'); if(!tb) return;
   const af=DATA.acctFlow||{};
@@ -610,13 +611,15 @@ function renderCash(){
 document.getElementById('searchCash').addEventListener('input',renderCash);
 
 function renderDiv(){
-  document.getElementById('divAccts').innerHTML=DATA.accounts.filter(a=>a.kind==='dividends'&&a.is_active).map(acctCard).join('');
+  const dv=DATA.div||{vadym:0,artem:0};
+  document.getElementById('divAccts').innerHTML=
+    `<div class="acct"><div class="nm">💰 Вадим</div><div class="bal">${fmtUAH(dv.vadym||0)}</div><div class="meta">виведено за період</div></div>`+
+    `<div class="acct"><div class="nm">💰 Артем</div><div class="bal">${fmtUAH(dv.artem||0)}</div><div class="meta">виведено за період</div></div>`;
   const q=(document.getElementById('searchDiv').value||'').toLowerCase();
-  const divIds=DATA.accounts.filter(a=>a.kind==='dividends').map(a=>a.id);
-  let rows=DATA.transfers.filter(t=>divIds.includes(t.to_account_id));
+  let rows=DATA.tx.filter(t=>t.div_to);
   if(q)rows=rows.filter(t=>(t.description||'').toLowerCase().includes(q));
-  document.querySelector('#tblDiv tbody').innerHTML=rows.length?rows.map(t=>{const f=acctById(t.from_account_id),to=acctById(t.to_account_id);
-    return `<tr><td>${fmtDT(t.occurred_ts,t.occurred_at)}</td><td style="text-align:left">${esc(t.description||'Виплата дивідендів')}</td><td><span class="pill">${f?esc(f.name):'?'}</span></td><td><span class="pill">${to?esc(to.name):'?'}</span></td><td class="out">${fmtUAH(t.amount_uah)}</td><td class="act"><button class="iconbtn del" onclick="delTransfer('${t.id}')">🗑</button></td></tr>`;}).join(''):'<tr><td colspan="6" class="empty">Виплат ще не було</td></tr>';
+  document.querySelector('#tblDiv tbody').innerHTML=rows.length?rows.map(t=>{const a=acctById(t.account_id);const who=t.div_to==='split'?'Порівну':(t.div_to==='vadym'?'Вадим':'Артем');
+    return `<tr><td>${fmtDT(t.occurred_ts,t.occurred_at)}</td><td style="text-align:left">${esc(t.description||'Виплата дивідендів')}</td><td><span class="pill">${a?esc(a.name):'?'}</span></td><td>${who}</td><td class="out">${fmtUAH(t.amount_uah)}</td><td class="act"><button class="iconbtn" onclick="editTransaction('${t.id}')">✎</button></td></tr>`;}).join(''):'<tr><td colspan="6" class="empty">Виплат дивідендів ще не було</td></tr>';
 }
 document.getElementById('searchDiv').addEventListener('input',renderDiv);
 
@@ -782,7 +785,7 @@ async function runImport(){
     if(r.error)throw r.error;closeModal('modalImp');alert(`Імпортовано (дублі пропущені). Рядків оброблено: ${payload.length}`);await loadAll();}catch(e){showErr('impErr',e.message||e);}
 }
 
-Object.assign(window,{loadAll,openTxModal,editTransaction,saveTx,delTx,openTransfer,saveTransfer,delTransfer,openAcct,editAccount,saveAcct,openImport,parseImport,runImport,closeModal,setDir,openBank,editBank,saveBank,delBank,bankToggle,saveMove,moveToggle});
+Object.assign(window,{loadAll,openTxModal,editTransaction,saveTx,delTx,openTransfer,saveTransfer,delTransfer,openAcct,editAccount,saveAcct,openImport,parseImport,runImport,closeModal,setDir,openBank,editBank,saveBank,delBank,bankToggle,saveMove,moveToggle,openDivPayout});
 
 // ---- banks (creds) ----
 let BANKS=[], editBankRow=null;
@@ -860,33 +863,22 @@ async function saveMove(){
   if(!(amount>0)) return showErr('txErr','Сума > 0');
   if(!occurred_at) return showErr('txErr','Вкажи дату');
   const to=document.getElementById('txMoveTo').value;
-  const rows=[];
-  if(to==='cash'){
-    const cash=DATA.accounts.find(a=>a.kind==='cash'&&a.is_active);
-    if(!cash) return showErr('txErr','Немає активного рахунку Готівка');
-    if(cash.id===fromId) return showErr('txErr','Джерело і призначення однакові');
-    rows.push({from_account_id:fromId,to_account_id:cash.id,amount_uah:amount,occurred_at,description:desc,created_by:ME});
-  } else {
-    const who=document.getElementById('txDivWho').value;
-    const dv=DATA.accounts.find(a=>a.kind==='dividends'&&/вадим/i.test(a.name));
-    const da=DATA.accounts.find(a=>a.kind==='dividends'&&/артем/i.test(a.name));
-    if(who==='split'){
-      if(!dv||!da) return showErr('txErr','Немає рахунків дивідендів Вадим/Артем');
-      const half=Math.round(amount/2*100)/100; const other=Math.round((amount-half)*100)/100;
-      rows.push({from_account_id:fromId,to_account_id:dv.id,amount_uah:half,occurred_at,description:desc+' (порівну)',created_by:ME});
-      rows.push({from_account_id:fromId,to_account_id:da.id,amount_uah:other,occurred_at,description:desc+' (порівну)',created_by:ME});
-    } else {
-      const tgt=who==='vadym'?dv:da;
-      if(!tgt) return showErr('txErr','Немає рахунку дивідендів');
-      rows.push({from_account_id:fromId,to_account_id:tgt.id,amount_uah:amount,occurred_at,description:desc,created_by:ME});
-    }
-  }
   try{
-    if(editTx && editTx.source==='manual'){ await sb.from('kasa_transactions').delete().eq('id',editTx.id); }
-    const r=await sb.from('kasa_transfers').insert(rows); if(r.error) throw r.error;
+    if(to==='dividends'){
+      const who=document.getElementById('txDivWho').value;
+      if(editTx){ const r=await sb.from('kasa_transactions').update({excl_pnl:true,div_to:who}).eq('id',editTx.id); if(r.error) throw r.error; }
+      else { const r=await sb.from('kasa_transactions').insert({account_id:fromId,direction:'out',amount_uah:amount,occurred_at,description:desc,source:'manual',excl_pnl:true,div_to:who,created_by:ME}); if(r.error) throw r.error; }
+    } else {
+      const cash=DATA.accounts.find(a=>a.kind==='cash'&&a.is_active);
+      if(!cash) return showErr('txErr','Немає активного рахунку Готівка');
+      if(editTx){ const r1=await sb.from('kasa_transactions').update({excl_pnl:true}).eq('id',editTx.id); if(r1.error) throw r1.error; }
+      else { const r1=await sb.from('kasa_transactions').insert({account_id:fromId,direction:'out',amount_uah:amount,occurred_at,description:desc,source:'manual',excl_pnl:true,created_by:ME}); if(r1.error) throw r1.error; }
+      if(cash.id!==fromId){ const r2=await sb.from('kasa_transactions').insert({account_id:cash.id,direction:'in',amount_uah:amount,occurred_at,description:desc||'Переміщення в готівку',source:'manual',excl_pnl:true,created_by:ME}); if(r2.error) throw r2.error; }
+    }
     closeModal('modalTx'); await loadAll();
   }catch(e){ showErr('txErr',e.message||e); }
 }
+function openDivPayout(){ openTxModal(null); setDir('move'); const mt=document.getElementById('txMoveTo'); if(mt) mt.value='dividends'; moveToggle(); }
 
 // ---- auth gate ----
 async function boot(user){
