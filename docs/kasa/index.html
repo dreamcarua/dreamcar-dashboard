@@ -457,7 +457,7 @@ async function loadAll(){
     await getSb();
     const [acc,tx,tr,cats,launches]=await Promise.all([
       sb.from('kasa_accounts').select('*').order('sort_order'),
-      sb.from('kasa_transactions').select('*').order('occurred_at',{ascending:false}).limit(5000),
+      sb.from('kasa_transactions').select('*').order('occurred_ts',{ascending:false,nullsFirst:false}).limit(5000),
       sb.from('kasa_transfers').select('*').order('occurred_at',{ascending:false}).limit(2000),
       sb.from('cost_categories').select('id,code,name,icon').order('sort_order'),
       sb.from('launches').select('id,name,code,status,starts_on').order('starts_on',{ascending:false})
@@ -518,8 +518,8 @@ function renderOverview(){
   if(bkChart)bkChart.destroy();
   bkChart=new Chart(document.getElementById('bookChart'),{type:'doughnut',data:{labels:['Безготівка','Готівка','Дивіденди'],datasets:[{data:[Math.round(bookTotal('bank')),Math.round(bookTotal('cash')),Math.round(bookTotal('dividends'))],backgroundColor:['#60a5fa','#10B981','#FBBF24'],borderColor:'#141414',borderWidth:2}]},
     options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#bbb',font:{size:11}}},title:{display:true,text:'Розподіл коштів',color:'#fff',font:{size:13}}}}});
-  const recent=[...DATA.tx.filter(t=>{const _a=acctById(t.account_id);return _a&&_a.is_active;}).map(t=>({k:'tx',d:t.occurred_at,row:t})),...DATA.transfers.filter(tr=>{const fa=acctById(tr.from_account_id),ta=acctById(tr.to_account_id);return (fa&&fa.is_active)||(ta&&ta.is_active);}).map(t=>({k:'tr',d:t.occurred_at,row:t}))]
-    .sort((a,b)=>b.d.localeCompare(a.d)).slice(0,15);
+  const recent=[...DATA.tx.filter(t=>{const _a=acctById(t.account_id);return _a&&_a.is_active;}).map(t=>({k:'tx',d:(t.occurred_ts||t.occurred_at),row:t})),...DATA.transfers.filter(tr=>{const fa=acctById(tr.from_account_id),ta=acctById(tr.to_account_id);return (fa&&fa.is_active)||(ta&&ta.is_active);}).map(t=>({k:'tr',d:(t.occurred_ts||t.occurred_at),row:t}))]
+    .sort((a,b)=>new Date(b.d)-new Date(a.d)).slice(0,15);
   const tb=document.querySelector('#tblRecent tbody');
   tb.innerHTML=recent.length?recent.map(r=>{
     if(r.k==='tx'){const t=r.row,a=acctById(t.account_id),c=catById(t.category_id),l=launchById(t.launch_id);
@@ -565,8 +565,8 @@ function acctCard(a){
   const bcls=a.bank==='monobank'?'mono':(a.bank==='privatbank'?'privat':(a.bank||''));
   const bk=a.bank?`<span class="badge ${bcls}">${a.bank}</span>`:'';
   let extra;
-  if(real!=null){ const diff=Math.round(real-ops);
-    extra = Math.abs(diff)>1 ? `<div class="meta" style="color:#fbbf24">\u26a0 \u0440\u043e\u0437\u0431\u0456\u0436\u043d\u0456\u0441\u0442\u044c \u0437 \u043e\u043f\u0435\u0440\u0430\u0446\u0456\u044f\u043c\u0438: ${diff>0?'+':''}${fmtUAH(diff)}</div>`
+  if(real!=null){ const diff=Math.round(real-ops); const tol=Math.max(1000, Math.abs(real)*0.01);
+    extra = Math.abs(diff)>tol ? `<div class="meta" style="color:#fbbf24">\u26a0 \u0440\u043e\u0437\u0431\u0456\u0436\u043d\u0456\u0441\u0442\u044c \u0437 \u043e\u043f\u0435\u0440\u0430\u0446\u0456\u044f\u043c\u0438: ${diff>0?'+':''}${fmtUAH(diff)}</div>`
       : `<div class="meta" style="color:#34d399">\u2713 \u0437\u0431\u0456\u0433\u0430\u0454\u0442\u044c\u0441\u044f</div>`;
   } else { extra=`<div class="meta">\u0437\u0430 \u043e\u043f\u0435\u0440\u0430\u0446\u0456\u044f\u043c\u0438</div>`; }
   return `<div class="acct"><div class="nm">${esc(a.icon||'🏦')} ${esc(a.name)} ${bk}</div><div class="bal">${fmtUAH(shown)}</div>${extra}<div class="meta">${a.kind}${a.is_active?'':' · \u043d\u0435\u0430\u043a\u0442\u0438\u0432\u043d\u0438\u0439'}</div></div>`;
