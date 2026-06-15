@@ -6,7 +6,7 @@
 <title>Фінанси · DreamCar</title>
 <meta name="color-scheme" content="dark">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta name="finance-build" content="20260615-sidebar">
+<meta name="finance-build" content="20260615-pnl-cache">
 <script src="https://brand.dreamcar.ua/assets/global-header.js?v=20260606b" defer></script>
 <script src="/assets/js/auth-guard.js?v=20260614" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -688,11 +688,70 @@ async function fetchOverviewRPC(fromISO, toISO) {
   return data; // { revenue, paid, prev_revenue, prev_paid, days, daily, by_project }
 }
 
-async function fetchPnl() {
+// #412 — кешований PnL: localStorage (10хв TTL) + server matview (REFRESH /15min)
+// 17.4с RPC → 20мс mv → майже миттєво при reload.
+const PNL_CACHE_KEY = 'dc_finance_pnl_cache_v1';
+const PNL_CACHE_TTL_MS = 10 * 60 * 1000; // 10хв
+
+function _readPnlCache() {
+  try {
+    const raw = localStorage.getItem(PNL_CACHE_KEY);
+    if (!raw) return null;
+    const j = JSON.parse(raw);
+    if (!j?.data || !j?.savedAt) return null;
+    return j;
+  } catch { return null; }
+}
+function _writePnlCache(data, refreshedAt) {
+  try {
+    localStorage.setItem(PNL_CACHE_KEY, JSON.stringify({ data, refreshedAt, savedAt: Date.now() }));
+  } catch {}
+}
+
+async function _fetchPnlFromServer() {
   await getSb();
+  const { data: cached, error: cachedErr } = await sb.rpc('dashboard_project_pnl_cached');
+  if (!cachedErr && cached?.[0]?.data) {
+    const arr = Array.isArray(cached[0].data) ? cached[0].data : [];
+    const refreshedAt = cached[0].refreshed_at || new Date().toISOString();
+    return { data: arr, refreshedAt, source: 'mv' };
+  }
+  console.warn('[pnl] cached fallback → live', cachedErr?.message);
   const { data, error } = await sb.rpc('dashboard_project_pnl');
-  if (error) { console.warn('pnl rpc', error); return []; }
-  return data || [];
+  if (error) { console.warn('pnl rpc live', error); return { data: [], refreshedAt: null, source: 'error' }; }
+  return { data: data || [], refreshedAt: new Date().toISOString(), source: 'live' };
+}
+
+// Stale-while-revalidate: 1-2 calls — спочатку cache, потім fresh
+async function fetchPnlSWR(onData) {
+  const cache = _readPnlCache();
+  const now = Date.now();
+  const isStale = !cache || (now - cache.savedAt) > PNL_CACHE_TTL_MS;
+  if (cache?.data?.length) {
+    onData(cache.data, { source: 'cache', refreshedAt: cache.refreshedAt, ageMs: now - cache.savedAt, stale: isStale });
+  }
+  if (!isStale && cache?.data?.length) return;
+  try {
+    const fresh = await _fetchPnlFromServer();
+    if (fresh.data?.length) {
+      _writePnlCache(fresh.data, fresh.refreshedAt);
+      onData(fresh.data, { source: fresh.source, refreshedAt: fresh.refreshedAt, ageMs: 0, stale: false });
+    } else if (!cache?.data?.length) {
+      onData([], { source: fresh.source, refreshedAt: null, ageMs: 0, stale: false });
+    }
+  } catch (e) {
+    console.error('[pnl] SWR fetch fail', e);
+    if (!cache?.data?.length) onData([], { source: 'error', refreshedAt: null, ageMs: 0, stale: false });
+  }
+}
+
+// Legacy compat: Promise<Array>
+async function fetchPnl() {
+  const cache = _readPnlCache();
+  if (cache?.data?.length && (Date.now() - cache.savedAt) < PNL_CACHE_TTL_MS) return cache.data;
+  const fresh = await _fetchPnlFromServer();
+  if (fresh.data?.length) _writePnlCache(fresh.data, fresh.refreshedAt);
+  return fresh.data || [];
 }
 
 function classBy(value, thresh) {
@@ -999,10 +1058,9 @@ async function reloadOverview() {
     renderKpi(periodRev, periodPaid, prevRev, null, days);
     renderForecast(null, daily, periodRev, dailyAds);
     renderInsights(null, periodRev, prevRev, [], OV.from, OV.to);
-    if (status) status.innerHTML = '<span class="loading-bar">Підвантажую P&amp;L по запусках (це може зайняти 15-20с)…</span>';
-
-    // Phase 2 (повільно у фоні): PnL → точні margin/cost + cost-структура + ranking.
-    fetchPnl().then(pnl => {
+    // Phase 2 SWR (#412): кеш миттєво → fresh у фоні. Рендер може спрацювати 2 рази.
+    let renderedFromCache = false;
+    fetchPnlSWR((pnl, meta) => {
       OV.pnl = pnl;
       drawCost(pnl);
       const summary = renderPnL(pnl, OV.from, OV.to);
@@ -1010,10 +1068,26 @@ async function reloadOverview() {
       renderForecast(summary, daily, periodRev, dailyAds);
       renderTopProjects(pnl);
       renderInsights(summary, periodRev, prevRev, pnl, OV.from, OV.to);
-      if (status) status.style.display = 'none';
-    }).catch(e => {
-      console.error('[overview] pnl bg fail', e);
-      if (status) status.innerHTML = `<span class="loading-bar" style="color:#fca5a5">P&amp;L не вдалося підвантажити: ${esc(e.message||e)}</span>`;
+      if (status) {
+        if (meta.source === 'cache' && meta.stale) {
+          const ageMin = Math.round(meta.ageMs / 60000);
+          status.innerHTML = `<span class="loading-bar" style="opacity:.6">Показано з кешу (${ageMin}хв) · оновлюю...</span>`;
+        } else if (meta.source === 'cache') {
+          const ageSec = Math.round(meta.ageMs / 1000);
+          status.innerHTML = `<span class="loading-bar" style="opacity:.5;color:#10B981">⚡ З кешу (${ageSec}с) · свіже</span>`;
+          setTimeout(() => { if (status) status.style.display = 'none'; }, 2000);
+        } else if (meta.source === 'mv') {
+          const refreshed = meta.refreshedAt ? new Date(meta.refreshedAt).toLocaleTimeString('uk-UA', { timeZone: 'Europe/Kyiv', hour: '2-digit', minute: '2-digit' }) : '?';
+          status.innerHTML = `<span class="loading-bar" style="opacity:.5;color:#10B981">⚡ Оновлено · matview ${refreshed} Київ</span>`;
+          setTimeout(() => { if (status) status.style.display = 'none'; }, 2000);
+        } else if (meta.source === 'live') {
+          status.innerHTML = `<span class="loading-bar" style="opacity:.5">P&amp;L live (matview ще не готовий)</span>`;
+          setTimeout(() => { if (status) status.style.display = 'none'; }, 2000);
+        } else {
+          status.innerHTML = `<span class="loading-bar" style="color:#fca5a5">P&amp;L: ${meta.source}</span>`;
+        }
+      }
+      renderedFromCache = renderedFromCache || (meta.source === 'cache');
     });
   } catch (e) {
     console.error('[overview]', e);
