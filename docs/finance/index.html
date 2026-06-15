@@ -9,6 +9,7 @@
 <script src="https://brand.dreamcar.ua/assets/global-header.js?v=20260606b" defer></script>
 <script src="/assets/js/auth-guard.js?v=20260614" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Manrope:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -70,6 +71,92 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
 .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
 .error-msg{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#fca5a5;padding:10px 12px;border-radius:6px;font-size:12px;margin:8px 0}
 .note{background:rgba(96,165,250,.07);border:1px solid rgba(96,165,250,.25);color:#93c5fd;padding:10px 13px;border-radius:8px;font-size:12px;margin-bottom:14px}
+
+/* ============ OVERVIEW / ANALYTICS ============ */
+.period-bar{display:flex;align-items:center;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.period-bar .lbl{font-size:11px;color:#888;letter-spacing:.1em;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-right:4px}
+.seg{display:inline-flex;background:#0f0f0f;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{background:transparent;border:none;color:#9CA3AF;font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:600;padding:0 14px;height:36px;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;transition:.15s}
+.seg button:hover{color:#fff;background:rgba(255,255,255,.04)}
+.seg button.on{background:rgba(227,6,19,.12);color:var(--gold);box-shadow:inset 0 2px 0 var(--red)}
+.dates{display:flex;align-items:center;gap:6px;color:#9CA3AF;font-size:11px;font-family:'JetBrains Mono',monospace}
+.dates input{background:#0f0f0f;border:1px solid var(--line);color:#fff;padding:6px 10px;border-radius:6px;font-size:11.5px;font-family:inherit}
+
+/* KPI Hero */
+.kpi-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:22px}
+@media(max-width:1100px){.kpi-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:680px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:#141414;border:1px solid rgba(255,255,255,.06);border-left:3px solid rgba(255,255,255,.08);border-radius:12px;padding:18px 18px 16px;position:relative;min-height:120px;display:flex;flex-direction:column;justify-content:space-between}
+.kpi.pos{border-left-color:var(--green);box-shadow:inset 4px 0 12px -4px rgba(16,185,129,.15)}
+.kpi.neg{border-left-color:var(--red);box-shadow:inset 4px 0 12px -4px rgba(227,6,19,.15)}
+.kpi.hero{border-left-color:var(--gold);box-shadow:inset 4px 0 14px -4px rgba(251,191,36,.2)}
+.kpi .label{font-size:10.5px;color:#9CA3AF;letter-spacing:.1em;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:4px;display:flex;justify-content:space-between;align-items:center}
+.kpi .label .hint{font-size:9px;color:#6B7280;text-transform:none;letter-spacing:0;cursor:help}
+.kpi .value{font-family:'Oswald',sans-serif;font-size:30px;font-weight:700;color:#fff;line-height:1.1;font-variant-numeric:tabular-nums}
+.kpi.hero .value{font-size:38px;color:var(--gold)}
+.kpi .delta{font-size:11.5px;font-family:'JetBrains Mono',monospace;color:#9CA3AF;display:inline-flex;align-items:center;gap:4px;margin-top:6px;font-weight:600}
+.kpi .delta.up{color:var(--green)}.kpi .delta.down{color:#fca5a5}
+.kpi .sub{font-size:10.5px;color:#6B7280;font-family:'JetBrains Mono',monospace;margin-top:6px}
+.kpi canvas{position:absolute;right:14px;bottom:14px;opacity:.7}
+
+/* Charts grid */
+.chart-grid{display:grid;grid-template-columns:3fr 2fr;gap:16px;margin-bottom:22px}
+@media(max-width:980px){.chart-grid{grid-template-columns:1fr}}
+.chart-card{background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:18px;min-height:280px}
+.chart-card h4{font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:#9CA3AF;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+.chart-card h4 .meta{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#6B7280;font-weight:400;text-transform:none;letter-spacing:0}
+.chart-canvas-wrap{position:relative;height:240px}
+
+/* P&L table */
+.pnl-card{background:var(--bg-2);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:22px}
+.pnl-card h4{font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:#9CA3AF;padding:16px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;margin:0}
+.pnl-card .scroll{max-height:520px;overflow:auto}
+.pnl{width:100%;border-collapse:collapse;font-size:12.5px;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
+.pnl thead th{position:sticky;top:0;background:#0f0f0f;color:#9CA3AF;font-weight:600;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:11px 10px;text-align:right;border-bottom:1px solid var(--line);z-index:5}
+.pnl thead th:first-child{text-align:left;position:sticky;left:0;z-index:6;box-shadow:2px 0 8px rgba(0,0,0,.6)}
+.pnl tbody td{padding:10px 10px;text-align:right;border-bottom:1px solid #1a1a1a;color:#ddd}
+.pnl tbody td:first-child{text-align:left;position:sticky;left:0;background:var(--bg-2);font-family:'Manrope',sans-serif;font-size:13px;font-weight:500;color:#fff;box-shadow:2px 0 8px rgba(0,0,0,.6);min-width:200px}
+.pnl tbody tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+.pnl tbody tr:nth-child(even) td:first-child{background:#171717}
+.pnl tbody tr:hover td{background:rgba(227,6,19,.06)}
+.pnl tbody tr:hover td:first-child{background:#1f0808}
+.pnl tfoot td{padding:13px 10px;font-weight:700;color:var(--gold);background:#0f0f0f;border-top:2px solid var(--red);font-size:13px}
+.pnl tfoot td:first-child{background:#0f0f0f;text-align:left;font-family:'Oswald',sans-serif;letter-spacing:.04em;text-transform:uppercase}
+.pnl .st-pill{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-left:6px;vertical-align:middle}
+.pnl .st-active{background:rgba(16,185,129,.15);color:var(--green)}
+.pnl .st-measure{background:rgba(251,191,36,.15);color:var(--gold)}
+.pnl .st-completed{background:rgba(96,165,250,.12);color:#93c5fd}
+.pnl .st-archived,.pnl .st-idea,.pnl .st-planning{background:rgba(255,255,255,.05);color:#9CA3AF}
+.pnl td.warn{color:var(--gold)}
+.pnl td.bad{color:#fca5a5}
+.pnl td.good{color:var(--green)}
+.pnl-spark{display:inline-block;vertical-align:middle}
+
+/* Insights */
+.insights{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-bottom:22px}
+.insight{background:#141414;border:1px solid var(--line);border-radius:10px;padding:14px 16px;border-left:3px solid #6B7280;display:flex;gap:10px}
+.insight.good{border-left-color:var(--green)}
+.insight.warn{border-left-color:var(--gold)}
+.insight.bad{border-left-color:var(--red)}
+.insight .ic{font-size:18px;flex-shrink:0;line-height:1.2}
+.insight .body{font-size:12.5px;color:#ddd;line-height:1.45}
+.insight .body b{color:#fff}
+
+/* Forecast */
+.forecast-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px}
+@media(max-width:780px){.forecast-grid{grid-template-columns:1fr}}
+.fc-card{background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:18px}
+.fc-card h4{font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:#9CA3AF;margin-bottom:14px}
+.fc-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,.06);font-size:13px;font-family:'JetBrains Mono',monospace}
+.fc-row:last-child{border-bottom:none}
+.fc-row .k{color:#9CA3AF}
+.fc-row .v{color:#fff;font-weight:600;font-variant-numeric:tabular-nums}
+.fc-row .v.gold{color:var(--gold);font-size:15px}
+.fc-row .v.green{color:var(--green)}
+.fc-row .v.red{color:#fca5a5}
+.progress{height:8px;background:#0f0f0f;border-radius:4px;overflow:hidden;margin:10px 0 4px}
+.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--red));border-radius:4px;transition:width .4s}
+.fc-note{color:#6B7280;font-size:10.5px;font-family:'JetBrains Mono',monospace;margin-top:8px;letter-spacing:.05em}
 </style>
 </head>
 <body>
@@ -81,22 +168,108 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
 
 <div class="wrap">
   <div class="title">ФІНАНСИ · <span class="r">P&amp;L</span></div>
-  <div class="sub">Категорії витрат · Фіксовані щомісячні · Per-project витрати · Призовий фонд</div>
-
-  <div class="note">
-    <b>Як це використовувати:</b> категорії визначаєш один раз. Fixed Monthly — overhead компанії (Cloudflare, Claude API, ФОП) — розноситься pro-rata по запусках за дні. Project Costs — витрати конкретно під запуск. Призовий фонд — у <code>launches.prize_cost_uah</code> (через таб "Запуски").
-  </div>
+  <div class="sub">Real-time приходи + витрати + P&amp;L по запусках. Управління категоріями та fixed-overhead — у вкладках.</div>
 
   <div class="tabs">
-    <button class="tab on" data-pane="categories">📁 Категорії <span class="cnt" id="c-categories">…</span></button>
+    <button class="tab on" data-pane="overview">📈 Огляд</button>
+    <button class="tab" data-pane="categories">📁 Категорії <span class="cnt" id="c-categories">…</span></button>
     <button class="tab" data-pane="fixed">⚙️ Fixed Monthly <span class="cnt" id="c-fixed">…</span></button>
     <button class="tab" data-pane="percent">📊 % з угод <span class="cnt" id="c-percent">…</span></button>
     <button class="tab" data-pane="project">💸 Project Costs <span class="cnt" id="c-project">…</span></button>
     <button class="tab" data-pane="launches">🏆 Запуски (приз) <span class="cnt" id="c-launches">…</span></button>
   </div>
 
+  <!-- OVERVIEW PANE -->
+  <div class="pane on" id="pane-overview">
+    <div class="period-bar">
+      <span class="lbl">Період</span>
+      <div class="seg" id="periodSeg">
+        <button data-p="7">7 днів</button>
+        <button data-p="30" class="on">30 днів</button>
+        <button data-p="mtd">Цей місяць</button>
+        <button data-p="90">90 днів</button>
+        <button data-p="ytd">YTD</button>
+        <button data-p="all">Весь час</button>
+      </div>
+      <span class="dates">
+        <input type="date" id="ovFrom"> → <input type="date" id="ovTo">
+        <button class="btn ghost" style="height:36px;padding:0 12px" onclick="reloadOverview()">↻</button>
+      </span>
+    </div>
+
+    <!-- HERO KPI -->
+    <div class="kpi-grid" id="kpiGrid">
+      <div class="kpi hero"><div class="label">Net Profit <span class="hint" title="True net profit після %-витрат (банк+ФОП+ЗСУ), fixed overhead, ad spend, призу">ℹ</span></div><div class="value" id="k-profit">…</div><div class="delta" id="d-profit">—</div></div>
+      <div class="kpi pos"><div class="label">Revenue <span class="hint" title="Сума успішних угод (paid) у періоді">ℹ</span></div><div class="value" id="k-revenue">…</div><div class="delta" id="d-revenue">—</div></div>
+      <div class="kpi"><div class="label">Margin % <span class="hint" title="True net profit ÷ revenue × 100">ℹ</span></div><div class="value" id="k-margin">…</div><div class="sub" id="s-margin">target ≥ 30%</div></div>
+      <div class="kpi"><div class="label">Total Cost <span class="hint" title="Усі витрати: ad spend + % з угод + fixed overhead + project costs + призовий">ℹ</span></div><div class="value" id="k-cost">…</div><div class="sub" id="s-cost">%-від revenue</div></div>
+      <div class="kpi"><div class="label">CAC / AOV <span class="hint" title="True CAC vs Average Order Value. Має бути <0.33 (3× LTV правило)">ℹ</span></div><div class="value" id="k-cac">…</div><div class="sub" id="s-cac">target ratio ≥ 3×</div></div>
+      <div class="kpi"><div class="label">Daily Run Rate <span class="hint" title="Середній net profit/день у періоді">ℹ</span></div><div class="value" id="k-runrate">…</div><div class="sub" id="s-runrate">UAH/день</div></div>
+    </div>
+
+    <!-- INSIGHTS -->
+    <div class="insights" id="insightsGrid"></div>
+
+    <!-- CHARTS row 1 -->
+    <div class="chart-grid">
+      <div class="chart-card">
+        <h4>💰 Revenue & Profit Trend <span class="meta" id="trendMeta">за період</span></h4>
+        <div class="chart-canvas-wrap"><canvas id="chTrend"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h4>📊 Структура витрат <span class="meta" id="costMeta">розподіл</span></h4>
+        <div class="chart-canvas-wrap"><canvas id="chCost"></canvas></div>
+      </div>
+    </div>
+
+    <!-- P&L TABLE -->
+    <div class="pnl-card">
+      <h4>📋 P&L по запусках <span class="meta" id="pnlMeta" style="font-size:11px;font-family:'JetBrains Mono',monospace;color:#6B7280;text-transform:none;letter-spacing:0">сортування: net profit ↓</span></h4>
+      <div class="scroll">
+        <table class="pnl" id="pnlTbl">
+          <thead><tr>
+            <th>Запуск</th>
+            <th>Revenue</th>
+            <th>Ad Spend</th>
+            <th>% з угод</th>
+            <th>Fixed</th>
+            <th>Призовий</th>
+            <th>Variable</th>
+            <th>Total Cost</th>
+            <th>Net Profit</th>
+            <th>Margin %</th>
+            <th>ROI %</th>
+            <th>CAC</th>
+            <th>AOV</th>
+            <th>Paid</th>
+          </tr></thead>
+          <tbody><tr><td colspan="14" class="empty">завантаження…</td></tr></tbody>
+          <tfoot><tr id="pnlFoot"></tr></tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- FORECAST -->
+    <div class="forecast-grid">
+      <div class="fc-card">
+        <h4>🎯 Поточний місяць (MTD)</h4>
+        <div class="fc-row"><span class="k">Виручка з 1-го числа</span><span class="v gold" id="fc-mtd-rev">—</span></div>
+        <div class="fc-row"><span class="k">Витрати</span><span class="v" id="fc-mtd-cost">—</span></div>
+        <div class="fc-row"><span class="k">Net Profit</span><span class="v green" id="fc-mtd-profit">—</span></div>
+        <div class="fc-row"><span class="k">День місяця / прогноз кінця</span><span class="v" id="fc-mtd-day">—</span></div>
+        <div class="progress"><span id="fc-progress" style="width:0%"></span></div>
+        <div class="fc-row"><span class="k">Run-rate × дні до кінця місяця</span><span class="v gold" id="fc-mtd-proj">—</span></div>
+        <div class="fc-note">Лінійна екстраполяція по поточному денному середньому</div>
+      </div>
+      <div class="fc-card">
+        <h4>🏁 Топ &amp; аутсайдери</h4>
+        <div id="topProjects"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- CATEGORIES PANE -->
-  <div class="pane on" id="pane-categories">
+  <div class="pane" id="pane-categories">
     <div class="toolbar">
       <input class="search" id="searchCat" placeholder="🔍 Пошук категорії…">
       <button class="btn" onclick="openCategoryModal()">+ Нова категорія</button>
@@ -300,6 +473,8 @@ document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () =>
   t.classList.add('on');
   document.querySelectorAll('.pane').forEach(x => x.classList.remove('on'));
   document.getElementById('pane-' + t.dataset.pane).classList.add('on');
+  // Лінива ініціалізація overview при першому переході (якщо ще не зрендерене)
+  if (t.dataset.pane === 'overview' && !window.__overviewBooted) reloadOverview();
 }));
 
 // === LOAD ===
@@ -357,6 +532,387 @@ function populateSelects() {
   document.getElementById('projCat').innerHTML = variableOpts.length > 100 ? variableOpts : allOpts;
   const launchOpts = '<option value="">— виберіть запуск —</option>' + DATA.launches.map(l => `<option value="${l.id}">${esc(l.name)} (${l.status})</option>`).join('');
   document.getElementById('projLaunch').innerHTML = launchOpts;
+}
+
+// ====================================================================
+// ============ OVERVIEW / ANALYTICS ==================================
+// ====================================================================
+const OV = { from: null, to: null, preset: '30', deals: [], pnl: [], charts: {} };
+
+function todayISO(){ return new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Kyiv' }); }
+function daysAgoISO(n){ const d=new Date(); d.setDate(d.getDate()-n); return d.toLocaleDateString('sv-SE',{timeZone:'Europe/Kyiv'}); }
+function monthStartISO(){ const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-01`; }
+function yearStartISO(){ return `${new Date().getFullYear()}-01-01`; }
+function daysBetween(a,b){ return Math.max(1, Math.round((new Date(b)-new Date(a))/86400000)+1); }
+function shortNum(v){ if(v==null) return '—'; const n=Number(v); if(Math.abs(n)>=1e6) return (n/1e6).toFixed(2)+'M'; if(Math.abs(n)>=1e3) return (n/1e3).toFixed(1)+'k'; return Math.round(n); }
+function shortUAH(v){ if(v==null||isNaN(v)) return '—'; return shortNum(v)+' ₴'; }
+
+function applyPreset(p) {
+  OV.preset = p;
+  const t = todayISO();
+  if (p === '7') { OV.from = daysAgoISO(7); OV.to = t; }
+  else if (p === '30') { OV.from = daysAgoISO(30); OV.to = t; }
+  else if (p === '90') { OV.from = daysAgoISO(90); OV.to = t; }
+  else if (p === 'mtd') { OV.from = monthStartISO(); OV.to = t; }
+  else if (p === 'ytd') { OV.from = yearStartISO(); OV.to = t; }
+  else if (p === 'all') { OV.from = '2025-01-01'; OV.to = t; }
+  document.getElementById('ovFrom').value = OV.from;
+  document.getElementById('ovTo').value = OV.to;
+  document.querySelectorAll('#periodSeg button').forEach(b => b.classList.toggle('on', b.dataset.p === p));
+}
+
+document.querySelectorAll('#periodSeg button').forEach(b => b.addEventListener('click', () => {
+  applyPreset(b.dataset.p); reloadOverview();
+}));
+document.getElementById('ovFrom').addEventListener('change', e => { OV.from = e.target.value; OV.preset = 'custom'; document.querySelectorAll('#periodSeg button').forEach(x=>x.classList.remove('on')); });
+document.getElementById('ovTo').addEventListener('change', e => { OV.to = e.target.value; OV.preset = 'custom'; document.querySelectorAll('#periodSeg button').forEach(x=>x.classList.remove('on')); });
+
+async function fetchDealsRange(fromISO, toISO) {
+  await getSb();
+  // Тягнемо paid угоди за період + попередній рівнозначний період для delta
+  const days = daysBetween(fromISO, toISO);
+  const prevTo = new Date(fromISO); prevTo.setDate(prevTo.getDate()-1);
+  const prevFrom = new Date(prevTo); prevFrom.setDate(prevFrom.getDate()-days+1);
+  const prevToISO = prevTo.toLocaleDateString('sv-SE',{timeZone:'Europe/Kyiv'});
+  const prevFromISO = prevFrom.toLocaleDateString('sv-SE',{timeZone:'Europe/Kyiv'});
+  const isoStart = (d) => new Date(d+'T00:00:00+03:00').toISOString();
+  const isoEnd = (d) => new Date(d+'T23:59:59+03:00').toISOString();
+  // Завантажуємо двома запитами: cur + prev
+  const [cur, prev] = await Promise.all([
+    sb.from('dashboard_deals')
+      .select('project, status, amount, created_at')
+      .eq('status', 'pay').gt('amount', 0)
+      .gte('created_at', isoStart(fromISO)).lte('created_at', isoEnd(toISO))
+      .limit(50000),
+    sb.from('dashboard_deals')
+      .select('amount')
+      .eq('status', 'pay').gt('amount', 0)
+      .gte('created_at', isoStart(prevFromISO)).lte('created_at', isoEnd(prevToISO))
+      .limit(50000)
+  ]);
+  if (cur.error) console.warn('deals cur', cur.error);
+  if (prev.error) console.warn('deals prev', prev.error);
+  return { deals: cur.data||[], prevDeals: prev.data||[], prevFromISO, prevToISO };
+}
+
+function aggregateDaily(deals, fromISO, toISO) {
+  const buckets = {};
+  for (const d of deals) {
+    const day = new Date(d.created_at).toLocaleDateString('sv-SE',{timeZone:'Europe/Kyiv'});
+    buckets[day] = (buckets[day]||0) + Number(d.amount||0);
+  }
+  // Заповнити дірки
+  const out = [];
+  let cur = new Date(fromISO+'T00:00:00');
+  const end = new Date(toISO+'T00:00:00');
+  while (cur <= end) {
+    const k = cur.toLocaleDateString('sv-SE');
+    out.push({ day: k, revenue: buckets[k]||0 });
+    cur.setDate(cur.getDate()+1);
+  }
+  return out;
+}
+
+function aggregateProject(deals) {
+  const out = {};
+  for (const d of deals) {
+    const p = d.project || '(no project)';
+    out[p] = (out[p]||0) + Number(d.amount||0);
+  }
+  return out;
+}
+
+async function fetchPnl() {
+  await getSb();
+  const { data, error } = await sb.rpc('dashboard_project_pnl');
+  if (error) { console.warn('pnl rpc', error); return []; }
+  return data || [];
+}
+
+function classBy(value, thresh) {
+  if (value == null) return '';
+  if (thresh.bad != null && value < thresh.bad) return 'bad';
+  if (thresh.warn != null && value < thresh.warn) return 'warn';
+  if (thresh.good != null && value >= thresh.good) return 'good';
+  return '';
+}
+
+function chartCommon() {
+  return {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { labels: { color: '#9CA3AF', font: { family: 'Manrope', size: 11 }, boxWidth: 10, boxHeight: 10 } },
+      tooltip: {
+        backgroundColor: 'rgba(10,10,10,0.95)', borderColor: '#E30613', borderWidth: 1,
+        titleColor: '#fff', bodyColor: '#ddd', padding: 12,
+        titleFont: { family: 'Manrope', weight: '600' },
+        bodyFont: { family: 'JetBrains Mono', size: 12 },
+        callbacks: { label: (ctx) => `${ctx.dataset.label||''}: ${new Intl.NumberFormat('uk-UA').format(Math.round(ctx.parsed.y||ctx.parsed||0))} ₴` }
+      }
+    },
+    scales: {
+      x: { grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false }, ticks: { color: '#6B7280', font: { family: 'JetBrains Mono', size: 10 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 8 } },
+      y: { grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false }, ticks: { color: '#6B7280', font: { family: 'JetBrains Mono', size: 10 }, callback: (v) => shortNum(v) } }
+    },
+    animation: { duration: 400, easing: 'easeOutQuart' }
+  };
+}
+
+function drawTrend(daily) {
+  const ctx = document.getElementById('chTrend').getContext('2d');
+  if (OV.charts.trend) OV.charts.trend.destroy();
+  // Cumulative profit ~91.5% margin proxy (true margin з PNL)
+  const labels = daily.map(d => d.day.slice(5));
+  const revenues = daily.map(d => d.revenue);
+  let cum = 0; const cumProfit = revenues.map(v => { cum += v*0.915; return Math.round(cum); });
+  const grad = ctx.createLinearGradient(0,0,0,240);
+  grad.addColorStop(0,'rgba(251,191,36,0.35)'); grad.addColorStop(1,'rgba(251,191,36,0)');
+  OV.charts.trend = new Chart(ctx, {
+    data: {
+      labels,
+      datasets: [
+        { type:'bar', label:'Revenue', data: revenues, backgroundColor: 'rgba(227,6,19,0.55)', borderColor:'#E30613', borderWidth:1, borderRadius:3, order:2, yAxisID:'y' },
+        { type:'line', label:'Cumulative profit', data: cumProfit, borderColor:'#FBBF24', backgroundColor: grad, fill: true, tension: 0.35, pointRadius:0, pointHoverRadius:4, borderWidth:2, order:1, yAxisID:'y1' }
+      ]
+    },
+    options: {
+      ...chartCommon(),
+      interaction: { mode: 'index', intersect: false },
+      scales: {
+        x: chartCommon().scales.x,
+        y: { ...chartCommon().scales.y, position: 'left', title: { display:false } },
+        y1: { ...chartCommon().scales.y, position: 'right', grid: { display: false } }
+      }
+    }
+  });
+}
+
+function drawCost(pnl) {
+  const ctx = document.getElementById('chCost').getContext('2d');
+  if (OV.charts.cost) OV.charts.cost.destroy();
+  let adS=0, pctS=0, fixedS=0, prizeS=0, varS=0;
+  pnl.forEach(p => {
+    adS += Number(p.ad_spend||0);
+    pctS += Number(p.percent_costs||0);
+    fixedS += Number(p.fixed_allocated||0);
+    prizeS += Number(p.prize_cost||0);
+    varS += Number(p.project_costs_total||0);
+  });
+  const items = [
+    { label:'Реклама', value: adS, color:'#E30613' },
+    { label:'% з угод (банк+ФОП+ЗСУ)', value: pctS, color:'#FBBF24' },
+    { label:'Fixed overhead', value: fixedS, color:'#93c5fd' },
+    { label:'Призовий фонд', value: prizeS, color:'#a78bfa' },
+    { label:'Variable (project)', value: varS, color:'#10B981' }
+  ].sort((a,b)=>b.value-a.value);
+  document.getElementById('costMeta').textContent = 'Σ ' + new Intl.NumberFormat('uk-UA').format(Math.round(items.reduce((s,i)=>s+i.value,0))) + ' ₴';
+  OV.charts.cost = new Chart(ctx, {
+    type: 'bar',
+    data: { labels: items.map(i=>i.label), datasets: [{ label:'UAH', data: items.map(i=>i.value), backgroundColor: items.map(i=>i.color), borderRadius:4, barPercentage:0.7 }] },
+    options: {
+      ...chartCommon(),
+      indexAxis: 'y',
+      plugins: { ...chartCommon().plugins, legend: { display:false } },
+      scales: {
+        x: { ...chartCommon().scales.y, beginAtZero:true },
+        y: { ...chartCommon().scales.x, ticks: { color:'#ddd', font:{ family:'Manrope', size:11 } } }
+      }
+    }
+  });
+}
+
+function renderPnL(pnl, fromISO, toISO) {
+  const tbody = document.querySelector('#pnlTbl tbody');
+  // Тільки запуски що ПЕРЕТИНАЮТЬСЯ з періодом (intersect)
+  const rows = pnl.filter(p => {
+    if (!p.starts_on) return Number(p.revenue_total||0) > 0;
+    const s = p.starts_on, e = p.ends_on || '2099-12-31';
+    return !(e < fromISO || s > toISO);
+  }).sort((a,b)=>Number(b.true_net_profit||0) - Number(a.true_net_profit||0));
+  if (!rows.length) { tbody.innerHTML = '<tr><td colspan="14" class="empty">Немає даних за період</td></tr>'; document.getElementById('pnlFoot').innerHTML=''; return; }
+  // Totals
+  let tRev=0, tAd=0, tPct=0, tFix=0, tPrize=0, tVar=0, tCost=0, tProf=0, tPaid=0;
+  rows.forEach(p => {
+    tRev+=Number(p.revenue_total||0); tAd+=Number(p.ad_spend||0); tPct+=Number(p.percent_costs||0);
+    tFix+=Number(p.fixed_allocated||0); tPrize+=Number(p.prize_cost||0); tVar+=Number(p.project_costs_total||0);
+    tCost+=Number(p.total_cost||0); tProf+=Number(p.true_net_profit||0); tPaid+=Number(p.paid_count||0);
+  });
+  const tMargin = tRev>0 ? (tProf/tRev*100) : null;
+  const tRoi = tCost>0 ? (tProf/tCost*100) : null;
+  const tCac = tPaid>0 ? (tCost/tPaid) : null;
+  const tAov = tPaid>0 ? (tRev/tPaid) : null;
+  tbody.innerHTML = rows.map(p => {
+    const margin = Number(p.true_net_margin_pct||0);
+    const roi = Number(p.true_roi_pct||0);
+    const mCls = classBy(margin, { bad: 0, warn: 20, good: 30 });
+    const rCls = classBy(roi, { bad: 0, warn: 100, good: 300 });
+    const profCls = Number(p.true_net_profit||0) < 0 ? 'bad' : (Number(p.true_net_profit||0)>0 ? 'good' : '');
+    return `<tr>
+      <td><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${p.color||'#888'};margin-right:8px;vertical-align:middle"></span>${esc(p.name)}<span class="st-pill st-${p.status}">${p.status}</span></td>
+      <td>${shortUAH(p.revenue_total)}</td>
+      <td>${shortUAH(p.ad_spend)}</td>
+      <td>${shortUAH(p.percent_costs)}</td>
+      <td>${shortUAH(p.fixed_allocated)}</td>
+      <td>${shortUAH(p.prize_cost)}</td>
+      <td>${shortUAH(p.project_costs_total)}</td>
+      <td><b>${shortUAH(p.total_cost)}</b></td>
+      <td class="${profCls}"><b>${shortUAH(p.true_net_profit)}</b></td>
+      <td class="${mCls}">${p.true_net_margin_pct!=null ? Number(p.true_net_margin_pct).toFixed(1)+'%' : '—'}</td>
+      <td class="${rCls}">${p.true_roi_pct!=null ? Number(p.true_roi_pct).toFixed(0)+'%' : '—'}</td>
+      <td>${p.true_cac!=null ? Number(p.true_cac).toFixed(2)+' ₴' : '—'}</td>
+      <td>${p.aov!=null ? Number(p.aov).toFixed(0)+' ₴' : '—'}</td>
+      <td>${Number(p.paid_count||0).toLocaleString('uk-UA')}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('pnlFoot').innerHTML = `
+    <td>Σ Усі запуски (${rows.length})</td>
+    <td>${shortUAH(tRev)}</td>
+    <td>${shortUAH(tAd)}</td>
+    <td>${shortUAH(tPct)}</td>
+    <td>${shortUAH(tFix)}</td>
+    <td>${shortUAH(tPrize)}</td>
+    <td>${shortUAH(tVar)}</td>
+    <td>${shortUAH(tCost)}</td>
+    <td>${shortUAH(tProf)}</td>
+    <td>${tMargin!=null?tMargin.toFixed(1)+'%':'—'}</td>
+    <td>${tRoi!=null?tRoi.toFixed(0)+'%':'—'}</td>
+    <td>${tCac!=null?tCac.toFixed(2)+' ₴':'—'}</td>
+    <td>${tAov!=null?tAov.toFixed(0)+' ₴':'—'}</td>
+    <td>${tPaid.toLocaleString('uk-UA')}</td>`;
+  return { tRev, tAd, tPct, tFix, tPrize, tVar, tCost, tProf, tPaid, tMargin, tRoi, tCac, tAov, rows };
+}
+
+function renderTopProjects(pnl) {
+  const cont = document.getElementById('topProjects');
+  const rows = pnl.filter(p => Number(p.revenue_total||0) > 0).sort((a,b)=>Number(b.true_net_profit||0)-Number(a.true_net_profit||0));
+  if (!rows.length) { cont.innerHTML = '<div class="muted" style="font-size:12px">Немає активних запусків з виручкою.</div>'; return; }
+  const top = rows.slice(0, 3); const bottom = rows.slice(-2).reverse().filter(r => !top.includes(r));
+  const renderRow = (p, badge) => `
+    <div class="fc-row">
+      <span class="k">${badge} ${esc(p.name)}</span>
+      <span class="v ${Number(p.true_net_profit)>0?'green':'red'}">${shortUAH(p.true_net_profit)} · ${Number(p.true_net_margin_pct||0).toFixed(0)}%</span>
+    </div>`;
+  cont.innerHTML = '<div style="font-size:10.5px;color:#10B981;letter-spacing:.1em;font-family:JetBrains Mono;text-transform:uppercase;margin-bottom:4px">🏆 топ за прибутком</div>'
+    + top.map((p,i)=>renderRow(p,['🥇','🥈','🥉'][i])).join('')
+    + (bottom.length? '<div style="font-size:10.5px;color:#fca5a5;letter-spacing:.1em;font-family:JetBrains Mono;text-transform:uppercase;margin:14px 0 4px">⚠ найнижча маржа</div>' + bottom.map(p=>renderRow(p,'•')).join(''):'');
+}
+
+function renderInsights(summary, deals, prevDeals, pnl, fromISO, toISO) {
+  const ins = [];
+  // 1. Margin
+  if (summary && summary.tMargin != null) {
+    if (summary.tMargin >= 50) ins.push({ cls:'good', ic:'✅', html:`Висока маржа: <b>${summary.tMargin.toFixed(1)}%</b> — це сильний показник. Продовжуй у тому ж дусі.` });
+    else if (summary.tMargin < 20) ins.push({ cls:'bad', ic:'🔴', html:`Маржа просіла до <b>${summary.tMargin.toFixed(1)}%</b>. Перевір розподіл fixed overhead і ad spend.` });
+  }
+  // 2. Revenue delta
+  const curRev = (deals||[]).reduce((s,d)=>s+Number(d.amount||0),0);
+  const prevRev = (prevDeals||[]).reduce((s,d)=>s+Number(d.amount||0),0);
+  if (prevRev > 0) {
+    const delta = (curRev - prevRev) / prevRev * 100;
+    if (delta > 20) ins.push({ cls:'good', ic:'📈', html:`Виручка <b>+${delta.toFixed(1)}%</b> vs попередній рівнозначний період (${shortUAH(curRev)} vs ${shortUAH(prevRev)}).` });
+    else if (delta < -20) ins.push({ cls:'bad', ic:'📉', html:`Виручка <b>${delta.toFixed(1)}%</b> vs попередній рівнозначний період. Перевір канали і завершені кампанії.` });
+  }
+  // 3. ROI > 500
+  const winners = (pnl||[]).filter(p => Number(p.true_roi_pct||0) > 500 && Number(p.revenue_total||0) > 0);
+  if (winners.length) ins.push({ cls:'good', ic:'🚀', html:`<b>${winners.length}</b> ${winners.length===1?'запуск з':'запуски з'} ROI > 500%. Топ — <b>${esc(winners[0].name)}</b> (${Number(winners[0].true_roi_pct).toFixed(0)}%).` });
+  // 4. Negative profit
+  const losers = (pnl||[]).filter(p => Number(p.true_net_profit||0) < 0);
+  if (losers.length) ins.push({ cls:'bad', ic:'⚠️', html:`<b>${losers.length}</b> ${losers.length===1?'запуск з':'запусків з'} негативним прибутком: ${losers.slice(0,2).map(l=>esc(l.name)).join(', ')}. Розглянути коригування.` });
+  // 5. CAC vs AOV
+  if (summary && summary.tCac != null && summary.tAov != null && summary.tCac > 0) {
+    const ratio = summary.tAov / summary.tCac;
+    if (ratio < 3 && summary.tAov > 0) ins.push({ cls:'warn', ic:'⚖️', html:`AOV / CAC = <b>${ratio.toFixed(1)}×</b>. Цільове правило ≥3×. CAC <b>${summary.tCac.toFixed(0)}₴</b> з'їдає маржу.` });
+    else if (ratio >= 5) ins.push({ cls:'good', ic:'💎', html:`AOV / CAC = <b>${ratio.toFixed(1)}×</b> — економіка одиниці у відмінному стані.` });
+  }
+  // 6. Завершені проекти без активних — нагадування
+  const active = (pnl||[]).filter(p => p.status==='active' || p.status==='measure');
+  if (!active.some(p => Number(p.revenue_total||0) > 0)) ins.push({ cls:'warn', ic:'🛠', html:`Усі активні запуски ще без виручки. Перевір трекінг або поточний funnel.` });
+  // Render
+  document.getElementById('insightsGrid').innerHTML = ins.length ? ins.map(i => `<div class="insight ${i.cls}"><span class="ic">${i.ic}</span><div class="body">${i.html}</div></div>`).join('') : '<div class="muted" style="font-size:12px;grid-column:1/-1;text-align:center;padding:10px">Не вистачає даних для автоматичних інсайтів</div>';
+}
+
+function renderKpi(summary, daily, prevRev, days) {
+  const tRev = summary?.tRev || 0;
+  const tProf = summary?.tProf || 0;
+  const tCost = summary?.tCost || 0;
+  const tMargin = summary?.tMargin;
+  const tCac = summary?.tCac;
+  const tAov = summary?.tAov;
+  // Daily run rate
+  const dailyRR = days > 0 ? tProf / days : 0;
+  // Delta revenue
+  const deltaR = prevRev > 0 ? (tRev - prevRev) / prevRev * 100 : null;
+  const deltaP = null; // потребує prev profit, наразі не маємо
+  const cur = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  cur('k-profit', shortUAH(tProf));
+  cur('k-revenue', shortUAH(tRev));
+  cur('k-cost', shortUAH(tCost));
+  cur('k-margin', tMargin!=null ? tMargin.toFixed(1)+'%' : '—');
+  cur('k-cac', tCac!=null && tAov ? (tAov/tCac).toFixed(1)+'×' : '—');
+  cur('s-cac', tCac!=null ? `CAC ${tCac.toFixed(0)}₴ · AOV ${(tAov||0).toFixed(0)}₴` : 'CAC / AOV');
+  cur('k-runrate', shortUAH(dailyRR));
+  cur('s-runrate', `${days} днів × ${shortUAH(dailyRR)}/день`);
+  // Delta render
+  const dr = document.getElementById('d-revenue');
+  if (deltaR != null) { dr.textContent = (deltaR>0?'▲ +':'▼ ')+deltaR.toFixed(1)+'% vs попередній період'; dr.className = 'delta ' + (deltaR>=0?'up':'down'); }
+  else dr.textContent = '—';
+  const dp = document.getElementById('d-profit');
+  dp.textContent = tCost > 0 ? `${(tProf/tCost*100).toFixed(0)}% ROI` : '—';
+  // Cost % від revenue
+  const sCost = document.getElementById('s-cost');
+  if (tRev > 0) sCost.textContent = (tCost/tRev*100).toFixed(1)+'% від revenue';
+  // Margin badge
+  const sMargin = document.getElementById('s-margin');
+  if (tMargin != null) sMargin.textContent = (tMargin>=30 ? '✓ above target 30%' : (tMargin>=20 ? '⚡ ok, target ≥30%' : '⚠ нижче 20%'));
+}
+
+function renderForecast(summary, daily) {
+  const cur = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  // MTD subset з усіх daily
+  const monthStart = monthStartISO();
+  const mtdDays = daily.filter(d => d.day >= monthStart);
+  const mtdRev = mtdDays.reduce((s,d)=>s+d.revenue,0);
+  const dayOfMonth = new Date().getDate();
+  const daysInMonth = new Date(new Date().getFullYear(), new Date().getMonth()+1, 0).getDate();
+  const remDays = daysInMonth - dayOfMonth;
+  const avgPerDay = mtdDays.length ? mtdRev / mtdDays.length : 0;
+  const projection = mtdRev + avgPerDay * remDays;
+  // Use period margin proxy
+  const margin = (summary?.tMargin || 91.5) / 100;
+  const mtdProf = mtdRev * margin;
+  cur('fc-mtd-rev', shortUAH(mtdRev));
+  cur('fc-mtd-cost', shortUAH(mtdRev * (1-margin)));
+  cur('fc-mtd-profit', shortUAH(mtdProf));
+  cur('fc-mtd-day', `день ${dayOfMonth}/${daysInMonth} · до кінця ${remDays} дн`);
+  cur('fc-mtd-proj', `~${shortUAH(projection)} прогноз кінця місяця`);
+  const pct = Math.min(100, Math.round(dayOfMonth/daysInMonth*100));
+  const bar = document.getElementById('fc-progress'); if (bar) bar.style.width = pct+'%';
+}
+
+async function reloadOverview() {
+  try {
+    window.__overviewBooted = true;
+    if (!OV.from) applyPreset('30');
+    document.getElementById('trendMeta').textContent = `${OV.from} → ${OV.to}`;
+    const days = daysBetween(OV.from, OV.to);
+    const [{ deals, prevDeals }, pnl] = await Promise.all([
+      fetchDealsRange(OV.from, OV.to),
+      fetchPnl()
+    ]);
+    OV.deals = deals; OV.pnl = pnl;
+    const daily = aggregateDaily(deals, OV.from, OV.to);
+    drawTrend(daily);
+    drawCost(pnl);
+    const summary = renderPnL(pnl, OV.from, OV.to);
+    const prevRev = prevDeals.reduce((s,d)=>s+Number(d.amount||0),0);
+    renderKpi(summary, daily, prevRev, days);
+    renderForecast(summary, daily);
+    renderTopProjects(pnl);
+    renderInsights(summary, deals, prevDeals, pnl, OV.from, OV.to);
+  } catch (e) {
+    console.error('[overview]', e);
+    document.getElementById('insightsGrid').innerHTML = `<div class="insight bad"><span class="ic">❌</span><div class="body">Помилка завантаження аналітики: ${esc(e.message||e)}</div></div>`;
+  }
 }
 
 // === RENDER CATEGORIES ===
@@ -766,6 +1322,11 @@ async function init() {
   try {
     await getSb(); // populate global `sb` для всіх CRUD-функцій
     await loadAll();
+    // Овергляд завантажуємо ASAP (default tab)
+    if (!window.__overviewBooted) {
+      applyPreset('30');
+      reloadOverview();
+    }
   } catch (e) {
     console.error('[finance] init', e);
     alert('Помилка ініціалізації: ' + (e.message || e));
