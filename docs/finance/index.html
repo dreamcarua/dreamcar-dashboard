@@ -6,7 +6,7 @@
 <title>Фінанси · DreamCar</title>
 <meta name="color-scheme" content="dark">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta name="finance-build" content="20260615-pnl-cache">
+<meta name="finance-build" content="20260615-cat-rate">
 <script src="https://brand.dreamcar.ua/assets/global-header.js?v=20260606b" defer></script>
 <script src="/assets/js/auth-guard.js?v=20260614" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -472,6 +472,7 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
     <div class="field"><label>Батьківська категорія</label><select id="catParent"><option value="">(корінь)</option></select></div>
     <div class="field"><label><input id="catFixed" type="checkbox"> Це fixed-overhead (для Fixed Monthly tab)</label></div>
     <div class="modal-actions"><button class="btn ghost" onclick="closeModal('modalCat')">Скасувати</button><button class="btn" onclick="saveCategory()">Зберегти</button></div>
+    <div class="field" id="catRateRow" style="display:none"><label>📊 Поточна ставка % (для категорій типу «% з угод»)</label><input id="catRate" type="number" step="0.01" min="0" max="100" placeholder="напр. 2.5"></div>
   </div>
 </div>
 
@@ -1326,6 +1327,15 @@ function editCategory(id) {
   document.getElementById('catSort').value = c.sort_order;
   document.getElementById('catParent').value = c.parent_id || '';
   document.getElementById('catFixed').checked = !!c.is_fixed;
+  // #413: для категорій типу % з угод — показати поле "Поточна ставка %"
+  const isPercent = c.cost_type === 'percent';
+  const rateRow = document.getElementById('catRateRow');
+  if (rateRow) rateRow.style.display = isPercent ? '' : 'none';
+  if (isPercent) {
+    const activeRate = DATA.percent.find(r => r.category_id === c.id && !r.valid_to);
+    document.getElementById('catRate').value = activeRate ? Number(activeRate.rate_pct) : '';
+    edit.cat._active_rate_id = activeRate?.id || null;
+  } else { document.getElementById('catRate').value = ''; }
   showErr('catError', null);
   openModal('modalCat');
 }
@@ -1343,10 +1353,35 @@ async function saveCategory() {
     is_fixed: document.getElementById('catFixed').checked
   };
   try {
-    const r = edit.cat
-      ? await sb.from('cost_categories').update(payload).eq('id', edit.cat.id)
-      : await sb.from('cost_categories').insert(payload);
-    if (r.error) throw r.error;
+    let categoryId = edit.cat?.id;
+    if (edit.cat) {
+      const r = await sb.from('cost_categories').update(payload).eq('id', edit.cat.id);
+      if (r.error) throw r.error;
+    } else {
+      const r = await sb.from('cost_categories').insert(payload).select('id').single();
+      if (r.error) throw r.error;
+      categoryId = r.data?.id;
+    }
+    // #413: зберігаємо ставку % для категорій типу 'percent'
+    if (categoryId && edit.cat && edit.cat.cost_type === 'percent') {
+      const rateInput = document.getElementById('catRate').value;
+      if (rateInput !== '' && rateInput !== null) {
+        const newRate = Number(rateInput);
+        if (!isNaN(newRate) && newRate >= 0) {
+          if (edit.cat._active_rate_id) {
+            const ur = await sb.from('percent_rates').update({ rate_pct: newRate }).eq('id', edit.cat._active_rate_id);
+            if (ur.error) console.warn('rate update failed', ur.error);
+          } else {
+            const ir = await sb.from('percent_rates').insert({
+              category_id: categoryId, rate_pct: newRate, applies_to: 'all',
+              valid_from: new Date().toISOString().slice(0, 10),
+              label: edit.cat.name + ' (через UI)'
+            });
+            if (ir.error) console.warn('rate insert failed', ir.error);
+          }
+        }
+      }
+    }
     closeModal('modalCat');
     await loadAll();
   } catch (e) { showErr('catError', e.message || e); }
