@@ -6,7 +6,7 @@
 <title>Фінанси · DreamCar</title>
 <meta name="color-scheme" content="dark">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta name="finance-build" content="20260615-trend-spend">
+<meta name="finance-build" content="20260615-mtd-real-cost">
 <script src="https://brand.dreamcar.ua/assets/global-header.js?v=20260606b" defer></script>
 <script src="/assets/js/auth-guard.js?v=20260614" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -214,7 +214,7 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
 
 <div class="topbar">
   <a class="brandmark" href="/"><span class="r">DREAM</span>CAR<span class="mm">Фінанси</span></a>
-  <a class="backlink" href="/win-analysis/">→ Win-Analysis</a>
+  <a class="backlink" href="/">← Dashboard</a>
 </div>
 
 <div class="wrap">
@@ -876,7 +876,7 @@ function renderKpi(periodRev, periodPaid, prevRev, summary, days) {
   if (tMargin != null) sMargin.textContent = (tMargin>=30 ? '✓ above target 30%' : (tMargin>=20 ? '⚡ ok, target ≥30%' : '⚠ нижче 20%'));
 }
 
-function renderForecast(summary, daily, periodRev) {
+function renderForecast(summary, daily, periodRev, dailyAds) {
   const cur = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
   // MTD subset з усіх daily
   const monthStart = monthStartISO();
@@ -887,16 +887,36 @@ function renderForecast(summary, daily, periodRev) {
   const remDays = daysInMonth - dayOfMonth;
   const avgPerDay = mtdDays.length ? mtdRev / mtdDays.length : 0;
   const projection = mtdRev + avgPerDay * remDays;
-  // Use period margin proxy
-  const margin = (summary?.tMargin || 91.5) / 100;
-  const mtdProf = mtdRev * margin;
+  // РЕАЛЬНІ MTD витрати: реклама з daily_ads (фільтр по month_start). Якщо є PnL — додати fixed/percent pro-rata.
+  const mtdAdSpend = (dailyAds || []).filter(a => a.day >= monthStart).reduce((s,a)=>s+Number(a.spend||0), 0);
+  // Якщо є summary (Phase 2) — додаємо пропорційну частку lifetime витрат (fixed + percent) до MTD днів.
+  // Якщо немає — показуємо тільки рекламу + примітку.
+  let mtdCostTotal = mtdAdSpend;
+  let costNote = 'тільки реклама (PnL ще не підвантажено)';
+  if (summary && summary.tCost > 0 && summary.tRev > 0) {
+    // Витрати в PnL = ad + fixed + percent + prize + variable
+    // Реклама окремо. Решта — pro-rata revenue.
+    const otherCostRate = Math.max(0, (Number(summary.tCost) - Number(summary.tAd || 0)) / Number(summary.tRev));
+    const mtdOtherCost = mtdRev * otherCostRate;
+    mtdCostTotal = mtdAdSpend + mtdOtherCost;
+    costNote = `реклама ${shortUAH(mtdAdSpend)} + інше pro-rata ${shortUAH(mtdOtherCost)}`;
+  }
+  const mtdProfit = mtdRev - mtdCostTotal;
+  const mtdMargin = mtdRev > 0 ? (mtdProfit / mtdRev * 100) : null;
+  // Прогноз кінця місяця: лінійна екстраполяція run-rate (revenue, cost, profit)
+  const projRev = projection;
+  const projCost = mtdDays.length ? (mtdCostTotal / mtdDays.length) * daysInMonth : 0;
+  const projProfit = projRev - projCost;
   cur('fc-mtd-rev', shortUAH(mtdRev));
-  cur('fc-mtd-cost', shortUAH(mtdRev * (1-margin)));
-  cur('fc-mtd-profit', shortUAH(mtdProf));
-  cur('fc-mtd-day', `день ${dayOfMonth}/${daysInMonth} · до кінця ${remDays} дн`);
-  cur('fc-mtd-proj', `~${shortUAH(projection)} прогноз кінця місяця`);
+  cur('fc-mtd-cost', shortUAH(mtdCostTotal));
+  cur('fc-mtd-profit', shortUAH(mtdProfit));
+  cur('fc-mtd-day', `день ${dayOfMonth}/${daysInMonth} · до кінця ${remDays} дн · margin ${mtdMargin != null ? mtdMargin.toFixed(1) + '%' : '—'}`);
+  cur('fc-mtd-proj', `Revenue ~${shortUAH(projRev)} · Profit ~${shortUAH(projProfit)}`);
   const pct = Math.min(100, Math.round(dayOfMonth/daysInMonth*100));
   const bar = document.getElementById('fc-progress'); if (bar) bar.style.width = pct+'%';
+  // Note про джерела витрат
+  const noteEl = document.querySelector('.fc-card .fc-note');
+  if (noteEl) noteEl.textContent = costNote + ' · лінійна екстраполяція кінця місяця';
 }
 
 async function reloadOverview() {
@@ -920,7 +940,7 @@ async function reloadOverview() {
     drawTrend(daily, dailyAds);
     // KPI з proxy margin 91.5% (буде уточнено після PnL)
     renderKpi(periodRev, periodPaid, prevRev, null, days);
-    renderForecast(null, daily, periodRev);
+    renderForecast(null, daily, periodRev, dailyAds);
     renderInsights(null, periodRev, prevRev, [], OV.from, OV.to);
     if (status) status.innerHTML = '<span class="loading-bar">Підвантажую P&amp;L по запусках (це може зайняти 15-20с)…</span>';
 
@@ -930,7 +950,7 @@ async function reloadOverview() {
       drawCost(pnl);
       const summary = renderPnL(pnl, OV.from, OV.to);
       renderKpi(periodRev, periodPaid, prevRev, summary, days);
-      renderForecast(summary, daily, periodRev);
+      renderForecast(summary, daily, periodRev, dailyAds);
       renderTopProjects(pnl);
       renderInsights(summary, periodRev, prevRev, pnl, OV.from, OV.to);
       if (status) status.style.display = 'none';
