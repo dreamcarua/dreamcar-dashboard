@@ -323,9 +323,11 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
 <div class="modal" id="modalTx"><div class="modal-card">
   <h3 id="txTitle">Нова операція</h3><div id="txErr"></div>
   <div class="field"><label>Тип</label>
-    <div class="seg"><button type="button" id="txIn" onclick="setDir('in')">↓ Надходження</button><button type="button" id="txOut" onclick="setDir('out')">↑ Витрата</button></div>
+    <div class="seg"><button type="button" id="txIn" onclick="setDir('in')">↓ Надходження</button><button type="button" id="txOut" onclick="setDir('out')">↑ Витрата</button><button type="button" id="txMove" onclick="setDir('move')">🔄 Переміщення</button></div>
   </div>
   <div class="field"><label>Рахунок *</label><select id="txAcct"></select></div>
+  <div class="field" id="txMoveWrap" style="display:none"><label>Куди перемістити *</label><select id="txMoveTo" onchange="moveToggle()"><option value="cash">💵 Готівка</option><option value="dividends">💰 Дивіденди</option></select></div>
+  <div class="field" id="txDivWrap" style="display:none"><label>Кому (дивіденди) *</label><select id="txDivWho"><option value="vadym">Вадим</option><option value="artem">Артем</option><option value="split">Порівну (50/50)</option></select></div>
   <div class="field-row">
     <div class="field"><label>Сума UAH *</label><input id="txAmount" type="number" min="0" step="0.01"></div>
     <div class="field"><label>Дата *</label><input id="txDate" type="date"></div>
@@ -652,7 +654,14 @@ function openModal(id){document.getElementById(id).classList.add('on');}
 function closeModal(id){document.getElementById(id).classList.remove('on');}
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('on');}));
 function showErr(id,msg){document.getElementById(id).innerHTML=msg?`<div class="error-msg">${esc(msg)}</div>`:'';}
-function setDir(d){txDir=d;document.getElementById('txIn').className=d==='in'?'on-in':'';document.getElementById('txOut').className=d==='out'?'on-out':'';}
+function setDir(d){txDir=d;
+  document.getElementById('txIn').className=d==='in'?'on-in':'';
+  document.getElementById('txOut').className=d==='out'?'on-out':'';
+  const mv=document.getElementById('txMove'); if(mv) mv.className=d==='move'?'on-out':'';
+  const mw=document.getElementById('txMoveWrap'); if(mw) mw.style.display=d==='move'?'block':'none';
+  moveToggle();
+}
+function moveToggle(){ const isM=txDir==='move'; const to=document.getElementById('txMoveTo'); const dw=document.getElementById('txDivWrap'); if(dw) dw.style.display=(isM&&to&&to.value==='dividends')?'block':'none'; }
 
 function openTxModal(kind){
   editTx=null;document.getElementById('txTitle').textContent='Нова операція';showErr('txErr',null);
@@ -674,6 +683,7 @@ function editTransaction(id){
   openModal('modalTx');
 }
 async function saveTx(){
+  if(txDir==='move') return saveMove();
   const account_id=document.getElementById('txAcct').value;
   const amount_uah=parseFloat(document.getElementById('txAmount').value);
   const occurred_at=document.getElementById('txDate').value;
@@ -772,7 +782,7 @@ async function runImport(){
     if(r.error)throw r.error;closeModal('modalImp');alert(`Імпортовано (дублі пропущені). Рядків оброблено: ${payload.length}`);await loadAll();}catch(e){showErr('impErr',e.message||e);}
 }
 
-Object.assign(window,{loadAll,openTxModal,editTransaction,saveTx,delTx,openTransfer,saveTransfer,delTransfer,openAcct,editAccount,saveAcct,openImport,parseImport,runImport,closeModal,setDir,openBank,editBank,saveBank,delBank,bankToggle});
+Object.assign(window,{loadAll,openTxModal,editTransaction,saveTx,delTx,openTransfer,saveTransfer,delTransfer,openAcct,editAccount,saveAcct,openImport,parseImport,runImport,closeModal,setDir,openBank,editBank,saveBank,delBank,bankToggle,saveMove,moveToggle});
 
 // ---- banks (creds) ----
 let BANKS=[], editBankRow=null;
@@ -839,6 +849,43 @@ function renderIntFlow(){
     return `<tr><td style="text-align:left">${esc(a.icon||'')} ${esc(a.name)}</td><td class="in">+${fmtUAH(f.moved_in)}</td><td class="out">−${fmtUAH(f.moved_out)}</td><td class="${net>=0?'in':'out'}">${net>=0?'+':'−'}${fmtUAH(Math.abs(net))}</td></tr>`;}).join('');
   html+=`<tr style="border-top:2px solid var(--line)"><td style="text-align:left"><b>Разом переміщено</b></td><td class="in">+${fmtUAH(ti)}</td><td class="out">−${fmtUAH(to)}</td><td class="muted">${Math.abs(ti-to)<2?'збалансовано':fmtUAH(ti-to)}</td></tr>`;
   tb.innerHTML=html;
+}
+
+async function saveMove(){
+  const fromId=document.getElementById('txAcct').value;
+  const amount=parseFloat(document.getElementById('txAmount').value);
+  const occurred_at=document.getElementById('txDate').value;
+  const desc=document.getElementById('txDesc').value.trim()||'Переміщення';
+  if(!fromId) return showErr('txErr','Вибери рахунок-джерело');
+  if(!(amount>0)) return showErr('txErr','Сума > 0');
+  if(!occurred_at) return showErr('txErr','Вкажи дату');
+  const to=document.getElementById('txMoveTo').value;
+  const rows=[];
+  if(to==='cash'){
+    const cash=DATA.accounts.find(a=>a.kind==='cash'&&a.is_active);
+    if(!cash) return showErr('txErr','Немає активного рахунку Готівка');
+    if(cash.id===fromId) return showErr('txErr','Джерело і призначення однакові');
+    rows.push({from_account_id:fromId,to_account_id:cash.id,amount_uah:amount,occurred_at,description:desc,created_by:ME});
+  } else {
+    const who=document.getElementById('txDivWho').value;
+    const dv=DATA.accounts.find(a=>a.kind==='dividends'&&/вадим/i.test(a.name));
+    const da=DATA.accounts.find(a=>a.kind==='dividends'&&/артем/i.test(a.name));
+    if(who==='split'){
+      if(!dv||!da) return showErr('txErr','Немає рахунків дивідендів Вадим/Артем');
+      const half=Math.round(amount/2*100)/100; const other=Math.round((amount-half)*100)/100;
+      rows.push({from_account_id:fromId,to_account_id:dv.id,amount_uah:half,occurred_at,description:desc+' (порівну)',created_by:ME});
+      rows.push({from_account_id:fromId,to_account_id:da.id,amount_uah:other,occurred_at,description:desc+' (порівну)',created_by:ME});
+    } else {
+      const tgt=who==='vadym'?dv:da;
+      if(!tgt) return showErr('txErr','Немає рахунку дивідендів');
+      rows.push({from_account_id:fromId,to_account_id:tgt.id,amount_uah:amount,occurred_at,description:desc,created_by:ME});
+    }
+  }
+  try{
+    if(editTx && editTx.source==='manual'){ await sb.from('kasa_transactions').delete().eq('id',editTx.id); }
+    const r=await sb.from('kasa_transfers').insert(rows); if(r.error) throw r.error;
+    closeModal('modalTx'); await loadAll();
+  }catch(e){ showErr('txErr',e.message||e); }
 }
 
 // ---- auth gate ----
