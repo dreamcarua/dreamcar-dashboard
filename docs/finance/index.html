@@ -6,7 +6,7 @@
 <title>Фінанси · DreamCar</title>
 <meta name="color-scheme" content="dark">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta name="finance-build" content="20260615-mtd-real-cost">
+<meta name="finance-build" content="20260615-sidebar">
 <script src="https://brand.dreamcar.ua/assets/global-header.js?v=20260606b" defer></script>
 <script src="/assets/js/auth-guard.js?v=20260614" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -202,6 +202,21 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
 .progress span{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--red));border-radius:4px;transition:width .4s}
 .fc-note{color:#6B7280;font-size:10.5px;font-family:'JetBrains Mono',monospace;margin-top:8px;letter-spacing:.05em}
 
+/* ============ SIDEBAR (#409) ============ */
+:root{--sidebar-w:220px}
+.app-layout{display:grid;grid-template-columns:var(--sidebar-w) 1fr;grid-template-areas:"sidebar main";min-height:calc(100vh - 64px)}
+.app-layout > .sidebar{grid-area:sidebar}
+.app-layout > .wrap{grid-area:main;max-width:none}
+.sidebar{background:#0a0a0a;border-right:1px solid var(--line);padding:18px 0;overflow-y:auto;position:sticky;top:64px;align-self:start;max-height:calc(100vh - 64px)}
+.sidebar .nav-group{margin-bottom:18px}
+.sidebar .nav-group-title{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;color:#6B7280;text-transform:uppercase;padding:0 18px 6px;font-weight:600}
+.sidebar .nav-item{display:flex;align-items:center;gap:9px;padding:8px 18px;color:#bbb;font-size:13px;font-family:'Manrope',sans-serif;text-decoration:none;cursor:pointer;border-left:2px solid transparent;transition:.12s}
+.sidebar .nav-item:hover{background:rgba(255,255,255,.04);color:#fff;border-left-color:rgba(227,6,19,.5)}
+.sidebar .nav-item.active{background:rgba(227,6,19,.1);color:#fff;border-left-color:var(--red);font-weight:600}
+.sidebar .nav-item .icon{font-size:14px;width:18px;text-align:center}
+.sidebar .nav-item .badge{margin-left:auto;background:#2a2a2a;color:#888;font-size:9px;padding:2px 6px;border-radius:4px;letter-spacing:.05em;font-family:'JetBrains Mono',monospace}
+@media(max-width:920px){.app-layout{grid-template-columns:1fr;grid-template-areas:"main"}.sidebar{display:none}}
+
 /* Skeleton shimmer */
 @keyframes shimmer { 0%{background-position:-300px 0} 100%{background-position:300px 0} }
 .skel{background:linear-gradient(90deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 100%);background-size:600px 100%;animation:shimmer 1.4s linear infinite;border-radius:4px;display:inline-block;height:1em;min-width:80px;color:transparent !important}
@@ -216,6 +231,47 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
   <a class="brandmark" href="/"><span class="r">DREAM</span>CAR<span class="mm">Фінанси</span></a>
   <a class="backlink" href="/">← Dashboard</a>
 </div>
+
+<div class="app-layout">
+
+  <aside class="sidebar">
+    <div class="nav-group">
+      <div class="nav-group-title">Аналітика</div>
+      <a class="nav-item" href="/#overview"><span class="icon">📊</span>Огляд</a>
+      <a class="nav-item" href="/#projects"><span class="icon">🏎️</span>Проекти</a>
+      <a class="nav-item" href="/#analytics"><span class="icon">💰</span>Аналітика</a>
+      <a class="nav-item" href="/#combos"><span class="icon">🔗</span>Комбінації</a>
+      <a class="nav-item" href="/#sources"><span class="icon">📍</span>Джерела</a>
+      <a class="nav-item" href="/#medium"><span class="icon">🔗</span>Тип трафіка</a>
+      <a class="nav-item" href="/#campaigns"><span class="icon">🎯</span>Кампанії</a>
+      <a class="nav-item" href="/#terms"><span class="icon">🔑</span>Виконавець</a>
+      <a class="nav-item" href="/#content"><span class="icon">🎨</span>Оголошення</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">Стратегія</div>
+      <a class="nav-item active" href="/finance/"><span class="icon">💰</span>Фінанси (P&amp;L)</a>
+      <a class="nav-item" href="/kasa/"><span class="icon">🧾</span>Каса</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">Експерименти</div>
+      <a class="nav-item" href="/upsell-ab/"><span class="icon">🧪</span>Upsell A/B/C</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">Facebook Ads</div>
+      <a class="nav-item" href="/#ads-overview"><span class="icon">💸</span>Ads Overview</a>
+      <a class="nav-item" href="/#ads-campaigns"><span class="icon">📊</span>Ads Campaigns</a>
+      <a class="nav-item" href="/meta-analytics/"><span class="icon">📈</span>Meta по проєктах</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">System</div>
+      <a class="nav-item" href="/#settings"><span class="icon">⚙️</span>Settings</a>
+      <a class="nav-item" href="/#help"><span class="icon">❓</span>Допомога</a>
+    </div>
+  </aside>
 
 <div class="wrap">
   <div class="title">ФІНАНСИ · <span class="r">P&amp;L</span></div>
@@ -397,6 +453,7 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
   </div>
 
 </div>
+</div><!-- /app-layout -->
 
 <!-- MODAL: Category -->
 <div class="modal" id="modalCat">
