@@ -6,7 +6,7 @@
 <title>Фінанси · DreamCar</title>
 <meta name="color-scheme" content="dark">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta name="finance-build" content="20260615-fast-boot">
+<meta name="finance-build" content="20260615-cat-tree">
 <script src="https://brand.dreamcar.ua/assets/global-header.js?v=20260606b" defer></script>
 <script src="/assets/js/auth-guard.js?v=20260614" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -48,6 +48,49 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
 .cat-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 9px;border-radius:5px;font-size:11.5px;font-weight:600;background:rgba(255,255,255,.05);border:1px solid var(--line)}
 .cat-pill .ic{font-size:14px}
 .cat-pill.fixed{border-color:var(--green);background:rgba(16,185,129,.1)}
+/* ============ CATEGORIES TREE (#401) ============ */
+.cat-tree{padding:8px 0}
+.cat-group{margin-bottom:6px;border-radius:10px;background:#0f0f0f;border:1px solid var(--line);overflow:hidden;transition:border-color .15s}
+.cat-group:hover{border-color:rgba(227,6,19,.4)}
+.cat-group.archived{opacity:.55}
+.cat-parent{display:grid;grid-template-columns:36px 28px 1fr auto auto auto auto;gap:12px;align-items:center;padding:13px 14px;cursor:pointer;user-select:none;background:linear-gradient(90deg, rgba(227,6,19,.08), rgba(227,6,19,.02));border-left:3px solid var(--red);font-family:'Manrope',sans-serif}
+.cat-parent:hover{background:linear-gradient(90deg, rgba(227,6,19,.13), rgba(227,6,19,.04))}
+.cat-parent .chev{font-family:'JetBrains Mono',monospace;color:var(--gold);font-size:12px;width:18px;text-align:center;transition:transform .2s}
+.cat-group.open .cat-parent .chev{transform:rotate(90deg)}
+.cat-parent .icn{font-size:22px;text-align:center;line-height:1}
+.cat-parent .nm{font-weight:700;font-size:14.5px;color:#fff;letter-spacing:.01em}
+.cat-parent .nm .code{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#9CA3AF;font-weight:500;letter-spacing:.05em;margin-left:8px}
+.cat-parent .nm .arch-tag{font-size:9.5px;color:#9CA3AF;background:rgba(255,255,255,.05);padding:2px 7px;border-radius:4px;margin-left:8px;letter-spacing:.08em;text-transform:uppercase;font-family:'JetBrains Mono',monospace}
+.cat-parent .sub-cnt{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#9CA3AF;background:rgba(255,255,255,.05);padding:3px 9px;border-radius:6px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.cat-parent .sub-cnt.empty{opacity:.4}
+.cat-parent .type-pill{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:3px 9px;border-radius:5px;letter-spacing:.07em;text-transform:uppercase;border:1px solid var(--line)}
+.cat-parent .type-pill.fixed{border-color:rgba(16,185,129,.4);color:var(--green);background:rgba(16,185,129,.08)}
+.cat-parent .type-pill.variable{border-color:rgba(96,165,250,.3);color:#93c5fd;background:rgba(96,165,250,.06)}
+.cat-parent .type-pill.percent{border-color:rgba(251,191,36,.4);color:var(--gold);background:rgba(251,191,36,.07)}
+.cat-parent .acts{display:flex;gap:6px}
+.cat-parent .iconbtn{width:28px;height:28px;font-size:13px}
+.cat-children{display:none;background:#0a0a0a;padding:4px 0;border-top:1px dashed rgba(255,255,255,.05)}
+.cat-group.open .cat-children{display:block}
+.cat-child{display:grid;grid-template-columns:36px 28px 1fr auto auto auto;gap:12px;align-items:center;padding:10px 14px 10px 30px;position:relative;font-family:'Manrope',sans-serif;border-left:3px solid transparent;transition:.12s}
+.cat-child:hover{background:rgba(255,255,255,.03);border-left-color:rgba(255,255,255,.15)}
+.cat-child .branch{position:absolute;left:20px;top:0;bottom:0;width:14px;font-family:'JetBrains Mono',monospace;color:rgba(255,255,255,.15);font-size:14px;line-height:1;display:flex;align-items:center;justify-content:flex-end;padding-right:2px}
+.cat-child .ord{font-family:'JetBrains Mono',monospace;font-size:10px;color:#6B7280;text-align:center;letter-spacing:.05em}
+.cat-child .icn{font-size:17px;text-align:center;line-height:1;opacity:.85}
+.cat-child .nm{font-size:13px;color:#ddd;font-weight:500}
+.cat-child .nm .code{font-family:'JetBrains Mono',monospace;font-size:10px;color:#6B7280;font-weight:400;letter-spacing:.05em;margin-left:6px}
+.cat-child.archived{opacity:.45}
+.cat-child .nm .arch-tag{font-size:9.5px;color:#9CA3AF;background:rgba(255,255,255,.05);padding:2px 7px;border-radius:4px;margin-left:8px;letter-spacing:.08em;text-transform:uppercase;font-family:'JetBrains Mono',monospace}
+.cat-child .type-pill{font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:600;padding:2px 7px;border-radius:4px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);opacity:.85}
+.cat-child .type-pill.fixed{border-color:rgba(16,185,129,.3);color:var(--green);background:rgba(16,185,129,.06)}
+.cat-child .type-pill.variable{border-color:rgba(96,165,250,.2);color:#93c5fd;background:rgba(96,165,250,.04)}
+.cat-child .type-pill.percent{border-color:rgba(251,191,36,.3);color:var(--gold);background:rgba(251,191,36,.05)}
+.cat-child .acts{display:flex;gap:5px;opacity:.55;transition:opacity .15s}
+.cat-child:hover .acts{opacity:1}
+.cat-child .iconbtn{width:26px;height:26px;font-size:12px}
+.cat-meta{display:flex;justify-content:space-between;align-items:center;padding:6px 14px 12px;color:#6B7280;font-size:11px;font-family:'JetBrains Mono',monospace;letter-spacing:.04em}
+.cat-orphans-title{font-family:'Oswald',sans-serif;font-size:13px;color:#9CA3AF;letter-spacing:.08em;text-transform:uppercase;padding:14px 0 8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+
+/* Legacy table rows (keeping old class names harmless if hit elsewhere) */
 .parent-cat td{background:rgba(227,6,19,.04)}
 .sub-cat td:first-child{padding-left:32px}
 .act{display:inline-flex;gap:5px}
@@ -285,11 +328,12 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
       <input class="search" id="searchCat" placeholder="🔍 Пошук категорії…">
       <button class="btn" onclick="openCategoryModal()">+ Нова категорія</button>
     </div>
-    <div class="tbl-card">
-      <table id="tblCat"><thead><tr>
-        <th data-key="sort_order">Order</th><th>Іконка</th><th data-key="name" style="text-align:left">Назва</th>
-        <th data-key="code">Код</th><th>Тип</th><th>Sub of</th><th>Дії</th>
-      </tr></thead><tbody><tr><td colspan="7" class="empty">завантаження…</td></tr></tbody></table>
+    <div class="tbl-card" style="background:transparent;border:none;max-height:none;overflow:visible;padding:0">
+      <div class="cat-meta">
+        <span id="catMetaCount">…</span>
+        <span style="color:#6B7280">клік на групу — розгорнути / згорнути</span>
+      </div>
+      <div class="cat-tree" id="catTree"><div class="empty">завантаження…</div></div>
     </div>
   </div>
 
@@ -901,40 +945,100 @@ async function reloadOverview() {
   }
 }
 
-// === RENDER CATEGORIES ===
+// === RENDER CATEGORIES (tree v2, #401) ===
+function _catTypeLabel(c) {
+  const t = (c.cost_type || (c.is_fixed ? 'fixed_monthly' : 'variable'));
+  if (t === 'fixed_monthly' || t === 'fixed') return { cls: 'fixed', label: '⚙ Fixed' };
+  if (t === 'percent') return { cls: 'percent', label: '% з угод' };
+  return { cls: 'variable', label: 'Variable' };
+}
+function _catParentRow(c, childCount, openByDefault) {
+  const t = _catTypeLabel(c);
+  return `<div class="cat-parent" onclick="window.toggleCatGroup('${c.id}')">
+    <span class="ord" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#6B7280;text-align:center">${c.sort_order ?? ''}</span>
+    <span class="chev">▶</span>
+    <span class="icn">${c.icon || '📁'}</span>
+    <span class="nm">${esc(c.name)}<span class="code">${esc(c.code)}</span>${c.is_archived ? '<span class="arch-tag">archived</span>' : ''}</span>
+    <span class="sub-cnt ${childCount ? '' : 'empty'}">${childCount ? childCount + ' підкатегор' + (childCount === 1 ? 'ія' : (childCount < 5 ? 'ії' : 'ій')) : 'без підкатегорій'}</span>
+    <span class="type-pill ${t.cls}">${t.label}</span>
+    <span class="acts">
+      <button class="iconbtn" title="Редагувати" onclick="event.stopPropagation();editCategory('${c.id}')">✎</button>
+      <button class="iconbtn del" title="${c.is_archived ? 'Відновити' : 'Архівувати'}" onclick="event.stopPropagation();toggleArchiveCat('${c.id}', ${c.is_archived})">${c.is_archived ? '↺' : '🗑'}</button>
+    </span>
+  </div>`;
+}
+function _catChildRow(c, isLast) {
+  const t = _catTypeLabel(c);
+  return `<div class="cat-child ${c.is_archived ? 'archived' : ''}">
+    <span class="branch">${isLast ? '┗' : '┣'}</span>
+    <span class="ord">${c.sort_order ?? ''}</span>
+    <span class="icn">${c.icon || '•'}</span>
+    <span class="nm">${esc(c.name)}<span class="code">${esc(c.code)}</span>${c.is_archived ? '<span class="arch-tag">archived</span>' : ''}</span>
+    <span class="type-pill ${t.cls}">${t.label}</span>
+    <span class="acts">
+      <button class="iconbtn" title="Редагувати" onclick="editCategory('${c.id}')">✎</button>
+      <button class="iconbtn del" title="${c.is_archived ? 'Відновити' : 'Архівувати'}" onclick="toggleArchiveCat('${c.id}', ${c.is_archived})">${c.is_archived ? '↺' : '🗑'}</button>
+    </span>
+  </div>`;
+}
+
+window.__openCatGroups = window.__openCatGroups || new Set();
+window.toggleCatGroup = function(id) {
+  const el = document.getElementById('catGroup_' + id);
+  if (!el) return;
+  el.classList.toggle('open');
+  if (el.classList.contains('open')) window.__openCatGroups.add(id);
+  else window.__openCatGroups.delete(id);
+};
+
 function renderCategories() {
-  const tbody = document.querySelector('#tblCat tbody');
-  if (!DATA.cats.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty">Немає категорій</td></tr>'; return; }
-  const q = (document.getElementById('searchCat').value || '').toLowerCase();
-  // Tree-flatten: parent first, then children
+  const root = document.getElementById('catTree');
+  if (!root) return;
+  const meta = document.getElementById('catMetaCount');
+  if (!DATA.cats.length) {
+    root.innerHTML = '<div class="empty">Немає категорій</div>';
+    if (meta) meta.textContent = '0 категорій';
+    return;
+  }
+  const q = (document.getElementById('searchCat')?.value || '').toLowerCase();
+  // Збираємо ієрархію
   const byParent = {};
   DATA.cats.forEach(c => { const p = c.parent_id || '_root'; (byParent[p] = byParent[p] || []).push(c); });
-  Object.values(byParent).forEach(arr => arr.sort((a,b)=>a.sort_order-b.sort_order));
-  const flat = [];
-  (byParent['_root'] || []).forEach(p => {
-    if (!q || p.name.toLowerCase().includes(q) || p.code.toLowerCase().includes(q)) {
-      flat.push({ ...p, _sub: false });
-      (byParent[p.id] || []).forEach(s => {
-        if (!q || s.name.toLowerCase().includes(q) || s.code.toLowerCase().includes(q)) flat.push({ ...s, _sub: true, _parentName: p.name });
-      });
-    }
-  });
-  // Also orphans (parent_id existing but parent filtered out)
-  const html = flat.map(c => `
-    <tr class="${c._sub ? 'sub-cat' : 'parent-cat'}">
-      <td>${c.sort_order}</td>
-      <td style="font-size:18px;text-align:center">${c.icon || '💸'}</td>
-      <td style="text-align:left">${c._sub ? '↳ ' : ''}<b>${esc(c.name)}</b>${c.is_archived ? ' <span class="muted">(archived)</span>' : ''}</td>
-      <td><code style="font-size:10.5px;color:#aaa">${esc(c.code)}</code></td>
-      <td>${c.is_fixed ? '<span class="cat-pill fixed">⚙️ fixed</span>' : '<span class="cat-pill">variable</span>'}</td>
-      <td class="muted" style="font-size:11px">${c._parentName ? esc(c._parentName) : '—'}</td>
-      <td class="act">
-        <button class="iconbtn" title="Редагувати" onclick="editCategory('${c.id}')">✎</button>
-        <button class="iconbtn del" title="${c.is_archived ? 'Відновити' : 'Архівувати'}" onclick="toggleArchiveCat('${c.id}', ${c.is_archived})">${c.is_archived ? '↺' : '🗑'}</button>
-      </td>
-    </tr>
-  `).join('');
-  tbody.innerHTML = html || '<tr><td colspan="7" class="empty">Не знайдено</td></tr>';
+  Object.values(byParent).forEach(arr => arr.sort((a,b)=>(a.sort_order||0)-(b.sort_order||0)));
+  const roots = byParent['_root'] || [];
+
+  const matches = (c) => !q || c.name.toLowerCase().includes(q) || c.code.toLowerCase().includes(q);
+
+  const html = [];
+  let totalShown = 0;
+  for (const p of roots) {
+    const children = (byParent[p.id] || []);
+    const childrenMatch = children.filter(matches);
+    const parentMatches = matches(p);
+    // Показуємо групу якщо matches parent, або matches хоч одна дитина
+    if (!parentMatches && childrenMatch.length === 0) continue;
+    const visibleChildren = parentMatches ? children : childrenMatch;
+    totalShown += 1 + visibleChildren.length;
+    // Якщо є пошук — авто-відкрити. Інакше: відкрити лише якщо у window.__openCatGroups.
+    const open = q ? true : window.__openCatGroups.has(p.id);
+    const childHtml = visibleChildren.map((c, i) => _catChildRow(c, i === visibleChildren.length - 1)).join('');
+    html.push(`<div class="cat-group ${open ? 'open' : ''} ${p.is_archived ? 'archived' : ''}" id="catGroup_${p.id}">
+      ${_catParentRow(p, visibleChildren.length, open)}
+      <div class="cat-children">${childHtml || '<div class="cat-child" style="opacity:.5;font-style:italic;color:#6B7280">— немає підкатегорій —</div>'}</div>
+    </div>`);
+  }
+
+  // Сироти (parent_id посилається на щось, чого нема у _root, або filtered out)
+  const rootIds = new Set(roots.map(r => r.id));
+  const orphans = DATA.cats.filter(c => c.parent_id && !rootIds.has(c.parent_id) && matches(c));
+  if (orphans.length) {
+    html.push(`<div class="cat-orphans-title">Без батьківської категорії</div>`);
+    for (const c of orphans) html.push(`<div class="cat-group"><div class="cat-children" style="display:block">${_catChildRow(c, true)}</div></div>`);
+    totalShown += orphans.length;
+  }
+
+  root.innerHTML = html.length ? html.join('') : '<div class="empty">Не знайдено</div>';
+  if (meta) meta.textContent = `${DATA.cats.length} категорій всього · ${roots.length} груп · показано ${totalShown}`;
 }
 document.getElementById('searchCat').addEventListener('input', () => renderCategories());
 
