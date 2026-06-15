@@ -458,9 +458,11 @@ document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
 }));
 
 // ---- load ----
+let CACHE_PAINTED=false;
 async function loadAll(){
   try{
     await getSb();
+    if(!CACHE_PAINTED && !(DATA.accounts&&DATA.accounts.length)){ try{ const c=JSON.parse(sessionStorage.getItem('kasa_cache')||'null'); if(c && (Date.now()-c.t)<600000){ DATA.accounts=c.accounts||[]; DATA.tx=c.tx||[]; DATA.transfers=c.transfers||[]; DATA.cats=c.cats||[]; DATA.launches=c.launches||[]; DATA.opsMap=c.opsMap||{}; CACHE_PAINTED=true; renderAll(); } }catch(_){} }
     const [acc,tx,tr,cats,launches]=await Promise.all([
       sb.from('kasa_accounts').select('*').order('sort_order'),
       sb.from('kasa_transactions').select('id,account_id,direction,amount_uah,occurred_at,occurred_ts,description,counterparty,category_id,launch_id,source,external_id,is_internal,excl_pnl,div_to').order('occurred_ts',{ascending:false,nullsFirst:false}).limit(5000),
@@ -472,6 +474,7 @@ async function loadAll(){
     DATA.accounts=acc.data||[]; DATA.tx=tx.data||[]; DATA.transfers=tr.data||[];
     DATA.cats=cats.data||[]; DATA.launches=launches.data||[];
     try{const ao=await sb.rpc('kasa_account_ops'); DATA.opsMap={}; (ao.data||[]).forEach(r=>{DATA.opsMap[r.account_id]=Number(r.ops)||0;});}catch(_){ DATA.opsMap={}; }
+    try{ sessionStorage.setItem('kasa_cache', JSON.stringify({t:Date.now(), accounts:DATA.accounts, tx:(DATA.tx||[]).slice(0,2500), transfers:(DATA.transfers||[]).slice(0,500), cats:DATA.cats, launches:DATA.launches, opsMap:DATA.opsMap})); }catch(_){}
     renderAll();
   }catch(e){ console.error('[kasa]',e);
     const msg=String(e&&e.message||e);
