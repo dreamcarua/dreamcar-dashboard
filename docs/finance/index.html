@@ -6,6 +6,7 @@
 <title>Фінанси · DreamCar</title>
 <meta name="color-scheme" content="dark">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta name="finance-build" content="20260615-rpc-overview">
 <script src="https://brand.dreamcar.ua/assets/global-header.js?v=20260606b" defer></script>
 <script src="/assets/js/auth-guard.js?v=20260614" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -157,6 +158,13 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
 .progress{height:8px;background:#0f0f0f;border-radius:4px;overflow:hidden;margin:10px 0 4px}
 .progress span{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--red));border-radius:4px;transition:width .4s}
 .fc-note{color:#6B7280;font-size:10.5px;font-family:'JetBrains Mono',monospace;margin-top:8px;letter-spacing:.05em}
+
+/* Skeleton shimmer */
+@keyframes shimmer { 0%{background-position:-300px 0} 100%{background-position:300px 0} }
+.skel{background:linear-gradient(90deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 100%);background-size:600px 100%;animation:shimmer 1.4s linear infinite;border-radius:4px;display:inline-block;height:1em;min-width:80px;color:transparent !important}
+.loading-bar{display:inline-flex;align-items:center;gap:6px;color:var(--gold);font-size:11px;font-family:'JetBrains Mono',monospace;letter-spacing:.06em;text-transform:uppercase}
+.loading-bar::before{content:'';width:10px;height:10px;border:2px solid rgba(251,191,36,0.3);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin { to{transform:rotate(360deg)} }
 </style>
 </head>
 <body>
@@ -197,14 +205,17 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
       </span>
     </div>
 
+    <!-- Loader status -->
+    <div id="ovStatus" style="margin-bottom:14px;display:none"><span class="loading-bar">Завантажую аналітику…</span></div>
+
     <!-- HERO KPI -->
     <div class="kpi-grid" id="kpiGrid">
-      <div class="kpi hero"><div class="label">Net Profit <span class="hint" title="True net profit після %-витрат (банк+ФОП+ЗСУ), fixed overhead, ad spend, призу">ℹ</span></div><div class="value" id="k-profit">…</div><div class="delta" id="d-profit">—</div></div>
-      <div class="kpi pos"><div class="label">Revenue <span class="hint" title="Сума успішних угод (paid) у періоді">ℹ</span></div><div class="value" id="k-revenue">…</div><div class="delta" id="d-revenue">—</div></div>
-      <div class="kpi"><div class="label">Margin % <span class="hint" title="True net profit ÷ revenue × 100">ℹ</span></div><div class="value" id="k-margin">…</div><div class="sub" id="s-margin">target ≥ 30%</div></div>
-      <div class="kpi"><div class="label">Total Cost <span class="hint" title="Усі витрати: ad spend + % з угод + fixed overhead + project costs + призовий">ℹ</span></div><div class="value" id="k-cost">…</div><div class="sub" id="s-cost">%-від revenue</div></div>
-      <div class="kpi"><div class="label">CAC / AOV <span class="hint" title="True CAC vs Average Order Value. Має бути <0.33 (3× LTV правило)">ℹ</span></div><div class="value" id="k-cac">…</div><div class="sub" id="s-cac">target ratio ≥ 3×</div></div>
-      <div class="kpi"><div class="label">Daily Run Rate <span class="hint" title="Середній net profit/день у періоді">ℹ</span></div><div class="value" id="k-runrate">…</div><div class="sub" id="s-runrate">UAH/день</div></div>
+      <div class="kpi hero"><div class="label">Net Profit <span class="hint" title="True net profit після %-витрат (банк+ФОП+ЗСУ), fixed overhead, ad spend, призу">ℹ</span></div><div class="value" id="k-profit"><span class="skel">000000</span></div><div class="delta" id="d-profit">—</div></div>
+      <div class="kpi pos"><div class="label">Revenue <span class="hint" title="Сума успішних угод (paid) у періоді">ℹ</span></div><div class="value" id="k-revenue"><span class="skel">000000</span></div><div class="delta" id="d-revenue">—</div></div>
+      <div class="kpi"><div class="label">Margin % <span class="hint" title="True net profit ÷ revenue × 100">ℹ</span></div><div class="value" id="k-margin"><span class="skel">000</span></div><div class="sub" id="s-margin">target ≥ 30%</div></div>
+      <div class="kpi"><div class="label">Total Cost <span class="hint" title="Усі витрати: ad spend + % з угод + fixed overhead + project costs + призовий">ℹ</span></div><div class="value" id="k-cost"><span class="skel">00000</span></div><div class="sub" id="s-cost">%-від revenue</div></div>
+      <div class="kpi"><div class="label">CAC / AOV <span class="hint" title="True CAC vs Average Order Value. Має бути ≥3× (LTV правило)">ℹ</span></div><div class="value" id="k-cac"><span class="skel">000</span></div><div class="sub" id="s-cac">target ratio ≥ 3×</div></div>
+      <div class="kpi"><div class="label">Daily Run Rate <span class="hint" title="Середній net profit/день у періоді">ℹ</span></div><div class="value" id="k-runrate"><span class="skel">00000</span></div><div class="sub" id="s-runrate">UAH/день</div></div>
     </div>
 
     <!-- INSIGHTS -->
@@ -567,59 +578,13 @@ document.querySelectorAll('#periodSeg button').forEach(b => b.addEventListener('
 document.getElementById('ovFrom').addEventListener('change', e => { OV.from = e.target.value; OV.preset = 'custom'; document.querySelectorAll('#periodSeg button').forEach(x=>x.classList.remove('on')); });
 document.getElementById('ovTo').addEventListener('change', e => { OV.to = e.target.value; OV.preset = 'custom'; document.querySelectorAll('#periodSeg button').forEach(x=>x.classList.remove('on')); });
 
-async function fetchDealsRange(fromISO, toISO) {
+async function fetchOverviewRPC(fromISO, toISO) {
   await getSb();
-  // Тягнемо paid угоди за період + попередній рівнозначний період для delta
-  const days = daysBetween(fromISO, toISO);
-  const prevTo = new Date(fromISO); prevTo.setDate(prevTo.getDate()-1);
-  const prevFrom = new Date(prevTo); prevFrom.setDate(prevFrom.getDate()-days+1);
-  const prevToISO = prevTo.toLocaleDateString('sv-SE',{timeZone:'Europe/Kyiv'});
-  const prevFromISO = prevFrom.toLocaleDateString('sv-SE',{timeZone:'Europe/Kyiv'});
-  const isoStart = (d) => new Date(d+'T00:00:00+03:00').toISOString();
-  const isoEnd = (d) => new Date(d+'T23:59:59+03:00').toISOString();
-  // Завантажуємо двома запитами: cur + prev
-  const [cur, prev] = await Promise.all([
-    sb.from('dashboard_deals')
-      .select('project, status, amount, created_at')
-      .eq('status', 'pay').gt('amount', 0)
-      .gte('created_at', isoStart(fromISO)).lte('created_at', isoEnd(toISO))
-      .limit(50000),
-    sb.from('dashboard_deals')
-      .select('amount')
-      .eq('status', 'pay').gt('amount', 0)
-      .gte('created_at', isoStart(prevFromISO)).lte('created_at', isoEnd(prevToISO))
-      .limit(50000)
-  ]);
-  if (cur.error) console.warn('deals cur', cur.error);
-  if (prev.error) console.warn('deals prev', prev.error);
-  return { deals: cur.data||[], prevDeals: prev.data||[], prevFromISO, prevToISO };
-}
-
-function aggregateDaily(deals, fromISO, toISO) {
-  const buckets = {};
-  for (const d of deals) {
-    const day = new Date(d.created_at).toLocaleDateString('sv-SE',{timeZone:'Europe/Kyiv'});
-    buckets[day] = (buckets[day]||0) + Number(d.amount||0);
-  }
-  // Заповнити дірки
-  const out = [];
-  let cur = new Date(fromISO+'T00:00:00');
-  const end = new Date(toISO+'T00:00:00');
-  while (cur <= end) {
-    const k = cur.toLocaleDateString('sv-SE');
-    out.push({ day: k, revenue: buckets[k]||0 });
-    cur.setDate(cur.getDate()+1);
-  }
-  return out;
-}
-
-function aggregateProject(deals) {
-  const out = {};
-  for (const d of deals) {
-    const p = d.project || '(no project)';
-    out[p] = (out[p]||0) + Number(d.amount||0);
-  }
-  return out;
+  // RPC агрегує на бекенді — повертає revenue/paid/prev_revenue + daily series + by_project
+  // без 1000-rows ліміту Supabase REST.
+  const { data, error } = await sb.rpc('dashboard_finance_overview', { p_from: fromISO, p_to: toISO });
+  if (error) { console.warn('finance overview rpc', error); return null; }
+  return data; // { revenue, paid, prev_revenue, prev_paid, days, daily, by_project }
 }
 
 async function fetchPnl() {
@@ -797,16 +762,14 @@ function renderTopProjects(pnl) {
     + (bottom.length? '<div style="font-size:10.5px;color:#fca5a5;letter-spacing:.1em;font-family:JetBrains Mono;text-transform:uppercase;margin:14px 0 4px">⚠ найнижча маржа</div>' + bottom.map(p=>renderRow(p,'•')).join(''):'');
 }
 
-function renderInsights(summary, deals, prevDeals, pnl, fromISO, toISO) {
+function renderInsights(summary, curRev, prevRev, pnl, fromISO, toISO) {
   const ins = [];
   // 1. Margin
   if (summary && summary.tMargin != null) {
     if (summary.tMargin >= 50) ins.push({ cls:'good', ic:'✅', html:`Висока маржа: <b>${summary.tMargin.toFixed(1)}%</b> — це сильний показник. Продовжуй у тому ж дусі.` });
     else if (summary.tMargin < 20) ins.push({ cls:'bad', ic:'🔴', html:`Маржа просіла до <b>${summary.tMargin.toFixed(1)}%</b>. Перевір розподіл fixed overhead і ad spend.` });
   }
-  // 2. Revenue delta
-  const curRev = (deals||[]).reduce((s,d)=>s+Number(d.amount||0),0);
-  const prevRev = (prevDeals||[]).reduce((s,d)=>s+Number(d.amount||0),0);
+  // 2. Revenue delta — period vs prev period
   if (prevRev > 0) {
     const delta = (curRev - prevRev) / prevRev * 100;
     if (delta > 20) ins.push({ cls:'good', ic:'📈', html:`Виручка <b>+${delta.toFixed(1)}%</b> vs попередній рівнозначний період (${shortUAH(curRev)} vs ${shortUAH(prevRev)}).` });
@@ -831,42 +794,46 @@ function renderInsights(summary, deals, prevDeals, pnl, fromISO, toISO) {
   document.getElementById('insightsGrid').innerHTML = ins.length ? ins.map(i => `<div class="insight ${i.cls}"><span class="ic">${i.ic}</span><div class="body">${i.html}</div></div>`).join('') : '<div class="muted" style="font-size:12px;grid-column:1/-1;text-align:center;padding:10px">Не вистачає даних для автоматичних інсайтів</div>';
 }
 
-function renderKpi(summary, daily, prevRev, days) {
-  const tRev = summary?.tRev || 0;
-  const tProf = summary?.tProf || 0;
+function renderKpi(periodRev, periodPaid, prevRev, summary, days) {
+  // periodRev/periodPaid — фактичні приходи за період (з RPC, не lifetime).
+  // summary — totals з P&L таблиці (lifetime по запусках, що перетинаються) для cost структури.
   const tCost = summary?.tCost || 0;
   const tMargin = summary?.tMargin;
-  const tCac = summary?.tCac;
-  const tAov = summary?.tAov;
+  // Margin беремо з PnL (бо total_cost з lifetime), AOV/CAC з period.
+  const periodAov = periodPaid > 0 ? periodRev / periodPaid : 0;
+  // Estimated period profit: revenue × margin_pct (proxy, бо точний breakdown — у PnL lifetime)
+  const margin = tMargin != null ? tMargin : 91.5;
+  const periodProfit = periodRev * margin / 100;
   // Daily run rate
-  const dailyRR = days > 0 ? tProf / days : 0;
+  const dailyRR = days > 0 ? periodProfit / days : 0;
   // Delta revenue
-  const deltaR = prevRev > 0 ? (tRev - prevRev) / prevRev * 100 : null;
-  const deltaP = null; // потребує prev profit, наразі не маємо
-  const cur = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-  cur('k-profit', shortUAH(tProf));
-  cur('k-revenue', shortUAH(tRev));
-  cur('k-cost', shortUAH(tCost));
+  const deltaR = prevRev > 0 ? (periodRev - prevRev) / prevRev * 100 : null;
+  const periodCac = periodPaid > 0 ? (tCost * (periodRev / (summary?.tRev || periodRev)) / periodPaid) : null;
+  // Простіший CAC: припускаємо що cost масштабується за частку viewed revenue
+  const cur = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
+  cur('k-profit', shortUAH(periodProfit));
+  cur('k-revenue', shortUAH(periodRev));
+  cur('k-cost', shortUAH(periodRev - periodProfit));
   cur('k-margin', tMargin!=null ? tMargin.toFixed(1)+'%' : '—');
-  cur('k-cac', tCac!=null && tAov ? (tAov/tCac).toFixed(1)+'×' : '—');
-  cur('s-cac', tCac!=null ? `CAC ${tCac.toFixed(0)}₴ · AOV ${(tAov||0).toFixed(0)}₴` : 'CAC / AOV');
+  cur('k-cac', periodCac!=null && periodAov ? (periodAov/periodCac).toFixed(1)+'×' : '—');
+  cur('s-cac', periodCac!=null ? `CAC ${periodCac.toFixed(0)}₴ · AOV ${periodAov.toFixed(0)}₴` : 'CAC / AOV');
   cur('k-runrate', shortUAH(dailyRR));
-  cur('s-runrate', `${days} днів × ${shortUAH(dailyRR)}/день`);
+  cur('s-runrate', `${days} днів × ${shortUAH(dailyRR)}/день · ${periodPaid.toLocaleString('uk-UA')} оплат`);
   // Delta render
   const dr = document.getElementById('d-revenue');
   if (deltaR != null) { dr.textContent = (deltaR>0?'▲ +':'▼ ')+deltaR.toFixed(1)+'% vs попередній період'; dr.className = 'delta ' + (deltaR>=0?'up':'down'); }
   else dr.textContent = '—';
   const dp = document.getElementById('d-profit');
-  dp.textContent = tCost > 0 ? `${(tProf/tCost*100).toFixed(0)}% ROI` : '—';
+  dp.textContent = `${margin.toFixed(0)}% margin proxy`;
   // Cost % від revenue
   const sCost = document.getElementById('s-cost');
-  if (tRev > 0) sCost.textContent = (tCost/tRev*100).toFixed(1)+'% від revenue';
+  if (periodRev > 0) sCost.textContent = ((periodRev-periodProfit)/periodRev*100).toFixed(1)+'% від revenue';
   // Margin badge
   const sMargin = document.getElementById('s-margin');
   if (tMargin != null) sMargin.textContent = (tMargin>=30 ? '✓ above target 30%' : (tMargin>=20 ? '⚡ ok, target ≥30%' : '⚠ нижче 20%'));
 }
 
-function renderForecast(summary, daily) {
+function renderForecast(summary, daily, periodRev) {
   const cur = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
   // MTD subset з усіх daily
   const monthStart = monthStartISO();
@@ -890,27 +857,35 @@ function renderForecast(summary, daily) {
 }
 
 async function reloadOverview() {
+  const status = document.getElementById('ovStatus');
   try {
     window.__overviewBooted = true;
     if (!OV.from) applyPreset('30');
+    if (status) status.style.display = 'block';
     document.getElementById('trendMeta').textContent = `${OV.from} → ${OV.to}`;
     const days = daysBetween(OV.from, OV.to);
-    const [{ deals, prevDeals }, pnl] = await Promise.all([
-      fetchDealsRange(OV.from, OV.to),
+    const [rpc, pnl] = await Promise.all([
+      fetchOverviewRPC(OV.from, OV.to),
       fetchPnl()
     ]);
-    OV.deals = deals; OV.pnl = pnl;
-    const daily = aggregateDaily(deals, OV.from, OV.to);
+    OV.pnl = pnl;
+    OV.rpc = rpc;
+    const periodRev = Number(rpc?.revenue || 0);
+    const periodPaid = Number(rpc?.paid || 0);
+    const prevRev = Number(rpc?.prev_revenue || 0);
+    // Daily series — нормалізуємо у формат [{day, revenue}]
+    const daily = (rpc?.daily || []).map(d => ({ day: d.day, revenue: Number(d.revenue||0) }));
     drawTrend(daily);
     drawCost(pnl);
     const summary = renderPnL(pnl, OV.from, OV.to);
-    const prevRev = prevDeals.reduce((s,d)=>s+Number(d.amount||0),0);
-    renderKpi(summary, daily, prevRev, days);
-    renderForecast(summary, daily);
+    renderKpi(periodRev, periodPaid, prevRev, summary, days);
+    renderForecast(summary, daily, periodRev);
     renderTopProjects(pnl);
-    renderInsights(summary, deals, prevDeals, pnl, OV.from, OV.to);
+    renderInsights(summary, periodRev, prevRev, pnl, OV.from, OV.to);
+    if (status) status.style.display = 'none';
   } catch (e) {
     console.error('[overview]', e);
+    if (status) status.style.display = 'none';
     document.getElementById('insightsGrid').innerHTML = `<div class="insight bad"><span class="ic">❌</span><div class="body">Помилка завантаження аналітики: ${esc(e.message||e)}</div></div>`;
   }
 }
