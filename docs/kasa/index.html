@@ -437,6 +437,7 @@ async function loadAll(){
     for(const r of [acc,tx,tr]) if(r.error) throw r.error;
     DATA.accounts=acc.data||[]; DATA.tx=tx.data||[]; DATA.transfers=tr.data||[];
     DATA.cats=cats.data||[]; DATA.launches=launches.data||[];
+    try{const ao=await sb.rpc('kasa_account_ops'); DATA.opsMap={}; (ao.data||[]).forEach(r=>{DATA.opsMap[r.account_id]=Number(r.ops)||0;});}catch(_){ DATA.opsMap={}; }
     renderAll();
   }catch(e){ console.error('[kasa]',e);
     const msg=String(e&&e.message||e);
@@ -450,7 +451,7 @@ async function loadAll(){
 }
 
 function renderAll(){
-  renderKpis(); renderOverview(); renderBank(); renderCash(); renderDiv(); renderTransfers(); renderAccounts(); populateSelects(); loadBanks();
+  renderKpis(); loadCashflow(); renderBank(); renderCash(); renderDiv(); renderTransfers(); renderAccounts(); populateSelects(); loadBanks();
   document.getElementById('c-bank').textContent=DATA.accounts.filter(a=>a.kind==='bank'&&a.is_active).length;
   document.getElementById('c-cash').textContent=DATA.accounts.filter(a=>a.kind==='cash').length;
   document.getElementById('c-div').textContent=DATA.accounts.filter(a=>a.kind==='dividends').length;
@@ -476,15 +477,11 @@ function periodStart(){
 }
 function renderOverview(){
   const from=periodStart();
-  const inSum=DATA.tx.filter(t=>t.direction==='in'&&t.occurred_at>=from&&!t.is_internal).reduce((s,t)=>s+Number(t.amount_uah),0);
-  const outSum=DATA.tx.filter(t=>t.direction==='out'&&t.occurred_at>=from&&!t.is_internal).reduce((s,t)=>s+Number(t.amount_uah),0);
-  const months={};
-  DATA.tx.filter(t=>t.occurred_at>=from&&!t.is_internal).forEach(t=>{
-    const m=t.occurred_at.slice(0,7); months[m]=months[m]||{in:0,out:0};
-    months[m][t.direction]+=Number(t.amount_uah);
-  });
-  const labels=Object.keys(months).sort();
-  const inData=labels.map(m=>Math.round(months[m].in)), outData=labels.map(m=>Math.round(months[m].out));
+  const inSum=(DATA.cf||[]).reduce((s,r)=>s+Number(r.inflow),0);
+  const outSum=(DATA.cf||[]).reduce((s,r)=>s+Number(r.outflow),0);
+  const _cf=(DATA.cf||[]);
+  const labels=_cf.map(r=>r.month);
+  const inData=_cf.map(r=>Math.round(Number(r.inflow))), outData=_cf.map(r=>Math.round(Number(r.outflow)));
   if(cfChart)cfChart.destroy();
   cfChart=new Chart(document.getElementById('cashflowChart'),{type:'bar',data:{labels:labels.map(m=>{const[y,mm]=m.split('-');return mm+'.'+y.slice(2)}),datasets:[
     {label:'Надходження',data:inData,backgroundColor:'#10B981'},
@@ -504,10 +501,11 @@ function renderOverview(){
     return `<tr><td>${fmtDate(t.occurred_at)}</td><td style="text-align:left">🔄 ${esc(t.description||'Переказ')}</td><td colspan="3"><span class="pill">${f?esc(f.name):'?'}</span> → <span class="pill">${to?esc(to.name):'?'}</span></td><td class="muted">${fmtUAH(t.amount_uah)}</td></tr>`;
   }).join(''):'<tr><td colspan="6" class="empty">Ще немає операцій</td></tr>';
 }
-document.getElementById('ovPeriod').addEventListener('change',renderOverview);
+document.getElementById('ovPeriod').addEventListener('change',loadCashflow);
+async function loadCashflow(){ try{ const r=await sb.rpc('kasa_monthly_cashflow',{p_from:periodStart()}); DATA.cf=r.data||[]; }catch(e){ DATA.cf=[]; } renderOverview(); }
 
 function acctCard(a){
-  const ops=balanceOf(a.id);
+  const ops=Number(a.opening_balance||0)+((DATA.opsMap&&DATA.opsMap[a.id])||0)+DATA.transfers.reduce((s,tr)=>s+(tr.to_account_id===a.id?Number(tr.amount_uah):0)-(tr.from_account_id===a.id?(Number(tr.amount_uah)+Number(tr.fee_uah||0)):0),0);
   const real=a.api_balance!=null?Number(a.api_balance):null;
   const shown=real!=null?real:ops;
   const bcls=a.bank==='monobank'?'mono':(a.bank==='privatbank'?'privat':(a.bank||''));
