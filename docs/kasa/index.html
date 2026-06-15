@@ -449,7 +449,7 @@ async function loadAll(){
 
 function renderAll(){
   renderKpis(); renderOverview(); renderBank(); renderCash(); renderDiv(); renderTransfers(); renderAccounts(); populateSelects(); loadBanks();
-  document.getElementById('c-bank').textContent=DATA.accounts.filter(a=>a.kind==='bank').length;
+  document.getElementById('c-bank').textContent=DATA.accounts.filter(a=>a.kind==='bank'&&a.is_active).length;
   document.getElementById('c-cash').textContent=DATA.accounts.filter(a=>a.kind==='cash').length;
   document.getElementById('c-div').textContent=DATA.accounts.filter(a=>a.kind==='dividends').length;
   document.getElementById('c-tr').textContent=DATA.transfers.length;
@@ -524,11 +524,11 @@ function txRow(t,withSource){
   </tr>`;
 }
 function renderBank(){
-  document.getElementById('bankAccts').innerHTML=DATA.accounts.filter(a=>a.kind==='bank').map(acctCard).join('')||'<div class="muted">Банк-рахунки зʼявляться після синку API</div>';
+  document.getElementById('bankAccts').innerHTML=DATA.accounts.filter(a=>a.kind==='bank'&&a.is_active).map(acctCard).join('')||'<div class="muted">Банк-рахунки зʼявляться після синку API</div>';
   const f=document.getElementById('bankAcctFilter');const cur=f.value;
-  f.innerHTML='<option value="">Усі банк-рахунки</option>'+DATA.accounts.filter(a=>a.kind==='bank').map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join('');f.value=cur;
+  f.innerHTML='<option value="">Усі банк-рахунки</option>'+DATA.accounts.filter(a=>a.kind==='bank'&&a.is_active).map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join('');f.value=cur;
   const q=(document.getElementById('searchBank').value||'').toLowerCase();
-  let rows=DATA.tx.filter(t=>{const a=acctById(t.account_id);return a&&a.kind==='bank';});
+  let rows=DATA.tx.filter(t=>{const a=acctById(t.account_id);return a&&a.kind==='bank'&&a.is_active;});
   if(f.value)rows=rows.filter(t=>t.account_id===f.value);
   if(q)rows=rows.filter(t=>(t.description||'').toLowerCase().includes(q)||(t.counterparty||'').toLowerCase().includes(q));
   document.querySelector('#tblBank tbody').innerHTML=rows.length?rows.slice(0,1500).map(t=>txRow(t,true)).join(''):'<tr><td colspan="9" class="empty">Немає операцій</td></tr>';
@@ -537,7 +537,7 @@ function renderBank(){
 document.getElementById('bankAcctFilter').addEventListener('change',renderBank);
 
 function renderCash(){
-  document.getElementById('cashAccts').innerHTML=DATA.accounts.filter(a=>a.kind==='cash').map(acctCard).join('');
+  document.getElementById('cashAccts').innerHTML=DATA.accounts.filter(a=>a.kind==='cash'&&a.is_active).map(acctCard).join('');
   const q=(document.getElementById('searchCash').value||'').toLowerCase();
   let rows=DATA.tx.filter(t=>{const a=acctById(t.account_id);return a&&a.kind==='cash';});
   if(q)rows=rows.filter(t=>(t.description||'').toLowerCase().includes(q)||(t.counterparty||'').toLowerCase().includes(q));
@@ -546,7 +546,7 @@ function renderCash(){
 document.getElementById('searchCash').addEventListener('input',renderCash);
 
 function renderDiv(){
-  document.getElementById('divAccts').innerHTML=DATA.accounts.filter(a=>a.kind==='dividends').map(acctCard).join('');
+  document.getElementById('divAccts').innerHTML=DATA.accounts.filter(a=>a.kind==='dividends'&&a.is_active).map(acctCard).join('');
   const q=(document.getElementById('searchDiv').value||'').toLowerCase();
   const divIds=DATA.accounts.filter(a=>a.kind==='dividends').map(a=>a.id);
   let rows=DATA.transfers.filter(t=>divIds.includes(t.to_account_id));
@@ -583,7 +583,7 @@ function populateSelects(){
   const accOpts=allAcc.map(a=>`<option value="${a.id}">${esc(a.icon+' '+a.name)} (${a.kind})</option>`).join('');
   document.getElementById('trFrom').innerHTML='<option value="">—</option>'+accOpts;
   document.getElementById('trTo').innerHTML='<option value="">—</option>'+accOpts;
-  document.getElementById('impAcct').innerHTML='<option value="">—</option>'+DATA.accounts.filter(a=>a.kind==='bank').map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join('');
+  document.getElementById('impAcct').innerHTML='<option value="">—</option>'+DATA.accounts.filter(a=>a.kind==='bank'&&a.is_active).map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join('');
 }
 
 function openModal(id){document.getElementById(id).classList.add('on');}
