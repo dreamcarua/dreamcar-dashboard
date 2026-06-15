@@ -246,6 +246,10 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
       <input class="search" id="searchBank" placeholder="🔍 Пошук операції…">
       <div class="grp">
         <select class="selin" id="bankAcctFilter"><option value="">Усі банк-рахунки</option></select>
+        <select class="selin" id="bankDirFilter"><option value="">Усі типи</option><option value="in">Дохід</option><option value="out">Витрата</option></select>
+        <select class="selin" id="bankPeriodFilter"><option value="all" selected>Весь час</option><option value="today">Сьогодні</option><option value="yesterday">Вчора</option><option value="7">7 днів</option><option value="30">30 днів</option><option value="90">90 днів</option><option value="365">12 місяців</option><option value="custom">Довільний діапазон</option></select>
+        <input type="date" id="bankFrom" class="selin" style="display:none">
+        <input type="date" id="bankTo" class="selin" style="display:none">
         <button class="btn green" onclick="openImport()">📥 Імпорт виписки (ПУМБ)</button>
         <button class="btn" onclick="openTxModal('bank')">+ Операція</button>
       </div>
@@ -596,10 +600,17 @@ function renderBank(){
   let rows=DATA.tx.filter(t=>{const a=acctById(t.account_id);return a&&a.kind==='bank'&&a.is_active;});
   if(f.value)rows=rows.filter(t=>t.account_id===f.value);
   if(q)rows=rows.filter(t=>(t.description||'').toLowerCase().includes(q)||(t.counterparty||'').toLowerCase().includes(q));
+  const dir=document.getElementById('bankDirFilter').value; if(dir)rows=rows.filter(t=>t.direction===dir);
+  const br=bankRange(); if(br)rows=rows.filter(t=>{const d=t.occurred_ts?t.occurred_ts.slice(0,10):t.occurred_at; return d>=br.from&&d<=br.to;});
   document.querySelector('#tblBank tbody').innerHTML=rows.length?rows.slice(0,1500).map(t=>txRow(t,true)).join(''):'<tr><td colspan="9" class="empty">Немає операцій</td></tr>';
 }
 ['searchBank'].forEach(id=>document.getElementById(id).addEventListener('input',renderBank));
 document.getElementById('bankAcctFilter').addEventListener('change',renderBank);
+document.getElementById('bankDirFilter').addEventListener('change',renderBank);
+document.getElementById('bankPeriodFilter').addEventListener('change',()=>{const c=document.getElementById('bankPeriodFilter').value==='custom';document.getElementById('bankFrom').style.display=c?'inline-block':'none';document.getElementById('bankTo').style.display=c?'inline-block':'none';renderBank();});
+document.getElementById('bankFrom').addEventListener('change',renderBank);
+document.getElementById('bankTo').addEventListener('change',renderBank);
+function bankRange(){const today=todayKyiv();const back=(n)=>{const x=new Date();x.setDate(x.getDate()-n);return x.toLocaleDateString('sv-SE',{timeZone:'Europe/Kyiv'});};const v=document.getElementById('bankPeriodFilter').value;if(v==='all')return null;if(v==='today')return{from:today,to:today};if(v==='yesterday'){const y=back(1);return{from:y,to:y};}if(v==='7')return{from:back(6),to:today};if(v==='30')return{from:back(29),to:today};if(v==='90')return{from:back(89),to:today};if(v==='365')return{from:back(364),to:today};if(v==='custom'){const ff=document.getElementById('bankFrom').value||'2020-01-01',tt=document.getElementById('bankTo').value||today;return{from:ff,to:tt};}return null;}
 
 function renderCash(){
   document.getElementById('cashAccts').innerHTML=DATA.accounts.filter(a=>a.kind==='cash'&&a.is_active).map(acctCard).join('');
