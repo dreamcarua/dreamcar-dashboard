@@ -220,6 +220,19 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
         <th>Дата</th><th style="text-align:left">Опис</th><th>Рахунок</th><th>Категорія</th><th>Проєкт</th><th>Сума</th>
       </tr></thead><tbody><tr><td colspan="6" class="empty">завантаження…</td></tr></tbody></table>
     </div>
+    <div class="toolbar" style="margin-top:10px"><div class="grp"><b style="font-family:'Oswald';font-size:16px">Пошук операцій</b></div></div>
+    <div class="toolbar">
+      <input class="search" id="schText" placeholder="🔍 слово в описі / контрагент…" style="max-width:340px" onkeydown="if(event.key==='Enter')doSearch()">
+      <div class="grp">
+        <input class="selin" id="schMin" type="number" placeholder="сума від" style="width:130px">
+        <input class="selin" id="schMax" type="number" placeholder="сума до" style="width:130px">
+        <button class="btn" onclick="doSearch()">Знайти</button>
+        <button class="btn ghost" onclick="clearSearch()">Скинути</button>
+      </div>
+    </div>
+    <div class="tbl-card"><table id="tblSearch"><thead><tr>
+      <th>Дата / час</th><th style="text-align:left">Опис</th><th>Контрагент</th><th>Рахунок</th><th>Сума</th>
+    </tr></thead><tbody><tr><td colspan="5" class="empty">введи запит і натисни «Знайти»</td></tr></tbody></table></div>
   </div>
 
   <!-- BANK -->
@@ -406,6 +419,7 @@ async function getSb(){ if(sb)return sb; for(let i=0;i<80;i++){ if(window.supaba
 const fmtUAH=(v)=>v==null?'—':new Intl.NumberFormat('uk-UA').format(Math.round(Number(v)))+' ₴';
 const fmtUAH2=(v)=>v==null?'—':new Intl.NumberFormat('uk-UA',{minimumFractionDigits:2,maximumFractionDigits:2}).format(Number(v))+' ₴';
 const fmtDate=(s)=>{if(!s)return '—';const [y,m,d]=s.split('-');return `${d}.${m}.${y}`;};
+const fmtDT=(ts,d)=>{ if(!ts) return fmtDate(d); const x=new Date(ts); if(isNaN(x)) return fmtDate(d); return x.toLocaleDateString('uk-UA',{timeZone:'Europe/Kyiv'})+' '+x.toLocaleTimeString('uk-UA',{timeZone:'Europe/Kyiv',hour:'2-digit',minute:'2-digit'}); };
 const esc=(s)=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const todayKyiv=()=>new Date().toLocaleDateString('sv-SE',{timeZone:'Europe/Kyiv'});
 const acctById=(id)=>DATA.accounts.find(a=>a.id===id);
@@ -505,9 +519,9 @@ function renderOverview(){
   const tb=document.querySelector('#tblRecent tbody');
   tb.innerHTML=recent.length?recent.map(r=>{
     if(r.k==='tx'){const t=r.row,a=acctById(t.account_id),c=catById(t.category_id),l=launchById(t.launch_id);
-      return `<tr><td>${fmtDate(t.occurred_at)}</td><td style="text-align:left">${t.is_internal?'<span class="badge" style="border-color:#888;color:#aaa">\ud83d\udd04 \u0432\u043d\u0443\u0442\u0440.</span> ':''}${esc(t.description||'—')}</td><td><span class="pill">${a?esc(a.icon+' '+a.name):'—'}</span></td><td>${c?esc((c.icon||'')+' '+c.name):'—'}</td><td>${l?esc(l.name):'—'}</td><td class="${t.direction==='in'?'in':'out'}">${t.direction==='in'?'+':'−'}${fmtUAH(t.amount_uah)}</td></tr>`;}
+      return `<tr><td>${fmtDT(t.occurred_ts,t.occurred_at)}</td><td style="text-align:left">${t.is_internal?'<span class="badge" style="border-color:#888;color:#aaa">\ud83d\udd04 \u0432\u043d\u0443\u0442\u0440.</span> ':''}${esc(t.description||'—')}</td><td><span class="pill">${a?esc(a.icon+' '+a.name):'—'}</span></td><td>${c?esc((c.icon||'')+' '+c.name):'—'}</td><td>${l?esc(l.name):'—'}</td><td class="${t.direction==='in'?'in':'out'}">${t.direction==='in'?'+':'−'}${fmtUAH(t.amount_uah)}</td></tr>`;}
     const t=r.row,f=acctById(t.from_account_id),to=acctById(t.to_account_id);
-    return `<tr><td>${fmtDate(t.occurred_at)}</td><td style="text-align:left">🔄 ${esc(t.description||'Переказ')}</td><td colspan="3"><span class="pill">${f?esc(f.name):'?'}</span> → <span class="pill">${to?esc(to.name):'?'}</span></td><td class="muted">${fmtUAH(t.amount_uah)}</td></tr>`;
+    return `<tr><td>${fmtDT(t.occurred_ts,t.occurred_at)}</td><td style="text-align:left">🔄 ${esc(t.description||'Переказ')}</td><td colspan="3"><span class="pill">${f?esc(f.name):'?'}</span> → <span class="pill">${to?esc(to.name):'?'}</span></td><td class="muted">${fmtUAH(t.amount_uah)}</td></tr>`;
   }).join(''):'<tr><td colspan="6" class="empty">Ще немає операцій</td></tr>';
 }
 document.getElementById('ovPeriod').addEventListener('change',()=>{const c=document.getElementById('ovPeriod').value==='custom';document.getElementById('ovFrom').style.display=c?'inline-block':'none';document.getElementById('ovTo').style.display=c?'inline-block':'none';loadCashflow();});
@@ -555,7 +569,7 @@ function acctCard(a){
 function txRow(t,withSource){
   const a=acctById(t.account_id),c=catById(t.category_id),l=launchById(t.launch_id);
   return `<tr>
-   <td>${fmtDate(t.occurred_at)}</td>
+   <td>${fmtDT(t.occurred_ts,t.occurred_at)}</td>
    <td style="text-align:left">${t.is_internal?'<span class="badge" style="border-color:#888;color:#aaa">\ud83d\udd04 \u0432\u043d\u0443\u0442\u0440.</span> ':''}${esc(t.description||'—')}</td>
    <td class="muted">${esc(t.counterparty||'—')}</td>
    <td><span class="pill">${a?esc(a.icon+' '+a.name):'—'}</span></td>
@@ -595,7 +609,7 @@ function renderDiv(){
   let rows=DATA.transfers.filter(t=>divIds.includes(t.to_account_id));
   if(q)rows=rows.filter(t=>(t.description||'').toLowerCase().includes(q));
   document.querySelector('#tblDiv tbody').innerHTML=rows.length?rows.map(t=>{const f=acctById(t.from_account_id),to=acctById(t.to_account_id);
-    return `<tr><td>${fmtDate(t.occurred_at)}</td><td style="text-align:left">${esc(t.description||'Виплата дивідендів')}</td><td><span class="pill">${f?esc(f.name):'?'}</span></td><td><span class="pill">${to?esc(to.name):'?'}</span></td><td class="out">${fmtUAH(t.amount_uah)}</td><td class="act"><button class="iconbtn del" onclick="delTransfer('${t.id}')">🗑</button></td></tr>`;}).join(''):'<tr><td colspan="6" class="empty">Виплат ще не було</td></tr>';
+    return `<tr><td>${fmtDT(t.occurred_ts,t.occurred_at)}</td><td style="text-align:left">${esc(t.description||'Виплата дивідендів')}</td><td><span class="pill">${f?esc(f.name):'?'}</span></td><td><span class="pill">${to?esc(to.name):'?'}</span></td><td class="out">${fmtUAH(t.amount_uah)}</td><td class="act"><button class="iconbtn del" onclick="delTransfer('${t.id}')">🗑</button></td></tr>`;}).join(''):'<tr><td colspan="6" class="empty">Виплат ще не було</td></tr>';
 }
 document.getElementById('searchDiv').addEventListener('input',renderDiv);
 
@@ -604,7 +618,7 @@ function renderTransfers(){
   let rows=DATA.transfers;
   if(q)rows=rows.filter(t=>(t.description||'').toLowerCase().includes(q));
   document.querySelector('#tblTr tbody').innerHTML=rows.length?rows.map(t=>{const f=acctById(t.from_account_id),to=acctById(t.to_account_id);
-    return `<tr><td>${fmtDate(t.occurred_at)}</td><td style="text-align:left">${t.is_internal?'<span class="badge" style="border-color:#888;color:#aaa">\ud83d\udd04 \u0432\u043d\u0443\u0442\u0440.</span> ':''}${esc(t.description||'—')}</td><td><span class="pill">${f?esc(f.name):'?'}</span></td><td><span class="pill">${to?esc(to.name):'?'}</span></td><td class="muted">${t.fee_uah>0?fmtUAH(t.fee_uah):'—'}</td><td>${fmtUAH(t.amount_uah)}</td><td class="act"><button class="iconbtn del" onclick="delTransfer('${t.id}')">🗑</button></td></tr>`;}).join(''):'<tr><td colspan="7" class="empty">Переказів ще немає</td></tr>';
+    return `<tr><td>${fmtDT(t.occurred_ts,t.occurred_at)}</td><td style="text-align:left">${t.is_internal?'<span class="badge" style="border-color:#888;color:#aaa">\ud83d\udd04 \u0432\u043d\u0443\u0442\u0440.</span> ':''}${esc(t.description||'—')}</td><td><span class="pill">${f?esc(f.name):'?'}</span></td><td><span class="pill">${to?esc(to.name):'?'}</span></td><td class="muted">${t.fee_uah>0?fmtUAH(t.fee_uah):'—'}</td><td>${fmtUAH(t.amount_uah)}</td><td class="act"><button class="iconbtn del" onclick="delTransfer('${t.id}')">🗑</button></td></tr>`;}).join(''):'<tr><td colspan="7" class="empty">Переказів ще немає</td></tr>';
 }
 document.getElementById('searchTr').addEventListener('input',renderTransfers);
 
@@ -794,6 +808,21 @@ async function saveBank(){
     if(r.error) throw r.error; closeModal('modalBank'); await loadBanks(); }catch(e){ showErr('bankErr',e.message||e); }
 }
 async function delBank(id){ if(!confirm('Видалити підключення?')) return; try{ const r=await sb.from('kasa_bank_creds').delete().eq('id',id); if(r.error) throw r.error; await loadBanks(); }catch(e){ alert(e.message||e); } }
+
+async function doSearch(){
+  const text=document.getElementById('schText').value.trim();
+  const min=document.getElementById('schMin').value!==''?Number(document.getElementById('schMin').value):null;
+  const max=document.getElementById('schMax').value!==''?Number(document.getElementById('schMax').value):null;
+  const tb=document.querySelector('#tblSearch tbody'); tb.innerHTML='<tr><td colspan="5" class="empty">пошук…</td></tr>';
+  try{ const r=await sb.rpc('kasa_search',{p_text:text||null,p_min:min,p_max:max,p_limit:300}); if(r.error) throw r.error;
+    const rows=r.data||[];
+    tb.innerHTML=rows.length?rows.map(t=>{const a=acctById(t.account_id);
+      return `<tr><td>${fmtDT(t.occurred_ts,t.occurred_at)}</td><td style="text-align:left">${t.is_internal?'<span class="badge" style="border-color:#888;color:#aaa">🔄</span> ':''}${esc(t.description||'—')}</td><td class="muted">${esc(t.counterparty||'—')}</td><td><span class="pill">${a?esc(a.icon+' '+a.name):'—'}</span></td><td class="${t.direction==='in'?'in':'out'}">${t.direction==='in'?'+':'−'}${fmtUAH(t.amount_uah)}</td></tr>`;
+    }).join(''):'<tr><td colspan="5" class="empty">нічого не знайдено</td></tr>';
+  }catch(e){ tb.innerHTML='<tr><td colspan="5" class="empty">помилка: '+esc(e.message||e)+'</td></tr>'; }
+}
+function clearSearch(){document.getElementById('schText').value='';document.getElementById('schMin').value='';document.getElementById('schMax').value='';document.querySelector('#tblSearch tbody').innerHTML='<tr><td colspan="5" class="empty">введи запит і натисни «Знайти»</td></tr>';}
+window.doSearch=doSearch; window.clearSearch=clearSearch;
 
 // ---- auth gate ----
 async function boot(user){
