@@ -412,7 +412,8 @@ function balanceOf(accId){
   }
   return b;
 }
-const bookTotal=(kind)=>DATA.accounts.filter(a=>a.kind===kind).reduce((s,a)=>s+balanceOf(a.id),0);
+const realBal=(a)=>a.api_balance!=null?Number(a.api_balance):balanceOf(a.id);
+const bookTotal=(kind)=>DATA.accounts.filter(a=>a.kind===kind&&a.is_active).reduce((s,a)=>s+realBal(a),0);
 
 // ---- tabs ----
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
@@ -505,9 +506,17 @@ function renderOverview(){
 document.getElementById('ovPeriod').addEventListener('change',renderOverview);
 
 function acctCard(a){
-  const bal=balanceOf(a.id);
-  const bk=a.bank?`<span class="badge ${a.bank}">${a.bank}</span>`:'';
-  return `<div class="acct"><div class="nm">${esc(a.icon||'🏦')} ${esc(a.name)} ${bk}</div><div class="bal">${fmtUAH(bal)}</div><div class="meta">${a.kind}${a.is_active?'':' · неактивний'}</div></div>`;
+  const ops=balanceOf(a.id);
+  const real=a.api_balance!=null?Number(a.api_balance):null;
+  const shown=real!=null?real:ops;
+  const bcls=a.bank==='monobank'?'mono':(a.bank==='privatbank'?'privat':(a.bank||''));
+  const bk=a.bank?`<span class="badge ${bcls}">${a.bank}</span>`:'';
+  let extra;
+  if(real!=null){ const diff=Math.round(real-ops);
+    extra = Math.abs(diff)>1 ? `<div class="meta" style="color:#fbbf24">\u26a0 \u0440\u043e\u0437\u0431\u0456\u0436\u043d\u0456\u0441\u0442\u044c \u0437 \u043e\u043f\u0435\u0440\u0430\u0446\u0456\u044f\u043c\u0438: ${diff>0?'+':''}${fmtUAH(diff)}</div>`
+      : `<div class="meta" style="color:#34d399">\u2713 \u0437\u0431\u0456\u0433\u0430\u0454\u0442\u044c\u0441\u044f</div>`;
+  } else { extra=`<div class="meta">\u0437\u0430 \u043e\u043f\u0435\u0440\u0430\u0446\u0456\u044f\u043c\u0438</div>`; }
+  return `<div class="acct"><div class="nm">${esc(a.icon||'🏦')} ${esc(a.name)} ${bk}</div><div class="bal">${fmtUAH(shown)}</div>${extra}<div class="meta">${a.kind}${a.is_active?'':' · \u043d\u0435\u0430\u043a\u0442\u0438\u0432\u043d\u0438\u0439'}</div></div>`;
 }
 function txRow(t,withSource){
   const a=acctById(t.account_id),c=catById(t.category_id),l=launchById(t.launch_id);
@@ -570,7 +579,7 @@ function renderAccounts(){
    <td style="text-align:left"><b>${esc(a.icon||'')} ${esc(a.name)}</b></td><td><span class="pill">${a.kind}</span></td>
    <td>${a.bank?`<span class="badge ${a.bank}">${a.bank}</span>`:'—'}</td>
    <td>${fmtUAH(a.opening_balance)}</td><td>${fmtDate(a.opening_date)}</td>
-   <td><b>${fmtUAH(balanceOf(a.id))}</b></td><td>${a.is_active?'✅':'⛔'}</td>
+   <td><b>${fmtUAH(realBal(a))}</b></td><td>${a.is_active?'✅':'⛔'}</td>
    <td class="act"><button class="iconbtn" onclick="editAccount('${a.id}')">✎</button></td></tr>`).join('')||'<tr><td colspan="8" class="empty">Немає рахунків</td></tr>';
 }
 
