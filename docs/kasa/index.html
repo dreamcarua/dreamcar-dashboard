@@ -128,6 +128,7 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
     <button class="tab" data-pane="div">💰 Дивіденди <span class="cnt" id="c-div">…</span></button>
     <button class="tab" data-pane="transfers">🔄 Перекази <span class="cnt" id="c-tr">…</span></button>
     <button class="tab" data-pane="accounts">⚙️ Рахунки <span class="cnt" id="c-acc">…</span></button>
+    <button class="tab" data-pane="banks">🔑 Банки <span class="cnt" id="c-banks">…</span></button>
   </div>
 
   <!-- OVERVIEW -->
@@ -214,6 +215,14 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
     <div class="toolbar"><div class="grp"><b style="font-family:'Oswald';font-size:16px">Рахунки та книги</b></div><button class="btn" onclick="openAcct()">+ Рахунок</button></div>
     <div class="tbl-card"><table id="tblAcc"><thead><tr>
       <th style="text-align:left">Назва</th><th>Тип</th><th>Банк</th><th>Старт. баланс</th><th>Старт. дата</th><th>Поточний баланс</th><th>Активний</th><th>Дії</th>
+    </tr></thead><tbody></tbody></table></div>
+  </div>
+  <!-- BANKS -->
+  <div class="pane" id="pane-banks">
+    <div class="note warn">🔒 Тут зберігаються токени банків (лише ви двоє, RLS). Синк автоматичний кожні 10 хв. monobank — особистий токен з api.monobank.ua (свій на кожен ФОП). Приват — id+token з Автоклієнта Приват24 Бізнес.</div>
+    <div class="toolbar"><div class="grp"><b style="font-family:'Oswald';font-size:16px">Банківські підключення</b></div><button class="btn" onclick="openBank()">+ Підключення</button></div>
+    <div class="tbl-card"><table id="tblBanks"><thead><tr>
+      <th style="text-align:left">Банк</th><th>ФОП / лейбл</th><th>Токен</th><th>Privat ID</th><th>Активний</th><th>Статус синку</th><th>Дії</th>
     </tr></thead><tbody></tbody></table></div>
   </div>
 </div>
@@ -304,6 +313,19 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
   <div class="modal-actions"><button class="btn ghost" onclick="closeModal('modalImp')">Скасувати</button><button class="btn green" id="impBtn" style="display:none" onclick="runImport()">Імпортувати</button></div>
 </div></div>
 
+<!-- MODAL: bank cred -->
+<div class="modal" id="modalBank"><div class="modal-card">
+  <h3 id="bankTitle">Нове підключення</h3><div id="bankErr"></div>
+  <div class="field-row">
+    <div class="field"><label>Банк *</label><select id="bankBank" onchange="bankToggle()"><option value="monobank">monobank</option><option value="privatbank">ПриватБанк</option></select></div>
+    <div class="field"><label>ФОП / лейбл *</label><input id="bankLabel" type="text" placeholder="напр. Спірін"></div>
+  </div>
+  <div class="field" id="bankPidWrap" style="display:none"><label>Privat Автоклієнт ID *</label><input id="bankPid" type="text"></div>
+  <div class="field"><label id="bankTokLbl">Токен *</label><input id="bankToken" type="text" placeholder="вставити токен"></div>
+  <div class="field"><label>Активний</label><select id="bankActive"><option value="true">Так</option><option value="false">Ні</option></select></div>
+  <div class="modal-actions"><button class="btn ghost" onclick="closeModal('modalBank')">Скасувати</button><button class="btn" onclick="saveBank()">Зберегти</button></div>
+</div></div>
+
 <script>
 const ALLOWED = ['1avrybak@gmail.com','dreamcarua@gmail.com'];
 let sb=null, ME=null;
@@ -369,7 +391,7 @@ async function loadAll(){
 }
 
 function renderAll(){
-  renderKpis(); renderOverview(); renderBank(); renderCash(); renderDiv(); renderTransfers(); renderAccounts(); populateSelects();
+  renderKpis(); renderOverview(); renderBank(); renderCash(); renderDiv(); renderTransfers(); renderAccounts(); populateSelects(); loadBanks();
   document.getElementById('c-bank').textContent=DATA.accounts.filter(a=>a.kind==='bank').length;
   document.getElementById('c-cash').textContent=DATA.accounts.filter(a=>a.kind==='cash').length;
   document.getElementById('c-div').textContent=DATA.accounts.filter(a=>a.kind==='dividends').length;
@@ -631,7 +653,47 @@ async function runImport(){
     if(r.error)throw r.error;closeModal('modalImp');alert(`Імпортовано (дублі пропущені). Рядків оброблено: ${payload.length}`);await loadAll();}catch(e){showErr('impErr',e.message||e);}
 }
 
-Object.assign(window,{loadAll,openTxModal,editTransaction,saveTx,delTx,openTransfer,saveTransfer,delTransfer,openAcct,editAccount,saveAcct,openImport,parseImport,runImport,closeModal,setDir});
+Object.assign(window,{loadAll,openTxModal,editTransaction,saveTx,delTx,openTransfer,saveTransfer,delTransfer,openAcct,editAccount,saveAcct,openImport,parseImport,runImport,closeModal,setDir,openBank,editBank,saveBank,delBank,bankToggle});
+
+// ---- banks (creds) ----
+let BANKS=[], editBankRow=null;
+async function loadBanks(){
+  try{ const r=await sb.from('kasa_bank_creds').select('*').order('bank').order('label');
+    if(r.error) throw r.error; BANKS=r.data||[]; renderBanks();
+  }catch(e){ /* нема таблиці/доступу */ }
+}
+function renderBanks(){
+  const el=document.getElementById('c-banks'); if(el) el.textContent=BANKS.length;
+  const tb=document.querySelector('#tblBanks tbody'); if(!tb) return;
+  tb.innerHTML=BANKS.length?BANKS.map(b=>`<tr>
+    <td style="text-align:left"><span class="badge ${b.bank==='monobank'?'mono':'privat'}">${esc(b.bank)}</span></td>
+    <td>${esc(b.label)}</td>
+    <td class="muted">${b.token?'\u2022\u2022\u2022'+esc(String(b.token).slice(-4)):'\u2014'}</td>
+    <td class="muted">${esc(b.privat_id||'\u2014')}</td>
+    <td>${b.is_active?'\u2705':'\u26d4'}</td>
+    <td class="muted" style="font-size:11px">${esc(b.last_status||'\u2014')}${b.last_inc?'<br>'+fmtDate(String(b.last_inc).slice(0,10)):''}</td>
+    <td class="act"><button class="iconbtn" onclick="editBank('${b.id}')">\u270e</button><button class="iconbtn del" onclick="delBank('${b.id}')">\ud83d\uddd1</button></td>
+  </tr>`).join(''):'<tr><td colspan="7" class="empty">Немає підключень. Додай 2 monobank + 2 privat.</td></tr>';
+}
+function bankToggle(){ const isP=document.getElementById('bankBank').value==='privatbank';
+  document.getElementById('bankPidWrap').style.display=isP?'block':'none';
+  document.getElementById('bankTokLbl').textContent=isP?'Автоклієнт Token *':'Особистий токен *'; }
+function openBank(){ editBankRow=null; document.getElementById('bankTitle').textContent='Нове підключення'; showErr('bankErr',null);
+  document.getElementById('bankBank').value='monobank'; document.getElementById('bankLabel').value=''; document.getElementById('bankPid').value=''; document.getElementById('bankToken').value=''; document.getElementById('bankActive').value='true'; bankToggle(); openModal('modalBank'); }
+function editBank(id){ const b=BANKS.find(x=>x.id===id); if(!b) return; editBankRow=b;
+  document.getElementById('bankTitle').textContent='Редагувати: '+b.label; showErr('bankErr',null);
+  document.getElementById('bankBank').value=b.bank; document.getElementById('bankLabel').value=b.label; document.getElementById('bankPid').value=b.privat_id||''; document.getElementById('bankToken').value=b.token||''; document.getElementById('bankActive').value=String(b.is_active); bankToggle(); openModal('modalBank'); }
+async function saveBank(){
+  const bank=document.getElementById('bankBank').value, label=document.getElementById('bankLabel').value.trim();
+  const token=document.getElementById('bankToken').value.trim(), pid=document.getElementById('bankPid').value.trim();
+  if(!label) return showErr('bankErr','Вкажи лейбл (ФОП)');
+  if(!token) return showErr('bankErr','Встав токен');
+  if(bank==='privatbank' && !pid) return showErr('bankErr','Privat потребує Автоклієнт ID');
+  const payload={bank,label,token,privat_id:bank==='privatbank'?pid:null,is_active:document.getElementById('bankActive').value==='true'};
+  try{ const r=editBankRow?await sb.from('kasa_bank_creds').update(payload).eq('id',editBankRow.id):await sb.from('kasa_bank_creds').insert(payload);
+    if(r.error) throw r.error; closeModal('modalBank'); await loadBanks(); }catch(e){ showErr('bankErr',e.message||e); }
+}
+async function delBank(id){ if(!confirm('Видалити підключення?')) return; try{ const r=await sb.from('kasa_bank_creds').delete().eq('id',id); if(r.error) throw r.error; await loadBanks(); }catch(e){ alert(e.message||e); } }
 
 // ---- auth gate ----
 async function boot(user){
