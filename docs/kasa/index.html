@@ -466,7 +466,7 @@ async function loadAll(){
     const [acc,tx,tr,cats,launches]=await Promise.all([
       sb.from('kasa_accounts').select('*').order('sort_order'),
       sb.from('kasa_transactions').select('id,account_id,direction,amount_uah,occurred_at,occurred_ts,description,counterparty,category_id,launch_id,source,external_id,is_internal,excl_pnl,div_to').order('occurred_ts',{ascending:false,nullsFirst:false}).limit(5000),
-      sb.from('kasa_transfers').select('id,from_account_id,to_account_id,amount_uah,occurred_at,occurred_ts,description,fee_uah').order('occurred_at',{ascending:false}).limit(2000),
+      sb.from('kasa_transfers').select('*').order('occurred_at',{ascending:false}).limit(2000),
       sb.from('cost_categories').select('id,code,name,icon').order('sort_order'),
       sb.from('launches').select('id,name,code,status,starts_on').order('starts_on',{ascending:false})
     ]);
