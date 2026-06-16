@@ -540,6 +540,40 @@ def build_signals(payload):
     sig.sort(key=lambda s: order.get(s['sev'], 3))
     return sig
 
+# ---------------- strategy structure (2026) ----------------
+STRATEGY_CAMPAIGNS = [
+    ('120249698602830624', '01 · Ядро', 'Advantage+ Sales · broad · A+A',
+     '70-80% бюджету. Головний драйвер. Увесь робочий креатив-пул (12-20). Highest Volume на старті → Highest Value, коли стабільно.'),
+    ('120249698605960624', '02 · Retargeting', 'Сайт 180д + гаряча 30д, excl. покупці',
+     '15-20%. Дожим теплих: дедлайн, соц-доказ, апсел токенів. Строгий таргет (A+A off).'),
+    ('120249698608790624', '03 · Prospecting', 'Broad, EXCL. усі наші аудиторії',
+     '5-10%. «Свіжа кров» — лише нові люди (виключені відвідувачі сайту + покупці), щоб алгоритм не крутився в нашій бульбашці.'),
+    ('120249698612830624', '04 · Testing', 'ABO малий · broad',
+     'Інкубатор нових концептів окремо від ядра. Переможців переносимо в Ядро.'),
+]
+STRATEGY_AUDIENCES = [
+    ('120249698494260624', 'Сайт · усі відвідувачі 180д', 'Retargeting + база для виключення'),
+    ('120249698499330624', 'Покупці 180д', 'Апсел токенів + виключення'),
+    ('120249698502970624', 'Сайт · гаряча 30д', 'Дожим гарячих'),
+]
+
+def build_strategy():
+    out = []
+    for cid, role, sub, desc in STRATEGY_CAMPAIGNS:
+        ent = fb_get(cid, {'fields': 'name,effective_status,daily_budget'}) or {}
+        item = {'id': cid, 'role': role, 'sub': sub, 'desc': desc,
+                'name': ent.get('name'), 'status': ent.get('effective_status'),
+                'daily_budget': round(_num(ent.get('daily_budget')) / 100) if ent.get('daily_budget') else None,
+                'spend': 0, 'purchases': 0, 'roas': 0, 'ctr': 0}
+        ins = fb_get(f'{cid}/insights', {'fields': 'spend,impressions,actions,purchase_roas,ctr', 'date_preset': 'maximum'})
+        if ins and ins.get('data'):
+            r = ins['data'][0]
+            item.update({'spend': round(_num(r.get('spend'))), 'purchases': _actions_purchases(r.get('actions')),
+                         'roas': round(_roas(r.get('purchase_roas')), 2), 'ctr': round(_num(r.get('ctr')), 2)})
+        out.append(item)
+        time.sleep(0.3)
+    return {'campaigns': out, 'audiences': [{'id': a, 'name': n, 'use': u} for a, n, u in STRATEGY_AUDIENCES]}
+
 # ---------------- main ----------------
 def build_project(proj):
     since, until = proj['date_start'], proj['date_end']
@@ -616,6 +650,10 @@ def main():
         'projects': built,
     }
     payload['signals'] = build_signals(payload)
+    try:
+        payload['strategy'] = build_strategy()
+    except Exception as e:
+        log(f'  ⚠ strategy failed: {e}'); payload['strategy'] = None
     os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
     with open(OUT_PATH, 'w', encoding='utf-8') as f:
         json.dump(payload, f, ensure_ascii=False, indent=1)
