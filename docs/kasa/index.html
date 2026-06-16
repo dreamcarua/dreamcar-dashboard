@@ -218,12 +218,6 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
     <div class="tbl-card" style="margin-bottom:18px"><table id="tblIntFlow"><thead><tr>
       <th style="text-align:left">Рахунок</th><th>Надійшло (внутр.)</th><th>Відправлено (внутр.)</th><th>Нетто</th>
     </tr></thead><tbody><tr><td colspan="4" class="empty">завантаження…</td></tr></tbody></table></div>
-    <div class="toolbar"><div class="grp"><b style="font-family:'Oswald';font-size:16px">Останні операції</b></div></div>
-    <div class="tbl-card">
-      <table id="tblRecent"><thead><tr>
-        <th>Дата</th><th style="text-align:left">Опис</th><th>Рахунок</th><th>Категорія</th><th>Проєкт</th><th>Сума</th>
-      </tr></thead><tbody><tr><td colspan="6" class="empty">завантаження…</td></tr></tbody></table>
-    </div>
     <div class="toolbar" style="margin-top:10px"><div class="grp"><b style="font-family:'Oswald';font-size:16px">Пошук операцій</b></div></div>
     <div class="toolbar">
       <input class="search" id="schText" placeholder="🔍 слово в описі / контрагент…" style="max-width:340px" onkeydown="if(event.key==='Enter')doSearch()">
@@ -235,6 +229,12 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
       </div>
     </div>
     <div class="tbl-card"><table id="tblSearch"><thead><tr>
+    <div class="toolbar"><div class="grp"><b style="font-family:'Oswald';font-size:16px">Останні операції</b></div></div>
+    <div class="tbl-card">
+      <table id="tblRecent"><thead><tr>
+        <th>Дата</th><th style="text-align:left">Опис</th><th>Рахунок</th><th>Категорія</th><th>Проєкт</th><th>Сума</th>
+      </tr></thead><tbody><tr><td colspan="6" class="empty">завантаження…</td></tr></tbody></table>
+    </div>
       <th>Дата / час</th><th style="text-align:left">Опис</th><th>Контрагент</th><th>Рахунок</th><th>Сума</th>
     </tr></thead><tbody><tr><td colspan="5" class="empty">введи запит і натисни «Знайти»</td></tr></tbody></table></div>
   </div>
@@ -257,6 +257,7 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
     <div class="tbl-card"><table id="tblBank"><thead><tr>
       <th>Дата</th><th style="text-align:left">Опис</th><th>Контрагент</th><th>Рахунок</th><th>Категорія</th><th>Проєкт</th><th>Джерело</th><th>Сума</th><th>Дії</th>
     </tr></thead><tbody></tbody></table></div>
+    <div id="pager-bank"></div>
   </div>
 
   <!-- CASH -->
@@ -269,6 +270,7 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
     <div class="tbl-card"><table id="tblCash"><thead><tr>
       <th>Дата</th><th style="text-align:left">Опис</th><th>Контрагент</th><th>Рахунок</th><th>Категорія</th><th>Проєкт</th><th>Сума</th><th>Дії</th>
     </tr></thead><tbody></tbody></table></div>
+    <div id="pager-cash"></div>
   </div>
 
   <!-- DIVIDENDS -->
@@ -282,6 +284,7 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
     <div class="tbl-card"><table id="tblDiv"><thead><tr>
       <th>Дата</th><th style="text-align:left">Опис</th><th>Звідки</th><th>Кому</th><th>Сума</th><th>Дії</th>
     </tr></thead><tbody></tbody></table></div>
+    <div id="pager-div"></div>
   </div>
 
   <!-- TRANSFERS -->
@@ -293,6 +296,7 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
     <div class="tbl-card"><table id="tblTr"><thead><tr>
       <th>Дата</th><th style="text-align:left">Опис</th><th>Звідки</th><th>Кому</th><th>Комісія</th><th>Сума</th><th>Дії</th>
     </tr></thead><tbody></tbody></table></div>
+    <div id="pager-tr"></div>
   </div>
 
   <!-- ACCOUNTS -->
@@ -595,6 +599,13 @@ function txRow(t,withSource){
    <td class="act"><button class="iconbtn" onclick="editTransaction('${t.id}')">✎</button><button class="iconbtn del" onclick="delTx('${t.id}')">🗑</button></td>
   </tr>`;
 }
+const PG={bank:{page:1,size:50},cash:{page:1,size:50},div:{page:1,size:50},tr:{page:1,size:50}};
+const PG_RENDER={bank:()=>renderBank(),cash:()=>renderCash(),div:()=>renderDiv(),tr:()=>renderTransfers()};
+function pageSlice(key,rows,sig){ const st=PG[key]; if(sig!==undefined){ if(st._sig!==undefined&&st._sig!==sig)st.page=1; st._sig=sig; } const total=rows.length; const pages=Math.max(1,Math.ceil(total/st.size)); if(st.page>pages)st.page=pages; if(st.page<1)st.page=1; renderPager(key,total,pages); return rows.slice((st.page-1)*st.size, st.page*st.size); }
+function renderPager(key,total,pages){ const el=document.getElementById('pager-'+key); if(!el)return; const st=PG[key]; if(!total){ el.innerHTML=''; return; } const from=(st.page-1)*st.size+1, to=Math.min(total,st.page*st.size); el.innerHTML=`<div style="display:flex;align-items:center;gap:8px;justify-content:flex-end;padding:10px 4px;flex-wrap:wrap"><span class="muted">Рядків:</span><select class="selin" style="width:74px" onchange="setPageSize('${key}',this.value)">${[10,50,100].map(n=>`<option value="${n}" ${st.size===n?'selected':''}>${n}</option>`).join('')}</select><span class="muted">${from}\u2013${to} з ${total}</span><button class="btn ghost" ${st.page<=1?'disabled':''} onclick="goPage('${key}',1)">\u00ab</button><button class="btn ghost" ${st.page<=1?'disabled':''} onclick="goPage('${key}',${st.page-1})">\u2039</button><span style="min-width:60px;text-align:center">${st.page} / ${pages}</span><button class="btn ghost" ${st.page>=pages?'disabled':''} onclick="goPage('${key}',${st.page+1})">\u203a</button><button class="btn ghost" ${st.page>=pages?'disabled':''} onclick="goPage('${key}',${pages})">\u00bb</button></div>`; }
+function setPageSize(key,v){ PG[key].size=Number(v); PG[key].page=1; PG_RENDER[key](); }
+function goPage(key,p){ PG[key].page=p; PG_RENDER[key](); }
+window.setPageSize=setPageSize; window.goPage=goPage;
 function renderBank(){
   document.getElementById('bankAccts').innerHTML=DATA.accounts.filter(a=>a.kind==='bank'&&a.is_active).map(acctCard).join('')||'<div class="muted">Банк-рахунки зʼявляться після синку API</div>';
   const f=document.getElementById('bankAcctFilter');const cur=f.value;
@@ -605,7 +616,7 @@ function renderBank(){
   if(q)rows=rows.filter(t=>(t.description||'').toLowerCase().includes(q)||(t.counterparty||'').toLowerCase().includes(q));
   const dir=document.getElementById('bankDirFilter').value; if(dir)rows=rows.filter(t=>t.direction===dir);
   const br=bankRange(); if(br)rows=rows.filter(t=>{const d=t.occurred_ts?t.occurred_ts.slice(0,10):t.occurred_at; return d>=br.from&&d<=br.to;});
-  document.querySelector('#tblBank tbody').innerHTML=rows.length?rows.slice(0,1500).map(t=>txRow(t,true)).join(''):'<tr><td colspan="9" class="empty">Немає операцій</td></tr>';
+  const pgB=pageSlice('bank',rows,[f.value,q,dir,br?br.from+br.to:''].join('|'));document.querySelector('#tblBank tbody').innerHTML=rows.length?pgB.map(t=>txRow(t,true)).join(''):'<tr><td colspan="9" class="empty">Немає операцій</td></tr>';
 }
 ['searchBank'].forEach(id=>document.getElementById(id).addEventListener('input',renderBank));
 document.getElementById('bankAcctFilter').addEventListener('change',renderBank);
@@ -620,7 +631,7 @@ function renderCash(){
   const q=(document.getElementById('searchCash').value||'').toLowerCase();
   let rows=DATA.tx.filter(t=>{const a=acctById(t.account_id);return a&&a.kind==='cash';});
   if(q)rows=rows.filter(t=>(t.description||'').toLowerCase().includes(q)||(t.counterparty||'').toLowerCase().includes(q));
-  document.querySelector('#tblCash tbody').innerHTML=rows.length?rows.map(t=>txRow(t,false)).join(''):'<tr><td colspan="8" class="empty">Немає готівкових операцій</td></tr>';
+  const pgC=pageSlice('cash',rows,q);document.querySelector('#tblCash tbody').innerHTML=rows.length?pgC.map(t=>txRow(t,false)).join(''):'<tr><td colspan="8" class="empty">Немає готівкових операцій</td></tr>';
 }
 document.getElementById('searchCash').addEventListener('input',renderCash);
 
@@ -632,7 +643,7 @@ function renderDiv(){
   const q=(document.getElementById('searchDiv').value||'').toLowerCase();
   let rows=DATA.tx.filter(t=>t.div_to);
   if(q)rows=rows.filter(t=>(t.description||'').toLowerCase().includes(q));
-  document.querySelector('#tblDiv tbody').innerHTML=rows.length?rows.map(t=>{const a=acctById(t.account_id);const who=t.div_to==='split'?'Порівну':(t.div_to==='vadym'?'Вадим':'Артем');
+  const pgD=pageSlice('div',rows,q);document.querySelector('#tblDiv tbody').innerHTML=rows.length?pgD.map(t=>{const a=acctById(t.account_id);const who=t.div_to==='split'?'Порівну':(t.div_to==='vadym'?'Вадим':'Артем');
     return `<tr><td>${fmtDT(t.occurred_ts,t.occurred_at)}</td><td style="text-align:left">${esc(t.description||'Виплата дивідендів')}</td><td><span class="pill">${a?esc(a.name):'?'}</span></td><td>${who}</td><td class="out">${fmtUAH(t.amount_uah)}</td><td class="act"><button class="iconbtn" onclick="editTransaction('${t.id}')">✎</button></td></tr>`;}).join(''):'<tr><td colspan="6" class="empty">Виплат дивідендів ще не було</td></tr>';
 }
 document.getElementById('searchDiv').addEventListener('input',renderDiv);
@@ -641,7 +652,7 @@ function renderTransfers(){
   const q=(document.getElementById('searchTr').value||'').toLowerCase();
   let rows=DATA.transfers;
   if(q)rows=rows.filter(t=>(t.description||'').toLowerCase().includes(q));
-  document.querySelector('#tblTr tbody').innerHTML=rows.length?rows.map(t=>{const f=acctById(t.from_account_id),to=acctById(t.to_account_id);
+  const pgT=pageSlice('tr',rows,q);document.querySelector('#tblTr tbody').innerHTML=rows.length?pgT.map(t=>{const f=acctById(t.from_account_id),to=acctById(t.to_account_id);
     return `<tr><td>${fmtDT(t.occurred_ts,t.occurred_at)}</td><td style="text-align:left">${t.is_internal?'<span class="badge" style="border-color:#888;color:#aaa">\ud83d\udd04 \u0432\u043d\u0443\u0442\u0440.</span> ':''}${t.div_to?`<span class="badge" style="border-color:#caa600;color:#ffd633">💰 ${t.div_to==='split'?'Порівну':(t.div_to==='vadym'?'Вадим':'Артем')}</span> `:(t.excl_pnl?'<span class="badge" style="border-color:#888;color:#aaa">↪ поза P&L</span> ':'')}${esc(t.description||'—')}</td><td><span class="pill">${f?esc(f.name):'?'}</span></td><td><span class="pill">${to?esc(to.name):'?'}</span></td><td class="muted">${t.fee_uah>0?fmtUAH(t.fee_uah):'—'}</td><td>${fmtUAH(t.amount_uah)}</td><td class="act"><button class="iconbtn del" onclick="delTransfer('${t.id}')">🗑</button></td></tr>`;}).join(''):'<tr><td colspan="7" class="empty">Переказів ще немає</td></tr>';
 }
 document.getElementById('searchTr').addEventListener('input',renderTransfers);
