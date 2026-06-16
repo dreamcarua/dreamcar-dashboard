@@ -344,6 +344,28 @@ def real_by_placement(since, until, top=8):
     out.sort(key=lambda x: -x['revenue'])
     return out[:top]
 
+def account_range(since, until):
+    """Зведення по акаунту за діапазон (для тижневих порівнянь)."""
+    px = account_pixel(since, until) or {}
+    sp = px.get('spend') or 0
+    real = real_ad_revenue(since, until)
+    return {'from': since, 'to': until, 'spend': round(sp), 'purchases': px.get('purchases'),
+            'pixel_roas': px.get('pixel_roas'), 'cpa': px.get('cpa'),
+            'real_revenue': real, 'real_roas': round(real / sp, 2) if sp else None}
+
+def week_compare(y_ord):
+    """7 днів, що завершуються вчора, проти попередніх 7 днів."""
+    def ds(o): return datetime.fromordinal(o).strftime('%Y-%m-%d')
+    this_ = account_range(ds(y_ord - 6), ds(y_ord))
+    prev_ = account_range(ds(y_ord - 13), ds(y_ord - 7))
+    def ch(a, b): return round((a - b) / b * 100, 1) if (a and b) else None
+    return {'this': this_, 'prev': prev_, 'deltas': {
+        'spend': ch(this_['spend'], prev_['spend']),
+        'real_roas': ch(this_['real_roas'], prev_['real_roas']),
+        'pixel_roas': ch(this_['pixel_roas'], prev_['pixel_roas']),
+        'cpa': ch(this_['cpa'], prev_['cpa']),
+        'purchases': ch(this_['purchases'], prev_['purchases'])}}
+
 def daily_snapshot(active_names):
     """Зріз за ВЧОРА (повна доба, Київ) — account-level Meta + реал по UTM + РЕАЛЬНІ оголошення за добу.
     Лідер/слабкі рахуються з ad-level за вчора (не з кумулятиву циклу — інакше у зріз протікають
@@ -384,6 +406,7 @@ def daily_snapshot(active_names):
         'real_ad_revenue': real,
         'real_ad_roas': round(real / spend, 2) if spend else None,
         'deltas': deltas,
+        'week': week_compare(y),
         'real_by_placement': real_by_placement(yd, yd),
         'active_cycles': active_names,
         'top_creatives': top[:3],
@@ -480,6 +503,43 @@ def recommend(p):
     recs.sort(key=lambda r: order.get(r['sev'], 3))
     return recs
 
+def build_signals(payload):
+    """Консолідований блок сигналів: акаунт-рівень (тиждень-до-тижня, денні зриви) +
+    критичні/важливі рекомендації поточних циклів. Сортування за серйозністю."""
+    sig = []
+    daily = payload.get('daily') or {}
+    wk = daily.get('week') or {}
+    t, p = wk.get('this') or {}, wk.get('prev') or {}
+    wd = wk.get('deltas') or {}
+    # тижневий реал-ROAS
+    if t.get('real_roas') and p.get('real_roas'):
+        ch = wd.get('real_roas')
+        if ch is not None and ch <= -25:
+            sig.append({'sev': 'cri', 'scope': 'Акаунт · тиждень',
+                        'text': f'Реал ROAS тижня {t["real_roas"]} vs попереднього {p["real_roas"]} ({ch:.0f}%) — перевірити креативи/аудиторію/бюджет.'})
+        elif ch is not None and ch >= 25:
+            sig.append({'sev': 'inf', 'scope': 'Акаунт · тиждень',
+                        'text': f'Реал ROAS тижня зріс до {t["real_roas"]} (+{ch:.0f}%) — є простір масштабувати переможців.'})
+    # тижневий CPA
+    if t.get('cpa') and p.get('cpa') and wd.get('cpa') is not None and wd['cpa'] >= 30:
+        sig.append({'sev': 'mod', 'scope': 'Акаунт · тиждень',
+                    'text': f'CPA тижня {t["cpa"]} ₴ vs {p["cpa"]} ₴ (+{wd["cpa"]:.0f}%) — залучення дорожчає.'})
+    # денний зрив pixel ROAS
+    dd = daily.get('deltas') or {}
+    if dd.get('pixel_roas') is not None and dd['pixel_roas'] <= -30:
+        sig.append({'sev': 'mod', 'scope': f'Вчора ({daily.get("date","")[5:]})',
+                    'text': f'Pixel ROAS вчора впав на {abs(dd["pixel_roas"]):.0f}% до дня раніше — стежити, чи не тренд.'})
+    # рекомендації поточних циклів (cri/mod)
+    for pr in payload.get('projects', []):
+        if not pr.get('is_current'):
+            continue
+        for r in (pr.get('recommendations') or []):
+            if r.get('sev') in ('cri', 'mod'):
+                sig.append({'sev': r['sev'], 'scope': pr['name'], 'text': r['text']})
+    order = {'cri': 0, 'mod': 1, 'inf': 2}
+    sig.sort(key=lambda s: order.get(s['sev'], 3))
+    return sig
+
 # ---------------- main ----------------
 def build_project(proj):
     since, until = proj['date_start'], proj['date_end']
@@ -555,6 +615,7 @@ def main():
         'daily': daily,
         'projects': built,
     }
+    payload['signals'] = build_signals(payload)
     os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
     with open(OUT_PATH, 'w', encoding='utf-8') as f:
         json.dump(payload, f, ensure_ascii=False, indent=1)

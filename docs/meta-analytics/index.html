@@ -146,6 +146,7 @@
 
   <div class="tabs">
     <button class="tb on" data-tab="overview">🗂 Огляд</button>
+    <button class="tb" data-tab="signals">🚨 Сигнали</button>
     <button class="tb" data-tab="trends">📈 Тренди</button>
     <button class="tb" data-tab="segments">🎯 Сегменти</button>
     <button class="tb" data-tab="creatives">🎬 Креативи</button>
@@ -155,6 +156,7 @@
   </div>
 
   <div class="tabc on" id="tab-overview"></div>
+  <div class="tabc" id="tab-signals"></div>
   <div class="tabc" id="tab-trends"></div>
   <div class="tabc" id="tab-segments"></div>
   <div class="tabc" id="tab-creatives"></div>
@@ -188,7 +190,9 @@ function renderOverview(){
   const ps=visibleProjects();
   const tot=ps.reduce((a,p)=>({s:a.s+(p.spend||0),pu:a.pu+(p.purchases||0),pr:a.pr+(p.pixel_revenue||0),rr:a.rr+(p.real_ad_revenue||0)}),{s:0,pu:0,pr:0,rr:0});
   const avgPx=tot.s?tot.pr/tot.s:0, avgReal=tot.s?tot.rr/tot.s:0;
-  let h=`<div class="grid k4">
+  const sgN=(DATA.signals||[]).filter(s=>s.sev!=='inf').length;
+  const banner=sgN?`<div class="note" style="border-color:rgba(227,6,19,.4);background:rgba(227,6,19,.07);cursor:pointer" onclick="[...document.querySelectorAll('.tb')].find(b=>b.dataset.tab==='signals').click()"><b style="color:${C.red2}">🚨 ${sgN} сигнал(ів) потребують уваги</b> — натисни, щоб переглянути.</div>`:'';
+  let h=banner+`<div class="grid k4">
     <div class="card kpi"><div class="lab">Проєктів</div><div class="val">${ps.length}</div><div class="meta">у вибірці</div></div>
     <div class="card kpi"><div class="lab">Витрати</div><div class="val">${(tot.s/1e6).toFixed(2)}М ₴</div><div class="meta">сумарно</div></div>
     <div class="card kpi"><div class="lab">Сер. ROAS pixel</div><div class="val neu">${f2(avgPx)}</div><div class="meta">зважений</div></div>
@@ -209,6 +213,18 @@ function renderOverview(){
    options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{...gx,title:{display:true,text:'₴'}},y1:{position:'right',grid:{drawOnChartArea:false},min:0,title:{display:true,text:'ROAS'}},x:{...gx,ticks:{font:{size:9}}}}}});
 }
 
+/* ---------- SIGNALS ---------- */
+function renderSignals(){
+  const el=document.getElementById('tab-signals');
+  const sg=(DATA.signals||[]);
+  const n={cri:sg.filter(s=>s.sev==='cri').length,mod:sg.filter(s=>s.sev==='mod').length,inf:sg.filter(s=>s.sev==='inf').length};
+  let h=`<div class="note">Консолідовані сигнали по акаунту й активних циклах — оновлюються щодня. Тут <b>не</b> спам: усе зведено в одне місце. <b style="color:${C.red2}">🔴 ${n.cri}</b> · <b style="color:${C.gold}">🟡 ${n.mod}</b> · <b style="color:${C.blue}">ℹ️ ${n.inf}</b></div>`;
+  if(!sg.length){ h+=`<div class="rec inf">Критичних сигналів немає — показники в нормі. 👌</div>`; el.innerHTML=h; return; }
+  sg.forEach(s=>{ const mark=s.sev==='cri'?'🔴':s.sev==='mod'?'🟡':'ℹ️'; h+=`<div class="rec ${s.sev}"><span class="tag ${s.sev==='cri'?'t-cur':'t-arc'}" style="margin-right:8px">${s.scope}</span>${mark} ${s.text}</div>`; });
+  el.innerHTML=h;
+}
+function wkRow(lab,a,b,dl,invert){ const good=invert?(dl<0):(dl>=0); const col=(dl==null)?'#888':(good?C.green:C.red2); const d=(dl==null)?'—':((dl>0?'+':'')+dl.toFixed(0)+'%'); return `<tr><td>${lab}</td><td><b>${a}</b></td><td style="color:#888">${b}</td><td style="color:${col}">${d}</td></tr>`; }
+
 /* ---------- TRENDS ---------- */
 function fmtDelta(v){ if(v==null) return ''; const up=v>=0; return `<span style="color:${up?C.green:C.red2};font-size:11px;margin-left:5px">${up?'▲':'▼'}${Math.abs(v).toFixed(0)}%</span>`; }
 function renderTrends(){
@@ -223,6 +239,15 @@ function renderTrends(){
       <div class="card kpi"><div class="lab">ROAS pixel / реал</div><div class="val neu">${f2(dl.pixel_roas)} / <span class="up">${f2(dl.real_ad_roas)}</span>${fmtDelta(d.pixel_roas)}</div></div>
       <div class="card kpi"><div class="lab">CPA</div><div class="val">${f2(dl.cpa)} ₴${fmtDelta(d.cpa)}</div></div>
     </div>`;
+    const wk=dl.week;
+    if(wk&&wk.this){ const t=wk.this,p=wk.prev||{},wd=wk.deltas||{};
+      h+=`<div class="card scroll" style="margin-top:13px"><h3 style="margin:2px 0 8px">📅 7 днів vs попередні 7 днів</h3><table><thead><tr><th>Метрика</th><th>Цей тиждень</th><th>Минулий</th><th>Зміна</th></tr></thead><tbody>`
+        +wkRow('Витрати ₴',fmt(t.spend),fmt(p.spend),wd.spend)
+        +wkRow('Покупки',fmt(t.purchases),fmt(p.purchases),wd.purchases)
+        +wkRow('Pixel ROAS',f2(t.pixel_roas),f2(p.pixel_roas),wd.pixel_roas)
+        +wkRow('Реал ROAS (реклама)',f2(t.real_roas),f2(p.real_roas),wd.real_roas)
+        +wkRow('CPA ₴',f2(t.cpa),f2(p.cpa),wd.cpa,true)
+        +`</tbody></table></div>`; }
     const rc=dl.real_by_placement||[];
     if(rc.length){ h+=`<div class="card scroll" style="margin-top:13px"><h3 style="margin:2px 0 8px">💰 Реальна виручка по рекламних плейсментах (utm_medium, за ${(dl.date||'').slice(5)})</h3><div class="note" style="margin:0 0 8px">Лише реклама (placement-мітки Meta). Органіка бренд-акаунтів, Telegram, email — НЕ враховані.</div><table><thead><tr><th>Плейсмент</th><th>Оплат</th><th>Виручка ₴</th></tr></thead><tbody>`+rc.map(c=>`<tr><td>${c.placement}</td><td>${fmt(c.paid)}</td><td>${fmt(c.revenue)}</td></tr>`).join('')+`</tbody></table></div>`; }
   }
@@ -327,7 +352,7 @@ function renderFormula(){
   <div class="note">Формат: <b class="hl">2-3 вертикальні відео + 5-6 фото + 1 мем</b>. Гачок ≤3 сек, субтитри, дедлайн на фінальному кадрі. Тестувати креативи всередині одного ad set.</div>`;
 }
 
-const RENDER={overview:renderOverview,trends:renderTrends,segments:renderSegments,creatives:renderCreatives,reconcile:renderReconcile,recs:renderRecs,formula:renderFormula};
+const RENDER={overview:renderOverview,signals:renderSignals,trends:renderTrends,segments:renderSegments,creatives:renderCreatives,reconcile:renderReconcile,recs:renderRecs,formula:renderFormula};
 let curTab='overview';
 function renderAll(){ RENDER[curTab](); }
 
