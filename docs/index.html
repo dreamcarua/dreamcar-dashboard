@@ -1828,6 +1828,10 @@ const filters = {
 
 // 14.06.2026 #392.2 — MAIN_PROJECTS видалено (dead code після #98 — auto-fetch з public.launches).
 let __projectsList = []; // cached from dashboard_projects table
+// 16.06.2026 — TTL-based invalidation: SQL changes у dashboard_projects.deal_project_values
+// раніше не підхоплювалися до hard reload. Тепер refresh кожні 5 хв через setInterval у bootstrap().
+let __projectsListLoadedAt = 0;
+const __PROJECTS_LIST_TTL_MS = 5 * 60 * 1000;
 
 /* Активні розіграші — модель + start/end + project-substring у БД.
    Зберігаємо у localStorage щоб юзер міг редагувати через Settings. */
@@ -2217,7 +2221,7 @@ function autoSelectNewestProject() {
     const _today = todayYmd();
     if (_selProj && (_selProj.date_end || '') >= _today) return; // still active
     // Expired project — clear and auto-select fresh one
-    console.log('[dashboard] stale project filter cleared:', filters.project, 'ended:', _selProj && _selProj.date_end);
+    if (window.DEBUG) console.log('[dashboard] stale project filter cleared:', filters.project, 'ended:', _selProj && _selProj.date_end);
     filters.project = null;
   }
   if (!__projectsList || !__projectsList.length) return;
@@ -2255,7 +2259,7 @@ function autoSelectNewestProject() {
   const dr = $('#f-date-range'); if (dr) dr.value = 'custom';
   const cf = $('#cd-from'); if (cf) cf.value = filters.from;
   const ct = $('#cd-to'); if (ct) ct.value = filters.to;
-  console.log('[dashboard] auto-selected newest active project:', pick.code, filters.from, '→', filters.to);
+  if (window.DEBUG) console.log('[dashboard] auto-selected newest active project:', pick.code, filters.from, '→', filters.to);
 }
 
 /* ------------ Timezone helpers (Kyiv CET/CEST) ------------ */
@@ -2586,8 +2590,25 @@ async function loadProjects() {
       // Якщо filters змінилися — оновити render
       if (typeof renderRoute === 'function' && filters.project) renderRoute();
     }
+    // 16.06.2026 — mark cache as fresh для TTL-based invalidation
+    __projectsListLoadedAt = Date.now();
   } catch (e) { console.warn('projects load failed', e); }
 }
+
+// 16.06.2026 — fire-and-forget refresh, безпечний для setInterval та applyFilters().
+// Якщо cache ще свіжий (< 5 хв) — no-op. Інакше повторно тригерить loadProjects(),
+// що оновить __projectsList з dashboard_projects + auto-merge з launches.
+async function ensureProjectsListFresh(force) {
+  try {
+    const age = Date.now() - __projectsListLoadedAt;
+    if (!force && age < __PROJECTS_LIST_TTL_MS) return false;
+    await loadProjects();
+    if (window.DEBUG) console.log('[projects] cache refreshed', new Date().toISOString());
+    return true;
+  } catch (e) { console.warn('[projects] refresh failed', e); return false; }
+}
+// Expose для дебагу з консолі
+window.ensureProjectsListFresh = ensureProjectsListFresh;
 
 function getSelectedProject() {
   if (!filters.project) return null;
@@ -5127,7 +5148,7 @@ async function bootstrap() {
           await sb.auth.setSession({ access_token: sso.access_token, refresh_token: sso.refresh_token });
           // Очистити fragment — токен не повинен залишатись у URL
           history.replaceState(null, '', location.pathname);
-          console.log('[sso] session set from HQ bridge');
+          if (window.DEBUG) console.log('[sso] session set from HQ bridge');
         }
       }
     } catch (e) { console.warn('[sso bridge]', e); }
@@ -5275,6 +5296,11 @@ async function onAuthed() {
   loadPayProviders();
   renderRoute();
 
+  // 16.06.2026 — TTL-based cache invalidation для __projectsList.
+  // SQL changes у dashboard_projects.deal_project_values раніше не підхоплювалися
+  // до hard reload. Фоновий refresh кожні 5 хв вирішує без UX-перебоїв.
+  setInterval(() => { ensureProjectsListFresh(true); }, __PROJECTS_LIST_TTL_MS);
+
   // ====== REAL-TIME: підписка на dashboard_deals + auto-refresh ======
   setupRealtimeSubscription();
   setupAutoRefreshIndicator();
@@ -5309,7 +5335,7 @@ function setupRealtimeSubscription() {
           maybeSoftReload();
         })
       .subscribe((status) => {
-        console.log('[realtime] subscription:', status);
+        if (window.DEBUG) console.log('[realtime] subscription:', status);
         if (status === 'SUBSCRIBED') updateLiveBadge();
       });
   } catch (e) {
@@ -5335,7 +5361,7 @@ function bindLiveBadgeClick() {
   el.title = 'Клік щоб підвантажити нові угоди';
   el.addEventListener('click', () => {
     if (__rtNewDeals === 0) return;
-    console.log('[realtime] manual refresh — ', __rtNewDeals, 'new deals');
+    if (window.DEBUG) console.log('[realtime] manual refresh — ', __rtNewDeals, 'new deals');
     __rtNewDeals = 0;
     renderRoute();
     updateLiveBadge();
@@ -5362,7 +5388,7 @@ const debouncedReload = debounce(() => {
   const sinceActivity = Date.now() - __lastUserActivity;
   if (sinceActivity < 2000) {
     if (__pendingRealtimeRetry) return; // вже є очікуваний retry — не нагромаджуємо
-    console.log('[realtime] postponing reload — user active', sinceActivity, 'ms ago');
+    if (window.DEBUG) console.log('[realtime] postponing reload — user active', sinceActivity, 'ms ago');
     __pendingRealtimeRetry = setTimeout(() => {
       __pendingRealtimeRetry = null;
       debouncedReload();
@@ -5370,7 +5396,7 @@ const debouncedReload = debounce(() => {
     return;
   }
   __pendingRealtimeRetry = null;
-  console.log('[realtime] reloading route after', __rtNewDeals, 'new deals');
+  if (window.DEBUG) console.log('[realtime] reloading route after', __rtNewDeals, 'new deals');
   renderRoute();
   __rtNewDeals = 0;
 }, 3000);
