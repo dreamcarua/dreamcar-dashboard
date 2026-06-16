@@ -1,106 +1,111 @@
 {
- "generated": "2026-06-15T11:31:14.255520+00:00",
+ "generated": "2026-06-16T08:34:15.100650+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-06-14",
-  "prev_date": "2026-06-13",
-  "spend": 33738.74,
-  "impressions": 252030,
-  "clicks": 4896,
-  "purchases": 526,
-  "pixel_roas": 3.37,
-  "cpa": 64.14,
-  "frequency": 2.24,
-  "real_ad_revenue": 71890,
-  "real_ad_roas": 2.13,
+  "date": "2026-06-15",
+  "prev_date": "2026-06-14",
+  "spend": 3929.68,
+  "impressions": 28596,
+  "clicks": 445,
+  "purchases": 34,
+  "pixel_roas": 4.4,
+  "cpa": 115.58,
+  "frequency": 1.08,
+  "real_ad_revenue": 18264,
+  "real_ad_roas": 4.65,
   "deltas": {
-   "spend": 21.3,
-   "pixel_roas": -15.5,
-   "purchases": 22.6,
-   "cpa": -1.0
+   "spend": -88.4,
+   "pixel_roas": 30.6,
+   "purchases": -93.5,
+   "cpa": 80.2
+  },
+  "week": {
+   "this": {
+    "from": "2026-06-09",
+    "to": "2026-06-15",
+    "spend": 136319,
+    "purchases": 2542,
+    "pixel_roas": 5.3,
+    "cpa": 53.63,
+    "real_revenue": 432619,
+    "real_roas": 3.17
+   },
+   "prev": {
+    "from": "2026-06-02",
+    "to": "2026-06-08",
+    "spend": 54935,
+    "purchases": 1859,
+    "pixel_roas": 6.74,
+    "cpa": 29.55,
+    "real_revenue": 231492,
+    "real_roas": 4.21
+   },
+   "deltas": {
+    "spend": 148.1,
+    "real_roas": -24.7,
+    "pixel_roas": -21.4,
+    "cpa": 81.5,
+    "purchases": 36.7
+   }
   },
   "real_by_placement": [
    {
+    "placement": "instagram_reels",
+    "revenue": 14177,
+    "paid": 21
+   },
+   {
     "placement": "instagram_stories",
-    "revenue": 28858,
-    "paid": 127
+    "revenue": 1693,
+    "paid": 7
    },
    {
     "placement": "instagram_feed",
-    "revenue": 18915,
-    "paid": 86
-   },
-   {
-    "placement": "instagram_reels",
-    "revenue": 15160,
-    "paid": 79
-   },
-   {
-    "placement": "facebook_mobile_feed",
-    "revenue": 5922,
-    "paid": 27
-   },
-   {
-    "placement": "facebook_mobile_reels",
-    "revenue": 2837,
-    "paid": 13
-   },
-   {
-    "placement": "facebook_desktop_feed",
-    "revenue": 99,
-    "paid": 1
+    "revenue": 1197,
+    "paid": 3
    },
    {
     "placement": "facebook_stories",
-    "revenue": 99,
+    "revenue": 698,
+    "paid": 2
+   },
+   {
+    "placement": "facebook_mobile_reels",
+    "revenue": 499,
     "paid": 1
    }
   ],
-  "active_cycles": [],
+  "active_cycles": [
+   "FORD MUSTANG"
+  ],
   "top_creatives": [
    {
-    "name": "KTM перший пост",
-    "ad_id": "120249028734040624",
-    "spend": 305.54,
-    "purchases": 5,
-    "roas": 6.01,
-    "ctr": 1.44
+    "name": "перший пост мустанг на нових",
+    "ad_id": "120249661821710624",
+    "spend": 3355.32,
+    "purchases": 19,
+    "roas": 3.91,
+    "ctr": 1.32
    },
    {
-    "name": "KTM_картинка – копія",
-    "ad_id": "120249030813310624",
-    "spend": 1108.73,
-    "purchases": 18,
-    "roas": 5.04,
-    "ctr": 1.83
-   },
-   {
-    "name": "KTM профі",
-    "ad_id": "120249471049230624",
-    "spend": 532.3,
-    "purchases": 11,
-    "roas": 5.01,
-    "ctr": 2.41
+    "name": "перший пост мустанг широка",
+    "ad_id": "120249661728780624",
+    "spend": 574.36,
+    "purchases": 4,
+    "roas": 1.89,
+    "ctr": 4.12
    }
   ],
   "weak_creatives": [
    {
-    "name": "KTM_картинка – копія",
-    "ad_id": "120249041160510624",
-    "spend": 1036.84,
-    "purchases": 10,
-    "roas": 1.73,
-    "ctr": 1.88
-   },
-   {
-    "name": "KTM_картинка – копія",
-    "ad_id": "120249041160490624",
-    "spend": 836.58,
-    "purchases": 9,
-    "roas": 1.53,
-    "ctr": 1.75
+    "name": "перший пост мустанг широка",
+    "ad_id": "120249661728780624",
+    "spend": 574.36,
+    "purchases": 4,
+    "roas": 1.89,
+    "ctr": 4.12
    }
   ]
  },
@@ -3991,174 +3996,158 @@
    "code": "motorcycle_jun2026",
    "name": "MOTORCYCLE",
    "car_model": null,
-   "date_from": "2026-06-06",
+   "date_from": "2026-06-07",
    "date_to": "2026-06-14",
-   "spend": 187316.88,
-   "impressions": 1490241,
-   "clicks": 30669,
+   "spend": 154732.7,
+   "impressions": 1330646,
+   "clicks": 27443,
    "ctr": 2.06,
-   "reach": 262253,
-   "frequency": 5.68,
-   "purchases": 4367,
-   "pixel_roas": 5.74,
-   "cpa": 42.89,
-   "pixel_revenue": 1075871,
-   "real_ad_revenue": 641216,
-   "real_ad_roas": 3.42,
-   "gap_pct": -40.4,
+   "reach": 253190,
+   "frequency": 5.26,
+   "purchases": 3290,
+   "pixel_roas": 5.71,
+   "cpa": 47.03,
+   "pixel_revenue": 883242,
+   "real_ad_revenue": 542856,
+   "real_ad_roas": 3.51,
+   "gap_pct": -38.5,
    "segments": {
     "platform": [
      [
       "instagram",
-      154273.46,
-      3661,
-      5.84
+      127812.67,
+      2779,
+      5.85
      ],
      [
       "facebook",
-      31414.35,
-      664,
-      5.34
+      25660.98,
+      477,
+      5.03
      ],
      [
       "threads",
-      1149.78,
-      29,
-      4.4
+      839.25,
+      23,
+      5.17
      ],
      [
       "audience_network",
-      479.29,
-      10,
-      3.78
+      419.8,
+      9,
+      4.15
      ],
      [
       "unknown",
       0.0,
-      5,
+      2,
       0.0
      ]
     ],
     "age": [
      [
       "25-34",
-      98795.84,
-      2339,
-      5.94
+      81926.43,
+      1749,
+      5.93
      ],
      [
       "35-44",
-      56199.79,
-      1298,
-      5.43
+      45230.9,
+      946,
+      5.3
      ],
      [
       "18-24",
-      19692.51,
-      472,
-      6.2
+      17739.22,
+      411,
+      6.24
      ],
      [
       "45-54",
-      9434.87,
-      187,
-      4.75
+      7293.8,
+      132,
+      4.44
      ],
      [
       "65+",
-      1895.55,
-      38,
-      5.4
+      1549.54,
+      29,
+      5.99
      ],
      [
       "55-64",
-      1296.21,
-      29,
-      4.48
+      991.17,
+      23,
+      5.14
      ],
      [
       "Unknown",
-      2.11,
-      5,
-      158.43
+      1.64,
+      1,
+      60.37
      ]
     ],
     "gender": [
      [
       "male",
-      171961.75,
-      4008,
-      5.89
+      144470.03,
+      3114,
+      5.87
      ],
      [
       "female",
-      14952.44,
-      350,
-      4.14
+      9903.83,
+      171,
+      3.41
      ],
      [
       "unknown",
-      402.69,
-      9,
-      4.25
+      358.84,
+      5,
+      4.12
      ]
     ],
     "device": [
      [
       "iphone",
-      102648.54,
-      2471,
-      5.75
+      82778.47,
+      1809,
+      5.69
      ],
      [
       "android_smartphone",
-      84191.24,
-      1880,
-      5.74
+      71553.4,
+      1470,
+      5.73
      ],
      [
       "desktop",
-      235.9,
-      8,
-      6.83
+      195.73,
+      6,
+      7.13
      ],
      [
       "android_tablet",
-      163.17,
+      143.39,
       2,
       1.39
      ],
      [
       "ipad",
-      78.02,
-      1,
-      0.62
+      61.71,
+      0,
+      0.0
      ],
      [
       "other",
       0.0,
-      6,
+      3,
       0.0
      ]
     ]
    },
    "creatives": [
-    {
-     "name": "iphone 1 день перший пост – копія",
-     "ad_id": "120248926759330624",
-     "spend": 666.58,
-     "purchases": 44,
-     "roas": 19.05,
-     "ctr": 4.23
-    },
-    {
-     "name": "iphone 1 день другий пост прокидайся – копія",
-     "ad_id": "120248964968580624",
-     "spend": 39.89,
-     "purchases": 1,
-     "roas": 12.81,
-     "ctr": 4.03
-    },
     {
      "name": "KTM пост про х2 на тариф",
      "ad_id": "120249208734640624",
@@ -4166,14 +4155,6 @@
      "purchases": 116,
      "roas": 11.47,
      "ctr": 2.52
-    },
-    {
-     "name": "iphone 1 день перший пост",
-     "ad_id": "120248896736950624",
-     "spend": 3852.25,
-     "purchases": 234,
-     "roas": 11.14,
-     "ctr": 3.17
     },
     {
      "name": "KTM х2 на пакет",
@@ -4194,26 +4175,10 @@
     {
      "name": "KTM_картинка – копія",
      "ad_id": "120249030813310624",
-     "spend": 5513.99,
+     "spend": 5514.19,
      "purchases": 134,
      "roas": 7.09,
      "ctr": 2.19
-    },
-    {
-     "name": "iphone 1 день перший пост – копія – копія",
-     "ad_id": "120248964968600624",
-     "spend": 80.02,
-     "purchases": 2,
-     "roas": 6.86,
-     "ctr": 0.94
-    },
-    {
-     "name": "iphone_картинка_з_кавою",
-     "ad_id": "120248897652380624",
-     "spend": 3209.31,
-     "purchases": 118,
-     "roas": 6.43,
-     "ctr": 2.1
     },
     {
      "name": "KTM_картинка – копія",
@@ -4238,16 +4203,49 @@
      "purchases": 65,
      "roas": 6.14,
      "ctr": 2.21
+    },
+    {
+     "name": "KTM перший пост",
+     "ad_id": "120249041160450624",
+     "spend": 7724.41,
+     "purchases": 201,
+     "roas": 6.13,
+     "ctr": 1.63
+    },
+    {
+     "name": "KTM_картинка",
+     "ad_id": "120249028734060624",
+     "spend": 5552.27,
+     "purchases": 139,
+     "roas": 6.03,
+     "ctr": 2.54
+    },
+    {
+     "name": "KTM пост про тариф",
+     "ad_id": "120249184349970624",
+     "spend": 534.38,
+     "purchases": 7,
+     "roas": 6.01,
+     "ctr": 1.01
+    },
+    {
+     "name": "KTM х2",
+     "ad_id": "120249471767080624",
+     "spend": 3726.54,
+     "purchases": 72,
+     "roas": 5.8,
+     "ctr": 1.67
+    },
+    {
+     "name": "KTM_картинка – копія",
+     "ad_id": "120249041160490624",
+     "spend": 4382.55,
+     "purchases": 99,
+     "roas": 5.76,
+     "ctr": 1.94
     }
    ],
    "series": [
-    {
-     "date": "2026-06-06",
-     "spend": 32591.2,
-     "purchases": 1077,
-     "roas": 5.91,
-     "cpa": 30.26
-    },
     {
      "date": "2026-06-07",
      "spend": 6292.06,
@@ -4292,47 +4290,39 @@
     },
     {
      "date": "2026-06-13",
-     "spend": 27806.92,
+     "spend": 27807.16,
      "purchases": 429,
      "roas": 3.99,
      "cpa": 64.82
     },
     {
      "date": "2026-06-14",
-     "spend": 33738.74,
+     "spend": 33745.52,
      "purchases": 526,
      "roas": 3.37,
-     "cpa": 64.14
+     "cpa": 64.15
     }
    ],
    "adsets": [
     {
      "name": "KTM moto",
-     "spend": 74755.4,
+     "spend": 74757.17,
      "purchases": 1744,
      "roas": 6.23,
      "ctr": 2.13,
-     "cpa": 42.86
+     "cpa": 42.87
     },
     {
      "name": "KTM moto на мото аудиторію",
-     "spend": 66360.95,
+     "spend": 66366.18,
      "purchases": 1342,
      "roas": 5.5,
      "ctr": 1.97,
      "cpa": 49.45
     },
     {
-     "name": "iphone 1 день!",
-     "spend": 32591.2,
-     "purchases": 1098,
-     "roas": 6.02,
-     "ctr": 2.03,
-     "cpa": 29.68
-    },
-    {
      "name": "мем на широку",
-     "spend": 3891.78,
+     "spend": 3891.8,
      "purchases": 68,
      "roas": 4.52,
      "ctr": 2.58,
@@ -4363,26 +4353,257 @@
      "cpa": 135.39
     }
    ],
-   "adsets_window": "2026-06-06",
+   "adsets_window": "2026-06-07",
    "recommendations": [
     {
      "sev": "mod",
-     "text": "Сумарна частота 5.68 за цикл близько до порогу вигорання — ротувати креатив кожні 4-5 днів або розширити аудиторію."
+     "text": "Сумарна частота 5.26 за цикл близько до порогу вигорання — ротувати креатив кожні 4-5 днів або розширити аудиторію."
     },
     {
      "sev": "mod",
-     "text": "Піксель завищує: реальний ad-ROAS лише 3.42 vs піксель 5.74. Орієнтуватись на реальний."
+     "text": "Чоловіки ROAS 5.87 vs жінки 3.41. Жінки (~6% бюджету) тягнуть униз — тестово звузити на чоловіків."
+    },
+    {
+     "sev": "mod",
+     "text": "Піксель завищує: реальний ad-ROAS лише 3.51 vs піксель 5.71. Орієнтуватись на реальний."
     },
     {
      "sev": "inf",
-     "text": "Лідер: «iphone 1 день перший пост – копія» ROAS 19.05, CTR 4.23% — масштабувати й дублювати в інші adset."
+     "text": "Лідер: «KTM пост про х2 на тариф» ROAS 11.47, CTR 2.52% — масштабувати й дублювати в інші adset."
     },
     {
      "sev": "inf",
-     "text": "Найефективніший вік: 18-24 (ROAS 6.2) — пріоритет у таргетингу."
+     "text": "Найефективніший вік: 18-24 (ROAS 6.24) — пріоритет у таргетингу."
     }
    ],
    "is_current": true
+  },
+  {
+   "code": "mustang",
+   "name": "FORD MUSTANG",
+   "car_model": "Ford Mustang Convertible 2017",
+   "date_from": "2026-06-15",
+   "date_to": "2026-06-16",
+   "spend": 14707.81,
+   "impressions": 81700,
+   "clicks": 1760,
+   "ctr": 2.15,
+   "reach": 54962,
+   "frequency": 1.49,
+   "purchases": 140,
+   "pixel_roas": 3.31,
+   "cpa": 105.06,
+   "pixel_revenue": 48673,
+   "real_ad_revenue": 40888,
+   "real_ad_roas": 2.78,
+   "gap_pct": -16.0,
+   "segments": {
+    "platform": [
+     [
+      "instagram",
+      12440.51,
+      117,
+      3.27
+     ],
+     [
+      "facebook",
+      2180.46,
+      24,
+      3.67
+     ],
+     [
+      "audience_network",
+      0.15,
+      0,
+      13.08
+     ]
+    ],
+    "age": [
+     [
+      "25-34",
+      7658.78,
+      69,
+      2.49
+     ],
+     [
+      "35-44",
+      4644.74,
+      50,
+      5.05
+     ],
+     [
+      "18-24",
+      1301.56,
+      14,
+      2.63
+     ],
+     [
+      "45-54",
+      838.01,
+      4,
+      1.36
+     ],
+     [
+      "65+",
+      136.2,
+      3,
+      9.19
+     ],
+     [
+      "55-64",
+      128.33,
+      1,
+      2.37
+     ],
+     [
+      "Unknown",
+      0.19,
+      0,
+      0.0
+     ]
+    ],
+    "gender": [
+     [
+      "male",
+      12091.99,
+      116,
+      3.5
+     ],
+     [
+      "female",
+      2580.08,
+      23,
+      2.43
+     ],
+     [
+      "unknown",
+      35.74,
+      1,
+      2.75
+     ]
+    ],
+    "device": [
+     [
+      "iphone",
+      9818.17,
+      84,
+      2.45
+     ],
+     [
+      "android_smartphone",
+      4770.42,
+      57,
+      5.15
+     ],
+     [
+      "desktop",
+      16.69,
+      0,
+      1.32
+     ],
+     [
+      "ipad",
+      8.91,
+      0,
+      0.0
+     ],
+     [
+      "android_tablet",
+      6.94,
+      0,
+      0.0
+     ]
+    ]
+   },
+   "creatives": [
+    {
+     "name": "перший пост мустанг на нових",
+     "ad_id": "120249661821710624",
+     "spend": 8294.4,
+     "purchases": 70,
+     "roas": 3.32,
+     "ctr": 1.67,
+     "thumb": "data:image/jpeg;base64,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"
+    },
+    {
+     "name": "перший пост мустанг широка",
+     "ad_id": "120249661728780624",
+     "spend": 6413.41,
+     "purchases": 59,
+     "roas": 2.82,
+     "ctr": 3.21,
+     "thumb": "data:image/jpeg;base64,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"
+    }
+   ],
+   "series": [
+    {
+     "date": "2026-06-15",
+     "spend": 3929.68,
+     "purchases": 34,
+     "roas": 4.4,
+     "cpa": 115.58
+    },
+    {
+     "date": "2026-06-16",
+     "spend": 10778.13,
+     "purchases": 106,
+     "roas": 2.91,
+     "cpa": 101.68
+    }
+   ],
+   "adsets": [
+    {
+     "name": "Пости мустанг на нових",
+     "spend": 8294.4,
+     "purchases": 70,
+     "roas": 3.32,
+     "ctr": 1.67,
+     "cpa": 118.49
+    },
+    {
+     "name": "Пости мустанг широка",
+     "spend": 6413.41,
+     "purchases": 59,
+     "roas": 2.82,
+     "ctr": 3.21,
+     "cpa": 108.7
+    }
+   ],
+   "adsets_window": "2026-06-15",
+   "recommendations": [
+    {
+     "sev": "inf",
+     "text": "Найефективніший вік: 35-44 (ROAS 5.05) — пріоритет у таргетингу."
+    }
+   ],
+   "is_current": true
+  }
+ ],
+ "signals": [
+  {
+   "sev": "mod",
+   "scope": "Акаунт · тиждень",
+   "text": "CPA тижня 53.63 ₴ vs 29.55 ₴ (+82%) — залучення дорожчає."
+  },
+  {
+   "sev": "mod",
+   "scope": "IPHONE 17 PRO MAX",
+   "text": "Піксель завищує: реальний ad-ROAS лише 3.02 vs піксель 5.91. Орієнтуватись на реальний."
+  },
+  {
+   "sev": "mod",
+   "scope": "MOTORCYCLE",
+   "text": "Сумарна частота 5.26 за цикл близько до порогу вигорання — ротувати креатив кожні 4-5 днів або розширити аудиторію."
+  },
+  {
+   "sev": "mod",
+   "scope": "MOTORCYCLE",
+   "text": "Чоловіки ROAS 5.87 vs жінки 3.41. Жінки (~6% бюджету) тягнуть униз — тестово звузити на чоловіків."
+  },
+  {
+   "sev": "mod",
+   "scope": "MOTORCYCLE",
+   "text": "Піксель завищує: реальний ad-ROAS лише 3.51 vs піксель 5.71. Орієнтуватись на реальний."
   }
  ]
 }
