@@ -1,23 +1,23 @@
 {
- "generated": "2026-06-16T08:34:15.100650+00:00",
+ "generated": "2026-06-16T09:31:47.892829+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
   "date": "2026-06-15",
   "prev_date": "2026-06-14",
-  "spend": 3929.68,
-  "impressions": 28596,
+  "spend": 3930.41,
+  "impressions": 28600,
   "clicks": 445,
   "purchases": 34,
-  "pixel_roas": 4.4,
-  "cpa": 115.58,
+  "pixel_roas": 4.39,
+  "cpa": 115.6,
   "frequency": 1.08,
   "real_ad_revenue": 18264,
   "real_ad_roas": 4.65,
   "deltas": {
    "spend": -88.4,
-   "pixel_roas": 30.6,
+   "pixel_roas": 30.3,
    "purchases": -93.5,
    "cpa": 80.2
   },
@@ -84,7 +84,7 @@
    {
     "name": "перший пост мустанг на нових",
     "ad_id": "120249661821710624",
-    "spend": 3355.32,
+    "spend": 3356.05,
     "purchases": 19,
     "roas": 3.91,
     "ctr": 1.32
@@ -3998,8 +3998,8 @@
    "car_model": null,
    "date_from": "2026-06-07",
    "date_to": "2026-06-14",
-   "spend": 154732.7,
-   "impressions": 1330646,
+   "spend": 154732.75,
+   "impressions": 1330647,
    "clicks": 27443,
    "ctr": 2.06,
    "reach": 253190,
@@ -4021,7 +4021,7 @@
      ],
      [
       "facebook",
-      25660.98,
+      25661.03,
       477,
       5.03
      ],
@@ -4053,7 +4053,7 @@
      ],
      [
       "35-44",
-      45230.9,
+      45230.95,
       946,
       5.3
      ],
@@ -4091,7 +4091,7 @@
     "gender": [
      [
       "male",
-      144470.03,
+      144470.08,
       3114,
       5.87
      ],
@@ -4117,7 +4117,7 @@
      ],
      [
       "android_smartphone",
-      71553.4,
+      71553.45,
       1470,
       5.73
      ],
@@ -4297,16 +4297,16 @@
     },
     {
      "date": "2026-06-14",
-     "spend": 33745.52,
+     "spend": 33745.57,
      "purchases": 526,
      "roas": 3.37,
-     "cpa": 64.15
+     "cpa": 64.16
     }
    ],
    "adsets": [
     {
      "name": "KTM moto",
-     "spend": 74757.17,
+     "spend": 74757.22,
      "purchases": 1744,
      "roas": 6.23,
      "ctr": 2.13,
@@ -4384,76 +4384,76 @@
    "car_model": "Ford Mustang Convertible 2017",
    "date_from": "2026-06-15",
    "date_to": "2026-06-16",
-   "spend": 14707.81,
-   "impressions": 81700,
-   "clicks": 1760,
-   "ctr": 2.15,
-   "reach": 54962,
-   "frequency": 1.49,
-   "purchases": 140,
-   "pixel_roas": 3.31,
-   "cpa": 105.06,
-   "pixel_revenue": 48673,
-   "real_ad_revenue": 40888,
-   "real_ad_roas": 2.78,
-   "gap_pct": -16.0,
+   "spend": 15781.17,
+   "impressions": 86937,
+   "clicks": 1857,
+   "ctr": 2.14,
+   "reach": 57099,
+   "frequency": 1.52,
+   "purchases": 154,
+   "pixel_roas": 3.38,
+   "cpa": 102.48,
+   "pixel_revenue": 53409,
+   "real_ad_revenue": 42783,
+   "real_ad_roas": 2.71,
+   "gap_pct": -19.9,
    "segments": {
     "platform": [
      [
       "instagram",
-      12440.51,
-      117,
-      3.27
+      13404.51,
+      128,
+      3.33
      ],
      [
       "facebook",
-      2180.46,
-      24,
+      2376.51,
+      27,
       3.67
      ],
      [
       "audience_network",
       0.15,
       0,
-      13.08
+      13.04
      ]
     ],
     "age": [
      [
       "25-34",
-      7658.78,
-      69,
-      2.49
+      8233.15,
+      74,
+      2.54
      ],
      [
       "35-44",
-      4644.74,
-      50,
-      5.05
+      4954.87,
+      56,
+      5.16
      ],
      [
       "18-24",
-      1301.56,
-      14,
-      2.63
+      1418.87,
+      16,
+      2.84
      ],
      [
       "45-54",
-      838.01,
+      893.34,
       4,
-      1.36
+      1.28
      ],
      [
       "65+",
-      136.2,
-      3,
-      9.19
+      141.3,
+      4,
+      11.86
      ],
      [
       "55-64",
-      128.33,
-      1,
-      2.37
+      139.45,
+      3,
+      5.71
      ],
      [
       "Unknown",
@@ -4465,51 +4465,51 @@
     "gender": [
      [
       "male",
-      12091.99,
-      116,
-      3.5
+      12956.08,
+      126,
+      3.49
      ],
      [
       "female",
-      2580.08,
-      23,
-      2.43
+      2787.16,
+      29,
+      3.15
      ],
      [
       "unknown",
-      35.74,
+      37.93,
       1,
-      2.75
+      2.59
      ]
     ],
     "device": [
      [
       "iphone",
-      9818.17,
-      84,
-      2.45
+      10544.23,
+      91,
+      2.56
      ],
      [
       "android_smartphone",
-      4770.42,
-      57,
-      5.15
+      5200.37,
+      64,
+      5.07
      ],
      [
       "desktop",
-      16.69,
+      20.22,
       0,
-      1.32
+      1.09
      ],
      [
       "ipad",
-      8.91,
+      9.01,
       0,
       0.0
      ],
      [
       "android_tablet",
-      6.94,
+      7.33,
       0,
       0.0
      ]
@@ -4519,61 +4519,61 @@
     {
      "name": "перший пост мустанг на нових",
      "ad_id": "120249661821710624",
-     "spend": 8294.4,
-     "purchases": 70,
-     "roas": 3.32,
-     "ctr": 1.67,
+     "spend": 8888.35,
+     "purchases": 80,
+     "roas": 3.5,
+     "ctr": 1.66,
      "thumb": "data:image/jpeg;base64,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"
     },
     {
      "name": "перший пост мустанг широка",
      "ad_id": "120249661728780624",
-     "spend": 6413.41,
-     "purchases": 59,
-     "roas": 2.82,
-     "ctr": 3.21,
+     "spend": 6892.82,
+     "purchases": 65,
+     "roas": 2.89,
+     "ctr": 3.17,
      "thumb": "data:image/jpeg;base64,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"
     }
    ],
    "series": [
     {
      "date": "2026-06-15",
-     "spend": 3929.68,
+     "spend": 3930.41,
      "purchases": 34,
-     "roas": 4.4,
-     "cpa": 115.58
+     "roas": 4.39,
+     "cpa": 115.6
     },
     {
      "date": "2026-06-16",
-     "spend": 10778.13,
-     "purchases": 106,
-     "roas": 2.91,
-     "cpa": 101.68
+     "spend": 11850.76,
+     "purchases": 121,
+     "roas": 3.05,
+     "cpa": 97.94
     }
    ],
    "adsets": [
     {
      "name": "Пости мустанг на нових",
-     "spend": 8294.4,
-     "purchases": 70,
-     "roas": 3.32,
-     "ctr": 1.67,
-     "cpa": 118.49
+     "spend": 8888.35,
+     "purchases": 78,
+     "roas": 3.42,
+     "ctr": 1.66,
+     "cpa": 113.95
     },
     {
      "name": "Пости мустанг широка",
-     "spend": 6413.41,
-     "purchases": 59,
-     "roas": 2.82,
-     "ctr": 3.21,
-     "cpa": 108.7
+     "spend": 6892.82,
+     "purchases": 65,
+     "roas": 2.89,
+     "ctr": 3.17,
+     "cpa": 106.04
     }
    ],
    "adsets_window": "2026-06-15",
    "recommendations": [
     {
      "sev": "inf",
-     "text": "Найефективніший вік: 35-44 (ROAS 5.05) — пріоритет у таргетингу."
+     "text": "Найефективніший вік: 35-44 (ROAS 5.16) — пріоритет у таргетингу."
     }
    ],
    "is_current": true
