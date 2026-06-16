@@ -557,6 +557,20 @@ STRATEGY_AUDIENCES = [
     ('120249698502970624', 'Сайт · гаряча 30д', 'Дожим гарячих'),
 ]
 
+# Знімок якості сигналу (перевірено через Meta MCP; оновлюється при ревізії Claude)
+SIGNAL_QUALITY = {
+    'checked': '2026-06-16',
+    'pixel': 'AI DreamCar',
+    'emq': 9.3,
+    'opp_score': 97,
+    'capi': 'server-side · real-time',
+    'capi_purchase_server_pct': 100,
+    'freshness': 'real-time',
+    'match_keys': [['email', 100], ['телефон', 100], ["ім'я", 100], ['external_id', 99.7],
+                   ['fbp', 97.8], ['ip', 99], ['fbc', 77.8], ['прізвище', 12.2]],
+    'note': 'Знімок перевірки через Meta API. EMQ 9.3/10 і Opportunity Score 97/100 — майже стеля. CAPI: усі Purchase надходять із сервера в реальному часі.',
+}
+
 def build_strategy():
     out = []
     for cid, role, sub, desc in STRATEGY_CAMPAIGNS:
@@ -654,6 +668,7 @@ def main():
         payload['strategy'] = build_strategy()
     except Exception as e:
         log(f'  ⚠ strategy failed: {e}'); payload['strategy'] = None
+    payload['signal_quality'] = SIGNAL_QUALITY
     os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
     with open(OUT_PATH, 'w', encoding='utf-8') as f:
         json.dump(payload, f, ensure_ascii=False, indent=1)
