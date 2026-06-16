@@ -462,7 +462,7 @@ const bookTotal=(kind)=>DATA.accounts.filter(a=>a.kind===kind&&a.is_active).redu
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
   document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');
   document.querySelectorAll('.pane').forEach(x=>x.classList.remove('on'));
-  document.getElementById('pane-'+t.dataset.pane).classList.add('on');
+  const _pe=document.getElementById('pane-'+t.dataset.pane); if(_pe) _pe.classList.add('on');
 }));
 
 // ---- load ----
@@ -530,23 +530,23 @@ function renderAlerts(){
 }
 function renderTrends(){
   const el=document.getElementById('trendsBox'); if(!el) return;
-  const byB={}; (DATA.cfMonthly||[]).forEach(r=>byB[r.bucket]={i:Number(r.inflow),o:Number(r.outflow)});
-  const now=new Date(); const series=[];
-  for(let k=11;k>=0;k--){ const d=new Date(now.getFullYear(),now.getMonth()-k,1); const key=d.toISOString().slice(0,7); const v=byB[key]||{i:0,o:0}; series.push({key,i:v.i,o:v.o,net:v.i-v.o}); }
-  const cur=series[series.length-1], prev=series[series.length-2]||{i:0,o:0,net:0};
-  const dl=(c,p)=>{ const d=c-p; const up=d>=0; const pct=p?Math.round(d/Math.abs(p)*100):(c?100:0); return `<span style="color:${up?'#10B981':'#E30613'};font-size:11px"> ${up?'▲':'▼'} ${fmtUAH(Math.abs(d))} (${up?'+':'−'}${Math.abs(pct)}%) до мин.міс</span>`; };
-  const MN=['січ','лют','бер','кві','тра','чер','лип','сер','вер','жов','лис','гру'];
-  const mName=(key)=>{const p=key.split('-');return MN[Number(p[1])-1]+' '+p[0].slice(2);};
-  const W=360,H=70,n=series.length,gap=W/n,bw=gap*0.62;
-  const maxA=Math.max(1,...series.map(x=>Math.abs(x.net)));
-  const bars=series.map((x,idx)=>{const h=Math.round(Math.abs(x.net)/maxA*(H/2-4)); const px=Math.round(idx*gap+(gap-bw)/2); const py=x.net>=0?(H/2-h):(H/2); const c=x.net>=0?'#10B981':'#E30613'; return `<rect x="${px}" y="${py}" width="${Math.round(bw)}" height="${Math.max(1,h)}" fill="${c}" rx="1"><title>${mName(x.key)}: ${x.net>=0?'+':'−'}${fmtUAH(Math.abs(x.net))}</title></rect>`;}).join('');
-  const spark=`<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" preserveAspectRatio="none"><line x1="0" y1="${H/2}" x2="${W}" y2="${H/2}" stroke="#333" stroke-width="1"/>${bars}</svg>`;
-  const card=(lab,c,p,clr)=>`<div style="flex:1;min-width:150px;background:#141414;border:1px solid #222;border-radius:10px;padding:10px 12px"><div class="muted" style="font-size:11px">${lab}</div><div style="font-size:18px;font-weight:700;color:${clr||'#fff'}">${fmtUAH(c)}</div><div>${dl(c,p)}</div></div>`;
+  const cf=DATA.cf||[];
+  const cIn=cf.reduce((q,r)=>q+Number(r.inflow),0), cOut=cf.reduce((q,r)=>q+Number(r.outflow),0), cNet=cIn-cOut;
+  const p=DATA.cfPrev||{in:0,out:0}; const pNet=(p.in||0)-(p.out||0);
+  const dl=(c,pv)=>{ const dd=c-pv; const up=dd>=0; const pct=pv?Math.round(dd/Math.abs(pv)*100):(c?100:0); return `<span style="color:${up?'#10B981':'#E30613'};font-size:11px"> ${up?'\u25b2':'\u25bc'} ${fmtUAH(Math.abs(dd))} (${up?'+':'\u2212'}${Math.abs(pct)}%) до поп. періоду</span>`; };
+  const series=cf.map(r=>({k:r.bucket,net:Number(r.inflow)-Number(r.outflow)}));
+  let spark;
+  if(series.length){ const W=Math.max(120,series.length*14),H=64,gap=W/series.length,bw=Math.max(3,gap*0.6); const maxA=Math.max(1,...series.map(x=>Math.abs(x.net)));
+    const bars=series.map((x,idx)=>{const h=Math.round(Math.abs(x.net)/maxA*(H/2-3)); const px=Math.round(idx*gap+(gap-bw)/2); const py=x.net>=0?(H/2-h):(H/2); const c=x.net>=0?'#10B981':'#E30613'; return `<rect x="${px}" y="${py}" width="${Math.round(bw)}" height="${Math.max(1,h)}" fill="${c}" rx="1"><title>${fmtBucket(x.k)}: ${x.net>=0?'+':'\u2212'}${fmtUAH(Math.abs(x.net))}</title></rect>`;}).join('');
+    spark=`<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" preserveAspectRatio="none"><line x1="0" y1="${H/2}" x2="${W}" y2="${H/2}" stroke="#333" stroke-width="1"/>${bars}</svg>`;
+  } else { spark='<div class="muted" style="font-size:12px">немає даних за період</div>'; }
+  const _o=document.querySelector('#ovPeriod option:checked'); const lbl=_o?_o.textContent.trim().toLowerCase():'період';
+  const card=(t,c,pv,clr)=>`<div style="flex:1;min-width:150px;background:#141414;border:1px solid #222;border-radius:10px;padding:10px 12px"><div class="muted" style="font-size:11px">${t}</div><div style="font-size:18px;font-weight:700;color:${clr||'#fff'}">${fmtUAH(c)}</div><div>${dl(c,pv)}</div></div>`;
   el.innerHTML=`<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:stretch">`
-    + card('Надходження · '+mName(cur.key),cur.i,prev.i,'#10B981')
-    + card('Витрати · '+mName(cur.key),cur.o,prev.o,'#E30613')
-    + card('Чистий потік · '+mName(cur.key),cur.net,prev.net, cur.net>=0?'#10B981':'#E30613')
-    + `<div style="flex:2;min-width:280px;background:#141414;border:1px solid #222;border-radius:10px;padding:10px 12px"><div class="muted" style="font-size:11px;margin-bottom:4px">Чистий потік · 12 міс</div>${spark}</div>`
+    + card('Надходження · '+lbl,cIn,p.in||0,'#10B981')
+    + card('Витрати · '+lbl,cOut,p.out||0,'#E30613')
+    + card('Чистий потік · '+lbl,cNet,pNet,cNet>=0?'#10B981':'#E30613')
+    + `<div style="flex:2;min-width:260px;background:#141414;border:1px solid #222;border-radius:10px;padding:10px 12px"><div class="muted" style="font-size:11px;margin-bottom:4px">Чистий потік по періоду</div>${spark}</div>`
     + `</div>`;
 }
 function renderKpis(){
@@ -613,7 +613,7 @@ async function loadCashflow(){ const pr=periodRange();
   try{ const af=await sb.rpc('kasa_account_cashflow',{p_from:pr.from,p_to:pr.to}); DATA.acctFlow={}; (af.data||[]).forEach(x=>{DATA.acctFlow[x.account_id]={inflow:Number(x.inflow),outflow:Number(x.outflow)};}); }catch(e){ DATA.acctFlow={}; }
   try{ const ifl=await sb.rpc('kasa_internal_flow',{p_from:pr.from,p_to:pr.to}); DATA.intFlow={}; (ifl.data||[]).forEach(x=>{DATA.intFlow[x.account_id]={moved_in:Number(x.moved_in),moved_out:Number(x.moved_out)};}); }catch(e){ DATA.intFlow={}; }
   try{ const dvr=await sb.rpc('kasa_dividends',{p_from:pr.from,p_to:pr.to}); DATA.div={vadym:0,artem:0}; (dvr.data||[]).forEach(x=>{DATA.div[x.who]=Number(x.amt)||0;}); DATA.divTotal=(DATA.div.vadym||0)+(DATA.div.artem||0); }catch(e){ DATA.div={vadym:0,artem:0}; DATA.divTotal=0; }
-  try{ const _t=new Date(); const _from=new Date(_t.getFullYear(),_t.getMonth()-11,1).toISOString().slice(0,10); const mt=await sb.rpc('kasa_cashflow',{p_from:_from,p_to:todayKyiv(),p_gran:'month'}); DATA.cfMonthly=mt.data||[]; }catch(e){ DATA.cfMonthly=[]; }
+  try{ const _len=Math.round((new Date(pr.to)-new Date(pr.from))/86400000)+1; const _pTo=new Date(new Date(pr.from).getTime()-86400000); const _pFrom=new Date(_pTo.getTime()-(_len-1)*86400000); const _f2=_pFrom.toLocaleDateString('sv-SE'),_t2=_pTo.toLocaleDateString('sv-SE'); const pv=await sb.rpc('kasa_cashflow',{p_from:_f2,p_to:_t2,p_gran:pr.gran}); const _a=pv.data||[]; DATA.cfPrev={in:_a.reduce((q,r)=>q+Number(r.inflow),0),out:_a.reduce((q,r)=>q+Number(r.outflow),0)}; }catch(e){ DATA.cfPrev={in:0,out:0}; }
   renderOverview(); renderAcctFlow(); renderIntFlow(); renderKpis(); renderDiv(); renderTrends(); }
 function renderAcctFlow(){
   const tb=document.querySelector('#tblAcctFlow tbody'); if(!tb) return;
