@@ -1,13 +1,13 @@
 {
- "generated": "2026-06-16T09:31:47.892829+00:00",
+ "generated": "2026-06-16T09:39:05.402374+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
   "date": "2026-06-15",
   "prev_date": "2026-06-14",
-  "spend": 3930.41,
-  "impressions": 28600,
+  "spend": 3930.43,
+  "impressions": 28601,
   "clicks": 445,
   "purchases": 34,
   "pixel_roas": 4.39,
@@ -84,7 +84,7 @@
    {
     "name": "перший пост мустанг на нових",
     "ad_id": "120249661821710624",
-    "spend": 3356.05,
+    "spend": 3356.07,
     "purchases": 19,
     "roas": 3.91,
     "ctr": 1.32
@@ -4384,76 +4384,76 @@
    "car_model": "Ford Mustang Convertible 2017",
    "date_from": "2026-06-15",
    "date_to": "2026-06-16",
-   "spend": 15781.17,
-   "impressions": 86937,
-   "clicks": 1857,
+   "spend": 15820.01,
+   "impressions": 87149,
+   "clicks": 1863,
    "ctr": 2.14,
    "reach": 57099,
-   "frequency": 1.52,
-   "purchases": 154,
-   "pixel_roas": 3.38,
-   "cpa": 102.48,
-   "pixel_revenue": 53409,
-   "real_ad_revenue": 42783,
-   "real_ad_roas": 2.71,
-   "gap_pct": -19.9,
+   "frequency": 1.53,
+   "purchases": 157,
+   "pixel_roas": 3.42,
+   "cpa": 100.76,
+   "pixel_revenue": 54125,
+   "real_ad_revenue": 42982,
+   "real_ad_roas": 2.72,
+   "gap_pct": -20.6,
    "segments": {
     "platform": [
      [
       "instagram",
-      13404.51,
-      128,
-      3.33
+      13475.75,
+      130,
+      3.37
      ],
      [
       "facebook",
-      2376.51,
+      2389.94,
       27,
-      3.67
+      3.65
      ],
      [
       "audience_network",
       0.15,
       0,
-      13.04
+      13.1
      ]
     ],
     "age": [
      [
       "25-34",
-      8233.15,
+      8277.86,
       74,
-      2.54
+      2.52
      ],
      [
       "35-44",
-      4954.87,
+      4976.75,
       56,
-      5.16
+      5.14
      ],
      [
       "18-24",
-      1418.87,
+      1427.76,
       16,
-      2.84
+      2.82
      ],
      [
       "45-54",
-      893.34,
+      901.53,
       4,
-      1.28
+      1.27
      ],
      [
       "65+",
-      141.3,
+      141.36,
       4,
       11.86
      ],
      [
       "55-64",
-      139.45,
+      140.39,
       3,
-      5.71
+      5.67
      ],
      [
       "Unknown",
@@ -4465,15 +4465,15 @@
     "gender": [
      [
       "male",
-      12956.08,
+      13022.97,
       126,
-      3.49
+      3.47
      ],
      [
       "female",
-      2787.16,
+      2804.94,
       29,
-      3.15
+      3.13
      ],
      [
       "unknown",
@@ -4485,31 +4485,31 @@
     "device": [
      [
       "iphone",
-      10544.23,
-      91,
-      2.56
+      10599.43,
+      93,
+      2.62
      ],
      [
       "android_smartphone",
-      5200.37,
+      5229.4,
       64,
-      5.07
+      5.04
      ],
      [
       "desktop",
-      20.22,
+      20.73,
       0,
-      1.09
+      1.07
      ],
      [
       "ipad",
-      9.01,
+      8.98,
       0,
       0.0
      ],
      [
       "android_tablet",
-      7.33,
+      7.3,
       0,
       0.0
      ]
@@ -4519,61 +4519,61 @@
     {
      "name": "перший пост мустанг на нових",
      "ad_id": "120249661821710624",
-     "spend": 8888.35,
+     "spend": 8929.86,
      "purchases": 80,
-     "roas": 3.5,
-     "ctr": 1.66,
+     "roas": 3.48,
+     "ctr": 1.67,
      "thumb": "data:image/jpeg;base64,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"
     },
     {
      "name": "перший пост мустанг широка",
      "ad_id": "120249661728780624",
-     "spend": 6892.82,
+     "spend": 6935.98,
      "purchases": 65,
-     "roas": 2.89,
-     "ctr": 3.17,
+     "roas": 2.87,
+     "ctr": 3.15,
      "thumb": "data:image/jpeg;base64,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"
     }
    ],
    "series": [
     {
      "date": "2026-06-15",
-     "spend": 3930.41,
+     "spend": 3930.43,
      "purchases": 34,
      "roas": 4.39,
      "cpa": 115.6
     },
     {
      "date": "2026-06-16",
-     "spend": 11850.76,
-     "purchases": 121,
-     "roas": 3.05,
-     "cpa": 97.94
+     "spend": 11935.41,
+     "purchases": 123,
+     "roas": 3.09,
+     "cpa": 97.04
     }
    ],
    "adsets": [
     {
      "name": "Пости мустанг на нових",
-     "spend": 8888.35,
-     "purchases": 78,
-     "roas": 3.42,
-     "ctr": 1.66,
-     "cpa": 113.95
+     "spend": 8959.61,
+     "purchases": 80,
+     "roas": 3.47,
+     "ctr": 1.67,
+     "cpa": 112.0
     },
     {
      "name": "Пости мустанг широка",
-     "spend": 6892.82,
+     "spend": 6935.98,
      "purchases": 65,
-     "roas": 2.89,
-     "ctr": 3.17,
-     "cpa": 106.04
+     "roas": 2.87,
+     "ctr": 3.15,
+     "cpa": 106.71
     }
    ],
    "adsets_window": "2026-06-15",
    "recommendations": [
     {
      "sev": "inf",
-     "text": "Найефективніший вік: 35-44 (ROAS 5.16) — пріоритет у таргетингу."
+     "text": "Найефективніший вік: 35-44 (ROAS 5.14) — пріоритет у таргетингу."
     }
    ],
    "is_current": true
@@ -4605,5 +4605,78 @@
    "scope": "MOTORCYCLE",
    "text": "Піксель завищує: реальний ad-ROAS лише 3.51 vs піксель 5.71. Орієнтуватись на реальний."
   }
- ]
+ ],
+ "strategy": {
+  "campaigns": [
+   {
+    "id": "120249698602830624",
+    "role": "01 · Ядро",
+    "sub": "Advantage+ Sales · broad · A+A",
+    "desc": "70-80% бюджету. Головний драйвер. Увесь робочий креатив-пул (12-20). Highest Volume на старті → Highest Value, коли стабільно.",
+    "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
+    "status": "PAUSED",
+    "daily_budget": 1000,
+    "spend": 0,
+    "purchases": 0,
+    "roas": 0,
+    "ctr": 0
+   },
+   {
+    "id": "120249698605960624",
+    "role": "02 · Retargeting",
+    "sub": "Сайт 180д + гаряча 30д, excl. покупці",
+    "desc": "15-20%. Дожим теплих: дедлайн, соц-доказ, апсел токенів. Строгий таргет (A+A off).",
+    "name": "DC | 02 Retargeting · дожим теплих",
+    "status": "PAUSED",
+    "daily_budget": 300,
+    "spend": 0,
+    "purchases": 0,
+    "roas": 0,
+    "ctr": 0
+   },
+   {
+    "id": "120249698608790624",
+    "role": "03 · Prospecting",
+    "sub": "Broad, EXCL. усі наші аудиторії",
+    "desc": "5-10%. «Свіжа кров» — лише нові люди (виключені відвідувачі сайту + покупці), щоб алгоритм не крутився в нашій бульбашці.",
+    "name": "DC | 03 Prospecting · свіжа кров (excl. наші)",
+    "status": "PAUSED",
+    "daily_budget": 500,
+    "spend": 0,
+    "purchases": 0,
+    "roas": 0,
+    "ctr": 0
+   },
+   {
+    "id": "120249698612830624",
+    "role": "04 · Testing",
+    "sub": "ABO малий · broad",
+    "desc": "Інкубатор нових концептів окремо від ядра. Переможців переносимо в Ядро.",
+    "name": "DC | 04 Testing · інкубатор (ABO)",
+    "status": "PAUSED",
+    "daily_budget": null,
+    "spend": 0,
+    "purchases": 0,
+    "roas": 0,
+    "ctr": 0
+   }
+  ],
+  "audiences": [
+   {
+    "id": "120249698494260624",
+    "name": "Сайт · усі відвідувачі 180д",
+    "use": "Retargeting + база для виключення"
+   },
+   {
+    "id": "120249698499330624",
+    "name": "Покупці 180д",
+    "use": "Апсел токенів + виключення"
+   },
+   {
+    "id": "120249698502970624",
+    "name": "Сайт · гаряча 30д",
+    "use": "Дожим гарячих"
+   }
+  ]
+ }
 }
