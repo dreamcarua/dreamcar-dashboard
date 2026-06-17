@@ -360,6 +360,69 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
       </div>
     </div>
 
+    <!-- PERIOD P&L (по періодах: день/тиждень/місяць/квартал/рік) -->
+    <div class="pnl-card" id="period-pnl-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:12px">
+        <h4 style="margin:0">📅 P&L по періодах <span class="meta" id="ppMeta" style="font-size:11px;font-family:'JetBrains Mono',monospace;color:#6B7280;text-transform:none;letter-spacing:0">завантаження…</span></h4>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <div class="seg" id="ppGranSeg" style="display:inline-flex;background:rgba(255,255,255,.05);border-radius:8px;padding:3px;gap:2px">
+            <button data-g="day" type="button">День</button>
+            <button data-g="week" type="button">Тиждень</button>
+            <button data-g="month" class="on" type="button">Місяць</button>
+            <button data-g="quarter" type="button">Квартал</button>
+            <button data-g="year" type="button">Рік</button>
+          </div>
+          <div class="seg" id="ppRangeSeg" style="display:inline-flex;background:rgba(255,255,255,.05);border-radius:8px;padding:3px;gap:2px">
+            <button data-r="3m" type="button">3 міс</button>
+            <button data-r="6m" type="button">6 міс</button>
+            <button data-r="ytd" class="on" type="button">YTD</button>
+            <button data-r="12m" type="button">12 міс</button>
+            <button data-r="all" type="button">Все</button>
+          </div>
+          <input type="date" id="ppFrom" style="height:32px;font-size:12px"> →
+          <input type="date" id="ppTo" style="height:32px;font-size:12px">
+          <select id="ppProject" style="height:32px;font-size:12px;background:#0f0f0f;color:#e5e7eb;border:1px solid rgba(255,255,255,.15);border-radius:6px;padding:0 8px;max-width:200px">
+            <option value="">Всі проєкти</option>
+          </select>
+          <button class="btn ghost" style="height:32px;padding:0 10px" onclick="reloadPeriodPnL()" title="Оновити">↻</button>
+        </div>
+      </div>
+
+      <div class="kpi-grid" id="ppKpiGrid" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:14px">
+        <div class="kpi"><div class="label">Σ Revenue</div><div class="value" id="pp-k-rev"><span class="skel">—</span></div></div>
+        <div class="kpi"><div class="label">Σ Total Cost</div><div class="value" id="pp-k-cost"><span class="skel">—</span></div></div>
+        <div class="kpi hero"><div class="label">Σ Net Profit</div><div class="value" id="pp-k-net"><span class="skel">—</span></div></div>
+        <div class="kpi"><div class="label">Avg Margin %</div><div class="value" id="pp-k-margin"><span class="skel">—</span></div></div>
+        <div class="kpi"><div class="label">Найкращий період</div><div class="value" id="pp-k-best" style="font-size:14px"><span class="skel">—</span></div></div>
+        <div class="kpi"><div class="label">Найгірший період</div><div class="value" id="pp-k-worst" style="font-size:14px"><span class="skel">—</span></div></div>
+      </div>
+
+      <div class="chart-canvas-wrap" style="height:240px;margin-bottom:14px;background:rgba(255,255,255,.02);border-radius:8px;padding:8px">
+        <canvas id="ppChart"></canvas>
+      </div>
+
+      <div class="scroll">
+        <table class="pnl" id="ppTbl">
+          <thead><tr>
+            <th>Період</th>
+            <th>Активних</th>
+            <th>Revenue</th>
+            <th>Ad Spend</th>
+            <th>% з угод</th>
+            <th>Fixed</th>
+            <th>Призовий</th>
+            <th>Variable</th>
+            <th>Total Cost</th>
+            <th>Net Profit</th>
+            <th>Margin %</th>
+            <th>Δ Net vs prev</th>
+          </tr></thead>
+          <tbody><tr><td colspan="12" class="empty">завантаження…</td></tr></tbody>
+          <tfoot><tr id="ppFoot"></tr></tfoot>
+        </table>
+      </div>
+    </div>
+
     <!-- FORECAST -->
     <div class="forecast-grid">
       <div class="fc-card">
@@ -774,7 +837,15 @@ function chartCommon() {
         titleColor: '#fff', bodyColor: '#ddd', padding: 12,
         titleFont: { family: 'Manrope', weight: '600' },
         bodyFont: { family: 'JetBrains Mono', size: 12 },
-        callbacks: { label: (ctx) => `${ctx.dataset.label||''}: ${new Intl.NumberFormat('uk-UA').format(Math.round(ctx.parsed.y||ctx.parsed||0))} ₴` }
+        callbacks: { label: (ctx) => {
+          // ctx.raw — справжнє значення для всіх типів (bar/line, vertical/horizontal)
+          // ctx.parsed.y ламається для indexAxis:'y' — повертає індекс label-а замість UAH
+          const v = (typeof ctx.raw === 'number') ? ctx.raw
+                  : (typeof ctx.parsed?.x === 'number' && ctx.chart?.options?.indexAxis === 'y') ? ctx.parsed.x
+                  : (typeof ctx.parsed?.y === 'number') ? ctx.parsed.y
+                  : 0;
+          return `${ctx.dataset.label||''}: ${new Intl.NumberFormat('uk-UA').format(Math.round(v))} ₴`;
+        }}
       }
     },
     scales: {
@@ -1611,6 +1682,258 @@ window.saveFixed = saveFixed;
 window.saveProject = saveProject;
 window.saveLaunchPrize = saveLaunchPrize;
 
+/* ─────────────────────────────────────────────────────────────
+   #507 — Period P&L блок (день/тиждень/місяць/квартал/рік)
+   RPC: dashboard_period_pnl(p_from, p_to, p_granularity, p_project_ids)
+   ───────────────────────────────────────────────────────────── */
+const PP = {
+  gran: 'month',
+  range: 'ytd',
+  from: null,
+  to: null,
+  projectId: '',
+  rows: [],
+  chart: null,
+  projects: [],
+  booted: false,
+  loading: false
+};
+
+function ppApplyRange(r) {
+  const today = new Date();
+  const t = today.toISOString().slice(0,10);
+  let from;
+  const subMonths = (n) => {
+    const d = new Date(today); d.setMonth(d.getMonth() - n); return d.toISOString().slice(0,10);
+  };
+  switch (r) {
+    case '3m': from = subMonths(3); break;
+    case '6m': from = subMonths(6); break;
+    case 'ytd': from = today.getFullYear() + '-01-01'; break;
+    case '12m': from = subMonths(12); break;
+    case 'all': from = '2024-01-01'; break;
+    default: from = today.getFullYear() + '-01-01';
+  }
+  PP.from = from; PP.to = t; PP.range = r;
+  const fEl = document.getElementById('ppFrom');
+  const tEl = document.getElementById('ppTo');
+  if (fEl) fEl.value = from;
+  if (tEl) tEl.value = t;
+  document.querySelectorAll('#ppRangeSeg button').forEach(b => b.classList.toggle('on', b.dataset.r === r));
+}
+
+async function ppPopulateProjects() {
+  if (PP.projects.length) return;
+  try {
+    await getSb();
+    const { data, error } = await sb
+      .from('launches')
+      .select('id,name,code,starts_on,ends_on,status,excl_from_finance')
+      .order('starts_on', { ascending: false });
+    if (error) throw error;
+    PP.projects = (data || []).filter(p => !p.excl_from_finance && !['idea','planning'].includes(String(p.status)));
+    const sel = document.getElementById('ppProject');
+    if (!sel) return;
+    sel.innerHTML = '<option value="">Всі проєкти</option>' +
+      PP.projects.map(p => `<option value="${p.id}">${esc(p.name || p.code)}</option>`).join('');
+  } catch (e) {
+    console.warn('[pp] populate projects', e);
+  }
+}
+
+function ppFmtPct(v) {
+  if (v == null || isNaN(v)) return '—';
+  const n = Number(v);
+  const cls = n >= 50 ? 'green' : n >= 20 ? 'gold' : n >= 0 ? '' : 'red';
+  return `<span class="${cls}">${n.toFixed(1)}%</span>`;
+}
+
+function ppDeltaCell(curr, prev) {
+  if (prev == null || prev === 0) return '<span style="color:#6B7280">—</span>';
+  const delta = curr - prev;
+  const pct = (delta / Math.abs(prev)) * 100;
+  const arrow = delta >= 0 ? '↑' : '↓';
+  const color = delta >= 0 ? '#10B981' : '#EF4444';
+  return `<span style="color:${color};white-space:nowrap">${arrow} ${shortUAH(Math.abs(delta))} (${pct.toFixed(0)}%)</span>`;
+}
+
+function ppRenderKPI(rows) {
+  const sumRev = rows.reduce((s,r) => s + Number(r.revenue||0), 0);
+  const sumCost = rows.reduce((s,r) => s + Number(r.total_cost||0), 0);
+  const sumNet = sumRev - sumCost;
+  const margin = sumRev > 0 ? (sumNet / sumRev * 100) : 0;
+  const sorted = [...rows].filter(r => Number(r.revenue||0) > 0).sort((a,b) => Number(b.net_profit||0) - Number(a.net_profit||0));
+  const best = sorted[0];
+  const worst = sorted[sorted.length-1];
+
+  document.getElementById('pp-k-rev').textContent = fmtUAH(sumRev);
+  document.getElementById('pp-k-cost').textContent = fmtUAH(sumCost);
+  const netEl = document.getElementById('pp-k-net');
+  netEl.textContent = fmtUAH(sumNet);
+  netEl.style.color = sumNet >= 0 ? '#10B981' : '#EF4444';
+  document.getElementById('pp-k-margin').innerHTML = ppFmtPct(margin);
+  document.getElementById('pp-k-best').innerHTML = best
+    ? `<span style="color:#10B981">${esc(best.period_label)}</span><div style="font-size:11px;color:#6B7280;margin-top:2px">${shortUAH(best.net_profit)}</div>`
+    : '<span style="color:#6B7280">—</span>';
+  document.getElementById('pp-k-worst').innerHTML = (worst && worst !== best)
+    ? `<span style="color:#EF4444">${esc(worst.period_label)}</span><div style="font-size:11px;color:#6B7280;margin-top:2px">${shortUAH(worst.net_profit)}</div>`
+    : '<span style="color:#6B7280">—</span>';
+}
+
+function ppRenderChart(rows) {
+  const ctx = document.getElementById('ppChart');
+  if (!ctx || !window.Chart) return;
+  if (PP.chart) { try { PP.chart.destroy(); } catch {} PP.chart = null; }
+  const labels = rows.map(r => r.period_label);
+  const revenue = rows.map(r => Number(r.revenue||0));
+  const cost = rows.map(r => Number(r.total_cost||0));
+  const net = rows.map(r => Number(r.net_profit||0));
+  PP.chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Revenue', data: revenue, backgroundColor: 'rgba(16,185,129,.45)', borderColor: '#10B981', borderWidth: 1, order: 2 },
+        { label: 'Total Cost', data: cost, backgroundColor: 'rgba(239,68,68,.35)', borderColor: '#EF4444', borderWidth: 1, order: 2 },
+        { label: 'Net Profit', data: net, type: 'line', borderColor: '#F59E0B', backgroundColor: '#F59E0B', borderWidth: 2, pointRadius: 3, tension: 0.25, order: 1, yAxisID: 'y' }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#9CA3AF', font: { size: 11 } } },
+        tooltip: {
+          callbacks: {
+            label: (c) => `${c.dataset.label}: ${fmtUAH(c.parsed.y)}`
+          }
+        }
+      },
+      scales: {
+        x: { ticks: { color: '#9CA3AF', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,.05)' } },
+        y: { ticks: { color: '#9CA3AF', callback: v => shortNum(v) }, grid: { color: 'rgba(255,255,255,.05)' } }
+      }
+    }
+  });
+}
+
+function ppRenderTable(rows) {
+  const tb = document.querySelector('#ppTbl tbody');
+  if (!tb) return;
+  if (!rows.length) {
+    tb.innerHTML = '<tr><td colspan="12" class="empty">даних немає за період</td></tr>';
+    document.getElementById('ppFoot').innerHTML = '';
+    return;
+  }
+  const html = rows.map((r, i) => {
+    const prev = i > 0 ? rows[i-1] : null;
+    const prevNet = prev ? Number(prev.net_profit||0) : null;
+    const netCur = Number(r.net_profit||0);
+    const netCls = netCur >= 0 ? 'green' : 'red';
+    return `<tr>
+      <td><b>${esc(r.period_label)}</b><div style="font-size:10.5px;color:#6B7280;font-family:'JetBrains Mono',monospace;margin-top:2px">${esc(r.period_start)} → ${esc(r.period_end)}</div></td>
+      <td style="text-align:center">${r.active_projects||0}</td>
+      <td class="gold">${shortUAH(r.revenue)}</td>
+      <td>${shortUAH(r.ad_spend)}</td>
+      <td>${shortUAH(r.percent_costs)}</td>
+      <td>${shortUAH(r.fixed_costs)}</td>
+      <td>${shortUAH(r.prize_cost)}</td>
+      <td>${shortUAH(r.variable_costs)}</td>
+      <td>${shortUAH(r.total_cost)}</td>
+      <td class="${netCls}">${shortUAH(r.net_profit)}</td>
+      <td>${ppFmtPct(r.margin_pct)}</td>
+      <td>${ppDeltaCell(netCur, prevNet)}</td>
+    </tr>`;
+  }).join('');
+  tb.innerHTML = html;
+
+  // Footer
+  const sum = (k) => rows.reduce((s,r) => s + Number(r[k]||0), 0);
+  const tRev = sum('revenue'), tAd = sum('ad_spend'), tPct = sum('percent_costs'),
+        tFix = sum('fixed_costs'), tPrize = sum('prize_cost'), tVar = sum('variable_costs'),
+        tCost = sum('total_cost'), tNet = sum('net_profit');
+  const tMargin = tRev > 0 ? (tNet / tRev * 100) : 0;
+  const tActive = Math.max(...rows.map(r => r.active_projects||0));
+  document.getElementById('ppFoot').innerHTML = `
+    <th><b>Σ Всього (${rows.length} ${PP.gran === 'day' ? 'днів' : PP.gran === 'week' ? 'тижнів' : PP.gran === 'month' ? 'місяців' : PP.gran === 'quarter' ? 'кварт.' : 'років'})</b></th>
+    <th style="text-align:center">${tActive}</th>
+    <th class="gold">${shortUAH(tRev)}</th>
+    <th>${shortUAH(tAd)}</th>
+    <th>${shortUAH(tPct)}</th>
+    <th>${shortUAH(tFix)}</th>
+    <th>${shortUAH(tPrize)}</th>
+    <th>${shortUAH(tVar)}</th>
+    <th>${shortUAH(tCost)}</th>
+    <th class="${tNet>=0?'green':'red'}">${shortUAH(tNet)}</th>
+    <th>${ppFmtPct(tMargin)}</th>
+    <th>—</th>`;
+}
+
+async function reloadPeriodPnL() {
+  if (PP.loading) return;
+  PP.loading = true;
+  const meta = document.getElementById('ppMeta');
+  if (meta) meta.textContent = 'завантаження…';
+  try {
+    await getSb();
+    if (!PP.from || !PP.to) ppApplyRange(PP.range);
+    const projIds = PP.projectId ? [PP.projectId] : null;
+    const { data, error } = await sb.rpc('dashboard_period_pnl', {
+      p_from: PP.from, p_to: PP.to,
+      p_granularity: PP.gran,
+      p_project_ids: projIds
+    });
+    if (error) throw error;
+    PP.rows = data || [];
+    ppRenderKPI(PP.rows);
+    ppRenderChart(PP.rows);
+    ppRenderTable(PP.rows);
+    if (meta) {
+      const granLabel = { day: 'по днях', week: 'по тижнях', month: 'по місяцях', quarter: 'по кварталах', year: 'по роках' }[PP.gran] || '';
+      meta.textContent = `${granLabel} · ${PP.from} → ${PP.to} · ${PP.rows.length} рядків`;
+    }
+  } catch (e) {
+    console.error('[pp] reload', e);
+    const tb = document.querySelector('#ppTbl tbody');
+    if (tb) tb.innerHTML = `<tr><td colspan="12" class="empty" style="color:#fca5a5">помилка: ${esc((e.message||e)+'')}</td></tr>`;
+    if (meta) meta.textContent = 'помилка завантаження';
+  } finally {
+    PP.loading = false;
+  }
+}
+
+function ppBindControls() {
+  if (PP.booted) return;
+  PP.booted = true;
+  ppApplyRange('ytd');
+
+  document.querySelectorAll('#ppGranSeg button').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('#ppGranSeg button').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    PP.gran = b.dataset.g;
+    reloadPeriodPnL();
+  }));
+  document.querySelectorAll('#ppRangeSeg button').forEach(b => b.addEventListener('click', () => {
+    ppApplyRange(b.dataset.r);
+    reloadPeriodPnL();
+  }));
+  document.getElementById('ppFrom').addEventListener('change', e => {
+    PP.from = e.target.value; PP.range = 'custom';
+    document.querySelectorAll('#ppRangeSeg button').forEach(x => x.classList.remove('on'));
+    reloadPeriodPnL();
+  });
+  document.getElementById('ppTo').addEventListener('change', e => {
+    PP.to = e.target.value; PP.range = 'custom';
+    document.querySelectorAll('#ppRangeSeg button').forEach(x => x.classList.remove('on'));
+    reloadPeriodPnL();
+  });
+  document.getElementById('ppProject').addEventListener('change', e => {
+    PP.projectId = e.target.value || '';
+    reloadPeriodPnL();
+  });
+}
+
+window.reloadPeriodPnL = reloadPeriodPnL;
+
 // Init: дочекатися готового window.supabase від auth-guard, потім load.
 let __initFired = false;
 async function init() {
@@ -1624,6 +1947,10 @@ async function init() {
       applyPreset('30');
       reloadOverview(); // fire-and-forget — миттєвий старт RPC
     }
+    // PP блок — bind + первинний load (паралельно з overview)
+    ppBindControls();
+    ppPopulateProjects();
+    reloadPeriodPnL();
     // CRUD таби паралельно
     await loadAll();
   } catch (e) {
