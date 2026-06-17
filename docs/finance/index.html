@@ -223,6 +223,7 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
 .loading-bar{display:inline-flex;align-items:center;gap:6px;color:var(--gold);font-size:11px;font-family:'JetBrains Mono',monospace;letter-spacing:.06em;text-transform:uppercase}
 .loading-bar::before{content:'';width:10px;height:10px;border:2px solid rgba(251,191,36,0.3);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite}
 @keyframes spin { to{transform:rotate(360deg)} }
+@keyframes ppPulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.7)} }
 </style>
 </head>
 <body>
@@ -372,7 +373,11 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
             <button data-g="quarter" type="button">Квартал</button>
             <button data-g="year" type="button">Рік</button>
           </div>
-          <div class="seg" id="ppRangeSeg" style="display:inline-flex;background:rgba(255,255,255,.05);border-radius:8px;padding:3px;gap:2px">
+          <div class="seg" id="ppRangeSeg" style="display:inline-flex;flex-wrap:wrap;background:rgba(255,255,255,.05);border-radius:8px;padding:3px;gap:2px">
+            <button data-r="today" type="button">Сьогодні</button>
+            <button data-r="7d" type="button">7 днів</button>
+            <button data-r="30d" type="button">30 днів</button>
+            <button data-r="mtd" type="button">Цей місяць</button>
             <button data-r="3m" type="button">3 міс</button>
             <button data-r="6m" type="button">6 міс</button>
             <button data-r="ytd" class="on" type="button">YTD</button>
@@ -1699,14 +1704,37 @@ const PP = {
   loading: false
 };
 
+// Auto-suggest granularity based on date range (UX щоб не показувати 365 рядків при "Все")
+function ppSuggestGran(r) {
+  switch (r) {
+    case 'today': return 'day';
+    case '7d': return 'day';
+    case '30d': return 'day';
+    case 'mtd': return 'day';
+    case '3m': return 'week';
+    case '6m': return 'week';
+    case 'ytd': return 'month';
+    case '12m': return 'month';
+    case 'all': return 'quarter';
+    default: return PP.gran;
+  }
+}
+
 function ppApplyRange(r) {
   const today = new Date();
   const t = today.toISOString().slice(0,10);
   let from;
+  const subDays = (n) => {
+    const d = new Date(today); d.setDate(d.getDate() - n + 1); return d.toISOString().slice(0,10);
+  };
   const subMonths = (n) => {
     const d = new Date(today); d.setMonth(d.getMonth() - n); return d.toISOString().slice(0,10);
   };
   switch (r) {
+    case 'today': from = t; break;
+    case '7d':  from = subDays(7);  break;
+    case '30d': from = subDays(30); break;
+    case 'mtd': from = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-01`; break;
     case '3m': from = subMonths(3); break;
     case '6m': from = subMonths(6); break;
     case 'ytd': from = today.getFullYear() + '-01-01'; break;
@@ -1715,11 +1743,52 @@ function ppApplyRange(r) {
     default: from = today.getFullYear() + '-01-01';
   }
   PP.from = from; PP.to = t; PP.range = r;
+  // Auto-switch granularity до розумного дефолту для нового range
+  const suggestedGran = ppSuggestGran(r);
+  if (suggestedGran && suggestedGran !== PP.gran) {
+    PP.gran = suggestedGran;
+    document.querySelectorAll('#ppGranSeg button').forEach(b => b.classList.toggle('on', b.dataset.g === suggestedGran));
+  }
   const fEl = document.getElementById('ppFrom');
   const tEl = document.getElementById('ppTo');
   if (fEl) fEl.value = from;
   if (tEl) tEl.value = t;
   document.querySelectorAll('#ppRangeSeg button').forEach(b => b.classList.toggle('on', b.dataset.r === r));
+}
+
+// Помітний skeleton-loader (заповнює всю область)
+function ppShowSkeleton() {
+  const meta = document.getElementById('ppMeta');
+  if (meta) meta.innerHTML = '<span style="display:inline-flex;align-items:center;gap:6px;color:#F59E0B"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#F59E0B;animation:ppPulse 1s infinite"></span> завантаження…</span>';
+  // KPI cards — skeleton
+  ['pp-k-rev','pp-k-cost','pp-k-net','pp-k-margin','pp-k-best','pp-k-worst'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = '<span class="ppSkel" style="display:inline-block;width:80px;height:18px;background:linear-gradient(90deg,rgba(255,255,255,.05) 25%,rgba(255,255,255,.12) 50%,rgba(255,255,255,.05) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:4px"></span>';
+  });
+  // Chart placeholder
+  const wrap = document.querySelector('#ppChart')?.parentElement;
+  if (wrap) {
+    wrap.style.position = 'relative';
+    let ph = wrap.querySelector('.pp-chart-skel');
+    if (!ph) {
+      ph = document.createElement('div');
+      ph.className = 'pp-chart-skel';
+      ph.style.cssText = 'position:absolute;inset:8px;display:flex;align-items:center;justify-content:center;background:linear-gradient(90deg,rgba(255,255,255,.02) 25%,rgba(255,255,255,.06) 50%,rgba(255,255,255,.02) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:6px;color:#F59E0B;font-size:13px;font-weight:600;pointer-events:none;z-index:2';
+      ph.innerHTML = '⏳ агрегую дані…';
+      wrap.appendChild(ph);
+    }
+  }
+  // Table — skeleton rows
+  const tb = document.querySelector('#ppTbl tbody');
+  if (tb) {
+    const skelRow = `<tr><td colspan="12" style="padding:8px"><div style="height:14px;background:linear-gradient(90deg,rgba(255,255,255,.04) 25%,rgba(255,255,255,.10) 50%,rgba(255,255,255,.04) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:4px"></div></td></tr>`;
+    tb.innerHTML = skelRow.repeat(5);
+  }
+}
+
+function ppHideSkeleton() {
+  const ph = document.querySelector('.pp-chart-skel');
+  if (ph) ph.remove();
 }
 
 async function ppPopulateProjects() {
@@ -1871,28 +1940,39 @@ function ppRenderTable(rows) {
 async function reloadPeriodPnL() {
   if (PP.loading) return;
   PP.loading = true;
+  ppShowSkeleton();
   const meta = document.getElementById('ppMeta');
-  if (meta) meta.textContent = 'завантаження…';
+  const tStart = performance.now();
   try {
     await getSb();
     if (!PP.from || !PP.to) ppApplyRange(PP.range);
     const projIds = PP.projectId ? [PP.projectId] : null;
-    const { data, error } = await sb.rpc('dashboard_period_pnl', {
-      p_from: PP.from, p_to: PP.to,
-      p_granularity: PP.gran,
-      p_project_ids: projIds
-    });
+    // v2 (швидкий, з matview) — коли НЕ фільтрується по проекту
+    // v1 (повільний, точний) — коли є project filter
+    let data, error;
+    if (!projIds) {
+      ({ data, error } = await sb.rpc('dashboard_period_pnl_v2', {
+        p_from: PP.from, p_to: PP.to, p_granularity: PP.gran
+      }));
+    } else {
+      ({ data, error } = await sb.rpc('dashboard_period_pnl', {
+        p_from: PP.from, p_to: PP.to, p_granularity: PP.gran, p_project_ids: projIds
+      }));
+    }
     if (error) throw error;
     PP.rows = data || [];
+    ppHideSkeleton();
     ppRenderKPI(PP.rows);
     ppRenderChart(PP.rows);
     ppRenderTable(PP.rows);
+    const elapsed = Math.round(performance.now() - tStart);
     if (meta) {
       const granLabel = { day: 'по днях', week: 'по тижнях', month: 'по місяцях', quarter: 'по кварталах', year: 'по роках' }[PP.gran] || '';
-      meta.textContent = `${granLabel} · ${PP.from} → ${PP.to} · ${PP.rows.length} рядків`;
+      meta.textContent = `${granLabel} · ${PP.from} → ${PP.to} · ${PP.rows.length} рядків · ${elapsed}мс`;
     }
   } catch (e) {
     console.error('[pp] reload', e);
+    ppHideSkeleton();
     const tb = document.querySelector('#ppTbl tbody');
     if (tb) tb.innerHTML = `<tr><td colspan="12" class="empty" style="color:#fca5a5">помилка: ${esc((e.message||e)+'')}</td></tr>`;
     if (meta) meta.textContent = 'помилка завантаження';
