@@ -225,14 +225,25 @@ def fetch_media(ig_id, since_ts):
     return out
 
 
-def media_insights(media_id):
-    """Метрики поста. Стійко: пробуємо повний набір, на 400 звужуємо."""
-    for metrics in (MEDIA_METRICS, ('reach', 'total_interactions', 'saved', 'shares'), ('reach',)):
+def media_insights(media_id, product_type=''):
+    """Метрики поста. Reels-специфічні (watch time, replays) + feed (profile_visits). Стійко звужуємо на 400."""
+    pt = (product_type or '').upper()
+    if pt == 'REELS':
+        chains = [('reach','saved','shares','total_interactions','likes','comments','views','ig_reels_avg_watch_time','ig_reels_video_view_total_time','clips_replays_count','ig_reels_aggregated_all_plays_count'),
+                  ('reach','saved','shares','total_interactions','views','ig_reels_avg_watch_time','ig_reels_video_view_total_time'),
+                  ('reach','total_interactions','saved','shares'), ('reach',)]
+    else:
+        chains = [('reach','saved','shares','total_interactions','likes','comments','views','profile_visits'),
+                  ('reach','saved','shares','total_interactions','profile_visits'),
+                  ('reach','total_interactions','saved','shares'), ('reach',)]
+    for metrics in chains:
         d = fb_get(f'{media_id}/insights', {'metric': ','.join(metrics)})
         if d and 'data' in d:
             res = {}
             for m in d['data']:
-                res[m.get('name')] = _int((m.get('values') or [{}])[0].get('value'))
+                vals = m.get('values') or []
+                v = vals[0].get('value') if vals else (m.get('total_value') or {}).get('value')
+                res[m.get('name')] = _int(v)
             return res
     return {}
 
@@ -240,7 +251,7 @@ def media_insights(media_id):
 def build_media_rows(ig_id, media_list):
     rows = []
     for m in media_list:
-        ins = media_insights(m['id'])
+        ins = media_insights(m['id'], m.get('media_product_type'))
         time.sleep(0.15)
         reach = ins.get('reach')
         inter = ins.get('total_interactions')
@@ -262,6 +273,11 @@ def build_media_rows(ig_id, media_list):
             'saved': ins.get('saved'),
             'shares': ins.get('shares'),
             'views': ins.get('views'),
+            'plays': ins.get('ig_reels_aggregated_all_plays_count') or ins.get('plays') or ins.get('views'),
+            'avg_watch_sec': round(ins['ig_reels_avg_watch_time']/1000, 2) if ins.get('ig_reels_avg_watch_time') else None,
+            'total_watch_sec': round(ins['ig_reels_video_view_total_time']/1000) if ins.get('ig_reels_video_view_total_time') else None,
+            'replays': ins.get('clips_replays_count'),
+            'profile_visits': ins.get('profile_visits'),
             'total_interactions': inter,
             'engagement_rate': er,
             'raw_data': {'media': m, 'insights': ins},
