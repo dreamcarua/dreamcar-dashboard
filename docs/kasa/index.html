@@ -427,8 +427,8 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
 </div></div>
 
 <script>
-// #515 role-based: тільки ceo/cfo/coo (Vadym, Артем, Давид)
-const ALLOWED_ROLES = ['ceo','cfo','coo'];
+// #515 role-based: /kasa/ — тільки ceo/cfo (Vadym + Артем). Давид (COO) бачить /finance/, але НЕ /kasa/.
+const ALLOWED_ROLES = ['ceo','cfo'];
 let sb=null, ME=null;
 let DATA={accounts:[],tx:[],transfers:[],cats:[],launches:[]};
 let txDir='out', editTx=null, editAcc=null, importRows=null, importCols=null;
