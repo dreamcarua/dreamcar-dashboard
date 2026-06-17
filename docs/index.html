@@ -2348,9 +2348,18 @@ function _rpcParams() {
   }
   // 08.06.2026 P0 Fix: якщо проект і period не перетинаються (напр. Moto 07.06-15.06 + "Вчора" 06.06)
   // — обнуляємо діапазон у trivial empty замість інверсії, що ламала RPC (поверталось 3803=все)
+  // 17.06.2026 P0 #472 FIX: для completed проектів коли немає перетину — fallback на проектний період
+  // (інакше iPhone 06.06 single-day + preset "Сьогодні" 17.06 → trivial empty замість показу даних проекту).
+  // Trivial empty залишаємо ТІЛЬКИ якщо проект не вибраний (raw filter без sp).
   if (fromDate > toDate) {
-    fromDate = '1900-01-01';
-    toDate = '1900-01-01';
+    if (sp && sp.date_start && sp.date_end) {
+      // Completed/single-day проект — показуємо весь проектний період замість 0
+      fromDate = sp.date_start;
+      toDate = (sp.date_end > todayYmd()) ? todayYmd() : sp.date_end;
+    } else {
+      fromDate = '1900-01-01';
+      toDate = '1900-01-01';
+    }
   }
   return {
     p_from: kyivIsoStart(fromDate),
