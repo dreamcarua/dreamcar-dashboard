@@ -347,6 +347,7 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
             <th>Variable</th>
             <th>Total Cost</th>
             <th>Net Profit</th>
+            <th>Net/день</th>
             <th>Margin %</th>
             <th>ROI %</th>
             <th>CAC</th>
@@ -854,7 +855,17 @@ function renderPnL(pnl, fromISO, toISO) {
     const s = p.starts_on, e = p.ends_on || '2099-12-31';
     return !(e < fromISO || s > toISO);
   }).sort((a,b)=>Number(b.true_net_profit||0) - Number(a.true_net_profit||0));
-  if (!rows.length) { tbody.innerHTML = '<tr><td colspan="14" class="empty">Немає даних за період</td></tr>'; document.getElementById('pnlFoot').innerHTML=''; return; }
+  if (!rows.length) { tbody.innerHTML = '<tr><td colspan="15" class="empty">Немає даних за період</td></tr>'; document.getElementById('pnlFoot').innerHTML=''; return; }
+  // 17.06.2026: helper — короткий формат дати DD.MM.YY
+  const fmtShort = iso => { if (!iso) return '?'; const [y,m,d] = iso.split('-'); return `${d}.${m}.${y.slice(2)}`; };
+  // 17.06.2026: розрахунок днів і net/день (на основі days_duration з RPC або recompute)
+  const calcDays = p => {
+    if (p.days_duration && p.days_duration > 0) return p.days_duration;
+    if (!p.starts_on) return null;
+    const s = new Date(p.starts_on);
+    const e = new Date(p.ends_on || new Date());
+    return Math.max(1, Math.round((e - s) / 86400000) + 1);
+  };
   // Totals
   let tRev=0, tAd=0, tPct=0, tFix=0, tPrize=0, tVar=0, tCost=0, tProf=0, tPaid=0;
   rows.forEach(p => {
@@ -872,8 +883,13 @@ function renderPnL(pnl, fromISO, toISO) {
     const mCls = classBy(margin, { bad: 0, warn: 20, good: 30 });
     const rCls = classBy(roi, { bad: 0, warn: 100, good: 300 });
     const profCls = Number(p.true_net_profit||0) < 0 ? 'bad' : (Number(p.true_net_profit||0)>0 ? 'good' : '');
+    const days = calcDays(p);
+    const netPerDay = (days && days > 0) ? Number(p.true_net_profit||0) / days : null;
+    const dateRange = (p.starts_on || p.ends_on)
+      ? `<div style="font-size:10.5px;color:#6B7280;font-family:'JetBrains Mono',monospace;margin-top:2px">${fmtShort(p.starts_on)} → ${fmtShort(p.ends_on)} · <b style="color:#999">${days||'?'} дн.</b></div>`
+      : '';
     return `<tr>
-      <td><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${p.color||'#888'};margin-right:8px;vertical-align:middle"></span>${esc(p.name)}<span class="st-pill st-${p.status}">${p.status}</span></td>
+      <td><div><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${p.color||'#888'};margin-right:8px;vertical-align:middle"></span>${esc(p.name)}<span class="st-pill st-${p.status}">${p.status}</span></div>${dateRange}</td>
       <td>${shortUAH(p.revenue_total)}</td>
       <td>${shortUAH(p.ad_spend)}</td>
       <td>${shortUAH(p.percent_costs)}</td>
@@ -882,6 +898,7 @@ function renderPnL(pnl, fromISO, toISO) {
       <td>${shortUAH(p.project_costs_total)}</td>
       <td><b>${shortUAH(p.total_cost)}</b></td>
       <td class="${profCls}"><b>${shortUAH(p.true_net_profit)}</b></td>
+      <td class="${profCls}">${netPerDay!=null ? shortUAH(netPerDay) : '—'}</td>
       <td class="${mCls}">${p.true_net_margin_pct!=null ? Number(p.true_net_margin_pct).toFixed(1)+'%' : '—'}</td>
       <td class="${rCls}">${p.true_roi_pct!=null ? Number(p.true_roi_pct).toFixed(0)+'%' : '—'}</td>
       <td>${p.true_cac!=null ? Number(p.true_cac).toFixed(2)+' ₴' : '—'}</td>
@@ -899,6 +916,7 @@ function renderPnL(pnl, fromISO, toISO) {
     <td>${shortUAH(tVar)}</td>
     <td>${shortUAH(tCost)}</td>
     <td>${shortUAH(tProf)}</td>
+    <td>${(() => { const totalDays = rows.reduce((a,p)=>a+(calcDays(p)||0),0); return totalDays>0 ? shortUAH(tProf/totalDays) : '—'; })()}</td>
     <td>${tMargin!=null?tMargin.toFixed(1)+'%':'—'}</td>
     <td>${tRoi!=null?tRoi.toFixed(0)+'%':'—'}</td>
     <td>${tCac!=null?tCac.toFixed(2)+' ₴':'—'}</td>
