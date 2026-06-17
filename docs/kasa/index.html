@@ -427,7 +427,8 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
 </div></div>
 
 <script>
-const ALLOWED = ['1avrybak@gmail.com','dreamcarua@gmail.com'];
+// #515 role-based: тільки ceo/cfo/coo (Vadym, Артем, Давид)
+const ALLOWED_ROLES = ['ceo','cfo','coo'];
 let sb=null, ME=null;
 let DATA={accounts:[],tx:[],transfers:[],cats:[],launches:[]};
 let txDir='out', editTx=null, editAcc=null, importRows=null, importCols=null;
@@ -958,11 +959,22 @@ async function saveMove(){
 }
 function openDivPayout(){ openTxModal(null); setDir('move'); const mt=document.getElementById('txMoveTo'); if(mt) mt.value='dividends'; moveToggle(); }
 
-// ---- auth gate ----
+// ---- auth gate (#515 role-based) ----
 async function boot(user){
   ME=(user&&user.email||'').toLowerCase();
-  if(!ALLOWED.includes(ME)){
-    document.getElementById('whoami').textContent=ME||'невідомо';
+  try {
+    await getSb();
+    const { data: u } = await sb.from('users').select('id,name,role,email,is_active').eq('auth_id', user.id).maybeSingle();
+    if (!u || !u.is_active || !ALLOWED_ROLES.includes(String(u.role))) {
+      const w = document.getElementById('whoami');
+      if (w) w.textContent = `${u?.name || ME || 'невідомо'} (${u?.role || 'no role'})`;
+      document.getElementById('denied').style.display='flex';
+      document.getElementById('app').style.display='none';
+      return;
+    }
+  } catch (e) {
+    console.error('[kasa role check]', e);
+    document.getElementById('whoami').textContent = ME || 'невідомо';
     document.getElementById('denied').style.display='flex';
     document.getElementById('app').style.display='none';
     return;

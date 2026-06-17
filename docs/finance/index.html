@@ -2049,6 +2049,46 @@ function ppBindControls() {
 
 window.reloadPeriodPnL = reloadPeriodPnL;
 
+// #514 — role-based access gate. /finance/ + /kasa/ — тільки ceo/cfo/coo (Vadym, Артем, Давид).
+const FINANCE_ALLOWED_ROLES = ['ceo','cfo','coo'];
+async function checkFinanceAccess() {
+  try {
+    await getSb();
+    const { data: { user } } = await sb.auth.getUser();
+    if (!user) return { ok: false, reason: 'no_user' };
+    const { data: u, error } = await sb
+      .from('users')
+      .select('id,name,role,email,is_active')
+      .eq('auth_id', user.id)
+      .maybeSingle();
+    if (error || !u) return { ok: false, reason: 'profile_not_found', email: user.email };
+    if (!u.is_active) return { ok: false, reason: 'inactive', name: u.name, role: u.role };
+    if (!FINANCE_ALLOWED_ROLES.includes(String(u.role))) {
+      return { ok: false, reason: 'role_denied', name: u.name, role: u.role };
+    }
+    return { ok: true, user: u };
+  } catch (e) { console.error('[finance access]', e); return { ok: false, reason: 'error', error: String(e?.message||e) }; }
+}
+function showAccessDenied(info) {
+  document.body.innerHTML = `
+    <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:'Manrope',sans-serif;background:#0a0a0a;color:#e5e7eb;padding:40px">
+      <div style="max-width:520px;text-align:center;background:#141414;border:1px solid #2a2a2a;border-radius:14px;padding:40px 32px">
+        <div style="font-size:48px;margin-bottom:12px">🔒</div>
+        <h1 style="font-family:'Oswald';letter-spacing:.06em;color:#E30613;margin:0 0 10px;font-size:22px">ДОСТУП ОБМЕЖЕНО</h1>
+        <p style="color:#a1a1aa;margin:8px 0 16px;font-size:14px;line-height:1.55">
+          Розділ <b>/finance/</b> доступний лише для:<br>
+          <span style="color:#fbbf24">CEO Вадим</span> · <span style="color:#fbbf24">CFO Артем</span> · <span style="color:#fbbf24">COO Давид</span>
+        </p>
+        <div style="background:#0a0a0a;border:1px solid #2a2a2a;border-radius:8px;padding:14px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#71717a;text-align:left">
+          <div>Поточний user: <span style="color:#a3a3a3">${(info.name||info.email||'—')}</span></div>
+          <div>Поточна роль: <span style="color:${info.role?'#fbbf24':'#71717a'}">${(info.role||'—')}</span></div>
+          <div>Причина: <span style="color:#ef4444">${info.reason}</span></div>
+        </div>
+        <a href="/" style="display:inline-block;margin-top:20px;padding:10px 22px;background:#E30613;color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:13px">← На головну дашборду</a>
+      </div>
+    </div>`;
+}
+
 // Init: дочекатися готового window.supabase від auth-guard, потім load.
 let __initFired = false;
 async function init() {
@@ -2056,21 +2096,24 @@ async function init() {
   __initFired = true;
   try {
     await getSb();
+    // #514 role gate
+    const access = await checkFinanceAccess();
+    if (!access.ok) {
+      console.warn('[finance] access denied', access);
+      showAccessDenied(access);
+      return;
+    }
     // Старт overview ВІДРАЗУ — паралельно з CRUD-завантаженням.
-    // Не блокуємо на loadAll (5 SELECT-ів + populateSelects можуть займати кілька секунд).
     if (!window.__overviewBooted) {
       applyPreset('30');
-      reloadOverview(); // fire-and-forget — миттєвий старт RPC
+      reloadOverview();
     }
-    // PP блок — bind + первинний load (паралельно з overview)
     ppBindControls();
     ppPopulateProjects();
     reloadPeriodPnL();
-    // CRUD таби паралельно
     await loadAll();
   } catch (e) {
     console.error('[finance] init', e);
-    // Не alert — щоб не блокувати рендер; вже є status bar з помилкою
     const ovs = document.getElementById('ovStatus');
     if (ovs) ovs.innerHTML = '<span class="loading-bar" style="color:#fca5a5">init err: '+esc((e.message||e)+'')+'</span>';
   }
