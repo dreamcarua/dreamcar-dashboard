@@ -274,6 +274,13 @@ def upsert(table, rows, on_conflict):
     if not rows:
         log(f'  ⚠ {table}: нема рядків')
         return 0
+    # PostgREST bulk insert вимагає однаковий набір ключів у всіх обʼєктах
+    allkeys = set()
+    for r in rows:
+        allkeys.update(r.keys())
+    for r in rows:
+        for k in allkeys:
+            r.setdefault(k, None)
     url = f'{SB_URL}/rest/v1/{table}?on_conflict={on_conflict}'
     total = 0
     for i in range(0, len(rows), BATCH):
