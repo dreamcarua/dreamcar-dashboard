@@ -749,6 +749,26 @@ document.querySelectorAll('#periodSeg button').forEach(b => b.addEventListener('
 document.getElementById('ovFrom').addEventListener('change', e => { OV.from = e.target.value; OV.preset = 'custom'; document.querySelectorAll('#periodSeg button').forEach(x=>x.classList.remove('on')); });
 document.getElementById('ovTo').addEventListener('change', e => { OV.to = e.target.value; OV.preset = 'custom'; document.querySelectorAll('#periodSeg button').forEach(x=>x.classList.remove('on')); });
 
+// #514 — period-aware Net Profit з mv_finance_daily_pnl через v2 RPC (9мс)
+// Замість margin proxy (revenue × lifetime_margin) — точні витрати за період.
+async function fetchPeriodPnLForKpi(fromISO, toISO) {
+  try {
+    await getSb();
+    const { data, error } = await sb.rpc('dashboard_period_pnl_v2', {
+      p_from: fromISO, p_to: toISO, p_granularity: 'day'
+    });
+    if (error) { console.warn('[kpi] v2 rpc', error); return null; }
+    if (!data || !data.length) return null;
+    let rev = 0, cost = 0, net = 0;
+    for (const r of data) {
+      rev += Number(r.revenue || 0);
+      cost += Number(r.total_cost || 0);
+      net += Number(r.net_profit || 0);
+    }
+    return { revenue: rev, total_cost: cost, net_profit: net };
+  } catch (e) { console.warn('[kpi] fetchPeriod', e); return null; }
+}
+
 async function fetchOverviewRPC(fromISO, toISO) {
   await getSb();
   // RPC агрегує на бекенді — повертає revenue/paid/prev_revenue + daily series + by_project
@@ -1050,25 +1070,40 @@ function renderInsights(summary, curRev, prevRev, pnl, fromISO, toISO) {
 
 function renderKpi(periodRev, periodPaid, prevRev, summary, days) {
   // periodRev/periodPaid — фактичні приходи за період (з RPC, не lifetime).
-  // summary — totals з P&L таблиці (lifetime по проєктах, що перетинаються) для cost структури.
-  const tCost = summary?.tCost || 0;
-  const tMargin = summary?.tMargin;
-  // Margin беремо з PnL (бо total_cost з lifetime), AOV/CAC з period.
+  // #514 FIX: Net Profit та Total Cost тепер беремо з period-aware mv_finance_daily_pnl (RPC v2)
+  // через fetchPeriodPnLForKpi() — не lifetime margin × revenue proxy.
+  const tCost_lifetime = summary?.tCost || 0;
   const periodAov = periodPaid > 0 ? periodRev / periodPaid : 0;
-  // Estimated period profit: revenue × margin_pct (proxy, бо точний breakdown — у PnL lifetime)
+  // Proxy fallback (відобразиться поки period RPC у польоті)
+  const tMargin = summary?.tMargin;
   const margin = tMargin != null ? tMargin : 91.5;
-  const periodProfit = periodRev * margin / 100;
-  // Daily run rate
-  const dailyRR = days > 0 ? periodProfit / days : 0;
-  // Delta revenue
+  const periodProfitProxy = periodRev * margin / 100;
+  const dailyRR = days > 0 ? periodProfitProxy / days : 0;
   const deltaR = prevRev > 0 ? (periodRev - prevRev) / prevRev * 100 : null;
-  const periodCac = periodPaid > 0 ? (tCost * (periodRev / (summary?.tRev || periodRev)) / periodPaid) : null;
-  // Простіший CAC: припускаємо що cost масштабується за частку viewed revenue
+  const periodCac = periodPaid > 0 ? (tCost_lifetime * (periodRev / (summary?.tRev || periodRev)) / periodPaid) : null;
   const cur = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
-  cur('k-profit', shortUAH(periodProfit));
+  cur('k-profit', shortUAH(periodProfitProxy));
   cur('k-revenue', shortUAH(periodRev));
-  cur('k-cost', shortUAH(periodRev - periodProfit));
+  cur('k-cost', shortUAH(periodRev - periodProfitProxy));
   cur('k-margin', tMargin!=null ? tMargin.toFixed(1)+'%' : '—');
+  // Async — точний period-aware net profit (Net = revenue - daily costs у періоді)
+  fetchPeriodPnLForKpi(OV.from, OV.to).then(p => {
+    if (!p) return;
+    const periodNet = Number(p.net_profit || 0);
+    const periodCost = Number(p.total_cost || 0);
+    const periodMargin = p.revenue > 0 ? (periodNet / p.revenue * 100) : 0;
+    cur('k-profit', shortUAH(periodNet));
+    cur('k-cost', shortUAH(periodCost));
+    cur('k-margin', periodMargin.toFixed(1)+'%');
+    // Update Daily Run Rate з точним net
+    const exactRR = days > 0 ? periodNet / days : 0;
+    cur('k-runrate', shortUAH(exactRR));
+    const dEl = document.getElementById('s-runrate');
+    if (dEl) dEl.textContent = `${days} дн × ${shortUAH(exactRR)}/день · ${periodPaid} оплат`;
+    // Margin proxy → actual
+    const sm = document.getElementById('s-margin');
+    if (sm) sm.textContent = periodMargin >= 30 ? '✓ target ≥ 30%' : 'target ≥ 30%';
+  }).catch(e => console.warn('[kpi] period RPC', e));
   cur('k-cac', periodCac!=null && periodAov ? (periodAov/periodCac).toFixed(1)+'×' : '—');
   cur('s-cac', periodCac!=null ? `CAC ${periodCac.toFixed(0)}₴ · AOV ${periodAov.toFixed(0)}₴` : 'CAC / AOV');
   cur('k-runrate', shortUAH(dailyRR));
