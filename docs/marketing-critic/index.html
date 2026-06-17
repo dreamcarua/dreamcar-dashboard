@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>Marketing Критик · DreamCar</title>
+<meta name="build" content="20260617-v1">
+<script src="https://brand.dreamcar.ua/assets/global-header.js?v=20260606b" defer></script>
+<script src="/assets/js/auth-guard.js?v=20260614" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Manrope:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0a;--bg2:#141414;--bg3:#1a1a1a;--line:#222;--steel:#2a2a2a;--txt:#fff;--mut:#888;--grey:#bbb;
+  --red:#E30613;--red2:#FF6A7A;--gold:#FBBF24;--green:#10B981;--blue:#60A5FA}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Manrope','JetBrains Mono',system-ui,sans-serif;background:var(--bg);color:var(--txt);line-height:1.5;padding-top:64px}
+a{color:inherit}
+.wrap{max-width:1280px;margin:0 auto;padding:22px 18px 80px}
+.toprow{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:16px}
+h1{font-family:'Oswald',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.3px}
+h2,h3{font-family:'Oswald',sans-serif}
+.sub{color:var(--mut);font-size:13px;margin-top:5px}
+.upd{font-size:11.5px;color:var(--mut);text-align:right}.upd b{color:var(--green)}
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.filters label{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.08em;font-family:'JetBrains Mono',monospace}
+input[type=date],select,button{background:var(--bg2);border:1px solid var(--steel);color:#fff;font-family:inherit;font-size:13.5px;padding:8px 12px;border-radius:8px;cursor:pointer}
+input[type=date]:hover,select:hover{border-color:var(--red)}
+button{font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-size:12.5px}
+button:hover{background:var(--red);border-color:var(--red)}
+.grid{display:grid;gap:13px}
+.k5{grid-template-columns:repeat(5,1fr)}
+@media(max-width:920px){.k5{grid-template-columns:repeat(2,1fr)}}
+.card{background:var(--bg2);border:1px solid var(--steel);border-radius:12px;padding:15px 16px}
+.kpi .lab{color:var(--mut);font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;font-weight:600;font-family:'JetBrains Mono',monospace}
+.kpi .val{font-family:'Oswald',sans-serif;font-size:23px;font-weight:700;margin-top:5px}
+.kpi .meta{font-size:11.5px;margin-top:3px;color:var(--mut)}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:5px}
+th,td{text-align:right;padding:10px 10px;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;letter-spacing:.04em;background:var(--bg2);position:sticky;top:64px}
+tbody tr:hover{background:rgba(255,255,255,.025)}
+.badge{display:inline-block;font-weight:700;padding:3px 9px;border-radius:6px;font-size:11px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.04em}
+.b-winner{background:rgba(16,185,129,.18);color:var(--green)}
+.b-ok{background:rgba(139,148,158,.14);color:var(--grey)}
+.b-low_ctr{background:rgba(251,191,36,.18);color:var(--gold)}
+.b-overspend{background:rgba(227,6,19,.18);color:var(--red2)}
+.b-ad_fatigue{background:rgba(227,6,19,.25);color:#FF4458;border:1px solid rgba(227,6,19,.5)}
+.scroll{overflow-x:auto;max-height:calc(100vh - 280px);overflow-y:auto}
+.note{background:rgba(96,165,250,.06);border:1px solid rgba(96,165,250,.25);border-radius:10px;padding:12px 15px;font-size:13px;color:#cdd9e5;margin:11px 0}
+.empty{color:var(--mut);font-size:13.5px;padding:30px;text-align:center}
+.foot{margin-top:20px;text-align:center;color:var(--mut);font-size:11.5px;font-family:'JetBrains Mono',monospace}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--mut);margin-top:8px}
+.legend .badge{font-size:10px;padding:2px 7px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="toprow">
+    <div>
+      <h1>🧬 Marketing Критик</h1>
+      <div class="sub">Аналіз оголошень FB Ads з verdicts (winner / fatigue / overspend / low CTR / ok)</div>
+    </div>
+    <div class="upd">оновлено <b id="gen">—</b><br>RPC <code>dashboard_marketing_critic</code></div>
+  </div>
+
+  <div class="filters">
+    <label for="dateFrom">Від</label>
+    <input type="date" id="dateFrom">
+    <label for="dateTo">До</label>
+    <input type="date" id="dateTo">
+    <label for="minSpend">Мін spend</label>
+    <select id="minSpend">
+      <option value="100">100 ₴</option>
+      <option value="500" selected>500 ₴</option>
+      <option value="1000">1 000 ₴</option>
+      <option value="5000">5 000 ₴</option>
+    </select>
+    <label for="projectFilter">Проєкт</label>
+    <input type="text" id="projectFilter" placeholder="напр. iphone" style="background:var(--bg2);border:1px solid var(--steel);color:#fff;padding:8px 12px;border-radius:8px;font-size:13.5px">
+    <button id="btnReload">🔄 Оновити</button>
+  </div>
+
+  <div class="grid k5" id="kpis">
+    <div class="card kpi"><div class="lab">Оголошень</div><div class="val" id="kAds">—</div><div class="meta">у вибірці</div></div>
+    <div class="card kpi"><div class="lab">Сумарно spend</div><div class="val" id="kSpend">—</div><div class="meta">за період</div></div>
+    <div class="card kpi"><div class="lab">Avg CTR</div><div class="val" id="kCTR">—</div><div class="meta">benchmark</div></div>
+    <div class="card kpi"><div class="lab">Винятки</div><div class="val" id="kProblems" style="color:var(--red2)">—</div><div class="meta">fatigue/low/overspend</div></div>
+    <div class="card kpi"><div class="lab">Winners</div><div class="val" id="kWinners" style="color:var(--green)">—</div><div class="meta">CTR > 1.5× bench</div></div>
+  </div>
+
+  <div class="note" id="note" style="display:none"></div>
+
+  <div class="legend">
+    <span><span class="badge b-winner">winner</span> CTR &gt; 150% benchmark</span>
+    <span><span class="badge b-ok">ok</span> у нормі</span>
+    <span><span class="badge b-low_ctr">low_ctr</span> CTR &lt; 50% benchmark</span>
+    <span><span class="badge b-overspend">overspend</span> spend &gt; 1000 ₴, clicks &lt; 10</span>
+    <span><span class="badge b-ad_fatigue">ad_fatigue</span> frequency &gt; 5</span>
+  </div>
+
+  <div class="card scroll" style="margin-top:13px">
+    <table>
+      <thead>
+        <tr>
+          <th>Оголошення</th>
+          <th>Кампанія</th>
+          <th>UTM term</th>
+          <th>Spend ₴</th>
+          <th>Impr</th>
+          <th>Clicks</th>
+          <th>Reach</th>
+          <th>CPC ₴</th>
+          <th>CPM ₴</th>
+          <th>CTR %</th>
+          <th>Freq</th>
+          <th>Verdict</th>
+        </tr>
+      </thead>
+      <tbody id="tb"><tr><td colspan="12" class="empty">Завантаження…</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="foot">DreamCar Marketing Critic · RPC <code>dashboard_marketing_critic(p_from, p_to, p_project, p_min_spend)</code></div>
+</div>
+
+<script>
+let sb = null;
+
+async function getSb() {
+  if (sb) return sb;
+  for (let i = 0; i < 80; i++) {
+    if (window.supabase && typeof window.supabase.from === 'function') {
+      sb = window.supabase;
+      return sb;
+    }
+    await new Promise(r => setTimeout(r, 100));
+  }
+  throw new Error('Supabase client не з\'явився за 8 сек');
+}
+
+const fmt = n => n == null ? '—' : Math.round(n).toLocaleString('uk-UA');
+const f2 = n => n == null ? '—' : Number(n).toFixed(2);
+
+function isoDate(d) {
+  return d.toISOString().slice(0, 10);
+}
+
+function initDates() {
+  const today = new Date();
+  const week = new Date(today);
+  week.setDate(week.getDate() - 7);
+  document.getElementById('dateFrom').value = isoDate(week);
+  document.getElementById('dateTo').value = isoDate(today);
+}
+
+async function loadCritic() {
+  const tb = document.getElementById('tb');
+  tb.innerHTML = '<tr><td colspan="12" class="empty">Завантаження…</td></tr>';
+  try {
+    const sb = await getSb();
+    const from = document.getElementById('dateFrom').value;
+    const to = document.getElementById('dateTo').value;
+    const minSpend = Number(document.getElementById('minSpend').value);
+    const project = document.getElementById('projectFilter').value.trim() || null;
+
+    const { data, error } = await sb.rpc('dashboard_marketing_critic', {
+      p_from: from,
+      p_to: to,
+      p_project: project,
+      p_min_spend: minSpend,
+    });
+    if (error) throw error;
+    renderData(data || []);
+  } catch (e) {
+    console.error('[critic] error:', e);
+    tb.innerHTML = `<tr><td colspan="12" class="empty" style="color:var(--red2)">Помилка: ${e.message}</td></tr>`;
+  }
+}
+
+function renderData(rows) {
+  document.getElementById('gen').textContent = new Date().toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' });
+
+  const totSpend = rows.reduce((a, r) => a + Number(r.spend || 0), 0);
+  const totImpr = rows.reduce((a, r) => a + Number(r.impressions || 0), 0);
+  const totClicks = rows.reduce((a, r) => a + Number(r.clicks || 0), 0);
+  const avgCTR = totImpr > 0 ? (totClicks / totImpr) * 100 : 0;
+  const problems = rows.filter(r => ['ad_fatigue', 'low_ctr', 'overspend'].includes(r.verdict)).length;
+  const winners = rows.filter(r => r.verdict === 'winner').length;
+
+  document.getElementById('kAds').textContent = rows.length.toLocaleString('uk-UA');
+  document.getElementById('kSpend').textContent = (totSpend / 1000).toFixed(1) + 'К';
+  document.getElementById('kCTR').textContent = avgCTR.toFixed(2) + '%';
+  document.getElementById('kProblems').textContent = problems;
+  document.getElementById('kWinners').textContent = winners;
+
+  const note = document.getElementById('note');
+  if (problems > 0) {
+    note.style.display = 'block';
+    note.innerHTML = `<b style="color:var(--red2)">🚨 ${problems} оголошен${problems === 1 ? 'ня' : 'ь'} потребу${problems === 1 ? 'є' : 'ть'} уваги</b> — fatigue/low_ctr/overspend. Розгляньте паузу або заміну креативу.`;
+  } else {
+    note.style.display = 'none';
+  }
+
+  if (!rows.length) {
+    document.getElementById('tb').innerHTML = '<tr><td colspan="12" class="empty">Жодного оголошення з spend ≥ ' + document.getElementById('minSpend').value + ' ₴</td></tr>';
+    return;
+  }
+
+  const verdictOrder = { ad_fatigue: 1, overspend: 2, low_ctr: 3, winner: 4, ok: 5 };
+  rows.sort((a, b) => (verdictOrder[a.verdict] || 9) - (verdictOrder[b.verdict] || 9) || Number(b.spend) - Number(a.spend));
+
+  const html = rows.map(r => `
+    <tr>
+      <td>${escapeHtml(r.ad_name || '—')}</td>
+      <td style="color:var(--mut);font-size:12px">${escapeHtml(r.campaign_name || '—')}</td>
+      <td style="color:var(--mut);font-size:12px">${escapeHtml(r.utm_term || '—')}</td>
+      <td><b>${fmt(r.spend)}</b></td>
+      <td>${fmt(r.impressions)}</td>
+      <td>${fmt(r.clicks)}</td>
+      <td>${fmt(r.reach)}</td>
+      <td>${f2(r.cpc)}</td>
+      <td>${f2(r.cpm)}</td>
+      <td>${f2(r.ctr)}</td>
+      <td>${f2(r.frequency)}</td>
+      <td><span class="badge b-${r.verdict}">${r.verdict}</span></td>
+    </tr>
+  `).join('');
+  document.getElementById('tb').innerHTML = html;
+}
+
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initDates();
+  document.getElementById('btnReload').addEventListener('click', loadCritic);
+  document.getElementById('dateFrom').addEventListener('change', loadCritic);
+  document.getElementById('dateTo').addEventListener('change', loadCritic);
+  document.getElementById('minSpend').addEventListener('change', loadCritic);
+  document.getElementById('projectFilter').addEventListener('keydown', e => { if (e.key === 'Enter') loadCritic(); });
+
+  setTimeout(loadCritic, 500);
+});
+</script>
+</body>
+</html>
