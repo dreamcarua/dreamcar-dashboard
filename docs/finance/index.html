@@ -366,23 +366,23 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:12px">
         <h4 style="margin:0">📅 P&L по періодах <span class="meta" id="ppMeta" style="font-size:11px;font-family:'JetBrains Mono',monospace;color:#6B7280;text-transform:none;letter-spacing:0">завантаження…</span></h4>
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-          <div class="seg" id="ppGranSeg" style="display:inline-flex;background:rgba(255,255,255,.05);border-radius:8px;padding:3px;gap:2px">
-            <button data-g="day" type="button">День</button>
-            <button data-g="week" type="button">Тиждень</button>
-            <button data-g="month" class="on" type="button">Місяць</button>
-            <button data-g="quarter" type="button">Квартал</button>
-            <button data-g="year" type="button">Рік</button>
-          </div>
           <div class="seg" id="ppRangeSeg" style="display:inline-flex;flex-wrap:wrap;background:rgba(255,255,255,.05);border-radius:8px;padding:3px;gap:2px">
             <button data-r="today" type="button">Сьогодні</button>
             <button data-r="7d" type="button">7 днів</button>
-            <button data-r="30d" type="button">30 днів</button>
+            <button data-r="30d" class="on" type="button">30 днів</button>
             <button data-r="mtd" type="button">Цей місяць</button>
             <button data-r="3m" type="button">3 міс</button>
             <button data-r="6m" type="button">6 міс</button>
-            <button data-r="ytd" class="on" type="button">YTD</button>
+            <button data-r="ytd" type="button">YTD</button>
             <button data-r="12m" type="button">12 міс</button>
             <button data-r="all" type="button">Все</button>
+          </div>
+          <div class="seg" id="ppGranSeg" style="display:inline-flex;background:rgba(255,255,255,.05);border-radius:8px;padding:3px;gap:2px">
+            <button data-g="day" class="on" type="button">День</button>
+            <button data-g="week" type="button">Тиждень</button>
+            <button data-g="month" type="button">Місяць</button>
+            <button data-g="quarter" type="button">Квартал</button>
+            <button data-g="year" type="button">Рік</button>
           </div>
           <input type="date" id="ppFrom" style="height:32px;font-size:12px"> →
           <input type="date" id="ppTo" style="height:32px;font-size:12px">
@@ -1692,8 +1692,8 @@ window.saveLaunchPrize = saveLaunchPrize;
    RPC: dashboard_period_pnl(p_from, p_to, p_granularity, p_project_ids)
    ───────────────────────────────────────────────────────────── */
 const PP = {
-  gran: 'month',
-  range: 'ytd',
+  gran: 'day',
+  range: '30d',
   from: null,
   to: null,
   projectId: '',
@@ -1984,7 +1984,7 @@ async function reloadPeriodPnL() {
 function ppBindControls() {
   if (PP.booted) return;
   PP.booted = true;
-  ppApplyRange('ytd');
+  ppApplyRange('30d');
 
   document.querySelectorAll('#ppGranSeg button').forEach(b => b.addEventListener('click', () => {
     document.querySelectorAll('#ppGranSeg button').forEach(x => x.classList.remove('on'));
