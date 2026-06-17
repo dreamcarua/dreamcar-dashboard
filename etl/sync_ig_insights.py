@@ -324,6 +324,38 @@ def update_sync_meta(acct_rows, media_rows, since, until):
         log(f'  ⚠ sync_meta: {e}')
 
 
+
+# ===== STORIES (forward-only; IG віддає активні сторіс ~24 год) =====
+def story_insights(story_id):
+    for metrics in (('reach','replies','taps_forward','taps_back','exits'),
+                    ('reach','replies'), ('reach',)):
+        d = fb_get(f'{story_id}/insights', {'metric': ','.join(metrics)})
+        if d and 'data' in d:
+            res = {}
+            for m in d['data']:
+                vals = m.get('values') or []
+                res[m.get('name')] = _int(vals[0].get('value') if vals else (m.get('total_value') or {}).get('value'))
+            return res
+    return {}
+
+
+def fetch_stories(ig_id):
+    d = fb_get(f'{ig_id}/stories', {'fields': 'id,media_type,permalink,timestamp', 'limit': 50})
+    rows = []
+    for st in (d or {}).get('data', []):
+        ins = story_insights(st['id'])
+        time.sleep(0.15)
+        rows.append({
+            'story_id': st['id'], 'ig_user_id': ig_id, 'media_type': st.get('media_type'),
+            'permalink': st.get('permalink'), 'published_at': st.get('timestamp'),
+            'reach': ins.get('reach'), 'replies': ins.get('replies'), 'exits': ins.get('exits'),
+            'taps_forward': ins.get('taps_forward'), 'taps_back': ins.get('taps_back'),
+            'total_interactions': (ins.get('replies') or 0),
+            'raw_data': {'story': st, 'insights': ins},
+        })
+    return rows
+
+
 # ===== MAIN =====
 def main():
     ap = argparse.ArgumentParser()
@@ -374,6 +406,13 @@ def main():
     log(f'  ℹ медіа за {LOOKBACK}д: {len(media_list)}')
     media_rows = build_media_rows(ig_id, media_list)
     n_media = upsert('dashboard_ig_media', media_rows, 'media_id')
+
+    try:
+        st_rows = fetch_stories(ig_id)
+        n_st = upsert('dashboard_ig_stories', st_rows, 'story_id') if st_rows else 0
+        log(f'  ℹ stories активних: {len(st_rows)}')
+    except Exception as e:
+        log(f'  ⚠ stories: {e}'); n_st = 0
 
     update_sync_meta(n_acct, n_media, since, until)
     log(f'✅ DONE — акаунт {n_acct} рядків, медіа {n_media} рядків')
