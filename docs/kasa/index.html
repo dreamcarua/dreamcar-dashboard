@@ -429,6 +429,12 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
 <script>
 // #515 role-based: /kasa/ — тільки ceo/cfo (Vadym + Артем). Давид (COO) бачить /finance/, але НЕ /kasa/.
 const ALLOWED_ROLES = ['ceo','cfo'];
+// #517 alias fallback (multi-Google account: Vadym має 2 OAuth — vg@ + dreamcarua@)
+const EMAIL_ALIAS_TO_ROLE_KASA = {
+  'vg@abrisart.com': 'ceo',
+  'dreamcarua@gmail.com': 'ceo',
+  '1avrybak@gmail.com': 'cfo',
+};
 let sb=null, ME=null;
 let DATA={accounts:[],tx:[],transfers:[],cats:[],launches:[]};
 let txDir='out', editTx=null, editAcc=null, importRows=null, importCols=null;
@@ -959,13 +965,27 @@ async function saveMove(){
 }
 function openDivPayout(){ openTxModal(null); setDir('move'); const mt=document.getElementById('txMoveTo'); if(mt) mt.value='dividends'; moveToggle(); }
 
-// ---- auth gate (#515 role-based) ----
+// ---- auth gate (#515 role-based + #517 email alias) ----
 async function boot(user){
   ME=(user&&user.email||'').toLowerCase();
+  let granted = false;
   try {
     await getSb();
-    const { data: u } = await sb.from('users').select('id,name,role,email,is_active').eq('auth_id', user.id).maybeSingle();
-    if (!u || !u.is_active || !ALLOWED_ROLES.includes(String(u.role))) {
+    // 1) auth_id або auth_id_aliases lookup
+    const { data: u } = await sb.from('users').select('id,name,role,email,is_active,auth_id_aliases').or(`auth_id.eq.${user.id},auth_id_aliases.cs.{${user.id}}`).maybeSingle();
+    if (u && u.is_active && ALLOWED_ROLES.includes(String(u.role))) {
+      granted = true;
+    } else if (ME) {
+      // 2) email lookup
+      const { data: u2 } = await sb.from('users').select('id,name,role,email,is_active').ilike('email', ME).maybeSingle();
+      if (u2 && u2.is_active && ALLOWED_ROLES.includes(String(u2.role))) granted = true;
+    }
+    // 3) hardcoded alias fallback (#517)
+    if (!granted && EMAIL_ALIAS_TO_ROLE_KASA[ME] && ALLOWED_ROLES.includes(EMAIL_ALIAS_TO_ROLE_KASA[ME])) {
+      granted = true;
+      console.log('[kasa] alias granted:', ME, '→', EMAIL_ALIAS_TO_ROLE_KASA[ME]);
+    }
+    if (!granted) {
       const w = document.getElementById('whoami');
       if (w) w.textContent = `${u?.name || ME || 'невідомо'} (${u?.role || 'no role'})`;
       document.getElementById('denied').style.display='flex';

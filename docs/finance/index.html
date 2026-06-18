@@ -2051,22 +2051,49 @@ window.reloadPeriodPnL = reloadPeriodPnL;
 
 // #514 — role-based access gate. /finance/ + /kasa/ — тільки ceo/cfo/coo (Vadym, Артем, Давид).
 const FINANCE_ALLOWED_ROLES = ['ceo','cfo','coo'];
+// #515.1 — alias emails (для multi-Google accounts: Vadym dreamcarua@ + vg@, Артем 1avrybak@, Давид smth.mario@)
+const EMAIL_ALIAS_TO_ROLE = {
+  'vg@abrisart.com': 'ceo',
+  'dreamcarua@gmail.com': 'ceo',
+  '1avrybak@gmail.com': 'cfo',
+  'smth.mario@gmail.com': 'coo',
+};
 async function checkFinanceAccess() {
   try {
     await getSb();
     const { data: { user } } = await sb.auth.getUser();
     if (!user) return { ok: false, reason: 'no_user' };
+    // 1) Lookup за auth_id або auth_id_aliases (основний шлях)
     const { data: u, error } = await sb
       .from('users')
-      .select('id,name,role,email,is_active')
-      .eq('auth_id', user.id)
+      .select('id,name,role,email,is_active,auth_id_aliases')
+      .or(`auth_id.eq.${user.id},auth_id_aliases.cs.{${user.id}}`)
       .maybeSingle();
-    if (error || !u) return { ok: false, reason: 'profile_not_found', email: user.email };
-    if (!u.is_active) return { ok: false, reason: 'inactive', name: u.name, role: u.role };
-    if (!FINANCE_ALLOWED_ROLES.includes(String(u.role))) {
+    if (!error && u && u.is_active) {
+      if (FINANCE_ALLOWED_ROLES.includes(String(u.role))) return { ok: true, user: u };
       return { ok: false, reason: 'role_denied', name: u.name, role: u.role };
     }
-    return { ok: true, user: u };
+    // 2) FALLBACK: email lookup у public.users
+    const userEmail = (user.email || '').toLowerCase();
+    if (userEmail) {
+      const { data: u2 } = await sb
+        .from('users')
+        .select('id,name,role,email,is_active')
+        .ilike('email', userEmail)
+        .maybeSingle();
+      if (u2 && u2.is_active && FINANCE_ALLOWED_ROLES.includes(String(u2.role))) {
+        return { ok: true, user: u2 };
+      }
+    }
+    // 3) FALLBACK alias: hardcoded mapping для multi-account users (#515.1)
+    if (userEmail && EMAIL_ALIAS_TO_ROLE[userEmail]) {
+      const aliasRole = EMAIL_ALIAS_TO_ROLE[userEmail];
+      if (FINANCE_ALLOWED_ROLES.includes(aliasRole)) {
+        console.log('[finance access] alias granted:', userEmail, '→', aliasRole);
+        return { ok: true, user: { name: 'alias', email: userEmail, role: aliasRole } };
+      }
+    }
+    return { ok: false, reason: 'profile_not_found', email: user.email };
   } catch (e) { console.error('[finance access]', e); return { ok: false, reason: 'error', error: String(e?.message||e) }; }
 }
 function showAccessDenied(info) {
