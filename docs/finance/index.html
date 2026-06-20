@@ -886,16 +886,19 @@ function drawTrend(daily, dailyAds) {
   if (OV.charts.trend) OV.charts.trend.destroy();
   const labels = daily.map(d => d.day.slice(5));
   const revenues = daily.map(d => d.revenue);
+  const netProfits = daily.map(d => Number(d.net_profit || 0));
   // align ads by day index — даних рівно стільки ж скільки днів (RPC заповнює дірки 0)
   const adsByDay = {};
   (dailyAds || []).forEach(a => { adsByDay[a.day] = Number(a.spend || 0); });
   const spends = daily.map(d => adsByDay[d.day] || 0);
+  // #534: третя серія — Net Profit як line поверх bar-ів
   OV.charts.trend = new Chart(ctx, {
     data: {
       labels,
       datasets: [
-        { type:'bar', label:'Виручка', data: revenues, backgroundColor: 'rgba(227,6,19,0.65)', borderColor:'#E30613', borderWidth:1, borderRadius:3, order:1 },
-        { type:'bar', label:'Реклама', data: spends, backgroundColor: 'rgba(251,191,36,0.7)', borderColor:'#FBBF24', borderWidth:1, borderRadius:3, order:2 }
+        { type:'bar', label:'Виручка', data: revenues, backgroundColor: 'rgba(227,6,19,0.65)', borderColor:'#E30613', borderWidth:1, borderRadius:3, order:2 },
+        { type:'bar', label:'Реклама', data: spends, backgroundColor: 'rgba(251,191,36,0.7)', borderColor:'#FBBF24', borderWidth:1, borderRadius:3, order:3 },
+        { type:'line', label:'Net Profit', data: netProfits, borderColor:'#10B981', backgroundColor:'rgba(16,185,129,0.15)', borderWidth:2, pointRadius:3, pointBackgroundColor:'#10B981', tension:0.25, fill:false, order:1 }
       ]
     },
     options: {
@@ -903,7 +906,7 @@ function drawTrend(daily, dailyAds) {
       interaction: { mode: 'index', intersect: false },
       scales: {
         x: { ...chartCommon().scales.x, stacked: false },
-        y: { ...chartCommon().scales.y, position: 'left', stacked: false, beginAtZero: true }
+        y: { ...chartCommon().scales.y, position: 'left', stacked: false, beginAtZero: false }
       }
     }
   });
@@ -1116,7 +1119,7 @@ function renderKpi(periodRev, periodPaid, prevRev, summary, days) {
   dp.textContent = `${margin.toFixed(0)}% margin proxy`;
   // Cost % від revenue
   const sCost = document.getElementById('s-cost');
-  if (periodRev > 0) sCost.textContent = ((periodRev-periodProfit)/periodRev*100).toFixed(1)+'% від revenue';
+  if (periodRev > 0) sCost.textContent = ((periodRev-periodProfitProxy)/periodRev*100).toFixed(1)+'% від revenue';
   // Margin badge
   const sMargin = document.getElementById('s-margin');
   if (tMargin != null) sMargin.textContent = (tMargin>=30 ? '✓ above target 30%' : (tMargin>=20 ? '⚡ ok, target ≥30%' : '⚠ нижче 20%'));
@@ -1181,7 +1184,7 @@ async function reloadOverview() {
     const periodRev = Number(rpc?.revenue || 0);
     const periodPaid = Number(rpc?.paid || 0);
     const prevRev = Number(rpc?.prev_revenue || 0);
-    const daily = (rpc?.daily || []).map(d => ({ day: d.day, revenue: Number(d.revenue||0) }));
+    const daily = (rpc?.daily || []).map(d => ({ day: d.day, revenue: Number(d.revenue||0), net_profit: Number(d.net_profit||0) }));
     const dailyAds = (rpc?.daily_ads || []).map(a => ({ day: a.day, spend: Number(a.spend||0) }));
     drawTrend(daily, dailyAds);
     // KPI з proxy margin 91.5% (буде уточнено після PnL)
