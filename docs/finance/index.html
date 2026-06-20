@@ -292,8 +292,9 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
     <div class="period-bar">
       <span class="lbl">Період</span>
       <div class="seg" id="periodSeg">
+        <button data-p="today" class="on">Сьогодні</button>
         <button data-p="7">7 днів</button>
-        <button data-p="30" class="on">30 днів</button>
+        <button data-p="30">30 днів</button>
         <button data-p="mtd">Цей місяць</button>
         <button data-p="90">90 днів</button>
         <button data-p="ytd">YTD</button>
@@ -367,9 +368,9 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
         <h4 style="margin:0">📅 P&L по періодах <span class="meta" id="ppMeta" style="font-size:11px;font-family:'JetBrains Mono',monospace;color:#6B7280;text-transform:none;letter-spacing:0">завантаження…</span></h4>
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
           <div class="seg" id="ppRangeSeg" style="display:inline-flex;flex-wrap:wrap;background:rgba(255,255,255,.05);border-radius:8px;padding:3px;gap:2px">
-            <button data-r="today" type="button">Сьогодні</button>
+            <button data-r="today" class="on" type="button">Сьогодні</button>
             <button data-r="7d" type="button">7 днів</button>
-            <button data-r="30d" class="on" type="button">30 днів</button>
+            <button data-r="30d" type="button">30 днів</button>
             <button data-r="mtd" type="button">Цей місяць</button>
             <button data-r="3m" type="button">3 міс</button>
             <button data-r="6m" type="button">6 міс</button>
@@ -719,7 +720,7 @@ function populateSelects() {
 // ====================================================================
 // ============ OVERVIEW / ANALYTICS ==================================
 // ====================================================================
-const OV = { from: null, to: null, preset: '30', deals: [], pnl: [], charts: {} };
+const OV = { from: null, to: null, preset: 'today', deals: [], pnl: [], charts: {} };
 
 function todayISO(){ return new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Kyiv' }); }
 function daysAgoISO(n){ const d=new Date(); d.setDate(d.getDate()-n); return d.toLocaleDateString('sv-SE',{timeZone:'Europe/Kyiv'}); }
@@ -732,7 +733,8 @@ function shortUAH(v){ if(v==null||isNaN(v)) return '—'; return shortNum(v)+' �
 function applyPreset(p) {
   OV.preset = p;
   const t = todayISO();
-  if (p === '7') { OV.from = daysAgoISO(7); OV.to = t; }
+  if (p === 'today') { OV.from = t; OV.to = t; }
+  else if (p === '7') { OV.from = daysAgoISO(7); OV.to = t; }
   else if (p === '30') { OV.from = daysAgoISO(30); OV.to = t; }
   else if (p === '90') { OV.from = daysAgoISO(90); OV.to = t; }
   else if (p === 'mtd') { OV.from = monthStartISO(); OV.to = t; }
@@ -912,17 +914,29 @@ function drawTrend(daily, dailyAds) {
   });
 }
 
-function drawCost(pnl) {
+// #535: drawCost тепер period-aware. Якщо передано costBreakdown — використовуємо його (від RPC).
+// Fallback на pnl-агрегацію для legacy викликів.
+function drawCost(pnlOrBreakdown) {
   const ctx = document.getElementById('chCost').getContext('2d');
   if (OV.charts.cost) OV.charts.cost.destroy();
   let adS=0, pctS=0, fixedS=0, prizeS=0, varS=0;
-  pnl.forEach(p => {
-    adS += Number(p.ad_spend||0);
-    pctS += Number(p.percent_costs||0);
-    fixedS += Number(p.fixed_allocated||0);
-    prizeS += Number(p.prize_cost||0);
-    varS += Number(p.project_costs_total||0);
-  });
+  if (pnlOrBreakdown && !Array.isArray(pnlOrBreakdown) && pnlOrBreakdown.ad_spend !== undefined) {
+    // RPC cost_breakdown — period-aware sums
+    adS = Number(pnlOrBreakdown.ad_spend||0);
+    pctS = Number(pnlOrBreakdown.percent_costs||0);
+    fixedS = Number(pnlOrBreakdown.fixed_costs||0);
+    prizeS = Number(pnlOrBreakdown.prize_cost||0);
+    varS = Number(pnlOrBreakdown.variable_costs||0);
+  } else {
+    // Legacy: pnl array (lifetime per-project)
+    (pnlOrBreakdown||[]).forEach(p => {
+      adS += Number(p.ad_spend||0);
+      pctS += Number(p.percent_costs||0);
+      fixedS += Number(p.fixed_allocated||0);
+      prizeS += Number(p.prize_cost||0);
+      varS += Number(p.project_costs_total||0);
+    });
+  }
   const items = [
     { label:'Реклама', value: adS, color:'#E30613' },
     { label:'% з угод (банк+ФОП+ЗСУ)', value: pctS, color:'#FBBF24' },
@@ -1172,7 +1186,7 @@ async function reloadOverview() {
   const status = document.getElementById('ovStatus');
   try {
     window.__overviewBooted = true;
-    if (!OV.from) applyPreset('30');
+    if (!OV.from) applyPreset('today');
     if (status) status.style.display = 'block';
     document.getElementById('trendMeta').textContent = `${OV.from} → ${OV.to}`;
     const days = daysBetween(OV.from, OV.to);
@@ -1187,6 +1201,8 @@ async function reloadOverview() {
     const daily = (rpc?.daily || []).map(d => ({ day: d.day, revenue: Number(d.revenue||0), net_profit: Number(d.net_profit||0) }));
     const dailyAds = (rpc?.daily_ads || []).map(a => ({ day: a.day, spend: Number(a.spend||0) }));
     drawTrend(daily, dailyAds);
+    // #535: Структура витрат — period-aware з RPC (не lifetime з pnl)
+    if (rpc?.cost_breakdown) drawCost(rpc.cost_breakdown);
     // KPI з proxy margin 91.5% (буде уточнено після PnL)
     renderKpi(periodRev, periodPaid, prevRev, null, days);
     renderForecast(null, daily, periodRev, dailyAds);
@@ -1195,7 +1211,8 @@ async function reloadOverview() {
     let renderedFromCache = false;
     fetchPnlSWR((pnl, meta) => {
       OV.pnl = pnl;
-      drawCost(pnl);
+      // #535: drawCost вже відмальовано з period-aware breakdown — НЕ перетираємо
+      // drawCost(pnl);
       const summary = renderPnL(pnl, OV.from, OV.to);
       renderKpi(periodRev, periodPaid, prevRev, summary, days);
       renderForecast(summary, daily, periodRev, dailyAds);
@@ -1731,7 +1748,7 @@ window.saveLaunchPrize = saveLaunchPrize;
    ───────────────────────────────────────────────────────────── */
 const PP = {
   gran: 'day',
-  range: '30d',
+  range: 'today',
   from: null,
   to: null,
   projectId: '',
@@ -2022,7 +2039,7 @@ async function reloadPeriodPnL() {
 function ppBindControls() {
   if (PP.booted) return;
   PP.booted = true;
-  ppApplyRange('30d');
+  ppApplyRange('today');
 
   document.querySelectorAll('#ppGranSeg button').forEach(b => b.addEventListener('click', () => {
     document.querySelectorAll('#ppGranSeg button').forEach(x => x.classList.remove('on'));
