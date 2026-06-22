@@ -223,6 +223,13 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
     <div class="tbl-card" style="margin-bottom:18px"><table id="tblIntFlow"><thead><tr>
       <th style="text-align:left">Рахунок</th><th>Надійшло (внутр.)</th><th>Відправлено (внутр.)</th><th>Нетто</th>
     </tr></thead><tbody><tr><td colspan="4" class="empty">завантаження…</td></tr></tbody></table></div>
+
+    <!-- #537: ФОП ліміт 2 групи 2026 -->
+    <div class="toolbar" style="margin-top:10px"><div class="grp"><b style="font-family:'Oswald';font-size:16px">📊 Чисті надходження по ФОПах (без внутр.) — ліміт 2 групи 2026</b>&nbsp;<span class="muted" id="fopLimitMeta">завантаження…</span></div></div>
+    <div class="tbl-card" style="margin-bottom:18px"><table id="tblFopLimit"><thead><tr>
+      <th style="text-align:left">ФОП</th><th>Чисті надходження (YTD)</th><th>Ліміт 2026</th><th>Залишок до ліміту</th><th>% використано</th>
+    </tr></thead><tbody><tr><td colspan="5" class="empty">завантаження…</td></tr></tbody></table></div>
+
     <div class="toolbar" style="margin-top:10px"><div class="grp"><b style="font-family:'Oswald';font-size:16px">Пошук операцій</b></div></div>
     <div class="toolbar">
       <input class="search" id="schText" placeholder="🔍 слово в описі / контрагент…" style="max-width:340px" onkeydown="if(event.key==='Enter')doSearch()">
@@ -620,9 +627,38 @@ async function loadCashflow(){ const pr=periodRange();
   try{ const r=await sb.rpc('kasa_cashflow',{p_from:pr.from,p_to:pr.to,p_gran:pr.gran}); DATA.cf=r.data||[]; }catch(e){ DATA.cf=[]; }
   try{ const af=await sb.rpc('kasa_account_cashflow',{p_from:pr.from,p_to:pr.to}); DATA.acctFlow={}; (af.data||[]).forEach(x=>{DATA.acctFlow[x.account_id]={inflow:Number(x.inflow),outflow:Number(x.outflow)};}); }catch(e){ DATA.acctFlow={}; }
   try{ const ifl=await sb.rpc('kasa_internal_flow',{p_from:pr.from,p_to:pr.to}); DATA.intFlow={}; (ifl.data||[]).forEach(x=>{DATA.intFlow[x.account_id]={moved_in:Number(x.moved_in),moved_out:Number(x.moved_out)};}); }catch(e){ DATA.intFlow={}; }
+  // #537: ФОП ліміт 2 групи YTD (поточний рік)
+  try{ const fl=await sb.rpc('dashboard_kasa_fop_limit',{p_year:new Date().getFullYear()}); DATA.fopLimit=fl.data||null; }catch(e){ DATA.fopLimit=null; }
   try{ const dvr=await sb.rpc('kasa_dividends',{p_from:pr.from,p_to:pr.to}); DATA.div={vadym:0,artem:0}; (dvr.data||[]).forEach(x=>{DATA.div[x.who]=Number(x.amt)||0;}); DATA.divTotal=(DATA.div.vadym||0)+(DATA.div.artem||0); }catch(e){ DATA.div={vadym:0,artem:0}; DATA.divTotal=0; }
   try{ const _len=Math.round((new Date(pr.to)-new Date(pr.from))/86400000)+1; const _pTo=new Date(new Date(pr.from).getTime()-86400000); const _pFrom=new Date(_pTo.getTime()-(_len-1)*86400000); const _f2=_pFrom.toLocaleDateString('sv-SE'),_t2=_pTo.toLocaleDateString('sv-SE'); const pv=await sb.rpc('kasa_cashflow',{p_from:_f2,p_to:_t2,p_gran:pr.gran}); const _a=pv.data||[]; DATA.cfPrev={in:_a.reduce((q,r)=>q+Number(r.inflow),0),out:_a.reduce((q,r)=>q+Number(r.outflow),0)}; }catch(e){ DATA.cfPrev={in:0,out:0}; }
-  renderOverview(); renderAcctFlow(); renderIntFlow(); renderKpis(); renderDiv(); renderTrends(); }
+  renderOverview(); renderAcctFlow(); renderIntFlow(); renderFopLimit(); renderKpis(); renderDiv(); renderTrends(); }
+
+// #537: render ФОП ліміт блок
+function renderFopLimit(){
+  const tb=document.querySelector('#tblFopLimit tbody'); if(!tb) return;
+  const meta=document.getElementById('fopLimitMeta');
+  const d=DATA.fopLimit;
+  if(!d || !d.fops || !d.fops.length){
+    tb.innerHTML='<tr><td colspan="5" class="empty">Немає даних за поточний рік</td></tr>';
+    if(meta) meta.textContent='';
+    return;
+  }
+  if(meta) meta.textContent=`· ${d.year} · ліміт 2 групи ${fmtUAH(d.limit_uah)} (834 × мін зарплата 8 647₴)`;
+  tb.innerHTML=d.fops.map(f=>{
+    const pct=Number(f.pct_used||0);
+    const over=f.over_limit;
+    const pctCls=over?'out':(pct>=80?'warn':'in');
+    const bar=`<div style="display:inline-block;width:120px;height:8px;background:#1f1f1f;border-radius:4px;overflow:hidden;vertical-align:middle"><div style="width:${Math.min(pct,100).toFixed(1)}%;height:100%;background:${over?'#dc2626':(pct>=80?'#FBBF24':'#10B981')}"></div></div>`;
+    const warn=over?'<span class="badge" style="border-color:#dc2626;color:#fca5a5;margin-left:6px">🚨 ПЕРЕВИЩЕНО</span>':(pct>=80?'<span class="badge" style="border-color:#FBBF24;color:#FBBF24;margin-left:6px">⚠ >80%</span>':'');
+    return `<tr>
+      <td style="text-align:left"><b>ФОП ${esc(f.name)}</b>${warn}</td>
+      <td class="in">+${fmtUAH(f.net_income)}</td>
+      <td class="muted">${fmtUAH(f.limit_uah)}</td>
+      <td class="${f.remaining>0?'in':'out'}"><b>${f.remaining>0?fmtUAH(f.remaining):'—'}</b></td>
+      <td class="${pctCls}">${pct.toFixed(1)}% ${bar}</td>
+    </tr>`;
+  }).join('');
+}
 function renderAcctFlow(){
   const tb=document.querySelector('#tblAcctFlow tbody'); if(!tb) return;
   const af=DATA.acctFlow||{};
