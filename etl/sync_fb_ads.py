@@ -4,7 +4,10 @@ ETL Facebook Marketing API → Supabase dashboard_ads_data.
 
 Replaces Make.com scenario "FB Ads → MySQL ads_data".
 
-Tig per ad-level insights with UTM extraction from link URLs.
+Tig per ad-level insights with UTM extraction from:
+  1) ad.url_tags (FB "Параметри URL-адреси" — головне джерело utm_term для виконавця)
+  2) creative.link_url + 8 інших стратегій (fallback для джерела/medium/campaign)
+  3) ad_account_id → executor mapping (last resort)
 
 Env vars:
   FB_ACCESS_TOKEN          — System User long-lived token (Business Manager)
@@ -52,19 +55,48 @@ def normalize_account(acct):
     return acct
 
 
+def _strip_macros(v):
+    """Прибрати FB macros {{site_source_name}} {{placement}} — залишити лише literal значення."""
+    if not v:
+        return None
+    s = str(v).strip()
+    if s.startswith('{{') and s.endswith('}}'):
+        return None
+    return s
+
+
+def extract_utm_from_url_tags(url_tags):
+    """
+    25.06.2026 #549: FB "Параметри URL-адреси" на ad level — найточніше джерело utm_term.
+    Формат рядка: 'utm_source={{site_source_name}}&utm_medium={{placement}}&utm_term=claude'
+    Парсимо як query string і прибираємо {{macros}}.
+    """
+    if not url_tags:
+        return {}
+    try:
+        q = parse_qs(url_tags)
+        out = {}
+        for k in ('utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'):
+            v = _strip_macros((q.get(k) or [None])[0])
+            if v:
+                out[k] = v
+        return out
+    except Exception:
+        return {}
+
+
 def extract_utm_from_url(url):
     """Parse UTM params from a destination URL."""
     if not url:
         return {}
     try:
         q = parse_qs(urlparse(url).query)
-        return {
-            'utm_source':   (q.get('utm_source')   or [None])[0],
-            'utm_medium':   (q.get('utm_medium')   or [None])[0],
-            'utm_campaign': (q.get('utm_campaign') or [None])[0],
-            'utm_term':     (q.get('utm_term')     or [None])[0],
-            'utm_content':  (q.get('utm_content')  or [None])[0],
-        }
+        out = {}
+        for k in ('utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'):
+            v = _strip_macros((q.get(k) or [None])[0])
+            if v:
+                out[k] = v
+        return out
     except Exception:
         return {}
 
@@ -159,14 +191,18 @@ def _fetch_post_url(post_id):
 
 def get_ad_link_urls(acct):
     """
-    Fetch link URLs per ad (for UTM extraction).
-    Returns: { ad_id: link_url }
+    Fetch link URLs + url_tags per ad (for UTM extraction).
+    25.06.2026 #549: додано url_tags (FB «Параметри URL-адреси» — головне джерело utm_term).
+    Returns: ({ ad_id: link_url }, { ad_id: url_tags })
     """
     links = {}
+    tags = {}
     no_url_count = 0
     unresolved_post_ids = []  # для другого pass через effective_object_story_id
     params = {
-        'fields': 'id,name,creative{object_story_spec,asset_feed_spec,effective_object_story_id,link_url,template_url}',
+        # url_tags — FB-поле на рівні ad, що містить «Параметри URL-адреси».
+        # Саме там медіабаєр вписує utm_term=claude / utm_term=vadym.
+        'fields': 'id,name,url_tags,creative{object_story_spec,asset_feed_spec,effective_object_story_id,link_url,template_url,url_tags}',
         'limit': 200,
     }
     next_url = None
@@ -177,15 +213,20 @@ def get_ad_link_urls(acct):
         else:
             data = fb_get(f'{acct}/ads', params)
         for ad in data.get('data', []):
+            ad_id = ad['id']
+            # url_tags: спершу з ad level, fallback на creative.url_tags
+            ad_tags = ad.get('url_tags') or (ad.get('creative') or {}).get('url_tags')
+            if ad_tags:
+                tags[ad_id] = ad_tags
             creative = ad.get('creative') or {}
             url, strategy = _extract_url_from_creative(creative)
             if url:
-                links[ad['id']] = url
+                links[ad_id] = url
             else:
                 # Fallback: ad refers to existing post — спробувати дотягнути URL з посту
                 eosi = creative.get('effective_object_story_id')
                 if eosi:
-                    unresolved_post_ids.append((ad['id'], eosi, ad.get('name')))
+                    unresolved_post_ids.append((ad_id, eosi, ad.get('name')))
                 else:
                     no_url_count += 1
         paging = data.get('paging') or {}
@@ -203,8 +244,8 @@ def get_ad_link_urls(acct):
             else:
                 no_url_count += 1
 
-    log(f'  ✓ resolved {len(links)} URLs, {no_url_count} ads without URL')
-    return links
+    log(f'  ✓ resolved {len(links)} URLs, {len(tags)} ads з url_tags, {no_url_count} без URL')
+    return links, tags
 
 
 def _date(s):
@@ -292,13 +333,24 @@ def count_actions(actions, target_types):
     return total
 
 
-def transform_row(row, link_map, acct_name, acct_currency, executor_map=None):
+def transform_row(row, link_map, tags_map, acct_name, acct_currency, executor_map=None):
     """FB insight row → dashboard_ads_data row."""
     ad_id = row.get('ad_id') or ''
     link_url = link_map.get(ad_id)
-    utm = extract_utm_from_url(link_url)
-    # 07.06.2026: fallback — якщо FB не повертає URL з utm_term, мапимо за ad_account_id
-    # (бо більшість акаунтів веде один виконавець, налаштування FB Ads URL Parameters ще не зроблені)
+    url_tags = tags_map.get(ad_id) if tags_map else None
+
+    # 25.06.2026 #549: ПРІОРИТЕТ — url_tags з ad level (Vadym: «тут вся інформація — де вадим а де клод»).
+    # Це FB-поле «Параметри URL-адреси», де медіабаєр сам вписує utm_term=claude/vadym.
+    utm = extract_utm_from_url_tags(url_tags)
+
+    # Fallback на парсинг URL з creative для полів, яких немає в url_tags.
+    if not utm.get('utm_term') or not utm.get('utm_source') or not utm.get('utm_medium'):
+        url_utm = extract_utm_from_url(link_url)
+        for k in ('utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'):
+            if not utm.get(k) and url_utm.get(k):
+                utm[k] = url_utm[k]
+
+    # Last resort: якщо все ще немає utm_term — мапимо за ad_account_id (legacy fallback).
     if not utm.get('utm_term') and executor_map:
         acct = row.get('account_id') or ''
         if acct in executor_map:
@@ -411,7 +463,7 @@ def main():
     log(f'   {len(FB_ACCOUNTS)} ad account(s): {", ".join(FB_ACCOUNTS)}')
 
     # 07.06.2026: завантажуємо mapping ad_account_id → utm_term (виконавець)
-    # для fallback коли FB API не повертає URL з utm_term у creative.
+    # для last-resort fallback коли FB API не повертає url_tags І URL без utm.
     executor_map = {}
     try:
         r = requests.get(f'{SB_URL}/rest/v1/ads_account_to_executor?select=ad_account_id,executor_utm_term',
@@ -434,13 +486,13 @@ def main():
             log(f'   ❌ fetch account info: {e}')
             continue
 
-        log(f'   Fetching ad link URLs...')
+        log(f'   Fetching ad link URLs + url_tags...')
         try:
-            link_map = get_ad_link_urls(acct)
-            log(f'   {len(link_map)} ads with link URLs')
+            link_map, tags_map = get_ad_link_urls(acct)
+            log(f'   {len(link_map)} ads with link URLs, {len(tags_map)} ads with url_tags')
         except Exception as e:
-            log(f'   ⚠ link URLs failed: {e}')
-            link_map = {}
+            log(f'   ⚠ link URLs/tags failed: {e}')
+            link_map, tags_map = {}, {}
 
         log(f'   Fetching insights...')
         try:
@@ -450,7 +502,7 @@ def main():
             log(f'   ❌ insights failed: {e}')
             continue
 
-        rows = [transform_row(r, link_map, name, currency, executor_map) for r in raw_rows]
+        rows = [transform_row(r, link_map, tags_map, name, currency, executor_map) for r in raw_rows]
         upserted = upsert_ads(rows)
         total += upserted
 
