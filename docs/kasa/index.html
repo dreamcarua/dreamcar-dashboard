@@ -526,8 +526,9 @@ function renderAlerts(){
   DATA.accounts.filter(a=>a.is_active).forEach(a=>{
     const real=realBal(a);
     if(a.api_balance!=null){
-      const ops=acctOps(a); const diff=Math.round(a.api_balance-ops); const tol=Math.max(1000,Math.abs(a.api_balance)*0.01);
-      if(Math.abs(diff)>tol) A.push({s:'warn',t:`Розбіжність: ${esc(a.name)} ${diff>0?'+':''}${fmtUAH(diff)} (API vs операції)`});
+      // 26.06.2026 #549c: прибрано "Розбіжність API vs операції" — фейкова метрика
+      // без opening_date. computed=opening+sum_tx має сенс лише з відомою датою opening_balance.
+      // Лишаємо тільки моніторинг свіжості api_balance_at.
       if(a.api_balance_at){ const h=(now-new Date(a.api_balance_at).getTime())/3600000; if(h>6) A.push({s:'warn',t:`${esc(a.name)}: баланс не оновлювався ${Math.round(h)} год`}); }
       else A.push({s:'warn',t:`${esc(a.name)}: немає даних балансу з API`});
     }
@@ -672,11 +673,18 @@ function acctCard(a){
   const shown=real!=null?real:ops;
   const bcls=a.bank==='monobank'?'mono':(a.bank==='privatbank'?'privat':(a.bank||''));
   const bk=a.bank?`<span class="badge ${bcls}">${a.bank}</span>`:'';
+  // 26.06.2026 #549c: \u043f\u0440\u0438\u0431\u0440\u0430\u043d\u043e "\u0440\u043e\u0437\u0431\u0456\u0436\u043d\u0456\u0441\u0442\u044c \u0437 \u043e\u043f\u0435\u0440\u0430\u0446\u0456\u044f\u043c\u0438" \u2014 \u0444\u0435\u0439\u043a\u043e\u0432\u0430 \u043c\u0435\u0442\u0440\u0438\u043a\u0430
+  // \u0431\u0435\u0437 opening_date (computed = opening + sum_tx, \u0430\u043b\u0435 opening_date \u043d\u0435\u0432\u0456\u0434\u043e\u043c\u0438\u0439).
+  // \u041f\u043e\u043a\u0430\u0437\u0443\u0454\u043c\u043e \u0442\u0456\u043b\u044c\u043a\u0438 api_balance \u2014 \u0446\u0435 source-of-truth \u0437 \u0431\u0430\u043d\u043a\u0443.
   let extra;
-  if(real!=null){ const diff=Math.round(real-ops); const tol=Math.max(1000, Math.abs(real)*0.01);
-    extra = Math.abs(diff)>tol ? `<div class="meta" style="color:#fbbf24">\u26a0 \u0440\u043e\u0437\u0431\u0456\u0436\u043d\u0456\u0441\u0442\u044c \u0437 \u043e\u043f\u0435\u0440\u0430\u0446\u0456\u044f\u043c\u0438: ${diff>0?'+':''}${fmtUAH(diff)}</div>`
-      : `<div class="meta" style="color:#34d399">\u2713 \u0437\u0431\u0456\u0433\u0430\u0454\u0442\u044c\u0441\u044f</div>`;
-  } else { extra=`<div class="meta">\u0437\u0430 \u043e\u043f\u0435\u0440\u0430\u0446\u0456\u044f\u043c\u0438</div>`; }
+  if(real!=null && a.api_balance_at){
+    const updatedAt = new Date(a.api_balance_at).toLocaleString('uk-UA', { timeZone: 'Europe/Kyiv', day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' });
+    extra=`<div class="meta" style="color:#34d399">\u2713 \u0437 \u0431\u0430\u043d\u043a\u0443 \u00b7 ${updatedAt}</div>`;
+  } else if(real!=null){
+    extra=`<div class="meta" style="color:#34d399">\u2713 \u0437 \u0431\u0430\u043d\u043a\u0443</div>`;
+  } else {
+    extra=`<div class="meta">\u0437\u0430 \u043e\u043f\u0435\u0440\u0430\u0446\u0456\u044f\u043c\u0438</div>`;
+  }
   return `<div class="acct"><div class="nm">${esc(a.icon||'🏦')} ${esc(a.name)} ${bk}</div><div class="bal">${fmtUAH(shown)}</div>${extra}<div class="meta">${a.kind}${a.is_active?'':' · \u043d\u0435\u0430\u043a\u0442\u0438\u0432\u043d\u0438\u0439'}</div></div>`;
 }
 function txRow(t,withSource){
