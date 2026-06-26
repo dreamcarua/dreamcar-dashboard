@@ -704,7 +704,29 @@ function txRow(t,withSource){
 const PG={bank:{page:1,size:50},cash:{page:1,size:50},div:{page:1,size:50},tr:{page:1,size:50}};
 const PG_RENDER={bank:()=>renderBank(),cash:()=>renderCash(),div:()=>renderDiv(),tr:()=>renderTransfers()};
 function pageSlice(key,rows,sig){ const st=PG[key]; if(sig!==undefined){ if(st._sig!==undefined&&st._sig!==sig)st.page=1; st._sig=sig; } const total=rows.length; const pages=Math.max(1,Math.ceil(total/st.size)); if(st.page>pages)st.page=pages; if(st.page<1)st.page=1; renderPager(key,total,pages); return rows.slice((st.page-1)*st.size, st.page*st.size); }
-function renderPager(key,total,pages){ const el=document.getElementById('pager-'+key); if(!el)return; const st=PG[key]; if(!total){ el.innerHTML=''; return; } const from=(st.page-1)*st.size+1, to=Math.min(total,st.page*st.size); el.innerHTML=`<div style="display:flex;align-items:center;gap:8px;justify-content:flex-end;padding:10px 4px;flex-wrap:wrap"><span class="muted">Рядків:</span><select class="selin" style="width:74px" onchange="setPageSize('${key}',this.value)">${[10,50,100].map(n=>`<option value="${n}" ${st.size===n?'selected':''}>${n}</option>`).join('')}</select><span class="muted">${from}\u2013${to} з ${total}</span><button class="btn ghost" ${st.page<=1?'disabled':''} onclick="goPage('${key}',1)">\u00ab</button><button class="btn ghost" ${st.page<=1?'disabled':''} onclick="goPage('${key}',${st.page-1})">\u2039</button><span style="min-width:60px;text-align:center">${st.page} / ${pages}</span><button class="btn ghost" ${st.page>=pages?'disabled':''} onclick="goPage('${key}',${st.page+1})">\u203a</button><button class="btn ghost" ${st.page>=pages?'disabled':''} onclick="goPage('${key}',${pages})">\u00bb</button></div>`; }
+function renderPager(key,total,pages){
+  const el=document.getElementById('pager-'+key); if(!el)return; const st=PG[key];
+  if(!total){ el.innerHTML=''; return; }
+  const from=(st.page-1)*st.size+1, to=Math.min(total,st.page*st.size);
+  // 26.06.2026 #549c: event delegation — Vadym: не працюють клавіши пагінації.
+  el.innerHTML=`<div style="display:flex;align-items:center;gap:8px;justify-content:flex-end;padding:10px 4px;flex-wrap:wrap"><span class="muted">Рядків:</span><select class="selin" style="width:74px" data-page-action="size" data-page-key="${key}">${[10,50,100].map(n=>`<option value="${n}" ${st.size===n?'selected':''}>${n}</option>`).join('')}</select><span class="muted">${from}\u2013${to} з ${total}</span><button class="btn ghost" ${st.page<=1?'disabled':''} data-page-action="go" data-page-key="${key}" data-page-target="1">\u00ab</button><button class="btn ghost" ${st.page<=1?'disabled':''} data-page-action="go" data-page-key="${key}" data-page-target="${st.page-1}">\u2039</button><span style="min-width:60px;text-align:center">${st.page} / ${pages}</span><button class="btn ghost" ${st.page>=pages?'disabled':''} data-page-action="go" data-page-key="${key}" data-page-target="${st.page+1}">\u203a</button><button class="btn ghost" ${st.page>=pages?'disabled':''} data-page-action="go" data-page-key="${key}" data-page-target="${pages}">\u00bb</button></div>`;
+  if(!el.__pagerBound){
+    el.__pagerBound=true;
+    el.addEventListener('click', (e)=>{
+      const b = e.target.closest('button[data-page-action="go"]');
+      if(!b || b.disabled) return;
+      const k = b.dataset.pageKey;
+      const p = Number(b.dataset.pageTarget);
+      if(!k || !p || isNaN(p)) return;
+      goPage(k, p);
+    });
+    el.addEventListener('change', (e)=>{
+      const s = e.target.closest('select[data-page-action="size"]');
+      if(!s) return;
+      setPageSize(s.dataset.pageKey, s.value);
+    });
+  }
+}
 function setPageSize(key,v){ PG[key].size=Number(v); PG[key].page=1; PG_RENDER[key](); }
 function goPage(key,p){ PG[key].page=p; PG_RENDER[key](); }
 window.setPageSize=setPageSize; window.goPage=goPage;
