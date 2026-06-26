@@ -1,89 +1,89 @@
 {
- "generated": "2026-06-25T08:37:53.622218+00:00",
+ "generated": "2026-06-26T08:41:19.292720+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-06-24",
-  "prev_date": "2026-06-23",
-  "spend": 12187.05,
-  "impressions": 83462,
-  "clicks": 1074,
-  "purchases": 195,
-  "pixel_roas": 7.06,
-  "cpa": 62.5,
-  "frequency": 2.4,
-  "real_ad_revenue": 44991,
-  "real_ad_roas": 3.69,
+  "date": "2026-06-25",
+  "prev_date": "2026-06-24",
+  "spend": 13383.1,
+  "impressions": 96076,
+  "clicks": 1110,
+  "purchases": 137,
+  "pixel_roas": 3.83,
+  "cpa": 97.69,
+  "frequency": 2.07,
+  "real_ad_revenue": 40895,
+  "real_ad_roas": 3.06,
   "deltas": {
-   "spend": 7.8,
-   "pixel_roas": 20.7,
-   "purchases": 48.9,
-   "cpa": -27.6
+   "spend": 9.8,
+   "pixel_roas": -45.8,
+   "purchases": -29.7,
+   "cpa": 56.3
   },
   "week": {
    "this": {
-    "from": "2026-06-18",
-    "to": "2026-06-24",
-    "spend": 151825,
-    "purchases": 1459,
-    "pixel_roas": 3.75,
-    "cpa": 104.06,
-    "real_revenue": 315641,
-    "real_roas": 2.08
+    "from": "2026-06-19",
+    "to": "2026-06-25",
+    "spend": 138392,
+    "purchases": 1248,
+    "pixel_roas": 3.57,
+    "cpa": 110.89,
+    "real_revenue": 294079,
+    "real_roas": 2.12
    },
    "prev": {
-    "from": "2026-06-11",
-    "to": "2026-06-17",
-    "spend": 145681,
-    "purchases": 2194,
-    "pixel_roas": 4.04,
-    "cpa": 66.4,
-    "real_revenue": 362170,
-    "real_roas": 2.49
+    "from": "2026-06-12",
+    "to": "2026-06-18",
+    "spend": 153592,
+    "purchases": 2146,
+    "pixel_roas": 3.96,
+    "cpa": 71.57,
+    "real_revenue": 366734,
+    "real_roas": 2.39
    },
    "deltas": {
-    "spend": 4.2,
-    "real_roas": -16.5,
-    "pixel_roas": -7.2,
-    "cpa": 56.7,
-    "purchases": -33.5
+    "spend": -9.9,
+    "real_roas": -11.3,
+    "pixel_roas": -9.8,
+    "cpa": 54.9,
+    "purchases": -41.8
    }
   },
   "real_by_placement": [
    {
     "placement": "instagram_stories",
-    "revenue": 12762,
-    "paid": 35
+    "revenue": 16793,
+    "paid": 34
    },
    {
     "placement": "instagram_feed",
-    "revenue": 12705,
-    "paid": 39
+    "revenue": 8516,
+    "paid": 32
    },
    {
     "placement": "instagram_reels",
-    "revenue": 12269,
-    "paid": 29
+    "revenue": 7402,
+    "paid": 18
+   },
+   {
+    "placement": "facebook_right_column",
+    "revenue": 2999,
+    "paid": 1
    },
    {
     "placement": "facebook_mobile_feed",
-    "revenue": 4638,
-    "paid": 9
+    "revenue": 2792,
+    "paid": 7
    },
    {
     "placement": "facebook_mobile_reels",
-    "revenue": 1918,
-    "paid": 6
+    "revenue": 1895,
+    "paid": 5
    },
    {
     "placement": "facebook_stories",
     "revenue": 499,
-    "paid": 1
-   },
-   {
-    "placement": "facebook_notification",
-    "revenue": 199,
     "paid": 1
    }
   ],
@@ -92,31 +92,40 @@
   ],
   "top_creatives": [
    {
-    "name": "мем пост мустанг",
-    "ad_id": "120250145987390624",
-    "spend": 551.8,
-    "purchases": 14,
-    "roas": 26.5,
-    "ctr": 1.1
-   },
-   {
-    "name": "відео рекламне",
-    "ad_id": "120250181183630624",
-    "spend": 4692.27,
-    "purchases": 93,
-    "roas": 7.29,
-    "ctr": 1.44
+    "name": "Картинка 16",
+    "ad_id": "120249740409550624",
+    "spend": 460.88,
+    "purchases": 11,
+    "roas": 8.16,
+    "ctr": 1.08
    },
    {
     "name": "ще пост мустанг",
     "ad_id": "120250145693030624",
-    "spend": 1510.81,
-    "purchases": 21,
-    "roas": 6.38,
-    "ctr": 0.93
+    "spend": 549.41,
+    "purchases": 10,
+    "roas": 7.53,
+    "ctr": 0.99
+   },
+   {
+    "name": "відео рекламне 5",
+    "ad_id": "120250381625340624",
+    "spend": 606.27,
+    "purchases": 3,
+    "roas": 6.87,
+    "ctr": 0.74
    }
   ],
-  "weak_creatives": []
+  "weak_creatives": [
+   {
+    "name": "Картинка 18 – копія",
+    "ad_id": "120250067098420624",
+    "spend": 506.68,
+    "purchases": 2,
+    "roas": 1.37,
+    "ctr": 1.45
+   }
+  ]
  },
  "projects": [
   {
@@ -596,72 +605,7 @@
      "cpa": null
     }
    ],
-   "adsets": [
-    {
-     "name": "Новий набір реклами з ціллю «Продажі»",
-     "spend": 164966.36,
-     "purchases": 4733,
-     "roas": 6.08,
-     "ctr": 2.0,
-     "cpa": 34.85
-    },
-    {
-     "name": "Новий набір реклами з ціллю «Продажі»",
-     "spend": 134710.86,
-     "purchases": 1983,
-     "roas": 0.64,
-     "ctr": 1.42,
-     "cpa": 67.93
-    },
-    {
-     "name": "Новий набір реклами з ціллю «Продажі»",
-     "spend": 78892.4,
-     "purchases": 1985,
-     "roas": 5.85,
-     "ctr": 1.41,
-     "cpa": 39.74
-    },
-    {
-     "name": "Новий набір реклами з ціллю «Продажі»",
-     "spend": 72610.39,
-     "purchases": 1186,
-     "roas": 0.3,
-     "ctr": 1.72,
-     "cpa": 61.22
-    },
-    {
-     "name": "Новий набір реклами з ціллю «Продажі»",
-     "spend": 67651.2,
-     "purchases": 2055,
-     "roas": 6.01,
-     "ctr": 2.35,
-     "cpa": 32.92
-    },
-    {
-     "name": "Новий набір реклами з ціллю «Продажі»",
-     "spend": 61282.33,
-     "purchases": 690,
-     "roas": 3.87,
-     "ctr": 1.3,
-     "cpa": 88.81
-    },
-    {
-     "name": "geo-ua_pl-all_audience-lal-interest-car_male_20-50_20250808",
-     "spend": 56061.21,
-     "purchases": 547,
-     "roas": 4.52,
-     "ctr": 1.23,
-     "cpa": 102.49
-    },
-    {
-     "name": "Новий набір реклами з ціллю «Продажі»",
-     "spend": 54982.03,
-     "purchases": 1949,
-     "roas": 12.85,
-     "ctr": 2.77,
-     "cpa": 28.21
-    }
-   ],
+   "adsets": [],
    "adsets_window": "2025-04-02",
    "recommendations": [
     {
@@ -1618,7 +1562,72 @@
      "cpa": null
     }
    ],
-   "adsets": [],
+   "adsets": [
+    {
+     "name": "Новий набір реклами з ціллю «Продажі»",
+     "spend": 36360.29,
+     "purchases": 1128,
+     "roas": 11.53,
+     "ctr": 1.95,
+     "cpa": 32.23
+    },
+    {
+     "name": "Новий набір реклами з ціллю «Продажі»",
+     "spend": 30008.46,
+     "purchases": 878,
+     "roas": 9.61,
+     "ctr": 2.03,
+     "cpa": 34.18
+    },
+    {
+     "name": "Новий набір реклами з ціллю «Продажі»",
+     "spend": 14548.69,
+     "purchases": 102,
+     "roas": 2.84,
+     "ctr": 1.99,
+     "cpa": 142.63
+    },
+    {
+     "name": "Новий набір реклами з ціллю «Продажі»",
+     "spend": 7444.67,
+     "purchases": 53,
+     "roas": 2.74,
+     "ctr": 1.8,
+     "cpa": 140.47
+    },
+    {
+     "name": "Новий набір реклами з ціллю «Продажі»",
+     "spend": 7425.92,
+     "purchases": 93,
+     "roas": 4.59,
+     "ctr": 2.71,
+     "cpa": 79.85
+    },
+    {
+     "name": "Новий набір реклами з ціллю «Продажі»",
+     "spend": 5281.55,
+     "purchases": 69,
+     "roas": 4.36,
+     "ctr": 2.33,
+     "cpa": 76.54
+    },
+    {
+     "name": "Новий набір реклами з ціллю «Продажі»",
+     "spend": 4407.19,
+     "purchases": 34,
+     "roas": 3.26,
+     "ctr": 2.3,
+     "cpa": 129.62
+    },
+    {
+     "name": "Новий набір реклами з ціллю «Продажі»",
+     "spend": 4152.12,
+     "purchases": 31,
+     "roas": 3.36,
+     "ctr": 1.97,
+     "cpa": 133.94
+    }
+   ],
    "adsets_window": "2025-12-08",
    "recommendations": [
     {
@@ -4327,45 +4336,45 @@
    "name": "FORD MUSTANG",
    "car_model": "Ford Mustang Convertible 2017",
    "date_from": "2026-06-15",
-   "date_to": "2026-06-25",
-   "spend": 200547.92,
-   "impressions": 1275542,
-   "clicks": 16700,
-   "ctr": 1.31,
-   "reach": 284381,
-   "frequency": 4.49,
-   "purchases": 1963,
-   "pixel_roas": 3.72,
-   "cpa": 102.16,
-   "pixel_revenue": 745431,
-   "real_ad_revenue": 438294,
-   "real_ad_roas": 2.19,
-   "gap_pct": -41.2,
+   "date_to": "2026-06-26",
+   "spend": 216789.42,
+   "impressions": 1387892,
+   "clicks": 17939,
+   "ctr": 1.29,
+   "reach": 294194,
+   "frequency": 4.72,
+   "purchases": 2114,
+   "pixel_roas": 3.71,
+   "cpa": 102.55,
+   "pixel_revenue": 804025,
+   "real_ad_revenue": 479140,
+   "real_ad_roas": 2.21,
+   "gap_pct": -40.4,
    "segments": {
     "platform": [
      [
       "instagram",
-      167825.28,
-      1615,
-      3.54
+      180803.45,
+      1731,
+      3.53
      ],
      [
       "facebook",
-      30743.23,
-      325,
-      4.6
+      33858.24,
+      356,
+      4.57
      ],
      [
       "threads",
-      1136.7,
+      1238.02,
       10,
-      3.79
+      3.5
      ],
      [
       "audience_network",
-      811.58,
-      12,
-      5.64
+      889.71,
+      14,
+      6.11
      ],
      [
       "unknown",
@@ -4377,107 +4386,125 @@
     "age": [
      [
       "25-34",
-      99914.95,
-      930,
-      3.57
+      107211.43,
+      995,
+      3.61
      ],
      [
       "35-44",
-      61272.22,
-      656,
-      4.06
+      66759.42,
+      721,
+      4.04
      ],
      [
       "18-24",
-      20299.57,
-      169,
-      2.88
+      21353.95,
+      179,
+      2.89
      ],
      [
       "45-54",
-      14784.5,
-      148,
-      4.06
+      16897.26,
+      159,
+      3.82
      ],
      [
       "65+",
-      2159.34,
+      2303.04,
       22,
-      4.19
+      3.95
      ],
      [
       "55-64",
-      2113.96,
-      35,
-      5.35
+      2260.89,
+      36,
+      5.09
      ],
      [
       "Unknown",
-      3.38,
+      3.43,
       1,
-      147.63
+      145.48
      ]
     ],
     "gender": [
      [
       "male",
-      165095.26,
-      1636,
-      3.84
+      179661.3,
+      1766,
+      3.81
      ],
      [
       "female",
-      35050.3,
-      321,
-      3.12
+      36703.09,
+      343,
+      3.2
      ],
      [
       "unknown",
-      402.36,
+      425.03,
       5,
-      5.1
+      4.83
      ]
     ],
     "device": [
      [
       "iphone",
-      119802.15,
-      1101,
+      128093.46,
+      1169,
       3.51
      ],
      [
       "android_smartphone",
-      80010.98,
-      855,
-      4.04
+      87903.55,
+      936,
+      4.01
      ],
      [
       "desktop",
-      452.94,
+      518.01,
       3,
-      2.01
+      1.86
      ],
      [
       "android_tablet",
-      141.9,
+      160.15,
       1,
-      1.47
+      1.3
      ],
      [
       "ipad",
-      108.81,
+      114.21,
       2,
-      4.14
+      3.94
      ],
      [
       "other",
-      0.02,
+      0.04,
       1,
-      24935.85
+      12463.8
      ]
     ]
    },
    "creatives": [
+    {
+     "name": "Картинка 4 – копія",
+     "ad_id": "120250066686900624",
+     "spend": 4.87,
+     "purchases": 1,
+     "roas": 162.75,
+     "ctr": 3.33,
+     "thumb": "data:image/jpeg;base64,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"
+    },
+    {
+     "name": "четвертий пост компл мустанг широка – копія – копія",
+     "ad_id": "120250066771200624",
+     "spend": 163.91,
+     "purchases": 5,
+     "roas": 15.11,
+     "ctr": 1.98,
+     "thumb": "data:image/jpeg;base64,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"
+    },
     {
      "name": "пʼятий пост айфон мустанг широка – копія",
      "ad_id": "120249957476270624",
@@ -4488,49 +4515,55 @@
      "thumb": "data:image/jpeg;base64,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"
     },
     {
-     "name": "четвертий пост компл мустанг широка – копія – копія",
-     "ad_id": "120250066771200624",
-     "spend": 163.91,
-     "purchases": 3,
-     "roas": 13.91,
-     "ctr": 1.98,
-     "thumb": "data:image/jpeg;base64,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"
-    },
-    {
-     "name": "Картинка 10 – копія",
-     "ad_id": "120250066771220624",
-     "spend": 117.3,
-     "purchases": 2,
-     "roas": 12.67,
-     "ctr": 1.03,
-     "thumb": "data:image/jpeg;base64,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"
+     "name": "відео рекламне 2 · 45-54",
+     "ad_id": "120250383152870624",
+     "spend": 41.73,
+     "purchases": 1,
+     "roas": 11.86,
+     "ctr": 0.95,
+     "thumb": "data:image/jpeg;base64,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"
     },
     {
      "name": "мем пост мустанг",
      "ad_id": "120250145987390624",
-     "spend": 1444.81,
-     "purchases": 22,
-     "roas": 11.5,
-     "ctr": 1.18,
+     "spend": 1568.64,
+     "purchases": 23,
+     "roas": 10.72,
+     "ctr": 1.16,
      "thumb": "data:image/jpeg;base64,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"
+    },
+    {
+     "name": "Картинка 10 – копія",
+     "ad_id": "120250066771220624",
+     "spend": 140.64,
+     "purchases": 2,
+     "roas": 10.57,
+     "ctr": 1.01,
+     "thumb": "data:image/jpeg;base64,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"
     },
     {
      "name": "Картинка 4 – копія",
      "ad_id": "120250066771360624",
-     "spend": 120.78,
-     "purchases": 3,
-     "roas": 10.44,
-     "ctr": 1.47,
-     "thumb": "data:image/jpeg;base64,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"
+     "spend": 184.37,
+     "purchases": 4,
+     "roas": 7.91,
+     "ctr": 1.52
+    },
+    {
+     "name": "мем пост мустанг · LAL 1%",
+     "ad_id": "120250384169770624",
+     "spend": 27.99,
+     "purchases": 1,
+     "roas": 7.84,
+     "ctr": 0.56
     },
     {
      "name": "пʼятий пост айфон мустанг широка",
      "ad_id": "120249957393090624",
      "spend": 536.51,
      "purchases": 10,
-     "roas": 7.72,
-     "ctr": 1.57,
-     "thumb": "data:image/jpeg;base64,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"
+     "roas": 7.73,
+     "ctr": 1.57
     },
     {
      "name": "пʼятий пост айфон мустанг широка – копія",
@@ -4543,42 +4576,18 @@
     {
      "name": "ще пост мустанг",
      "ad_id": "120250145693030624",
-     "spend": 3830.37,
-     "purchases": 47,
-     "roas": 7.33,
-     "ctr": 1.03
+     "spend": 4085.34,
+     "purchases": 53,
+     "roas": 7.35,
+     "ctr": 1.04
     },
     {
      "name": "Картинка 17",
      "ad_id": "120249740409580624",
-     "spend": 1332.92,
-     "purchases": 18,
-     "roas": 7.23,
-     "ctr": 1.4
-    },
-    {
-     "name": "Картинка 13",
-     "ad_id": "120249740409540624",
-     "spend": 2266.1,
-     "purchases": 35,
-     "roas": 6.54,
-     "ctr": 1.26
-    },
-    {
-     "name": "Картинка 18",
-     "ad_id": "120249740409640624",
-     "spend": 1883.89,
-     "purchases": 28,
-     "roas": 6.4,
-     "ctr": 1.21
-    },
-    {
-     "name": "відео рекламне",
-     "ad_id": "120250181183630624",
-     "spend": 8316.8,
-     "purchases": 147,
-     "roas": 6.33,
-     "ctr": 1.45
+     "spend": 1330.26,
+     "purchases": 16,
+     "roas": 6.78,
+     "ctr": 1.43
     }
    ],
    "series": [
@@ -4647,74 +4656,101 @@
     },
     {
      "date": "2026-06-24",
-     "spend": 12187.05,
+     "spend": 12190.97,
      "purchases": 195,
      "roas": 7.06,
-     "cpa": 62.5
+     "cpa": 62.52
     },
     {
      "date": "2026-06-25",
-     "spend": 4795.48,
-     "purchases": 54,
-     "roas": 3.92,
-     "cpa": 88.81
+     "spend": 13383.1,
+     "purchases": 137,
+     "roas": 3.83,
+     "cpa": 97.69
+    },
+    {
+     "date": "2026-06-26",
+     "spend": 7649.96,
+     "purchases": 67,
+     "roas": 3.41,
+     "cpa": 114.18
     }
    ],
    "adsets": [
     {
      "name": "Broad · UA 18-45 · A+A · VALUE · інкремент",
-     "spend": 52459.77,
-     "purchases": 701,
-     "roas": 5.44,
-     "ctr": 1.27,
-     "cpa": 74.84
+     "spend": 58208.89,
+     "purchases": 716,
+     "roas": 5.15,
+     "ctr": 1.22,
+     "cpa": 81.3
     },
     {
      "name": "Пости мустанг широка",
-     "spend": 49572.32,
-     "purchases": 512,
-     "roas": 4.24,
-     "ctr": 1.2,
-     "cpa": 96.82
+     "spend": 38811.02,
+     "purchases": 343,
+     "roas": 3.64,
+     "ctr": 1.15,
+     "cpa": 113.15
     },
     {
      "name": "Пости мустанг на нових",
-     "spend": 45809.78,
-     "purchases": 235,
-     "roas": 1.55,
-     "ctr": 1.11,
-     "cpa": 194.94
-    },
-    {
-     "name": "45-54 · чоловіки · UA (діамант)",
-     "spend": 3648.03,
-     "purchases": 17,
-     "roas": 1.55,
-     "ctr": 1.51,
-     "cpa": 214.59
+     "spend": 36063.68,
+     "purchases": 153,
+     "roas": 1.29,
+     "ctr": 1.08,
+     "cpa": 235.71
     },
     {
      "name": "35-54 · чоловіки · UA (sweet spot)",
-     "spend": 3510.45,
-     "purchases": 44,
-     "roas": 4.17,
-     "ctr": 1.19,
-     "cpa": 79.78
+     "spend": 5389.87,
+     "purchases": 67,
+     "roas": 3.75,
+     "ctr": 1.22,
+     "cpa": 80.45
     },
     {
-     "name": "Retarget · сайт 180д+30д (excl. покупці) · v2",
-     "spend": 1619.91,
+     "name": "45-54 · чоловіки · UA (діамант)",
+     "spend": 5219.81,
+     "purchases": 23,
+     "roas": 1.43,
+     "ctr": 1.48,
+     "cpa": 226.95
+    },
+    {
+     "name": "Broad · чол 25-54 · UA · excl.наші",
+     "spend": 878.29,
+     "purchases": 10,
+     "roas": 3.78,
+     "ctr": 0.99,
+     "cpa": 87.83
+    },
+    {
+     "name": "LAL 1% покупці 90д · чол · UA",
+     "spend": 699.98,
      "purchases": 2,
-     "roas": 0.25,
-     "ctr": 1.13,
-     "cpa": 809.96
+     "roas": 1.41,
+     "ctr": 0.97,
+     "cpa": 349.99
+    },
+    {
+     "name": "FB+IG Stories · чол 35-54",
+     "spend": 357.77,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.94,
+     "cpa": null
     }
    ],
-   "adsets_window": "2026-06-18",
+   "adsets_window": "2026-06-19",
    "recommendations": [
     {
      "sev": "mod",
-     "text": "Піксель завищує: реальний ad-ROAS лише 2.19 vs піксель 3.72. Орієнтуватись на реальний."
+     "text": "Сумарна частота 4.72 за цикл близько до порогу вигорання — ротувати креатив кожні 4-5 днів або розширити аудиторію."
+    },
+    {
+     "sev": "mod",
+     "text": "Піксель завищує: реальний ad-ROAS лише 2.21 vs піксель 3.71. Орієнтуватись на реальний."
     },
     {
      "sev": "inf",
@@ -4722,7 +4758,7 @@
     },
     {
      "sev": "inf",
-     "text": "Найефективніший вік: 35-44 (ROAS 4.06) — пріоритет у таргетингу."
+     "text": "Найефективніший вік: 35-44 (ROAS 4.04) — пріоритет у таргетингу."
     }
    ],
    "is_current": true
@@ -4732,7 +4768,12 @@
   {
    "sev": "mod",
    "scope": "Акаунт · тиждень",
-   "text": "CPA тижня 104.06 ₴ vs 66.4 ₴ (+57%) — залучення дорожчає."
+   "text": "CPA тижня 110.89 ₴ vs 71.57 ₴ (+55%) — залучення дорожчає."
+  },
+  {
+   "sev": "mod",
+   "scope": "Вчора (06-25)",
+   "text": "Pixel ROAS вчора впав на 46% до дня раніше — стежити, чи не тренд."
   },
   {
    "sev": "mod",
@@ -4757,7 +4798,12 @@
   {
    "sev": "mod",
    "scope": "FORD MUSTANG",
-   "text": "Піксель завищує: реальний ad-ROAS лише 2.19 vs піксель 3.72. Орієнтуватись на реальний."
+   "text": "Сумарна частота 4.72 за цикл близько до порогу вигорання — ротувати креатив кожні 4-5 днів або розширити аудиторію."
+  },
+  {
+   "sev": "mod",
+   "scope": "FORD MUSTANG",
+   "text": "Піксель завищує: реальний ad-ROAS лише 2.21 vs піксель 3.71. Орієнтуватись на реальний."
   }
  ],
  "strategy": {
@@ -4769,11 +4815,11 @@
     "desc": "70-80% бюджету. Головний драйвер. Увесь робочий креатив-пул (12-20). Highest Volume на старті → Highest Value, коли стабільно.",
     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
     "status": "ACTIVE",
-    "daily_budget": 10000,
-    "spend": 57013,
-    "purchases": 749,
-    "roas": 5.31,
-    "ctr": 1.29
+    "daily_budget": 13000,
+    "spend": 67687,
+    "purchases": 858,
+    "roas": 5.16,
+    "ctr": 1.25
    },
    {
     "id": "120249698605960624",
@@ -4794,12 +4840,12 @@
     "sub": "Broad, EXCL. усі наші аудиторії",
     "desc": "5-10%. «Свіжа кров» — лише нові люди (виключені відвідувачі сайту + покупці), щоб алгоритм не крутився в нашій бульбашці.",
     "name": "DC | 03 Prospecting · свіжа кров (excl. наші)",
-    "status": "PAUSED",
-    "daily_budget": 500,
-    "spend": 0,
-    "purchases": 0,
-    "roas": 0,
-    "ctr": 0
+    "status": "ACTIVE",
+    "daily_budget": 1500,
+    "spend": 1059,
+    "purchases": 11,
+    "roas": 3.35,
+    "ctr": 0.98
    },
    {
     "id": "120249698612830624",
