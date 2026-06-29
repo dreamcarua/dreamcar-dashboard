@@ -1,0 +1,57 @@
+{
+ "account": "4136058269783354",
+ "account_name": "DreamCar.ua UAH",
+ "generated": "2026-06-29T09:20:00+00:00",
+ "seed": true,
+ "window": { "since": "2026-06-01", "until": "2026-06-28", "days": 28 },
+ "prev_window": null,
+ "funnel": {
+  "spend": 472622, "impressions": 3345777, "reach": 501099, "frequency": 6.68,
+  "clicks": 54671, "link_clicks": 34568, "purchases": 7475, "revenue": 2278038,
+  "ctr": 1.63, "link_ctr": 1.03, "cpc": 8.64, "cpc_link": 13.67, "cpm": 141,
+  "cvr": 21.6, "cpa": 63.2, "aov": 305, "roas": 4.82, "real_roas": 3.37
+ },
+ "funnel_prev": null,
+ "deltas": {},
+ "campaigns": [
+  { "name": "на ШИРОКУ продажі", "spend": 179818, "cpm": 155, "cpc": 8.02, "ctr": 1.94, "frequency": 5.15, "reach": 224723, "purchases": 3626, "roas": 5.34, "role": "core", "fatigue": true },
+  { "name": "DC | 01 Ядро · Advantage+ Sales (broad)", "spend": 114405, "cpm": 149, "cpc": 11.90, "ctr": 1.25, "frequency": 5.91, "reach": 129654, "purchases": 1597, "roas": 5.86, "role": "core", "fatigue": true },
+  { "name": "На мото аудиторію!", "spend": 69641, "cpm": 111, "cpc": 5.59, "ctr": 1.98, "frequency": 3.24, "reach": 194493, "purchases": 1416, "roas": 5.56, "role": "core", "fatigue": false },
+  { "name": "На НОВИХ продажі", "spend": 66179, "cpm": 138, "cpc": 11.42, "ctr": 1.20, "frequency": 2.20, "reach": 218851, "purchases": 427, "roas": 2.10, "role": "acquisition", "fatigue": false },
+  { "name": "DC | 05 Тест аудиторій (vg)", "spend": 24105, "cpm": 146, "cpc": 10.23, "ctr": 1.43, "frequency": 3.28, "reach": 50329, "purchases": 239, "roas": 3.08, "role": "core", "fatigue": false },
+  { "name": "DC | 03 Prospecting · свіжа кров", "spend": 10406, "cpm": 108, "cpc": 9.25, "ctr": 1.17, "frequency": 1.28, "reach": 75236, "purchases": 117, "roas": 3.59, "role": "prospecting", "fatigue": false },
+  { "name": "мем на мото", "spend": 3464, "cpm": 158, "cpc": 7.82, "ctr": 2.02, "frequency": 1.14, "reach": 19302, "purchases": 27, "roas": 2.00, "role": "core", "fatigue": false },
+  { "name": "мем на широку", "spend": 2979, "cpm": 143, "cpc": 8.03, "ctr": 1.78, "frequency": 1.18, "reach": 17700, "purchases": 22, "roas": 1.34, "role": "core", "fatigue": false },
+  { "name": "DC | 02 Retargeting · дожим теплих", "spend": 1620, "cpm": 255, "cpc": 22.50, "ctr": 1.13, "frequency": 1.65, "reach": 3854, "purchases": 2, "roas": 0.25, "role": "retarget", "fatigue": false }
+ ],
+ "clusters": [
+  { "cluster": "KTM/мото", "spend": 150919, "spend_pct": 33.2, "roas": 5.81, "purchases": 3252, "ctr": 2.07, "cpa": 46 },
+  { "cluster": "Mustang-пост", "spend": 144024, "spend_pct": 31.7, "roas": 3.61, "purchases": 1362, "ctr": 1.35, "cpa": 106 },
+  { "cluster": "Картинка-нумерована", "spend": 54386, "spend_pct": 12.0, "roas": 4.19, "purchases": 594, "ctr": 1.24, "cpa": 92 },
+  { "cluster": "Відео", "spend": 46741, "spend_pct": 10.3, "roas": 5.79, "purchases": 658, "ctr": 1.17, "cpa": 71 },
+  { "cluster": "iPhone/айфон", "spend": 36635, "spend_pct": 8.1, "roas": 6.18, "purchases": 1176, "ctr": 1.96, "cpa": 31 },
+  { "cluster": "Пост x2/тариф", "spend": 10650, "spend_pct": 2.3, "roas": 4.38, "purchases": 122, "ctr": 1.38, "cpa": 87 },
+  { "cluster": "Картинка-нова", "spend": 7910, "spend_pct": 1.7, "roas": 6.14, "purchases": 94, "ctr": 1.13, "cpa": 84 }
+ ],
+ "video_vs_static": {
+  "video": { "spend": 46741, "pct": 10.3, "roas": 5.79, "purchases": 658 },
+  "static": { "spend": 407503, "pct": 89.7, "roas": 4.79, "purchases": 6622 }
+ },
+ "ai": {
+  "summary": "Реал ROAS ~3.37 (pixel 4.82), CPA 63 ₴, частота 6.68. Головні важелі — реалокація бюджету у топ-кластери (iPhone/KTM/відео), подвоєння відео та ротація креативів при частоті >4.",
+  "priorities": [
+   { "id": "P1", "action": "Перелити бюджет з «Mustang-пост» у топ-кластери (iPhone, KTM/мото, Картинка-нова)", "why": "Mustang-пост 31.7% бюджету / ROAS 3.61 проти iPhone 6.18 / KTM 5.81", "impact": "Високий", "effort": "Низьке", "expect": "+0.3–0.7 ROAS" },
+   { "id": "P2", "action": "Подвоїти частку відео (більше 9:16 варіацій)", "why": "Відео ROAS 5.79 при лише 10.3% бюджету", "impact": "Високий", "effort": "Середнє", "expect": "+обсяг при ROAS вище середнього" },
+   { "id": "P3", "action": "Ротувати креативи де частота >4 (на ШИРОКУ, DC|01 Ядро)", "why": "Частота↑ + CTR↓ + CPC↑ = втома (Ядро CTR 1.25%, CPC 11.9 ₴)", "impact": "Високий", "effort": "Середнє", "expect": "CTR↑, CPC↓" },
+   { "id": "P4", "action": "Окремий FB-адсет (FB Stories + FB Reels)", "why": "FB ROAS 5.26 > IG 4.73, але лише 17% бюджету; FB Stories 6.57", "impact": "Середній", "effort": "Низьке", "expect": "+0.2–0.3 ROAS" },
+   { "id": "P5", "action": "45-54 — лише обмежений тест, бюджет у 25-44", "why": "45-54: CTR 2.63% але ROAS 3.88 (дно); 25-34 4.94", "impact": "Середній", "effort": "Низьке", "expect": "+0.1–0.2 ROAS" }
+  ],
+  "alerts": [
+   { "sev": "mod", "text": "Частота акаунту 6.68 — висока (поріг 4). Ризик вигорання — освіжати креативи/аудиторії." },
+   { "sev": "mod", "text": "«на ШИРОКУ продажі»: частота 5.15, CTR 1.94% — втома, ротувати креативи." },
+   { "sev": "mod", "text": "«DC | 01 Ядро · Advantage+ Sales (broad)»: частота 5.91, CTR 1.25% — втома, ротувати креативи." },
+   { "sev": "cri", "text": "«DC | 02 Retargeting · дожим теплих»: ROAS 0.25 при витратах 1620 ₴ — зламана/злив, ревізія." },
+   { "sev": "mod", "text": "Кластер «Mustang-пост» з'їдає 31.7% бюджету при ROAS 3.61 — скоротити на користь топ-кластерів." }
+  ]
+ }
+}
