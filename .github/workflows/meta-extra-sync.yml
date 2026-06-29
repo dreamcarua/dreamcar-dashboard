@@ -1,0 +1,49 @@
+name: Meta Extra → meta-extra.json (daily)
+
+# Ізольований pipeline для 4 додаткових табів /meta-analytics/ (воронка/втома/формати/AI).
+# Тягне Meta Marketing API напряму -> docs/meta-analytics/meta-extra.json. Не чіпає data.json.
+
+on:
+  schedule:
+    - cron: "40 5 * * *"   # 08:40 Kyiv (після meta-stats о 08:30)
+  workflow_dispatch:
+    inputs:
+      days:
+        description: 'Вікно (днів)'
+        required: false
+        default: '30'
+
+concurrency:
+  group: meta-extra-sync
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: etl/requirements.txt
+      - name: Install deps
+        run: pip install -r etl/requirements.txt
+      - name: Build meta-extra.json
+        env:
+          FB_ACCESS_TOKEN:   ${{ secrets.FB_ACCESS_TOKEN }}
+          FB_AD_ACCOUNT_IDS: ${{ secrets.FB_AD_ACCOUNT_IDS }}
+          META_EXTRA_DAYS:   ${{ github.event.inputs.days || '30' }}
+        run: python etl/build_meta_extra.py
+      - name: Commit meta-extra.json if changed
+        run: |
+          git config user.name  "dreamcar-bot"
+          git config user.email "bot@dreamcar.ua"
+          git add docs/meta-analytics/meta-extra.json
+          if git diff --cached --quiet; then echo "no changes"; exit 0; fi
+          git commit -m "chore(meta-extra): оновлення meta-extra.json [skip ci]"
+          for i in 1 2 3; do git pull --rebase --autostash origin main && git push origin main && break; sleep 5; done
