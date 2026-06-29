@@ -189,8 +189,26 @@ function visibleProjects(){
 function curProject(){ return DATA.projects.find(p=>p.code===SEL) || null; }
 
 /* ---------- OVERVIEW ---------- */
+function ovProject(el,p){
+  el.innerHTML=`<div class="note"><b class="hl">${p.name}</b> <span class="tag ${p.is_current?'t-cur':'t-arc'}">${p.is_current?'цикл':'архів'}</span> · ${(p.date_from||'')}→${(p.date_to||'')} · показники по проєкту</div>
+  <div class="grid k4">
+    <div class="card kpi"><div class="lab">Витрати</div><div class="val">${fmt(p.spend)} ₴</div></div>
+    <div class="card kpi"><div class="lab">Покупки</div><div class="val">${fmt(p.purchases)}</div><div class="meta">CPA ${f2(p.cpa)} ₴</div></div>
+    <div class="card kpi"><div class="lab">ROAS pixel</div><div class="val neu">${f2(p.pixel_roas)}</div></div>
+    <div class="card kpi"><div class="lab">ROAS реал</div><div class="val up">${f2(p.real_ad_roas)}</div></div>
+  </div>
+  <div class="chart-card" style="margin-top:13px"><h3 style="margin:2px 0 8px">${p.name} — витрати vs ROAS по днях</h3><div class="chart-box" style="height:300px"><canvas id="cOvP"></canvas></div>
+    <div class="legend"><span><i class="dot" style="background:${C.red}"></i>Витрати ₴</span><span><i class="dot" style="background:${C.gold}"></i>ROAS pixel</span></div></div>`;
+  const s=p.series||[];
+  if(!s.length){ el.insertAdjacentHTML('beforeend','<div class="empty">Немає денних даних для цього проєкту.</div>'); return; }
+  mk('cOvP',{data:{labels:s.map(x=>(x.date||'').slice(5)),datasets:[
+    {type:'bar',label:'Витрати',data:s.map(x=>Math.round(x.spend||0)),backgroundColor:'#E3061399',yAxisID:'y',borderRadius:4,order:2},
+    {type:'line',label:'ROAS',data:s.map(x=>x.roas),borderColor:C.gold,backgroundColor:C.gold,yAxisID:'y1',tension:.3,pointRadius:2,order:1}]},
+   options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{...gx,title:{display:true,text:'₴'}},y1:{position:'right',grid:{drawOnChartArea:false},min:0,title:{display:true,text:'ROAS'}},x:{...gx,ticks:{font:{size:9}}}}}});
+}
 function renderOverview(){
   const el=document.getElementById('tab-overview');
+  if(SEL!=='all'){ const _pp=curProject(); if(_pp){ ovProject(el,_pp); return; } }
   const ps=visibleProjects();
   const tot=ps.reduce((a,p)=>({s:a.s+(p.spend||0),pu:a.pu+(p.purchases||0),pr:a.pr+(p.pixel_revenue||0),rr:a.rr+(p.real_ad_revenue||0)}),{s:0,pu:0,pr:0,rr:0});
   const avgPx=tot.s?tot.pr/tot.s:0, avgReal=tot.s?tot.rr/tot.s:0;
@@ -298,7 +316,7 @@ function fmtDelta(v){ if(v==null) return ''; const up=v>=0; return `<span style=
 function renderTrends(){
   const el=document.getElementById('tab-trends');
   const dl=DATA.daily; let h='';
-  if(dl){
+  if(dl&&SEL==='all'){
     const d=dl.deltas||{};
     h+=`<div class="note">Денний зріз за <b class="hl">${(dl.date||'').split('-').reverse().join('.')}</b> (по акаунту), дельта — до ${(dl.prev_date||'').slice(5).split('-').reverse().join('.')}. Активні цикли: <b>${(dl.active_cycles||[]).join(', ')||'—'}</b></div>
     <div class="grid k4">
@@ -433,7 +451,7 @@ function initSelectors(){
     sel.value=SEL;
   }
   fill();
-  sel.addEventListener('change',()=>{SEL=sel.value;var _t=(SEL==='all')?'overview':'segments';var _b=document.querySelector('.tb[data-tab="'+_t+'"]');if(_b&&!_b.classList.contains('on')){_b.click();}else{renderAll();}});
+  sel.addEventListener('change',()=>{SEL=sel.value;renderAll();});
   document.getElementById('scopeSel').addEventListener('change',e=>{SCOPE=e.target.value;fill();SEL='all';sel.value='all';renderAll();});
 }
 
