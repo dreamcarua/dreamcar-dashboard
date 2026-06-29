@@ -433,7 +433,7 @@ function initSelectors(){
     sel.value=SEL;
   }
   fill();
-  sel.addEventListener('change',()=>{SEL=sel.value;var _t=(SEL==='all')?'overview':'trends';var _b=document.querySelector('.tb[data-tab="'+_t+'"]');if(_b&&!_b.classList.contains('on')){_b.click();}else{renderAll();}});
+  sel.addEventListener('change',()=>{SEL=sel.value;var _t=(SEL==='all')?'overview':'segments';var _b=document.querySelector('.tb[data-tab="'+_t+'"]');if(_b&&!_b.classList.contains('on')){_b.click();}else{renderAll();}});
   document.getElementById('scopeSel').addEventListener('change',e=>{SCOPE=e.target.value;fill();SEL='all';sel.value='all';renderAll();});
 }
 
