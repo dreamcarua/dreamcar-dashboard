@@ -175,7 +175,7 @@
 const C={red:'#E30613',red2:'#FF6A7A',gold:'#FBBF24',green:'#10B981',blue:'#60A5FA',grey:'#888',pur:'#a5b4fc',ig:'#FF6A7A'};
 const fmt=n=>(n==null?'—':Math.round(n).toLocaleString('uk-UA'));
 const f2=n=>(n==null?'—':Number(n).toFixed(2));
-let DATA=null, SEL='all', SCOPE='all', charts={};
+let DATA=null, SEL='all', SCOPE='all', charts={}, crSort='roas', crDir=-1, crPage=0; const CR_PAGE=15;
 Chart.defaults.color='#888';Chart.defaults.font.family="'JetBrains Mono',monospace";
 const gx={grid:{color:'#1c1c1c'}};
 function roasPill(v){const c=v>=5?'pg':v>=3?'py':'pr';return `<span class="pill ${c}">${f2(v)}</span>`;}
@@ -387,14 +387,32 @@ function renderSegments(){
 /* ---------- CREATIVES ---------- */
 function renderCreatives(){
   const el=document.getElementById('tab-creatives'); const p=curProject();
-  if(!p){ el.innerHTML=`<div class="note">Оберіть проєкт, щоб побачити топ-креативи.</div>`; return; }
-  const cr=(p.creatives||[]);
-  if(!cr.length){ el.innerHTML=`<div class="empty">Немає даних по креативах для «${p.name}».</div>`; return; }
-  let h=`<div class="note"><b class="hl">${p.name}</b> — топ креативи за ROAS${p.is_current?` <span style="color:#888;font-weight:400">(поточний цикл — останні 7 днів, активні оголошення)</span>`:''}. <span style="color:#888">Прев'ю — для топ. Нормалізація: у рейтинг ROAS — лише креативи з ≥5 покупок, менше — «мала вибірка» (ROAS орієнтовний).</span></div><div class="card scroll"><table><thead><tr><th>#</th><th>Прев'ю</th><th>Креатив</th><th>Витрати ₴</th><th>Покупки</th><th>ROAS</th><th>CTR</th></tr></thead><tbody>`;
-  cr.sort((a,b)=>((b.purchases>=5)-(a.purchases>=5))||(b.roas-a.roas)); cr.forEach((c,i)=>{ const tw=c.thumb?`<img src="${c.thumb}" loading="lazy" style="width:44px;height:44px;object-fit:cover;border-radius:6px;border:1px solid var(--steel)">`:'<span style="color:#555">—</span>'; h+=`<tr style="${c.purchases<5?'opacity:.5':''}"><td>${c.purchases>=5?(i+1):'—'}</td><td>${tw}</td><td>${c.name}${c.purchases<5?' <span class="pill py">мала вибірка</span>':''}</td><td>${fmt(c.spend)}</td><td>${fmt(c.purchases)}</td><td>${c.purchases>=5?roasPill(c.roas):f2(c.roas)}</td><td>${f2(c.ctr)}%</td></tr>`; });
-  h+=`</tbody></table></div>`;
+  if(!p){ el.innerHTML=`<div class="note">Оберіть проєкт, щоб побачити креативи.</div>`; return; }
+  const all=(p.creatives||[]).slice();
+  if(!all.length){ el.innerHTML=`<div class="empty">Немає даних по креативах для «${p.name}».</div>`; return; }
+  const MIN=5;
+  const sig=all.filter(c=>(c.purchases||0)>=MIN);
+  const low=all.filter(c=>(c.purchases||0)<MIN).sort((a,b)=>(b.roas||0)-(a.roas||0));
+  sig.sort((a,b)=>(((a[crSort]||0)-(b[crSort]||0))*crDir));
+  const pages=Math.max(1,Math.ceil(sig.length/CR_PAGE));
+  if(crPage>=pages) crPage=pages-1; if(crPage<0) crPage=0;
+  const slice=sig.slice(crPage*CR_PAGE,(crPage+1)*CR_PAGE);
+  const ar=k=>crSort===k?(crDir<0?' ▼':' ▲'):'';
+  const th=(k,l)=>`<th onclick="crSortBy('${k}')" style="cursor:pointer;user-select:none">${l}${ar(k)}</th>`;
+  let h=`<div class="note"><b class="hl">${p.name}</b> — креативи${p.is_current?` <span style="color:#888;font-weight:400">(поточний цикл, активні)</span>`:''} · ${all.length} всього. Клік по заголовку — сортування. У рейтинг — лише ≥${MIN} покупок; решта — «мала вибірка» нижче.</div>
+  <div class="card scroll"><table><thead><tr><th>#</th><th>Прев'ю</th><th>Креатив</th>${th('spend','Витрати ₴')}${th('purchases','Покупки')}${th('roas','ROAS')}${th('ctr','CTR')}</tr></thead><tbody>`;
+  if(!slice.length) h+=`<tr><td colspan="7" class="empty">Немає креативів з ≥${MIN} покупок.</td></tr>`;
+  slice.forEach((c,i)=>{ const rank=crPage*CR_PAGE+i+1; const tw=c.thumb?`<img src="${c.thumb}" loading="lazy" style="width:44px;height:44px;object-fit:cover;border-radius:6px;border:1px solid var(--steel)">`:'<span style="color:#555">—</span>'; h+=`<tr><td>${rank}</td><td>${tw}</td><td>${c.name}</td><td>${fmt(c.spend)}</td><td>${fmt(c.purchases)}</td><td>${roasPill(c.roas)}</td><td>${f2(c.ctr)}%</td></tr>`; });
+  h+=`</tbody></table></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:13px;color:#aaa">
+    <span>${sig.length} значущих (≥${MIN} покуп.) · стор. ${crPage+1}/${pages}</span>
+    <span><button onclick="crGo(-1)" class="seg" style="padding:5px 11px"${crPage<=0?' disabled':''}>← Назад</button>
+    <button onclick="crGo(1)" class="seg" style="padding:5px 11px;margin-left:6px"${crPage>=pages-1?' disabled':''}>Далі →</button></span></div>`;
+  if(low.length){ h+=`<details style="margin-top:14px"><summary style="cursor:pointer;color:#FBBF24;font-size:13px;padding:6px 0">Мала вибірка (&lt;${MIN} покуп.) — ${low.length} шт., ROAS орієнтовний</summary><div class="card scroll" style="margin-top:8px"><table><thead><tr><th>Креатив</th><th>Витрати ₴</th><th>Покупки</th><th>ROAS</th><th>CTR</th></tr></thead><tbody>`+low.slice(0,60).map(c=>`<tr style="opacity:.6"><td>${c.name}</td><td>${fmt(c.spend)}</td><td>${fmt(c.purchases)}</td><td>${f2(c.roas)}</td><td>${f2(c.ctr)}%</td></tr>`).join('')+`</tbody></table></div></details>`; }
   el.innerHTML=h;
 }
+function crSortBy(k){ if(crSort===k){crDir=-crDir;}else{crSort=k;crDir=-1;} crPage=0; renderCreatives(); }
+function crGo(d){ crPage=crPage+d; renderCreatives(); }
 
 /* ---------- RECONCILE ---------- */
 function renderReconcile(){

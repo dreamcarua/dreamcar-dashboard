@@ -608,7 +608,7 @@ def build_project(proj):
     if is_cur:
         d7 = (datetime.strptime(today, '%Y-%m-%d') - timedelta(days=7)).strftime('%Y-%m-%d')
         as_since = max(since, d7)
-    crv = creatives(as_since if is_cur else since, until)
+    crv = creatives(as_since if is_cur else since, until, top=100)
     crv = creative_thumbs(crv, embed=is_cur)
     real = real_ad_revenue(since, until)
     spend = px.get('spend') or 0
