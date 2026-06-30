@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """
 Прикріплює існуючий IG-пост як оголошення у задані ад-сети (PAUSED).
-Використовує системний токен FB_ACCESS_TOKEN (scope: ads_management, instagram_basic, pages).
+Використовує системний токен FB_ACCESS_TOKEN (scope: ads_management, instagram_basic, instagram_content_publish).
 ДЛЯ engagement-кампанії DC|06: один і той самий пост у всі групи -> коменти копляться в одному треді.
 
-ПЕРЕДУМОВА: Meta-додаток, до якого привʼязаний токен, має бути у LIVE-режимі (не Development),
-інакше створення оголошення падає з subcode 1885183.
+ПЕРЕДУМОВИ:
+- Meta-додаток токена (DC new, 1897152837652670) у LIVE-режимі (інакше subcode 1885183).
+- IMAGE-пост як оголошення вимагає CTA + URL сайта у креативі (інакше subcode 2446383) -> додаємо call_to_action.
 """
 import os, json, urllib.parse, urllib.request, urllib.error, sys
 
@@ -18,6 +19,8 @@ SHORTCODE = os.environ.get("SHORTCODE", "DaLlUIlMWD9").strip()
 IG_MEDIA_ID = os.environ.get("IG_MEDIA_ID", "").strip()
 ADSETS = [x.strip() for x in os.environ.get("ADSET_IDS", "").split(",") if x.strip()]
 CREATIVE_ID_IN = os.environ.get("CREATIVE_ID", "").strip()
+LINK_URL = os.environ.get("LINK_URL", "https://dreamcar.ua").strip()
+CTA_TYPE = os.environ.get("CTA_TYPE", "LEARN_MORE").strip()
 DRY = os.environ.get("DRY_RUN", "true").lower() == "true"
 BASE = f"https://graph.facebook.com/{GRAPH}"
 
@@ -43,8 +46,7 @@ def whoami():
     try:
         res = api("debug_token", params={"input_token": TOKEN})
         d = res.get("data", {})
-        print("TOKEN_APP_ID:", d.get("app_id"), "| app_name:", d.get("application"),
-              "| token_type:", d.get("type"), "| scopes:", d.get("scopes"))
+        print("TOKEN_APP_ID:", d.get("app_id"), "| app_name:", d.get("application"), "| type:", d.get("type"))
     except Exception as e:
         print("debug_token failed:", e)
 
@@ -76,9 +78,13 @@ def create_creative(media_id):
         print("Using provided CREATIVE_ID:", CREATIVE_ID_IN)
         return CREATIVE_ID_IN
     name = f"DC|06 engagement {SHORTCODE}"
+    cta = json.dumps({"type": CTA_TYPE, "value": {"link": LINK_URL}})
     attempts = [
+        # IMAGE-пост як ad: потрібен CTA + link у креативі
+        {"name": name, "instagram_user_id": IG_USER, "source_instagram_media_id": media_id, "call_to_action": cta},
+        {"name": name, "object_story_spec": json.dumps({"page_id": PAGE_ID, "instagram_user_id": IG_USER}), "source_instagram_media_id": media_id, "call_to_action": cta},
+        # fallback без CTA (для відео/reels, де не вимагається)
         {"name": name, "instagram_user_id": IG_USER, "source_instagram_media_id": media_id},
-        {"name": name, "object_story_spec": json.dumps({"page_id": PAGE_ID, "instagram_user_id": IG_USER}), "source_instagram_media_id": media_id},
     ]
     last = None
     for a in attempts:
@@ -93,7 +99,7 @@ def create_creative(media_id):
 
 
 def main():
-    print(f"== attach_engagement_post | graph={GRAPH} act={ACT} dry={DRY} ==")
+    print(f"== attach_engagement_post | graph={GRAPH} act={ACT} dry={DRY} link={LINK_URL} cta={CTA_TYPE} ==")
     whoami()
     print("ad sets:", ADSETS)
     media_id = resolve_media()
