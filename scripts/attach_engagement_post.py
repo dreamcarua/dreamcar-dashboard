@@ -3,6 +3,9 @@
 Прикріплює існуючий IG-пост як оголошення у задані ад-сети (PAUSED).
 Використовує системний токен FB_ACCESS_TOKEN (scope: ads_management, instagram_basic, pages).
 ДЛЯ engagement-кампанії DC|06: один і той самий пост у всі групи -> коменти копляться в одному треді.
+
+ПЕРЕДУМОВА: Meta-додаток, до якого привʼязаний токен, має бути у LIVE-режимі (не Development),
+інакше створення оголошення падає з subcode 1885183.
 """
 import os, json, urllib.parse, urllib.request, urllib.error, sys
 
@@ -63,10 +66,10 @@ def create_creative(media_id):
         print("Using provided CREATIVE_ID:", CREATIVE_ID_IN)
         return CREATIVE_ID_IN
     name = f"DC|06 engagement {SHORTCODE}"
+    # Коректна форма для просування існуючого IG-поста:
     attempts = [
-        {"name": name, "object_story_spec": json.dumps({"page_id": PAGE_ID, "instagram_user_id": IG_USER}), "source_instagram_media_id": media_id},
         {"name": name, "instagram_user_id": IG_USER, "source_instagram_media_id": media_id},
-        {"name": name, "object_story_spec": json.dumps({"page_id": PAGE_ID, "instagram_actor_id": IG_USER}), "source_instagram_media_id": media_id},
+        {"name": name, "object_story_spec": json.dumps({"page_id": PAGE_ID, "instagram_user_id": IG_USER}), "source_instagram_media_id": media_id},
     ]
     last = None
     for a in attempts:
