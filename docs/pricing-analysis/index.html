@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Цінова стратегія · DreamCar</title>
+<meta name="color-scheme" content="dark">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta name="pricing-build" content="20260630-v1">
+<script src="https://brand.dreamcar.ua/assets/global-header.js?v=20260606b" defer></script>
+<script src="/assets/js/auth-guard.js?v=20260614" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Manrope:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0a;--bg-2:#141414;--bg-3:#1a1a1a;--line:#2a2a2a;--white:#fff;--ash:#888;--grey:#bbb;--red:#E30613;--gold:#FBBF24;--green:#10B981;--blue:#60A5FA;--violet:#a78bfa;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:var(--bg);color:var(--white);font-family:'Manrope','JetBrains Mono',system-ui,sans-serif;min-height:100vh;line-height:1.5;}
+.topbar{background:#141414;border-bottom:2px solid var(--red);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:40;flex-wrap:wrap;gap:8px}
+.brandmark{font-family:'Oswald',sans-serif;font-weight:700;font-size:18px;letter-spacing:.06em;color:#fff;text-decoration:none}
+.brandmark .r{color:var(--red)}.brandmark .mm{font-size:10px;color:#888;letter-spacing:.18em;margin-left:9px;font-family:'JetBrains Mono',monospace;text-transform:uppercase}
+.backlink{color:#aaa;text-decoration:none;font-size:11.5px;font-family:'JetBrains Mono',monospace;letter-spacing:.06em;border:1px solid #2a2a2a;padding:8px 13px;border-radius:6px;text-transform:uppercase;min-height:36px;display:inline-flex;align-items:center}
+.backlink:hover{border-color:var(--red);color:#fff}
+
+/* Sidebar */
+:root{--sidebar-w:220px}
+.app-layout{display:grid;grid-template-columns:var(--sidebar-w) 1fr;grid-template-areas:"sidebar main";min-height:calc(100vh - 64px)}
+.app-layout > .sidebar{grid-area:sidebar}
+.app-layout > .wrap{grid-area:main;max-width:none}
+.sidebar{background:#0a0a0a;border-right:1px solid var(--line);padding:18px 0;overflow-y:auto;position:sticky;top:64px;align-self:start;max-height:calc(100vh - 64px)}
+.sidebar .nav-group{margin-bottom:18px}
+.sidebar .nav-group-title{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;color:#6B7280;text-transform:uppercase;padding:0 18px 6px;font-weight:600}
+.sidebar .nav-item{display:flex;align-items:center;gap:9px;padding:8px 18px;color:#bbb;font-size:13px;font-family:'Manrope',sans-serif;text-decoration:none;cursor:pointer;border-left:2px solid transparent;transition:.12s}
+.sidebar .nav-item:hover{background:rgba(255,255,255,.04);color:#fff;border-left-color:rgba(227,6,19,.5)}
+.sidebar .nav-item.active{background:rgba(227,6,19,.1);color:#fff;border-left-color:var(--red);font-weight:600}
+.sidebar .nav-item .icon{font-size:14px;width:18px;text-align:center}
+@media(max-width:920px){.app-layout{grid-template-columns:1fr;grid-template-areas:"main"}.sidebar{display:none}}
+
+.wrap{max-width:1400px;margin:0 auto;padding:24px 20px 60px}
+
+/* Hero */
+.hero{margin-bottom:26px}
+.hero-title{font-family:'Oswald',sans-serif;font-size:32px;font-weight:700;letter-spacing:-.3px;line-height:1.1;margin-bottom:6px}
+.hero-title .r{color:var(--red)}
+.hero-sub{color:var(--ash);font-size:13.5px;font-family:'JetBrains Mono',monospace;letter-spacing:.04em}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+@media(max-width:900px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.kpi-grid{grid-template-columns:1fr}}
+.kpi{background:#141414;border:1px solid rgba(255,255,255,.06);border-left:3px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;min-height:110px;display:flex;flex-direction:column;justify-content:space-between}
+.kpi.hero-card{border-left-color:var(--gold);box-shadow:inset 4px 0 14px -4px rgba(251,191,36,.2)}
+.kpi.pos{border-left-color:var(--green)}
+.kpi.neg{border-left-color:var(--red)}
+.kpi .label{font-size:10.5px;color:#9CA3AF;letter-spacing:.1em;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:4px}
+.kpi .value{font-family:'Oswald',sans-serif;font-size:30px;font-weight:700;color:#fff;line-height:1.1;font-variant-numeric:tabular-nums}
+.kpi.hero-card .value{color:var(--gold)}
+.kpi .sub{font-size:10.5px;color:#6B7280;font-family:'JetBrains Mono',monospace;margin-top:6px}
+
+/* Section */
+.section{margin-bottom:36px}
+.section-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.section-title{font-family:'Oswald',sans-serif;font-size:21px;font-weight:600;letter-spacing:.02em;color:#fff}
+.section-title .num{color:var(--red);font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.1em;margin-right:6px;vertical-align:middle}
+.section-meta{font-size:11.5px;color:#6B7280;font-family:'JetBrains Mono',monospace;letter-spacing:.05em}
+
+/* Table */
+.tbl-card{background:var(--bg-2);border:1px solid var(--line);border-radius:12px;overflow:auto;max-height:calc(100vh - 200px)}
+table.data{width:100%;border-collapse:collapse;font-size:12.5px;font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
+table.data thead th{background:#0f0f0f;color:#9CA3AF;font-weight:600;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:11px 10px;text-align:right;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;white-space:nowrap}
+table.data thead th:first-child,table.data tbody td:first-child{text-align:left}
+table.data thead th.sortable{cursor:pointer;user-select:none}
+table.data thead th.sortable:hover{color:#fff}
+table.data thead th.sorted{color:var(--gold)}
+table.data tbody td{padding:10px 10px;text-align:right;border-bottom:1px solid #1a1a1a;color:#ddd}
+table.data tbody td:first-child{font-family:'Manrope',sans-serif;font-size:13px;font-weight:500;color:#fff;min-width:200px}
+table.data tbody tr:hover td{background:rgba(227,6,19,.05)}
+.entry-pill{display:inline-block;padding:3px 10px;border-radius:5px;font-size:11px;font-weight:700;letter-spacing:.04em;font-family:'JetBrains Mono',monospace;min-width:54px;text-align:center}
+.entry-pill.e199{background:rgba(16,185,129,.15);color:#34d399;border:1px solid rgba(16,185,129,.35)}
+.entry-pill.e249{background:rgba(227,6,19,.13);color:#fca5a5;border:1px solid rgba(227,6,19,.35)}
+.entry-pill.e99{background:rgba(96,165,250,.13);color:#93c5fd;border:1px solid rgba(96,165,250,.35)}
+.entry-pill.e49{background:rgba(167,139,250,.15);color:#c4b5fd;border:1px solid rgba(167,139,250,.4)}
+.entry-pill.eunknown{background:rgba(255,255,255,.05);color:#9CA3AF;border:1px solid var(--line)}
+.pos{color:#34d399;font-weight:600}.neg{color:#fca5a5;font-weight:600}
+.muted{color:#888}
+tr.row-e199{background:rgba(16,185,129,.04)}
+tr.row-e249{background:rgba(227,6,19,.04)}
+tr.row-e99{background:rgba(96,165,250,.04)}
+tr.row-e49{background:rgba(167,139,250,.04)}
+
+/* Compare 199 vs 249 */
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+@media(max-width:780px){.compare-grid{grid-template-columns:1fr}}
+.cmp-card{background:#141414;border:1px solid var(--line);border-radius:14px;padding:22px;position:relative;overflow:hidden}
+.cmp-card.win{border-color:rgba(16,185,129,.5);box-shadow:0 0 0 1px rgba(16,185,129,.15) inset}
+.cmp-card.lose{border-color:rgba(227,6,19,.4);box-shadow:0 0 0 1px rgba(227,6,19,.12) inset;opacity:.95}
+.cmp-card .crown{position:absolute;top:14px;right:14px;font-size:18px}
+.cmp-card .ent-num{font-family:'Oswald',sans-serif;font-size:54px;font-weight:700;line-height:1;letter-spacing:-.02em}
+.cmp-card.win .ent-num{color:#34d399}
+.cmp-card.lose .ent-num{color:#fca5a5}
+.cmp-card .ent-cur{font-size:24px;color:#9CA3AF;margin-left:2px;font-family:'Oswald',sans-serif}
+.cmp-card .cmp-label{font-size:11px;color:#9CA3AF;letter-spacing:.12em;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-top:8px;margin-bottom:18px}
+.cmp-metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.cmp-m .k{font-size:10px;color:#9CA3AF;letter-spacing:.1em;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:3px}
+.cmp-m .v{font-family:'Oswald',sans-serif;font-size:22px;font-weight:600;color:#fff;font-variant-numeric:tabular-nums}
+.verdict{background:linear-gradient(90deg,rgba(16,185,129,.13),rgba(16,185,129,.03));border:1px solid rgba(16,185,129,.35);border-radius:12px;padding:18px 22px;font-family:'Manrope',sans-serif;font-size:15px;color:#fff;line-height:1.55;margin-top:6px}
+.verdict b{color:#34d399}
+.verdict .big{font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;display:block;margin-bottom:6px;color:#34d399}
+
+/* Flash */
+.flash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.flash-card{background:#141414;border:1px solid var(--line);border-radius:12px;padding:20px;border-left:3px solid var(--violet)}
+.flash-card.iphone{border-left-color:var(--violet)}
+.flash-card.moto{border-left-color:var(--blue)}
+.flash-card .fc-title{font-family:'Oswald',sans-serif;font-size:18px;font-weight:600;letter-spacing:.02em;margin-bottom:4px;color:#fff}
+.flash-card .fc-sub{font-size:11px;color:#9CA3AF;font-family:'JetBrains Mono',monospace;letter-spacing:.05em;text-transform:uppercase;margin-bottom:14px}
+.flash-card .fc-metric{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;border-bottom:1px dashed rgba(255,255,255,.06);font-size:13px}
+.flash-card .fc-metric:last-child{border-bottom:none}
+.flash-card .fc-metric .k{color:#9CA3AF;font-family:'JetBrains Mono',monospace;font-size:11.5px}
+.flash-card .fc-metric .v{font-family:'JetBrains Mono',monospace;font-weight:700;color:#fff;font-variant-numeric:tabular-nums}
+.flash-card .fc-metric .v.hi{color:var(--gold);font-size:15px}
+
+.chart-card{background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:18px;margin-top:16px}
+.chart-card h4{font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:#9CA3AF;margin-bottom:14px}
+.chart-canvas-wrap{position:relative;height:240px}
+
+/* Recommendation */
+.reco-card{background:linear-gradient(135deg,rgba(227,6,19,.08),rgba(251,191,36,.04));border:1px solid rgba(227,6,19,.35);border-radius:14px;padding:24px;margin-bottom:18px}
+.reco-card .ttl{font-family:'Oswald',sans-serif;font-size:17px;letter-spacing:.04em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.reco-row{display:grid;grid-template-columns:1fr 100px 1fr;gap:14px;padding:12px 0;border-bottom:1px dashed rgba(255,255,255,.08);align-items:center}
+@media(max-width:680px){.reco-row{grid-template-columns:1fr;gap:6px}}
+.reco-row:last-child{border-bottom:none}
+.reco-row .sit{font-family:'Manrope',sans-serif;font-size:14px;color:#ddd}
+.reco-row .arrow{text-align:center;color:#6B7280;font-family:'JetBrains Mono',monospace;font-size:13px}
+.reco-row .rec{font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;color:#34d399;letter-spacing:.02em}
+.reco-row .rec.amber{color:var(--gold)}
+.reco-row .rec.violet{color:#c4b5fd}
+
+/* Accordion */
+.acc{background:#141414;border:1px solid var(--line);border-radius:10px;margin-top:14px;overflow:hidden}
+.acc summary{padding:14px 18px;cursor:pointer;font-family:'Oswald',sans-serif;font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:#9CA3AF;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary::after{content:'▼';font-size:10px;color:#6B7280;transition:.2s}
+.acc[open] summary::after{transform:rotate(180deg)}
+.acc summary:hover{color:#fff}
+.acc .acc-body{padding:0 18px 18px;color:#ccc;font-size:13.5px;line-height:1.6;font-family:'Manrope',sans-serif}
+.acc .acc-body p{margin:8px 0}
+.acc .acc-body b{color:#fff}
+.acc .acc-body code{background:#0f0f0f;padding:2px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--gold)}
+
+/* Anti-patterns */
+.anti-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.anti{background:#141414;border:1px solid var(--line);border-left:3px solid var(--red);border-radius:10px;padding:16px 18px;display:flex;gap:12px;align-items:flex-start}
+.anti .ic{font-size:20px;line-height:1;flex-shrink:0}
+.anti .body{font-size:13px;color:#ddd;line-height:1.5}
+.anti .body b{color:#fca5a5;display:block;margin-bottom:4px;font-family:'Oswald',sans-serif;font-size:14px;letter-spacing:.03em}
+
+/* Footer */
+.footer{margin-top:40px;padding-top:24px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;color:#6B7280;font-size:11.5px;font-family:'JetBrains Mono',monospace;letter-spacing:.05em}
+.btn{background:var(--red);color:#fff;border:none;font-family:'Manrope',sans-serif;font-size:12.5px;font-weight:700;padding:10px 18px;border-radius:6px;cursor:pointer;text-transform:uppercase;letter-spacing:.04em;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:.15s}
+.btn:hover{background:#B8050F}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--grey)}
+.btn.ghost:hover{border-color:var(--red);color:#fff}
+
+/* Loader */
+@keyframes shimmer { 0%{background-position:-300px 0} 100%{background-position:300px 0} }
+.skel{background:linear-gradient(90deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 100%);background-size:600px 100%;animation:shimmer 1.4s linear infinite;border-radius:4px;display:inline-block;height:1em;min-width:60px;color:transparent !important}
+@keyframes spin { to{transform:rotate(360deg)} }
+.loading-bar{display:inline-flex;align-items:center;gap:8px;color:var(--gold);font-size:11.5px;font-family:'JetBrains Mono',monospace;letter-spacing:.06em;text-transform:uppercase}
+.loading-bar::before{content:'';width:11px;height:11px;border:2px solid rgba(251,191,36,0.3);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite}
+.empty{padding:60px 20px;text-align:center;color:#888;font-size:13px;font-style:italic}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brandmark" href="/"><span class="r">DREAM</span>CAR<span class="mm">Цінова стратегія</span></a>
+  <a class="backlink" href="/">← Dashboard</a>
+</div>
+
+<div class="app-layout">
+
+  <aside class="sidebar">
+    <div class="nav-group">
+      <div class="nav-group-title">Аналітика</div>
+      <a class="nav-item" href="/#overview"><span class="icon">📊</span>Огляд</a>
+      <a class="nav-item" href="/#projects"><span class="icon">🏎️</span>Проекти</a>
+      <a class="nav-item" href="/#analytics"><span class="icon">💰</span>Аналітика</a>
+      <a class="nav-item" href="/#combos"><span class="icon">🔗</span>Комбінації</a>
+      <a class="nav-item" href="/#sources"><span class="icon">📍</span>Джерела</a>
+      <a class="nav-item" href="/#campaigns"><span class="icon">🎯</span>Кампанії</a>
+      <a class="nav-item" href="/#terms"><span class="icon">🔑</span>Виконавець</a>
+      <a class="nav-item" href="/#content"><span class="icon">🎨</span>Оголошення</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">Стратегія</div>
+      <a class="nav-item" href="/finance/"><span class="icon">💰</span>Фінанси (P&amp;L)</a>
+      <a class="nav-item" href="/kasa/"><span class="icon">🧾</span>Каса</a>
+      <a class="nav-item active" href="/pricing-analysis/"><span class="icon">🎯</span>Цінова стратегія</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">Експерименти</div>
+      <a class="nav-item" href="/upsell-ab/"><span class="icon">🧪</span>Upsell A/B/C</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">Facebook Ads</div>
+      <a class="nav-item" href="/#ads-overview"><span class="icon">💸</span>Ads Overview</a>
+      <a class="nav-item" href="/#ads-campaigns"><span class="icon">📊</span>Ads Campaigns</a>
+      <a class="nav-item" href="/meta-analytics/"><span class="icon">📈</span>Meta по проєктах</a>
+    </div>
+  </aside>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-title">АНАЛІЗ <span class="r">ЦІНОВОЇ</span> СТРАТЕГІЇ · <span class="r">ENTRY</span> TOKEN</div>
+    <div class="hero-sub">Live data з P&amp;L 9 проєктів · live update з <code style="background:#0f0f0f;padding:1px 6px;border-radius:3px;color:#FBBF24">mv_dashboard_project_pnl</code></div>
+  </div>
+
+  <div id="loaderStatus" style="margin-bottom:14px"><span class="loading-bar">Завантажую дані P&amp;L…</span></div>
+
+  <!-- KPI -->
+  <div class="kpi-grid" id="kpiGrid">
+    <div class="kpi hero-card">
+      <div class="label">Середній NET / день</div>
+      <div class="value" id="k-avgnetday"><span class="skel">000000</span></div>
+      <div class="sub" id="s-avgnetday">по всіх проєктах</div>
+    </div>
+    <div class="kpi pos">
+      <div class="label">Середня маржа %</div>
+      <div class="value" id="k-avgmargin"><span class="skel">00</span></div>
+      <div class="sub">target ≥ 30%</div>
+    </div>
+    <div class="kpi pos">
+      <div class="label">Середній ROI %</div>
+      <div class="value" id="k-avgroi"><span class="skel">00</span></div>
+      <div class="sub">net / total cost</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Проєктів проаналізовано</div>
+      <div class="value" id="k-count"><span class="skel">0</span></div>
+      <div class="sub" id="s-count">завершені + активні</div>
+    </div>
+  </div>
+
+  <!-- Section 1: Project × entry -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-title"><span class="num">01</span>Реальна картина: проєкт × entry-ціна</div>
+      <div class="section-meta">Сортування за NET / день ↓ · клік на заголовок — інше сортування</div>
+    </div>
+    <div class="tbl-card">
+      <table class="data" id="tblProjects">
+        <thead><tr>
+          <th data-sort="name" class="sortable">Проєкт</th>
+          <th data-sort="entry" class="sortable">Entry ₴</th>
+          <th data-sort="days" class="sortable">Дн</th>
+          <th data-sort="revenue" class="sortable">Revenue</th>
+          <th data-sort="adspend" class="sortable">Ad Spend</th>
+          <th data-sort="netprofit" class="sortable">Net Profit</th>
+          <th data-sort="netday" class="sortable sorted">NET / день ↓</th>
+          <th data-sort="margin" class="sortable">Маржа %</th>
+          <th data-sort="roi" class="sortable">ROI %</th>
+          <th data-sort="cac" class="sortable">CAC</th>
+          <th data-sort="aov" class="sortable">AOV</th>
+          <th data-sort="paid" class="sortable">Paid</th>
+        </tr></thead>
+        <tbody><tr><td colspan="12" class="empty">завантаження…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Section 2: 199 vs 249 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-title"><span class="num">02</span>Прямий розріз: 199 ₴ vs 249 ₴</div>
+      <div class="section-meta">Сегмент premium-авто</div>
+    </div>
+    <div class="compare-grid">
+      <div class="cmp-card win" id="card199">
+        <span class="crown">👑</span>
+        <div><span class="ent-num">199</span><span class="ent-cur">₴</span></div>
+        <div class="cmp-label">Default Entry · переможець</div>
+        <div class="cmp-metrics">
+          <div class="cmp-m"><div class="k">Avg Маржа %</div><div class="v" id="c199-margin"><span class="skel">—</span></div></div>
+          <div class="cmp-m"><div class="k">Avg ROI %</div><div class="v" id="c199-roi"><span class="skel">—</span></div></div>
+          <div class="cmp-m"><div class="k">Avg NET / день</div><div class="v" id="c199-netday"><span class="skel">—</span></div></div>
+          <div class="cmp-m"><div class="k">Avg CAC ₴</div><div class="v" id="c199-cac"><span class="skel">—</span></div></div>
+          <div class="cmp-m"><div class="k">Avg AOV ₴</div><div class="v" id="c199-aov"><span class="skel">—</span></div></div>
+          <div class="cmp-m"><div class="k">Проєктів</div><div class="v" id="c199-cnt"><span class="skel">—</span></div></div>
+        </div>
+      </div>
+      <div class="cmp-card lose" id="card249">
+        <span class="crown">⚠️</span>
+        <div><span class="ent-num">249</span><span class="ent-cur">₴</span></div>
+        <div class="cmp-label">Експеримент · програш</div>
+        <div class="cmp-metrics">
+          <div class="cmp-m"><div class="k">Avg Маржа %</div><div class="v" id="c249-margin"><span class="skel">—</span></div></div>
+          <div class="cmp-m"><div class="k">Avg ROI %</div><div class="v" id="c249-roi"><span class="skel">—</span></div></div>
+          <div class="cmp-m"><div class="k">Avg NET / день</div><div class="v" id="c249-netday"><span class="skel">—</span></div></div>
+          <div class="cmp-m"><div class="k">Avg CAC ₴</div><div class="v" id="c249-cac"><span class="skel">—</span></div></div>
+          <div class="cmp-m"><div class="k">Avg AOV ₴</div><div class="v" id="c249-aov"><span class="skel">—</span></div></div>
+          <div class="cmp-m"><div class="k">Проєктів</div><div class="v" id="c249-cnt"><span class="skel">—</span></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="verdict" id="verdictBox">
+      <span class="big" id="verdictBig">обчислюю переможця…</span>
+      <span id="verdictText" class="muted">обчислюю розрив…</span>
+    </div>
+  </div>
+
+  <!-- Section 3: Flash -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-title"><span class="num">03</span>Flash формати · 1-2 дні</div>
+      <div class="section-meta">Гаджети + мото · короткі цикли · висока продуктивність</div>
+    </div>
+    <div class="flash-grid">
+      <div class="flash-card iphone">
+        <div class="fc-title">📱 49 ₴ · iPhone 17 PRO MAX</div>
+        <div class="fc-sub">Цикл 1 день · рекордна продуктивність</div>
+        <div id="flash49"><span class="loading-bar">завантаження…</span></div>
+      </div>
+      <div class="flash-card moto">
+        <div class="fc-title">🏍️ 99 ₴ · Мото</div>
+        <div class="fc-sub">Гаджет/мото ≤200k призового</div>
+        <div id="flash99"><span class="loading-bar">завантаження…</span></div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h4>📊 NET / день · порівняння всіх entry-цін</h4>
+      <div class="chart-canvas-wrap"><canvas id="chFlash"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Section 4: Recommendation -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-title"><span class="num">04</span>Рекомендація на новий проєкт</div>
+      <div class="section-meta">На основі lifetime-даних 9 проєктів</div>
+    </div>
+    <div class="reco-card">
+      <div class="ttl">🎯 Default-стратегія</div>
+      <div class="reco-row">
+        <div class="sit">Premium авто · цикл 4-6 тижнів · приз 1-3M ₴</div>
+        <div class="arrow">→</div>
+        <div class="rec">199 ₴</div>
+      </div>
+      <div class="reco-row">
+        <div class="sit">Flash гаджет · 1 день · приз ≤80k ₴</div>
+        <div class="arrow">→</div>
+        <div class="rec violet">49 ₴</div>
+      </div>
+      <div class="reco-row">
+        <div class="sit">Мото / середній гаджет · приз ≤200k ₴</div>
+        <div class="arrow">→</div>
+        <div class="rec amber">99 ₴</div>
+      </div>
+      <div class="reco-row">
+        <div class="sit">Експеримент 249 ₴ для premium</div>
+        <div class="arrow">⛔</div>
+        <div class="rec" style="color:#fca5a5">НЕ повторювати</div>
+      </div>
+    </div>
+
+    <details class="acc">
+      <summary>📐 A/B тест-план (опційно, від тижня 2)</summary>
+      <div class="acc-body">
+        <p><b>Тижні 1-2:</b> запускаємо default <b>199 ₴</b> на 100% трафіку — збираємо baseline ROAS/CAC.</p>
+        <p><b>Тиждень 3+ (опційно):</b> split 70/30 — 70% залишається на 199, 30% — тест на <b>149 ₴</b> (нижчий вхід → перевірка чи зростуть AOV+conversion).</p>
+        <p><b>Stop-criteria:</b> якщо ROAS 149-варіанта &lt; 0.85× від 199 на 5+ днях — повертаємо весь трафік на 199.</p>
+        <p><b>Що не тестуємо:</b> 249 ₴ (підтверджений програш), 99/49 для авто (порушує юніт-економіку — див. секцію 05).</p>
+        <p>Конвертація: utm_term=<code>price149</code> для тест-сегмента, sticky-варіант через <code>dcSetVariant()</code> tracker v2.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- Section 5: Anti-patterns -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-title"><span class="num">05</span>Що НЕ робити · anti-patterns</div>
+      <div class="section-meta">Підтверджені поразки</div>
+    </div>
+    <div class="anti-grid">
+      <div class="anti">
+        <div class="ic">🚫</div>
+        <div class="body">
+          <b>249 ₴ для premium авто</b>
+          −50 пп ROI vs 199 ₴. Психологічний поріг entry-ціни — 199 ₴ це &laquo;спробувати&raquo;, 249 ₴ — &laquo;подумати&raquo;.
+        </div>
+      </div>
+      <div class="anti">
+        <div class="ic">⛔</div>
+        <div class="body">
+          <b>99 ₴ для авто</b>
+          Руйнує юніт-економіку. CAC залишається таким же високим (~200 ₴ на acquisition), але AOV впав = маржа в мінус.
+        </div>
+      </div>
+      <div class="anti">
+        <div class="ic">📉</div>
+        <div class="body">
+          <b>Variant C апсейл</b>
+          5.7% take-rate. Виключити з нових проєктів — &laquo;більше пакетів · старт х1&raquo; не працює.
+        </div>
+      </div>
+      <div class="anti">
+        <div class="ic">🧪</div>
+        <div class="body">
+          <b>MODE(amount) з deals</b>
+          Антипатерн для визначення entry-ціни. Використовуй <code style="background:#0f0f0f;padding:1px 6px;border-radius:3px">mv_dashboard_project_pnl</code> + хардкоднутий ENTRY_PRICES mapping.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div>Дані з P&amp;L по проєктах · оновлюється з кожним новим проєктом · <span id="lastUpd">—</span></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn ghost" onclick="location.reload()">↻ Reload</button>
+      <a class="btn" href="#" id="btnPdf" onclick="window.print();return false">📄 Завантажити PDF звіт</a>
+    </div>
+  </div>
+
+</div>
+</div><!-- /app-layout -->
+
+<script src="/pricing-analysis/app.js?v=20260630-v1" defer></script>
+
+</body>
+</html>
