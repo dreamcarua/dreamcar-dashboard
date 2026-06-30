@@ -1,0 +1,46 @@
+name: Attach Engagement Post
+
+on:
+  workflow_dispatch:
+    inputs:
+      shortcode:
+        description: "IG post shortcode"
+        default: "DaLlUIlMWD9"
+      ig_media_id:
+        description: "Override IG media id (optional)"
+        default: ""
+      creative_id:
+        description: "Reuse existing creative id (optional)"
+        default: ""
+      adset_ids:
+        description: "Comma-separated ad set ids"
+        default: "120250690349300624,120250690350550624,120250690351790624,120250690353260624,120250690352530624"
+      graph_ver:
+        description: "Graph API version"
+        default: "v21.0"
+      dry_run:
+        description: "Resolve media only, do not create ads"
+        type: boolean
+        default: true
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Attach engagement post
+        env:
+          FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+          AD_ACCOUNT_ID: "4136058269783354"
+          IG_USER_ID: "17841403783002317"
+          PAGE_ID: "1676843282640684"
+          SHORTCODE: ${{ inputs.shortcode }}
+          IG_MEDIA_ID: ${{ inputs.ig_media_id }}
+          CREATIVE_ID: ${{ inputs.creative_id }}
+          ADSET_IDS: ${{ inputs.adset_ids }}
+          GRAPH_VER: ${{ inputs.graph_ver }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: python scripts/attach_engagement_post.py
