@@ -39,6 +39,16 @@ def api(path, params=None, data=None, method="GET"):
         raise RuntimeError(f"HTTP {e.code} {method} {path}: {e.read().decode()}")
 
 
+def whoami():
+    try:
+        res = api("debug_token", params={"input_token": TOKEN})
+        d = res.get("data", {})
+        print("TOKEN_APP_ID:", d.get("app_id"), "| app_name:", d.get("application"),
+              "| token_type:", d.get("type"), "| scopes:", d.get("scopes"))
+    except Exception as e:
+        print("debug_token failed:", e)
+
+
 def resolve_media():
     if IG_MEDIA_ID:
         print("Using provided IG_MEDIA_ID:", IG_MEDIA_ID)
@@ -66,7 +76,6 @@ def create_creative(media_id):
         print("Using provided CREATIVE_ID:", CREATIVE_ID_IN)
         return CREATIVE_ID_IN
     name = f"DC|06 engagement {SHORTCODE}"
-    # Коректна форма для просування існуючого IG-поста:
     attempts = [
         {"name": name, "instagram_user_id": IG_USER, "source_instagram_media_id": media_id},
         {"name": name, "object_story_spec": json.dumps({"page_id": PAGE_ID, "instagram_user_id": IG_USER}), "source_instagram_media_id": media_id},
@@ -85,6 +94,7 @@ def create_creative(media_id):
 
 def main():
     print(f"== attach_engagement_post | graph={GRAPH} act={ACT} dry={DRY} ==")
+    whoami()
     print("ad sets:", ADSETS)
     media_id = resolve_media()
     print("IG media id:", media_id)
