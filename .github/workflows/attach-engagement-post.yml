@@ -3,6 +3,9 @@ name: Attach Engagement Post
 on:
   workflow_dispatch:
     inputs:
+      mode:
+        description: "rebuild (create groups) | attach (add ad to existing groups)"
+        default: "rebuild"
       shortcode:
         description: "IG post shortcode"
         default: "DaLlUIlMWD9"
@@ -13,13 +16,19 @@ on:
         description: "Reuse existing creative id (optional)"
         default: ""
       adset_ids:
-        description: "Comma-separated ad set ids"
-        default: "120250690349300624,120250690350550624,120250690351790624,120250690353260624,120250690352530624"
+        description: "Comma-separated ad set ids (attach mode)"
+        default: ""
+      group_nums:
+        description: "Filter groups by number for rebuild, e.g. 4,5 (empty = all)"
+        default: ""
+      link_url:
+        description: "CTA link"
+        default: "https://t.me/DreamCar_CLUB"
       graph_ver:
         description: "Graph API version"
         default: "v21.0"
       dry_run:
-        description: "Resolve media only, do not create ads"
+        description: "Resolve media only, do not create"
         type: boolean
         default: true
 
@@ -37,10 +46,14 @@ jobs:
           AD_ACCOUNT_ID: "4136058269783354"
           IG_USER_ID: "17841403783002317"
           PAGE_ID: "1676843282640684"
+          CAMPAIGN_ID: "120250690345200624"
+          MODE: ${{ inputs.mode }}
           SHORTCODE: ${{ inputs.shortcode }}
           IG_MEDIA_ID: ${{ inputs.ig_media_id }}
           CREATIVE_ID: ${{ inputs.creative_id }}
           ADSET_IDS: ${{ inputs.adset_ids }}
+          GROUP_NUMS: ${{ inputs.group_nums }}
+          LINK_URL: ${{ inputs.link_url }}
           GRAPH_VER: ${{ inputs.graph_ver }}
           DRY_RUN: ${{ inputs.dry_run }}
         run: python scripts/attach_engagement_post.py
