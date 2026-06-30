@@ -8,10 +8,10 @@ MODE=rebuild: створює ad sets через Graph (promoted_object=Page + ON
 - токен у LIVE-додатку DC new (1897152837652670), інакше subcode 1885183;
 - IMAGE-пост як ad потребує CTA+link, інакше subcode 2446383;
 - ad set engagement потребує promoted_object={page_id} + destination ON_POST на момент створення, immutable, інакше 1885154;
-- BROAD ad set (без custom_audiences) потребує явного targeting_automation.advantage_audience (0/1), інакше 1870227.
+- BROAD ad set (без custom_audiences) потребує явного targeting_automation.advantage_audience (0/1), інакше 1870227;
+- з advantage_audience=1 НЕ можна age_max<65 (1870189) -> для broad лишаємо 18+ (age_max 65).
 
-GROUP_NUMS (env) — фільтр груп за номером, напр. "4". Порожньо = всі.
-CREATIVE_ID (env) — переused існуючий креатив (щоб не плодити).
+GROUP_NUMS (env) — фільтр груп за номером. CREATIVE_ID (env) — переused існуючий креатив.
 """
 import os, json, urllib.parse, urllib.request, urllib.error, sys
 
@@ -38,7 +38,7 @@ GROUPS = [
     ("1 · Тепла база · IG-engagers + Engaged Page 90д", {"custom_audiences": [{"id": "120239206735980624"}, {"id": "120239206222220624"}], "age_min": 18, "age_max": 65}),
     ("2 · Підписники dreamcar (followers)", {"custom_audiences": [{"id": "120237307584540624"}], "age_min": 18, "age_max": 65}),
     ("3 · LAL 1% покупців сайту", {"custom_audiences": [{"id": "120249981511060624"}], "age_min": 18, "age_max": 65}),
-    ("4 · Broad UA 18-45", {"age_min": 18, "age_max": 45, "targeting_automation": {"advantage_audience": 1}}),
+    ("4 · Broad UA 18+ (Advantage)", {"age_min": 18, "age_max": 65, "targeting_automation": {"advantage_audience": 1}}),
     ("5 · Чол 25-54 (ядро, hard cap)", {"genders": [1], "age_min": 25, "age_max": 54, "targeting_automation": {"advantage_audience": 0}}),
 ]
 
