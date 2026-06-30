@@ -1,114 +1,58 @@
 {
- "generated": "2026-06-29T16:45:41.654955+00:00",
+ "generated": "2026-06-30T08:43:58.813854+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-06-28",
-  "prev_date": "2026-06-27",
-  "spend": 33501.7,
-  "impressions": 208719,
-  "clicks": 3019,
-  "purchases": 488,
-  "pixel_roas": 5.43,
-  "cpa": 68.65,
-  "frequency": 2.28,
-  "real_ad_revenue": 113294,
-  "real_ad_roas": 3.38,
+  "date": "2026-06-29",
+  "prev_date": "2026-06-28",
+  "spend": 0,
+  "impressions": 0,
+  "clicks": 0,
+  "purchases": 17,
+  "pixel_roas": 0.0,
+  "cpa": 0.0,
+  "frequency": 0.0,
+  "real_ad_revenue": 0,
+  "real_ad_roas": null,
   "deltas": {
-   "spend": 50.0,
-   "pixel_roas": -23.0,
-   "purchases": 33.3,
-   "cpa": 12.5
+   "spend": -100.0,
+   "pixel_roas": -100.0,
+   "purchases": -96.5,
+   "cpa": -100.0
   },
   "week": {
    "this": {
-    "from": "2026-06-22",
-    "to": "2026-06-28",
-    "spend": 127363,
-    "purchases": 1620,
-    "pixel_roas": 5.23,
-    "cpa": 78.62,
-    "real_revenue": 380760,
-    "real_roas": 2.99
+    "from": "2026-06-23",
+    "to": "2026-06-29",
+    "spend": 113069,
+    "purchases": 1539,
+    "pixel_roas": 5.61,
+    "cpa": 73.47,
+    "real_revenue": 359710,
+    "real_roas": 3.18
    },
    "prev": {
-    "from": "2026-06-15",
-    "to": "2026-06-21",
-    "spend": 157960,
-    "purchases": 1486,
-    "pixel_roas": 3.41,
-    "cpa": 106.3,
-    "real_revenue": 310287,
-    "real_roas": 1.96
+    "from": "2026-06-16",
+    "to": "2026-06-22",
+    "spend": 168326,
+    "purchases": 1550,
+    "pixel_roas": 3.31,
+    "cpa": 108.6,
+    "real_revenue": 316263,
+    "real_roas": 1.88
    },
    "deltas": {
-    "spend": -19.4,
-    "real_roas": 52.6,
-    "pixel_roas": 53.4,
-    "cpa": -26.0,
-    "purchases": 9.0
+    "spend": -32.8,
+    "real_roas": 69.1,
+    "pixel_roas": 69.5,
+    "cpa": -32.3,
+    "purchases": -0.7
    }
   },
-  "real_by_placement": [
-   {
-    "placement": "instagram_reels",
-    "revenue": 37143,
-    "paid": 106
-   },
-   {
-    "placement": "instagram_feed",
-    "revenue": 27047,
-    "paid": 80
-   },
-   {
-    "placement": "instagram_stories",
-    "revenue": 23583,
-    "paid": 73
-   },
-   {
-    "placement": "facebook_mobile_reels",
-    "revenue": 15348,
-    "paid": 36
-   },
-   {
-    "placement": "facebook_mobile_feed",
-    "revenue": 6577,
-    "paid": 23
-   },
-   {
-    "placement": "facebook_stories",
-    "revenue": 3596,
-    "paid": 4
-   }
-  ],
+  "real_by_placement": [],
   "active_cycles": [],
-  "top_creatives": [
-   {
-    "name": "Картинка рекламна 1",
-    "ad_id": "120250382299700624",
-    "spend": 757.35,
-    "purchases": 11,
-    "roas": 17.7,
-    "ctr": 1.56
-   },
-   {
-    "name": "фінал пост мустанг",
-    "ad_id": "120250541947100624",
-    "spend": 484.39,
-    "purchases": 18,
-    "roas": 10.2,
-    "ctr": 2.8
-   },
-   {
-    "name": "фінал пост мустанг",
-    "ad_id": "120250541740320624",
-    "spend": 7546.17,
-    "purchases": 176,
-    "roas": 8.91,
-    "ctr": 2.01
-   }
-  ],
+  "top_creatives": [],
   "weak_creatives": []
  },
  "projects": [
@@ -7806,16 +7750,16 @@
    "car_model": "Ford Mustang Convertible 2017",
    "date_from": "2026-06-15",
    "date_to": "2026-06-28",
-   "spend": 285323.49,
-   "impressions": 1855602,
-   "clicks": 24000,
+   "spend": 285327.16,
+   "impressions": 1855615,
+   "clicks": 24008,
    "ctr": 1.29,
    "reach": 354584,
    "frequency": 5.23,
    "purchases": 3106,
    "pixel_roas": 4.22,
    "cpa": 91.86,
-   "pixel_revenue": 1204049,
+   "pixel_revenue": 1204050,
    "real_ad_revenue": 691047,
    "real_ad_roas": 2.42,
    "gap_pct": -42.6,
@@ -7823,13 +7767,13 @@
     "platform": [
      [
       "instagram",
-      233837.75,
+      233837.17,
       2507,
       4.0
      ],
      [
       "facebook",
-      48569.75,
+      48574.01,
       563,
       5.21
      ],
@@ -7855,13 +7799,13 @@
     "age": [
      [
       "25-34",
-      139802.77,
+      139802.97,
       1509,
       4.22
      ],
      [
       "35-44",
-      89621.02,
+      89624.17,
       1040,
       4.49
      ],
@@ -7885,9 +7829,9 @@
      ],
      [
       "55-64",
-      2966.02,
+      2966.34,
       45,
-      4.78
+      4.77
      ],
      [
       "Unknown",
@@ -7899,13 +7843,13 @@
     "gender": [
      [
       "male",
-      240848.31,
+      240850.46,
       2653,
       4.37
      ],
      [
       "female",
-      43934.44,
+      43935.96,
       443,
       3.38
      ],
@@ -7919,13 +7863,13 @@
     "device": [
      [
       "iphone",
-      165759.79,
+      165760.65,
       1691,
       3.95
      ],
      [
       "android_smartphone",
-      118559.63,
+      118562.45,
       1405,
       4.61
      ],
@@ -7951,7 +7895,7 @@
       "other",
       0.05,
       3,
-      19468.8
+      19468.85
      ]
     ]
    },
@@ -8031,9 +7975,9 @@
     {
      "name": "фінал пост мустанг",
      "ad_id": "120250541947100624",
-     "spend": 484.39,
+     "spend": 485.06,
      "purchases": 18,
-     "roas": 10.2,
+     "roas": 10.19,
      "ctr": 2.8
     },
     {
@@ -8047,10 +7991,10 @@
     {
      "name": "фінал пост мустанг",
      "ad_id": "120250541740320624",
-     "spend": 7546.17,
+     "spend": 7547.01,
      "purchases": 176,
      "roas": 8.91,
-     "ctr": 2.01
+     "ctr": 2.02
     },
     {
      "name": "відео рекламне 3",
@@ -8199,7 +8143,7 @@
     {
      "name": "відео рекламне",
      "ad_id": "120250181183630624",
-     "spend": 16938.35,
+     "spend": 16938.49,
      "purchases": 246,
      "roas": 5.66,
      "ctr": 1.32
@@ -8207,10 +8151,10 @@
     {
      "name": "фінал 2 пост мустанг",
      "ad_id": "120250541764290624",
-     "spend": 2821.24,
+     "spend": 2822.44,
      "purchases": 42,
-     "roas": 5.52,
-     "ctr": 1.83
+     "roas": 5.51,
+     "ctr": 1.84
     },
     {
      "name": "відео рекламне 4",
@@ -8311,7 +8255,7 @@
     {
      "name": "фінал пост мустанг",
      "ad_id": "120250541933230624",
-     "spend": 1695.36,
+     "spend": 1695.91,
      "purchases": 26,
      "roas": 4.62,
      "ctr": 1.36
@@ -8687,7 +8631,7 @@
     {
      "name": "Картинка 11 – копія",
      "ad_id": "120250066771310624",
-     "spend": 442.27,
+     "spend": 442.54,
      "purchases": 4,
      "roas": 2.51,
      "ctr": 1.02
@@ -8851,19 +8795,19 @@
     },
     {
      "date": "2026-06-28",
-     "spend": 33501.7,
+     "spend": 33505.37,
      "purchases": 488,
      "roas": 5.43,
-     "cpa": 68.65
+     "cpa": 68.66
     }
    ],
    "adsets": [
     {
      "name": "Broad · UA 18-45 · A+A · VALUE · інкремент",
-     "spend": 114425.27,
+     "spend": 114427.45,
      "purchases": 1597,
      "roas": 5.86,
-     "ctr": 1.25,
+     "ctr": 1.26,
      "cpa": 71.65
     },
     {
@@ -8884,11 +8828,11 @@
     },
     {
      "name": "35-54 · чоловіки · UA (sweet spot)",
-     "spend": 11118.93,
+     "spend": 11119.87,
      "purchases": 145,
      "roas": 4.07,
      "ctr": 1.36,
-     "cpa": 76.68
+     "cpa": 76.69
     },
     {
      "name": "45-54 · чоловіки · UA (діамант)",
@@ -8900,11 +8844,11 @@
     },
     {
      "name": "Broad · чол 25-54 · UA · excl.наші",
-     "spend": 8893.95,
+     "spend": 8894.5,
      "purchases": 92,
      "roas": 3.38,
      "ctr": 1.17,
-     "cpa": 96.67
+     "cpa": 96.68
     },
     {
      "name": "LAL 1% покупці 90д · чол · UA",
@@ -8953,6 +8897,11 @@
   },
   {
    "sev": "mod",
+   "scope": "Вчора (06-29)",
+   "text": "Pixel ROAS вчора впав на 100% до дня раніше — стежити, чи не тренд."
+  },
+  {
+   "sev": "mod",
    "scope": "IPHONE 17 PRO MAX",
    "text": "Піксель завищує: реальний ad-ROAS лише 3.16 vs піксель 5.91. Орієнтуватись на реальний."
   },
@@ -8984,7 +8933,7 @@
   {
    "sev": "inf",
    "scope": "Акаунт · тиждень",
-   "text": "Реал ROAS тижня зріс до 2.99 (+53%) — є простір масштабувати переможців."
+   "text": "Реал ROAS тижня зріс до 3.18 (+69%) — є простір масштабувати переможців."
   }
  ],
  "strategy": {
@@ -8997,10 +8946,10 @@
     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
     "status": "PAUSED",
     "daily_budget": 32000,
-    "spend": 114425,
+    "spend": 114427,
     "purchases": 1612,
     "roas": 5.89,
-    "ctr": 1.25
+    "ctr": 1.26
    },
    {
     "id": "120249698605960624",
@@ -9023,7 +8972,7 @@
     "name": "DC | 03 Prospecting · свіжа кров (excl. наші)",
     "status": "PAUSED",
     "daily_budget": 6000,
-    "spend": 10407,
+    "spend": 10408,
     "purchases": 117,
     "roas": 3.59,
     "ctr": 1.17
