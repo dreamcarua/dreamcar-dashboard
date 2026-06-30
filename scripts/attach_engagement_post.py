@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 """
 Engagement-кампанія DC|06: один IG-пост у всі групи -> коменти копляться в одному треді.
-MODE=rebuild (default): створює 5 ad sets через Graph (promoted_object=Page + destination ON_POST +
-POST_ENGAGEMENT), чіпляє пост (з CTA-кнопкою на t.me/DreamCar_CLUB), архівує старі биті групи.
-MODE=attach: лише чіпляє пост у вже задані ADSET_IDS.
+MODE=rebuild: створює ad sets через Graph (promoted_object=Page + ON_POST + POST_ENGAGEMENT),
+чіпляє пост (CTA-кнопка на t.me/DreamCar_CLUB), архівує старі биті групи.
 
-Передумови: токен у LIVE-додатку DC new (1897152837652670); IMAGE-пост як ad потребує CTA+link (subcode 2446383);
-ad set engagement потребує promoted_object на момент створення (subcode 1885154).
+Передумови/граблі:
+- токен у LIVE-додатку DC new (1897152837652670), інакше subcode 1885183;
+- IMAGE-пост як ad потребує CTA+link, інакше subcode 2446383;
+- ad set engagement потребує promoted_object на момент створення, інакше subcode 1885154;
+- geo-таргет потребує location_types:["home","recent"], інакше subcode 1870227.
+
+GROUP_NUMS (env) — фільтр груп за номером, напр. "4,5". Порожньо = всі.
+CREATIVE_ID (env) — переused існуючий креатив (щоб не плодити).
 """
 import os, json, urllib.parse, urllib.request, urllib.error, sys
 
@@ -18,17 +23,17 @@ PAGE_ID = os.environ.get("PAGE_ID", "1676843282640684")
 CAMPAIGN_ID = os.environ.get("CAMPAIGN_ID", "120250690345200624")
 SHORTCODE = os.environ.get("SHORTCODE", "DaLlUIlMWD9").strip()
 IG_MEDIA_ID = os.environ.get("IG_MEDIA_ID", "").strip()
-CREATIVE_ID_IN = os.environ.get("CREATIVE_ID", "").strip()
+CREATIVE_ID_IN = os.environ.get("CREATIVE_ID", "1336439131947353").strip()
 LINK_URL = os.environ.get("LINK_URL", "https://t.me/DreamCar_CLUB").strip()
 CTA_TYPE = os.environ.get("CTA_TYPE", "LEARN_MORE").strip()
 DAILY_BUDGET = os.environ.get("DAILY_BUDGET", "20000").strip()
 MODE = os.environ.get("MODE", "rebuild").strip().lower()
+GROUP_NUMS = [x.strip() for x in os.environ.get("GROUP_NUMS", "4,5").split(",") if x.strip()]
 ATTACH_ADSETS = [x.strip() for x in os.environ.get("ADSET_IDS", "").split(",") if x.strip()]
 OLD_ADSETS = [x.strip() for x in os.environ.get("OLD_ADSETS", "120250690349300624,120250690350550624,120250690351790624,120250690353260624,120250690352530624").split(",") if x.strip()]
 DRY = os.environ.get("DRY_RUN", "true").lower() == "true"
 BASE = f"https://graph.facebook.com/{GRAPH}"
 
-# 5 груп: назва + специфіка таргета (поверх базового UA + feed/reels)
 GROUPS = [
     ("1 · Тепла база · IG-engagers + Engaged Page 90д", {"custom_audiences": [{"id": "120239206735980624"}, {"id": "120239206222220624"}], "age_min": 18, "age_max": 65}),
     ("2 · Підписники dreamcar (followers)", {"custom_audiences": [{"id": "120237307584540624"}], "age_min": 18, "age_max": 65}),
@@ -58,24 +63,23 @@ def api(path, params=None, data=None, method="GET"):
 def whoami():
     try:
         d = api("debug_token", params={"input_token": TOKEN}).get("data", {})
-        print("TOKEN_APP_ID:", d.get("app_id"), "| app:", d.get("application"), "| type:", d.get("type"))
+        print("TOKEN_APP_ID:", d.get("app_id"), "| app:", d.get("application"))
     except Exception as e:
         print("debug_token failed:", e)
 
 
 def resolve_media():
     if IG_MEDIA_ID:
-        print("Using provided IG_MEDIA_ID:", IG_MEDIA_ID)
         return IG_MEDIA_ID
     after = None
     while True:
-        params = {"fields": "id,permalink,media_type,caption", "limit": "50"}
+        params = {"fields": "id,permalink,media_type", "limit": "50"}
         if after:
             params["after"] = after
         res = api(f"{IG_USER}/media", params=params)
         for m in res.get("data", []):
             if SHORTCODE in (m.get("permalink") or ""):
-                print("MATCH:", m.get("id"), m.get("permalink"), m.get("media_type"))
+                print("MATCH:", m.get("id"), m.get("permalink"))
                 return m["id"]
         after = res.get("paging", {}).get("cursors", {}).get("after")
         if not after:
@@ -85,7 +89,7 @@ def resolve_media():
 
 def base_targeting(extra):
     t = {
-        "geo_locations": {"countries": ["UA"]},
+        "geo_locations": {"countries": ["UA"], "location_types": ["home", "recent"]},
         "publisher_platforms": ["facebook", "instagram"],
         "facebook_positions": ["feed", "facebook_reels"],
         "instagram_positions": ["stream", "reels", "explore"],
@@ -95,7 +99,7 @@ def base_targeting(extra):
 
 
 def create_adset(name, extra):
-    data = {
+    res = api(f"act_{ACT}/adsets", data={
         "name": name,
         "campaign_id": CAMPAIGN_ID,
         "status": "PAUSED",
@@ -106,32 +110,28 @@ def create_adset(name, extra):
         "daily_budget": DAILY_BUDGET,
         "bid_strategy": "LOWEST_COST_WITHOUT_CAP",
         "targeting": json.dumps(base_targeting(extra)),
-    }
-    res = api(f"act_{ACT}/adsets", data=data, method="POST")
+    }, method="POST")
     print(f"ADSET OK '{name}' -> {res.get('id')}")
     return res["id"]
 
 
 def create_creative(media_id):
     if CREATIVE_ID_IN:
-        print("Using provided CREATIVE_ID:", CREATIVE_ID_IN)
+        print("Using CREATIVE_ID:", CREATIVE_ID_IN)
         return CREATIVE_ID_IN
     name = f"DC|06 engagement {SHORTCODE}"
     cta = json.dumps({"type": CTA_TYPE, "value": {"link": LINK_URL}})
-    attempts = [
+    for a in [
         {"name": name, "instagram_user_id": IG_USER, "source_instagram_media_id": media_id, "call_to_action": cta},
         {"name": name, "instagram_user_id": IG_USER, "source_instagram_media_id": media_id},
-    ]
-    last = None
-    for a in attempts:
+    ]:
         try:
             res = api(f"act_{ACT}/adcreatives", data=a, method="POST")
-            print("CREATIVE OK:", res.get("id"), "| fields:", list(a.keys()))
+            print("CREATIVE OK:", res.get("id"))
             return res["id"]
         except Exception as e:
             print("creative attempt failed:", e)
-            last = e
-    raise last
+    raise RuntimeError("creative failed")
 
 
 def create_ad(adset_id, creative_id, tag):
@@ -154,36 +154,37 @@ def archive(adset_id):
 
 
 def main():
-    print(f"== DC|06 engagement | mode={MODE} graph={GRAPH} dry={DRY} link={LINK_URL} ==")
+    print(f"== DC|06 engagement | mode={MODE} groups={GROUP_NUMS or 'all'} dry={DRY} link={LINK_URL} ==")
     whoami()
     media_id = resolve_media()
     if DRY:
         print("DRY_RUN: stop.")
         return
     creative_id = create_creative(media_id)
-    print("creative id:", creative_id)
-
     results = []
     if MODE == "rebuild":
-        new_ids = []
         for name, extra in GROUPS:
-            asid = create_adset(name, extra)
-            new_ids.append(asid)
-            adid = create_ad(asid, creative_id, name.split(" ")[0])
-            results.append((name, asid, adid))
+            num = name.split(" ")[0]
+            if GROUP_NUMS and num not in GROUP_NUMS:
+                continue
+            try:
+                asid = create_adset(name, extra)
+                adid = create_ad(asid, creative_id, num)
+                results.append((name, asid, adid))
+            except Exception as e:
+                print("GROUP FAIL", name, e)
+                results.append((name, "ERROR", str(e)))
         for old in OLD_ADSETS:
             archive(old)
     else:
         for asid in ATTACH_ADSETS:
             try:
-                adid = create_ad(asid, creative_id, asid[-5:])
-                results.append((asid, adid))
+                results.append((asid, create_ad(asid, creative_id, asid[-5:])))
             except Exception as e:
                 print("AD FAIL", asid, e)
                 results.append((asid, f"ERROR {e}"))
-
     print("SUMMARY:", json.dumps(results, ensure_ascii=False))
-    if any((isinstance(r[-1], str) and str(r[-1]).startswith("ERROR")) or r[-1] is None for r in results):
+    if any("ERROR" in str(r[-1]) or r[-1] is None for r in results):
         sys.exit(1)
 
 
