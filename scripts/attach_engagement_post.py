@@ -4,14 +4,14 @@ Engagement-кампанія DC|06: один IG-пост у всі групи -> 
 MODE=rebuild: створює ad sets через Graph (promoted_object=Page + ON_POST + POST_ENGAGEMENT),
 чіпляє пост (CTA-кнопка на t.me/DreamCar_CLUB), архівує старі биті групи.
 
-Передумови/граблі (усі підтверджені 30.06.2026):
+Передумови/граблі:
 - токен у LIVE-додатку DC new (1897152837652670), інакше subcode 1885183;
 - IMAGE-пост як ad потребує CTA+link, інакше subcode 2446383;
-- ad set engagement потребує promoted_object={page_id} + destination ON_POST на момент створення, immutable, інакше 1885154;
-- BROAD ad set (без custom_audiences) потребує явного targeting_automation.advantage_audience (0/1), інакше 1870227;
-- з advantage_audience=1 НЕ можна age_max<65 (1870189) -> для broad лишаємо 18+ (age_max 65).
+- ad set engagement потребує promoted_object на момент створення, інакше subcode 1885154;
+- geo-таргет потребує location_types:["home","recent"], інакше subcode 1870227.
 
-GROUP_NUMS (env) — фільтр груп за номером. CREATIVE_ID (env) — переused існуючий креатив.
+GROUP_NUMS (env) — фільтр груп за номером, напр. "4,5". Порожньо = всі.
+CREATIVE_ID (env) — переused існуючий креатив (щоб не плодити).
 """
 import os, json, urllib.parse, urllib.request, urllib.error, sys
 
@@ -28,9 +28,9 @@ LINK_URL = os.environ.get("LINK_URL", "https://t.me/DreamCar_CLUB").strip()
 CTA_TYPE = os.environ.get("CTA_TYPE", "LEARN_MORE").strip()
 DAILY_BUDGET = os.environ.get("DAILY_BUDGET", "20000").strip()
 MODE = os.environ.get("MODE", "rebuild").strip().lower()
-GROUP_NUMS = [x.strip() for x in os.environ.get("GROUP_NUMS", "4").split(",") if x.strip()]
+GROUP_NUMS = [x.strip() for x in os.environ.get("GROUP_NUMS", "4,5").split(",") if x.strip()]
 ATTACH_ADSETS = [x.strip() for x in os.environ.get("ADSET_IDS", "").split(",") if x.strip()]
-OLD_ADSETS = [x.strip() for x in os.environ.get("OLD_ADSETS", "").split(",") if x.strip()]
+OLD_ADSETS = [x.strip() for x in os.environ.get("OLD_ADSETS", "120250690349300624,120250690350550624,120250690351790624,120250690353260624,120250690352530624").split(",") if x.strip()]
 DRY = os.environ.get("DRY_RUN", "true").lower() == "true"
 BASE = f"https://graph.facebook.com/{GRAPH}"
 
@@ -38,7 +38,7 @@ GROUPS = [
     ("1 · Тепла база · IG-engagers + Engaged Page 90д", {"custom_audiences": [{"id": "120239206735980624"}, {"id": "120239206222220624"}], "age_min": 18, "age_max": 65}),
     ("2 · Підписники dreamcar (followers)", {"custom_audiences": [{"id": "120237307584540624"}], "age_min": 18, "age_max": 65}),
     ("3 · LAL 1% покупців сайту", {"custom_audiences": [{"id": "120249981511060624"}], "age_min": 18, "age_max": 65}),
-    ("4 · Broad UA 18+ (Advantage)", {"age_min": 18, "age_max": 65, "targeting_automation": {"advantage_audience": 1}}),
+    ("4 · Broad UA 18-45", {"age_min": 18, "age_max": 45}),
     ("5 · Чол 25-54 (ядро, hard cap)", {"genders": [1], "age_min": 25, "age_max": 54, "targeting_automation": {"advantage_audience": 0}}),
 ]
 
@@ -145,6 +145,21 @@ def create_ad(adset_id, creative_id, tag):
     return res.get("id")
 
 
+def ensure_promoted_object(adset_id):
+    """P0 FIX 30.06.2026: Проверить что ad set имеет promoted_object для POST_ENGAGEMENT"""
+    try:
+        info = api(adset_id, params={"fields": "id,promoted_object,optimization_goal"})
+        po = info.get("promoted_object")
+        if not po:
+            print(f"⚠️  ADSET {adset_id} missing promoted_object (goal={info.get('optimization_goal')}), attempting UPDATE...")
+            api(adset_id, data={"promoted_object": json.dumps({"page_id": PAGE_ID})}, method="POST")
+            print(f"✅ UPDATED adset {adset_id} with promoted_object")
+        return True
+    except Exception as e:
+        print(f"❌ ensure_promoted_object failed for {adset_id}: {e}")
+        return False
+
+
 def archive(adset_id):
     try:
         api(adset_id, data={"status": "ARCHIVED"}, method="POST")
@@ -179,6 +194,10 @@ def main():
     else:
         for asid in ATTACH_ADSETS:
             try:
+                # P0 FIX 30.06.2026: Проверить что ad set имеет promoted_object перед attach
+                if not ensure_promoted_object(asid):
+                    results.append((asid, f"ERROR: Failed to ensure promoted_object"))
+                    continue
                 results.append((asid, create_ad(asid, creative_id, asid[-5:])))
             except Exception as e:
                 print("AD FAIL", asid, e)
