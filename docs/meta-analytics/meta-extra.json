@@ -1,7 +1,7 @@
 {
  "account": "4136058269783354",
  "account_name": "DreamCar.ua UAH",
- "generated": "2026-06-30T08:45:25.622469+00:00",
+ "generated": "2026-07-01T09:01:05.275291+00:00",
  "default_period": "last_30d",
  "thresholds": {
   "min_conv": 5,
@@ -9,40 +9,214 @@
   "min_impr": 1500
  },
  "periods": {
+  "today": {
+   "window": {
+    "since": "2026-07-01",
+    "until": "2026-07-01"
+   },
+   "funnel": {
+    "spend": 580,
+    "impressions": 13207,
+    "reach": 12346,
+    "frequency": 1.07,
+    "clicks": 119,
+    "link_clicks": 42,
+    "purchases": 0,
+    "revenue": 0,
+    "ctr": 0.9,
+    "link_ctr": 0.32,
+    "cpc": 4.87,
+    "cpc_link": 13.81,
+    "cpm": 43.91,
+    "cvr": 0.0,
+    "cpa": 0,
+    "aov": 0,
+    "roas": 0.0,
+    "real_roas": 0.0
+   },
+   "deltas": {
+    "spend": null,
+    "roas": null,
+    "cpa": null,
+    "ctr": null,
+    "cpm": null,
+    "frequency": 7.0,
+    "purchases": null,
+    "link_ctr": null
+   },
+   "campaigns": [
+    {
+     "name": "DC | 06 Engagement · розшевелити (байти/коменти)",
+     "spend": 580,
+     "cpm": 43.9,
+     "cpc": 4.87,
+     "ctr": 0.9,
+     "frequency": 1.07,
+     "reach": 12346,
+     "purchases": 0,
+     "roas": 0.0,
+     "role": "core",
+     "fatigue": false
+    }
+   ],
+   "clusters": [
+    {
+     "cluster": "Інше",
+     "spend": 580,
+     "spend_pct": 100.0,
+     "roas": 0.0,
+     "purchases": 0,
+     "ctr": 0.9,
+     "cpa": 0,
+     "is_video": false
+    }
+   ],
+   "video_vs_static": {
+    "video": null,
+    "static": {
+     "spend": 580,
+     "pct": 100.0,
+     "roas": 0.0,
+     "purchases": 0
+    }
+   },
+   "by_platform": [
+    {
+     "spend": 343,
+     "impressions": 7007,
+     "reach": 6538,
+     "frequency": 1.07,
+     "clicks": 32,
+     "link_clicks": 20,
+     "purchases": 0,
+     "revenue": 0,
+     "ctr": 0.46,
+     "link_ctr": 0.29,
+     "cpc": 10.71,
+     "cpc_link": 17.14,
+     "cpm": 48.92,
+     "cvr": 0.0,
+     "cpa": 0,
+     "aov": 0,
+     "roas": 0.0,
+     "real_roas": 0.0,
+     "key": "instagram"
+    },
+    {
+     "spend": 237,
+     "impressions": 6200,
+     "reach": 5891,
+     "frequency": 1.05,
+     "clicks": 87,
+     "link_clicks": 22,
+     "purchases": 0,
+     "revenue": 0,
+     "ctr": 1.4,
+     "link_ctr": 0.35,
+     "cpc": 2.73,
+     "cpc_link": 10.78,
+     "cpm": 38.24,
+     "cvr": 0.0,
+     "cpa": 0,
+     "aov": 0,
+     "roas": 0.0,
+     "real_roas": 0.0,
+     "key": "facebook"
+    }
+   ],
+   "by_gender": [
+    {
+     "spend": 479,
+     "impressions": 10925,
+     "reach": 10223,
+     "frequency": 1.07,
+     "clicks": 90,
+     "link_clicks": 34,
+     "purchases": 0,
+     "revenue": 0,
+     "ctr": 0.82,
+     "link_ctr": 0.31,
+     "cpc": 5.32,
+     "cpc_link": 14.09,
+     "cpm": 43.84,
+     "cvr": 0.0,
+     "cpa": 0,
+     "aov": 0,
+     "roas": 0.0,
+     "real_roas": 0.0,
+     "key": "male"
+    },
+    {
+     "spend": 100,
+     "impressions": 2268,
+     "reach": 2198,
+     "frequency": 1.03,
+     "clicks": 29,
+     "link_clicks": 8,
+     "purchases": 0,
+     "revenue": 0,
+     "ctr": 1.28,
+     "link_ctr": 0.35,
+     "cpc": 3.46,
+     "cpc_link": 12.56,
+     "cpm": 44.29,
+     "cvr": 0.0,
+     "cpa": 0,
+     "aov": 0,
+     "roas": 0.0,
+     "real_roas": 0.0,
+     "key": "female"
+    }
+   ],
+   "ai": {
+    "summary": "Реал ROAS ~0.0 (pixel 0.0), CPA 0 ₴, частота 1.07. Важелі — реалокація у топ-кластери, відео, ротація при частоті >4.",
+    "priorities": [],
+    "alerts": [
+     {
+      "sev": "cri",
+      "text": "«DC | 06 Engagement · розшевелити (байти/коменти)»: ROAS 0.0 при 580 ₴ — зламана, ревізія."
+     },
+     {
+      "sev": "mod",
+      "text": "Кластер «Інше» 100.0% бюджету при ROAS 0.0 — скоротити."
+     }
+    ]
+   }
+  },
   "yesterday": {
    "window": {
-    "since": "2026-06-29",
-    "until": "2026-06-29"
+    "since": "2026-06-30",
+    "until": "2026-06-30"
    },
    "funnel": {
     "spend": 0,
-    "impressions": 0,
-    "reach": 0,
-    "frequency": 0,
+    "impressions": 1,
+    "reach": 1,
+    "frequency": 1.0,
     "clicks": 0,
     "link_clicks": 0,
-    "purchases": 17,
-    "revenue": 4808,
-    "ctr": 0,
-    "link_ctr": 0,
+    "purchases": 0,
+    "revenue": 0,
+    "ctr": 0.0,
+    "link_ctr": 0.0,
     "cpc": 0,
     "cpc_link": 0,
-    "cpm": 0,
+    "cpm": 0.0,
     "cvr": 0,
-    "cpa": 0.0,
-    "aov": 283,
+    "cpa": 0,
+    "aov": 0,
     "roas": 0,
     "real_roas": 0
    },
    "deltas": {
-    "spend": -100.0,
-    "roas": -100.0,
-    "cpa": -100.0,
-    "ctr": -100.0,
-    "cpm": -100.0,
-    "frequency": -100.0,
-    "purchases": -96.5,
-    "link_ctr": -100.0
+    "spend": null,
+    "roas": null,
+    "cpa": null,
+    "ctr": null,
+    "cpm": null,
+    "frequency": null,
+    "purchases": -100.0,
+    "link_ctr": null
    },
    "campaigns": [],
    "clusters": [],
@@ -58,70 +232,70 @@
    "by_platform": [],
    "by_gender": [],
    "ai": {
-    "summary": "Реал ROAS ~0 (pixel 0), CPA 0.0 ₴, частота 0. ROAS ↓100.0% до попер. періоду. Важелі — реалокація у топ-кластери, відео, ротація при частоті >4.",
+    "summary": "Реал ROAS ~0 (pixel 0), CPA 0 ₴, частота 1.0. Важелі — реалокація у топ-кластери, відео, ротація при частоті >4.",
     "priorities": [],
     "alerts": []
    }
   },
   "last_7d": {
    "window": {
-    "since": "2026-06-23",
-    "until": "2026-06-29"
+    "since": "2026-06-24",
+    "until": "2026-06-30"
    },
    "funnel": {
-    "spend": 113069,
-    "impressions": 777722,
-    "reach": 196874,
-    "frequency": 3.95,
-    "clicks": 9788,
-    "link_clicks": 6011,
-    "purchases": 1539,
-    "revenue": 634324,
+    "spend": 101762,
+    "impressions": 696751,
+    "reach": 191351,
+    "frequency": 3.64,
+    "clicks": 8809,
+    "link_clicks": 5391,
+    "purchases": 1409,
+    "revenue": 568210,
     "ctr": 1.26,
     "link_ctr": 0.77,
     "cpc": 11.55,
-    "cpc_link": 18.81,
-    "cpm": 145.38,
-    "cvr": 25.6,
-    "cpa": 73.5,
-    "aov": 412,
-    "roas": 5.61,
-    "real_roas": 3.93
+    "cpc_link": 18.88,
+    "cpm": 146.05,
+    "cvr": 26.1,
+    "cpa": 72.2,
+    "aov": 403,
+    "roas": 5.58,
+    "real_roas": 3.91
    },
    "deltas": {
-    "spend": -32.8,
-    "roas": 69.5,
-    "cpa": -32.3,
-    "ctr": -3.8,
-    "cpm": -9.4,
-    "frequency": -2.7,
-    "purchases": -0.7,
-    "link_ctr": -8.3
+    "spend": -36.0,
+    "roas": 64.6,
+    "cpa": -35.4,
+    "ctr": 3.3,
+    "cpm": -6.2,
+    "frequency": -8.5,
+    "purchases": -0.8,
+    "link_ctr": -4.9
    },
    "campaigns": [
     {
      "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
-     "spend": 80220,
-     "cpm": 152.3,
-     "cpc": 12.39,
-     "ctr": 1.23,
-     "frequency": 4.79,
-     "reach": 110003,
-     "purchases": 1194,
-     "roas": 6.55,
+     "spend": 70828,
+     "cpm": 153.9,
+     "cpc": 12.45,
+     "ctr": 1.24,
+     "frequency": 4.37,
+     "reach": 105395,
+     "purchases": 1081,
+     "roas": 6.59,
      "role": "core",
      "fatigue": true
     },
     {
      "name": "DC | 05 Тест аудиторій (vg) · 35-54 / 45-54 / LAL",
-     "spend": 22441,
-     "cpm": 145.0,
-     "cpc": 10.26,
-     "ctr": 1.41,
-     "frequency": 3.1,
-     "reach": 49896,
-     "purchases": 226,
-     "roas": 3.16,
+     "spend": 20526,
+     "cpm": 146.4,
+     "cpc": 10.28,
+     "ctr": 1.42,
+     "frequency": 2.93,
+     "reach": 47904,
+     "purchases": 210,
+     "roas": 3.11,
      "role": "core",
      "fatigue": false
     },
@@ -142,38 +316,38 @@
    "clusters": [
     {
      "cluster": "Відео",
-     "spend": 48258,
-     "spend_pct": 42.7,
-     "roas": 5.73,
-     "purchases": 672,
+     "spend": 46905,
+     "spend_pct": 46.1,
+     "roas": 5.72,
+     "purchases": 649,
      "ctr": 1.17,
      "cpa": 72,
      "is_video": true
     },
     {
      "cluster": "Картинка-нумерована",
-     "spend": 33601,
-     "spend_pct": 29.7,
-     "roas": 3.95,
-     "purchases": 337,
-     "ctr": 1.23,
-     "cpa": 100,
+     "spend": 27030,
+     "spend_pct": 26.6,
+     "roas": 3.57,
+     "purchases": 266,
+     "ctr": 1.24,
+     "cpa": 102,
      "is_video": false
     },
     {
      "cluster": "Mustang-пост",
-     "spend": 22748,
-     "spend_pct": 20.1,
-     "roas": 7.64,
-     "purchases": 425,
-     "ctr": 1.6,
-     "cpa": 54,
+     "spend": 19365,
+     "spend_pct": 19.0,
+     "roas": 7.87,
+     "purchases": 389,
+     "ctr": 1.68,
+     "cpa": 50,
      "is_video": false
     },
     {
      "cluster": "Картинка-нова",
      "spend": 8363,
-     "spend_pct": 7.4,
+     "spend_pct": 8.2,
      "roas": 6.02,
      "purchases": 100,
      "ctr": 1.14,
@@ -193,176 +367,176 @@
    ],
    "video_vs_static": {
     "video": {
-     "spend": 48258,
-     "pct": 42.7,
-     "roas": 5.73,
-     "purchases": 672
+     "spend": 46905,
+     "pct": 46.1,
+     "roas": 5.72,
+     "purchases": 649
     },
     "static": {
-     "spend": 64811,
-     "pct": 57.3,
-     "roas": 5.51,
-     "purchases": 863
+     "spend": 54857,
+     "pct": 53.9,
+     "roas": 5.46,
+     "purchases": 756
     }
    },
    "by_platform": [
     {
-     "spend": 88663,
-     "impressions": 582790,
-     "reach": 159444,
-     "frequency": 3.66,
-     "clicks": 6157,
-     "link_clicks": 3982,
-     "purchases": 1216,
-     "revenue": 472870,
+     "spend": 79484,
+     "impressions": 520931,
+     "reach": 155643,
+     "frequency": 3.35,
+     "clicks": 5530,
+     "link_clicks": 3571,
+     "purchases": 1108,
+     "revenue": 422770,
      "ctr": 1.06,
-     "link_ctr": 0.68,
-     "cpc": 14.4,
-     "cpc_link": 22.27,
-     "cpm": 152.14,
-     "cvr": 30.5,
-     "cpa": 72.9,
-     "aov": 389,
-     "roas": 5.33,
-     "real_roas": 3.73,
+     "link_ctr": 0.69,
+     "cpc": 14.37,
+     "cpc_link": 22.26,
+     "cpm": 152.58,
+     "cvr": 31.0,
+     "cpa": 71.7,
+     "aov": 382,
+     "roas": 5.32,
+     "real_roas": 3.72,
      "key": "instagram"
     },
     {
-     "spend": 22994,
-     "impressions": 174151,
-     "reach": 44631,
-     "frequency": 3.9,
-     "clicks": 3087,
-     "link_clicks": 1435,
-     "purchases": 307,
-     "revenue": 154551,
+     "spend": 21077,
+     "impressions": 158409,
+     "reach": 43760,
+     "frequency": 3.62,
+     "clicks": 2809,
+     "link_clicks": 1303,
+     "purchases": 284,
+     "revenue": 138592,
      "ctr": 1.77,
      "link_ctr": 0.82,
-     "cpc": 7.45,
-     "cpc_link": 16.02,
-     "cpm": 132.04,
-     "cvr": 21.4,
-     "cpa": 74.9,
-     "aov": 503,
-     "roas": 6.72,
-     "real_roas": 4.7,
+     "cpc": 7.5,
+     "cpc_link": 16.18,
+     "cpm": 133.06,
+     "cvr": 21.8,
+     "cpa": 74.2,
+     "aov": 488,
+     "roas": 6.58,
+     "real_roas": 4.6,
      "key": "facebook"
     },
     {
-     "spend": 772,
-     "impressions": 9254,
-     "reach": 5324,
-     "frequency": 1.74,
-     "clicks": 63,
-     "link_clicks": 52,
-     "purchases": 6,
-     "revenue": 2665,
-     "ctr": 0.68,
-     "link_ctr": 0.56,
-     "cpc": 12.26,
-     "cpc_link": 14.85,
-     "cpm": 83.47,
-     "cvr": 11.5,
-     "cpa": 128.7,
-     "aov": 444,
-     "roas": 3.45,
-     "real_roas": 2.42,
+     "spend": 663,
+     "impressions": 7583,
+     "reach": 4481,
+     "frequency": 1.69,
+     "clicks": 53,
+     "link_clicks": 44,
+     "purchases": 5,
+     "revenue": 2610,
+     "ctr": 0.7,
+     "link_ctr": 0.58,
+     "cpc": 12.51,
+     "cpc_link": 15.07,
+     "cpm": 87.43,
+     "cvr": 11.4,
+     "cpa": 132.6,
+     "aov": 522,
+     "roas": 3.94,
+     "real_roas": 2.76,
      "key": "threads"
     },
     {
-     "spend": 639,
-     "impressions": 11527,
-     "reach": 1675,
-     "frequency": 6.88,
-     "clicks": 469,
-     "link_clicks": 542,
+     "spend": 538,
+     "impressions": 9828,
+     "reach": 1526,
+     "frequency": 6.44,
+     "clicks": 405,
+     "link_clicks": 473,
      "purchases": 10,
      "revenue": 3961,
-     "ctr": 4.07,
-     "link_ctr": 4.7,
-     "cpc": 1.36,
-     "cpc_link": 1.18,
-     "cpm": 55.47,
-     "cvr": 1.8,
-     "cpa": 63.9,
+     "ctr": 4.12,
+     "link_ctr": 4.81,
+     "cpc": 1.33,
+     "cpc_link": 1.14,
+     "cpm": 54.76,
+     "cvr": 2.1,
+     "cpa": 53.8,
      "aov": 396,
-     "roas": 6.19,
-     "real_roas": 4.34,
+     "roas": 7.36,
+     "real_roas": 5.15,
      "key": "audience_network"
     }
    ],
    "by_gender": [
     {
-     "spend": 100452,
-     "impressions": 716757,
-     "reach": 185122,
-     "frequency": 3.87,
-     "clicks": 8745,
-     "link_clicks": 5507,
-     "purchases": 1358,
-     "revenue": 568034,
-     "ctr": 1.22,
+     "spend": 90678,
+     "impressions": 643594,
+     "reach": 180930,
+     "frequency": 3.56,
+     "clicks": 7908,
+     "link_clicks": 4951,
+     "purchases": 1248,
+     "revenue": 512521,
+     "ctr": 1.23,
      "link_ctr": 0.77,
-     "cpc": 11.49,
-     "cpc_link": 18.24,
-     "cpm": 140.15,
-     "cvr": 24.7,
-     "cpa": 74.0,
-     "aov": 418,
+     "cpc": 11.47,
+     "cpc_link": 18.32,
+     "cpm": 140.89,
+     "cvr": 25.2,
+     "cpa": 72.7,
+     "aov": 411,
      "roas": 5.65,
      "real_roas": 3.96,
      "key": "male"
     },
     {
-     "spend": 12426,
-     "impressions": 59767,
-     "reach": 13399,
-     "frequency": 4.46,
-     "clicks": 1023,
-     "link_clicks": 494,
-     "purchases": 175,
-     "revenue": 63945,
-     "ctr": 1.71,
+     "spend": 10913,
+     "impressions": 52106,
+     "reach": 12408,
+     "frequency": 4.2,
+     "clicks": 887,
+     "link_clicks": 433,
+     "purchases": 155,
+     "revenue": 53343,
+     "ctr": 1.7,
      "link_ctr": 0.83,
-     "cpc": 12.15,
-     "cpc_link": 25.15,
-     "cpm": 207.9,
-     "cvr": 35.4,
-     "cpa": 71.0,
-     "aov": 365,
-     "roas": 5.15,
-     "real_roas": 3.6,
+     "cpc": 12.3,
+     "cpc_link": 25.2,
+     "cpm": 209.44,
+     "cvr": 35.8,
+     "cpa": 70.4,
+     "aov": 344,
+     "roas": 4.89,
+     "real_roas": 3.42,
      "key": "female"
     },
     {
-     "spend": 191,
-     "impressions": 1198,
-     "reach": 310,
-     "frequency": 3.86,
-     "clicks": 20,
-     "link_clicks": 10,
+     "spend": 172,
+     "impressions": 1051,
+     "reach": 294,
+     "frequency": 3.57,
+     "clicks": 14,
+     "link_clicks": 7,
      "purchases": 6,
      "revenue": 2346,
-     "ctr": 1.67,
-     "link_ctr": 0.83,
-     "cpc": 9.56,
-     "cpc_link": 19.11,
-     "cpm": 159.55,
-     "cvr": 60.0,
-     "cpa": 31.9,
+     "ctr": 1.33,
+     "link_ctr": 0.67,
+     "cpc": 12.25,
+     "cpc_link": 24.51,
+     "cpm": 163.22,
+     "cvr": 85.7,
+     "cpa": 28.6,
      "aov": 391,
-     "roas": 12.27,
-     "real_roas": 8.59,
+     "roas": 13.68,
+     "real_roas": 9.57,
      "key": "unknown"
     }
    ],
    "ai": {
-    "summary": "Реал ROAS ~3.93 (pixel 5.61), CPA 73.5 ₴, частота 3.95. ROAS ↑69.5% до попер. періоду. Важелі — реалокація у топ-кластери, відео, ротація при частоті >4.",
+    "summary": "Реал ROAS ~3.91 (pixel 5.58), CPA 72.2 ₴, частота 3.64. ROAS ↑64.6% до попер. періоду. Важелі — реалокація у топ-кластери, відео, ротація при частоті >4.",
     "priorities": [
      {
       "id": "P1",
       "action": "Перелити бюджет з «Картинка-нумерована» у топ (Mustang-пост, Картинка-нова, Відео)",
-      "why": "Картинка-нумерована 29.7% / ROAS 3.95 проти Mustang-пост 7.64",
+      "why": "Картинка-нумерована 26.6% / ROAS 3.57 проти Mustang-пост 7.87",
       "impact": "Високий",
       "effort": "Низьке",
       "expect": "+0.3–0.7 ROAS"
@@ -379,498 +553,19 @@
     "alerts": [
      {
       "sev": "mod",
-      "text": "«DC | 01 Ядро · Advantage+ Sales (broad)»: частота 4.79, CTR 1.23% — втома."
+      "text": "«DC | 01 Ядро · Advantage+ Sales (broad)»: частота 4.37, CTR 1.24% — втома."
      }
     ]
    }
   },
   "last_30d": {
    "window": {
-    "since": "2026-05-31",
-    "until": "2026-06-29"
-   },
-   "funnel": {
-    "spend": 510654,
-    "impressions": 3550940,
-    "reach": 549322,
-    "frequency": 6.46,
-    "clicks": 57679,
-    "link_clicks": 36418,
-    "purchases": 7841,
-    "revenue": 2432826,
-    "ctr": 1.62,
-    "link_ctr": 1.03,
-    "cpc": 8.85,
-    "cpc_link": 14.02,
-    "cpm": 143.81,
-    "cvr": 21.5,
-    "cpa": 65.1,
-    "aov": 310,
-    "roas": 4.76,
-    "real_roas": 3.33
-   },
-   "deltas": {
-    "spend": -41.1,
-    "roas": 8.4,
-    "cpa": -45.7,
-    "ctr": 14.1,
-    "cpm": -8.9,
-    "frequency": -8.8,
-    "purchases": 8.5,
-    "link_ctr": 8.4
-   },
-   "campaigns": [
-    {
-     "name": "на ШИРОКУ продажі",
-     "spend": 207538,
-     "cpm": 158.5,
-     "cpc": 8.27,
-     "ctr": 1.92,
-     "frequency": 5.52,
-     "reach": 237214,
-     "purchases": 3938,
-     "roas": 5.27,
-     "role": "core",
-     "fatigue": true
-    },
-    {
-     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
-     "spend": 114427,
-     "cpm": 149.3,
-     "cpc": 11.89,
-     "ctr": 1.26,
-     "frequency": 5.91,
-     "reach": 129654,
-     "purchases": 1612,
-     "roas": 5.89,
-     "role": "core",
-     "fatigue": true
-    },
-    {
-     "name": "На мото аудиторію!",
-     "spend": 69641,
-     "cpm": 110.6,
-     "cpc": 5.59,
-     "ctr": 1.98,
-     "frequency": 3.24,
-     "reach": 194493,
-     "purchases": 1416,
-     "roas": 5.56,
-     "role": "core",
-     "fatigue": false
-    },
-    {
-     "name": "На НОВИХ продажі",
-     "spend": 66179,
-     "cpm": 137.5,
-     "cpc": 11.42,
-     "ctr": 1.2,
-     "frequency": 2.2,
-     "reach": 218851,
-     "purchases": 427,
-     "roas": 2.1,
-     "role": "acquisition",
-     "fatigue": false
-    },
-    {
-     "name": "DC | 05 Тест аудиторій (vg) · 35-54 / 45-54 / LAL",
-     "spend": 24115,
-     "cpm": 146.3,
-     "cpc": 10.23,
-     "ctr": 1.43,
-     "frequency": 3.28,
-     "reach": 50329,
-     "purchases": 241,
-     "roas": 3.09,
-     "role": "core",
-     "fatigue": false
-    },
-    {
-     "name": "DC | 03 Prospecting · свіжа кров (excl. наші)",
-     "spend": 10408,
-     "cpm": 108.2,
-     "cpc": 9.25,
-     "ctr": 1.17,
-     "frequency": 1.28,
-     "reach": 75236,
-     "purchases": 117,
-     "roas": 3.59,
-     "role": "prospecting",
-     "fatigue": false
-    },
-    {
-     "name": "фінал",
-     "spend": 9594,
-     "cpm": 190.9,
-     "cpc": 34.14,
-     "ctr": 0.56,
-     "frequency": 1.1,
-     "reach": 45709,
-     "purchases": 5,
-     "roas": 0.19,
-     "role": "core",
-     "fatigue": false
-    },
-    {
-     "name": "мем на мото",
-     "spend": 3464,
-     "cpm": 157.8,
-     "cpc": 7.82,
-     "ctr": 2.02,
-     "frequency": 1.14,
-     "reach": 19302,
-     "purchases": 27,
-     "roas": 2.0,
-     "role": "core",
-     "fatigue": false
-    },
-    {
-     "name": "мем на широку",
-     "spend": 2979,
-     "cpm": 143.0,
-     "cpc": 8.03,
-     "ctr": 1.78,
-     "frequency": 1.18,
-     "reach": 17700,
-     "purchases": 22,
-     "roas": 1.34,
-     "role": "core",
-     "fatigue": false
-    },
-    {
-     "name": "DC | 02 Retargeting · дожим теплих",
-     "spend": 1620,
-     "cpm": 254.9,
-     "cpc": 22.5,
-     "ctr": 1.13,
-     "frequency": 1.65,
-     "reach": 3854,
-     "purchases": 2,
-     "roas": 0.25,
-     "role": "retarget",
-     "fatigue": false
-    },
-    {
-     "name": "x2",
-     "spend": 688,
-     "cpm": 195.0,
-     "cpc": 20.24,
-     "ctr": 0.96,
-     "frequency": 1.21,
-     "reach": 2921,
-     "purchases": 32,
-     "roas": 18.04,
-     "role": "core",
-     "fatigue": false
-    }
-   ],
-   "clusters": [
-    {
-     "cluster": "KTM/мото",
-     "spend": 154733,
-     "spend_pct": 30.3,
-     "roas": 5.71,
-     "purchases": 3280,
-     "ctr": 2.06,
-     "cpa": 47,
-     "is_video": false
-    },
-    {
-     "cluster": "Mustang-пост",
-     "spend": 147309,
-     "spend_pct": 28.8,
-     "roas": 3.68,
-     "purchases": 1436,
-     "ctr": 1.36,
-     "cpa": 103,
-     "is_video": false
-    },
-    {
-     "cluster": "Картинка-нумерована",
-     "spend": 77674,
-     "spend_pct": 15.2,
-     "roas": 3.34,
-     "purchases": 702,
-     "ctr": 1.18,
-     "cpa": 111,
-     "is_video": false
-    },
-    {
-     "cluster": "Відео",
-     "spend": 48258,
-     "spend_pct": 9.5,
-     "roas": 5.73,
-     "purchases": 672,
-     "ctr": 1.17,
-     "cpa": 72,
-     "is_video": true
-    },
-    {
-     "cluster": "iPhone/айфон",
-     "spend": 38167,
-     "spend_pct": 7.5,
-     "roas": 6.14,
-     "purchases": 1201,
-     "ctr": 1.96,
-     "cpa": 32,
-     "is_video": false
-    },
-    {
-     "cluster": "Інше",
-     "spend": 21248,
-     "spend_pct": 4.2,
-     "roas": 5.49,
-     "purchases": 271,
-     "ctr": 1.82,
-     "cpa": 78,
-     "is_video": false
-    },
-    {
-     "cluster": "Пост x2/тариф",
-     "spend": 14901,
-     "spend_pct": 2.9,
-     "roas": 4.71,
-     "purchases": 170,
-     "ctr": 1.51,
-     "cpa": 88,
-     "is_video": false
-    },
-    {
-     "cluster": "Картинка-нова",
-     "spend": 8363,
-     "spend_pct": 1.6,
-     "roas": 6.02,
-     "purchases": 100,
-     "ctr": 1.14,
-     "cpa": 84,
-     "is_video": false
-    }
-   ],
-   "video_vs_static": {
-    "video": {
-     "spend": 48258,
-     "pct": 9.5,
-     "roas": 5.73,
-     "purchases": 672
-    },
-    "static": {
-     "spend": 462396,
-     "pct": 90.5,
-     "roas": 4.66,
-     "purchases": 7160
-    }
-   },
-   "by_platform": [
-    {
-     "spend": 417193,
-     "impressions": 2775857,
-     "reach": 460854,
-     "frequency": 6.02,
-     "clicks": 39239,
-     "link_clicks": 26896,
-     "purchases": 6441,
-     "revenue": 1943392,
-     "ctr": 1.41,
-     "link_ctr": 0.97,
-     "cpc": 10.63,
-     "cpc_link": 15.51,
-     "cpm": 150.29,
-     "cvr": 23.9,
-     "cpa": 64.8,
-     "aov": 302,
-     "roas": 4.66,
-     "real_roas": 3.26,
-     "key": "instagram"
-    },
-    {
-     "spend": 88317,
-     "impressions": 706741,
-     "reach": 122224,
-     "frequency": 5.78,
-     "clicks": 16325,
-     "link_clicks": 7269,
-     "purchases": 1309,
-     "revenue": 462945,
-     "ctr": 2.31,
-     "link_ctr": 1.03,
-     "cpc": 5.41,
-     "cpc_link": 12.15,
-     "cpm": 124.96,
-     "cvr": 18.0,
-     "cpa": 67.5,
-     "aov": 354,
-     "roas": 5.24,
-     "real_roas": 3.67,
-     "key": "facebook"
-    },
-    {
-     "spend": 3194,
-     "impressions": 41617,
-     "reach": 20153,
-     "frequency": 2.07,
-     "clicks": 398,
-     "link_clicks": 322,
-     "purchases": 43,
-     "revenue": 11368,
-     "ctr": 0.96,
-     "link_ctr": 0.77,
-     "cpc": 8.03,
-     "cpc_link": 9.92,
-     "cpm": 76.75,
-     "cvr": 13.4,
-     "cpa": 74.3,
-     "aov": 264,
-     "roas": 3.56,
-     "real_roas": 2.49,
-     "key": "threads"
-    },
-    {
-     "spend": 1950,
-     "impressions": 26724,
-     "reach": 3084,
-     "frequency": 8.67,
-     "clicks": 1698,
-     "link_clicks": 1931,
-     "purchases": 40,
-     "revenue": 13460,
-     "ctr": 6.35,
-     "link_ctr": 7.23,
-     "cpc": 1.15,
-     "cpc_link": 1.01,
-     "cpm": 72.96,
-     "cvr": 2.1,
-     "cpa": 48.7,
-     "aov": 336,
-     "roas": 6.9,
-     "real_roas": 4.83,
-     "key": "audience_network"
-    }
-   ],
-   "by_gender": [
-    {
-     "spend": 440276,
-     "impressions": 3200869,
-     "reach": 451408,
-     "frequency": 7.09,
-     "clicks": 51166,
-     "link_clicks": 32778,
-     "purchases": 6969,
-     "revenue": 2192461,
-     "ctr": 1.6,
-     "link_ctr": 1.02,
-     "cpc": 8.6,
-     "cpc_link": 13.43,
-     "cpm": 137.55,
-     "cvr": 21.3,
-     "cpa": 63.2,
-     "aov": 315,
-     "roas": 4.98,
-     "real_roas": 3.49,
-     "key": "male"
-    },
-    {
-     "spend": 69328,
-     "impressions": 343399,
-     "reach": 100360,
-     "frequency": 3.42,
-     "clicks": 6392,
-     "link_clicks": 3570,
-     "purchases": 849,
-     "revenue": 232734,
-     "ctr": 1.86,
-     "link_ctr": 1.04,
-     "cpc": 10.85,
-     "cpc_link": 19.42,
-     "cpm": 201.89,
-     "cvr": 23.8,
-     "cpa": 81.7,
-     "aov": 274,
-     "roas": 3.36,
-     "real_roas": 2.35,
-     "key": "female"
-    },
-    {
-     "spend": 1049,
-     "impressions": 6672,
-     "reach": 1541,
-     "frequency": 4.33,
-     "clicks": 121,
-     "link_clicks": 70,
-     "purchases": 22,
-     "revenue": 7631,
-     "ctr": 1.81,
-     "link_ctr": 1.05,
-     "cpc": 8.67,
-     "cpc_link": 14.99,
-     "cpm": 157.28,
-     "cvr": 31.4,
-     "cpa": 47.7,
-     "aov": 347,
-     "roas": 7.27,
-     "real_roas": 5.09,
-     "key": "unknown"
-    }
-   ],
-   "ai": {
-    "summary": "Реал ROAS ~3.33 (pixel 4.76), CPA 65.1 ₴, частота 6.46. ROAS ↑8.4% до попер. періоду. Важелі — реалокація у топ-кластери, відео, ротація при частоті >4.",
-    "priorities": [
-     {
-      "id": "P1",
-      "action": "Перелити бюджет з «Mustang-пост» у топ (iPhone/айфон, Картинка-нова, Відео)",
-      "why": "Mustang-пост 28.8% / ROAS 3.68 проти iPhone/айфон 6.14",
-      "impact": "Високий",
-      "effort": "Низьке",
-      "expect": "+0.3–0.7 ROAS"
-     },
-     {
-      "id": "P2",
-      "action": "Подвоїти частку відео (9:16 варіації)",
-      "why": "Відео ROAS 5.73 при 9.5% бюджету",
-      "impact": "Високий",
-      "effort": "Середнє",
-      "expect": "+обсяг при ROAS вище середнього"
-     },
-     {
-      "id": "P3",
-      "action": "Ротувати креативи де частота >4 (на ШИРОКУ продажі, DC | 01 Ядро · Advanta)",
-      "why": "Частота↑ + CTR↓ + CPC↑ = втома",
-      "impact": "Високий",
-      "effort": "Середнє",
-      "expect": "CTR↑, CPC↓"
-     }
-    ],
-    "alerts": [
-     {
-      "sev": "mod",
-      "text": "Частота 6.46 — висока (поріг 4.0). Освіжати креативи/аудиторії."
-     },
-     {
-      "sev": "mod",
-      "text": "«на ШИРОКУ продажі»: частота 5.52, CTR 1.92% — втома."
-     },
-     {
-      "sev": "mod",
-      "text": "«DC | 01 Ядро · Advantage+ Sales (broad)»: частота 5.91, CTR 1.26% — втома."
-     },
-     {
-      "sev": "cri",
-      "text": "«фінал»: ROAS 0.19 при 9594 ₴ — зламана, ревізія."
-     },
-     {
-      "sev": "cri",
-      "text": "«DC | 02 Retargeting · дожим теплих»: ROAS 0.25 при 1620 ₴ — зламана, ревізія."
-     }
-    ]
-   }
-  },
-  "this_month": {
-   "window": {
     "since": "2026-06-01",
     "until": "2026-06-30"
    },
    "funnel": {
-    "spend": 472651,
-    "impressions": 3345915,
+    "spend": 472652,
+    "impressions": 3345919,
     "reach": 501099,
     "frequency": 6.68,
     "clicks": 54686,
@@ -914,7 +609,7 @@
     },
     {
      "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
-     "spend": 114427,
+     "spend": 114428,
      "cpm": 149.3,
      "cpc": 11.89,
      "ctr": 1.26,
@@ -953,7 +648,7 @@
     },
     {
      "name": "DC | 05 Тест аудиторій (vg) · 35-54 / 45-54 / LAL",
-     "spend": 24115,
+     "spend": 24116,
      "cpm": 146.3,
      "cpc": 10.23,
      "ctr": 1.43,
@@ -1030,7 +725,7 @@
     },
     {
      "cluster": "Mustang-пост",
-     "spend": 147309,
+     "spend": 147310,
      "spend_pct": 31.2,
      "roas": 3.68,
      "purchases": 1436,
@@ -1106,7 +801,7 @@
    "by_platform": [
     {
      "spend": 388110,
-     "impressions": 2634239,
+     "impressions": 2634240,
      "reach": 426719,
      "frequency": 6.17,
      "clicks": 37729,
@@ -1126,8 +821,8 @@
      "key": "instagram"
     },
     {
-     "spend": 79996,
-     "impressions": 649653,
+     "spend": 79997,
+     "impressions": 649656,
      "reach": 104181,
      "frequency": 6.24,
      "clicks": 15170,
@@ -1191,8 +886,8 @@
    ],
    "by_gender": [
     {
-     "spend": 412819,
-     "impressions": 3043157,
+     "spend": 412820,
+     "impressions": 3043161,
      "reach": 428795,
      "frequency": 7.1,
      "clicks": 48766,
@@ -1301,19 +996,1014 @@
      }
     ]
    }
+  },
+  "this_month": {
+   "window": {
+    "since": "2026-07-01",
+    "until": "2026-07-01"
+   },
+   "funnel": {
+    "spend": 580,
+    "impressions": 13207,
+    "reach": 12346,
+    "frequency": 1.07,
+    "clicks": 119,
+    "link_clicks": 42,
+    "purchases": 0,
+    "revenue": 0,
+    "ctr": 0.9,
+    "link_ctr": 0.32,
+    "cpc": 4.87,
+    "cpc_link": 13.81,
+    "cpm": 43.91,
+    "cvr": 0.0,
+    "cpa": 0,
+    "aov": 0,
+    "roas": 0.0,
+    "real_roas": 0.0
+   },
+   "deltas": {
+    "spend": -99.9,
+    "roas": -100.0,
+    "cpa": -100.0,
+    "ctr": -44.8,
+    "cpm": -68.9,
+    "frequency": -84.0,
+    "purchases": -100.0,
+    "link_ctr": -68.9
+   },
+   "campaigns": [
+    {
+     "name": "DC | 06 Engagement · розшевелити (байти/коменти)",
+     "spend": 580,
+     "cpm": 43.9,
+     "cpc": 4.87,
+     "ctr": 0.9,
+     "frequency": 1.07,
+     "reach": 12346,
+     "purchases": 0,
+     "roas": 0.0,
+     "role": "core",
+     "fatigue": false
+    }
+   ],
+   "clusters": [
+    {
+     "cluster": "Інше",
+     "spend": 580,
+     "spend_pct": 100.0,
+     "roas": 0.0,
+     "purchases": 0,
+     "ctr": 0.9,
+     "cpa": 0,
+     "is_video": false
+    }
+   ],
+   "video_vs_static": {
+    "video": null,
+    "static": {
+     "spend": 580,
+     "pct": 100.0,
+     "roas": 0.0,
+     "purchases": 0
+    }
+   },
+   "by_platform": [
+    {
+     "spend": 343,
+     "impressions": 7007,
+     "reach": 6538,
+     "frequency": 1.07,
+     "clicks": 32,
+     "link_clicks": 20,
+     "purchases": 0,
+     "revenue": 0,
+     "ctr": 0.46,
+     "link_ctr": 0.29,
+     "cpc": 10.71,
+     "cpc_link": 17.14,
+     "cpm": 48.92,
+     "cvr": 0.0,
+     "cpa": 0,
+     "aov": 0,
+     "roas": 0.0,
+     "real_roas": 0.0,
+     "key": "instagram"
+    },
+    {
+     "spend": 237,
+     "impressions": 6200,
+     "reach": 5891,
+     "frequency": 1.05,
+     "clicks": 87,
+     "link_clicks": 22,
+     "purchases": 0,
+     "revenue": 0,
+     "ctr": 1.4,
+     "link_ctr": 0.35,
+     "cpc": 2.73,
+     "cpc_link": 10.78,
+     "cpm": 38.24,
+     "cvr": 0.0,
+     "cpa": 0,
+     "aov": 0,
+     "roas": 0.0,
+     "real_roas": 0.0,
+     "key": "facebook"
+    }
+   ],
+   "by_gender": [
+    {
+     "spend": 479,
+     "impressions": 10925,
+     "reach": 10223,
+     "frequency": 1.07,
+     "clicks": 90,
+     "link_clicks": 34,
+     "purchases": 0,
+     "revenue": 0,
+     "ctr": 0.82,
+     "link_ctr": 0.31,
+     "cpc": 5.32,
+     "cpc_link": 14.09,
+     "cpm": 43.84,
+     "cvr": 0.0,
+     "cpa": 0,
+     "aov": 0,
+     "roas": 0.0,
+     "real_roas": 0.0,
+     "key": "male"
+    },
+    {
+     "spend": 100,
+     "impressions": 2268,
+     "reach": 2198,
+     "frequency": 1.03,
+     "clicks": 29,
+     "link_clicks": 8,
+     "purchases": 0,
+     "revenue": 0,
+     "ctr": 1.28,
+     "link_ctr": 0.35,
+     "cpc": 3.46,
+     "cpc_link": 12.56,
+     "cpm": 44.29,
+     "cvr": 0.0,
+     "cpa": 0,
+     "aov": 0,
+     "roas": 0.0,
+     "real_roas": 0.0,
+     "key": "female"
+    }
+   ],
+   "ai": {
+    "summary": "Реал ROAS ~0.0 (pixel 0.0), CPA 0 ₴, частота 1.07. ROAS ↓100.0% до попер. періоду. Важелі — реалокація у топ-кластери, відео, ротація при частоті >4.",
+    "priorities": [],
+    "alerts": [
+     {
+      "sev": "cri",
+      "text": "«DC | 06 Engagement · розшевелити (байти/коменти)»: ROAS 0.0 при 580 ₴ — зламана, ревізія."
+     },
+     {
+      "sev": "mod",
+      "text": "Кластер «Інше» 100.0% бюджету при ROAS 0.0 — скоротити."
+     }
+    ]
+   }
+  },
+  "this_year": {
+   "window": {
+    "since": "2026-01-01",
+    "until": "2026-07-01"
+   },
+   "funnel": {
+    "spend": 2639240,
+    "impressions": 19790609,
+    "reach": 2343566,
+    "frequency": 8.44,
+    "clicks": 282231,
+    "link_clicks": 171057,
+    "purchases": 31457,
+    "revenue": 13661680,
+    "ctr": 1.43,
+    "link_ctr": 0.86,
+    "cpc": 9.35,
+    "cpc_link": 15.43,
+    "cpm": 133.36,
+    "cvr": 18.4,
+    "cpa": 83.9,
+    "aov": 434,
+    "roas": 5.18,
+    "real_roas": 3.62
+   },
+   "deltas": {
+    "spend": -26.9,
+    "roas": 9.1,
+    "cpa": 42.0,
+    "ctr": -24.3,
+    "cpm": 7.3,
+    "frequency": -31.5,
+    "purchases": -48.5,
+    "link_ctr": -7.5
+   },
+   "campaigns": [
+    {
+     "name": "На НОВИХ продажі",
+     "spend": 689231,
+     "cpm": 125.5,
+     "cpc": 9.44,
+     "ctr": 1.33,
+     "frequency": 6.2,
+     "reach": 885197,
+     "purchases": 5382,
+     "roas": 3.69,
+     "role": "acquisition",
+     "fatigue": true
+    },
+    {
+     "name": "на ШИРОКУ продажі",
+     "spend": 536841,
+     "cpm": 170.1,
+     "cpc": 9.9,
+     "ctr": 1.72,
+     "frequency": 9.11,
+     "reach": 346334,
+     "purchases": 7105,
+     "roas": 5.14,
+     "role": "core",
+     "fatigue": true
+    },
+    {
+     "name": "Акції",
+     "spend": 341317,
+     "cpm": 184.3,
+     "cpc": 12.27,
+     "ctr": 1.5,
+     "frequency": 4.95,
+     "reach": 373969,
+     "purchases": 3375,
+     "roas": 5.47,
+     "role": "core",
+     "fatigue": true
+    },
+    {
+     "name": "ПОСТИ GLE",
+     "spend": 267827,
+     "cpm": 149.9,
+     "cpc": 8.85,
+     "ctr": 1.69,
+     "frequency": 6.49,
+     "reach": 275372,
+     "purchases": 3462,
+     "roas": 5.51,
+     "role": "core",
+     "fatigue": true
+    },
+    {
+     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
+     "spend": 114428,
+     "cpm": 149.3,
+     "cpc": 11.89,
+     "ctr": 1.26,
+     "frequency": 5.91,
+     "reach": 129654,
+     "purchases": 1612,
+     "roas": 5.89,
+     "role": "core",
+     "fatigue": true
+    },
+    {
+     "name": "Акції",
+     "spend": 94804,
+     "cpm": 168.9,
+     "cpc": 8.24,
+     "ctr": 2.05,
+     "frequency": 9.03,
+     "reach": 62161,
+     "purchases": 1998,
+     "roas": 9.16,
+     "role": "core",
+     "fatigue": true
+    },
+    {
+     "name": "На тих, хто не купляв!",
+     "spend": 92538,
+     "cpm": 126.6,
+     "cpc": 8.9,
+     "ctr": 1.42,
+     "frequency": 1.77,
+     "reach": 412340,
+     "purchases": 685,
+     "roas": 3.21,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "На мото аудиторію!",
+     "spend": 69641,
+     "cpm": 110.6,
+     "cpc": 5.59,
+     "ctr": 1.98,
+     "frequency": 3.24,
+     "reach": 194493,
+     "purchases": 1416,
+     "roas": 5.56,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "Перший пост BMW 330e",
+     "spend": 65654,
+     "cpm": 144.7,
+     "cpc": 10.87,
+     "ctr": 1.33,
+     "frequency": 2.28,
+     "reach": 198881,
+     "purchases": 448,
+     "roas": 2.44,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "Картинки пост Інст",
+     "spend": 32892,
+     "cpm": 172.5,
+     "cpc": 9.01,
+     "ctr": 1.91,
+     "frequency": 3.51,
+     "reach": 54315,
+     "purchases": 225,
+     "roas": 3.5,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "x2",
+     "spend": 30626,
+     "cpm": 192.4,
+     "cpc": 12.8,
+     "ctr": 1.5,
+     "frequency": 2.57,
+     "reach": 62017,
+     "purchases": 518,
+     "roas": 9.68,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "Фінальні продажі",
+     "spend": 29648,
+     "cpm": 210.4,
+     "cpc": 13.6,
+     "ctr": 1.55,
+     "frequency": 2.43,
+     "reach": 58120,
+     "purchases": 339,
+     "roas": 6.22,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "На широкую",
+     "spend": 26910,
+     "cpm": 123.2,
+     "cpc": 3.55,
+     "ctr": 3.47,
+     "frequency": 6.42,
+     "reach": 34002,
+     "purchases": 1950,
+     "roas": 31.94,
+     "role": "core",
+     "fatigue": true
+    },
+    {
+     "name": "DC | 05 Тест аудиторій (vg) · 35-54 / 45-54 / LAL",
+     "spend": 24116,
+     "cpm": 146.3,
+     "cpc": 10.23,
+     "ctr": 1.43,
+     "frequency": 3.28,
+     "reach": 50329,
+     "purchases": 241,
+     "roas": 3.09,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "Відео з цінником",
+     "spend": 24089,
+     "cpm": 121.2,
+     "cpc": 7.81,
+     "ctr": 1.55,
+     "frequency": 1.81,
+     "reach": 110052,
+     "purchases": 231,
+     "roas": 3.29,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "Другий пост рілз",
+     "spend": 21818,
+     "cpm": 163.1,
+     "cpc": 17.29,
+     "ctr": 0.94,
+     "frequency": 2.9,
+     "reach": 46190,
+     "purchases": 445,
+     "roas": 8.14,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "день х2",
+     "spend": 20000,
+     "cpm": 201.4,
+     "cpc": 11.92,
+     "ctr": 1.69,
+     "frequency": 2.25,
+     "reach": 44081,
+     "purchases": 691,
+     "roas": 16.19,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "Картинки \"Розкішний синьо-жовтий\"",
+     "spend": 17282,
+     "cpm": 142.7,
+     "cpc": 9.21,
+     "ctr": 1.55,
+     "frequency": 2.12,
+     "reach": 57036,
+     "purchases": 46,
+     "roas": 1.12,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "BMW X5 HYBRID",
+     "spend": 17202,
+     "cpm": 130.6,
+     "cpc": 4.17,
+     "ctr": 3.13,
+     "frequency": 3.39,
+     "reach": 38841,
+     "purchases": 562,
+     "roas": 13.57,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "Картинки перші про гібрід жовто сині",
+     "spend": 16780,
+     "cpm": 140.4,
+     "cpc": 9.03,
+     "ctr": 1.55,
+     "frequency": 2.36,
+     "reach": 50686,
+     "purchases": 62,
+     "roas": 1.27,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "Картинки перші червоні \"виграй\"",
+     "spend": 16725,
+     "cpm": 93.6,
+     "cpc": 7.31,
+     "ctr": 1.28,
+     "frequency": 2.18,
+     "reach": 81891,
+     "purchases": 55,
+     "roas": 1.06,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "На тих, хто не заходив!",
+     "spend": 14106,
+     "cpm": 11.2,
+     "cpc": 4.95,
+     "ctr": 0.23,
+     "frequency": 1.86,
+     "reach": 676686,
+     "purchases": 11,
+     "roas": 0.39,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "останній по Х5",
+     "spend": 13036,
+     "cpm": 191.9,
+     "cpc": 11.56,
+     "ctr": 1.66,
+     "frequency": 1.5,
+     "reach": 45413,
+     "purchases": 160,
+     "roas": 5.15,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "DC | 03 Prospecting · свіжа кров (excl. наші)",
+     "spend": 10408,
+     "cpm": 108.2,
+     "cpc": 9.25,
+     "ctr": 1.17,
+     "frequency": 1.28,
+     "reach": 75236,
+     "purchases": 117,
+     "roas": 3.59,
+     "role": "prospecting",
+     "fatigue": false
+    },
+    {
+     "name": "айфон за два дні",
+     "spend": 10000,
+     "cpm": 181.2,
+     "cpc": 12.92,
+     "ctr": 1.4,
+     "frequency": 1.55,
+     "reach": 35645,
+     "purchases": 150,
+     "roas": 5.25,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "фінал",
+     "spend": 9594,
+     "cpm": 190.9,
+     "cpc": 34.14,
+     "ctr": 0.56,
+     "frequency": 1.1,
+     "reach": 45709,
+     "purchases": 5,
+     "roas": 0.19,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "На наших хто не купляв просто перегляди",
+     "spend": 9088,
+     "cpm": 15.4,
+     "cpc": 5.65,
+     "ctr": 0.27,
+     "frequency": 6.62,
+     "reach": 88836,
+     "purchases": 0,
+     "roas": 0.0,
+     "role": "core",
+     "fatigue": true
+    },
+    {
+     "name": "Нова ціль «Трафік» «Кампанія» з рекомендованими налаштуваннями",
+     "spend": 6526,
+     "cpm": 72.1,
+     "cpc": 2.08,
+     "ctr": 3.46,
+     "frequency": 1.02,
+     "reach": 88561,
+     "purchases": 0,
+     "roas": 0.0,
+     "role": "acquisition",
+     "fatigue": false
+    },
+    {
+     "name": "Нова кампанія з ціллю «Продажі»",
+     "spend": 5000,
+     "cpm": 212.6,
+     "cpc": 19.69,
+     "ctr": 1.08,
+     "frequency": 1.6,
+     "reach": 14673,
+     "purchases": 114,
+     "roas": 9.78,
+     "role": "acquisition",
+     "fatigue": false
+    },
+    {
+     "name": "мем на мото",
+     "spend": 3464,
+     "cpm": 157.8,
+     "cpc": 7.82,
+     "ctr": 2.02,
+     "frequency": 1.14,
+     "reach": 19302,
+     "purchases": 27,
+     "roas": 2.0,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "мем на широку",
+     "spend": 2979,
+     "cpm": 143.0,
+     "cpc": 8.03,
+     "ctr": 1.78,
+     "frequency": 1.18,
+     "reach": 17700,
+     "purchases": 22,
+     "roas": 1.34,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "Коменти на тачку за 10 номерків",
+     "spend": 2471,
+     "cpm": 11.7,
+     "cpc": 6.66,
+     "ctr": 0.18,
+     "frequency": 1.56,
+     "reach": 134525,
+     "purchases": 0,
+     "roas": 0.0,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "DC | 02 Retargeting · дожим теплих",
+     "spend": 1620,
+     "cpm": 254.9,
+     "cpc": 22.5,
+     "ctr": 1.13,
+     "frequency": 1.65,
+     "reach": 3854,
+     "purchases": 2,
+     "roas": 0.25,
+     "role": "retarget",
+     "fatigue": false
+    },
+    {
+     "name": "DC | 06 Engagement · розшевелити (байти/коменти)",
+     "spend": 580,
+     "cpm": 43.9,
+     "cpc": 4.87,
+     "ctr": 0.9,
+     "frequency": 1.07,
+     "reach": 12346,
+     "purchases": 0,
+     "roas": 0.0,
+     "role": "core",
+     "fatigue": false
+    }
+   ],
+   "clusters": [
+    {
+     "cluster": "Інше",
+     "spend": 1882674,
+     "spend_pct": 71.3,
+     "roas": 5.35,
+     "purchases": 21533,
+     "ctr": 1.37,
+     "cpa": 87,
+     "is_video": false
+    },
+    {
+     "cluster": "Пост x2/тариф",
+     "spend": 174765,
+     "spend_pct": 6.6,
+     "roas": 4.08,
+     "purchases": 1223,
+     "ctr": 1.53,
+     "cpa": 143,
+     "is_video": false
+    },
+    {
+     "cluster": "KTM/мото",
+     "spend": 154733,
+     "spend_pct": 5.9,
+     "roas": 5.71,
+     "purchases": 3280,
+     "ctr": 2.06,
+     "cpa": 47,
+     "is_video": false
+    },
+    {
+     "cluster": "Картинка-нумерована",
+     "spend": 149933,
+     "spend_pct": 5.7,
+     "roas": 4.69,
+     "purchases": 1575,
+     "ctr": 1.3,
+     "cpa": 95,
+     "is_video": false
+    },
+    {
+     "cluster": "Mustang-пост",
+     "spend": 147310,
+     "spend_pct": 5.6,
+     "roas": 3.68,
+     "purchases": 1436,
+     "ctr": 1.36,
+     "cpa": 103,
+     "is_video": false
+    },
+    {
+     "cluster": "iPhone/айфон",
+     "spend": 66791,
+     "spend_pct": 2.5,
+     "roas": 5.31,
+     "purchases": 1435,
+     "ctr": 1.71,
+     "cpa": 47,
+     "is_video": false
+    },
+    {
+     "cluster": "Відео",
+     "spend": 54671,
+     "spend_pct": 2.1,
+     "roas": 6.42,
+     "purchases": 867,
+     "ctr": 1.25,
+     "cpa": 63,
+     "is_video": true
+    },
+    {
+     "cluster": "Картинка-нова",
+     "spend": 8363,
+     "spend_pct": 0.3,
+     "roas": 6.02,
+     "purchases": 100,
+     "ctr": 1.14,
+     "cpa": 84,
+     "is_video": false
+    }
+   ],
+   "video_vs_static": {
+    "video": {
+     "spend": 54671,
+     "pct": 2.1,
+     "roas": 6.42,
+     "purchases": 867
+    },
+    "static": {
+     "spend": 2584569,
+     "pct": 97.9,
+     "roas": 5.15,
+     "purchases": 30582
+    }
+   },
+   "by_platform": [
+    {
+     "spend": 2158448,
+     "impressions": 14103944,
+     "reach": 1243244,
+     "frequency": 11.34,
+     "clicks": 173909,
+     "link_clicks": 112014,
+     "purchases": 25506,
+     "revenue": 10877606,
+     "ctr": 1.23,
+     "link_ctr": 0.79,
+     "cpc": 12.41,
+     "cpc_link": 19.27,
+     "cpm": 153.04,
+     "cvr": 22.8,
+     "cpa": 84.6,
+     "aov": 426,
+     "roas": 5.04,
+     "real_roas": 3.53,
+     "key": "instagram"
+    },
+    {
+     "spend": 456003,
+     "impressions": 5398379,
+     "reach": 1133648,
+     "frequency": 4.76,
+     "clicks": 89797,
+     "link_clicks": 38461,
+     "purchases": 5556,
+     "revenue": 2578369,
+     "ctr": 1.66,
+     "link_ctr": 0.71,
+     "cpc": 5.08,
+     "cpc_link": 11.86,
+     "cpm": 84.47,
+     "cvr": 14.4,
+     "cpa": 82.1,
+     "aov": 464,
+     "roas": 5.65,
+     "real_roas": 3.96,
+     "key": "facebook"
+    },
+    {
+     "spend": 13999,
+     "impressions": 134454,
+     "reach": 19750,
+     "frequency": 6.81,
+     "clicks": 17428,
+     "link_clicks": 19745,
+     "purchases": 268,
+     "revenue": 156595,
+     "ctr": 12.96,
+     "link_ctr": 14.69,
+     "cpc": 0.8,
+     "cpc_link": 0.71,
+     "cpm": 104.12,
+     "cvr": 1.4,
+     "cpa": 52.2,
+     "aov": 584,
+     "roas": 11.19,
+     "real_roas": 7.83,
+     "key": "audience_network"
+    },
+    {
+     "spend": 10790,
+     "impressions": 153808,
+     "reach": 55836,
+     "frequency": 2.75,
+     "clicks": 1053,
+     "link_clicks": 836,
+     "purchases": 102,
+     "revenue": 39421,
+     "ctr": 0.68,
+     "link_ctr": 0.54,
+     "cpc": 10.25,
+     "cpc_link": 12.91,
+     "cpm": 70.15,
+     "cvr": 12.2,
+     "cpa": 105.8,
+     "aov": 386,
+     "roas": 3.65,
+     "real_roas": 2.56,
+     "key": "threads"
+    },
+    {
+     "spend": 1,
+     "impressions": 24,
+     "reach": 24,
+     "frequency": 1.0,
+     "clicks": 1,
+     "link_clicks": 1,
+     "purchases": 1,
+     "revenue": 247,
+     "ctr": 4.17,
+     "link_ctr": 4.17,
+     "cpc": 0.65,
+     "cpc_link": 0.65,
+     "cpm": 27.07,
+     "cvr": 100.0,
+     "cpa": 0.6,
+     "aov": 247,
+     "roas": 380.14,
+     "real_roas": 266.1,
+     "key": "messenger"
+    }
+   ],
+   "by_gender": [
+    {
+     "spend": 2168911,
+     "impressions": 17120043,
+     "reach": 1631681,
+     "frequency": 10.49,
+     "clicks": 234452,
+     "link_clicks": 144463,
+     "purchases": 27298,
+     "revenue": 12022227,
+     "ctr": 1.37,
+     "link_ctr": 0.84,
+     "cpc": 9.25,
+     "cpc_link": 15.01,
+     "cpm": 126.69,
+     "cvr": 18.9,
+     "cpa": 79.5,
+     "aov": 440,
+     "roas": 5.54,
+     "real_roas": 3.88,
+     "key": "male"
+    },
+    {
+     "spend": 465812,
+     "impressions": 2639313,
+     "reach": 678653,
+     "frequency": 3.89,
+     "clicks": 47182,
+     "link_clicks": 26308,
+     "purchases": 4091,
+     "revenue": 1593838,
+     "ctr": 1.79,
+     "link_ctr": 1.0,
+     "cpc": 9.87,
+     "cpc_link": 17.71,
+     "cpm": 176.49,
+     "cvr": 15.6,
+     "cpa": 113.9,
+     "aov": 390,
+     "roas": 3.42,
+     "real_roas": 2.4,
+     "key": "female"
+    },
+    {
+     "spend": 4517,
+     "impressions": 31253,
+     "reach": 5150,
+     "frequency": 6.07,
+     "clicks": 597,
+     "link_clicks": 286,
+     "purchases": 68,
+     "revenue": 45615,
+     "ctr": 1.91,
+     "link_ctr": 0.92,
+     "cpc": 7.57,
+     "cpc_link": 15.79,
+     "cpm": 144.51,
+     "cvr": 23.8,
+     "cpa": 66.4,
+     "aov": 671,
+     "roas": 10.1,
+     "real_roas": 7.07,
+     "key": "unknown"
+    }
+   ],
+   "ai": {
+    "summary": "Реал ROAS ~3.62 (pixel 5.18), CPA 83.9 ₴, частота 8.44. ROAS ↑9.1% до попер. періоду. Важелі — реалокація у топ-кластери, відео, ротація при частоті >4.",
+    "priorities": [
+     {
+      "id": "P2",
+      "action": "Подвоїти частку відео (9:16 варіації)",
+      "why": "Відео ROAS 6.42 при 2.1% бюджету",
+      "impact": "Високий",
+      "effort": "Середнє",
+      "expect": "+обсяг при ROAS вище середнього"
+     },
+     {
+      "id": "P3",
+      "action": "Ротувати креативи де частота >4 (На НОВИХ продажі, на ШИРОКУ продажі, Акції)",
+      "why": "Частота↑ + CTR↓ + CPC↑ = втома",
+      "impact": "Високий",
+      "effort": "Середнє",
+      "expect": "CTR↑, CPC↓"
+     }
+    ],
+    "alerts": [
+     {
+      "sev": "mod",
+      "text": "Частота 8.44 — висока (поріг 4.0). Освіжати креативи/аудиторії."
+     },
+     {
+      "sev": "mod",
+      "text": "«На НОВИХ продажі»: частота 6.2, CTR 1.33% — втома."
+     },
+     {
+      "sev": "mod",
+      "text": "«на ШИРОКУ продажі»: частота 9.11, CTR 1.72% — втома."
+     },
+     {
+      "sev": "mod",
+      "text": "«Акції»: частота 4.95, CTR 1.5% — втома."
+     },
+     {
+      "sev": "mod",
+      "text": "«ПОСТИ GLE»: частота 6.49, CTR 1.69% — втома."
+     },
+     {
+      "sev": "mod",
+      "text": "«DC | 01 Ядро · Advantage+ Sales (broad)»: частота 5.91, CTR 1.26% — втома."
+     },
+     {
+      "sev": "mod",
+      "text": "«Акції»: частота 9.03, CTR 2.05% — втома."
+     },
+     {
+      "sev": "mod",
+      "text": "«На широкую»: частота 6.42, CTR 3.47% — втома."
+     },
+     {
+      "sev": "cri",
+      "text": "«На тих, хто не заходив!»: ROAS 0.39 при 14106 ₴ — зламана, ревізія."
+     },
+     {
+      "sev": "cri",
+      "text": "«фінал»: ROAS 0.19 при 9594 ₴ — зламана, ревізія."
+     },
+     {
+      "sev": "mod",
+      "text": "«На наших хто не купляв просто перегляди»: частота 6.62, CTR 0.27% — втома."
+     },
+     {
+      "sev": "cri",
+      "text": "«На наших хто не купляв просто перегляди»: ROAS 0.0 при 9088 ₴ — зламана, ревізія."
+     },
+     {
+      "sev": "cri",
+      "text": "«Коменти на тачку за 10 номерків»: ROAS 0.0 при 2471 ₴ — зламана, ревізія."
+     },
+     {
+      "sev": "cri",
+      "text": "«DC | 02 Retargeting · дожим теплих»: ROAS 0.25 при 1620 ₴ — зламана, ревізія."
+     },
+     {
+      "sev": "cri",
+      "text": "«DC | 06 Engagement · розшевелити (байти/коменти)»: ROAS 0.0 при 580 ₴ — зламана, ревізія."
+     }
+    ]
+   }
   }
  },
  "daily": [
-  {
-   "date": "2025-05-31",
-   "spend": 27242.62,
-   "impressions": 163572,
-   "reach": 93321,
-   "clicks": 3401,
-   "link_clicks": 1593,
-   "purchases": 549,
-   "revenue": 0.0
-  },
   {
    "date": "2025-06-01",
    "spend": 28066.26,
@@ -4076,8 +4766,8 @@
   },
   {
    "date": "2026-06-28",
-   "spend": 33505.37,
-   "impressions": 208732,
+   "spend": 33505.95,
+   "impressions": 208735,
    "reach": 91505,
    "clicks": 3027,
    "link_clicks": 1849,
@@ -4093,59 +4783,79 @@
    "link_clicks": 0,
    "purchases": 17,
    "revenue": 4808.35
+  },
+  {
+   "date": "2026-06-30",
+   "spend": 0.0,
+   "impressions": 1,
+   "reach": 1,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2026-07-01",
+   "spend": 579.9,
+   "impressions": 13207,
+   "reach": 12346,
+   "clicks": 119,
+   "link_clicks": 42,
+   "purchases": 0,
+   "revenue": 0.0
   }
  ],
  "window": {
-  "since": "2026-05-31",
-  "until": "2026-06-29"
+  "since": "2026-06-01",
+  "until": "2026-06-30"
  },
  "funnel": {
-  "spend": 510654,
-  "impressions": 3550940,
-  "reach": 549322,
-  "frequency": 6.46,
-  "clicks": 57679,
-  "link_clicks": 36418,
-  "purchases": 7841,
-  "revenue": 2432826,
-  "ctr": 1.62,
+  "spend": 472652,
+  "impressions": 3345919,
+  "reach": 501099,
+  "frequency": 6.68,
+  "clicks": 54686,
+  "link_clicks": 34574,
+  "purchases": 7492,
+  "revenue": 2284827,
+  "ctr": 1.63,
   "link_ctr": 1.03,
-  "cpc": 8.85,
-  "cpc_link": 14.02,
-  "cpm": 143.81,
-  "cvr": 21.5,
-  "cpa": 65.1,
-  "aov": 310,
-  "roas": 4.76,
-  "real_roas": 3.33
+  "cpc": 8.64,
+  "cpc_link": 13.67,
+  "cpm": 141.26,
+  "cvr": 21.7,
+  "cpa": 63.1,
+  "aov": 305,
+  "roas": 4.83,
+  "real_roas": 3.38
  },
  "deltas": {
-  "spend": -41.1,
-  "roas": 8.4,
-  "cpa": -45.7,
-  "ctr": 14.1,
-  "cpm": -8.9,
-  "frequency": -8.8,
-  "purchases": 8.5,
+  "spend": -47.8,
+  "roas": 10.5,
+  "cpa": -47.2,
+  "ctr": 14.8,
+  "cpm": -11.1,
+  "frequency": -4.0,
+  "purchases": -1.1,
   "link_ctr": 8.4
  },
  "campaigns": [
   {
    "name": "на ШИРОКУ продажі",
-   "spend": 207538,
-   "cpm": 158.5,
-   "cpc": 8.27,
-   "ctr": 1.92,
-   "frequency": 5.52,
-   "reach": 237214,
-   "purchases": 3938,
-   "roas": 5.27,
+   "spend": 179818,
+   "cpm": 155.2,
+   "cpc": 8.02,
+   "ctr": 1.94,
+   "frequency": 5.15,
+   "reach": 224723,
+   "purchases": 3626,
+   "roas": 5.34,
    "role": "core",
    "fatigue": true
   },
   {
    "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
-   "spend": 114427,
+   "spend": 114428,
    "cpm": 149.3,
    "cpc": 11.89,
    "ctr": 1.26,
@@ -4184,7 +4894,7 @@
   },
   {
    "name": "DC | 05 Тест аудиторій (vg) · 35-54 / 45-54 / LAL",
-   "spend": 24115,
+   "spend": 24116,
    "cpm": 146.3,
    "cpc": 10.23,
    "ctr": 1.43,
@@ -4206,19 +4916,6 @@
    "purchases": 117,
    "roas": 3.59,
    "role": "prospecting",
-   "fatigue": false
-  },
-  {
-   "name": "фінал",
-   "spend": 9594,
-   "cpm": 190.9,
-   "cpc": 34.14,
-   "ctr": 0.56,
-   "frequency": 1.1,
-   "reach": 45709,
-   "purchases": 5,
-   "roas": 0.19,
-   "role": "core",
    "fatigue": false
   },
   {
@@ -4259,26 +4956,13 @@
    "roas": 0.25,
    "role": "retarget",
    "fatigue": false
-  },
-  {
-   "name": "x2",
-   "spend": 688,
-   "cpm": 195.0,
-   "cpc": 20.24,
-   "ctr": 0.96,
-   "frequency": 1.21,
-   "reach": 2921,
-   "purchases": 32,
-   "roas": 18.04,
-   "role": "core",
-   "fatigue": false
   }
  ],
  "clusters": [
   {
    "cluster": "KTM/мото",
    "spend": 154733,
-   "spend_pct": 30.3,
+   "spend_pct": 32.7,
    "roas": 5.71,
    "purchases": 3280,
    "ctr": 2.06,
@@ -4287,8 +4971,8 @@
   },
   {
    "cluster": "Mustang-пост",
-   "spend": 147309,
-   "spend_pct": 28.8,
+   "spend": 147310,
+   "spend_pct": 31.2,
    "roas": 3.68,
    "purchases": 1436,
    "ctr": 1.36,
@@ -4297,18 +4981,18 @@
   },
   {
    "cluster": "Картинка-нумерована",
-   "spend": 77674,
-   "spend_pct": 15.2,
-   "roas": 3.34,
-   "purchases": 702,
-   "ctr": 1.18,
-   "cpa": 111,
+   "spend": 65171,
+   "spend_pct": 13.8,
+   "roas": 3.86,
+   "purchases": 673,
+   "ctr": 1.24,
+   "cpa": 97,
    "is_video": false
   },
   {
    "cluster": "Відео",
    "spend": 48258,
-   "spend_pct": 9.5,
+   "spend_pct": 10.2,
    "roas": 5.73,
    "purchases": 672,
    "ctr": 1.17,
@@ -4318,7 +5002,7 @@
   {
    "cluster": "iPhone/айфон",
    "spend": 38167,
-   "spend_pct": 7.5,
+   "spend_pct": 8.1,
    "roas": 6.14,
    "purchases": 1201,
    "ctr": 1.96,
@@ -4326,29 +5010,19 @@
    "is_video": false
   },
   {
-   "cluster": "Інше",
-   "spend": 21248,
-   "spend_pct": 4.2,
-   "roas": 5.49,
-   "purchases": 271,
-   "ctr": 1.82,
-   "cpa": 78,
-   "is_video": false
-  },
-  {
    "cluster": "Пост x2/тариф",
-   "spend": 14901,
-   "spend_pct": 2.9,
-   "roas": 4.71,
-   "purchases": 170,
-   "ctr": 1.51,
-   "cpa": 88,
+   "spend": 10650,
+   "spend_pct": 2.3,
+   "roas": 4.38,
+   "purchases": 122,
+   "ctr": 1.38,
+   "cpa": 87,
    "is_video": false
   },
   {
    "cluster": "Картинка-нова",
    "spend": 8363,
-   "spend_pct": 1.6,
+   "spend_pct": 1.8,
    "roas": 6.02,
    "purchases": 100,
    "ctr": 1.14,
@@ -4359,24 +5033,24 @@
  "video_vs_static": {
   "video": {
    "spend": 48258,
-   "pct": 9.5,
+   "pct": 10.2,
    "roas": 5.73,
    "purchases": 672
   },
   "static": {
-   "spend": 462396,
-   "pct": 90.5,
-   "roas": 4.66,
-   "purchases": 7160
+   "spend": 424394,
+   "pct": 89.8,
+   "roas": 4.73,
+   "purchases": 6812
   }
  },
  "ai": {
-  "summary": "Реал ROAS ~3.33 (pixel 4.76), CPA 65.1 ₴, частота 6.46. ROAS ↑8.4% до попер. періоду. Важелі — реалокація у топ-кластери, відео, ротація при частоті >4.",
+  "summary": "Реал ROAS ~3.38 (pixel 4.83), CPA 63.1 ₴, частота 6.68. ROAS ↑10.5% до попер. періоду. Важелі — реалокація у топ-кластери, відео, ротація при частоті >4.",
   "priorities": [
    {
     "id": "P1",
     "action": "Перелити бюджет з «Mustang-пост» у топ (iPhone/айфон, Картинка-нова, Відео)",
-    "why": "Mustang-пост 28.8% / ROAS 3.68 проти iPhone/айфон 6.14",
+    "why": "Mustang-пост 31.2% / ROAS 3.68 проти iPhone/айфон 6.14",
     "impact": "Високий",
     "effort": "Низьке",
     "expect": "+0.3–0.7 ROAS"
@@ -4384,7 +5058,7 @@
    {
     "id": "P2",
     "action": "Подвоїти частку відео (9:16 варіації)",
-    "why": "Відео ROAS 5.73 при 9.5% бюджету",
+    "why": "Відео ROAS 5.73 при 10.2% бюджету",
     "impact": "Високий",
     "effort": "Середнє",
     "expect": "+обсяг при ROAS вище середнього"
@@ -4401,19 +5075,15 @@
   "alerts": [
    {
     "sev": "mod",
-    "text": "Частота 6.46 — висока (поріг 4.0). Освіжати креативи/аудиторії."
+    "text": "Частота 6.68 — висока (поріг 4.0). Освіжати креативи/аудиторії."
    },
    {
     "sev": "mod",
-    "text": "«на ШИРОКУ продажі»: частота 5.52, CTR 1.92% — втома."
+    "text": "«на ШИРОКУ продажі»: частота 5.15, CTR 1.94% — втома."
    },
    {
     "sev": "mod",
     "text": "«DC | 01 Ядро · Advantage+ Sales (broad)»: частота 5.91, CTR 1.26% — втома."
-   },
-   {
-    "sev": "cri",
-    "text": "«фінал»: ROAS 0.19 при 9594 ₴ — зламана, ревізія."
    },
    {
     "sev": "cri",
