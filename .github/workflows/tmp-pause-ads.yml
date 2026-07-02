@@ -1,0 +1,37 @@
+name: tmp-pause-ads
+on:
+  workflow_dispatch:
+jobs:
+  pause:
+    runs-on: ubuntu-latest
+    steps:
+      - name: pause all ACTIVE ads in finished-project campaigns
+        env:
+          TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+        run: |
+          python3 - << 'PY'
+          import json,os,urllib.request,urllib.parse
+          tok=os.environ['TOKEN']
+          camps=["120249698602830624","120249698605960624","120249698608790624","120249698612830624","120249980882600624","120246626941820624","120244383019000624"]
+          base="https://graph.facebook.com/v21.0"
+          ads=[]
+          url=f"{base}/act_4136058269783354/ads?filtering="+urllib.parse.quote(json.dumps([{"field":"campaign.id","operator":"IN","value":camps}]))+"&fields=id,status&limit=500&access_token="+tok
+          while url:
+              d=json.load(urllib.request.urlopen(url))
+              ads+=d.get("data",[])
+              url=d.get("paging",{}).get("next")
+          active=[a["id"] for a in ads if a.get("status")=="ACTIVE"]
+          print("fetched:",len(ads),"active_to_pause:",len(active))
+          ok=fail=0
+          for i in range(0,len(active),50):
+              chunk=active[i:i+50]
+              batch=[{"method":"POST","relative_url":x,"body":"status=PAUSED"} for x in chunk]
+              data=urllib.parse.urlencode({"batch":json.dumps(batch),"access_token":tok}).encode()
+              r=json.load(urllib.request.urlopen(urllib.request.Request(base+"/",data=data)))
+              for res in r:
+                  if res and res.get("code")==200: ok+=1
+                  else:
+                      fail+=1
+                      print("FAIL:",json.dumps(res)[:200])
+          print("RESULT paused_ok:",ok,"failed:",fail)
+          PY
