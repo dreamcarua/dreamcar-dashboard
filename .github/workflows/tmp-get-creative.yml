@@ -4,17 +4,19 @@ on:
     inputs:
       ad_id:
         required: true
-        description: "Ad ID"
+        description: "Object ID"
+      fields:
+        required: false
+        default: "id,name"
+        description: "Graph fields"
 jobs:
   get:
     runs-on: ubuntu-latest
     steps:
-      - name: fetch creative info
+      - name: fetch object
         env:
           TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
-          AD_ID: ${{ github.event.inputs.ad_id }}
+          OBJ: ${{ github.event.inputs.ad_id }}
+          F: ${{ github.event.inputs.fields }}
         run: |
-          echo "=== A: ad with creative field ==="
-          curl -s "https://graph.facebook.com/v21.0/${AD_ID}?fields=id,name,creative&access_token=$TOKEN" | jq -c '.'
-          echo "=== B: adcreatives edge ==="
-          curl -s "https://graph.facebook.com/v21.0/${AD_ID}/adcreatives?fields=id,object_story_id,effective_instagram_media_id,source_instagram_media_id&access_token=$TOKEN" | jq -c '.'
+          curl -s "https://graph.facebook.com/v21.0/${OBJ}?fields=${F}&access_token=$TOKEN" | jq -c '.'
