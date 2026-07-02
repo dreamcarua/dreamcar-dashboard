@@ -1,0 +1,37 @@
+name: tmp-copy-ads
+on:
+  workflow_dispatch:
+jobs:
+  copy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: copy iphone ads to DC02-05 adsets
+        env:
+          TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+        run: |
+          python3 - << 'PY'
+          import json,os,time,urllib.request,urllib.parse
+          tok=os.environ['TOKEN']
+          base="https://graph.facebook.com/v21.0"
+          ads=["120250775561550624","120250775561560624","120250775499340624","120250775457770624","120250775427960624","120250775316810624","120250775249500624","120250775189970624","120250774758290624","120250775146890624","120250775116120624","120250775082420624"]
+          adsets=["120249883647100624","120250384146330624","120250384145220624","120250384142630624","120249883739070624","120249883742020624","120250383367390624","120249980894940624","120249980891620624","120249980888590624"]
+          total_ok=total_fail=0
+          for aset in adsets:
+              batch=[{"method":"POST","relative_url":f"{ad}/copies","body":f"adset_id={aset}&status_option=ACTIVE"} for ad in ads]
+              data=urllib.parse.urlencode({"batch":json.dumps(batch),"access_token":tok}).encode()
+              try:
+                  r=json.load(urllib.request.urlopen(urllib.request.Request(base+"/",data=data)))
+              except Exception as e:
+                  print("BATCH_ERR",aset,str(e)[:150]); total_fail+=len(ads); continue
+              ok=sum(1 for res in r if res and res.get("code")==200)
+              fail=len(ads)-ok
+              for res in r:
+                  if res and res.get("code")!=200:
+                      try: msg=json.loads(res["body"])["error"]["message"][:120]
+                      except: msg=str(res)[:120]
+                      print("FAIL",aset,msg)
+              total_ok+=ok; total_fail+=fail
+              print(f"ADSET {aset}: ok={ok} fail={fail}")
+              time.sleep(4)
+          print(f"RESULT copied_ok: {total_ok} failed: {total_fail}")
+          PY
