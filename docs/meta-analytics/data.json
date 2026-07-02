@@ -1,53 +1,53 @@
 {
- "generated": "2026-07-01T09:00:58.301616+00:00",
+ "generated": "2026-07-02T08:30:31.069376+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-06-30",
-  "prev_date": "2026-06-29",
-  "spend": 0,
-  "impressions": 1,
-  "clicks": 0,
+  "date": "2026-07-01",
+  "prev_date": "2026-06-30",
+  "spend": 1112.98,
+  "impressions": 34838,
+  "clicks": 264,
   "purchases": 0,
   "pixel_roas": 0.0,
   "cpa": null,
-  "frequency": 1.0,
+  "frequency": 1.05,
   "real_ad_revenue": 0,
-  "real_ad_roas": null,
+  "real_ad_roas": 0.0,
   "deltas": {
    "spend": null,
    "pixel_roas": null,
-   "purchases": -100.0,
+   "purchases": null,
    "cpa": null
   },
   "week": {
    "this": {
-    "from": "2026-06-24",
-    "to": "2026-06-30",
-    "spend": 101762,
-    "purchases": 1409,
-    "pixel_roas": 5.58,
-    "cpa": 72.22,
-    "real_revenue": 308425,
-    "real_roas": 3.03
+    "from": "2026-06-25",
+    "to": "2026-07-01",
+    "spend": 90684,
+    "purchases": 1213,
+    "pixel_roas": 5.32,
+    "cpa": 74.76,
+    "real_revenue": 263434,
+    "real_roas": 2.9
    },
    "prev": {
-    "from": "2026-06-17",
-    "to": "2026-06-23",
-    "spend": 158897,
-    "purchases": 1421,
-    "pixel_roas": 3.39,
-    "cpa": 111.82,
-    "real_revenue": 311621,
-    "real_roas": 1.96
+    "from": "2026-06-18",
+    "to": "2026-06-24",
+    "spend": 151829,
+    "purchases": 1459,
+    "pixel_roas": 3.75,
+    "cpa": 104.06,
+    "real_revenue": 315641,
+    "real_roas": 2.08
    },
    "deltas": {
-    "spend": -36.0,
-    "real_roas": 54.6,
-    "pixel_roas": 64.6,
-    "cpa": -35.4,
-    "purchases": -0.8
+    "spend": -40.3,
+    "real_roas": 39.4,
+    "pixel_roas": 41.9,
+    "cpa": -28.2,
+    "purchases": -16.9
    }
   },
   "real_by_placement": [],
@@ -8893,7 +8893,7 @@
   {
    "sev": "inf",
    "scope": "Акаунт · тиждень",
-   "text": "Реал ROAS тижня зріс до 3.03 (+55%) — є простір масштабувати переможців."
+   "text": "Реал ROAS тижня зріс до 2.9 (+39%) — є простір масштабувати переможців."
   }
  ],
  "strategy": {
