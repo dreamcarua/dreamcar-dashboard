@@ -12,5 +12,9 @@ jobs:
       - name: fetch creative info
         env:
           TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+          AD_ID: ${{ github.event.inputs.ad_id }}
         run: |
-          curl -s "https://graph.facebook.com/v21.0/${{ github.event.inputs.ad_id }}?fields=creative{id,object_story_id,effective_instagram_media_id,source_instagram_media_id,instagram_permalink_url}&access_token=$TOKEN" | jq '{creative_result: .creative}'
+          echo "=== A: ad with creative field ==="
+          curl -s "https://graph.facebook.com/v21.0/${AD_ID}?fields=id,name,creative&access_token=$TOKEN" | jq -c '.'
+          echo "=== B: adcreatives edge ==="
+          curl -s "https://graph.facebook.com/v21.0/${AD_ID}/adcreatives?fields=id,object_story_id,effective_instagram_media_id,source_instagram_media_id&access_token=$TOKEN" | jq -c '.'
