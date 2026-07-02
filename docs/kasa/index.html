@@ -120,6 +120,15 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
 .sidebar .nav-item.active{background:rgba(227,6,19,.1);color:#fff;border-left-color:var(--red);font-weight:600}
 .sidebar .nav-item .icon{font-size:14px;width:18px;text-align:center}
 @media(max-width:920px){.app-layout{grid-template-columns:1fr;grid-template-areas:"main"}.sidebar{display:none}}
+/* mobile overflow fix: grid item .wrap мав min-width:auto → 12 таблиць розпирали сторінку за viewport (картки/кнопки/останні колонки обрізались). min-width:0 дозволяє стиснення, tbl-card overflow:auto тоді скролить таблицю всередині. */
+.app-layout>.wrap{min-width:0}
+html,body{overflow-x:hidden;max-width:100%}
+@media(max-width:920px){
+  .wrap{padding:16px 12px 48px}
+  .kpis{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+  .toolbar .search{max-width:none;flex:1 1 100%}
+  .title{font-size:23px}
+}
 </style>
 </head>
 <body>
