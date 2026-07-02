@@ -1,0 +1,16 @@
+name: tmp-get-creative
+on:
+  workflow_dispatch:
+    inputs:
+      ad_id:
+        required: true
+        description: "Ad ID"
+jobs:
+  get:
+    runs-on: ubuntu-latest
+    steps:
+      - name: fetch creative info
+        env:
+          TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+        run: |
+          curl -s "https://graph.facebook.com/v21.0/${{ github.event.inputs.ad_id }}?fields=creative{id,object_story_id,effective_instagram_media_id,source_instagram_media_id,instagram_permalink_url}&access_token=$TOKEN" | jq '{creative_result: .creative}'
