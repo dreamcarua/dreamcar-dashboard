@@ -2208,7 +2208,7 @@ function loadModelsSelect() {
   // Keep ACTIVE_MODELS in sync for legacy `getActiveModel()` reads
   if (src !== ACTIVE_MODELS) ACTIVE_MODELS = src;
   sel.innerHTML = '<option value="">Усі проєкти</option>' +
-    src.map(m => `<option value="${escapeHtml(m.id)}">${escapeHtml(m.name)} (${(m.start||'').slice(5).replace('-','.')}–${(m.end||'').slice(5).replace('-','.')})</option>`).join('');
+    src.map(m => `<option value="${escapeHtml(m.id)}">${escapeHtml(m.name)} (${_ddmm(m.start)}–${_ddmm(m.end)})</option>`).join('');
   if (cur) sel.value = cur;
 }
 
@@ -2476,6 +2476,13 @@ function _fmtProjDate(s) {
   if (!s) return '';
   const [y,m,d] = s.split('-');
   return `${d}.${m}.${y.slice(2)}`;
+}
+// 03.07.2026 fix: DD.MM для лейблів дропдауна «Активний розіграш» (був MM.DD через
+// naive .slice(5).replace — 2026-07-03 → 07.03 замість 03.07). Український формат.
+function _ddmm(s) {
+  if (!s) return '';
+  const [y, m, d] = s.split('-');
+  return `${d}.${m}`;
 }
 
 async function loadProjects() {
