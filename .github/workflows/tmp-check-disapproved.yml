@@ -1,0 +1,40 @@
+name: tmp-check-disapproved
+on:
+  workflow_dispatch:
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: list disapproved with review feedback
+        env:
+          FB_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+        run: |
+          python3 - << 'PYEOF'
+          import json, os, urllib.request
+          from collections import Counter
+          TOKEN = os.environ["FB_TOKEN"]
+          API = "https://graph.facebook.com/v21.0"
+          CAMPS = ["120249698602830624","120249698605960624","120249698608790624","120249698612830624","120249980882600624"]
+          def get(url):
+              with urllib.request.urlopen(url) as r: return json.load(r)
+          ads = []
+          for c in CAMPS:
+              url = f"{API}/{c}/ads?fields=id,name,effective_status,adset{{name}},ad_review_feedback{{global,placement_specific}}&limit=200&access_token={TOKEN}"
+              while url:
+                  d = get(url); ads += d.get("data", []); url = d.get("paging", {}).get("next")
+          st = Counter(a["effective_status"] for a in ads)
+          print("STATUS COUNTS:", json.dumps(st, ensure_ascii=False))
+          bad = [a for a in ads if a["effective_status"] in ("DISAPPROVED", "WITH_ISSUES")]
+          print("BLOCKED NOW:", len(bad))
+          reasons = Counter()
+          for a in bad:
+              fb = a.get("ad_review_feedback", {})
+              g = fb.get("global", {})
+              ps = fb.get("placement_specific", {})
+              for k in g: reasons[k] += 1
+              print("---", a["id"], "|", a["name"], "|", a["adset"]["name"])
+              if g: print("   GLOBAL:", json.dumps(g, ensure_ascii=False)[:400])
+              if ps: print("   PLACEMENT:", json.dumps(ps, ensure_ascii=False)[:400])
+              if not g and not ps: print("   (no feedback returned)")
+          print("REASON SUMMARY:", json.dumps(reasons, ensure_ascii=False))
+          PYEOF
