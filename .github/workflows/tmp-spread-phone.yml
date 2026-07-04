@@ -1,0 +1,82 @@
+name: tmp-spread-phone
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "true = discovery only"
+        default: "true"
+        required: true
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: delete disapproved + spread approved phone ad
+        env:
+          FB_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+        run: |
+          python3 - << 'PYEOF'
+          import json, os, time, urllib.request, urllib.parse
+          TOKEN = os.environ["FB_TOKEN"]; ACT = "act_4136058269783354"
+          API = "https://graph.facebook.com/v21.0"
+          CAMPS = ["120249698602830624","120249698605960624","120249698608790624","120249698612830624","120249980882600624"]
+          def get(url):
+              with urllib.request.urlopen(url) as r: return json.load(r)
+          ads = []
+          for c in CAMPS:
+              url = f"{API}/{c}/ads?fields=id,name,effective_status,adset{{id,name,effective_status}},creative{{id}}&limit=200&access_token={TOKEN}"
+              while url:
+                  d = get(url); ads += d.get("data", []); url = d.get("paging", {}).get("next")
+          print("total ads:", len(ads))
+          dis = [a for a in ads if a["effective_status"] == "DISAPPROVED"]
+          print("DISAPPROVED to delete:", len(dis))
+          from collections import Counter
+          print("disapproved by adset:", Counter(a["adset"]["name"] for a in dis))
+          src = [a for a in ads if a["name"].strip() == "пост телефон новий дизайн" and "creative" in a]
+          if not src:
+              src = [a for a in ads if "пост телефон" in a["name"] and "creative" in a]
+          if not src:
+              url = f"{API}/{ACT}/ads?fields=id,name,effective_status,adset{{id,name,effective_status}},creative{{id}}&filtering=" + urllib.parse.quote('[{"field":"name","operator":"CONTAIN","value":"пост телефон"}]') + f"&limit=100&access_token={TOKEN}"
+              src = [a for a in get(url).get("data", []) if "creative" in a]
+          print("SOURCE candidates:", json.dumps([{"id": a["id"], "name": a["name"], "st": a["effective_status"], "adset": a["adset"]["name"]} for a in src], ensure_ascii=False))
+          if not src:
+              print("NO SOURCE FOUND — ABORT"); raise SystemExit(1)
+          cid = src[0]["creative"]["id"]; print("use creative_id:", cid)
+          adsets = {}
+          for a in ads:
+              s = a.get("adset", {})
+              if s.get("effective_status") == "ACTIVE": adsets[s["id"]] = s.get("name", "")
+          have = {a["adset"]["id"] for a in ads if "пост телефон" in a["name"]}
+          targets = [k for k in sorted(adsets) if k not in have]
+          print("ACTIVE adsets:", len(adsets), json.dumps(adsets, ensure_ascii=False))
+          print("PLAN: delete", len(dis), "disapproved; create", len(targets), "copies")
+          if os.environ.get("DRY_RUN") == "true":
+              print("DRY RUN — nothing changed"); raise SystemExit(0)
+          delok = delfail = 0
+          for a in dis:
+              try:
+                  r = urllib.request.Request(f"{API}/{a['id']}?access_token={TOKEN}", method="DELETE")
+                  json.load(urllib.request.urlopen(r)); delok += 1
+              except Exception as e:
+                  body = e.read().decode()[:200] if hasattr(e, "read") else str(e)
+                  print("DELFAIL", a["id"], a["name"], body); delfail += 1
+              time.sleep(0.3)
+          print(f"DELETED {delok} DELFAILED {delfail}")
+          ok = fail = 0
+          for t in targets:
+              params = urllib.parse.urlencode({
+                  "name": "пост телефон новий дизайн",
+                  "adset_id": t,
+                  "status": "ACTIVE",
+                  "creative": json.dumps({"creative_id": cid}),
+                  "access_token": TOKEN,
+              }).encode()
+              try:
+                  req = urllib.request.Request(f"{API}/{ACT}/ads", data=params)
+                  json.load(urllib.request.urlopen(req)); ok += 1
+              except Exception as e:
+                  body = e.read().decode()[:250] if hasattr(e, "read") else str(e)
+                  print("FAIL", t, adsets.get(t, ""), body); fail += 1
+              time.sleep(0.4)
+          print(f"RESULT: DELETED {delok}/{len(dis)}; CREATED {ok}/{len(targets)}; CFAILED {fail}")
+          PYEOF
