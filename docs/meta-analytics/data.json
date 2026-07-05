@@ -1,129 +1,115 @@
 {
- "generated": "2026-07-04T08:11:44.786043+00:00",
+ "generated": "2026-07-05T08:26:53.423968+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-07-03",
-  "prev_date": "2026-07-02",
-  "spend": 20569.99,
-  "impressions": 141138,
-  "clicks": 2811,
-  "purchases": 662,
-  "pixel_roas": 5.24,
-  "cpa": 31.07,
-  "frequency": 1.96,
-  "real_ad_revenue": 88193,
-  "real_ad_roas": 4.29,
+  "date": "2026-07-04",
+  "prev_date": "2026-07-03",
+  "spend": 22821.78,
+  "impressions": 151809,
+  "clicks": 2014,
+  "purchases": 573,
+  "pixel_roas": 4.91,
+  "cpa": 39.83,
+  "frequency": 2.18,
+  "real_ad_revenue": 44919,
+  "real_ad_roas": 1.97,
   "deltas": {
-   "spend": 1130.5,
-   "pixel_roas": null,
-   "purchases": null,
-   "cpa": null
+   "spend": 10.9,
+   "pixel_roas": -6.1,
+   "purchases": -13.4,
+   "cpa": 28.1
   },
   "week": {
    "this": {
-    "from": "2026-06-27",
-    "to": "2026-07-03",
-    "spend": 79197,
-    "purchases": 1534,
-    "pixel_roas": 5.71,
-    "cpa": 51.63,
-    "real_revenue": 267731,
-    "real_roas": 3.38
+    "from": "2026-06-28",
+    "to": "2026-07-04",
+    "spend": 79693,
+    "purchases": 1741,
+    "pixel_roas": 5.1,
+    "cpa": 45.77,
+    "real_revenue": 246407,
+    "real_roas": 3.09
    },
    "prev": {
-    "from": "2026-06-20",
-    "to": "2026-06-26",
-    "spend": 133614,
-    "purchases": 1234,
-    "pixel_roas": 3.73,
-    "cpa": 108.28,
-    "real_revenue": 300331,
-    "real_roas": 2.25
+    "from": "2026-06-21",
+    "to": "2026-06-27",
+    "spend": 124278,
+    "purchases": 1260,
+    "pixel_roas": 4.3,
+    "cpa": 98.63,
+    "real_revenue": 297781,
+    "real_roas": 2.4
    },
    "deltas": {
-    "spend": -40.7,
-    "real_roas": 50.2,
-    "pixel_roas": 53.1,
-    "cpa": -52.3,
-    "purchases": 24.3
+    "spend": -35.9,
+    "real_roas": 28.7,
+    "pixel_roas": 18.6,
+    "cpa": -53.6,
+    "purchases": 38.2
    }
   },
   "real_by_placement": [
    {
-    "placement": "instagram_feed",
-    "revenue": 29427,
-    "paid": 179
+    "placement": "instagram_stories",
+    "revenue": 13250,
+    "paid": 78
    },
    {
-    "placement": "instagram_stories",
-    "revenue": 26028,
-    "paid": 167
+    "placement": "instagram_feed",
+    "revenue": 11011,
+    "paid": 59
    },
    {
     "placement": "instagram_reels",
-    "revenue": 14948,
-    "paid": 105
-   },
-   {
-    "placement": "facebook_mobile_feed",
-    "revenue": 12942,
-    "paid": 58
+    "revenue": 10092,
+    "paid": 56
    },
    {
     "placement": "facebook_stories",
-    "revenue": 2586,
-    "paid": 10
+    "revenue": 3771,
+    "paid": 9
    },
    {
     "placement": "facebook_mobile_reels",
-    "revenue": 2017,
-    "paid": 15
+    "revenue": 3664,
+    "paid": 18
    },
    {
-    "placement": "facebook_desktop_feed",
-    "revenue": 245,
-    "paid": 3
+    "placement": "facebook_mobile_feed",
+    "revenue": 3131,
+    "paid": 15
    }
   ],
   "active_cycles": [],
   "top_creatives": [
    {
-    "name": "iphone 49 грн новий дизайн відео 3",
-    "ad_id": "120250775561550624",
-    "spend": 442.14,
-    "purchases": 21,
-    "roas": 11.69,
-    "ctr": 3.26
+    "name": "iphone 49 грн старий дизайн відео 3",
+    "ad_id": "120250775457770624",
+    "spend": 339.94,
+    "purchases": 7,
+    "roas": 31.13,
+    "ctr": 0.83
    },
    {
-    "name": "iphone 49 грн новий дизайн відео 2",
-    "ad_id": "120250775499340624",
-    "spend": 881.51,
-    "purchases": 49,
-    "roas": 10.15,
-    "ctr": 3.27
+    "name": "iphone 49 грн новий дизайн – копія",
+    "ad_id": "120250775189970624",
+    "spend": 428.32,
+    "purchases": 20,
+    "roas": 10.8,
+    "ctr": 1.23
    },
    {
-    "name": "iphone 49 грн новий дизайн відео 1",
-    "ad_id": "120250775561560624",
-    "spend": 715.8,
-    "purchases": 39,
-    "roas": 9.82,
-    "ctr": 3.05
+    "name": "iphone 49 грн старий дизайн відео 1 – к2",
+    "ad_id": "120250796817320624",
+    "spend": 1016.35,
+    "purchases": 23,
+    "roas": 6.66,
+    "ctr": 1.23
    }
   ],
-  "weak_creatives": [
-   {
-    "name": "iphone 49 грн новий дизайн відео 2",
-    "ad_id": "120250775758160624",
-    "spend": 1946.38,
-    "purchases": 23,
-    "roas": 1.06,
-    "ctr": 1.8
-   }
-  ]
+  "weak_creatives": []
  },
  "projects": [
   {
@@ -8963,7 +8949,7 @@
   {
    "sev": "inf",
    "scope": "Акаунт · тиждень",
-   "text": "Реал ROAS тижня зріс до 3.38 (+50%) — є простір масштабувати переможців."
+   "text": "Реал ROAS тижня зріс до 3.09 (+29%) — є простір масштабувати переможців."
   }
  ],
  "strategy": {
@@ -8974,12 +8960,12 @@
     "sub": "Advantage+ Sales · broad · A+A",
     "desc": "70-80% бюджету. Головний драйвер. Увесь робочий креатив-пул (12-20). Highest Volume на старті → Highest Value, коли стабільно.",
     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
-    "status": "ACTIVE",
+    "status": "PAUSED",
     "daily_budget": 15000,
-    "spend": 129089,
-    "purchases": 2156,
-    "roas": 5.92,
-    "ctr": 1.36
+    "spend": 141233,
+    "purchases": 2463,
+    "roas": 5.94,
+    "ctr": 1.35
    },
    {
     "id": "120249698605960624",
@@ -8987,12 +8973,12 @@
     "sub": "Сайт 180д + гаряча 30д, excl. покупці",
     "desc": "15-20%. Дожим теплих: дедлайн, соц-доказ, апсел токенів. Строгий таргет (A+A off).",
     "name": "DC | 02 Retargeting · дожим теплих",
-    "status": "ACTIVE",
+    "status": "PAUSED",
     "daily_budget": 2500,
-    "spend": 5719,
-    "purchases": 79,
-    "roas": 1.68,
-    "ctr": 1.74
+    "spend": 6508,
+    "purchases": 97,
+    "roas": 2.04,
+    "ctr": 1.71
    },
    {
     "id": "120249698608790624",
@@ -9000,12 +8986,12 @@
     "sub": "Broad, EXCL. усі наші аудиторії",
     "desc": "5-10%. «Свіжа кров» — лише нові люди (виключені відвідувачі сайту + покупці), щоб алгоритм не крутився в нашій бульбашці.",
     "name": "DC | 03 Prospecting · свіжа кров (excl. наші)",
-    "status": "ACTIVE",
-    "daily_budget": 3000,
-    "spend": 14271,
-    "purchases": 224,
-    "roas": 4.04,
-    "ctr": 1.34
+    "status": "PAUSED",
+    "daily_budget": 3600,
+    "spend": 16421,
+    "purchases": 283,
+    "roas": 3.9,
+    "ctr": 1.38
    },
    {
     "id": "120249698612830624",
@@ -9013,12 +8999,12 @@
     "sub": "ABO малий · broad",
     "desc": "Інкубатор нових концептів окремо від ядра. Переможців переносимо в Ядро.",
     "name": "DC | 04 Testing · інкубатор (ABO)",
-    "status": "ACTIVE",
+    "status": "PAUSED",
     "daily_budget": null,
-    "spend": 467,
-    "purchases": 25,
-    "roas": 8.29,
-    "ctr": 3.1
+    "spend": 618,
+    "purchases": 33,
+    "roas": 7.25,
+    "ctr": 2.94
    }
   ],
   "audiences": [
