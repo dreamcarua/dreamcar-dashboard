@@ -1,0 +1,27 @@
+name: Spread Engagement Post
+on:
+  workflow_dispatch:
+    inputs:
+      ad_id:
+        description: 'Еталонний ad ID (з якого взяти креатив)'
+        required: true
+      adset_ids:
+        description: 'CSV адсетів, куди розкидати'
+        required: true
+      activate:
+        description: 'Одразу ACTIVE (true/false)'
+        required: false
+        default: 'true'
+
+jobs:
+  spread:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Spread post to adsets
+        env:
+          FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+          AD_ID: ${{ github.event.inputs.ad_id }}
+          ADSET_IDS: ${{ github.event.inputs.adset_ids }}
+          ACTIVATE: ${{ github.event.inputs.activate }}
+        run: python3 scripts/spread_engagement_post.py
