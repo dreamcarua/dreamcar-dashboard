@@ -87,11 +87,12 @@ def sha(v):
 
 def fetch_segments():
     log('Тягну платежі з Supabase (paged REST)...')
-    rows, offset, page = [], 0, 50000
+    rows, offset, page = [], 0, 1000  # PostgREST server cap = 1000/запит
     while True:
-        chunk = sb_select(f'dashboard_deals?select=customer_email,customer_phone,amount,paid_at&status=eq.pay&paid_at=not.is.null&limit={page}&offset={offset}')
+        chunk = sb_select(f'dashboard_deals?select=customer_email,customer_phone,amount,paid_at&status=eq.pay&paid_at=not.is.null&order=paid_at.desc&limit={page}&offset={offset}')
         rows.extend(chunk)
-        log(f'  +{len(chunk)} (разом {len(rows)})')
+        if len(rows) % 20000 < page:
+            log(f'  ...{len(rows)}')
         if len(chunk) < page:
             break
         offset += page
