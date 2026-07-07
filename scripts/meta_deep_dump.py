@@ -104,4 +104,15 @@ insights("br_campaign_platform_90", "campaign", R90, breakdowns="publisher_platf
 # age×gender у розрізі кампаній — для структурних висновків
 insights("br_campaign_age_90", "campaign", R90, breakdowns="age")
 
+# ===== 4. v2 (07.07.2026): втома крео + девайси + комплаєнс =====
+# ad×day — крива втоми креативів (день життя ада vs ROAS/CTR)
+insights("ins_ad_daily_90", "ad", R90, increment="1")
+# iOS vs Android
+insights("br_impression_device_90", "account", R90, breakdowns="impression_device")
+# тексти проблемних адів (DISAPPROVED/WITH_ISSUES) для compliance-переписування
+dump("problem_ads_creatives", paged(f"act_{ACT}/ads", {
+    "fields": "id,name,campaign_id,adset_id,effective_status,creative{id,body,title,object_story_spec}",
+    "filtering": json.dumps([{"field": "ad.effective_status", "operator": "IN", "value": ["DISAPPROVED", "WITH_ISSUES"]}]),
+    "limit": "100"}))
+
 print("DONE")
