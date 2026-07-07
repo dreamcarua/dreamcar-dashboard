@@ -1,0 +1,18 @@
+name: Meta Deep Dump
+on:
+  workflow_dispatch:
+
+jobs:
+  dump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deep dump insights + structure
+        env:
+          FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+        run: python3 scripts/meta_deep_dump.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: meta-deep-dump
+          path: out/
+          retention-days: 7
