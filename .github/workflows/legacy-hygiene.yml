@@ -1,0 +1,24 @@
+name: Legacy Hygiene (pause children)
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'true = лише звіт, false = ставити PAUSED дітям legacy-кампаній'
+        required: false
+        default: 'true'
+      cutoff:
+        description: 'Кампанії, створені ДО цієї дати'
+        required: false
+        default: '2026-01-01'
+
+jobs:
+  hygiene:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pause legacy children
+        env:
+          FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'true' }}
+          CUTOFF: ${{ github.event.inputs.cutoff || '2026-01-01' }}
+        run: python3 scripts/legacy_pause_children.py
