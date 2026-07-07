@@ -231,7 +231,13 @@ def main():
     for name, pairs in segs.items():
         aud_id, _ = ensure_custom(name, existing)
         if aud_id:
-            replace_users(aud_id, pairs)
+            try:
+                replace_users(aud_id, pairs)
+            except Exception as e:
+                if '1870145' in str(e) or '2650' in str(e):
+                    log(f'SKIP replace "{name}": аудиторія ще оновлюється з попереднього запуску (не критично)')
+                else:
+                    log(f'REPLACE FAIL "{name}": {e}')
         ids[name] = aud_id
 
     top_id = ids.get('DC · AUTO · Топ-20% LTV')
