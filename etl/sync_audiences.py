@@ -216,9 +216,9 @@ def ensure_engagement(name, rule, existing):
 
 def eng_rule(source_type, source_id, event, days):
     return {'inclusions': {'operator': 'or', 'rules': [{
-        'event_sources': [{'type': source_type, 'id': source_id}],
+        'event_sources': [{'type': source_type, 'id': int(source_id)}],
         'retention_seconds': days * 86400,
-        'filter': {'operator': 'and', 'filters': [{'field': 'event', 'operator': '=', 'value': event}]}}]}}
+        'filter': {'operator': 'and', 'filters': [{'field': 'event', 'operator': 'eq', 'value': event}]}}]}}
 
 
 def main():
