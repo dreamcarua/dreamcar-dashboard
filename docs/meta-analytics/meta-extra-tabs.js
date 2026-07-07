@@ -48,7 +48,7 @@
       cpa:s.purchases?+(s.spend/s.purchases).toFixed(1):0,
       aov:s.purchases?Math.round(s.revenue/s.purchases):0,
       roas:s.spend?+(s.revenue/s.spend).toFixed(2):0,
-      real_roas:s.spend?+(s.revenue/s.spend*0.7).toFixed(2):0 };
+      real_roas:s.spend?+(s.revenue/s.spend*0.54).toFixed(2):0 }; /* pixel->real 1/1.86, research 07.2026 */
     var base=EX.periods[EX.default_period]||{};
     return { funnel:f, deltas:{}, campaigns:base.campaigns, clusters:base.clusters,
              video_vs_static:base.video_vs_static, by_platform:base.by_platform, by_gender:base.by_gender,

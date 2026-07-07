@@ -391,7 +391,7 @@ function renderCreatives(){
   if(!p){ el.innerHTML=`<div class="note">Оберіть проєкт, щоб побачити креативи.</div>`; return; }
   const all=(p.creatives||[]).slice();
   if(!all.length){ el.innerHTML=`<div class="empty">Немає даних по креативах для «${p.name}».</div>`; return; }
-  const MIN=5; const ratio=(p.pixel_roas&&p.real_ad_roas)?(p.real_ad_roas/p.pixel_roas):0.7;
+  const MIN=5; const ratio=(p.pixel_roas&&p.real_ad_roas)?(p.real_ad_roas/p.pixel_roas):0.54; /* fallback 1/1.86, research 07.2026 */
   const sig=all.filter(c=>(c.purchases||0)>=MIN);
   const low=all.filter(c=>(c.purchases||0)<MIN).sort((a,b)=>(b.roas||0)-(a.roas||0));
   sig.sort((a,b)=>(((a[crSort]||0)-(b[crSort]||0))*crDir));

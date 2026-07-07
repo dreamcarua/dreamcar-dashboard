@@ -491,8 +491,8 @@ def recommend(p):
     if real and px:
         if real >= px * 1.3:
             recs.append({'sev': 'inf', 'text': f'Реальний ad-ROAS {real} > піксель {px} — реклама ефективніша, ніж показує піксель (він недооцінює конверсії).'})
-        elif real <= px * 0.7:
-            recs.append({'sev': 'mod', 'text': f'Піксель завищує: реальний ad-ROAS лише {real} vs піксель {px}. Орієнтуватись на реальний.'})
+        elif real <= px * 0.45:  # норма 2026 = 0.54 (pixel/real 1.86, research 07.2026); алерт лише коли гірше норми
+            recs.append({'sev': 'mod', 'text': f'Піксель завищує сильніше за норму (×1.86): реальний ad-ROAS {real} vs піксель {px}. Орієнтуватись на реальний.'})
 
     # 9) CPA
     cpa = p.get('cpa')
