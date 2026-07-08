@@ -1,6 +1,0 @@
-=== TOTAL count ===
-content-range: 0-999/37663
-=== OUT count ===
-content-range: 0-523/524
-=== min/max occurred_at ===
-[{"occurred_at":"2026-04-20"}][{"occurred_at":"2026-07-07"}]
