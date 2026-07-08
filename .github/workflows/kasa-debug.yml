@@ -1,0 +1,28 @@
+name: kasa-debug
+on:
+  push:
+    paths: ['.github/workflows/kasa-debug.yml','debug/kasa-trigger.txt']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  read:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read kasa state via service_role
+        env:
+          U: ${{ secrets.SUPABASE_URL }}
+          K: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          mkdir -p debug
+          curl -s "$U/rest/v1/kasa_accounts?select=id,name,kind,opening_balance,is_active&order=kind,name" -H "apikey: $K" -H "Authorization: Bearer $K" > debug/accounts.json
+          curl -s "$U/rest/v1/kasa_transactions?select=id,account_id,direction,amount_uah,excl_pnl,div_to,description,occurred_at,source&order=occurred_at.desc&limit=60" -H "apikey: $K" -H "Authorization: Bearer $K" > debug/tx.json
+          curl -s "$U/rest/v1/kasa_transfers?select=id,from_account_id,to_account_id,amount_uah,fee_uah,description,occurred_at&order=occurred_at.desc&limit=30" -H "apikey: $K" -H "Authorization: Bearer $K" > debug/transfers.json
+      - name: Commit state
+        run: |
+          git config user.name "kasa-debug"
+          git config user.email "bot@dreamcar.local"
+          git add debug/
+          git commit -m "kasa-debug: state snapshot [skip ci]" || echo "no change"
+          git push
