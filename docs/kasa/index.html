@@ -1056,7 +1056,12 @@ async function saveMove(){
       // #FIX 03.07.2026: перехід дивіденд→готівка знімає div_to + зберігає повний набір (сума/дата/опис/рахунок).
       if(editTx){ const r1=await sb.from('kasa_transactions').update({account_id:fromId,amount_uah:amount,occurred_at,description:desc,excl_pnl:true,div_to:null}).eq('id',editTx.id); if(r1.error) throw r1.error; }
       else { const r1=await sb.from('kasa_transactions').insert({account_id:fromId,direction:'out',amount_uah:amount,occurred_at,description:desc,source:'manual',excl_pnl:true,created_by:ME}); if(r1.error) throw r1.error; }
-      if(cash.id!==fromId && !(editTx&&editTx.excl_pnl)){ const r2=await sb.from('kasa_transactions').insert({account_id:cash.id,direction:'in',amount_uah:amount,occurred_at,description:desc||'Переміщення в готівку',source:'manual',excl_pnl:true,created_by:ME}); if(r2.error) throw r2.error; }
+      // #FIX 03.07.2026: створюємо готівкову IN-частину при переході дивіденд→готівка теж.
+      // Раніше умова !(editTx&&excl_pnl) пропускала дивіденд (він excl_pnl) → готівкова частина
+      // не створювалась → сума Готівки не оновлювалась (Вадим: «не попала в суму ГОТІВКА»).
+      // Тепер: створюємо якщо new, АБО був дивіденд (div_to), АБО був звичайний дохід/витрата;
+      // НЕ дублюємо лише для вже-готівкового-переміщення (excl_pnl && !div_to).
+      if(cash.id!==fromId && (!editTx || editTx.div_to || !editTx.excl_pnl)){ const r2=await sb.from('kasa_transactions').insert({account_id:cash.id,direction:'in',amount_uah:amount,occurred_at,description:desc||'Переміщення в готівку',source:'manual',excl_pnl:true,created_by:ME}); if(r2.error) throw r2.error; }
     }
     closeModal('modalTx'); await loadAll();
   }catch(e){ showErr('txErr',e.message||e); }
