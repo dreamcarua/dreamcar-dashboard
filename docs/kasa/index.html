@@ -513,14 +513,19 @@ let CACHE_PAINTED=false;
 // Тягнемо порціями по 1000, поки не вичерпаються.
 async function fetchAllTx(){
   const cols='id,account_id,direction,amount_uah,occurred_at,occurred_ts,description,counterparty,category_id,launch_id,source,external_id,is_internal,excl_pnl,div_to';
-  const all=[]; const PAGE=1000;
-  for(let i=0;i<80;i++){ // safety: до 80k рядків
-    const from=i*PAGE;
-    const {data,error}=await sb.from('kasa_transactions').select(cols).order('occurred_ts',{ascending:false,nullsFirst:false}).range(from,from+PAGE-1);
-    if(error) return {data:all,error};
-    all.push(...(data||[]));
-    if(!data || data.length<PAGE) break;
+  const PAGE=1000;
+  // 1) точна кількість рядків одним HEAD-запитом
+  let total=0;
+  try{ const c=await sb.from('kasa_transactions').select('id',{count:'exact',head:true}); total=c.count||0; }catch(_){ total=0; }
+  const pages=total?Math.ceil(total/PAGE):1;
+  // 2) усі сторінки ПАРАЛЕЛЬНО (стабільний порядок: occurred_ts desc, потім id)
+  const reqs=[];
+  for(let i=0;i<Math.min(pages,80);i++){
+    reqs.push(sb.from('kasa_transactions').select(cols).order('occurred_ts',{ascending:false,nullsFirst:false}).order('id',{ascending:false}).range(i*PAGE,i*PAGE+PAGE-1));
   }
+  const res=await Promise.all(reqs);
+  const all=[];
+  for(const r of res){ if(r.error) return {data:all,error:r.error}; all.push(...(r.data||[])); }
   return {data:all,error:null};
 }
 async function loadAll(){
