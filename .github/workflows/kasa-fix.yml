@@ -1,0 +1,33 @@
+name: kasa-fix
+on:
+  push:
+    paths: ['.github/workflows/kasa-fix.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore missing cash-in for Спірін→готівка Богатюк 200k
+        env:
+          U: ${{ secrets.SUPABASE_URL }}
+          K: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          CASH="fc5f0dc2-c6a4-4247-8a0d-a1f9262744b8"
+          # GUARD: скільки готівкових in 200000 на 2026-07-06 вже є?
+          N=$(curl -s "$U/rest/v1/kasa_transactions?select=id&account_id=eq.$CASH&direction=eq.in&amount_uah=eq.200000&occurred_at=eq.2026-07-06" -H "apikey: $K" -H "Authorization: Bearer $K" | python3 -c "import json,sys;print(len(json.load(sys.stdin)))")
+          echo "Наявних готівкових in 200k на 06.07: $N (треба 2 — Заяць + Спірін)"
+          if [ "$N" -ge 2 ]; then
+            echo "Вже 2+ — нічого не створюю (ідемпотентно)."
+          else
+            echo "Створюю відсутню готівкову частину +200000..."
+            curl -s -X POST "$U/rest/v1/kasa_transactions" \
+              -H "apikey: $K" -H "Authorization: Bearer $K" \
+              -H "Content-Type: application/json" -H "Prefer: return=representation" \
+              -d '{"account_id":"fc5f0dc2-c6a4-4247-8a0d-a1f9262744b8","direction":"in","amount_uah":200000,"occurred_at":"2026-07-06","description":"ФОП Богатюк Марія Олегівна","excl_pnl":true,"source":"manual","created_by":"dreamcarua@gmail.com"}'
+            echo
+          fi
+          echo "=== ГОТІВКА після: сума in-out ==="
+          curl -s "$U/rest/v1/kasa_transactions?select=direction,amount_uah&account_id=eq.$CASH" -H "apikey: $K" -H "Authorization: Bearer $K" | python3 -c "import json,sys;t=json.load(sys.stdin);print('cash net =', sum((1 if x['direction']=='in' else -1)*float(x['amount_uah']) for x in t))"
