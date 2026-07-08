@@ -1,0 +1,19 @@
+name: kasa-debug
+on:
+  push: { paths: ['.github/workflows/kasa-debug.yml'] }
+  workflow_dispatch:
+permissions: { contents: write }
+jobs:
+  read:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - env: { U: "${{ secrets.SUPABASE_URL }}", K: "${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" }
+        run: |
+          mkdir -p debug
+          curl -s "$U/rest/v1/kasa_accounts?select=id,name,kind,is_active" -H "apikey: $K" -H "Authorization: Bearer $K" > debug/accounts.json
+          curl -s "$U/rest/v1/kasa_transactions?select=account_id,direction,amount_uah,occurred_at,description&order=occurred_at.desc&limit=5000" -H "apikey: $K" -H "Authorization: Bearer $K" > debug/tx.json
+          echo "total tx: $(python3 -c 'import json;print(len(json.load(open("debug/tx.json"))))')"
+      - run: |
+          git config user.name bot; git config user.email bot@d.local
+          git add debug/; git commit -m "state [skip ci-not]" || true; git push
