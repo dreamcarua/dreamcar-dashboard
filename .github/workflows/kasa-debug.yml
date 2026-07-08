@@ -17,7 +17,7 @@ jobs:
         run: |
           mkdir -p debug
           curl -s "$U/rest/v1/kasa_accounts?select=id,name,kind,opening_balance,is_active&order=kind,name" -H "apikey: $K" -H "Authorization: Bearer $K" > debug/accounts.json
-          curl -s "$U/rest/v1/kasa_transactions?select=id,account_id,direction,amount_uah,excl_pnl,div_to,description,occurred_at,source&order=occurred_at.desc&limit=60" -H "apikey: $K" -H "Authorization: Bearer $K" > debug/tx.json
+          curl -s "$U/rest/v1/kasa_transactions?select=id,account_id,direction,amount_uah,excl_pnl,div_to,description,occurred_at,source,created_by,created_at&order=occurred_at.desc&limit=1000" -H "apikey: $K" -H "Authorization: Bearer $K" > debug/tx.json
           curl -s "$U/rest/v1/kasa_transfers?select=id,from_account_id,to_account_id,amount_uah,fee_uah,description,occurred_at&order=occurred_at.desc&limit=30" -H "apikey: $K" -H "Authorization: Bearer $K" > debug/transfers.json
       - name: Commit state
         run: |
