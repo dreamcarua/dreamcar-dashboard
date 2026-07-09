@@ -231,7 +231,7 @@ html,body{overflow-x:hidden;max-width:100%}
         <input type="date" id="ovFrom" class="selin" style="display:none">
         <input type="date" id="ovTo" class="selin" style="display:none">
       </div>
-      <button class="btn ghost" onclick="loadAll()">↻ Оновити</button>
+      <button class="btn ghost" onclick="loadAll(true)">↻ Оновити</button>
     </div>
     <div class="toolbar"><div class="grp"><b style="font-family:'Oswald';font-size:16px">🔔 Сигнали</b></div></div>
     <div id="alertsBox" style="margin-bottom:16px"></div>
@@ -528,10 +528,22 @@ async function fetchAllTx(){
   for(const r of res){ if(r.error) return {data:all,error:r.error}; all.push(...(r.data||[])); }
   return {data:all,error:null};
 }
-async function loadAll(){
+// IndexedDB-кеш (вміщає всі 37k+ tx; sessionStorage замалий ~5MB). TTL 5 хв.
+const KIDB={_db:null,
+  _open(){return this._db||(this._db=new Promise((res,rej)=>{try{const r=indexedDB.open('kasa_cache_db',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);}catch(e){rej(e);}}));},
+  async get(k){try{const db=await this._open();return await new Promise(res=>{const t=db.transaction('kv').objectStore('kv').get(k);t.onsuccess=()=>res(t.result||null);t.onerror=()=>res(null);});}catch(_){return null;}},
+  async set(k,v){try{const db=await this._open();await new Promise(res=>{const t=db.transaction('kv','readwrite').objectStore('kv').put(v,k);t.onsuccess=()=>res();t.onerror=()=>res();});}catch(_){}}};
+const KASA_TTL=300000; // 5 хв
+async function loadAll(force){
   try{
     await getSb();
-    if(!CACHE_PAINTED && !(DATA.accounts&&DATA.accounts.length)){ try{ const c=JSON.parse(sessionStorage.getItem('kasa_cache')||'null'); if(c && (Date.now()-c.t)<600000){ DATA.accounts=c.accounts||[]; DATA.tx=c.tx||[]; DATA.transfers=c.transfers||[]; DATA.cats=c.cats||[]; DATA.launches=c.launches||[]; DATA.opsMap=c.opsMap||{}; CACHE_PAINTED=true; renderAll(); } }catch(_){} }
+    // #FIX 08.07.2026: СВІЖИЙ кеш (<5хв) → миттєвий показ БЕЗ запитів до БД (Вадим: «вантажиться вічність»).
+    // Кнопка «Оновити» форсує (loadAll(true)). Після власних змін теж force.
+    if(!force){ const snap=await KIDB.get('snapshot');
+      if(snap && (Date.now()-snap.t)<KASA_TTL && snap.accounts && snap.accounts.length){
+        DATA.accounts=snap.accounts; DATA.tx=snap.tx||[]; DATA.transfers=snap.transfers||[]; DATA.cats=snap.cats||[]; DATA.launches=snap.launches||[]; DATA.opsMap=snap.opsMap||{};
+        renderAll(); return; }
+    }
     const [acc,tx,tr,cats,launches]=await Promise.all([
       sb.from('kasa_accounts').select('*').order('sort_order'),
       fetchAllTx(),
@@ -543,7 +555,7 @@ async function loadAll(){
     DATA.accounts=acc.data||[]; DATA.tx=tx.data||[]; DATA.transfers=tr.data||[];
     DATA.cats=cats.data||[]; DATA.launches=launches.data||[];
     try{const ao=await sb.rpc('kasa_account_ops'); DATA.opsMap={}; (ao.data||[]).forEach(r=>{DATA.opsMap[r.account_id]=Number(r.ops)||0;});}catch(_){ DATA.opsMap={}; }
-    try{ sessionStorage.setItem('kasa_cache', JSON.stringify({t:Date.now(), accounts:DATA.accounts, tx:(DATA.tx||[]).slice(0,2500), transfers:(DATA.transfers||[]).slice(0,500), cats:DATA.cats, launches:DATA.launches, opsMap:DATA.opsMap})); }catch(_){}
+    try{ await KIDB.set('snapshot',{t:Date.now(), accounts:DATA.accounts, tx:DATA.tx, transfers:DATA.transfers, cats:DATA.cats, launches:DATA.launches, opsMap:DATA.opsMap}); }catch(_){}
     renderAll();
   }catch(e){ console.error('[kasa]',e);
     const msg=String(e&&e.message||e);
@@ -897,9 +909,9 @@ async function saveTx(){
     launch_id:document.getElementById('txLaunch').value||null,
     source:editTx?editTx.source:'manual',created_by:ME};
   try{const r=editTx?await sb.from('kasa_transactions').update(payload).eq('id',editTx.id):await sb.from('kasa_transactions').insert(payload);
-    if(r.error)throw r.error;closeModal('modalTx');await loadAll();}catch(e){showErr('txErr',e.message||e);}
+    if(r.error)throw r.error;closeModal('modalTx');await loadAll(true);}catch(e){showErr('txErr',e.message||e);}
 }
-async function delTx(id){if(!confirm('Видалити операцію?'))return;try{const r=await sb.from('kasa_transactions').delete().eq('id',id);if(r.error)throw r.error;await loadAll();}catch(e){alert(e.message||e);}}
+async function delTx(id){if(!confirm('Видалити операцію?'))return;try{const r=await sb.from('kasa_transactions').delete().eq('id',id);if(r.error)throw r.error;await loadAll(true);}catch(e){alert(e.message||e);}}
 
 function openTransfer(preset){
   showErr('trErr',null);document.getElementById('trTitle').textContent=preset==='toDiv'?'Виплата дивідендів':'Переказ між книгами';
@@ -917,9 +929,9 @@ async function saveTransfer(){
   if(!(amount_uah>0))return showErr('trErr','Сума > 0');
   if(!occurred_at)return showErr('trErr','Вкажи дату');
   const payload={from_account_id,to_account_id,amount_uah,fee_uah,occurred_at,description:document.getElementById('trDesc').value.trim()||null,created_by:ME};
-  try{const r=await sb.from('kasa_transfers').insert(payload);if(r.error)throw r.error;closeModal('modalTr');await loadAll();}catch(e){showErr('trErr',e.message||e);}
+  try{const r=await sb.from('kasa_transfers').insert(payload);if(r.error)throw r.error;closeModal('modalTr');await loadAll(true);}catch(e){showErr('trErr',e.message||e);}
 }
-async function delTransfer(id){if(!confirm('Видалити переказ?'))return;try{const r=await sb.from('kasa_transfers').delete().eq('id',id);if(r.error)throw r.error;await loadAll();}catch(e){alert(e.message||e);}}
+async function delTransfer(id){if(!confirm('Видалити переказ?'))return;try{const r=await sb.from('kasa_transfers').delete().eq('id',id);if(r.error)throw r.error;await loadAll(true);}catch(e){alert(e.message||e);}}
 
 function openAcct(){editAcc=null;document.getElementById('accTitle').textContent='Новий рахунок';showErr('accErr',null);
   ['accName','accOpen','accOpenDate','accIcon'].forEach(i=>document.getElementById(i).value='');document.getElementById('accOpen').value='0';
@@ -934,7 +946,7 @@ async function saveAcct(){
     opening_balance:parseFloat(document.getElementById('accOpen').value)||0,opening_date:document.getElementById('accOpenDate').value||null,
     icon:document.getElementById('accIcon').value.trim()||'🏦',is_active:document.getElementById('accActive').value==='true'};
   try{const r=editAcc?await sb.from('kasa_accounts').update(payload).eq('id',editAcc.id):await sb.from('kasa_accounts').insert(payload);
-    if(r.error)throw r.error;closeModal('modalAcc');await loadAll();}catch(e){showErr('accErr',e.message||e);}
+    if(r.error)throw r.error;closeModal('modalAcc');await loadAll(true);}catch(e){showErr('accErr',e.message||e);}
 }
 
 function openImport(){showErr('impErr',null);importRows=null;importCols=null;document.getElementById('impFile').value='';
@@ -979,7 +991,7 @@ async function runImport(){
     description:r.desc||null,counterparty:r.cp||null,source:'pumb_import',
     external_id:`${acct}|${r.date}|${r.amount}|${(r.desc||'').slice(0,24)}`,created_by:ME}));
   try{const r=await sb.from('kasa_transactions').upsert(payload,{onConflict:'source,external_id',ignoreDuplicates:true});
-    if(r.error)throw r.error;closeModal('modalImp');alert(`Імпортовано (дублі пропущені). Рядків оброблено: ${payload.length}`);await loadAll();}catch(e){showErr('impErr',e.message||e);}
+    if(r.error)throw r.error;closeModal('modalImp');alert(`Імпортовано (дублі пропущені). Рядків оброблено: ${payload.length}`);await loadAll(true);}catch(e){showErr('impErr',e.message||e);}
 }
 
 Object.assign(window,{loadAll,openTxModal,editTransaction,saveTx,delTx,openTransfer,saveTransfer,delTransfer,openAcct,editAccount,saveAcct,openImport,parseImport,runImport,closeModal,setDir,openBank,editBank,saveBank,delBank,bankToggle,saveMove,moveToggle,openDivPayout});
@@ -1072,7 +1084,7 @@ async function saveMove(){
       else { const r1=await sb.from('kasa_transactions').insert({account_id:fromId,direction:'out',amount_uah:amount,occurred_at,description:desc,source:'manual',excl_pnl:true,created_by:ME}); if(r1.error) throw r1.error; }
       if(cash.id!==fromId && !(editTx&&editTx.excl_pnl)){ const r2=await sb.from('kasa_transactions').insert({account_id:cash.id,direction:'in',amount_uah:amount,occurred_at,description:desc||'Переміщення в готівку',source:'manual',excl_pnl:true,created_by:ME}); if(r2.error) throw r2.error; }
     }
-    closeModal('modalTx'); await loadAll();
+    closeModal('modalTx'); await loadAll(true);
   }catch(e){ showErr('txErr',e.message||e); }
 }
 function openDivPayout(){ openTxModal(null); setDir('move'); const mt=document.getElementById('txMoveTo'); if(mt) mt.value='dividends'; moveToggle(); }
@@ -1112,7 +1124,7 @@ async function boot(user){
     return;
   }
   document.getElementById('app').style.display='block';
-  await loadAll();
+  await loadAll(false); // init — миттєво з кешу, якщо свіжий (<5хв)
 }
 window.addEventListener('dc-auth-ok',(e)=>boot(e.detail&&e.detail.user));
 setTimeout(async()=>{try{const s=await getSb();const {data}=await s.auth.getSession();if(data&&data.session&&document.getElementById('app').style.display==='none'&&document.getElementById('denied').style.display==='none')boot(data.session.user);}catch(_){}} ,2500);
