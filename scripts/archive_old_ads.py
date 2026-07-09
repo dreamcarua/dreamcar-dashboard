@@ -4,8 +4,8 @@ Archive old ads in the current sales structure DC|01-05 (pre-launch cleanup).
 Sets status=ARCHIVED on every non-archived ad in the target campaigns, so old
 creatives don't clutter the campaigns before new-project ads are added.
 SAFETY: only touches ads whose parent campaign is in TARGET_CAMPAIGNS. Reversible.
-Idempotent + self-looping: re-fetches remaining each pass and retries until 0
-(Meta throttles bulk writes on this account, so it grinds through with backoff).
+Idempotent + self-looping. FIX: query /ads with explicit effective_status so
+CAMPAIGN_PAUSED / paused children are returned (default edge missed them -> false 0).
 DRY_RUN=true (default) -> report only.
 env: FB_ACCESS_TOKEN, AD_ACCOUNT_ID, DRY_RUN, FB_API_VERSION, ARCHIVE_CAMPAIGN_IDS (CSV)
 """
@@ -27,6 +27,8 @@ DEFAULT_TARGETS = [
 _env = os.environ.get('ARCHIVE_CAMPAIGN_IDS', '').strip()
 TARGETS = [x.strip() for x in _env.split(',') if x.strip()] or DEFAULT_TARGETS
 MAX_PASSES = int(os.environ.get('MAX_PASSES', '40'))
+# every non-archived / non-deleted status
+EFF = '["ACTIVE","PAUSED","CAMPAIGN_PAUSED","ADSET_PAUSED","PENDING_REVIEW","DISAPPROVED","WITH_ISSUES","PENDING_BILLING_INFO","IN_PROCESS","PREAPPROVED"]'
 
 
 def api_get(path, params=None):
@@ -51,7 +53,7 @@ def live_ids():
     ids = []
     for cid in TARGETS:
         try:
-            ads = paged(f'{cid}/ads', {'fields': 'id,status', 'limit': 200})
+            ads = paged(f'{cid}/ads', {'fields': 'id,status', 'effective_status': EFF, 'limit': 200})
         except Exception as e:
             print(f'  SKIP fetch {cid}: {e}', flush=True); continue
         ids += [a['id'] for a in ads if a.get('status') not in ('ARCHIVED', 'DELETED')]
@@ -95,7 +97,7 @@ def main():
         print(f'  pass {p}: ok={ok} fail={fail}', flush=True)
         zero_streak = zero_streak + 1 if ok == 0 else 0
         if zero_streak >= 4:
-            print('  4 passes no progress -> stop (Meta throttle); re-run later to finish'); break
+            print('  4 passes no progress -> stop (Meta throttle); re-run later'); break
         time.sleep(30 if ok else 90)
     rem = live_ids()
     print(f'FINAL remaining={len(rem)}')
