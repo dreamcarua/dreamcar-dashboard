@@ -1,0 +1,6 @@
+=== 1) dashboard_period_pnl_v2 (09.07) ===
+[{"period_start":"2026-07-09","period_end":"2026-07-09","period_label":"09.07.2026","active_projects":0,"revenue":79895.00,"ad_spend":5677.91,"percent_costs":9587.40,"fixed_costs":18709.68,"prize_cost":0.00,"variable_costs":0.00,"total_cost":33974.99,"net_profit":45920.01,"margin_pct":57.5}]
+=== 2) dashboard_finance_overview (09.07) ===
+{"days": 1, "paid": 188, "daily": [{"day": "2026-07-09", "paid": 188, "revenue": 80792.00, "net_profit": 45920.0125806451612904}], "revenue": 80792.00, "ad_spend": 5677.91, "daily_ads": [{"day": "2026-07-09", "spend": 5677.91}], "prev_paid": 4, "by_project": [{"rev": 80792.00, "paid": 188, "project": "BMW X6M"}], "prev_revenue": 40.00, "cost_breakdown": {"ad_spend": 5677.91, "prize_cost": 0, "fixed_costs": 18709.6774193548387096, "percent_costs": 9587.4000000000000000, "variable_costs": 0}}
+=== 3) gross paid deals 09.07 (sum amount) ===
+paid deals: 0 sum amount: 0
