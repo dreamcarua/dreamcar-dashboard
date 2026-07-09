@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-Distribute X6M creatives from DC|01 source adset into target sales adsets (DC|02-05)
-then LAUNCH (activate target campaigns + adsets + source video). IDEMPOTENT.
-Robust to Meta throttling: retries GETs; a throttled adset fetch is retried next pass;
-loop continues until every target adset has all source creatives (or no progress for
-several passes). ACTIVATION always runs. DRY_RUN=true -> report only.
+Distribute X6M creatives across ALL sales adsets (DC|01 Ядро + DC|02-05) then LAUNCH.
+Creatives = the 11 'картинка х6м' from the source adset + the 'перший пост х6м' post.
+IDEMPOTENT: per adset only creates ads for creatives it doesn't already have. Robust to
+Meta throttling (GET retries; failing adset retried next pass; loops until all filled or
+no progress). ACTIVATION always runs. DRY_RUN=true -> report only.
 env: FB_ACCESS_TOKEN, AD_ACCOUNT_ID, DRY_RUN, FB_API_VERSION
 NOTE: DC|03s Stories template (120250907727750624) intentionally excluded (Vadym enables it).
 """
@@ -17,8 +17,11 @@ DRY = os.environ.get('DRY_RUN', 'true').lower() == 'true'
 BASE = f'https://graph.facebook.com/{VER}'
 EFF = '["ACTIVE","PAUSED","CAMPAIGN_PAUSED","ADSET_PAUSED","PENDING_REVIEW","DISAPPROVED","WITH_ISSUES","IN_PROCESS","PREAPPROVED"]'
 
-SOURCE_ADSET = '120249708049950624'
+SOURCE_ADSET = '120249708049950624'  # DC|01 Ядро (holds the 11 картинки)
+# extra creatives to spread everywhere (id, name)
+EXTRA_CREATIVES = [('2229148431267681', 'перший пост х6м')]
 TARGET_ADSETS = [
+    '120249708049950624',  # DC|01 Ядро (add 'перший пост'; картинки already here -> skip)
     '120249883647100624',  # DC|02 Retarget
     '120250384146330624',  # DC|03 45-54 діамант
     '120250384145220624',  # DC|03 LAL 1% покупці AI
@@ -30,7 +33,7 @@ TARGET_ADSETS = [
     '120249980891620624',  # DC|05 35-54 sweet spot
     '120249980888590624',  # DC|05 45-54 діамант
 ]
-TARGET_CAMPAIGNS = ['120249698605960624', '120249698608790624', '120249698612830624', '120249980882600624']
+TARGET_CAMPAIGNS = ['120249698602830624', '120249698605960624', '120249698608790624', '120249698612830624', '120249980882600624']
 
 
 def _get_url(url, tries=6):
@@ -83,12 +86,15 @@ def source_ads():
     return paged(f'{SOURCE_ADSET}/ads', {'fields': 'id,name,status,creative{id}', 'effective_status': EFF, 'limit': 100})
 
 
-def creatives_from(ads):
+def all_creatives():
     out, seen = [], set()
-    for a in ads:
+    for a in source_ads():
         cid = (a.get('creative') or {}).get('id')
         if cid and cid not in seen:
             seen.add(cid); out.append((cid, a.get('name', 'X6M')))
+    for cid, name in EXTRA_CREATIVES:
+        if cid not in seen:
+            seen.add(cid); out.append((cid, name))
     return out
 
 
@@ -109,10 +115,10 @@ def activate():
 
 def main():
     print(f'== distribute-x6m | DRY={DRY} | act_{ACT} | api {VER} ==', flush=True)
-    creatives = creatives_from(source_ads())
-    print(f'Source creatives: {len(creatives)}', flush=True)
+    creatives = all_creatives()
+    print(f'Creatives to spread: {len(creatives)}', flush=True)
     if not creatives:
-        print('No source creatives; abort.'); return
+        print('No creatives; abort.'); return
 
     if DRY:
         grand = 0
@@ -153,13 +159,6 @@ def main():
         time.sleep(60)
 
     activate()
-
-    try:
-        for a in source_ads():
-            if a.get('status') != 'ACTIVE':
-                post(a['id'], {'status': 'ACTIVE'})
-    except Exception:
-        pass
 
     for adset in TARGET_ADSETS:
         try:
