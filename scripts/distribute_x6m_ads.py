@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """
-Distribute X6M creatives from the DC|01 source adset into the target sales adsets
-(DC|02 Retargeting, DC|03 Prospecting, DC|04 Testing, DC|05 Тест аудиторій), then
-LAUNCH: activate target campaigns + adsets, and turn on the source video in DC|01.
-IDEMPOTENT: per target adset only creates ads for creatives it doesn't already have.
-Hardened: GETs retry on transient errors; a failing adset is skipped (retried next
-pass); ACTIVATION always runs even if creation had issues. DRY_RUN=true -> report only.
+Distribute X6M creatives from DC|01 source adset into target sales adsets (DC|02-05)
+then LAUNCH (activate target campaigns + adsets + source video). IDEMPOTENT.
+Robust to Meta throttling: retries GETs; a throttled adset fetch is retried next pass;
+loop continues until every target adset has all source creatives (or no progress for
+several passes). ACTIVATION always runs. DRY_RUN=true -> report only.
 env: FB_ACCESS_TOKEN, AD_ACCOUNT_ID, DRY_RUN, FB_API_VERSION
 NOTE: DC|03s Stories template (120250907727750624) intentionally excluded (Vadym enables it).
 """
@@ -31,20 +30,15 @@ TARGET_ADSETS = [
     '120249980891620624',  # DC|05 35-54 sweet spot
     '120249980888590624',  # DC|05 45-54 діамант
 ]
-TARGET_CAMPAIGNS = [
-    '120249698605960624',  # DC|02 Retargeting
-    '120249698608790624',  # DC|03 Prospecting
-    '120249698612830624',  # DC|04 Testing
-    '120249980882600624',  # DC|05 Тест аудиторій
-]
+TARGET_CAMPAIGNS = ['120249698605960624', '120249698608790624', '120249698612830624', '120249980882600624']
 
 
-def _get_url(url, tries=5):
+def _get_url(url, tries=6):
     for t in range(tries):
         try:
             with urllib.request.urlopen(urllib.request.Request(url), timeout=120) as r:
                 return json.loads(r.read().decode())
-        except Exception as e:
+        except Exception:
             if t == tries - 1:
                 raise
             time.sleep(2 * (t + 1))
@@ -76,7 +70,7 @@ def post(path, data, tries=4):
             msg = str(e)
             if hasattr(e, 'read'):
                 try:
-                    msg = e.read().decode()[:220]
+                    msg = e.read().decode()[:200]
                 except Exception:
                     pass
             if t == tries - 1:
@@ -107,16 +101,16 @@ def activate():
     print('-- ACTIVATION --', flush=True)
     for cid in TARGET_CAMPAIGNS:
         res, err = post(cid, {'status': 'ACTIVE'})
-        print(f'  activate campaign {cid}: {"ok" if res else err}', flush=True)
+        print(f'  campaign {cid}: {"ok" if res else err}', flush=True)
     for adset in TARGET_ADSETS:
         res, err = post(adset, {'status': 'ACTIVE'})
-        print(f'  activate adset {adset}: {"ok" if res else err}', flush=True)
+        print(f'  adset {adset}: {"ok" if res else err}', flush=True)
 
 
 def main():
     print(f'== distribute-x6m | DRY={DRY} | act_{ACT} | api {VER} ==', flush=True)
     creatives = creatives_from(source_ads())
-    print(f'Source creatives: {len(creatives)} ids={[c for c, _ in creatives]}', flush=True)
+    print(f'Source creatives: {len(creatives)}', flush=True)
     if not creatives:
         print('No source creatives; abort.'); return
 
@@ -124,58 +118,52 @@ def main():
         grand = 0
         for adset in TARGET_ADSETS:
             try:
-                ex = existing_creatives(adset)
+                miss = [c for c, _ in creatives if c not in existing_creatives(adset)]
+                print(f'  adset {adset}: missing {len(miss)}', flush=True); grand += len(miss)
             except Exception as e:
-                print(f'  adset {adset}: FETCH ERR {e}'); continue
-            miss = [c for c, _ in creatives if c not in ex]
-            print(f'  adset {adset}: has {len(ex)}, missing {len(miss)}', flush=True)
-            grand += len(miss)
-        print(f'TOTAL ads to create: {grand} across {len(TARGET_ADSETS)} adsets')
-        print('DONE'); return
+                print(f'  adset {adset}: FETCH ERR {str(e)[:60]}')
+        print(f'TOTAL to create: {grand}'); print('DONE'); return
 
-    # CREATE (idempotent, per-adset guarded; never let one failure kill activation)
-    try:
-        for p in range(1, 9):
-            created = fail = 0
-            for adset in TARGET_ADSETS:
-                try:
-                    ex = existing_creatives(adset)
-                except Exception as e:
-                    print(f'  skip adset {adset} fetch: {e}', flush=True); continue
-                for cid, name in creatives:
-                    if cid in ex:
-                        continue
-                    res, err = post(f'act_{ACT}/ads', {'name': name, 'adset_id': adset,
-                                                        'creative': json.dumps({'creative_id': cid}), 'status': 'ACTIVE'})
-                    if res and res.get('id'):
-                        created += 1
-                    else:
-                        fail += 1
-                        print(f'   FAIL adset {adset} cre {cid}: {err}', flush=True)
-                    time.sleep(0.4)
-            print(f'PASS {p}: created {created} fail {fail}', flush=True)
-            if created == 0:
-                break
-            time.sleep(20)
-    except Exception as e:
-        print(f'CREATE phase error (continuing to activation): {e}', flush=True)
+    no_prog = 0
+    for p in range(1, 16):
+        created = missing = fetch_ok = 0
+        for adset in TARGET_ADSETS:
+            try:
+                ex = existing_creatives(adset); fetch_ok += 1
+            except Exception as e:
+                print(f'  skip fetch {adset}: {str(e)[:70]}', flush=True)
+                missing += len(creatives); continue
+            for cid, name in creatives:
+                if cid in ex:
+                    continue
+                res, err = post(f'act_{ACT}/ads', {'name': name, 'adset_id': adset,
+                                                    'creative': json.dumps({'creative_id': cid}), 'status': 'ACTIVE'})
+                if res and res.get('id'):
+                    created += 1
+                else:
+                    missing += 1
+                    print(f'   FAIL {adset} {cid}: {err}', flush=True)
+                time.sleep(0.5)
+        print(f'PASS {p}: created={created} still_missing~{missing} fetch_ok={fetch_ok}/{len(TARGET_ADSETS)}', flush=True)
+        if missing == 0 and fetch_ok == len(TARGET_ADSETS):
+            break
+        no_prog = no_prog + 1 if created == 0 else 0
+        if no_prog >= 6:
+            print('  6 passes no progress -> stop (throttle); re-run later', flush=True); break
+        time.sleep(60)
 
-    # ACTIVATE (always)
     activate()
 
-    # turn on source video / paused source ads
     try:
         for a in source_ads():
             if a.get('status') != 'ACTIVE':
-                res, err = post(a['id'], {'status': 'ACTIVE'})
-                print(f'  activate source ad {a["id"]}: {"ok" if res else err}', flush=True)
-    except Exception as e:
-        print(f'source-activate err: {e}', flush=True)
+                post(a['id'], {'status': 'ACTIVE'})
+    except Exception:
+        pass
 
-    # FINAL report
     for adset in TARGET_ADSETS:
         try:
-            print(f'  FINAL adset {adset}: {len(existing_creatives(adset))} creatives', flush=True)
+            print(f'  FINAL adset {adset}: {len(existing_creatives(adset))}', flush=True)
         except Exception:
             pass
     print('DONE')
