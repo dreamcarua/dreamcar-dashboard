@@ -5,6 +5,8 @@ Sets status=ARCHIVED on every non-archived/non-deleted ad in the target campaign
 so old creatives don't clutter the campaigns before new-project ads are added.
 SAFETY: only touches ads whose parent campaign is in TARGET_CAMPAIGNS. Archiving is
 reversible (un-archive in Meta). DRY_RUN=true (default) -> report only, change nothing.
+Idempotent: already-ARCHIVED ads are skipped, so it is safe to re-run to finish leftovers.
+Sequential POST + retry (Meta batch API aborts most items under write throttling).
 env: FB_ACCESS_TOKEN, AD_ACCOUNT_ID, DRY_RUN, FB_API_VERSION, ARCHIVE_CAMPAIGN_IDS (CSV override)
 """
 import os, json, time, urllib.parse, urllib.request
@@ -15,7 +17,6 @@ VER = os.environ.get('FB_API_VERSION', 'v21.0')
 DRY = os.environ.get('DRY_RUN', 'true').lower() == 'true'
 BASE = f'https://graph.facebook.com/{VER}'
 
-# DC|01-05 current sales structure (Ядро, Retargeting, Prospecting, Testing, Тест аудиторій)
 DEFAULT_TARGETS = [
     '120249698602830624',  # DC | 01 Ядро · Advantage+ Sales (broad)
     '120249698605960624',  # DC | 02 Retargeting · дожим теплих
@@ -45,24 +46,20 @@ def paged(path, params):
             res = json.loads(r.read().decode())
 
 
-def batch_archive(ad_ids):
-    ok = fail = 0
-    for i in range(0, len(ad_ids), 50):
-        chunk = ad_ids[i:i+50]
-        batch = [{'method': 'POST', 'relative_url': f'{aid}?status=ARCHIVED'} for aid in chunk]
-        data = urllib.parse.urlencode({'access_token': TOKEN, 'batch': json.dumps(batch)}).encode()
-        req = urllib.request.Request(BASE + '/', data=data, method='POST')
-        with urllib.request.urlopen(req, timeout=180) as r:
-            resp = json.loads(r.read().decode())
-        for item in resp:
-            if item and item.get('code') == 200:
-                ok += 1
-            else:
-                fail += 1
-                print('   FAIL', str(item)[:160])
-        print(f'  batch {i//50+1}: ok={ok} fail={fail}', flush=True)
-        time.sleep(1)
-    return ok, fail
+def archive_one(aid, tries=4):
+    data = urllib.parse.urlencode({'access_token': TOKEN, 'status': 'ARCHIVED'}).encode()
+    for t in range(tries):
+        try:
+            req = urllib.request.Request(f'{BASE}/{aid}', data=data, method='POST')
+            with urllib.request.urlopen(req, timeout=60) as r:
+                json.loads(r.read().decode())
+            return True
+        except Exception as e:
+            if t == tries - 1:
+                print(f'   FAIL {aid}: {str(e)[:120]}', flush=True)
+                return False
+            time.sleep(1.5 * (t + 1))
+    return False
 
 
 def main():
@@ -81,7 +78,15 @@ def main():
     if DRY:
         print('DRY-RUN -> nothing changed. Sample ids:', all_ids[:5])
         print('DONE'); return
-    ok, fail = batch_archive(all_ids)
+    ok = fail = 0
+    for i, aid in enumerate(all_ids):
+        if archive_one(aid):
+            ok += 1
+        else:
+            fail += 1
+        if (i + 1) % 40 == 0:
+            print(f'  progress {i+1}/{len(all_ids)} ok={ok} fail={fail}', flush=True)
+        time.sleep(0.35)
     print(f'ARCHIVED ok={ok} fail={fail} of {len(all_ids)}')
     print('DONE')
 
