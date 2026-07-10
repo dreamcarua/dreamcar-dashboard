@@ -714,27 +714,13 @@ function periodRange(){
   return{from:back(364),to:today,gran:'month'};
 }
 async function loadCashflow(){ const pr=periodRange();
-  // #PERF 10.07.2026: 6 RPC ПАРАЛЕЛЬНО (Promise.all) замість послідовно (await один за одним).
-  // Було: KPI «Дивіденди» + графіки чекали суму 6 запитів (~20с). Стало: час одного (найдовшого).
-  // Логіка/числа незмінні — лише запити стартують одночасно.
-  const _len=Math.round((new Date(pr.to)-new Date(pr.from))/86400000)+1;
-  const _pTo=new Date(new Date(pr.from).getTime()-86400000);
-  const _pFrom=new Date(_pTo.getTime()-(_len-1)*86400000);
-  const _f2=_pFrom.toLocaleDateString('sv-SE'),_t2=_pTo.toLocaleDateString('sv-SE');
-  const [r,af,ifl,fl,dvr,pv]=await Promise.all([
-    sb.rpc('kasa_cashflow',{p_from:pr.from,p_to:pr.to,p_gran:pr.gran}).catch(()=>({data:[]})),
-    sb.rpc('kasa_account_cashflow',{p_from:pr.from,p_to:pr.to}).catch(()=>({data:[]})),
-    sb.rpc('kasa_internal_flow',{p_from:pr.from,p_to:pr.to}).catch(()=>({data:[]})),
-    sb.rpc('dashboard_kasa_fop_limit',{p_year:new Date().getFullYear()}).catch(()=>({data:null})),
-    sb.rpc('kasa_dividends',{p_from:pr.from,p_to:pr.to}).catch(()=>({data:[]})),
-    sb.rpc('kasa_cashflow',{p_from:_f2,p_to:_t2,p_gran:pr.gran}).catch(()=>({data:[]}))
-  ]);
-  DATA.cf=(r&&r.data)||[];
-  DATA.acctFlow={}; ((af&&af.data)||[]).forEach(x=>{DATA.acctFlow[x.account_id]={inflow:Number(x.inflow),outflow:Number(x.outflow)};});
-  DATA.intFlow={}; ((ifl&&ifl.data)||[]).forEach(x=>{DATA.intFlow[x.account_id]={moved_in:Number(x.moved_in),moved_out:Number(x.moved_out)};});
-  DATA.fopLimit=(fl&&fl.data)||null;
-  DATA.div={vadym:0,artem:0}; ((dvr&&dvr.data)||[]).forEach(x=>{DATA.div[x.who]=Number(x.amt)||0;}); DATA.divTotal=(DATA.div.vadym||0)+(DATA.div.artem||0);
-  const _a=(pv&&pv.data)||[]; DATA.cfPrev={in:_a.reduce((q,r)=>q+Number(r.inflow),0),out:_a.reduce((q,r)=>q+Number(r.outflow),0)};
+  try{ const r=await sb.rpc('kasa_cashflow',{p_from:pr.from,p_to:pr.to,p_gran:pr.gran}); DATA.cf=r.data||[]; }catch(e){ DATA.cf=[]; }
+  try{ const af=await sb.rpc('kasa_account_cashflow',{p_from:pr.from,p_to:pr.to}); DATA.acctFlow={}; (af.data||[]).forEach(x=>{DATA.acctFlow[x.account_id]={inflow:Number(x.inflow),outflow:Number(x.outflow)};}); }catch(e){ DATA.acctFlow={}; }
+  try{ const ifl=await sb.rpc('kasa_internal_flow',{p_from:pr.from,p_to:pr.to}); DATA.intFlow={}; (ifl.data||[]).forEach(x=>{DATA.intFlow[x.account_id]={moved_in:Number(x.moved_in),moved_out:Number(x.moved_out)};}); }catch(e){ DATA.intFlow={}; }
+  // #537: ФОП ліміт 2 групи YTD (поточний рік)
+  try{ const fl=await sb.rpc('dashboard_kasa_fop_limit',{p_year:new Date().getFullYear()}); DATA.fopLimit=fl.data||null; }catch(e){ DATA.fopLimit=null; }
+  try{ const dvr=await sb.rpc('kasa_dividends',{p_from:pr.from,p_to:pr.to}); DATA.div={vadym:0,artem:0}; (dvr.data||[]).forEach(x=>{DATA.div[x.who]=Number(x.amt)||0;}); DATA.divTotal=(DATA.div.vadym||0)+(DATA.div.artem||0); }catch(e){ DATA.div={vadym:0,artem:0}; DATA.divTotal=0; }
+  try{ const _len=Math.round((new Date(pr.to)-new Date(pr.from))/86400000)+1; const _pTo=new Date(new Date(pr.from).getTime()-86400000); const _pFrom=new Date(_pTo.getTime()-(_len-1)*86400000); const _f2=_pFrom.toLocaleDateString('sv-SE'),_t2=_pTo.toLocaleDateString('sv-SE'); const pv=await sb.rpc('kasa_cashflow',{p_from:_f2,p_to:_t2,p_gran:pr.gran}); const _a=pv.data||[]; DATA.cfPrev={in:_a.reduce((q,r)=>q+Number(r.inflow),0),out:_a.reduce((q,r)=>q+Number(r.outflow),0)}; }catch(e){ DATA.cfPrev={in:0,out:0}; }
   renderOverview(); renderAcctFlow(); renderIntFlow(); renderFopLimit(); renderKpis(); renderDiv(); renderTrends(); }
 
 // #537: render ФОП ліміт блок
