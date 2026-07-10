@@ -125,7 +125,10 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
 html,body{overflow-x:hidden;max-width:100%}
 @media(max-width:920px){
   .wrap{padding:16px 12px 48px}
-  .kpis{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+  .kpis{grid-template-columns:1fr;gap:10px}
+  .grid2{grid-template-columns:1fr}
+  .chart-card{height:240px}
+  canvas{max-width:100%!important}
   .title{font-size:23px}
   /* 03.07.2026 mobile overflow — комплексний фікс (Вадим: «багато не поміщається горизонтально») */
   /* 1. картки банків/готівки/дивідендів — 1 у стовпчик (було auto-fill 220px → 2 в ряд, обрізались) */
