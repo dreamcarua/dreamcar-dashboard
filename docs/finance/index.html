@@ -216,6 +216,31 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
 .sidebar .nav-item .icon{font-size:14px;width:18px;text-align:center}
 .sidebar .nav-item .badge{margin-left:auto;background:#2a2a2a;color:#888;font-size:9px;padding:2px 6px;border-radius:4px;letter-spacing:.05em;font-family:'JetBrains Mono',monospace}
 @media(max-width:920px){.app-layout{grid-template-columns:1fr;grid-template-areas:"main"}.sidebar{display:none}}
+/* ═══ МОБІЛЬНА ВЕРСТКА ФІНАНСІВ (переписано 08.07.2026) ═══ */
+@media(max-width:920px){
+  html,body{overflow-x:hidden;max-width:100vw}
+  .wrap{padding:14px 12px 40px;max-width:100vw;overflow-x:hidden;box-sizing:border-box}
+  h1,h2,.subtitle{word-break:break-word;overflow-wrap:anywhere}
+  /* вкладки (Огляд/Категорії/...) — горизонтальний свайп */
+  .tabs{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+  .tab{flex:0 0 auto;white-space:nowrap}
+  /* фільтри періодів (Сьогодні/7днів/... + День/Тиждень/...) — свайп, не обрізати */
+  .period-bar{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+  .period-bar>*{flex:0 0 auto}
+  .seg{flex:0 0 auto}
+  /* KPI — значення довгі, переносяться */
+  .kpi .val,.kpi{word-break:break-word;overflow-wrap:anywhere;box-sizing:border-box}
+  /* графіки — responsive, компактні */
+  .chart-grid{grid-template-columns:1fr}
+  .chart-card{min-height:240px;padding:12px;box-sizing:border-box}
+  .chart-card canvas{max-width:100%!important;height:auto!important}
+  /* ТАБЛИЦІ (P&L по проєктах/періодах) — горизонтальний скрол свайпом */
+  .tbl-card{overflow-x:auto!important;-webkit-overflow-scrolling:touch;max-height:none;max-width:100%}
+  .tbl-card table{width:max-content;min-width:100%}
+  .tbl-card th,.tbl-card td{white-space:nowrap}
+  /* категорії (grid 7 колонок) — природна ширина + скрол через .tbl-card батька */
+  .cat-parent,.cat-child{min-width:max-content}
+}
 
 /* Skeleton shimmer */
 @keyframes shimmer { 0%{background-position:-300px 0} 100%{background-position:300px 0} }
