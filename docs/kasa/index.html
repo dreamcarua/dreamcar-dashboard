@@ -537,19 +537,21 @@ let CACHE_PAINTED=false;
 async function fetchAllTx(){
   const cols='id,account_id,direction,amount_uah,occurred_at,occurred_ts,description,counterparty,category_id,launch_id,source,external_id,is_internal,excl_pnl,div_to';
   const PAGE=1000;
-  // 1) точна кількість рядків одним HEAD-запитом
-  let total=0;
-  try{ const c=await sb.from('kasa_transactions').select('id',{count:'exact',head:true}); total=c.count||0; }catch(_){ total=0; }
-  const pages=total?Math.ceil(total/PAGE):1;
-  // 2) усі сторінки ПАРАЛЕЛЬНО (стабільний порядок: occurred_ts desc, потім id)
+  // #PERF 10.07.2026: НЕ тягнемо всі 38k банківських на клієнт — це і давало 20с (сервер віддає за 75мс,
+  // але 39 REST-запитів + ~7.7MB + парсинг = 20с у браузері). З 38626 tx: bank≈38622, cash=4, дивіденди=мітки.
+  // Тягнемо: останні ~5000 (recent/сигнали/недавня банк-таблиця) + ВСІ дивіденди (div_to) + ВСЮ готівку —
+  // щоб їхні таблиці/KPI були повні. Повна глибина банк-таблиці — окремим server-side RPC (крок 2).
   const reqs=[];
-  for(let i=0;i<Math.min(pages,80);i++){
+  for(let i=0;i<5;i++){
     reqs.push(sb.from('kasa_transactions').select(cols).order('occurred_ts',{ascending:false,nullsFirst:false}).order('id',{ascending:false}).range(i*PAGE,i*PAGE+PAGE-1));
   }
+  reqs.push(sb.from('kasa_transactions').select(cols).not('div_to','is',null).order('occurred_ts',{ascending:false,nullsFirst:false}).limit(5000));
+  const cashIds=(DATA.accounts||[]).filter(a=>a && a.kind==='cash').map(a=>a.id);
+  if(cashIds.length) reqs.push(sb.from('kasa_transactions').select(cols).in('account_id',cashIds).order('occurred_ts',{ascending:false,nullsFirst:false}).limit(5000));
   const res=await Promise.all(reqs);
-  const all=[];
-  for(const r of res){ if(!r.error) all.push(...(r.data||[])); } // толерантно: пропущена сторінка не валить сторінку
-  return {data:all,error:null};
+  const map=new Map();
+  for(const r of res){ if(!r.error) for(const row of (r.data||[])){ if(row&&row.id!=null) map.set(row.id,row); } } // dedupe by id
+  return {data:[...map.values()],error:null};
 }
 // IndexedDB-кеш (вміщає всі 37k+ tx; sessionStorage замалий ~5MB). TTL 5 хв.
 const KIDB={_db:null,ok:true,
@@ -833,19 +835,33 @@ function renderPager(key,total,pages){
 function setPageSize(key,v){ PG[key].size=Number(v); PG[key].page=1; PG_RENDER[key](); }
 function goPage(key,p){ PG[key].page=p; PG_RENDER[key](); }
 window.setPageSize=setPageSize; window.goPage=goPage;
-function renderBank(){
+// #PERF 10.07.2026: банк-таблиця SERVER-SIDE. 38k банківських tx на клієнт = 20с. RPC kasa_bank_page
+// робить фільтри+пагінацію+total на сервері (98мс), тягнемо лише видимі 50 рядків. Повна глибина, миттєво.
+async function renderBank(){
   document.getElementById('bankAccts').innerHTML=DATA.accounts.filter(a=>a.kind==='bank'&&a.is_active).map(acctCard).join('')||'<div class="muted">Банк-рахунки зʼявляться після синку API</div>';
   const f=document.getElementById('bankAcctFilter');const cur=f.value;
   f.innerHTML='<option value="">Усі банк-рахунки</option>'+DATA.accounts.filter(a=>a.kind==='bank'&&a.is_active).map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join('');f.value=cur;
-  const q=(document.getElementById('searchBank').value||'').toLowerCase();
-  let rows=DATA.tx.filter(t=>{const a=acctById(t.account_id);return a&&a.kind==='bank'&&a.is_active;});
-  if(f.value)rows=rows.filter(t=>t.account_id===f.value);
-  if(q)rows=rows.filter(t=>(t.description||'').toLowerCase().includes(q)||(t.counterparty||'').toLowerCase().includes(q));
-  const dir=document.getElementById('bankDirFilter').value; if(dir)rows=rows.filter(t=>t.direction===dir);
-  const br=bankRange(); if(br)rows=rows.filter(t=>{const d=t.occurred_ts?t.occurred_ts.slice(0,10):t.occurred_at; return d>=br.from&&d<=br.to;});
-  const pgB=pageSlice('bank',rows,[f.value,q,dir,br?br.from+br.to:''].join('|'));document.querySelector('#tblBank tbody').innerHTML=rows.length?pgB.map(t=>txRow(t,true)).join(''):'<tr><td colspan="9" class="empty">Немає операцій</td></tr>';
+  const q=(document.getElementById('searchBank').value||'').trim();
+  const dir=document.getElementById('bankDirFilter').value||null;
+  const br=bankRange();
+  const st=PG.bank; const sig=[f.value,q,dir,br?br.from+br.to:''].join('|');
+  if(st._sig!==undefined&&st._sig!==sig)st.page=1; st._sig=sig;
+  const tb=document.querySelector('#tblBank tbody');
+  const myReq=(renderBank._seq=(renderBank._seq||0)+1);
+  if(!DATA.bankRows||!DATA.bankRows.length) tb.innerHTML='<tr><td colspan="9" class="empty">Завантаження…</td></tr>';
+  try{
+    const r=await sb.rpc('kasa_bank_page',{p_account:f.value||null,p_dir:dir,p_from:br?br.from:null,p_to:br?br.to:null,p_search:q||null,p_limit:st.size,p_offset:(st.page-1)*st.size});
+    if(myReq!==renderBank._seq) return; // застаріла відповідь (швидкі фільтри) — ігноруємо
+    if(r.error) throw r.error;
+    const rows=r.data||[]; const total=rows.length?Number(rows[0].total_count):0;
+    const pages=Math.max(1,Math.ceil(total/st.size));
+    if(st.page>pages && total>0){ st.page=pages; return renderBank(); }
+    DATA.bankRows=rows; // для editTransaction (банк tx більше не в DATA.tx)
+    renderPager('bank',total,pages);
+    tb.innerHTML=rows.length?rows.map(t=>txRow(t,true)).join(''):'<tr><td colspan="9" class="empty">Немає операцій</td></tr>';
+  }catch(e){ tb.innerHTML='<tr><td colspan="9" class="empty">Помилка завантаження: '+esc(String(e&&e.message||e))+'</td></tr>'; }
 }
-['searchBank'].forEach(id=>document.getElementById(id).addEventListener('input',renderBank));
+{let _bkt; document.getElementById('searchBank').addEventListener('input',()=>{clearTimeout(_bkt);_bkt=setTimeout(renderBank,350);});} // debounce: server-side пошук не на кожну літеру
 document.getElementById('bankAcctFilter').addEventListener('change',renderBank);
 document.getElementById('bankDirFilter').addEventListener('change',renderBank);
 document.getElementById('bankPeriodFilter').addEventListener('change',()=>{const c=document.getElementById('bankPeriodFilter').value==='custom';document.getElementById('bankFrom').style.display=c?'inline-block':'none';document.getElementById('bankTo').style.display=c?'inline-block':'none';renderBank();});
@@ -928,7 +944,7 @@ function openTxModal(kind){
   openModal('modalTx');
 }
 function editTransaction(id){
-  const t=DATA.tx.find(x=>x.id===id);if(!t)return;editTx=t;
+  const t=DATA.tx.find(x=>x.id===id)||(DATA.bankRows||[]).find(x=>x.id===id);if(!t)return;editTx=t;
   document.getElementById('txTitle').textContent='Редагувати операцію';showErr('txErr',null);setDir(t.direction);
   document.getElementById('txAcct').innerHTML=DATA.accounts.map(a=>`<option value="${a.id}">${esc(a.icon+' '+a.name)} (${a.kind})</option>`).join('');
   document.getElementById('txAcct').value=t.account_id;
