@@ -516,7 +516,10 @@ function balanceOf(accId){
   }
   return b;
 }
-const realBal=(a)=>a.api_balance!=null?Number(a.api_balance):balanceOf(a.id);
+// #PERF 10.07.2026: поки важкі транзакції (37k) вантажаться у фоні, KPI/баланси беруть
+// серверний агрегат acctOps (opsMap RPC) — миттєво, як картки рахунків. Коли DATA.tx готовий —
+// рахуємо як раніше (balanceOf). Фінальне число НЕ змінюється; зникає стрибок «0 → повне за 20с».
+const realBal=(a)=>a.api_balance!=null?Number(a.api_balance):((DATA.tx&&DATA.tx.length)?balanceOf(a.id):acctOps(a));
 const bookTotal=(kind)=>DATA.accounts.filter(a=>a.kind===kind&&a.is_active).reduce((s,a)=>s+realBal(a),0);
 
 // ---- tabs ----
