@@ -1,4 +1,0 @@
-=== статуси угод BMW X6M (чому paid=0?) ===
-Counter({'pay': 400})
-=== SET deal_aliases=['BMW X6M'] для launch code=X6M ===
-updated: [('BMW X6M - найпотужні', ['BMW X6M'])]
