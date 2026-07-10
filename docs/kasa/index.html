@@ -525,14 +525,17 @@ async function fetchAllTx(){
   }
   const res=await Promise.all(reqs);
   const all=[];
-  for(const r of res){ if(r.error) return {data:all,error:r.error}; all.push(...(r.data||[])); }
+  for(const r of res){ if(!r.error) all.push(...(r.data||[])); } // толерантно: пропущена сторінка не валить сторінку
   return {data:all,error:null};
 }
 // IndexedDB-кеш (вміщає всі 37k+ tx; sessionStorage замалий ~5MB). TTL 5 хв.
-const KIDB={_db:null,
-  _open(){return this._db||(this._db=new Promise((res,rej)=>{try{const r=indexedDB.open('kasa_cache_db',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);}catch(e){rej(e);}}));},
-  async get(k){try{const db=await this._open();return await new Promise(res=>{const t=db.transaction('kv').objectStore('kv').get(k);t.onsuccess=()=>res(t.result||null);t.onerror=()=>res(null);});}catch(_){return null;}},
-  async set(k,v){try{const db=await this._open();await new Promise(res=>{const t=db.transaction('kv','readwrite').objectStore('kv').put(v,k);t.onsuccess=()=>res();t.onerror=()=>res();});}catch(_){}}};
+const KIDB={_db:null,ok:true,
+  _open(){return this._db||(this._db=Promise.race([
+    new Promise((res,rej)=>{try{const r=indexedDB.open('kasa_cache_db',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);r.onblocked=()=>rej(new Error('blocked'));}catch(e){rej(e);}}),
+    new Promise((_,rej)=>setTimeout(()=>rej(new Error('idb-timeout')),1500))
+  ]).catch(e=>{this._db=null;this.ok=false;return null;}));},
+  async get(k){if(!this.ok)return null;try{const db=await this._open();if(!db)return null;return await Promise.race([new Promise(res=>{const t=db.transaction('kv').objectStore('kv').get(k);t.onsuccess=()=>res(t.result||null);t.onerror=()=>res(null);}),new Promise(res=>setTimeout(()=>res(null),1500))]);}catch(_){return null;}},
+  async set(k,v){if(!this.ok)return;try{const db=await this._open();if(!db)return;await new Promise(res=>{const t=db.transaction('kv','readwrite').objectStore('kv').put(v,k);t.onsuccess=()=>res();t.onerror=()=>res();});}catch(_){}}};
 const KASA_TTL=300000; // 5 хв
 async function loadAll(force){
   try{
