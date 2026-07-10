@@ -1,0 +1,27 @@
+name: proj-debug
+on:
+  push: { paths: ['.github/workflows/proj-debug.yml'] }
+  workflow_dispatch:
+permissions: { contents: write }
+jobs:
+  read:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - env: { U: "${{ secrets.SUPABASE_URL }}", K: "${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" }
+        run: |
+          mkdir -p debug
+          echo "=== launch BMW X6M (name/code/deal_aliases/status) ===" > debug/p.txt
+          curl -s "$U/rest/v1/launches?select=id,name,code,status,is_active,deal_aliases,starts_on,ends_on&name=ilike.*X6M*" -H "apikey: $K" -H "Authorization: Bearer $K" >> debug/p.txt
+          echo "" >> debug/p.txt
+          echo "=== dashboard_deals: distinct project що містить BMW/X6M ===" >> debug/p.txt
+          curl -s "$U/rest/v1/dashboard_deals?select=project&project=ilike.*X6M*&limit=5" -H "apikey: $K" -H "Authorization: Bearer $K" >> debug/p.txt
+          echo "" >> debug/p.txt
+          echo "=== count paid deals project=BMW X6M ===" >> debug/p.txt
+          curl -s -I "$U/rest/v1/dashboard_deals?select=id&project=eq.BMW%20X6M&status=eq.paid" -H "apikey: $K" -H "Authorization: Bearer $K" -H "Prefer: count=exact" | grep -i content-range >> debug/p.txt
+          echo "=== dashboard_projects BMW X6M row (deal_project_values) ===" >> debug/p.txt
+          curl -s "$U/rest/v1/dashboard_projects?select=code,name,deal_project_values&name=ilike.*X6M*" -H "apikey: $K" -H "Authorization: Bearer $K" >> debug/p.txt
+          cat debug/p.txt
+      - run: |
+          git config user.name bot; git config user.email bot@d.local
+          git add debug/; git commit -m "proj state [skip ci-not]" || true; git push
