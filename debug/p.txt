@@ -1,0 +1,12 @@
+=== launch BMW X6M (name/code/deal_aliases/status) ===
+[{"id":"d073ac54-9a26-4b1f-9e07-730621cbd6a8","name":"BMW X6M - найпотужніший, найдорожчий 20 ювілейний проект!","code":"X6M","status":"active","is_active":true,"deal_aliases":null,"starts_on":"2026-07-07","ends_on":"2026-08-03"}]
+=== dashboard_deals: distinct project що містить BMW/X6M ===
+[{"project":"BMW X6M"}, 
+ {"project":"BMW X6M"}, 
+ {"project":"BMW X6M"}, 
+ {"project":"BMW X6M"}, 
+ {"project":"BMW X6M"}]
+=== count paid deals project=BMW X6M ===
+content-range: */0
+=== dashboard_projects BMW X6M row (deal_project_values) ===
+[]
