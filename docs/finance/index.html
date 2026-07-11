@@ -240,6 +240,32 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
   .tbl-card th,.tbl-card td{white-space:nowrap}
   /* категорії (grid 7 колонок) — природна ширина + скрол через .tbl-card батька */
   .cat-parent,.cat-child{min-width:max-content}
+  /* ═══ P&L таблиці (.pnl: 15/12 колонок) → КАРТКИ-ПРОЄКТИ (10.07.2026) ═══ */
+  .pnl-card .scroll{overflow:visible}
+  table.pnl{display:block;width:100%}
+  table.pnl thead{display:none}
+  table.pnl tbody{display:block}
+  table.pnl tfoot{display:block;margin-top:6px}
+  table.pnl tr{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px 12px;background:#141414;border:1px solid #232323;border-radius:14px;padding:14px;margin-bottom:12px}
+  table.pnl td{display:flex;flex-direction:column;align-items:flex-start;padding:0;border:none;font-size:13px;line-height:1.25;text-align:left;white-space:normal;word-break:break-word}
+  table.pnl td::before{content:attr(data-label);color:#7a7a7a;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+  table.pnl td:first-child{grid-column:1/-1;order:-2;display:block;font-size:15px;font-weight:700;padding-bottom:8px;border-bottom:1px solid #232323}
+  table.pnl td:first-child::before{display:none}
+  table.pnl td:first-child .st-pill{font-size:9px;margin-left:8px;vertical-align:middle}
+  /* ключові Net Profit / Margin % / ROI % — великі, у ряд зверху картки */
+  table.pnl td[data-key]{order:-1;background:#0e0e0e;border:1px solid #262626;border-radius:10px;padding:9px 10px;font-size:16px;font-weight:800}
+  table.pnl td[data-key]::before{color:#888;margin-bottom:4px}
+  table.pnl tfoot tr{background:#0e0e0e;border-color:#3a3a1a}
+  table.pnl tfoot td{font-weight:700}
+  /* MTD / Forecast — мітка зверху, значення знизу (більше не зрізає праворуч) */
+  .forecast-grid{grid-template-columns:1fr}
+  .fc-row{display:flex;flex-direction:column;align-items:flex-start;gap:1px}
+  .fc-row .k{font-size:12px;color:#888;white-space:normal}
+  .fc-row .v{font-size:17px;font-weight:700;word-break:break-word}
+  .fc-note{font-size:10.5px;word-break:break-word}
+  /* графіки — компактні, тултіп не перекриває весь екран */
+  .chart-canvas-wrap{height:220px!important;max-height:46vh}
+  .chart-canvas-wrap canvas{max-width:100%!important}
 }
 
 /* Skeleton shimmer */
@@ -1028,21 +1054,21 @@ function renderPnL(pnl, fromISO, toISO) {
       ? `<div style="font-size:10.5px;color:#6B7280;font-family:'JetBrains Mono',monospace;margin-top:2px">${fmtShort(p.starts_on)} → ${fmtShort(p.ends_on)} · <b style="color:#999">${days||'?'} дн.</b></div>`
       : '';
     return `<tr>
-      <td><div><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${p.color||'#888'};margin-right:8px;vertical-align:middle"></span>${esc(p.name)}<span class="st-pill st-${p.status}">${p.status}</span></div>${dateRange}</td>
-      <td>${shortUAH(p.revenue_total)}</td>
-      <td>${shortUAH(p.ad_spend)}</td>
-      <td>${shortUAH(p.percent_costs)}</td>
-      <td>${shortUAH(p.fixed_allocated)}</td>
-      <td>${shortUAH(p.prize_cost)}</td>
-      <td>${shortUAH(p.project_costs_total)}</td>
-      <td><b>${shortUAH(p.total_cost)}</b></td>
-      <td class="${profCls}"><b>${shortUAH(p.true_net_profit)}</b></td>
-      <td class="${profCls}">${netPerDay!=null ? shortUAH(netPerDay) : '—'}</td>
-      <td class="${mCls}">${p.true_net_margin_pct!=null ? Number(p.true_net_margin_pct).toFixed(1)+'%' : '—'}</td>
-      <td class="${rCls}">${p.true_roi_pct!=null ? Number(p.true_roi_pct).toFixed(0)+'%' : '—'}</td>
-      <td>${p.true_cac!=null ? Number(p.true_cac).toFixed(2)+' ₴' : '—'}</td>
-      <td>${p.aov!=null ? Number(p.aov).toFixed(0)+' ₴' : '—'}</td>
-      <td>${Number(p.paid_count||0).toLocaleString('uk-UA')}</td>
+      <td data-label="Проєкт"><div><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${p.color||'#888'};margin-right:8px;vertical-align:middle"></span>${esc(p.name)}<span class="st-pill st-${p.status}">${p.status}</span></div>${dateRange}</td>
+      <td data-label="Revenue">${shortUAH(p.revenue_total)}</td>
+      <td data-label="Ad Spend">${shortUAH(p.ad_spend)}</td>
+      <td data-label="% з угод">${shortUAH(p.percent_costs)}</td>
+      <td data-label="Fixed">${shortUAH(p.fixed_allocated)}</td>
+      <td data-label="Призовий">${shortUAH(p.prize_cost)}</td>
+      <td data-label="Variable">${shortUAH(p.project_costs_total)}</td>
+      <td data-label="Total Cost"><b>${shortUAH(p.total_cost)}</b></td>
+      <td data-label="Net Profit" data-key="net" class="${profCls}"><b>${shortUAH(p.true_net_profit)}</b></td>
+      <td data-label="Net/день" class="${profCls}">${netPerDay!=null ? shortUAH(netPerDay) : '—'}</td>
+      <td data-label="Margin %" data-key="margin" class="${mCls}">${p.true_net_margin_pct!=null ? Number(p.true_net_margin_pct).toFixed(1)+'%' : '—'}</td>
+      <td data-label="ROI %" data-key="roi" class="${rCls}">${p.true_roi_pct!=null ? Number(p.true_roi_pct).toFixed(0)+'%' : '—'}</td>
+      <td data-label="CAC">${p.true_cac!=null ? Number(p.true_cac).toFixed(2)+' ₴' : '—'}</td>
+      <td data-label="AOV">${p.aov!=null ? Number(p.aov).toFixed(0)+' ₴' : '—'}</td>
+      <td data-label="Paid">${Number(p.paid_count||0).toLocaleString('uk-UA')}</td>
     </tr>`;
   }).join('');
   document.getElementById('pnlFoot').innerHTML = `
@@ -1980,18 +2006,18 @@ function ppRenderTable(rows) {
     const netCur = Number(r.net_profit||0);
     const netCls = netCur >= 0 ? 'green' : 'red';
     return `<tr>
-      <td><b>${esc(r.period_label)}</b><div style="font-size:10.5px;color:#6B7280;font-family:'JetBrains Mono',monospace;margin-top:2px">${esc(r.period_start)} → ${esc(r.period_end)}</div></td>
-      <td style="text-align:center">${r.active_projects||0}</td>
-      <td class="gold">${shortUAH(r.revenue)}</td>
-      <td>${shortUAH(r.ad_spend)}</td>
-      <td>${shortUAH(r.percent_costs)}</td>
-      <td>${shortUAH(r.fixed_costs)}</td>
-      <td>${shortUAH(r.prize_cost)}</td>
-      <td>${shortUAH(r.variable_costs)}</td>
-      <td>${shortUAH(r.total_cost)}</td>
-      <td class="${netCls}">${shortUAH(r.net_profit)}</td>
-      <td>${ppFmtPct(r.margin_pct)}</td>
-      <td>${ppDeltaCell(netCur, prevNet)}</td>
+      <td data-label="Період"><b>${esc(r.period_label)}</b><div style="font-size:10.5px;color:#6B7280;font-family:'JetBrains Mono',monospace;margin-top:2px">${esc(r.period_start)} → ${esc(r.period_end)}</div></td>
+      <td data-label="Активних" style="text-align:center">${r.active_projects||0}</td>
+      <td data-label="Revenue" class="gold">${shortUAH(r.revenue)}</td>
+      <td data-label="Ad Spend">${shortUAH(r.ad_spend)}</td>
+      <td data-label="% з угод">${shortUAH(r.percent_costs)}</td>
+      <td data-label="Fixed">${shortUAH(r.fixed_costs)}</td>
+      <td data-label="Призовий">${shortUAH(r.prize_cost)}</td>
+      <td data-label="Variable">${shortUAH(r.variable_costs)}</td>
+      <td data-label="Total Cost">${shortUAH(r.total_cost)}</td>
+      <td data-label="Net Profit" data-key="net" class="${netCls}">${shortUAH(r.net_profit)}</td>
+      <td data-label="Margin %" data-key="margin">${ppFmtPct(r.margin_pct)}</td>
+      <td data-label="Δ vs prev">${ppDeltaCell(netCur, prevNet)}</td>
     </tr>`;
   }).join('');
   tb.innerHTML = html;
