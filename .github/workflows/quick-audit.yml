@@ -1,0 +1,16 @@
+name: Quick Audit (fresh)
+on:
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - name: Run quick audit
+        env:
+          FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+          AD_ACCOUNT_ID: '4136058269783354'
+        run: python3 scripts/quick_audit.py
