@@ -1,0 +1,31 @@
+name: Replicate Creatives (write)
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'true = plan only (no writes), false = create + activate'
+        default: 'true'
+        required: true
+      status_option:
+        description: 'ACTIVE or PAUSED'
+        default: 'ACTIVE'
+        required: true
+      source_names:
+        description: 'Optional || -separated ad names override'
+        default: ''
+        required: false
+jobs:
+  replicate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - name: Replicate
+        env:
+          FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+          AD_ACCOUNT_ID: '4136058269783354'
+          DRY_RUN: ${{ inputs.dry_run }}
+          STATUS_OPTION: ${{ inputs.status_option }}
+          SOURCE_NAMES: ${{ inputs.source_names }}
+        run: python3 scripts/replicate_creatives.py
