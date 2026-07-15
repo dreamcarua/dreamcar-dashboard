@@ -15,7 +15,7 @@ STATUS_OPTION = os.environ.get("STATUS_OPTION", "ACTIVE")
 MAXC = int(os.environ.get("MAX_CREATES", "90"))
 BASE = f"https://graph.facebook.com/{GRAPH}"
 DEFAULT_NAMES = ["меган перший пост х6м", "100 при 50 пост х6м – копія", "на своїй пост х6м", "камерамен пост х6м"]
-SRC_NAMES = [s for s in os.environ.get("SOURCE_NAMES", "||".join(DEFAULT_NAMES)).split("||") if s.strip()]
+SRC_NAMES = [s for s in (os.environ.get("SOURCE_NAMES", "").strip() or "||".join(DEFAULT_NAMES)).split("||") if s.strip()]
 SALES_OBJ = {"OUTCOME_SALES", "CONVERSIONS", "PRODUCT_CATALOG_SALES"}
 ST_KEEP = ["ACTIVE", "PAUSED", "PENDING_REVIEW", "CAMPAIGN_PAUSED", "ADSET_PAUSED", "IN_PROCESS", "WITH_ISSUES"]
 
