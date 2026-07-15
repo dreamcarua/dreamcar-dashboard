@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Replicate source ads into ALL active SALES adsets and activate (Meta act 4136058269783354).
-READ+WRITE via Ad Copy API POST /{ad_id}/copies. Dedupes by post (effective_object_story_id).
-env: FB_ACCESS_TOKEN, AD_ACCOUNT_ID, DRY_RUN(true/false), STATUS_OPTION(ACTIVE/PAUSED),
-     SOURCE_NAMES(||-sep, optional override), MAX_CREATES(default 90).
+"""Replicate source page-posts into ALL active SALES adsets as ACTIVE ads (Meta act 4136058269783354).
+Creates ONE clean creative per source post (object_story_id, standard-enhancements OPT_OUT) and
+attaches it as a new ad in every active sales adset (dedupe by post). Avoids /copies (subcode 3858504).
+env: FB_ACCESS_TOKEN, AD_ACCOUNT_ID, DRY_RUN, STATUS_OPTION(ACTIVE/PAUSED), MAX_CREATES, SOURCES(name::postid||...).
 """
 import os, json, time, urllib.parse, urllib.request, urllib.error
 from collections import Counter
@@ -11,17 +11,25 @@ GRAPH = os.environ.get("GRAPH_VER", "v21.0")
 TOKEN = os.environ["FB_ACCESS_TOKEN"]
 ACT = os.environ.get("AD_ACCOUNT_ID", "4136058269783354")
 DRY = os.environ.get("DRY_RUN", "true").lower() == "true"
-STATUS_OPTION = os.environ.get("STATUS_OPTION", "ACTIVE")
+STATUS = os.environ.get("STATUS_OPTION", "ACTIVE").upper()
 MAXC = int(os.environ.get("MAX_CREATES", "90"))
 BASE = f"https://graph.facebook.com/{GRAPH}"
-DEFAULT_NAMES = ["меган перший пост х6м", "100 при 50 пост х6м – копія", "на своїй пост х6м", "камерамен пост х6м"]
-SRC_NAMES = [s for s in (os.environ.get("SOURCE_NAMES", "").strip() or "||".join(DEFAULT_NAMES)).split("||") if s.strip()]
+DEFAULT_SOURCES = [
+    ("меган перший пост х6м", "1676843282640684_3812050758938051"),
+    ("100 при 50 пост х6м – копія", "1676843282640684_1037561262352778"),
+    ("на своїй пост х6м", "1676843282640684_862903833255150"),
+    ("камерамен пост х6м", "1676843282640684_1587690539640623"),
+]
+_env = os.environ.get("SOURCES", "").strip()
+if _env:
+    SOURCES = []
+    for part in _env.split("||"):
+        if "::" in part:
+            nm, pid = part.split("::", 1); SOURCES.append((nm.strip(), pid.strip()))
+else:
+    SOURCES = DEFAULT_SOURCES
 SALES_OBJ = {"OUTCOME_SALES", "CONVERSIONS", "PRODUCT_CATALOG_SALES"}
-ST_KEEP = ["ACTIVE", "PAUSED", "PENDING_REVIEW", "CAMPAIGN_PAUSED", "ADSET_PAUSED", "IN_PROCESS", "WITH_ISSUES"]
-
-
-def norm(s):
-    return " ".join((s or "").replace("–", "-").replace("—", "-").split()).lower()
+DOF = json.dumps({"creative_features_spec": {"standard_enhancements": {"enroll_status": "OPT_OUT"}}})
 
 
 def get(path, params=None):
@@ -32,12 +40,12 @@ def get(path, params=None):
             with urllib.request.urlopen(urllib.request.Request(url), timeout=120) as r:
                 return json.loads(r.read().decode())
         except urllib.error.HTTPError as e:
-            body = e.read().decode()[:300]; print(f"  GET {e.code}: {body}")
-            if e.code == 400 and "limit" not in body.lower():
-                return {}
-            time.sleep(10)
+            body = e.read().decode()[:200]; print(f"  GET {e.code}: {body}")
+            if "limit" in body.lower() or e.code in (17, 4, 613):
+                time.sleep(15); continue
+            return {}
         except Exception as e:
-            print("  GET ERR", str(e)[:200]); time.sleep(5)
+            print("  GET ERR", str(e)[:150]); time.sleep(4)
     return {}
 
 
@@ -50,18 +58,15 @@ def get_all(path, params=None):
         if not nxt or not res.get("data"):
             break
         p2 = dict(p); p2["after"] = nxt; res = get(path, p2)
-        if len(out) > 8000:
-            break
     return out
 
 
 def post(path, params):
     p = dict(params); p["access_token"] = TOKEN
     data = urllib.parse.urlencode(p).encode()
-    for a in range(3):
+    for a in range(4):
         try:
-            req = urllib.request.Request(f"{BASE}/{path}", data=data, method="POST")
-            with urllib.request.urlopen(req, timeout=120) as r:
+            with urllib.request.urlopen(urllib.request.Request(f"{BASE}/{path}", data=data, method="POST"), timeout=120) as r:
                 return json.loads(r.read().decode()), None
         except urllib.error.HTTPError as e:
             body = e.read().decode()[:400]
@@ -73,92 +78,77 @@ def post(path, params):
     return None, "retry_exhausted"
 
 
-print(f"REPLICATE CREATIVES · act {ACT} · dry_run={DRY} · status_option={STATUS_OPTION}")
+print(f"REPLICATE (object_story_id) · act {ACT} · dry_run={DRY} · status={STATUS}")
+print("=== SOURCES ===")
+for nm, pid in SOURCES:
+    print(f"  {nm[:34]:34} post={pid}")
 
-# 1) Resolve source ads by name
-print("=== RESOLVE SOURCES ===")
-ads = get_all(f"act_{ACT}/ads", {"fields": "name,adset_id,effective_status,creative{id,effective_object_story_id},created_time",
-                                 "filtering": json.dumps([{"field": "effective_status", "operator": "IN", "value": ST_KEEP}])})
-by_norm = {}
-for a in ads:
-    by_norm.setdefault(norm(a.get("name")), []).append(a)
-sources = []
-for nm in SRC_NAMES:
-    cands = list(by_norm.get(norm(nm), []))
-    cands.sort(key=lambda x: x.get("created_time", ""), reverse=True)
-    cands.sort(key=lambda x: x.get("effective_status") != "ACTIVE")
-    if cands:
-        s = cands[0]; sources.append(s)
-        post_id = (s.get("creative") or {}).get("effective_object_story_id")
-        print(f"  OK  '{nm}' -> ad {s['id']} [{s.get('effective_status')}] post={post_id} (cands={len(cands)})")
-    else:
-        print(f"  MISS '{nm}' -> NOT FOUND")
-if not sources:
-    print("NO SOURCES FOUND — abort"); print("DONE_REPLICATE"); raise SystemExit(0)
-
-# 2) Targets = active adsets of active SALES campaigns (excludes engagement)
 print("=== TARGET ADSETS (active sales) ===")
 camps = get_all(f"act_{ACT}/campaigns", {"fields": "name,objective,effective_status",
                                          "filtering": json.dumps([{"field": "effective_status", "operator": "IN", "value": ["ACTIVE"]}])})
 tcamps = [c for c in camps if c.get("objective") in SALES_OBJ]
-skipped = [f"{c.get('name','?')}({c.get('objective')})" for c in camps if c.get("objective") not in SALES_OBJ]
+skip_c = [f"{c.get('name','?')}({c.get('objective')})" for c in camps if c.get("objective") not in SALES_OBJ]
 targets = []
 for c in tcamps:
-    asets = get_all(f"{c['id']}/adsets", {"fields": "name,effective_status",
-                                          "filtering": json.dumps([{"field": "effective_status", "operator": "IN", "value": ["ACTIVE"]}])})
-    for a in asets:
+    for a in get_all(f"{c['id']}/adsets", {"fields": "name,effective_status",
+                                           "filtering": json.dumps([{"field": "effective_status", "operator": "IN", "value": ["ACTIVE"]}])}):
         targets.append((a["id"], a.get("name", "?"), c.get("name", "?")))
-        print(f"  {c.get('name','?')[:26]:26} | {a.get('name','?')[:34]:34} | adset {a['id']}")
-print(f"  sales_active_campaigns={len(tcamps)}  target_adsets={len(targets)}  skipped_nonsales={skipped}")
+print(f"  sales_active_campaigns={len(tcamps)} target_adsets={len(targets)} skipped_nonsales={skip_c}")
+for (aid, an, cn) in targets:
+    print(f"  {cn[:24]:24} | {an[:32]:32} | {aid}")
 if not targets:
-    print("NO TARGETS — abort"); print("DONE_REPLICATE"); raise SystemExit(0)
+    print("NO TARGETS"); print("DONE_REPLICATE"); raise SystemExit(0)
 
-# 3) Dedupe: existing posts per adset
 present = {}
 for (aid, _, _) in targets:
     ex = get_all(f"{aid}/ads", {"fields": "creative{effective_object_story_id}",
                                 "filtering": json.dumps([{"field": "effective_status", "operator": "IN", "value": ["ACTIVE", "PENDING_REVIEW", "PAUSED", "IN_PROCESS"]}])})
     present[aid] = set(filter(None, [(e.get("creative") or {}).get("effective_object_story_id") for e in ex]))
 
-# 4) Plan
 plan = []
-for s in sources:
-    spost = (s.get("creative") or {}).get("effective_object_story_id")
+for (nm, pid) in SOURCES:
     for (aid, an, cn) in targets:
-        if spost and spost in present.get(aid, set()):
-            print(f"  skip(dup) '{(s.get('name') or '')[:22]}' already in {an[:28]}")
-            continue
-        plan.append((s["id"], s.get("name"), aid, an, cn))
-print(f"=== PLAN: {len(plan)} copies (dry_run={DRY}) ===")
-for (sid, sn, aid, an, cn) in plan:
-    print(f"  copy '{(sn or '')[:24]}' -> [{cn[:18]}] {an[:30]} ({aid})")
+        if pid in present.get(aid, set()):
+            print(f"  skip(dup) '{nm[:20]}' in {an[:26]}"); continue
+        plan.append((nm, pid, aid, an, cn))
+print(f"=== PLAN: {len(plan)} ads (dry_run={DRY}) ===")
+for (nm, pid, aid, an, cn) in plan:
+    print(f"  '{nm[:20]}' -> [{cn[:16]}] {an[:28]} ({aid})")
 if len(plan) > MAXC:
-    print(f"ABORT: plan {len(plan)} > MAX_CREATES {MAXC} (safety cap)"); print("DONE_REPLICATE"); raise SystemExit(0)
+    print(f"ABORT plan>{MAXC}"); print("DONE_REPLICATE"); raise SystemExit(0)
 if DRY:
-    print("DRY_RUN — no writes performed."); print("DONE_REPLICATE"); raise SystemExit(0)
+    print("DRY_RUN — no writes."); print("DONE_REPLICATE"); raise SystemExit(0)
 
-# 5) Execute
-print("=== EXECUTE COPIES ===")
-created = []
-for (sid, sn, aid, an, cn) in plan:
-    res, err = post(f"{sid}/copies", {"adset_id": aid, "status_option": STATUS_OPTION})
+print("=== CREATE CREATIVES (1 per source) ===")
+cre = {}
+for (nm, pid) in SOURCES:
+    res, err = post(f"act_{ACT}/adcreatives", {"name": f"[repl] {nm}", "object_story_id": pid, "degrees_of_freedom_spec": DOF})
     if err:
-        print(f"  FAIL '{(sn or '')[:20]}' -> {an[:26]}: {err}")
+        print(f"  CRE FAIL '{nm[:24]}': {err}")
     else:
-        nid = res.get("copied_ad_id") or res.get("ad_id") or res.get("id")
-        created.append(nid); print(f"  OK   {nid} '{(sn or '')[:20]}' -> {an[:26]}")
+        cre[pid] = res.get("id"); print(f"  CRE OK {res.get('id')} <- '{nm[:24]}'")
     time.sleep(1)
-print(f"created={len(created)} / planned={len(plan)}")
 
-# 6) Verify effective_status
+print("=== CREATE ADS ===")
+created = []
+for (nm, pid, aid, an, cn) in plan:
+    cid = cre.get(pid)
+    if not cid:
+        print(f"  SKIP no-creative '{nm[:18]}' {an[:22]}"); continue
+    res, err = post(f"act_{ACT}/ads", {"name": nm, "adset_id": aid, "creative": json.dumps({"creative_id": cid}), "status": STATUS})
+    if err:
+        print(f"  AD FAIL '{nm[:16]}'->{an[:22]}: {err}")
+    else:
+        created.append(res.get("id")); print(f"  AD OK {res.get('id')} '{nm[:16]}'->{an[:22]}")
+    time.sleep(1)
+print(f"created={len(created)}/{len(plan)}")
+
 print("=== VERIFY ===")
 cnt = Counter()
 for nid in created:
     if not nid:
         continue
-    r = get(f"{nid}", {"fields": "effective_status,name"})
-    cnt[r.get("effective_status", "?")] += 1
-    time.sleep(0.3)
-print("  status_breakdown:", dict(cnt))
+    r = get(f"{nid}", {"fields": "effective_status"}); cnt[r.get("effective_status", "?")] += 1; time.sleep(0.3)
+print("  status:", dict(cnt))
 print("  new_ad_ids:", ",".join([c for c in created if c]))
 print("DONE_REPLICATE")
