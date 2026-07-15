@@ -275,6 +275,8 @@ html,body{overflow-x:hidden;max-width:100%}
     <div class="tbl-card" style="margin-bottom:18px"><table id="tblFopLimit"><thead><tr>
       <th style="text-align:left">ФОП</th><th>Чисті надходження (YTD)</th><th>Ліміт 2026</th><th>Залишок до ліміту</th><th>% використано</th>
     </tr></thead><tbody><tr><td colspan="5" class="empty">завантаження…</td></tr></tbody></table></div>
+    <!-- #stale-sync: попередження про застряглий банк-синк (ФОП занижений) -->
+    <div id="fopStaleWarn" style="display:none;margin:-8px 0 18px"></div>
 
     <div class="toolbar" style="margin-top:10px"><div class="grp"><b style="font-family:'Oswald';font-size:16px">Пошук операцій</b></div></div>
     <div class="toolbar">
@@ -722,10 +724,10 @@ function periodRange(){
 async function loadCashflow(){ const pr=periodRange();
   const ckey='cf:'+pr.from+':'+pr.to+':'+pr.gran;
   if(!DATA.cf) DATA.cf=[]; if(!DATA.div) DATA.div={vadym:0,artem:0}; if(DATA.divTotal==null) DATA.divTotal=0;
-  if(!DATA.acctFlow) DATA.acctFlow={}; if(!DATA.intFlow) DATA.intFlow={}; if(!DATA.cfPrev) DATA.cfPrev={in:0,out:0};
+  if(!DATA.acctFlow) DATA.acctFlow={}; if(!DATA.intFlow) DATA.intFlow={}; if(!DATA.cfPrev) DATA.cfPrev={in:0,out:0}; if(!DATA.staleAccts) DATA.staleAccts=[];
   // 1) stale — показати кеш одразу
   try{ const ck=await KIDB.get(ckey);
-    if(ck&&ck.cf){ DATA.cf=ck.cf; DATA.div=ck.div||{vadym:0,artem:0}; DATA.divTotal=ck.divTotal||0; DATA.acctFlow=ck.acctFlow||{}; DATA.intFlow=ck.intFlow||{}; DATA.fopLimit=(ck.fopLimit!==undefined?ck.fopLimit:null); DATA.cfPrev=ck.cfPrev||{in:0,out:0};
+    if(ck&&ck.cf){ DATA.cf=ck.cf; DATA.div=ck.div||{vadym:0,artem:0}; DATA.divTotal=ck.divTotal||0; DATA.acctFlow=ck.acctFlow||{}; DATA.intFlow=ck.intFlow||{}; DATA.fopLimit=(ck.fopLimit!==undefined?ck.fopLimit:null); DATA.cfPrev=ck.cfPrev||{in:0,out:0}; DATA.staleAccts=ck.staleAccts||[];
       renderOverview(); renderAcctFlow(); renderIntFlow(); renderFopLimit(); renderKpis(); renderDiv(); renderTrends(); }
   }catch(_){}
   // 2) revalidate — свіжі дані ПОСЛІДОВНО (при помилці лишаємо stale, не скидаємо в 0)
@@ -733,10 +735,11 @@ async function loadCashflow(){ const pr=periodRange();
   try{ const af=await sb.rpc('kasa_account_cashflow',{p_from:pr.from,p_to:pr.to}); if(af&&!af.error){ DATA.acctFlow={}; (af.data||[]).forEach(x=>{DATA.acctFlow[x.account_id]={inflow:Number(x.inflow),outflow:Number(x.outflow)};}); } }catch(e){}
   try{ const ifl=await sb.rpc('kasa_internal_flow',{p_from:pr.from,p_to:pr.to}); if(ifl&&!ifl.error){ DATA.intFlow={}; (ifl.data||[]).forEach(x=>{DATA.intFlow[x.account_id]={moved_in:Number(x.moved_in),moved_out:Number(x.moved_out)};}); } }catch(e){}
   try{ const fl=await sb.rpc('dashboard_kasa_fop_limit',{p_year:new Date().getFullYear()}); if(fl&&!fl.error) DATA.fopLimit=fl.data||null; }catch(e){}
+  try{ const st=await sb.rpc('kasa_stale_accounts',{p_days:3}); if(st&&!st.error) DATA.staleAccts=st.data||[]; }catch(e){}
   try{ const dvr=await sb.rpc('kasa_dividends',{p_from:pr.from,p_to:pr.to}); if(dvr&&!dvr.error){ DATA.div={vadym:0,artem:0}; (dvr.data||[]).forEach(x=>{DATA.div[x.who]=Number(x.amt)||0;}); DATA.divTotal=(DATA.div.vadym||0)+(DATA.div.artem||0); } }catch(e){}
   try{ const _len=Math.round((new Date(pr.to)-new Date(pr.from))/86400000)+1; const _pTo=new Date(new Date(pr.from).getTime()-86400000); const _pFrom=new Date(_pTo.getTime()-(_len-1)*86400000); const _f2=_pFrom.toLocaleDateString('sv-SE'),_t2=_pTo.toLocaleDateString('sv-SE'); const pv=await sb.rpc('kasa_cashflow',{p_from:_f2,p_to:_t2,p_gran:pr.gran}); if(pv&&!pv.error){ const _a=pv.data||[]; DATA.cfPrev={in:_a.reduce((q,r)=>q+Number(r.inflow),0),out:_a.reduce((q,r)=>q+Number(r.outflow),0)}; } }catch(e){}
   // 3) зберегти свіжий кеш + перерендерити
-  try{ await KIDB.set(ckey,{t:Date.now(),cf:DATA.cf,div:DATA.div,divTotal:DATA.divTotal,acctFlow:DATA.acctFlow,intFlow:DATA.intFlow,fopLimit:DATA.fopLimit,cfPrev:DATA.cfPrev}); }catch(_){}
+  try{ await KIDB.set(ckey,{t:Date.now(),cf:DATA.cf,div:DATA.div,divTotal:DATA.divTotal,acctFlow:DATA.acctFlow,intFlow:DATA.intFlow,fopLimit:DATA.fopLimit,cfPrev:DATA.cfPrev,staleAccts:DATA.staleAccts}); }catch(_){}
   renderOverview(); renderAcctFlow(); renderIntFlow(); renderFopLimit(); renderKpis(); renderDiv(); renderTrends(); }
 
 // #537: render ФОП ліміт блок
@@ -764,6 +767,14 @@ function renderFopLimit(){
       <td class="${pctCls}">${pct.toFixed(1)}% ${bar}</td>
     </tr>`;
   }).join('');
+  // #stale-sync: банер про застряглий банк-синк (ФОП-надходження нижче реальних)
+  const sw=document.getElementById('fopStaleWarn');
+  if(sw){ const st=DATA.staleAccts||[];
+    if(st.length){ sw.style.display='';
+      sw.innerHTML='<div class="note warn" style="border-color:#dc2626;color:#fca5a5">🚨 <b>Синк банку застряг — ФОП-надходження нижче реальних!</b><br>'+
+        st.map(a=>`• <b>${esc(a.name)}</b>: остання операція ${a.last_tx}, тиша <b>${a.days_stale} дн</b>; баланс живий (${fmtUAH(a.api_balance)}) — токен Автоклієнта треба перевипустити.`).join('<br>')+'</div>';
+    } else { sw.style.display='none'; sw.innerHTML=''; }
+  }
 }
 function renderAcctFlow(){
   const tb=document.querySelector('#tblAcctFlow tbody'); if(!tb) return;
