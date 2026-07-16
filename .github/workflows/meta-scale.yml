@@ -1,0 +1,37 @@
+name: Meta Scale (write)
+# Змінює бюджет кампаній (% від поточного), паузить/активує — через FB_ACCESS_TOKEN, без adspirer.
+# Безпечно: читає поточний бюджет і множить на коефіцієнт; крок ≤ MAX_PCT; "На НОВИХ" захищена.
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'true = лише план (без записів), false = застосувати'
+        default: 'true'
+        required: true
+      targets:
+        description: 'id_або_підрядок_назви::op, через || . op = +25 | -20 | PAUSE | ACTIVATE. Напр: 120249698602830624::+25||DC | 03::+20'
+        required: true
+      max_pct:
+        description: 'макс |відсоток| за один запуск'
+        default: '30'
+        required: false
+      cap_uah:
+        description: 'стеля денного бюджету кампанії, грн'
+        default: '60000'
+        required: false
+jobs:
+  scale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Scale
+        env:
+          FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+          AD_ACCOUNT_ID: '4136058269783354'
+          DRY_RUN: ${{ inputs.dry_run }}
+          TARGETS: ${{ inputs.targets }}
+          MAX_PCT: ${{ inputs.max_pct }}
+          CAP_UAH: ${{ inputs.cap_uah }}
+        run: python3 scripts/meta_scale.py
