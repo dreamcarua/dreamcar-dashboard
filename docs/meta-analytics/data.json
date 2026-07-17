@@ -1,34 +1,34 @@
 {
- "generated": "2026-07-16T21:20:14.473745+00:00",
+ "generated": "2026-07-17T07:34:42.378607+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
   "date": "2026-07-16",
   "prev_date": "2026-07-15",
-  "spend": 22182.78,
-  "impressions": 165956,
+  "spend": 22229.72,
+  "impressions": 166267,
   "clicks": 2880,
-  "purchases": 352,
-  "pixel_roas": 8.9,
-  "cpa": 63.02,
+  "purchases": 356,
+  "pixel_roas": 8.99,
+  "cpa": 62.44,
   "frequency": 2.19,
   "real_ad_revenue": 70983,
-  "real_ad_roas": 3.2,
+  "real_ad_roas": 3.19,
   "deltas": {
-   "spend": -3.6,
-   "pixel_roas": 23.1,
-   "purchases": -12.0,
-   "cpa": 9.5
+   "spend": -3.4,
+   "pixel_roas": 24.3,
+   "purchases": -11.0,
+   "cpa": 8.5
   },
   "week": {
    "this": {
     "from": "2026-07-10",
     "to": "2026-07-16",
-    "spend": 148299,
-    "purchases": 2443,
-    "pixel_roas": 7.35,
-    "cpa": 60.7,
+    "spend": 148348,
+    "purchases": 2447,
+    "pixel_roas": 7.36,
+    "cpa": 60.62,
     "real_revenue": 586354,
     "real_roas": 3.95
    },
@@ -45,9 +45,9 @@
    "deltas": {
     "spend": 174.2,
     "real_roas": 11.0,
-    "pixel_roas": 31.7,
-    "cpa": 63.6,
-    "purchases": 67.6
+    "pixel_roas": 31.9,
+    "cpa": 63.4,
+    "purchases": 67.8
    }
   },
   "real_by_placement": [
@@ -87,7 +87,7 @@
    {
     "name": "100 при 50 пост х6м – копія",
     "ad_id": "120251106548450624",
-    "spend": 731.96,
+    "spend": 732.33,
     "purchases": 20,
     "roas": 15.76,
     "ctr": 1.13
@@ -95,17 +95,17 @@
    {
     "name": "на своїй пост х6м",
     "ad_id": "120251106548440624",
-    "spend": 797.31,
+    "spend": 798.72,
     "purchases": 16,
-    "roas": 14.25,
+    "roas": 14.22,
     "ctr": 1.47
    },
    {
     "name": "картинка х6м 7",
     "ad_id": "120250963885120624",
-    "spend": 330.67,
+    "spend": 331.5,
     "purchases": 6,
-    "roas": 14.0,
+    "roas": 13.97,
     "ctr": 1.18
    }
   ],
@@ -8933,7 +8933,7 @@
   {
    "sev": "mod",
    "scope": "Акаунт · тиждень",
-   "text": "CPA тижня 60.7 ₴ vs 37.1 ₴ (+64%) — залучення дорожчає."
+   "text": "CPA тижня 60.62 ₴ vs 37.1 ₴ (+63%) — залучення дорожчає."
   }
  ],
  "strategy": {
@@ -8945,10 +8945,10 @@
     "desc": "70-80% бюджету. Головний драйвер. Увесь робочий креатив-пул (12-20). Highest Volume на старті → Highest Value, коли стабільно.",
     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
     "status": "ACTIVE",
-    "daily_budget": 10000,
-    "spend": 213920,
-    "purchases": 3874,
-    "roas": 7.15,
+    "daily_budget": 12500,
+    "spend": 218115,
+    "purchases": 3928,
+    "roas": 7.12,
     "ctr": 1.56
    },
    {
@@ -8958,10 +8958,10 @@
     "desc": "15-20%. Дожим теплих: дедлайн, соц-доказ, апсел токенів. Строгий таргет (A+A off).",
     "name": "DC | 02 Retargeting · дожим теплих",
     "status": "ACTIVE",
-    "daily_budget": 1000,
-    "spend": 15168,
-    "purchases": 237,
-    "roas": 4.77,
+    "daily_budget": 1300,
+    "spend": 15526,
+    "purchases": 242,
+    "roas": 4.8,
     "ctr": 2.16
    },
    {
@@ -8971,10 +8971,10 @@
     "desc": "5-10%. «Свіжа кров» — лише нові люди (виключені відвідувачі сайту + покупці), щоб алгоритм не крутився в нашій бульбашці.",
     "name": "DC | 03 Prospecting · свіжа кров (excl. наші)",
     "status": "ACTIVE",
-    "daily_budget": 5000,
-    "spend": 52819,
-    "purchases": 770,
-    "roas": 4.72,
+    "daily_budget": 6000,
+    "spend": 54305,
+    "purchases": 781,
+    "roas": 4.66,
     "ctr": 1.58
    },
    {
@@ -8985,10 +8985,10 @@
     "name": "DC | 04 Testing · інкубатор (ABO)",
     "status": "ACTIVE",
     "daily_budget": null,
-    "spend": 4148,
-    "purchases": 106,
-    "roas": 6.88,
-    "ctr": 2.34
+    "spend": 4253,
+    "purchases": 108,
+    "roas": 6.8,
+    "ctr": 2.36
    }
   ],
   "audiences": [
