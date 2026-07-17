@@ -1,0 +1,74 @@
+name: Google Ads → dashboard_ads_data
+
+# ETL витрат Google Ads нарівні з Meta (platform='google').
+# UTM тягнуться з final_urls оголошення → розділ «🔑 Виконавець» (#terms)
+# рахує Google так само, як Meta, по utm_term.
+#
+# Secrets (Settings → Secrets and variables → Actions):
+#   GOOGLE_ADS_DEVELOPER_TOKEN     — Google Ads API Center
+#   GOOGLE_ADS_CLIENT_ID           — OAuth client id
+#   GOOGLE_ADS_CLIENT_SECRET       — OAuth client secret
+#   GOOGLE_ADS_REFRESH_TOKEN       — OAuth refresh token
+#   GOOGLE_ADS_CUSTOMER_IDS        — id акаунтів через кому, без дефісів
+#   GOOGLE_ADS_LOGIN_CUSTOMER_ID   — MCC id (опційно)
+#   SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY — вже є в repo
+#
+# Поки секрети не виставлені — job коректно скіпається (не червонить Actions).
+
+on:
+  schedule:
+    - cron: "7,37 * * * *"   # кожні 30 хв (зі зсувом, щоб не збігатись з fb-ads-sync)
+  workflow_dispatch:
+    inputs:
+      sync_days:
+        description: 'Глибина синку в днях'
+        default: '30'
+
+concurrency:
+  group: google-ads-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check credentials
+        id: creds
+        env:
+          DEV_TOKEN: ${{ secrets.GOOGLE_ADS_DEVELOPER_TOKEN }}
+          CUSTOMERS: ${{ secrets.GOOGLE_ADS_CUSTOMER_IDS }}
+        run: |
+          if [ -z "${DEV_TOKEN:-}" ] || [ -z "${CUSTOMERS:-}" ]; then
+            echo "::notice::Google Ads secrets ще не виставлені — skip (це очікувано до видачі developer token)"
+            echo "ready=false" >> $GITHUB_OUTPUT
+          else
+            echo "ready=true" >> $GITHUB_OUTPUT
+          fi
+
+      - uses: actions/setup-python@v5
+        if: steps.creds.outputs.ready == 'true'
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: etl/requirements.txt
+
+      - name: Install deps
+        if: steps.creds.outputs.ready == 'true'
+        run: pip install -r etl/requirements.txt
+
+      - name: Sync Google Ads
+        if: steps.creds.outputs.ready == 'true'
+        env:
+          GOOGLE_ADS_DEVELOPER_TOKEN:   ${{ secrets.GOOGLE_ADS_DEVELOPER_TOKEN }}
+          GOOGLE_ADS_CLIENT_ID:         ${{ secrets.GOOGLE_ADS_CLIENT_ID }}
+          GOOGLE_ADS_CLIENT_SECRET:     ${{ secrets.GOOGLE_ADS_CLIENT_SECRET }}
+          GOOGLE_ADS_REFRESH_TOKEN:     ${{ secrets.GOOGLE_ADS_REFRESH_TOKEN }}
+          GOOGLE_ADS_CUSTOMER_IDS:      ${{ secrets.GOOGLE_ADS_CUSTOMER_IDS }}
+          GOOGLE_ADS_LOGIN_CUSTOMER_ID: ${{ secrets.GOOGLE_ADS_LOGIN_CUSTOMER_ID }}
+          SUPABASE_URL:                 ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY:    ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SYNC_DAYS:                    ${{ github.event.inputs.sync_days || '30' }}
+        run: python etl/sync_google_ads.py
