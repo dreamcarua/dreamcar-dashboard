@@ -7,7 +7,7 @@ Legacy-гігієна (research-2026-07 §2 п.10): у 332 legacy-кампані
 DRY_RUN=true (default) — тільки список. НЕ чіпає: кампанії 2026 року і все, що ACTIVE ефективно.
 env: FB_ACCESS_TOKEN, AD_ACCOUNT_ID, DRY_RUN, CUTOFF (default 2026-01-01)
 """
-import os, json, time, urllib.parse, urllib.request
+import os, sys, json, time, urllib.parse, urllib.request
 
 TOKEN = os.environ['FB_ACCESS_TOKEN']
 ACT = os.environ.get('AD_ACCOUNT_ID', '4136058269783354')
@@ -50,13 +50,14 @@ def main():
     legacy = [c for c in camps if c.get('created_time', '9999')[:10] < CUTOFF and c.get('effective_status') != 'ACTIVE']
     print(f'Кампаній всього {len(camps)}, legacy до {CUTOFF} і не-ACTIVE: {len(legacy)}')
 
-    total_as, total_ads, changed = 0, 0, 0
+    total_as, total_ads, changed, skips = 0, 0, 0, 0
     for i, c in enumerate(legacy):
         try:
             adsets = paged(f'{c["id"]}/adsets', {'fields': 'id,name,status', 'limit': 100})
             ads = paged(f'{c["id"]}/ads', {'fields': 'id,name,status', 'limit': 200})
         except Exception as e:
             print(f'  SKIP {c["id"]} {c["name"][:40]}: {e}')
+            skips += 1
             continue
         act_as = [a for a in adsets if a.get('status') == 'ACTIVE']
         act_ads = [a for a in ads if a.get('status') == 'ACTIVE']
@@ -72,9 +73,19 @@ def main():
                     time.sleep(0.2)
                 except Exception as e:
                     print(f'    FAIL {a["id"]}: {e}')
-    print(f'ПІДСУМОК: config-ACTIVE адсетів {total_as}, адів {total_ads} у {len(legacy)} legacy-кампаніях. Змінено: {changed if not DRY else "0 (dry-run)"}')
+    skip_rate = skips / len(legacy) if legacy else 0
+    print(f'ПІДСУМОК: config-ACTIVE адсетів {total_as}, адів {total_ads} у {len(legacy)} legacy-кампаніях. '
+          f'Змінено: {changed if not DRY else "0 (dry-run)"}. Не прочитано кампаній: {skips} ({skip_rate:.0%})')
     print('DONE')
+
+    # Без цього прогін, що впав на rate-limit і не зробив НІЧОГО, завершувався як success.
+    threshold = float(os.environ.get('SKIP_THRESHOLD', '0.2'))
+    if skip_rate > threshold:
+        print(f'::error::Не вдалося прочитати {skip_rate:.0%} legacy-кампаній (поріг {threshold:.0%}) — '
+              f'результат недостовірний. Найімовірніше rate-limit Meta: перезапустити через 2-4 год.')
+        return 1
+    return 0
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())
