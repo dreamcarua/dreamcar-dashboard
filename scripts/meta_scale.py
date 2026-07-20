@@ -14,6 +14,9 @@ env:
   DRY_RUN  (default "true" -> plan only)  · MAX_PCT (default "30")
   CAP_UAH  (default "60000")  · PROTECTED (default "НОВИХ", ||-separated)
   TARGETS  "<id_or_nameSubstr>::<op>||..."   op = +25  |  -20  |  PAUSE  |  ACTIVATE
+
+AD-LEVEL: якщо цифровий ID не знайдено серед кампаній, шукаємо серед ads акаунту.
+Для ads дозволені ЛИШЕ PAUSE/ACTIVATE (бюджету в ad немає). Захист PROTECTED діє так само.
 """
 import os, json, time, urllib.parse, urllib.request, urllib.error
 
@@ -90,10 +93,30 @@ by_id = {c["id"]: c for c in camps}
 print(f"loaded {len(camps)} campaigns")
 
 
+_ads_cache = None
+
+
+def load_ads():
+    """Ліниво тягне ads акаунту — лише коли цифровий ID не знайшовся серед кампаній."""
+    global _ads_cache
+    if _ads_cache is None:
+        _ads_cache = get_all(f"act_{ACT}/ads", {"fields": "name,effective_status", "limit": 500})
+        print(f"loaded {len(_ads_cache)} ads (ad-level fallback)")
+    return _ads_cache
+
+
 def resolve(tok):
     tok = tok.strip()
     if tok.isdigit():
-        return by_id.get(tok)
+        c = by_id.get(tok)
+        if c:
+            return c
+        for a in load_ads():
+            if a.get("id") == tok:
+                a = dict(a)
+                a["_level"] = "ad"
+                return a
+        return None
     hits = [c for c in camps if tok.lower() in (c.get("name", "") or "").lower()]
     if len(hits) == 1:
         return hits[0]
@@ -111,13 +134,17 @@ for part in TARGETS.split("||"):
     if not c:
         print(f"  UNRESOLVED '{tok}'"); continue
     nm = c.get("name", "?"); cid = c["id"]; st = c.get("effective_status")
+    lvl = c.get("_level", "campaign")
     prot = any(pt in nm.lower() for pt in PROTECTED)
     opu = op.upper()
     if opu in ("PAUSE", "ACTIVATE"):
         if opu == "PAUSE" and prot:
             print(f"  REFUSE pause protected '{nm}'"); continue
-        plan.append({"cid": cid, "nm": nm, "kind": "status", "to": "PAUSED" if opu == "PAUSE" else "ACTIVE", "st": st})
+        plan.append({"cid": cid, "nm": nm, "kind": "status", "lvl": lvl,
+                     "to": "PAUSED" if opu == "PAUSE" else "ACTIVE", "st": st})
         continue
+    if lvl == "ad":
+        print(f"  REFUSE budget op on AD '{nm}' — ads have no budget; use PAUSE/ACTIVATE"); continue
     try:
         pct = float(op.replace("%", "").replace("+", ""))
         if op.strip().startswith("-"):
@@ -145,7 +172,7 @@ for p in plan:
     if p["kind"] == "budget":
         print(f"  BUDGET '{p['nm'][:34]:34}' {uah(p['cur'])} -> {uah(p['new'])} UAH ({p['pct']:+.0f}%) [{p['st']}]")
     else:
-        print(f"  STATUS '{p['nm'][:34]:34}' -> {p['to']} [{p['st']}]")
+        print(f"  STATUS[{p.get('lvl','campaign')[:3]}] '{p['nm'][:34]:34}' -> {p['to']} [{p['st']}]")
 if not plan:
     print("empty plan"); print("DONE_SCALE"); raise SystemExit(0)
 if DRY:
