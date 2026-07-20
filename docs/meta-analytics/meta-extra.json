@@ -1,20 +1,5789 @@
 {
  "account": "4136058269783354",
  "account_name": "DreamCar.ua UAH",
- "generated": "2026-07-19T07:48:12.714664+00:00",
+ "generated": "2026-07-20T08:28:31.850481+00:00",
  "default_period": "last_30d",
  "thresholds": {
   "min_conv": 5,
   "soft_conv": 3,
   "min_impr": 1500
  },
- "periods": {},
- "daily": [],
- "window": null,
- "funnel": null,
- "deltas": null,
- "campaigns": null,
- "clusters": null,
- "video_vs_static": null,
- "ai": null
+ "periods": {
+  "today": {
+   "window": {
+    "since": "2026-07-20",
+    "until": "2026-07-20"
+   },
+   "funnel": {
+    "spend": 6709,
+    "impressions": 46929,
+    "reach": 23932,
+    "frequency": 1.96,
+    "clicks": 838,
+    "link_clicks": 424,
+    "purchases": 57,
+    "revenue": 38184,
+    "ctr": 1.79,
+    "link_ctr": 0.9,
+    "cpc": 8.01,
+    "cpc_link": 15.82,
+    "cpm": 142.95,
+    "cvr": 13.4,
+    "cpa": 117.7,
+    "aov": 670,
+    "roas": 5.69,
+    "real_roas": 3.98
+   },
+   "deltas": {
+    "spend": -72.2,
+    "roas": 16.6,
+    "cpa": 29.5,
+    "ctr": -5.3,
+    "cpm": -4.5,
+    "frequency": -34.2,
+    "purchases": -78.5,
+    "link_ctr": -22.4
+   },
+   "campaigns": [
+    {
+     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
+     "spend": 2662,
+     "cpm": 161.6,
+     "cpc": 10.69,
+     "ctr": 1.51,
+     "frequency": 1.81,
+     "reach": 9084,
+     "purchases": 30,
+     "roas": 10.03,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "DC | 03 Prospecting · свіжа кров (excl. наші)",
+     "spend": 1845,
+     "cpm": 120.8,
+     "cpc": 7.35,
+     "ctr": 1.64,
+     "frequency": 1.33,
+     "reach": 11501,
+     "purchases": 12,
+     "roas": 2.43,
+     "role": "prospecting",
+     "fatigue": false
+    },
+    {
+     "name": "DC | 05 Тест аудиторій (vg) · 35-54 / 45-54 / LAL",
+     "spend": 1151,
+     "cpm": 142.3,
+     "cpc": 5.54,
+     "ctr": 2.57,
+     "frequency": 1.52,
+     "reach": 5341,
+     "purchases": 8,
+     "roas": 2.31,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "DC|02b База · Дожим покупців (апсейл)",
+     "spend": 560,
+     "cpm": 164.8,
+     "cpc": 11.66,
+     "ctr": 1.41,
+     "frequency": 1.74,
+     "reach": 1949,
+     "purchases": 5,
+     "roas": 6.0,
+     "role": "retarget",
+     "fatigue": false
+    },
+    {
+     "name": "DC | 02 Retargeting · дожим теплих",
+     "spend": 334,
+     "cpm": 122.7,
+     "cpc": 5.38,
+     "ctr": 2.28,
+     "frequency": 1.35,
+     "reach": 2015,
+     "purchases": 2,
+     "roas": 2.97,
+     "role": "retarget",
+     "fatigue": false
+    },
+    {
+     "name": "DC | 04 Testing · інкубатор (ABO)",
+     "spend": 157,
+     "cpm": 161.7,
+     "cpc": 7.83,
+     "ctr": 2.06,
+     "frequency": 1.16,
+     "reach": 832,
+     "purchases": 0,
+     "roas": 0.0,
+     "role": "core",
+     "fatigue": false
+    }
+   ],
+   "clusters": [
+    {
+     "cluster": "Інше",
+     "spend": 5542,
+     "spend_pct": 82.6,
+     "roas": 6.39,
+     "purchases": 52,
+     "ctr": 1.86,
+     "cpa": 107,
+     "is_video": false
+    },
+    {
+     "cluster": "Картинка-нумерована",
+     "spend": 1167,
+     "spend_pct": 17.4,
+     "roas": 2.33,
+     "purchases": 4,
+     "ctr": 1.51,
+     "cpa": 292,
+     "is_video": false
+    }
+   ],
+   "video_vs_static": {
+    "video": null,
+    "static": {
+     "spend": 6709,
+     "pct": 100.0,
+     "roas": 5.69,
+     "purchases": 56
+    }
+   },
+   "by_platform": [
+    {
+     "spend": 5424,
+     "impressions": 34054,
+     "reach": 19480,
+     "frequency": 1.75,
+     "clicks": 459,
+     "link_clicks": 301,
+     "purchases": 45,
+     "revenue": 31870,
+     "ctr": 1.35,
+     "link_ctr": 0.88,
+     "cpc": 11.82,
+     "cpc_link": 18.02,
+     "cpm": 159.27,
+     "cvr": 15.0,
+     "cpa": 120.5,
+     "aov": 708,
+     "roas": 5.88,
+     "real_roas": 4.11,
+     "key": "instagram"
+    },
+    {
+     "spend": 1395,
+     "impressions": 11934,
+     "reach": 6539,
+     "frequency": 1.83,
+     "clicks": 352,
+     "link_clicks": 92,
+     "purchases": 10,
+     "revenue": 3913,
+     "ctr": 2.95,
+     "link_ctr": 0.77,
+     "cpc": 3.96,
+     "cpc_link": 15.17,
+     "cpm": 116.93,
+     "cvr": 10.9,
+     "cpa": 139.5,
+     "aov": 391,
+     "roas": 2.8,
+     "real_roas": 1.96,
+     "key": "facebook"
+    },
+    {
+     "spend": 38,
+     "impressions": 616,
+     "reach": 195,
+     "frequency": 3.16,
+     "clicks": 27,
+     "link_clicks": 31,
+     "purchases": 2,
+     "revenue": 2379,
+     "ctr": 4.38,
+     "link_ctr": 5.03,
+     "cpc": 1.39,
+     "cpc_link": 1.21,
+     "cpm": 61.08,
+     "cvr": 6.5,
+     "cpa": 18.8,
+     "aov": 1189,
+     "roas": 63.22,
+     "real_roas": 44.26,
+     "key": "audience_network"
+    },
+    {
+     "spend": 29,
+     "impressions": 325,
+     "reach": 299,
+     "frequency": 1.09,
+     "clicks": 0,
+     "link_clicks": 0,
+     "purchases": 0,
+     "revenue": 22,
+     "ctr": 0.0,
+     "link_ctr": 0.0,
+     "cpc": 0,
+     "cpc_link": 0,
+     "cpm": 88.79,
+     "cvr": 0,
+     "cpa": 0,
+     "aov": 0,
+     "roas": 0.77,
+     "real_roas": 0.54,
+     "key": "threads"
+    }
+   ],
+   "by_gender": [
+    {
+     "spend": 5633,
+     "impressions": 41601,
+     "reach": 20989,
+     "frequency": 1.98,
+     "clicks": 684,
+     "link_clicks": 355,
+     "purchases": 50,
+     "revenue": 34504,
+     "ctr": 1.64,
+     "link_ctr": 0.85,
+     "cpc": 8.24,
+     "cpc_link": 15.87,
+     "cpm": 135.41,
+     "cvr": 14.1,
+     "cpa": 112.7,
+     "aov": 690,
+     "roas": 6.13,
+     "real_roas": 4.29,
+     "key": "male"
+    },
+    {
+     "spend": 1058,
+     "impressions": 5240,
+     "reach": 3210,
+     "frequency": 1.63,
+     "clicks": 147,
+     "link_clicks": 71,
+     "purchases": 7,
+     "revenue": 3680,
+     "ctr": 2.81,
+     "link_ctr": 1.35,
+     "cpc": 7.2,
+     "cpc_link": 14.91,
+     "cpm": 201.98,
+     "cvr": 9.9,
+     "cpa": 151.2,
+     "aov": 526,
+     "roas": 3.48,
+     "real_roas": 2.43,
+     "key": "female"
+    },
+    {
+     "spend": 17,
+     "impressions": 88,
+     "reach": 41,
+     "frequency": 2.15,
+     "clicks": 7,
+     "link_clicks": 7,
+     "purchases": 0,
+     "revenue": 0,
+     "ctr": 7.95,
+     "link_ctr": 7.95,
+     "cpc": 2.42,
+     "cpc_link": 2.42,
+     "cpm": 192.5,
+     "cvr": 0.0,
+     "cpa": 0,
+     "aov": 0,
+     "roas": 0.0,
+     "real_roas": 0.0,
+     "key": "unknown"
+    }
+   ],
+   "ai": {
+    "summary": "Реал ROAS ~3.98 (pixel 5.69), CPA 117.7 ₴, частота 1.96. ROAS ↑16.6% до попер. періоду. Важелі — реалокація у топ-кластери, відео, ротація при частоті >4.",
+    "priorities": [
+     {
+      "id": "P1",
+      "action": "Перелити бюджет з «Картинка-нумерована» у топ (Інше)",
+      "why": "Картинка-нумерована 17.4% / ROAS 2.33 проти Інше 6.39",
+      "impact": "Високий",
+      "effort": "Низьке",
+      "expect": "+0.3–0.7 ROAS"
+     }
+    ],
+    "alerts": []
+   }
+  },
+  "yesterday": {
+   "window": {
+    "since": "2026-07-19",
+    "until": "2026-07-19"
+   },
+   "funnel": {
+    "spend": 24090,
+    "impressions": 160919,
+    "reach": 53984,
+    "frequency": 2.98,
+    "clicks": 3048,
+    "link_clicks": 1869,
+    "purchases": 265,
+    "revenue": 117545,
+    "ctr": 1.89,
+    "link_ctr": 1.16,
+    "cpc": 7.9,
+    "cpc_link": 12.89,
+    "cpm": 149.7,
+    "cvr": 14.2,
+    "cpa": 90.9,
+    "aov": 444,
+    "roas": 4.88,
+    "real_roas": 3.42
+   },
+   "deltas": {
+    "spend": 7.0,
+    "roas": -72.3,
+    "cpa": 223.5,
+    "ctr": -20.3,
+    "cpm": -10.3,
+    "frequency": 8.8,
+    "purchases": -66.9,
+    "link_ctr": -26.1
+   },
+   "campaigns": [
+    {
+     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
+     "spend": 10347,
+     "cpm": 176.1,
+     "cpc": 10.29,
+     "ctr": 1.71,
+     "frequency": 2.69,
+     "reach": 21819,
+     "purchases": 109,
+     "roas": 5.48,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "DC | 03 Prospecting · свіжа кров (excl. наші)",
+     "spend": 6274,
+     "cpm": 115.5,
+     "cpc": 6.2,
+     "ctr": 1.86,
+     "frequency": 1.92,
+     "reach": 28223,
+     "purchases": 73,
+     "roas": 5.3,
+     "role": "prospecting",
+     "fatigue": false
+    },
+    {
+     "name": "DC | 05 Тест аудиторій (vg) · 35-54 / 45-54 / LAL",
+     "spend": 4242,
+     "cpm": 151.9,
+     "cpc": 7.3,
+     "ctr": 2.08,
+     "frequency": 2.04,
+     "reach": 13685,
+     "purchases": 44,
+     "roas": 3.64,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "DC|02b База · Дожим покупців (апсейл)",
+     "spend": 1515,
+     "cpm": 192.2,
+     "cpc": 12.03,
+     "ctr": 1.6,
+     "frequency": 2.31,
+     "reach": 3415,
+     "purchases": 19,
+     "roas": 3.82,
+     "role": "retarget",
+     "fatigue": false
+    },
+    {
+     "name": "DC | 02 Retargeting · дожим теплих",
+     "spend": 1127,
+     "cpm": 135.3,
+     "cpc": 5.12,
+     "ctr": 2.64,
+     "frequency": 1.86,
+     "reach": 4469,
+     "purchases": 14,
+     "roas": 4.14,
+     "role": "retarget",
+     "fatigue": false
+    },
+    {
+     "name": "DC | 04 Testing · інкубатор (ABO)",
+     "spend": 584,
+     "cpm": 156.7,
+     "cpc": 5.67,
+     "ctr": 2.77,
+     "frequency": 1.38,
+     "reach": 2703,
+     "purchases": 6,
+     "roas": 2.88,
+     "role": "core",
+     "fatigue": false
+    }
+   ],
+   "clusters": [
+    {
+     "cluster": "Інше",
+     "spend": 19850,
+     "spend_pct": 82.4,
+     "roas": 4.96,
+     "purchases": 219,
+     "ctr": 1.99,
+     "cpa": 91,
+     "is_video": false
+    },
+    {
+     "cluster": "Картинка-нумерована",
+     "spend": 4240,
+     "spend_pct": 17.6,
+     "roas": 4.4,
+     "purchases": 42,
+     "ctr": 1.57,
+     "cpa": 101,
+     "is_video": false
+    }
+   ],
+   "video_vs_static": {
+    "video": null,
+    "static": {
+     "spend": 24090,
+     "pct": 100.0,
+     "roas": 4.86,
+     "purchases": 261
+    }
+   },
+   "by_platform": [
+    {
+     "spend": 19087,
+     "impressions": 120055,
+     "reach": 45189,
+     "frequency": 2.66,
+     "clicks": 1894,
+     "link_clicks": 1327,
+     "purchases": 214,
+     "revenue": 97313,
+     "ctr": 1.58,
+     "link_ctr": 1.11,
+     "cpc": 10.08,
+     "cpc_link": 14.38,
+     "cpm": 158.99,
+     "cvr": 16.1,
+     "cpa": 89.2,
+     "aov": 455,
+     "roas": 5.1,
+     "real_roas": 3.57,
+     "key": "instagram"
+    },
+    {
+     "spend": 4806,
+     "impressions": 38350,
+     "reach": 13836,
+     "frequency": 2.77,
+     "clicks": 1058,
+     "link_clicks": 438,
+     "purchases": 49,
+     "revenue": 19814,
+     "ctr": 2.76,
+     "link_ctr": 1.14,
+     "cpc": 4.54,
+     "cpc_link": 10.97,
+     "cpm": 125.32,
+     "cvr": 11.2,
+     "cpa": 98.1,
+     "aov": 404,
+     "roas": 4.12,
+     "real_roas": 2.89,
+     "key": "facebook"
+    },
+    {
+     "spend": 109,
+     "impressions": 1527,
+     "reach": 390,
+     "frequency": 3.92,
+     "clicks": 84,
+     "link_clicks": 95,
+     "purchases": 1,
+     "revenue": 198,
+     "ctr": 5.5,
+     "link_ctr": 6.22,
+     "cpc": 1.29,
+     "cpc_link": 1.14,
+     "cpm": 71.21,
+     "cvr": 1.1,
+     "cpa": 108.7,
+     "aov": 198,
+     "roas": 1.82,
+     "real_roas": 1.27,
+     "key": "audience_network"
+    },
+    {
+     "spend": 88,
+     "impressions": 987,
+     "reach": 822,
+     "frequency": 1.2,
+     "clicks": 12,
+     "link_clicks": 9,
+     "purchases": 1,
+     "revenue": 220,
+     "ctr": 1.22,
+     "link_ctr": 0.91,
+     "cpc": 7.35,
+     "cpc_link": 9.8,
+     "cpm": 89.37,
+     "cvr": 11.1,
+     "cpa": 88.2,
+     "aov": 220,
+     "roas": 2.49,
+     "real_roas": 1.74,
+     "key": "threads"
+    }
+   ],
+   "by_gender": [
+    {
+     "spend": 20564,
+     "impressions": 142760,
+     "reach": 45952,
+     "frequency": 3.11,
+     "clicks": 2524,
+     "link_clicks": 1582,
+     "purchases": 228,
+     "revenue": 101680,
+     "ctr": 1.77,
+     "link_ctr": 1.11,
+     "cpc": 8.15,
+     "cpc_link": 13.0,
+     "cpm": 144.05,
+     "cvr": 14.4,
+     "cpa": 90.2,
+     "aov": 446,
+     "roas": 4.94,
+     "real_roas": 3.46,
+     "key": "male"
+    },
+    {
+     "spend": 3484,
+     "impressions": 17949,
+     "reach": 7031,
+     "frequency": 2.55,
+     "clicks": 520,
+     "link_clicks": 285,
+     "purchases": 35,
+     "revenue": 15668,
+     "ctr": 2.9,
+     "link_ctr": 1.59,
+     "cpc": 6.7,
+     "cpc_link": 12.22,
+     "cpm": 194.08,
+     "cvr": 12.3,
+     "cpa": 99.5,
+     "aov": 448,
+     "roas": 4.5,
+     "real_roas": 3.15,
+     "key": "female"
+    },
+    {
+     "spend": 42,
+     "impressions": 210,
+     "reach": 80,
+     "frequency": 2.62,
+     "clicks": 4,
+     "link_clicks": 2,
+     "purchases": 1,
+     "revenue": 197,
+     "ctr": 1.9,
+     "link_ctr": 0.95,
+     "cpc": 10.62,
+     "cpc_link": 21.24,
+     "cpm": 202.29,
+     "cvr": 50.0,
+     "cpa": 42.5,
+     "aov": 197,
+     "roas": 4.65,
+     "real_roas": 3.25,
+     "key": "unknown"
+    }
+   ],
+   "ai": {
+    "summary": "Реал ROAS ~3.42 (pixel 4.88), CPA 90.9 ₴, частота 2.98. ROAS ↓72.3% до попер. періоду. Важелі — реалокація у топ-кластери, відео, ротація при частоті >4.",
+    "priorities": [
+     {
+      "id": "P1",
+      "action": "Перелити бюджет з «Картинка-нумерована» у топ (Інше)",
+      "why": "Картинка-нумерована 17.6% / ROAS 4.4 проти Інше 4.96",
+      "impact": "Високий",
+      "effort": "Низьке",
+      "expect": "+0.3–0.7 ROAS"
+     }
+    ],
+    "alerts": []
+   }
+  },
+  "last_7d": {
+   "window": {
+    "since": "2026-07-13",
+    "until": "2026-07-19"
+   },
+   "funnel": {
+    "spend": 159955,
+    "impressions": 1107255,
+    "reach": 183441,
+    "frequency": 6.04,
+    "clicks": 20228,
+    "link_clicks": 12436,
+    "purchases": 2735,
+    "revenue": 1336980,
+    "ctr": 1.83,
+    "link_ctr": 1.12,
+    "cpc": 7.91,
+    "cpc_link": 12.86,
+    "cpm": 144.46,
+    "cvr": 22.0,
+    "cpa": 58.5,
+    "aov": 489,
+    "roas": 8.36,
+    "real_roas": 5.85
+   },
+   "deltas": {
+    "spend": 121.5,
+    "roas": 16.9,
+    "cpa": 8.5,
+    "ctr": 3.4,
+    "cpm": 34.9,
+    "frequency": 123.7,
+    "purchases": 104.1,
+    "link_ctr": 27.3
+   },
+   "campaigns": [
+    {
+     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
+     "spend": 77710,
+     "cpm": 164.8,
+     "cpc": 9.28,
+     "ctr": 1.78,
+     "frequency": 6.13,
+     "reach": 76943,
+     "purchases": 1412,
+     "roas": 9.73,
+     "role": "core",
+     "fatigue": true
+    },
+    {
+     "name": "DC | 03 Prospecting · свіжа кров (excl. наші)",
+     "spend": 38514,
+     "cpm": 111.5,
+     "cpc": 6.54,
+     "ctr": 1.7,
+     "frequency": 2.72,
+     "reach": 127136,
+     "purchases": 501,
+     "roas": 5.32,
+     "role": "prospecting",
+     "fatigue": false
+    },
+    {
+     "name": "DC | 05 Тест аудиторій (vg) · 35-54 / 45-54 / LAL",
+     "spend": 25544,
+     "cpm": 148.4,
+     "cpc": 7.66,
+     "ctr": 1.94,
+     "frequency": 3.37,
+     "reach": 51117,
+     "purchases": 468,
+     "roas": 7.56,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "DC | 02 Retargeting · дожим теплих",
+     "spend": 7816,
+     "cpm": 135.6,
+     "cpc": 5.79,
+     "ctr": 2.34,
+     "frequency": 4.78,
+     "reach": 12064,
+     "purchases": 130,
+     "roas": 7.72,
+     "role": "retarget",
+     "fatigue": true
+    },
+    {
+     "name": "DC|02b База · Дожим покупців (апсейл)",
+     "spend": 6823,
+     "cpm": 193.6,
+     "cpc": 10.53,
+     "ctr": 1.84,
+     "frequency": 5.45,
+     "reach": 6462,
+     "purchases": 146,
+     "roas": 13.38,
+     "role": "retarget",
+     "fatigue": true
+    },
+    {
+     "name": "DC | 04 Testing · інкубатор (ABO)",
+     "spend": 3547,
+     "cpm": 140.5,
+     "cpc": 5.62,
+     "ctr": 2.5,
+     "frequency": 1.55,
+     "reach": 16267,
+     "purchases": 78,
+     "roas": 8.71,
+     "role": "core",
+     "fatigue": false
+    }
+   ],
+   "clusters": [
+    {
+     "cluster": "Інше",
+     "spend": 110025,
+     "spend_pct": 68.8,
+     "roas": 9.45,
+     "purchases": 2059,
+     "ctr": 2.0,
+     "cpa": 53,
+     "is_video": false
+    },
+    {
+     "cluster": "Картинка-нумерована",
+     "spend": 49930,
+     "spend_pct": 31.2,
+     "roas": 5.95,
+     "purchases": 667,
+     "ctr": 1.5,
+     "cpa": 75,
+     "is_video": false
+    }
+   ],
+   "video_vs_static": {
+    "video": null,
+    "static": {
+     "spend": 159955,
+     "pct": 100.0,
+     "roas": 8.36,
+     "purchases": 2726
+    }
+   },
+   "by_platform": [
+    {
+     "spend": 130830,
+     "impressions": 875964,
+     "reach": 162821,
+     "frequency": 5.38,
+     "clicks": 13684,
+     "link_clicks": 9298,
+     "purchases": 2181,
+     "revenue": 1049559,
+     "ctr": 1.56,
+     "link_ctr": 1.06,
+     "cpc": 9.56,
+     "cpc_link": 14.07,
+     "cpm": 149.36,
+     "cvr": 23.5,
+     "cpa": 60.0,
+     "aov": 481,
+     "roas": 8.02,
+     "real_roas": 5.62,
+     "key": "instagram"
+    },
+    {
+     "spend": 28006,
+     "impressions": 216376,
+     "reach": 35111,
+     "frequency": 6.16,
+     "clicks": 6104,
+     "link_clicks": 2673,
+     "purchases": 531,
+     "revenue": 277542,
+     "ctr": 2.82,
+     "link_ctr": 1.24,
+     "cpc": 4.59,
+     "cpc_link": 10.48,
+     "cpm": 129.43,
+     "cvr": 19.9,
+     "cpa": 52.7,
+     "aov": 523,
+     "roas": 9.91,
+     "real_roas": 6.94,
+     "key": "facebook"
+    },
+    {
+     "spend": 572,
+     "impressions": 9432,
+     "reach": 1483,
+     "frequency": 6.36,
+     "clicks": 391,
+     "link_clicks": 430,
+     "purchases": 16,
+     "revenue": 7397,
+     "ctr": 4.15,
+     "link_ctr": 4.56,
+     "cpc": 1.46,
+     "cpc_link": 1.33,
+     "cpm": 60.64,
+     "cvr": 3.7,
+     "cpa": 35.7,
+     "aov": 462,
+     "roas": 12.93,
+     "real_roas": 9.05,
+     "key": "audience_network"
+    },
+    {
+     "spend": 547,
+     "impressions": 5483,
+     "reach": 2921,
+     "frequency": 1.88,
+     "clicks": 45,
+     "link_clicks": 35,
+     "purchases": 6,
+     "revenue": 2092,
+     "ctr": 0.82,
+     "link_ctr": 0.64,
+     "cpc": 12.17,
+     "cpc_link": 15.64,
+     "cpm": 99.84,
+     "cvr": 17.1,
+     "cpa": 91.2,
+     "aov": 349,
+     "roas": 3.82,
+     "real_roas": 2.67,
+     "key": "threads"
+    }
+   ],
+   "by_gender": [
+    {
+     "spend": 136250,
+     "impressions": 983393,
+     "reach": 156119,
+     "frequency": 6.3,
+     "clicks": 16793,
+     "link_clicks": 10615,
+     "purchases": 2336,
+     "revenue": 1156963,
+     "ctr": 1.71,
+     "link_ctr": 1.08,
+     "cpc": 8.11,
+     "cpc_link": 12.84,
+     "cpm": 138.55,
+     "cvr": 22.0,
+     "cpa": 58.3,
+     "aov": 495,
+     "roas": 8.49,
+     "real_roas": 5.94,
+     "key": "male"
+    },
+    {
+     "spend": 23467,
+     "impressions": 122348,
+     "reach": 29433,
+     "frequency": 4.16,
+     "clicks": 3399,
+     "link_clicks": 1804,
+     "purchases": 386,
+     "revenue": 172935,
+     "ctr": 2.78,
+     "link_ctr": 1.47,
+     "cpc": 6.9,
+     "cpc_link": 13.01,
+     "cpm": 191.8,
+     "cvr": 21.4,
+     "cpa": 60.8,
+     "aov": 448,
+     "roas": 7.37,
+     "real_roas": 5.16,
+     "key": "female"
+    },
+    {
+     "spend": 239,
+     "impressions": 1514,
+     "reach": 367,
+     "frequency": 4.13,
+     "clicks": 36,
+     "link_clicks": 17,
+     "purchases": 13,
+     "revenue": 7082,
+     "ctr": 2.38,
+     "link_ctr": 1.12,
+     "cpc": 6.63,
+     "cpc_link": 14.04,
+     "cpm": 157.6,
+     "cvr": 76.5,
+     "cpa": 18.4,
+     "aov": 545,
+     "roas": 29.68,
+     "real_roas": 20.78,
+     "key": "unknown"
+    }
+   ],
+   "ai": {
+    "summary": "Реал ROAS ~5.85 (pixel 8.36), CPA 58.5 ₴, частота 6.04. ROAS ↑16.9% до попер. періоду. Важелі — реалокація у топ-кластери, відео, ротація при частоті >4.",
+    "priorities": [
+     {
+      "id": "P1",
+      "action": "Перелити бюджет з «Картинка-нумерована» у топ (Інше)",
+      "why": "Картинка-нумерована 31.2% / ROAS 5.95 проти Інше 9.45",
+      "impact": "Високий",
+      "effort": "Низьке",
+      "expect": "+0.3–0.7 ROAS"
+     },
+     {
+      "id": "P3",
+      "action": "Ротувати креативи де частота >4 (DC | 01 Ядро · Advanta, DC | 02 Retargeting · , DC|02b База · Дожим по)",
+      "why": "Частота↑ + CTR↓ + CPC↑ = втома",
+      "impact": "Високий",
+      "effort": "Середнє",
+      "expect": "CTR↑, CPC↓"
+     }
+    ],
+    "alerts": [
+     {
+      "sev": "mod",
+      "text": "Частота 6.04 — висока (поріг 4.0). Освіжати креативи/аудиторії."
+     },
+     {
+      "sev": "mod",
+      "text": "«DC | 01 Ядро · Advantage+ Sales (broad)»: частота 6.13, CTR 1.78% — втома."
+     },
+     {
+      "sev": "mod",
+      "text": "«DC | 02 Retargeting · дожим теплих»: частота 4.78, CTR 2.34% — втома."
+     },
+     {
+      "sev": "mod",
+      "text": "«DC|02b База · Дожим покупців (апсейл)»: частота 5.45, CTR 1.84% — втома."
+     }
+    ]
+   }
+  },
+  "last_30d": {
+   "window": {
+    "since": "2026-06-20",
+    "until": "2026-07-19"
+   },
+   "funnel": {
+    "spend": 468091,
+    "impressions": 3440258,
+    "reach": 629682,
+    "frequency": 5.46,
+    "clicks": 53195,
+    "link_clicks": 31516,
+    "purchases": 7427,
+    "revenue": 2916713,
+    "ctr": 1.55,
+    "link_ctr": 0.92,
+    "cpc": 8.8,
+    "cpc_link": 14.85,
+    "cpm": 136.06,
+    "cvr": 23.6,
+    "cpa": 63.0,
+    "aov": 393,
+    "roas": 6.23,
+    "real_roas": 4.36
+   },
+   "deltas": {
+    "spend": -36.5,
+    "roas": 36.0,
+    "cpa": -23.7,
+    "ctr": -8.3,
+    "cpm": -11.7,
+    "frequency": -11.1,
+    "purchases": -16.8,
+    "link_ctr": -17.1
+   },
+   "campaigns": [
+    {
+     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
+     "spend": 233744,
+     "cpm": 159.9,
+     "cpc": 9.8,
+     "ctr": 1.63,
+     "frequency": 8.8,
+     "reach": 166125,
+     "purchases": 4364,
+     "roas": 7.76,
+     "role": "core",
+     "fatigue": true
+    },
+    {
+     "name": "DC | 03 Prospecting · свіжа кров (excl. наші)",
+     "spend": 70849,
+     "cpm": 113.5,
+     "cpc": 6.87,
+     "ctr": 1.65,
+     "frequency": 3.04,
+     "reach": 205283,
+     "purchases": 1044,
+     "roas": 5.15,
+     "role": "prospecting",
+     "fatigue": false
+    },
+    {
+     "name": "DC | 05 Тест аудиторій (vg) · 35-54 / 45-54 / LAL",
+     "spend": 66522,
+     "cpm": 152.2,
+     "cpc": 8.64,
+     "ctr": 1.76,
+     "frequency": 4.62,
+     "reach": 94594,
+     "purchases": 1051,
+     "roas": 5.39,
+     "role": "core",
+     "fatigue": true
+    },
+    {
+     "name": "на ШИРОКУ продажі",
+     "spend": 28757,
+     "cpm": 186.0,
+     "cpc": 17.34,
+     "ctr": 1.07,
+     "frequency": 2.39,
+     "reach": 64704,
+     "purchases": 218,
+     "roas": 3.18,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "На НОВИХ продажі",
+     "spend": 26919,
+     "cpm": 136.2,
+     "cpc": 12.26,
+     "ctr": 1.11,
+     "frequency": 1.45,
+     "reach": 136472,
+     "purchases": 119,
+     "roas": 1.3,
+     "role": "acquisition",
+     "fatigue": false
+    },
+    {
+     "name": "DC | 02 Retargeting · дожим теплих",
+     "spend": 17223,
+     "cpm": 158.8,
+     "cpc": 6.76,
+     "ctr": 2.35,
+     "frequency": 6.45,
+     "reach": 16823,
+     "purchases": 304,
+     "roas": 5.91,
+     "role": "retarget",
+     "fatigue": true
+    },
+    {
+     "name": "DC | 06 Engagement · розшевелити (байти/коменти)",
+     "spend": 9399,
+     "cpm": 25.3,
+     "cpc": 3.07,
+     "ctr": 0.82,
+     "frequency": 1.43,
+     "reach": 259279,
+     "purchases": 0,
+     "roas": 0.0,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "DC|02b База · Дожим покупців (апсейл)",
+     "spend": 9013,
+     "cpm": 200.6,
+     "cpc": 10.35,
+     "ctr": 1.94,
+     "frequency": 6.65,
+     "reach": 6757,
+     "purchases": 180,
+     "roas": 11.7,
+     "role": "retarget",
+     "fatigue": true
+    },
+    {
+     "name": "DC | 04 Testing · інкубатор (ABO)",
+     "spend": 5665,
+     "cpm": 144.0,
+     "cpc": 5.79,
+     "ctr": 2.49,
+     "frequency": 1.73,
+     "reach": 22682,
+     "purchases": 147,
+     "roas": 8.07,
+     "role": "core",
+     "fatigue": false
+    }
+   ],
+   "clusters": [
+    {
+     "cluster": "Інше",
+     "spend": 156426,
+     "spend_pct": 33.4,
+     "roas": 8.23,
+     "purchases": 2812,
+     "ctr": 1.68,
+     "cpa": 56,
+     "is_video": false
+    },
+    {
+     "cluster": "Картинка-нумерована",
+     "spend": 138135,
+     "spend_pct": 29.5,
+     "roas": 5.63,
+     "purchases": 1901,
+     "ctr": 1.58,
+     "cpa": 73,
+     "is_video": false
+    },
+    {
+     "cluster": "Mustang-пост",
+     "spend": 77260,
+     "spend_pct": 16.5,
+     "roas": 3.75,
+     "purchases": 734,
+     "ctr": 1.24,
+     "cpa": 105,
+     "is_video": false
+    },
+    {
+     "cluster": "Відео",
+     "spend": 66323,
+     "spend_pct": 14.2,
+     "roas": 5.63,
+     "purchases": 1194,
+     "ctr": 1.35,
+     "cpa": 56,
+     "is_video": true
+    },
+    {
+     "cluster": "iPhone/айфон",
+     "spend": 21584,
+     "spend_pct": 4.6,
+     "roas": 6.08,
+     "purchases": 646,
+     "ctr": 1.87,
+     "cpa": 33,
+     "is_video": false
+    },
+    {
+     "cluster": "Картинка-нова",
+     "spend": 8363,
+     "spend_pct": 1.8,
+     "roas": 6.02,
+     "purchases": 101,
+     "ctr": 1.14,
+     "cpa": 83,
+     "is_video": false
+    }
+   ],
+   "video_vs_static": {
+    "video": {
+     "spend": 66323,
+     "pct": 14.2,
+     "roas": 5.63,
+     "purchases": 1194
+    },
+    "static": {
+     "spend": 401768,
+     "pct": 85.8,
+     "roas": 6.31,
+     "purchases": 6194
+    }
+   },
+   "by_platform": [
+    {
+     "spend": 378025,
+     "impressions": 2522432,
+     "reach": 405680,
+     "frequency": 6.22,
+     "clicks": 35044,
+     "link_clicks": 23205,
+     "purchases": 5994,
+     "revenue": 2292527,
+     "ctr": 1.39,
+     "link_ctr": 0.92,
+     "cpc": 10.79,
+     "cpc_link": 16.29,
+     "cpm": 149.87,
+     "cvr": 25.8,
+     "cpa": 63.1,
+     "aov": 382,
+     "roas": 6.06,
+     "real_roas": 4.25,
+     "key": "instagram"
+    },
+    {
+     "spend": 85983,
+     "impressions": 863775,
+     "reach": 250126,
+     "frequency": 3.45,
+     "clicks": 16705,
+     "link_clicks": 6775,
+     "purchases": 1370,
+     "revenue": 600124,
+     "ctr": 1.93,
+     "link_ctr": 0.78,
+     "cpc": 5.15,
+     "cpc_link": 12.69,
+     "cpm": 99.54,
+     "cvr": 20.2,
+     "cpa": 62.8,
+     "aov": 438,
+     "roas": 6.98,
+     "real_roas": 4.89,
+     "key": "facebook"
+    },
+    {
+     "spend": 2337,
+     "impressions": 25995,
+     "reach": 11507,
+     "frequency": 2.26,
+     "clicks": 232,
+     "link_clicks": 191,
+     "purchases": 26,
+     "revenue": 9249,
+     "ctr": 0.89,
+     "link_ctr": 0.73,
+     "cpc": 10.07,
+     "cpc_link": 12.24,
+     "cpm": 89.92,
+     "cvr": 13.6,
+     "cpa": 89.9,
+     "aov": 356,
+     "roas": 3.96,
+     "real_roas": 2.77,
+     "key": "threads"
+    },
+    {
+     "spend": 1747,
+     "impressions": 28056,
+     "reach": 3014,
+     "frequency": 9.31,
+     "clicks": 1196,
+     "link_clicks": 1345,
+     "purchases": 32,
+     "revenue": 13927,
+     "ctr": 4.26,
+     "link_ctr": 4.79,
+     "cpc": 1.46,
+     "cpc_link": 1.3,
+     "cpm": 62.25,
+     "cvr": 2.4,
+     "cpa": 54.6,
+     "aov": 435,
+     "roas": 7.97,
+     "real_roas": 5.58,
+     "key": "audience_network"
+    }
+   ],
+   "by_gender": [
+    {
+     "spend": 399098,
+     "impressions": 3032586,
+     "reach": 523718,
+     "frequency": 5.79,
+     "clicks": 44330,
+     "link_clicks": 27117,
+     "purchases": 6308,
+     "revenue": 2542986,
+     "ctr": 1.46,
+     "link_ctr": 0.89,
+     "cpc": 9.0,
+     "cpc_link": 14.72,
+     "cpm": 131.6,
+     "cvr": 23.3,
+     "cpa": 63.3,
+     "aov": 403,
+     "roas": 6.37,
+     "real_roas": 4.46,
+     "key": "male"
+    },
+    {
+     "spend": 68283,
+     "impressions": 402887,
+     "reach": 117725,
+     "frequency": 3.42,
+     "clicks": 8774,
+     "link_clicks": 4358,
+     "purchases": 1085,
+     "revenue": 360612,
+     "ctr": 2.18,
+     "link_ctr": 1.08,
+     "cpc": 7.78,
+     "cpc_link": 15.67,
+     "cpm": 169.48,
+     "cvr": 24.9,
+     "cpa": 62.9,
+     "aov": 332,
+     "roas": 5.28,
+     "real_roas": 3.7,
+     "key": "female"
+    },
+    {
+     "spend": 710,
+     "impressions": 4785,
+     "reach": 1033,
+     "frequency": 4.63,
+     "clicks": 91,
+     "link_clicks": 41,
+     "purchases": 34,
+     "revenue": 13116,
+     "ctr": 1.9,
+     "link_ctr": 0.86,
+     "cpc": 7.8,
+     "cpc_link": 17.31,
+     "cpm": 148.35,
+     "cvr": 82.9,
+     "cpa": 20.9,
+     "aov": 386,
+     "roas": 18.48,
+     "real_roas": 12.93,
+     "key": "unknown"
+    }
+   ],
+   "ai": {
+    "summary": "Реал ROAS ~4.36 (pixel 6.23), CPA 63.0 ₴, частота 5.46. ROAS ↑36.0% до попер. періоду. Важелі — реалокація у топ-кластери, відео, ротація при частоті >4.",
+    "priorities": [
+     {
+      "id": "P1",
+      "action": "Перелити бюджет з «Картинка-нумерована» у топ (Інше)",
+      "why": "Картинка-нумерована 29.5% / ROAS 5.63 проти Інше 8.23",
+      "impact": "Високий",
+      "effort": "Низьке",
+      "expect": "+0.3–0.7 ROAS"
+     },
+     {
+      "id": "P3",
+      "action": "Ротувати креативи де частота >4 (DC | 01 Ядро · Advanta, DC | 05 Тест аудиторій, DC | 02 Retargeting · )",
+      "why": "Частота↑ + CTR↓ + CPC↑ = втома",
+      "impact": "Високий",
+      "effort": "Середнє",
+      "expect": "CTR↑, CPC↓"
+     }
+    ],
+    "alerts": [
+     {
+      "sev": "mod",
+      "text": "Частота 5.46 — висока (поріг 4.0). Освіжати креативи/аудиторії."
+     },
+     {
+      "sev": "mod",
+      "text": "«DC | 01 Ядро · Advantage+ Sales (broad)»: частота 8.8, CTR 1.63% — втома."
+     },
+     {
+      "sev": "mod",
+      "text": "«DC | 05 Тест аудиторій (vg) · 35-54 / 45-54 / LAL»: частота 4.62, CTR 1.76% — втома."
+     },
+     {
+      "sev": "mod",
+      "text": "«DC | 02 Retargeting · дожим теплих»: частота 6.45, CTR 2.35% — втома."
+     },
+     {
+      "sev": "cri",
+      "text": "«DC | 06 Engagement · розшевелити (байти/коменти)»: ROAS 0.0 при 9399 ₴ — зламана, ревізія."
+     },
+     {
+      "sev": "mod",
+      "text": "«DC|02b База · Дожим покупців (апсейл)»: частота 6.65, CTR 1.94% — втома."
+     }
+    ]
+   }
+  },
+  "this_month": {
+   "window": {
+    "since": "2026-07-01",
+    "until": "2026-07-20"
+   },
+   "funnel": {
+    "spend": 285414,
+    "impressions": 2216486,
+    "reach": 462083,
+    "frequency": 4.8,
+    "clicks": 38482,
+    "link_clicks": 21985,
+    "purchases": 5379,
+    "revenue": 2112280,
+    "ctr": 1.74,
+    "link_ctr": 0.99,
+    "cpc": 7.42,
+    "cpc_link": 12.98,
+    "cpm": 128.77,
+    "cvr": 24.5,
+    "cpa": 53.1,
+    "aov": 393,
+    "roas": 7.4,
+    "real_roas": 5.18
+   },
+   "deltas": {
+    "spend": -39.6,
+    "roas": 53.2,
+    "cpa": -15.8,
+    "ctr": 6.7,
+    "cpm": -8.8,
+    "frequency": -28.1,
+    "purchases": -28.2,
+    "link_ctr": -3.9
+   },
+   "campaigns": [
+    {
+     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
+     "spend": 137180,
+     "cpm": 167.1,
+     "cpc": 8.63,
+     "ctr": 1.94,
+     "frequency": 8.32,
+     "reach": 98642,
+     "purchases": 2984,
+     "roas": 9.01,
+     "role": "core",
+     "fatigue": true
+    },
+    {
+     "name": "DC | 03 Prospecting · свіжа кров (excl. наші)",
+     "spend": 62299,
+     "cpm": 114.7,
+     "cpc": 6.6,
+     "ctr": 1.74,
+     "frequency": 3.47,
+     "reach": 156567,
+     "purchases": 939,
+     "roas": 5.33,
+     "role": "prospecting",
+     "fatigue": false
+    },
+    {
+     "name": "DC | 05 Тест аудиторій (vg) · 35-54 / 45-54 / LAL",
+     "spend": 43571,
+     "cpm": 155.3,
+     "cpc": 7.84,
+     "ctr": 1.98,
+     "frequency": 4.28,
+     "reach": 65463,
+     "purchases": 818,
+     "roas": 6.58,
+     "role": "core",
+     "fatigue": true
+    },
+    {
+     "name": "DC | 02 Retargeting · дожим теплих",
+     "spend": 17557,
+     "cpm": 157.9,
+     "cpc": 6.73,
+     "ctr": 2.35,
+     "frequency": 6.56,
+     "reach": 16961,
+     "purchases": 306,
+     "roas": 5.85,
+     "role": "retarget",
+     "fatigue": true
+    },
+    {
+     "name": "DC|02b База · Дожим покупців (апсейл)",
+     "spend": 9573,
+     "cpm": 198.1,
+     "cpc": 10.42,
+     "ctr": 1.9,
+     "frequency": 6.95,
+     "reach": 6955,
+     "purchases": 185,
+     "roas": 11.37,
+     "role": "retarget",
+     "fatigue": true
+    },
+    {
+     "name": "DC | 06 Engagement · розшевелити (байти/коменти)",
+     "spend": 9399,
+     "cpm": 25.3,
+     "cpc": 3.07,
+     "ctr": 0.82,
+     "frequency": 1.43,
+     "reach": 259279,
+     "purchases": 0,
+     "roas": 0.0,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "DC | 04 Testing · інкубатор (ABO)",
+     "spend": 5822,
+     "cpm": 144.4,
+     "cpc": 5.83,
+     "ctr": 2.48,
+     "frequency": 1.76,
+     "reach": 22890,
+     "purchases": 147,
+     "roas": 7.85,
+     "role": "core",
+     "fatigue": false
+    }
+   ],
+   "clusters": [
+    {
+     "cluster": "Інше",
+     "spend": 162001,
+     "spend_pct": 56.8,
+     "roas": 8.16,
+     "purchases": 2864,
+     "ctr": 1.69,
+     "cpa": 57,
+     "is_video": false
+    },
+    {
+     "cluster": "Картинка-нумерована",
+     "spend": 89310,
+     "spend_pct": 31.3,
+     "roas": 6.71,
+     "purchases": 1433,
+     "ctr": 1.77,
+     "cpa": 62,
+     "is_video": false
+    },
+    {
+     "cluster": "Відео",
+     "spend": 18065,
+     "spend_pct": 6.3,
+     "roas": 5.36,
+     "purchases": 522,
+     "ctr": 1.98,
+     "cpa": 35,
+     "is_video": true
+    },
+    {
+     "cluster": "iPhone/айфон",
+     "spend": 16007,
+     "spend_pct": 5.6,
+     "roas": 5.81,
+     "purchases": 544,
+     "ctr": 1.94,
+     "cpa": 29,
+     "is_video": false
+    }
+   ],
+   "video_vs_static": {
+    "video": {
+     "spend": 18065,
+     "pct": 6.3,
+     "roas": 5.36,
+     "purchases": 522
+    },
+    "static": {
+     "spend": 267318,
+     "pct": 93.7,
+     "roas": 7.54,
+     "purchases": 4841
+    }
+   },
+   "by_platform": [
+    {
+     "spend": 230390,
+     "impressions": 1572202,
+     "reach": 264991,
+     "frequency": 5.93,
+     "clicks": 25219,
+     "link_clicks": 16491,
+     "purchases": 4340,
+     "revenue": 1673861,
+     "ctr": 1.6,
+     "link_ctr": 1.05,
+     "cpc": 9.14,
+     "cpc_link": 13.97,
+     "cpm": 146.54,
+     "cvr": 26.3,
+     "cpa": 53.1,
+     "aov": 386,
+     "roas": 7.27,
+     "real_roas": 5.09,
+     "key": "instagram"
+    },
+    {
+     "spend": 53047,
+     "impressions": 620964,
+     "reach": 212647,
+     "frequency": 2.92,
+     "clicks": 12579,
+     "link_clicks": 4790,
+     "purchases": 997,
+     "revenue": 421750,
+     "ctr": 2.03,
+     "link_ctr": 0.77,
+     "cpc": 4.22,
+     "cpc_link": 11.07,
+     "cpm": 85.43,
+     "cvr": 20.8,
+     "cpa": 53.2,
+     "aov": 423,
+     "roas": 7.95,
+     "real_roas": 5.57,
+     "key": "facebook"
+    },
+    {
+     "spend": 1178,
+     "impressions": 10367,
+     "reach": 4872,
+     "frequency": 2.13,
+     "clicks": 130,
+     "link_clicks": 107,
+     "purchases": 18,
+     "revenue": 4776,
+     "ctr": 1.25,
+     "link_ctr": 1.03,
+     "cpc": 9.07,
+     "cpc_link": 11.01,
+     "cpm": 113.67,
+     "cvr": 16.8,
+     "cpa": 65.5,
+     "aov": 265,
+     "roas": 4.05,
+     "real_roas": 2.84,
+     "key": "threads"
+    },
+    {
+     "spend": 799,
+     "impressions": 12953,
+     "reach": 1725,
+     "frequency": 7.51,
+     "clicks": 550,
+     "link_clicks": 606,
+     "purchases": 21,
+     "revenue": 11283,
+     "ctr": 4.25,
+     "link_ctr": 4.68,
+     "cpc": 1.45,
+     "cpc_link": 1.32,
+     "cpm": 61.67,
+     "cvr": 3.5,
+     "cpa": 38.0,
+     "aov": 537,
+     "roas": 14.12,
+     "real_roas": 9.89,
+     "key": "audience_network"
+    }
+   ],
+   "by_gender": [
+    {
+     "spend": 240415,
+     "impressions": 1926505,
+     "reach": 376720,
+     "frequency": 5.11,
+     "clicks": 31410,
+     "link_clicks": 18573,
+     "purchases": 4519,
+     "revenue": 1828369,
+     "ctr": 1.63,
+     "link_ctr": 0.96,
+     "cpc": 7.65,
+     "cpc_link": 12.94,
+     "cpm": 124.79,
+     "cvr": 24.3,
+     "cpa": 53.2,
+     "aov": 405,
+     "roas": 7.61,
+     "real_roas": 5.32,
+     "key": "male"
+    },
+    {
+     "spend": 44598,
+     "impressions": 287253,
+     "reach": 93509,
+     "frequency": 3.07,
+     "clicks": 7007,
+     "link_clicks": 3388,
+     "purchases": 833,
+     "revenue": 273361,
+     "ctr": 2.44,
+     "link_ctr": 1.18,
+     "cpc": 6.36,
+     "cpc_link": 13.16,
+     "cpm": 155.26,
+     "cvr": 24.6,
+     "cpa": 53.5,
+     "aov": 328,
+     "roas": 6.13,
+     "real_roas": 4.29,
+     "key": "female"
+    },
+    {
+     "spend": 401,
+     "impressions": 2728,
+     "reach": 609,
+     "frequency": 4.48,
+     "clicks": 65,
+     "link_clicks": 33,
+     "purchases": 26,
+     "revenue": 10550,
+     "ctr": 2.38,
+     "link_ctr": 1.21,
+     "cpc": 6.17,
+     "cpc_link": 12.16,
+     "cpm": 147.05,
+     "cvr": 78.8,
+     "cpa": 15.4,
+     "aov": 406,
+     "roas": 26.3,
+     "real_roas": 18.41,
+     "key": "unknown"
+    }
+   ],
+   "ai": {
+    "summary": "Реал ROAS ~5.18 (pixel 7.4), CPA 53.1 ₴, частота 4.8. ROAS ↑53.2% до попер. періоду. Важелі — реалокація у топ-кластери, відео, ротація при частоті >4.",
+    "priorities": [
+     {
+      "id": "P1",
+      "action": "Перелити бюджет з «Картинка-нумерована» у топ (Інше)",
+      "why": "Картинка-нумерована 31.3% / ROAS 6.71 проти Інше 8.16",
+      "impact": "Високий",
+      "effort": "Низьке",
+      "expect": "+0.3–0.7 ROAS"
+     },
+     {
+      "id": "P3",
+      "action": "Ротувати креативи де частота >4 (DC | 01 Ядро · Advanta, DC | 05 Тест аудиторій, DC | 02 Retargeting · )",
+      "why": "Частота↑ + CTR↓ + CPC↑ = втома",
+      "impact": "Високий",
+      "effort": "Середнє",
+      "expect": "CTR↑, CPC↓"
+     }
+    ],
+    "alerts": [
+     {
+      "sev": "mod",
+      "text": "Частота 4.8 — висока (поріг 4.0). Освіжати креативи/аудиторії."
+     },
+     {
+      "sev": "mod",
+      "text": "«DC | 01 Ядро · Advantage+ Sales (broad)»: частота 8.32, CTR 1.94% — втома."
+     },
+     {
+      "sev": "mod",
+      "text": "«DC | 05 Тест аудиторій (vg) · 35-54 / 45-54 / LAL»: частота 4.28, CTR 1.98% — втома."
+     },
+     {
+      "sev": "mod",
+      "text": "«DC | 02 Retargeting · дожим теплих»: частота 6.56, CTR 2.35% — втома."
+     },
+     {
+      "sev": "mod",
+      "text": "«DC|02b База · Дожим покупців (апсейл)»: частота 6.95, CTR 1.9% — втома."
+     },
+     {
+      "sev": "cri",
+      "text": "«DC | 06 Engagement · розшевелити (байти/коменти)»: ROAS 0.0 при 9399 ₴ — зламана, ревізія."
+     }
+    ]
+   }
+  },
+  "this_year": {
+   "window": {
+    "since": "2026-01-01",
+    "until": "2026-07-20"
+   },
+   "funnel": {
+    "spend": 2924074,
+    "impressions": 21993888,
+    "reach": 2518971,
+    "frequency": 8.73,
+    "clicks": 320594,
+    "link_clicks": 193000,
+    "purchases": 36836,
+    "revenue": 15773960,
+    "ctr": 1.46,
+    "link_ctr": 0.88,
+    "cpc": 9.12,
+    "cpc_link": 15.15,
+    "cpm": 132.95,
+    "cvr": 19.1,
+    "cpa": 79.4,
+    "aov": 428,
+    "roas": 5.39,
+    "real_roas": 3.78
+   },
+   "deltas": {
+    "spend": -19.1,
+    "roas": 13.5,
+    "cpa": 34.3,
+    "ctr": -22.8,
+    "cpm": 7.0,
+    "frequency": -29.2,
+    "purchases": -39.7,
+    "link_ctr": -5.4
+   },
+   "campaigns": [
+    {
+     "name": "На НОВИХ продажі",
+     "spend": 689231,
+     "cpm": 125.5,
+     "cpc": 9.44,
+     "ctr": 1.33,
+     "frequency": 6.2,
+     "reach": 885197,
+     "purchases": 5382,
+     "roas": 3.69,
+     "role": "acquisition",
+     "fatigue": true
+    },
+    {
+     "name": "на ШИРОКУ продажі",
+     "spend": 536841,
+     "cpm": 170.1,
+     "cpc": 9.9,
+     "ctr": 1.72,
+     "frequency": 9.11,
+     "reach": 346334,
+     "purchases": 7105,
+     "roas": 5.14,
+     "role": "core",
+     "fatigue": true
+    },
+    {
+     "name": "Акції",
+     "spend": 341317,
+     "cpm": 184.3,
+     "cpc": 12.27,
+     "ctr": 1.5,
+     "frequency": 4.95,
+     "reach": 373969,
+     "purchases": 3375,
+     "roas": 5.47,
+     "role": "core",
+     "fatigue": true
+    },
+    {
+     "name": "ПОСТИ GLE",
+     "spend": 267827,
+     "cpm": 149.9,
+     "cpc": 8.85,
+     "ctr": 1.69,
+     "frequency": 6.49,
+     "reach": 275372,
+     "purchases": 3462,
+     "roas": 5.51,
+     "role": "core",
+     "fatigue": true
+    },
+    {
+     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
+     "spend": 251608,
+     "cpm": 158.5,
+     "cpc": 9.86,
+     "ctr": 1.61,
+     "frequency": 9.11,
+     "reach": 174204,
+     "purchases": 4596,
+     "roas": 7.59,
+     "role": "core",
+     "fatigue": true
+    },
+    {
+     "name": "Акції",
+     "spend": 94804,
+     "cpm": 168.9,
+     "cpc": 8.24,
+     "ctr": 2.05,
+     "frequency": 9.03,
+     "reach": 62161,
+     "purchases": 1998,
+     "roas": 9.16,
+     "role": "core",
+     "fatigue": true
+    },
+    {
+     "name": "На тих, хто не купляв!",
+     "spend": 92538,
+     "cpm": 126.6,
+     "cpc": 8.9,
+     "ctr": 1.42,
+     "frequency": 1.77,
+     "reach": 412340,
+     "purchases": 685,
+     "roas": 3.21,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "DC | 03 Prospecting · свіжа кров (excl. наші)",
+     "spend": 72707,
+     "cpm": 113.7,
+     "cpc": 6.88,
+     "ctr": 1.65,
+     "frequency": 3.1,
+     "reach": 206512,
+     "purchases": 1056,
+     "roas": 5.08,
+     "role": "prospecting",
+     "fatigue": false
+    },
+    {
+     "name": "На мото аудиторію!",
+     "spend": 69641,
+     "cpm": 110.6,
+     "cpc": 5.59,
+     "ctr": 1.98,
+     "frequency": 3.24,
+     "reach": 194493,
+     "purchases": 1416,
+     "roas": 5.56,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "DC | 05 Тест аудиторій (vg) · 35-54 / 45-54 / LAL",
+     "spend": 67687,
+     "cpm": 152.0,
+     "cpc": 8.55,
+     "ctr": 1.78,
+     "frequency": 4.66,
+     "reach": 95549,
+     "purchases": 1059,
+     "roas": 5.34,
+     "role": "core",
+     "fatigue": true
+    },
+    {
+     "name": "Перший пост BMW 330e",
+     "spend": 65654,
+     "cpm": 144.7,
+     "cpc": 10.87,
+     "ctr": 1.33,
+     "frequency": 2.28,
+     "reach": 198881,
+     "purchases": 448,
+     "roas": 2.44,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "Картинки пост Інст",
+     "spend": 32892,
+     "cpm": 172.5,
+     "cpc": 9.01,
+     "ctr": 1.91,
+     "frequency": 3.51,
+     "reach": 54315,
+     "purchases": 225,
+     "roas": 3.5,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "x2",
+     "spend": 30626,
+     "cpm": 192.4,
+     "cpc": 12.8,
+     "ctr": 1.5,
+     "frequency": 2.57,
+     "reach": 62017,
+     "purchases": 518,
+     "roas": 9.68,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "Фінальні продажі",
+     "spend": 29648,
+     "cpm": 210.4,
+     "cpc": 13.6,
+     "ctr": 1.55,
+     "frequency": 2.43,
+     "reach": 58120,
+     "purchases": 339,
+     "roas": 6.22,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "На широкую",
+     "spend": 26910,
+     "cpm": 123.2,
+     "cpc": 3.55,
+     "ctr": 3.47,
+     "frequency": 6.42,
+     "reach": 34002,
+     "purchases": 1950,
+     "roas": 31.94,
+     "role": "core",
+     "fatigue": true
+    },
+    {
+     "name": "Відео з цінником",
+     "spend": 24089,
+     "cpm": 121.2,
+     "cpc": 7.81,
+     "ctr": 1.55,
+     "frequency": 1.81,
+     "reach": 110052,
+     "purchases": 231,
+     "roas": 3.29,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "Другий пост рілз",
+     "spend": 21818,
+     "cpm": 163.1,
+     "cpc": 17.29,
+     "ctr": 0.94,
+     "frequency": 2.9,
+     "reach": 46190,
+     "purchases": 445,
+     "roas": 8.14,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "день х2",
+     "spend": 20000,
+     "cpm": 201.4,
+     "cpc": 11.92,
+     "ctr": 1.69,
+     "frequency": 2.25,
+     "reach": 44081,
+     "purchases": 691,
+     "roas": 16.19,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "DC | 02 Retargeting · дожим теплих",
+     "spend": 19177,
+     "cpm": 163.1,
+     "cpc": 7.16,
+     "ctr": 2.28,
+     "frequency": 6.38,
+     "reach": 18421,
+     "purchases": 308,
+     "roas": 5.38,
+     "role": "retarget",
+     "fatigue": true
+    },
+    {
+     "name": "Картинки \"Розкішний синьо-жовтий\"",
+     "spend": 17282,
+     "cpm": 142.7,
+     "cpc": 9.21,
+     "ctr": 1.55,
+     "frequency": 2.12,
+     "reach": 57036,
+     "purchases": 46,
+     "roas": 1.12,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "BMW X5 HYBRID",
+     "spend": 17202,
+     "cpm": 130.6,
+     "cpc": 4.17,
+     "ctr": 3.13,
+     "frequency": 3.39,
+     "reach": 38841,
+     "purchases": 562,
+     "roas": 13.57,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "Картинки перші про гібрід жовто сині",
+     "spend": 16780,
+     "cpm": 140.4,
+     "cpc": 9.03,
+     "ctr": 1.55,
+     "frequency": 2.36,
+     "reach": 50686,
+     "purchases": 62,
+     "roas": 1.27,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "Картинки перші червоні \"виграй\"",
+     "spend": 16725,
+     "cpm": 93.6,
+     "cpc": 7.31,
+     "ctr": 1.28,
+     "frequency": 2.18,
+     "reach": 81891,
+     "purchases": 55,
+     "roas": 1.06,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "На тих, хто не заходив!",
+     "spend": 14106,
+     "cpm": 11.2,
+     "cpc": 4.95,
+     "ctr": 0.23,
+     "frequency": 1.86,
+     "reach": 676686,
+     "purchases": 11,
+     "roas": 0.39,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "останній по Х5",
+     "spend": 13036,
+     "cpm": 191.9,
+     "cpc": 11.56,
+     "ctr": 1.66,
+     "frequency": 1.5,
+     "reach": 45413,
+     "purchases": 160,
+     "roas": 5.15,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "айфон за два дні",
+     "spend": 10000,
+     "cpm": 181.2,
+     "cpc": 12.92,
+     "ctr": 1.4,
+     "frequency": 1.55,
+     "reach": 35645,
+     "purchases": 150,
+     "roas": 5.25,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "фінал",
+     "spend": 9594,
+     "cpm": 190.9,
+     "cpc": 34.14,
+     "ctr": 0.56,
+     "frequency": 1.1,
+     "reach": 45709,
+     "purchases": 5,
+     "roas": 0.19,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "DC|02b База · Дожим покупців (апсейл)",
+     "spend": 9573,
+     "cpm": 198.1,
+     "cpc": 10.42,
+     "ctr": 1.9,
+     "frequency": 6.95,
+     "reach": 6955,
+     "purchases": 185,
+     "roas": 11.37,
+     "role": "retarget",
+     "fatigue": true
+    },
+    {
+     "name": "DC | 06 Engagement · розшевелити (байти/коменти)",
+     "spend": 9399,
+     "cpm": 25.3,
+     "cpc": 3.07,
+     "ctr": 0.82,
+     "frequency": 1.43,
+     "reach": 259279,
+     "purchases": 0,
+     "roas": 0.0,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "На наших хто не купляв просто перегляди",
+     "spend": 9088,
+     "cpm": 15.4,
+     "cpc": 5.65,
+     "ctr": 0.27,
+     "frequency": 6.62,
+     "reach": 88836,
+     "purchases": 0,
+     "roas": 0.0,
+     "role": "core",
+     "fatigue": true
+    },
+    {
+     "name": "Нова ціль «Трафік» «Кампанія» з рекомендованими налаштуваннями",
+     "spend": 6526,
+     "cpm": 72.1,
+     "cpc": 2.08,
+     "ctr": 3.46,
+     "frequency": 1.02,
+     "reach": 88561,
+     "purchases": 0,
+     "roas": 0.0,
+     "role": "acquisition",
+     "fatigue": false
+    },
+    {
+     "name": "DC | 04 Testing · інкубатор (ABO)",
+     "spend": 5823,
+     "cpm": 144.4,
+     "cpc": 5.83,
+     "ctr": 2.47,
+     "frequency": 1.76,
+     "reach": 22890,
+     "purchases": 147,
+     "roas": 7.85,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "Нова кампанія з ціллю «Продажі»",
+     "spend": 5000,
+     "cpm": 212.6,
+     "cpc": 19.69,
+     "ctr": 1.08,
+     "frequency": 1.6,
+     "reach": 14673,
+     "purchases": 114,
+     "roas": 9.78,
+     "role": "acquisition",
+     "fatigue": false
+    },
+    {
+     "name": "мем на мото",
+     "spend": 3464,
+     "cpm": 157.8,
+     "cpc": 7.82,
+     "ctr": 2.02,
+     "frequency": 1.14,
+     "reach": 19302,
+     "purchases": 27,
+     "roas": 2.0,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "мем на широку",
+     "spend": 2979,
+     "cpm": 143.0,
+     "cpc": 8.03,
+     "ctr": 1.78,
+     "frequency": 1.18,
+     "reach": 17700,
+     "purchases": 22,
+     "roas": 1.34,
+     "role": "core",
+     "fatigue": false
+    },
+    {
+     "name": "Коменти на тачку за 10 номерків",
+     "spend": 2471,
+     "cpm": 11.7,
+     "cpc": 6.66,
+     "ctr": 0.18,
+     "frequency": 1.56,
+     "reach": 134525,
+     "purchases": 0,
+     "roas": 0.0,
+     "role": "core",
+     "fatigue": false
+    }
+   ],
+   "clusters": [
+    {
+     "cluster": "Інше",
+     "spend": 2044118,
+     "spend_pct": 69.9,
+     "roas": 5.57,
+     "purchases": 24397,
+     "ctr": 1.4,
+     "cpa": 84,
+     "is_video": false
+    },
+    {
+     "cluster": "Картинка-нумерована",
+     "spend": 239249,
+     "spend_pct": 8.2,
+     "roas": 5.45,
+     "purchases": 3008,
+     "ctr": 1.5,
+     "cpa": 80,
+     "is_video": false
+    },
+    {
+     "cluster": "Пост x2/тариф",
+     "spend": 174765,
+     "spend_pct": 6.0,
+     "roas": 4.08,
+     "purchases": 1223,
+     "ctr": 1.53,
+     "cpa": 143,
+     "is_video": false
+    },
+    {
+     "cluster": "KTM/мото",
+     "spend": 154733,
+     "spend_pct": 5.3,
+     "roas": 5.71,
+     "purchases": 3280,
+     "ctr": 2.06,
+     "cpa": 47,
+     "is_video": false
+    },
+    {
+     "cluster": "Mustang-пост",
+     "spend": 147310,
+     "spend_pct": 5.0,
+     "roas": 3.68,
+     "purchases": 1436,
+     "ctr": 1.36,
+     "cpa": 103,
+     "is_video": false
+    },
+    {
+     "cluster": "iPhone/айфон",
+     "spend": 82799,
+     "spend_pct": 2.8,
+     "roas": 5.41,
+     "purchases": 1979,
+     "ctr": 1.76,
+     "cpa": 42,
+     "is_video": false
+    },
+    {
+     "cluster": "Відео",
+     "spend": 72736,
+     "spend_pct": 2.5,
+     "roas": 6.16,
+     "purchases": 1389,
+     "ctr": 1.4,
+     "cpa": 52,
+     "is_video": true
+    },
+    {
+     "cluster": "Картинка-нова",
+     "spend": 8363,
+     "spend_pct": 0.3,
+     "roas": 6.02,
+     "purchases": 101,
+     "ctr": 1.14,
+     "cpa": 83,
+     "is_video": false
+    }
+   ],
+   "video_vs_static": {
+    "video": {
+     "spend": 72736,
+     "pct": 2.5,
+     "roas": 6.16,
+     "purchases": 1389
+    },
+    "static": {
+     "spend": 2851337,
+     "pct": 97.5,
+     "roas": 5.38,
+     "purchases": 35424
+    }
+   },
+   "by_platform": [
+    {
+     "spend": 2388497,
+     "impressions": 15669118,
+     "reach": 1306291,
+     "frequency": 12.0,
+     "clicks": 199094,
+     "link_clicks": 128485,
+     "purchases": 29846,
+     "revenue": 12551467,
+     "ctr": 1.27,
+     "link_ctr": 0.82,
+     "cpc": 12.0,
+     "cpc_link": 18.59,
+     "cpm": 152.43,
+     "cvr": 23.2,
+     "cpa": 80.0,
+     "aov": 421,
+     "roas": 5.25,
+     "real_roas": 3.68,
+     "key": "instagram"
+    },
+    {
+     "spend": 508810,
+     "impressions": 6013162,
+     "reach": 1249929,
+     "frequency": 4.81,
+     "clicks": 102289,
+     "link_clicks": 43229,
+     "purchases": 6553,
+     "revenue": 3000119,
+     "ctr": 1.7,
+     "link_ctr": 0.72,
+     "cpc": 4.97,
+     "cpc_link": 11.77,
+     "cpm": 84.62,
+     "cvr": 15.2,
+     "cpa": 77.6,
+     "aov": 458,
+     "roas": 5.9,
+     "real_roas": 4.13,
+     "key": "facebook"
+    },
+    {
+     "spend": 14798,
+     "impressions": 147407,
+     "reach": 20421,
+     "frequency": 7.22,
+     "clicks": 17980,
+     "link_clicks": 20351,
+     "purchases": 289,
+     "revenue": 167877,
+     "ctr": 12.2,
+     "link_ctr": 13.81,
+     "cpc": 0.82,
+     "cpc_link": 0.73,
+     "cpm": 100.39,
+     "cvr": 1.4,
+     "cpa": 51.2,
+     "aov": 581,
+     "roas": 11.34,
+     "real_roas": 7.94,
+     "key": "audience_network"
+    },
+    {
+     "spend": 11968,
+     "impressions": 164177,
+     "reach": 57232,
+     "frequency": 2.87,
+     "clicks": 1183,
+     "link_clicks": 943,
+     "purchases": 120,
+     "revenue": 44198,
+     "ctr": 0.72,
+     "link_ctr": 0.57,
+     "cpc": 10.12,
+     "cpc_link": 12.69,
+     "cpm": 72.9,
+     "cvr": 12.7,
+     "cpa": 99.7,
+     "aov": 368,
+     "roas": 3.69,
+     "real_roas": 2.59,
+     "key": "threads"
+    },
+    {
+     "spend": 1,
+     "impressions": 24,
+     "reach": 24,
+     "frequency": 1.0,
+     "clicks": 1,
+     "link_clicks": 1,
+     "purchases": 1,
+     "revenue": 247,
+     "ctr": 4.17,
+     "link_ctr": 4.17,
+     "cpc": 0.65,
+     "cpc_link": 0.65,
+     "cpm": 27.08,
+     "cvr": 100.0,
+     "cpa": 0.6,
+     "aov": 247,
+     "roas": 380.11,
+     "real_roas": 266.08,
+     "key": "messenger"
+    }
+   ],
+   "by_gender": [
+    {
+     "spend": 2408847,
+     "impressions": 19035623,
+     "reach": 1748051,
+     "frequency": 10.89,
+     "clicks": 265772,
+     "link_clicks": 163002,
+     "purchases": 31817,
+     "revenue": 13850597,
+     "ctr": 1.4,
+     "link_ctr": 0.86,
+     "cpc": 9.06,
+     "cpc_link": 14.78,
+     "cpm": 126.54,
+     "cvr": 19.5,
+     "cpa": 75.7,
+     "aov": 435,
+     "roas": 5.75,
+     "real_roas": 4.02,
+     "key": "male"
+    },
+    {
+     "spend": 510309,
+     "impressions": 2924298,
+     "reach": 738434,
+     "frequency": 3.96,
+     "clicks": 54160,
+     "link_clicks": 29688,
+     "purchases": 4924,
+     "revenue": 1867199,
+     "ctr": 1.85,
+     "link_ctr": 1.02,
+     "cpc": 9.42,
+     "cpc_link": 17.19,
+     "cpm": 174.51,
+     "cvr": 16.6,
+     "cpa": 103.6,
+     "aov": 379,
+     "roas": 3.66,
+     "real_roas": 2.56,
+     "key": "female"
+    },
+    {
+     "spend": 4917,
+     "impressions": 33967,
+     "reach": 5304,
+     "frequency": 6.4,
+     "clicks": 662,
+     "link_clicks": 319,
+     "purchases": 94,
+     "revenue": 56165,
+     "ctr": 1.95,
+     "link_ctr": 0.94,
+     "cpc": 7.43,
+     "cpc_link": 15.41,
+     "cpm": 144.76,
+     "cvr": 29.5,
+     "cpa": 52.3,
+     "aov": 597,
+     "roas": 11.42,
+     "real_roas": 8.0,
+     "key": "unknown"
+    }
+   ],
+   "ai": {
+    "summary": "Реал ROAS ~3.78 (pixel 5.39), CPA 79.4 ₴, частота 8.73. ROAS ↑13.5% до попер. періоду. Важелі — реалокація у топ-кластери, відео, ротація при частоті >4.",
+    "priorities": [
+     {
+      "id": "P2",
+      "action": "Подвоїти частку відео (9:16 варіації)",
+      "why": "Відео ROAS 6.16 при 2.5% бюджету",
+      "impact": "Високий",
+      "effort": "Середнє",
+      "expect": "+обсяг при ROAS вище середнього"
+     },
+     {
+      "id": "P3",
+      "action": "Ротувати креативи де частота >4 (На НОВИХ продажі, на ШИРОКУ продажі, Акції)",
+      "why": "Частота↑ + CTR↓ + CPC↑ = втома",
+      "impact": "Високий",
+      "effort": "Середнє",
+      "expect": "CTR↑, CPC↓"
+     }
+    ],
+    "alerts": [
+     {
+      "sev": "mod",
+      "text": "Частота 8.73 — висока (поріг 4.0). Освіжати креативи/аудиторії."
+     },
+     {
+      "sev": "mod",
+      "text": "«На НОВИХ продажі»: частота 6.2, CTR 1.33% — втома."
+     },
+     {
+      "sev": "mod",
+      "text": "«на ШИРОКУ продажі»: частота 9.11, CTR 1.72% — втома."
+     },
+     {
+      "sev": "mod",
+      "text": "«Акції»: частота 4.95, CTR 1.5% — втома."
+     },
+     {
+      "sev": "mod",
+      "text": "«ПОСТИ GLE»: частота 6.49, CTR 1.69% — втома."
+     },
+     {
+      "sev": "mod",
+      "text": "«DC | 01 Ядро · Advantage+ Sales (broad)»: частота 9.11, CTR 1.61% — втома."
+     },
+     {
+      "sev": "mod",
+      "text": "«Акції»: частота 9.03, CTR 2.05% — втома."
+     },
+     {
+      "sev": "mod",
+      "text": "«DC | 05 Тест аудиторій (vg) · 35-54 / 45-54 / LAL»: частота 4.66, CTR 1.78% — втома."
+     },
+     {
+      "sev": "mod",
+      "text": "«На широкую»: частота 6.42, CTR 3.47% — втома."
+     },
+     {
+      "sev": "mod",
+      "text": "«DC | 02 Retargeting · дожим теплих»: частота 6.38, CTR 2.28% — втома."
+     },
+     {
+      "sev": "cri",
+      "text": "«На тих, хто не заходив!»: ROAS 0.39 при 14106 ₴ — зламана, ревізія."
+     },
+     {
+      "sev": "cri",
+      "text": "«фінал»: ROAS 0.19 при 9594 ₴ — зламана, ревізія."
+     },
+     {
+      "sev": "mod",
+      "text": "«DC|02b База · Дожим покупців (апсейл)»: частота 6.95, CTR 1.9% — втома."
+     },
+     {
+      "sev": "cri",
+      "text": "«DC | 06 Engagement · розшевелити (байти/коменти)»: ROAS 0.0 при 9399 ₴ — зламана, ревізія."
+     },
+     {
+      "sev": "mod",
+      "text": "«На наших хто не купляв просто перегляди»: частота 6.62, CTR 0.27% — втома."
+     },
+     {
+      "sev": "cri",
+      "text": "«На наших хто не купляв просто перегляди»: ROAS 0.0 при 9088 ₴ — зламана, ревізія."
+     },
+     {
+      "sev": "cri",
+      "text": "«Коменти на тачку за 10 номерків»: ROAS 0.0 при 2471 ₴ — зламана, ревізія."
+     }
+    ]
+   }
+  }
+ },
+ "daily": [
+  {
+   "date": "2025-07-15",
+   "spend": 1821.7,
+   "impressions": 17942,
+   "reach": 10429,
+   "clicks": 1741,
+   "link_clicks": 852,
+   "purchases": 239,
+   "revenue": 72939.0
+  },
+  {
+   "date": "2025-07-16",
+   "spend": 1401.03,
+   "impressions": 13311,
+   "reach": 7505,
+   "clicks": 1143,
+   "link_clicks": 557,
+   "purchases": 162,
+   "revenue": 52550.0
+  },
+  {
+   "date": "2025-07-17",
+   "spend": 3749.43,
+   "impressions": 34550,
+   "reach": 19854,
+   "clicks": 2048,
+   "link_clicks": 1028,
+   "purchases": 336,
+   "revenue": 128565.2
+  },
+  {
+   "date": "2025-07-18",
+   "spend": 6390.61,
+   "impressions": 57693,
+   "reach": 25346,
+   "clicks": 3022,
+   "link_clicks": 1531,
+   "purchases": 482,
+   "revenue": 161607.9
+  },
+  {
+   "date": "2025-07-19",
+   "spend": 5531.93,
+   "impressions": 50513,
+   "reach": 24087,
+   "clicks": 2149,
+   "link_clicks": 1071,
+   "purchases": 326,
+   "revenue": 178502.13
+  },
+  {
+   "date": "2025-07-20",
+   "spend": 6110.81,
+   "impressions": 57807,
+   "reach": 26844,
+   "clicks": 2142,
+   "link_clicks": 1039,
+   "purchases": 292,
+   "revenue": 103090.77
+  },
+  {
+   "date": "2025-07-21",
+   "spend": 5766.95,
+   "impressions": 50824,
+   "reach": 24095,
+   "clicks": 1908,
+   "link_clicks": 934,
+   "purchases": 269,
+   "revenue": 109105.87
+  },
+  {
+   "date": "2025-07-22",
+   "spend": 7702.02,
+   "impressions": 66781,
+   "reach": 31440,
+   "clicks": 2102,
+   "link_clicks": 1073,
+   "purchases": 432,
+   "revenue": 167187.72
+  },
+  {
+   "date": "2025-07-23",
+   "spend": 8772.3,
+   "impressions": 92405,
+   "reach": 47832,
+   "clicks": 1908,
+   "link_clicks": 940,
+   "purchases": 425,
+   "revenue": 154372.41
+  },
+  {
+   "date": "2025-07-24",
+   "spend": 11146.67,
+   "impressions": 121116,
+   "reach": 60992,
+   "clicks": 2632,
+   "link_clicks": 1239,
+   "purchases": 327,
+   "revenue": 140430.27
+  },
+  {
+   "date": "2025-07-25",
+   "spend": 14453.51,
+   "impressions": 142253,
+   "reach": 75471,
+   "clicks": 2741,
+   "link_clicks": 1354,
+   "purchases": 438,
+   "revenue": 145407.9
+  },
+  {
+   "date": "2025-07-26",
+   "spend": 16046.04,
+   "impressions": 161893,
+   "reach": 93101,
+   "clicks": 3274,
+   "link_clicks": 1766,
+   "purchases": 416,
+   "revenue": 329851.33
+  },
+  {
+   "date": "2025-07-27",
+   "spend": 19060.6,
+   "impressions": 193865,
+   "reach": 103621,
+   "clicks": 3625,
+   "link_clicks": 1909,
+   "purchases": 490,
+   "revenue": 172664.49
+  },
+  {
+   "date": "2025-07-28",
+   "spend": 17988.38,
+   "impressions": 189700,
+   "reach": 100077,
+   "clicks": 3205,
+   "link_clicks": 1514,
+   "purchases": 481,
+   "revenue": 182671.84
+  },
+  {
+   "date": "2025-07-29",
+   "spend": 17611.45,
+   "impressions": 186004,
+   "reach": 101304,
+   "clicks": 3115,
+   "link_clicks": 1506,
+   "purchases": 390,
+   "revenue": 180103.3
+  },
+  {
+   "date": "2025-07-30",
+   "spend": 20447.19,
+   "impressions": 203856,
+   "reach": 113525,
+   "clicks": 3442,
+   "link_clicks": 1668,
+   "purchases": 362,
+   "revenue": 143331.38
+  },
+  {
+   "date": "2025-07-31",
+   "spend": 20746.76,
+   "impressions": 177521,
+   "reach": 96532,
+   "clicks": 3149,
+   "link_clicks": 1506,
+   "purchases": 372,
+   "revenue": 129759.57
+  },
+  {
+   "date": "2025-08-01",
+   "spend": 18325.68,
+   "impressions": 159639,
+   "reach": 89495,
+   "clicks": 2471,
+   "link_clicks": 1120,
+   "purchases": 287,
+   "revenue": 103041.11
+  },
+  {
+   "date": "2025-08-02",
+   "spend": 17657.7,
+   "impressions": 186057,
+   "reach": 120487,
+   "clicks": 2958,
+   "link_clicks": 1344,
+   "purchases": 219,
+   "revenue": 66491.88
+  },
+  {
+   "date": "2025-08-03",
+   "spend": 27585.73,
+   "impressions": 242069,
+   "reach": 119068,
+   "clicks": 3970,
+   "link_clicks": 1975,
+   "purchases": 318,
+   "revenue": 105185.57
+  },
+  {
+   "date": "2025-08-04",
+   "spend": 14314.46,
+   "impressions": 126294,
+   "reach": 64243,
+   "clicks": 2083,
+   "link_clicks": 967,
+   "purchases": 220,
+   "revenue": 77937.58
+  },
+  {
+   "date": "2025-08-05",
+   "spend": 11738.41,
+   "impressions": 103374,
+   "reach": 49484,
+   "clicks": 1535,
+   "link_clicks": 707,
+   "purchases": 197,
+   "revenue": 77348.55
+  },
+  {
+   "date": "2025-08-06",
+   "spend": 12783.42,
+   "impressions": 113217,
+   "reach": 52511,
+   "clicks": 1599,
+   "link_clicks": 716,
+   "purchases": 197,
+   "revenue": 65552.16
+  },
+  {
+   "date": "2025-08-07",
+   "spend": 21548.05,
+   "impressions": 179420,
+   "reach": 86291,
+   "clicks": 2783,
+   "link_clicks": 1300,
+   "purchases": 383,
+   "revenue": 116617.72
+  },
+  {
+   "date": "2025-08-08",
+   "spend": 28360.83,
+   "impressions": 250230,
+   "reach": 138468,
+   "clicks": 3145,
+   "link_clicks": 1456,
+   "purchases": 309,
+   "revenue": 120801.35
+  },
+  {
+   "date": "2025-08-09",
+   "spend": 26811.94,
+   "impressions": 222439,
+   "reach": 122739,
+   "clicks": 3193,
+   "link_clicks": 1580,
+   "purchases": 260,
+   "revenue": 128460.36
+  },
+  {
+   "date": "2025-08-10",
+   "spend": 30258.68,
+   "impressions": 261402,
+   "reach": 148776,
+   "clicks": 3504,
+   "link_clicks": 1646,
+   "purchases": 281,
+   "revenue": 91337.06
+  },
+  {
+   "date": "2025-08-11",
+   "spend": 27443.86,
+   "impressions": 240786,
+   "reach": 148244,
+   "clicks": 3581,
+   "link_clicks": 1637,
+   "purchases": 321,
+   "revenue": 129592.72
+  },
+  {
+   "date": "2025-08-12",
+   "spend": 30345.0,
+   "impressions": 288086,
+   "reach": 151315,
+   "clicks": 3272,
+   "link_clicks": 1557,
+   "purchases": 306,
+   "revenue": 127348.23
+  },
+  {
+   "date": "2025-08-13",
+   "spend": 25554.57,
+   "impressions": 216055,
+   "reach": 113621,
+   "clicks": 2652,
+   "link_clicks": 1319,
+   "purchases": 228,
+   "revenue": 72290.17
+  },
+  {
+   "date": "2025-08-14",
+   "spend": 19942.45,
+   "impressions": 161537,
+   "reach": 91674,
+   "clicks": 2129,
+   "link_clicks": 1148,
+   "purchases": 260,
+   "revenue": 95558.77
+  },
+  {
+   "date": "2025-08-15",
+   "spend": 16460.28,
+   "impressions": 134590,
+   "reach": 81160,
+   "clicks": 1674,
+   "link_clicks": 928,
+   "purchases": 213,
+   "revenue": 102323.46
+  },
+  {
+   "date": "2025-08-16",
+   "spend": 16330.42,
+   "impressions": 135166,
+   "reach": 83813,
+   "clicks": 1623,
+   "link_clicks": 855,
+   "purchases": 182,
+   "revenue": 74837.96
+  },
+  {
+   "date": "2025-08-17",
+   "spend": 16758.18,
+   "impressions": 141123,
+   "reach": 95330,
+   "clicks": 1918,
+   "link_clicks": 939,
+   "purchases": 177,
+   "revenue": 52099.57
+  },
+  {
+   "date": "2025-08-18",
+   "spend": 15849.07,
+   "impressions": 135360,
+   "reach": 94465,
+   "clicks": 1807,
+   "link_clicks": 868,
+   "purchases": 175,
+   "revenue": 59246.75
+  },
+  {
+   "date": "2025-08-19",
+   "spend": 14773.74,
+   "impressions": 126756,
+   "reach": 84714,
+   "clicks": 1579,
+   "link_clicks": 805,
+   "purchases": 161,
+   "revenue": 62870.0
+  },
+  {
+   "date": "2025-08-20",
+   "spend": 19803.62,
+   "impressions": 180334,
+   "reach": 127535,
+   "clicks": 1804,
+   "link_clicks": 866,
+   "purchases": 137,
+   "revenue": 53265.97
+  },
+  {
+   "date": "2025-08-21",
+   "spend": 30286.02,
+   "impressions": 225436,
+   "reach": 131018,
+   "clicks": 4353,
+   "link_clicks": 2256,
+   "purchases": 466,
+   "revenue": 170341.17
+  },
+  {
+   "date": "2025-08-22",
+   "spend": 43895.47,
+   "impressions": 373583,
+   "reach": 234191,
+   "clicks": 7822,
+   "link_clicks": 3956,
+   "purchases": 697,
+   "revenue": 264514.44
+  },
+  {
+   "date": "2025-08-23",
+   "spend": 41435.66,
+   "impressions": 363813,
+   "reach": 252543,
+   "clicks": 6850,
+   "link_clicks": 3579,
+   "purchases": 566,
+   "revenue": 172004.42
+  },
+  {
+   "date": "2025-08-24",
+   "spend": 51302.89,
+   "impressions": 438620,
+   "reach": 277799,
+   "clicks": 8907,
+   "link_clicks": 3941,
+   "purchases": 556,
+   "revenue": 164476.91
+  },
+  {
+   "date": "2025-08-25",
+   "spend": 31886.05,
+   "impressions": 287249,
+   "reach": 186586,
+   "clicks": 5130,
+   "link_clicks": 2296,
+   "purchases": 389,
+   "revenue": 129515.02
+  },
+  {
+   "date": "2025-08-26",
+   "spend": 33448.16,
+   "impressions": 296295,
+   "reach": 206449,
+   "clicks": 5084,
+   "link_clicks": 2324,
+   "purchases": 373,
+   "revenue": 134134.59
+  },
+  {
+   "date": "2025-08-27",
+   "spend": 33527.16,
+   "impressions": 273559,
+   "reach": 191926,
+   "clicks": 4887,
+   "link_clicks": 2287,
+   "purchases": 366,
+   "revenue": 105558.09
+  },
+  {
+   "date": "2025-08-28",
+   "spend": 31982.9,
+   "impressions": 280801,
+   "reach": 203251,
+   "clicks": 7237,
+   "link_clicks": 2445,
+   "purchases": 358,
+   "revenue": 96171.59
+  },
+  {
+   "date": "2025-08-29",
+   "spend": 18562.03,
+   "impressions": 126096,
+   "reach": 101860,
+   "clicks": 3039,
+   "link_clicks": 1038,
+   "purchases": 171,
+   "revenue": 57374.36
+  },
+  {
+   "date": "2025-08-30",
+   "spend": 26377.54,
+   "impressions": 199246,
+   "reach": 141896,
+   "clicks": 2739,
+   "link_clicks": 1289,
+   "purchases": 411,
+   "revenue": 121569.99
+  },
+  {
+   "date": "2025-08-31",
+   "spend": 15440.81,
+   "impressions": 112439,
+   "reach": 86801,
+   "clicks": 2196,
+   "link_clicks": 951,
+   "purchases": 314,
+   "revenue": 83170.31
+  },
+  {
+   "date": "2025-09-01",
+   "spend": 0.0,
+   "impressions": 0,
+   "reach": 0,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2025-09-02",
+   "spend": 0.0,
+   "impressions": 0,
+   "reach": 0,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2025-09-03",
+   "spend": 0.0,
+   "impressions": 0,
+   "reach": 0,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2025-09-11",
+   "spend": 186.39,
+   "impressions": 1699,
+   "reach": 1580,
+   "clicks": 42,
+   "link_clicks": 17,
+   "purchases": 12,
+   "revenue": 5235.0
+  },
+  {
+   "date": "2025-09-12",
+   "spend": 2506.05,
+   "impressions": 22925,
+   "reach": 13377,
+   "clicks": 494,
+   "link_clicks": 302,
+   "purchases": 127,
+   "revenue": 110420.0
+  },
+  {
+   "date": "2025-09-13",
+   "spend": 1417.1,
+   "impressions": 14287,
+   "reach": 8568,
+   "clicks": 189,
+   "link_clicks": 124,
+   "purchases": 54,
+   "revenue": 55227.0
+  },
+  {
+   "date": "2025-09-14",
+   "spend": 2071.83,
+   "impressions": 22104,
+   "reach": 12785,
+   "clicks": 334,
+   "link_clicks": 221,
+   "purchases": 122,
+   "revenue": 84387.0
+  },
+  {
+   "date": "2025-09-15",
+   "spend": 2581.99,
+   "impressions": 25704,
+   "reach": 16085,
+   "clicks": 367,
+   "link_clicks": 247,
+   "purchases": 125,
+   "revenue": 94218.0
+  },
+  {
+   "date": "2025-09-16",
+   "spend": 1718.56,
+   "impressions": 15213,
+   "reach": 11973,
+   "clicks": 206,
+   "link_clicks": 140,
+   "purchases": 111,
+   "revenue": 86496.84
+  },
+  {
+   "date": "2025-09-17",
+   "spend": 0.0,
+   "impressions": 0,
+   "reach": 0,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2025-09-18",
+   "spend": 0.0,
+   "impressions": 0,
+   "reach": 0,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2025-10-10",
+   "spend": 2440.93,
+   "impressions": 26475,
+   "reach": 25198,
+   "clicks": 429,
+   "link_clicks": 214,
+   "purchases": 27,
+   "revenue": 14603.0
+  },
+  {
+   "date": "2025-10-11",
+   "spend": 5602.15,
+   "impressions": 59928,
+   "reach": 29327,
+   "clicks": 2685,
+   "link_clicks": 1469,
+   "purchases": 663,
+   "revenue": 260998.67
+  },
+  {
+   "date": "2025-10-12",
+   "spend": 11517.33,
+   "impressions": 136239,
+   "reach": 75773,
+   "clicks": 4602,
+   "link_clicks": 2442,
+   "purchases": 785,
+   "revenue": 274222.16
+  },
+  {
+   "date": "2025-10-13",
+   "spend": 9430.34,
+   "impressions": 114129,
+   "reach": 68106,
+   "clicks": 3360,
+   "link_clicks": 1844,
+   "purchases": 531,
+   "revenue": 194108.13
+  },
+  {
+   "date": "2025-10-14",
+   "spend": 15525.03,
+   "impressions": 164981,
+   "reach": 100515,
+   "clicks": 4298,
+   "link_clicks": 2294,
+   "purchases": 539,
+   "revenue": 186324.91
+  },
+  {
+   "date": "2025-10-15",
+   "spend": 19220.33,
+   "impressions": 187014,
+   "reach": 112509,
+   "clicks": 4255,
+   "link_clicks": 2398,
+   "purchases": 470,
+   "revenue": 156465.37
+  },
+  {
+   "date": "2025-10-16",
+   "spend": 19635.44,
+   "impressions": 174878,
+   "reach": 102923,
+   "clicks": 3902,
+   "link_clicks": 2264,
+   "purchases": 408,
+   "revenue": 131137.29
+  },
+  {
+   "date": "2025-10-17",
+   "spend": 25676.24,
+   "impressions": 213367,
+   "reach": 124717,
+   "clicks": 4168,
+   "link_clicks": 2381,
+   "purchases": 432,
+   "revenue": 146068.99
+  },
+  {
+   "date": "2025-10-18",
+   "spend": 33013.06,
+   "impressions": 231484,
+   "reach": 122128,
+   "clicks": 4601,
+   "link_clicks": 2595,
+   "purchases": 583,
+   "revenue": 199873.19
+  },
+  {
+   "date": "2025-10-19",
+   "spend": 35230.65,
+   "impressions": 233878,
+   "reach": 111583,
+   "clicks": 4259,
+   "link_clicks": 2554,
+   "purchases": 494,
+   "revenue": 157201.62
+  },
+  {
+   "date": "2025-10-20",
+   "spend": 25131.68,
+   "impressions": 178340,
+   "reach": 81577,
+   "clicks": 3032,
+   "link_clicks": 1842,
+   "purchases": 366,
+   "revenue": 121461.06
+  },
+  {
+   "date": "2025-10-21",
+   "spend": 29453.46,
+   "impressions": 203768,
+   "reach": 86475,
+   "clicks": 3429,
+   "link_clicks": 2018,
+   "purchases": 376,
+   "revenue": 135503.37
+  },
+  {
+   "date": "2025-10-22",
+   "spend": 31918.1,
+   "impressions": 215809,
+   "reach": 96494,
+   "clicks": 3515,
+   "link_clicks": 2023,
+   "purchases": 444,
+   "revenue": 161590.16
+  },
+  {
+   "date": "2025-10-23",
+   "spend": 36901.18,
+   "impressions": 223798,
+   "reach": 101706,
+   "clicks": 3835,
+   "link_clicks": 2343,
+   "purchases": 534,
+   "revenue": 178317.13
+  },
+  {
+   "date": "2025-10-24",
+   "spend": 37152.98,
+   "impressions": 211442,
+   "reach": 92873,
+   "clicks": 4108,
+   "link_clicks": 2554,
+   "purchases": 529,
+   "revenue": 181351.07
+  },
+  {
+   "date": "2025-10-25",
+   "spend": 32954.39,
+   "impressions": 169376,
+   "reach": 72937,
+   "clicks": 4072,
+   "link_clicks": 2356,
+   "purchases": 488,
+   "revenue": 192247.66
+  },
+  {
+   "date": "2025-10-26",
+   "spend": 28198.94,
+   "impressions": 141652,
+   "reach": 49691,
+   "clicks": 2889,
+   "link_clicks": 1476,
+   "purchases": 208,
+   "revenue": 100502.47
+  },
+  {
+   "date": "2025-10-27",
+   "spend": 20014.89,
+   "impressions": 154544,
+   "reach": 78530,
+   "clicks": 2280,
+   "link_clicks": 1370,
+   "purchases": 62,
+   "revenue": 19532.0
+  },
+  {
+   "date": "2025-10-28",
+   "spend": 23874.23,
+   "impressions": 160162,
+   "reach": 84096,
+   "clicks": 2874,
+   "link_clicks": 1670,
+   "purchases": 189,
+   "revenue": 76618.85
+  },
+  {
+   "date": "2025-10-29",
+   "spend": 24885.92,
+   "impressions": 165371,
+   "reach": 87260,
+   "clicks": 2812,
+   "link_clicks": 1734,
+   "purchases": 306,
+   "revenue": 145517.45
+  },
+  {
+   "date": "2025-10-30",
+   "spend": 26853.0,
+   "impressions": 174220,
+   "reach": 84306,
+   "clicks": 2687,
+   "link_clicks": 1579,
+   "purchases": 272,
+   "revenue": 124282.25
+  },
+  {
+   "date": "2025-10-31",
+   "spend": 21346.61,
+   "impressions": 131065,
+   "reach": 57393,
+   "clicks": 2006,
+   "link_clicks": 1202,
+   "purchases": 270,
+   "revenue": 110799.33
+  },
+  {
+   "date": "2025-11-01",
+   "spend": 25076.44,
+   "impressions": 150495,
+   "reach": 84362,
+   "clicks": 2808,
+   "link_clicks": 1615,
+   "purchases": 272,
+   "revenue": 102315.55
+  },
+  {
+   "date": "2025-11-02",
+   "spend": 19650.8,
+   "impressions": 102648,
+   "reach": 59708,
+   "clicks": 2051,
+   "link_clicks": 1181,
+   "purchases": 75,
+   "revenue": 33262.0
+  },
+  {
+   "date": "2025-11-03",
+   "spend": 18173.41,
+   "impressions": 109710,
+   "reach": 57218,
+   "clicks": 1702,
+   "link_clicks": 982,
+   "purchases": 19,
+   "revenue": 5544.15
+  },
+  {
+   "date": "2025-11-04",
+   "spend": 21036.3,
+   "impressions": 127102,
+   "reach": 84587,
+   "clicks": 2262,
+   "link_clicks": 1329,
+   "purchases": 71,
+   "revenue": 31258.03
+  },
+  {
+   "date": "2025-11-05",
+   "spend": 20974.99,
+   "impressions": 122713,
+   "reach": 76164,
+   "clicks": 2102,
+   "link_clicks": 1343,
+   "purchases": 117,
+   "revenue": 44429.53
+  },
+  {
+   "date": "2025-11-06",
+   "spend": 22461.71,
+   "impressions": 151888,
+   "reach": 101880,
+   "clicks": 2121,
+   "link_clicks": 1313,
+   "purchases": 121,
+   "revenue": 46005.44
+  },
+  {
+   "date": "2025-11-07",
+   "spend": 22006.78,
+   "impressions": 149998,
+   "reach": 107887,
+   "clicks": 2564,
+   "link_clicks": 1728,
+   "purchases": 188,
+   "revenue": 72250.32
+  },
+  {
+   "date": "2025-11-08",
+   "spend": 20411.68,
+   "impressions": 133249,
+   "reach": 88188,
+   "clicks": 2325,
+   "link_clicks": 1433,
+   "purchases": 179,
+   "revenue": 72983.19
+  },
+  {
+   "date": "2025-11-09",
+   "spend": 21685.79,
+   "impressions": 143584,
+   "reach": 98151,
+   "clicks": 2276,
+   "link_clicks": 1341,
+   "purchases": 113,
+   "revenue": 38411.68
+  },
+  {
+   "date": "2025-11-10",
+   "spend": 20525.56,
+   "impressions": 142814,
+   "reach": 109130,
+   "clicks": 2335,
+   "link_clicks": 1381,
+   "purchases": 103,
+   "revenue": 39034.86
+  },
+  {
+   "date": "2025-11-11",
+   "spend": 22195.51,
+   "impressions": 171839,
+   "reach": 130643,
+   "clicks": 2334,
+   "link_clicks": 1351,
+   "purchases": 131,
+   "revenue": 51187.46
+  },
+  {
+   "date": "2025-11-12",
+   "spend": 23681.82,
+   "impressions": 170035,
+   "reach": 136227,
+   "clicks": 2306,
+   "link_clicks": 1339,
+   "purchases": 117,
+   "revenue": 38337.07
+  },
+  {
+   "date": "2025-11-13",
+   "spend": 15640.93,
+   "impressions": 103745,
+   "reach": 82524,
+   "clicks": 1445,
+   "link_clicks": 840,
+   "purchases": 106,
+   "revenue": 35908.2
+  },
+  {
+   "date": "2025-11-14",
+   "spend": 24102.76,
+   "impressions": 148030,
+   "reach": 106279,
+   "clicks": 2185,
+   "link_clicks": 1332,
+   "purchases": 101,
+   "revenue": 60706.76
+  },
+  {
+   "date": "2025-11-15",
+   "spend": 23916.25,
+   "impressions": 134440,
+   "reach": 100629,
+   "clicks": 2217,
+   "link_clicks": 1298,
+   "purchases": 198,
+   "revenue": 80499.44
+  },
+  {
+   "date": "2025-11-16",
+   "spend": 23797.62,
+   "impressions": 139496,
+   "reach": 96106,
+   "clicks": 2367,
+   "link_clicks": 1307,
+   "purchases": 99,
+   "revenue": 38429.0
+  },
+  {
+   "date": "2025-11-17",
+   "spend": 22768.59,
+   "impressions": 148561,
+   "reach": 100005,
+   "clicks": 2296,
+   "link_clicks": 1324,
+   "purchases": 102,
+   "revenue": 30320.48
+  },
+  {
+   "date": "2025-11-18",
+   "spend": 25402.23,
+   "impressions": 159248,
+   "reach": 118272,
+   "clicks": 2719,
+   "link_clicks": 1752,
+   "purchases": 93,
+   "revenue": 42375.98
+  },
+  {
+   "date": "2025-11-19",
+   "spend": 23593.59,
+   "impressions": 164751,
+   "reach": 122845,
+   "clicks": 2588,
+   "link_clicks": 1449,
+   "purchases": 98,
+   "revenue": 52312.48
+  },
+  {
+   "date": "2025-11-20",
+   "spend": 16466.68,
+   "impressions": 95233,
+   "reach": 70090,
+   "clicks": 1526,
+   "link_clicks": 871,
+   "purchases": 61,
+   "revenue": 22776.71
+  },
+  {
+   "date": "2025-11-21",
+   "spend": 15007.86,
+   "impressions": 77706,
+   "reach": 55442,
+   "clicks": 1265,
+   "link_clicks": 709,
+   "purchases": 106,
+   "revenue": 51324.44
+  },
+  {
+   "date": "2025-11-22",
+   "spend": 16518.76,
+   "impressions": 95672,
+   "reach": 64092,
+   "clicks": 1614,
+   "link_clicks": 960,
+   "purchases": 118,
+   "revenue": 46800.88
+  },
+  {
+   "date": "2025-11-23",
+   "spend": 15398.37,
+   "impressions": 101762,
+   "reach": 74318,
+   "clicks": 1738,
+   "link_clicks": 1021,
+   "purchases": 92,
+   "revenue": 54353.45
+  },
+  {
+   "date": "2025-11-24",
+   "spend": 9991.01,
+   "impressions": 71812,
+   "reach": 50619,
+   "clicks": 1280,
+   "link_clicks": 704,
+   "purchases": 61,
+   "revenue": 20086.89
+  },
+  {
+   "date": "2025-11-25",
+   "spend": 11045.17,
+   "impressions": 86713,
+   "reach": 69007,
+   "clicks": 1581,
+   "link_clicks": 927,
+   "purchases": 71,
+   "revenue": 19067.72
+  },
+  {
+   "date": "2025-11-26",
+   "spend": 10269.14,
+   "impressions": 85536,
+   "reach": 65742,
+   "clicks": 1641,
+   "link_clicks": 957,
+   "purchases": 81,
+   "revenue": 27655.34
+  },
+  {
+   "date": "2025-11-27",
+   "spend": 9109.84,
+   "impressions": 71956,
+   "reach": 50535,
+   "clicks": 1455,
+   "link_clicks": 842,
+   "purchases": 120,
+   "revenue": 35500.26
+  },
+  {
+   "date": "2025-11-28",
+   "spend": 6483.44,
+   "impressions": 50181,
+   "reach": 34435,
+   "clicks": 1211,
+   "link_clicks": 712,
+   "purchases": 72,
+   "revenue": 34916.95
+  },
+  {
+   "date": "2025-11-29",
+   "spend": 5743.42,
+   "impressions": 42870,
+   "reach": 32341,
+   "clicks": 1322,
+   "link_clicks": 776,
+   "purchases": 88,
+   "revenue": 30079.15
+  },
+  {
+   "date": "2025-11-30",
+   "spend": 4971.42,
+   "impressions": 36681,
+   "reach": 26621,
+   "clicks": 1078,
+   "link_clicks": 612,
+   "purchases": 86,
+   "revenue": 33293.9
+  },
+  {
+   "date": "2025-12-01",
+   "spend": 0.0,
+   "impressions": 0,
+   "reach": 0,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2025-12-02",
+   "spend": 385.11,
+   "impressions": 4865,
+   "reach": 3481,
+   "clicks": 58,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2025-12-03",
+   "spend": 416.12,
+   "impressions": 5663,
+   "reach": 3614,
+   "clicks": 35,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2025-12-04",
+   "spend": 451.37,
+   "impressions": 5374,
+   "reach": 3495,
+   "clicks": 36,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2025-12-05",
+   "spend": 486.88,
+   "impressions": 5692,
+   "reach": 3918,
+   "clicks": 38,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2025-12-06",
+   "spend": 521.94,
+   "impressions": 5724,
+   "reach": 4013,
+   "clicks": 31,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2025-12-07",
+   "spend": 163.47,
+   "impressions": 1717,
+   "reach": 1440,
+   "clicks": 13,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2025-12-09",
+   "spend": 12929.85,
+   "impressions": 74828,
+   "reach": 30872,
+   "clicks": 2893,
+   "link_clicks": 1501,
+   "purchases": 593,
+   "revenue": 203930.07
+  },
+  {
+   "date": "2025-12-10",
+   "spend": 7941.62,
+   "impressions": 64230,
+   "reach": 30900,
+   "clicks": 1468,
+   "link_clicks": 771,
+   "purchases": 302,
+   "revenue": 109017.0
+  },
+  {
+   "date": "2025-12-11",
+   "spend": 9469.89,
+   "impressions": 90838,
+   "reach": 52655,
+   "clicks": 1673,
+   "link_clicks": 872,
+   "purchases": 249,
+   "revenue": 92852.98
+  },
+  {
+   "date": "2025-12-12",
+   "spend": 9798.9,
+   "impressions": 90214,
+   "reach": 57409,
+   "clicks": 1469,
+   "link_clicks": 808,
+   "purchases": 214,
+   "revenue": 81740.74
+  },
+  {
+   "date": "2025-12-13",
+   "spend": 10503.58,
+   "impressions": 87192,
+   "reach": 56787,
+   "clicks": 1424,
+   "link_clicks": 804,
+   "purchases": 230,
+   "revenue": 71435.8
+  },
+  {
+   "date": "2025-12-14",
+   "spend": 12422.02,
+   "impressions": 99265,
+   "reach": 56473,
+   "clicks": 1867,
+   "link_clicks": 1002,
+   "purchases": 242,
+   "revenue": 81021.4
+  },
+  {
+   "date": "2025-12-15",
+   "spend": 16038.86,
+   "impressions": 126934,
+   "reach": 70853,
+   "clicks": 2042,
+   "link_clicks": 1106,
+   "purchases": 300,
+   "revenue": 111246.58
+  },
+  {
+   "date": "2025-12-16",
+   "spend": 5262.44,
+   "impressions": 36070,
+   "reach": 29011,
+   "clicks": 707,
+   "link_clicks": 363,
+   "purchases": 61,
+   "revenue": 27828.58
+  },
+  {
+   "date": "2025-12-17",
+   "spend": 0.0,
+   "impressions": 0,
+   "reach": 0,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2025-12-18",
+   "spend": 0.0,
+   "impressions": 0,
+   "reach": 0,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2025-12-19",
+   "spend": 0.0,
+   "impressions": 0,
+   "reach": 0,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2025-12-20",
+   "spend": 0.0,
+   "impressions": 0,
+   "reach": 0,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2025-12-21",
+   "spend": 0.0,
+   "impressions": 0,
+   "reach": 0,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2025-12-22",
+   "spend": 0.0,
+   "impressions": 0,
+   "reach": 0,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2025-12-23",
+   "spend": 29295.99,
+   "impressions": 151097,
+   "reach": 72258,
+   "clicks": 2993,
+   "link_clicks": 1696,
+   "purchases": 243,
+   "revenue": 94163.88
+  },
+  {
+   "date": "2025-12-24",
+   "spend": 0.0,
+   "impressions": 0,
+   "reach": 0,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2026-01-10",
+   "spend": 4167.79,
+   "impressions": 40416,
+   "reach": 31172,
+   "clicks": 908,
+   "link_clicks": 445,
+   "purchases": 45,
+   "revenue": 15602.0
+  },
+  {
+   "date": "2026-01-11",
+   "spend": 14857.1,
+   "impressions": 118946,
+   "reach": 45257,
+   "clicks": 2224,
+   "link_clicks": 1176,
+   "purchases": 134,
+   "revenue": 47645.0
+  },
+  {
+   "date": "2026-01-12",
+   "spend": 14599.05,
+   "impressions": 128282,
+   "reach": 53503,
+   "clicks": 1654,
+   "link_clicks": 890,
+   "purchases": 33,
+   "revenue": 10347.0
+  },
+  {
+   "date": "2026-01-13",
+   "spend": 15848.51,
+   "impressions": 125703,
+   "reach": 65255,
+   "clicks": 1386,
+   "link_clicks": 707,
+   "purchases": 25,
+   "revenue": 10555.0
+  },
+  {
+   "date": "2026-01-14",
+   "spend": 16838.47,
+   "impressions": 145433,
+   "reach": 82423,
+   "clicks": 1864,
+   "link_clicks": 969,
+   "purchases": 32,
+   "revenue": 12637.0
+  },
+  {
+   "date": "2026-01-15",
+   "spend": 17908.31,
+   "impressions": 149295,
+   "reach": 81146,
+   "clicks": 1961,
+   "link_clicks": 1063,
+   "purchases": 39,
+   "revenue": 11731.0
+  },
+  {
+   "date": "2026-01-16",
+   "spend": 16149.5,
+   "impressions": 115212,
+   "reach": 62414,
+   "clicks": 1635,
+   "link_clicks": 878,
+   "purchases": 57,
+   "revenue": 23463.0
+  },
+  {
+   "date": "2026-01-17",
+   "spend": 21908.68,
+   "impressions": 137326,
+   "reach": 78115,
+   "clicks": 2084,
+   "link_clicks": 1200,
+   "purchases": 361,
+   "revenue": 133740.0
+  },
+  {
+   "date": "2026-01-18",
+   "spend": 22245.87,
+   "impressions": 126961,
+   "reach": 72138,
+   "clicks": 1833,
+   "link_clicks": 885,
+   "purchases": 284,
+   "revenue": 113070.44
+  },
+  {
+   "date": "2026-01-19",
+   "spend": 14157.57,
+   "impressions": 72641,
+   "reach": 31832,
+   "clicks": 1126,
+   "link_clicks": 526,
+   "purchases": 99,
+   "revenue": 31671.0
+  },
+  {
+   "date": "2026-01-20",
+   "spend": 13385.61,
+   "impressions": 76345,
+   "reach": 33568,
+   "clicks": 1054,
+   "link_clicks": 533,
+   "purchases": 143,
+   "revenue": 57387.0
+  },
+  {
+   "date": "2026-01-21",
+   "spend": 33876.89,
+   "impressions": 197751,
+   "reach": 94708,
+   "clicks": 2830,
+   "link_clicks": 1595,
+   "purchases": 888,
+   "revenue": 423560.99
+  },
+  {
+   "date": "2026-01-22",
+   "spend": 13871.81,
+   "impressions": 83142,
+   "reach": 49792,
+   "clicks": 1173,
+   "link_clicks": 532,
+   "purchases": 182,
+   "revenue": 74688.73
+  },
+  {
+   "date": "2026-01-23",
+   "spend": 10425.55,
+   "impressions": 56750,
+   "reach": 27704,
+   "clicks": 1036,
+   "link_clicks": 434,
+   "purchases": 145,
+   "revenue": 49835.33
+  },
+  {
+   "date": "2026-01-24",
+   "spend": 0.0,
+   "impressions": 0,
+   "reach": 0,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2026-01-26",
+   "spend": 0.0,
+   "impressions": 0,
+   "reach": 0,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2026-01-28",
+   "spend": 0.0,
+   "impressions": 0,
+   "reach": 0,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2026-02-07",
+   "spend": 8224.01,
+   "impressions": 67157,
+   "reach": 38169,
+   "clicks": 2039,
+   "link_clicks": 1058,
+   "purchases": 270,
+   "revenue": 102634.28
+  },
+  {
+   "date": "2026-02-08",
+   "spend": 16754.42,
+   "impressions": 151016,
+   "reach": 89488,
+   "clicks": 3100,
+   "link_clicks": 1589,
+   "purchases": 327,
+   "revenue": 114675.38
+  },
+  {
+   "date": "2026-02-09",
+   "spend": 21163.5,
+   "impressions": 186290,
+   "reach": 113957,
+   "clicks": 3122,
+   "link_clicks": 1509,
+   "purchases": 276,
+   "revenue": 116629.41
+  },
+  {
+   "date": "2026-02-10",
+   "spend": 25462.02,
+   "impressions": 179935,
+   "reach": 106645,
+   "clicks": 3523,
+   "link_clicks": 1602,
+   "purchases": 255,
+   "revenue": 122924.24
+  },
+  {
+   "date": "2026-02-11",
+   "spend": 23816.17,
+   "impressions": 167212,
+   "reach": 92582,
+   "clicks": 3517,
+   "link_clicks": 1611,
+   "purchases": 185,
+   "revenue": 68047.99
+  },
+  {
+   "date": "2026-02-12",
+   "spend": 22192.71,
+   "impressions": 161422,
+   "reach": 89123,
+   "clicks": 2546,
+   "link_clicks": 1211,
+   "purchases": 287,
+   "revenue": 114144.41
+  },
+  {
+   "date": "2026-02-13",
+   "spend": 22549.94,
+   "impressions": 165056,
+   "reach": 83690,
+   "clicks": 2334,
+   "link_clicks": 1182,
+   "purchases": 289,
+   "revenue": 116139.27
+  },
+  {
+   "date": "2026-02-14",
+   "spend": 41919.31,
+   "impressions": 285651,
+   "reach": 137121,
+   "clicks": 4730,
+   "link_clicks": 2957,
+   "purchases": 863,
+   "revenue": 295574.44
+  },
+  {
+   "date": "2026-02-15",
+   "spend": 47009.07,
+   "impressions": 306711,
+   "reach": 144044,
+   "clicks": 5011,
+   "link_clicks": 3128,
+   "purchases": 680,
+   "revenue": 253868.35
+  },
+  {
+   "date": "2026-02-16",
+   "spend": 13502.01,
+   "impressions": 82738,
+   "reach": 26259,
+   "clicks": 1242,
+   "link_clicks": 555,
+   "purchases": 91,
+   "revenue": 38056.49
+  },
+  {
+   "date": "2026-02-17",
+   "spend": 7202.29,
+   "impressions": 50272,
+   "reach": 18160,
+   "clicks": 867,
+   "link_clicks": 410,
+   "purchases": 89,
+   "revenue": 34160.64
+  },
+  {
+   "date": "2026-02-18",
+   "spend": 21339.4,
+   "impressions": 146146,
+   "reach": 54334,
+   "clicks": 2615,
+   "link_clicks": 1421,
+   "purchases": 458,
+   "revenue": 161989.22
+  },
+  {
+   "date": "2026-02-19",
+   "spend": 16033.81,
+   "impressions": 107016,
+   "reach": 54485,
+   "clicks": 1436,
+   "link_clicks": 641,
+   "purchases": 128,
+   "revenue": 60262.16
+  },
+  {
+   "date": "2026-02-20",
+   "spend": 19578.81,
+   "impressions": 117030,
+   "reach": 52790,
+   "clicks": 1401,
+   "link_clicks": 705,
+   "purchases": 140,
+   "revenue": 124508.8
+  },
+  {
+   "date": "2026-02-21",
+   "spend": 17299.38,
+   "impressions": 107906,
+   "reach": 58882,
+   "clicks": 1490,
+   "link_clicks": 742,
+   "purchases": 93,
+   "revenue": 71493.68
+  },
+  {
+   "date": "2026-02-22",
+   "spend": 20076.96,
+   "impressions": 121245,
+   "reach": 48078,
+   "clicks": 1569,
+   "link_clicks": 752,
+   "purchases": 106,
+   "revenue": 146645.37
+  },
+  {
+   "date": "2026-02-23",
+   "spend": 16492.82,
+   "impressions": 104917,
+   "reach": 53940,
+   "clicks": 1148,
+   "link_clicks": 537,
+   "purchases": 169,
+   "revenue": 61087.66
+  },
+  {
+   "date": "2026-02-24",
+   "spend": 11691.6,
+   "impressions": 71547,
+   "reach": 37470,
+   "clicks": 697,
+   "link_clicks": 314,
+   "purchases": 43,
+   "revenue": 17757.41
+  },
+  {
+   "date": "2026-02-25",
+   "spend": 19953.8,
+   "impressions": 114577,
+   "reach": 25805,
+   "clicks": 1935,
+   "link_clicks": 1366,
+   "purchases": 376,
+   "revenue": 190245.77
+  },
+  {
+   "date": "2026-02-26",
+   "spend": 4440.46,
+   "impressions": 128865,
+   "reach": 122953,
+   "clicks": 821,
+   "link_clicks": 174,
+   "purchases": 28,
+   "revenue": 8838.84
+  },
+  {
+   "date": "2026-02-27",
+   "spend": 17447.05,
+   "impressions": 133261,
+   "reach": 50706,
+   "clicks": 1562,
+   "link_clicks": 998,
+   "purchases": 277,
+   "revenue": 116103.15
+  },
+  {
+   "date": "2026-02-28",
+   "spend": 22494.61,
+   "impressions": 245465,
+   "reach": 144650,
+   "clicks": 3319,
+   "link_clicks": 2034,
+   "purchases": 368,
+   "revenue": 154419.78
+  },
+  {
+   "date": "2026-03-01",
+   "spend": 22592.31,
+   "impressions": 198420,
+   "reach": 98810,
+   "clicks": 3149,
+   "link_clicks": 1752,
+   "purchases": 355,
+   "revenue": 153251.45
+  },
+  {
+   "date": "2026-03-02",
+   "spend": 0.0,
+   "impressions": 0,
+   "reach": 0,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 5.68
+  },
+  {
+   "date": "2026-03-03",
+   "spend": 0.0,
+   "impressions": 0,
+   "reach": 0,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2026-03-04",
+   "spend": 0.0,
+   "impressions": 0,
+   "reach": 0,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2026-03-05",
+   "spend": 0.0,
+   "impressions": 0,
+   "reach": 0,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2026-03-23",
+   "spend": 659.37,
+   "impressions": 4390,
+   "reach": 3462,
+   "clicks": 310,
+   "link_clicks": 165,
+   "purchases": 8,
+   "revenue": 3192.0
+  },
+  {
+   "date": "2026-03-24",
+   "spend": 5109.88,
+   "impressions": 34950,
+   "reach": 10871,
+   "clicks": 2845,
+   "link_clicks": 1361,
+   "purchases": 136,
+   "revenue": 55014.0
+  },
+  {
+   "date": "2026-03-25",
+   "spend": 6971.97,
+   "impressions": 53475,
+   "reach": 17188,
+   "clicks": 2192,
+   "link_clicks": 1047,
+   "purchases": 207,
+   "revenue": 88294.49
+  },
+  {
+   "date": "2026-03-26",
+   "spend": 11838.91,
+   "impressions": 281843,
+   "reach": 215198,
+   "clicks": 2273,
+   "link_clicks": 1296,
+   "purchases": 402,
+   "revenue": 177466.84
+  },
+  {
+   "date": "2026-03-27",
+   "spend": 13758.19,
+   "impressions": 356063,
+   "reach": 235537,
+   "clicks": 2663,
+   "link_clicks": 1778,
+   "purchases": 342,
+   "revenue": 132613.52
+  },
+  {
+   "date": "2026-03-28",
+   "spend": 18071.04,
+   "impressions": 479837,
+   "reach": 308677,
+   "clicks": 3023,
+   "link_clicks": 1780,
+   "purchases": 708,
+   "revenue": 289652.5
+  },
+  {
+   "date": "2026-03-29",
+   "spend": 17934.98,
+   "impressions": 248905,
+   "reach": 146876,
+   "clicks": 2507,
+   "link_clicks": 1464,
+   "purchases": 958,
+   "revenue": 424207.69
+  },
+  {
+   "date": "2026-03-30",
+   "spend": 10359.68,
+   "impressions": 90425,
+   "reach": 38764,
+   "clicks": 1547,
+   "link_clicks": 933,
+   "purchases": 166,
+   "revenue": 73040.16
+  },
+  {
+   "date": "2026-03-31",
+   "spend": 11492.14,
+   "impressions": 101981,
+   "reach": 52908,
+   "clicks": 1599,
+   "link_clicks": 968,
+   "purchases": 178,
+   "revenue": 112458.07
+  },
+  {
+   "date": "2026-04-01",
+   "spend": 14650.82,
+   "impressions": 122255,
+   "reach": 60449,
+   "clicks": 1602,
+   "link_clicks": 1020,
+   "purchases": 146,
+   "revenue": 100546.26
+  },
+  {
+   "date": "2026-04-02",
+   "spend": 13384.96,
+   "impressions": 114356,
+   "reach": 62360,
+   "clicks": 1265,
+   "link_clicks": 766,
+   "purchases": 80,
+   "revenue": 35961.94
+  },
+  {
+   "date": "2026-04-03",
+   "spend": 27945.94,
+   "impressions": 242620,
+   "reach": 134420,
+   "clicks": 3457,
+   "link_clicks": 2093,
+   "purchases": 490,
+   "revenue": 200344.44
+  },
+  {
+   "date": "2026-04-04",
+   "spend": 20193.99,
+   "impressions": 184936,
+   "reach": 89404,
+   "clicks": 2678,
+   "link_clicks": 1685,
+   "purchases": 391,
+   "revenue": 195548.02
+  },
+  {
+   "date": "2026-04-05",
+   "spend": 25416.4,
+   "impressions": 253853,
+   "reach": 120450,
+   "clicks": 4162,
+   "link_clicks": 2435,
+   "purchases": 359,
+   "revenue": 147017.42
+  },
+  {
+   "date": "2026-04-06",
+   "spend": 21750.49,
+   "impressions": 207752,
+   "reach": 90731,
+   "clicks": 2539,
+   "link_clicks": 1383,
+   "purchases": 244,
+   "revenue": 97908.25
+  },
+  {
+   "date": "2026-04-07",
+   "spend": 15779.3,
+   "impressions": 150577,
+   "reach": 65983,
+   "clicks": 1434,
+   "link_clicks": 750,
+   "purchases": 100,
+   "revenue": 45889.55
+  },
+  {
+   "date": "2026-04-08",
+   "spend": 31230.24,
+   "impressions": 250186,
+   "reach": 100469,
+   "clicks": 2613,
+   "link_clicks": 1565,
+   "purchases": 170,
+   "revenue": 156610.02
+  },
+  {
+   "date": "2026-04-09",
+   "spend": 43005.7,
+   "impressions": 326554,
+   "reach": 120346,
+   "clicks": 3701,
+   "link_clicks": 2277,
+   "purchases": 650,
+   "revenue": 408727.78
+  },
+  {
+   "date": "2026-04-10",
+   "spend": 22852.97,
+   "impressions": 206058,
+   "reach": 84237,
+   "clicks": 1955,
+   "link_clicks": 1228,
+   "purchases": 128,
+   "revenue": 49210.53
+  },
+  {
+   "date": "2026-04-11",
+   "spend": 53155.79,
+   "impressions": 322962,
+   "reach": 111355,
+   "clicks": 3851,
+   "link_clicks": 2626,
+   "purchases": 373,
+   "revenue": 170518.07
+  },
+  {
+   "date": "2026-04-12",
+   "spend": 44308.4,
+   "impressions": 320004,
+   "reach": 119619,
+   "clicks": 3850,
+   "link_clicks": 2790,
+   "purchases": 285,
+   "revenue": 108421.74
+  },
+  {
+   "date": "2026-04-13",
+   "spend": 19847.97,
+   "impressions": 195288,
+   "reach": 89959,
+   "clicks": 2125,
+   "link_clicks": 1277,
+   "purchases": 107,
+   "revenue": 60850.99
+  },
+  {
+   "date": "2026-04-14",
+   "spend": 16350.12,
+   "impressions": 159286,
+   "reach": 69020,
+   "clicks": 2288,
+   "link_clicks": 1363,
+   "purchases": 34,
+   "revenue": 23272.99
+  },
+  {
+   "date": "2026-04-15",
+   "spend": 948.82,
+   "impressions": 39353,
+   "reach": 27340,
+   "clicks": 271,
+   "link_clicks": 143,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2026-04-16",
+   "spend": 897.2,
+   "impressions": 39590,
+   "reach": 26916,
+   "clicks": 265,
+   "link_clicks": 142,
+   "purchases": 2,
+   "revenue": 678.67
+  },
+  {
+   "date": "2026-04-17",
+   "spend": 10357.91,
+   "impressions": 167443,
+   "reach": 132393,
+   "clicks": 4138,
+   "link_clicks": 2200,
+   "purchases": 32,
+   "revenue": 23366.19
+  },
+  {
+   "date": "2026-04-18",
+   "spend": 30487.95,
+   "impressions": 244474,
+   "reach": 152069,
+   "clicks": 3381,
+   "link_clicks": 2282,
+   "purchases": 453,
+   "revenue": 257434.85
+  },
+  {
+   "date": "2026-04-19",
+   "spend": 60696.58,
+   "impressions": 355656,
+   "reach": 155200,
+   "clicks": 5614,
+   "link_clicks": 3394,
+   "purchases": 623,
+   "revenue": 329532.16
+  },
+  {
+   "date": "2026-04-20",
+   "spend": 656.3,
+   "impressions": 28446,
+   "reach": 27849,
+   "clicks": 104,
+   "link_clicks": 63,
+   "purchases": 1,
+   "revenue": 308.61
+  },
+  {
+   "date": "2026-04-21",
+   "spend": 344.52,
+   "impressions": 38095,
+   "reach": 35806,
+   "clicks": 54,
+   "link_clicks": 23,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2026-04-22",
+   "spend": 398.76,
+   "impressions": 39924,
+   "reach": 37872,
+   "clicks": 77,
+   "link_clicks": 30,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2026-04-23",
+   "spend": 402.28,
+   "impressions": 39924,
+   "reach": 36326,
+   "clicks": 56,
+   "link_clicks": 31,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2026-04-24",
+   "spend": 402.8,
+   "impressions": 39180,
+   "reach": 37474,
+   "clicks": 49,
+   "link_clicks": 17,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2026-04-25",
+   "spend": 266.51,
+   "impressions": 24794,
+   "reach": 22764,
+   "clicks": 31,
+   "link_clicks": 10,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2026-05-07",
+   "spend": 16377.74,
+   "impressions": 118004,
+   "reach": 71669,
+   "clicks": 1932,
+   "link_clicks": 1098,
+   "purchases": 207,
+   "revenue": 90528.85
+  },
+  {
+   "date": "2026-05-08",
+   "spend": 16781.74,
+   "impressions": 120252,
+   "reach": 28092,
+   "clicks": 2054,
+   "link_clicks": 1255,
+   "purchases": 332,
+   "revenue": 148834.44
+  },
+  {
+   "date": "2026-05-09",
+   "spend": 12091.41,
+   "impressions": 96136,
+   "reach": 34096,
+   "clicks": 1545,
+   "link_clicks": 1007,
+   "purchases": 219,
+   "revenue": 97768.46
+  },
+  {
+   "date": "2026-05-10",
+   "spend": 26660.75,
+   "impressions": 204214,
+   "reach": 72697,
+   "clicks": 3403,
+   "link_clicks": 2052,
+   "purchases": 280,
+   "revenue": 128583.44
+  },
+  {
+   "date": "2026-05-11",
+   "spend": 27293.57,
+   "impressions": 212567,
+   "reach": 77479,
+   "clicks": 2918,
+   "link_clicks": 1806,
+   "purchases": 261,
+   "revenue": 125341.39
+  },
+  {
+   "date": "2026-05-12",
+   "spend": 28486.89,
+   "impressions": 223376,
+   "reach": 88568,
+   "clicks": 2716,
+   "link_clicks": 1673,
+   "purchases": 254,
+   "revenue": 121250.98
+  },
+  {
+   "date": "2026-05-13",
+   "spend": 47714.04,
+   "impressions": 308455,
+   "reach": 125862,
+   "clicks": 3368,
+   "link_clicks": 2092,
+   "purchases": 323,
+   "revenue": 301032.36
+  },
+  {
+   "date": "2026-05-14",
+   "spend": 30631.77,
+   "impressions": 223289,
+   "reach": 90830,
+   "clicks": 2302,
+   "link_clicks": 1539,
+   "purchases": 187,
+   "revenue": 73596.73
+  },
+  {
+   "date": "2026-05-15",
+   "spend": 29627.09,
+   "impressions": 201634,
+   "reach": 77975,
+   "clicks": 2332,
+   "link_clicks": 1677,
+   "purchases": 190,
+   "revenue": 78600.89
+  },
+  {
+   "date": "2026-05-16",
+   "spend": 67922.13,
+   "impressions": 373884,
+   "reach": 133422,
+   "clicks": 4689,
+   "link_clicks": 3281,
+   "purchases": 666,
+   "revenue": 274939.16
+  },
+  {
+   "date": "2026-05-17",
+   "spend": 55170.05,
+   "impressions": 314328,
+   "reach": 112558,
+   "clicks": 3976,
+   "link_clicks": 2572,
+   "purchases": 557,
+   "revenue": 286126.98
+  },
+  {
+   "date": "2026-05-18",
+   "spend": 39875.64,
+   "impressions": 241545,
+   "reach": 110106,
+   "clicks": 3536,
+   "link_clicks": 2078,
+   "purchases": 167,
+   "revenue": 71667.48
+  },
+  {
+   "date": "2026-05-19",
+   "spend": 27196.98,
+   "impressions": 165962,
+   "reach": 65483,
+   "clicks": 2370,
+   "link_clicks": 1585,
+   "purchases": 291,
+   "revenue": 123217.85
+  },
+  {
+   "date": "2026-05-20",
+   "spend": 25108.25,
+   "impressions": 181267,
+   "reach": 73797,
+   "clicks": 2168,
+   "link_clicks": 1584,
+   "purchases": 103,
+   "revenue": 93298.47
+  },
+  {
+   "date": "2026-05-21",
+   "spend": 27724.22,
+   "impressions": 183551,
+   "reach": 84002,
+   "clicks": 2287,
+   "link_clicks": 1633,
+   "purchases": 145,
+   "revenue": 71700.66
+  },
+  {
+   "date": "2026-05-22",
+   "spend": 40997.24,
+   "impressions": 243576,
+   "reach": 109024,
+   "clicks": 3541,
+   "link_clicks": 2532,
+   "purchases": 252,
+   "revenue": 117431.65
+  },
+  {
+   "date": "2026-05-23",
+   "spend": 39340.24,
+   "impressions": 213879,
+   "reach": 90692,
+   "clicks": 4135,
+   "link_clicks": 3087,
+   "purchases": 306,
+   "revenue": 154931.62
+  },
+  {
+   "date": "2026-05-24",
+   "spend": 29447.48,
+   "impressions": 189581,
+   "reach": 71069,
+   "clicks": 3378,
+   "link_clicks": 2299,
+   "purchases": 162,
+   "revenue": 88184.43
+  },
+  {
+   "date": "2026-05-25",
+   "spend": 45150.84,
+   "impressions": 273959,
+   "reach": 112722,
+   "clicks": 4510,
+   "link_clicks": 3076,
+   "purchases": 342,
+   "revenue": 246902.05
+  },
+  {
+   "date": "2026-05-26",
+   "spend": 54007.57,
+   "impressions": 325559,
+   "reach": 175747,
+   "clicks": 4963,
+   "link_clicks": 3453,
+   "purchases": 364,
+   "revenue": 228201.87
+  },
+  {
+   "date": "2026-05-27",
+   "spend": 54157.04,
+   "impressions": 345144,
+   "reach": 203145,
+   "clicks": 4874,
+   "link_clicks": 3225,
+   "purchases": 307,
+   "revenue": 207489.86
+  },
+  {
+   "date": "2026-05-28",
+   "spend": 48398.17,
+   "impressions": 293838,
+   "reach": 170311,
+   "clicks": 4165,
+   "link_clicks": 2781,
+   "purchases": 196,
+   "revenue": 105429.2
+  },
+  {
+   "date": "2026-05-29",
+   "spend": 25352.46,
+   "impressions": 171516,
+   "reach": 90141,
+   "clicks": 2508,
+   "link_clicks": 1711,
+   "purchases": 200,
+   "revenue": 81982.38
+  },
+  {
+   "date": "2026-05-30",
+   "spend": 51085.99,
+   "impressions": 261449,
+   "reach": 89673,
+   "clicks": 4303,
+   "link_clicks": 3035,
+   "purchases": 916,
+   "revenue": 484327.71
+  },
+  {
+   "date": "2026-05-31",
+   "spend": 38002.58,
+   "impressions": 205025,
+   "reach": 98101,
+   "clicks": 2993,
+   "link_clicks": 1844,
+   "purchases": 349,
+   "revenue": 147999.24
+  },
+  {
+   "date": "2026-06-01",
+   "spend": 0.0,
+   "impressions": 0,
+   "reach": 0,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2026-06-02",
+   "spend": 0.0,
+   "impressions": 0,
+   "reach": 0,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2026-06-03",
+   "spend": 0.0,
+   "impressions": 0,
+   "reach": 0,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2026-06-05",
+   "spend": 0.0,
+   "impressions": 0,
+   "reach": 0,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2026-06-06",
+   "spend": 32591.2,
+   "impressions": 159653,
+   "reach": 43393,
+   "clicks": 3235,
+   "link_clicks": 2090,
+   "purchases": 1077,
+   "revenue": 192628.59
+  },
+  {
+   "date": "2026-06-07",
+   "spend": 6292.06,
+   "impressions": 43329,
+   "reach": 27794,
+   "clicks": 1179,
+   "link_clicks": 738,
+   "purchases": 209,
+   "revenue": 42873.29
+  },
+  {
+   "date": "2026-06-08",
+   "spend": 16051.76,
+   "impressions": 129074,
+   "reach": 46523,
+   "clicks": 3070,
+   "link_clicks": 1987,
+   "purchases": 572,
+   "revenue": 134618.05
+  },
+  {
+   "date": "2026-06-09",
+   "spend": 13776.67,
+   "impressions": 144330,
+   "reach": 70702,
+   "clicks": 3010,
+   "link_clicks": 1936,
+   "purchases": 354,
+   "revenue": 109962.72
+  },
+  {
+   "date": "2026-06-10",
+   "spend": 16859.15,
+   "impressions": 164909,
+   "reach": 82982,
+   "clicks": 3739,
+   "link_clicks": 2315,
+   "purchases": 412,
+   "revenue": 164982.48
+  },
+  {
+   "date": "2026-06-11",
+   "spend": 18908.47,
+   "impressions": 174587,
+   "reach": 82355,
+   "clicks": 3358,
+   "link_clicks": 2158,
+   "purchases": 396,
+   "revenue": 106808.1
+  },
+  {
+   "date": "2026-06-12",
+   "spend": 21291.91,
+   "impressions": 191258,
+   "reach": 95871,
+   "clicks": 3713,
+   "link_clicks": 2331,
+   "purchases": 391,
+   "revenue": 99279.45
+  },
+  {
+   "date": "2026-06-13",
+   "spend": 27807.16,
+   "impressions": 231072,
+   "reach": 115170,
+   "clicks": 4470,
+   "link_clicks": 2890,
+   "purchases": 429,
+   "revenue": 110860.79
+  },
+  {
+   "date": "2026-06-14",
+   "spend": 33745.57,
+   "impressions": 252088,
+   "reach": 112304,
+   "clicks": 4904,
+   "link_clicks": 3025,
+   "purchases": 527,
+   "revenue": 113955.28
+  },
+  {
+   "date": "2026-06-15",
+   "spend": 3932.14,
+   "impressions": 28620,
+   "reach": 26593,
+   "clicks": 445,
+   "link_clicks": 253,
+   "purchases": 34,
+   "revenue": 17272.43
+  },
+  {
+   "date": "2026-06-16",
+   "spend": 20735.77,
+   "impressions": 110028,
+   "reach": 49996,
+   "clicks": 2285,
+   "link_clicks": 1217,
+   "purchases": 260,
+   "revenue": 84075.9
+  },
+  {
+   "date": "2026-06-17",
+   "spend": 19259.75,
+   "impressions": 126304,
+   "reach": 69188,
+   "clicks": 1797,
+   "link_clicks": 1097,
+   "purchases": 157,
+   "revenue": 56053.08
+  },
+  {
+   "date": "2026-06-18",
+   "spend": 26819.33,
+   "impressions": 166208,
+   "reach": 79474,
+   "clicks": 2183,
+   "link_clicks": 1438,
+   "purchases": 348,
+   "revenue": 126968.45
+  },
+  {
+   "date": "2026-06-19",
+   "spend": 25125.63,
+   "impressions": 153277,
+   "reach": 66524,
+   "clicks": 1741,
+   "link_clicks": 1144,
+   "purchases": 219,
+   "revenue": 81871.25
+  },
+  {
+   "date": "2026-06-20",
+   "spend": 31670.83,
+   "impressions": 203484,
+   "reach": 107800,
+   "clicks": 2397,
+   "link_clicks": 1651,
+   "purchases": 340,
+   "revenue": 120870.87
+  },
+  {
+   "date": "2026-06-21",
+   "spend": 30416.97,
+   "impressions": 193164,
+   "reach": 98272,
+   "clicks": 2261,
+   "link_clicks": 1560,
+   "purchases": 128,
+   "revenue": 50818.9
+  },
+  {
+   "date": "2026-06-22",
+   "spend": 14297.92,
+   "impressions": 96808,
+   "reach": 45069,
+   "clicks": 1111,
+   "link_clicks": 733,
+   "purchases": 98,
+   "revenue": 36603.02
+  },
+  {
+   "date": "2026-06-23",
+   "spend": 11307.05,
+   "impressions": 80975,
+   "reach": 33101,
+   "clicks": 979,
+   "link_clicks": 620,
+   "purchases": 131,
+   "revenue": 66114.26
+  },
+  {
+   "date": "2026-06-24",
+   "spend": 12191.52,
+   "impressions": 83494,
+   "reach": 34819,
+   "clicks": 1074,
+   "link_clicks": 677,
+   "purchases": 195,
+   "revenue": 86059.94
+  },
+  {
+   "date": "2026-06-25",
+   "spend": 13390.03,
+   "impressions": 96111,
+   "reach": 46505,
+   "clicks": 1110,
+   "link_clicks": 659,
+   "purchases": 137,
+   "revenue": 51242.3
+  },
+  {
+   "date": "2026-06-26",
+   "spend": 20339.37,
+   "impressions": 142043,
+   "reach": 72219,
+   "clicks": 1653,
+   "link_clicks": 1036,
+   "purchases": 205,
+   "revenue": 86503.81
+  },
+  {
+   "date": "2026-06-27",
+   "spend": 22335.48,
+   "impressions": 166367,
+   "reach": 86044,
+   "clicks": 1945,
+   "link_clicks": 1170,
+   "purchases": 366,
+   "revenue": 157517.85
+  },
+  {
+   "date": "2026-06-28",
+   "spend": 33505.95,
+   "impressions": 208735,
+   "reach": 91505,
+   "clicks": 3027,
+   "link_clicks": 1849,
+   "purchases": 488,
+   "revenue": 182077.47
+  },
+  {
+   "date": "2026-06-29",
+   "spend": 0.0,
+   "impressions": 0,
+   "reach": 0,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 17,
+   "revenue": 4808.35
+  },
+  {
+   "date": "2026-06-30",
+   "spend": 0.0,
+   "impressions": 1,
+   "reach": 1,
+   "clicks": 0,
+   "link_clicks": 0,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2026-07-01",
+   "spend": 1113.59,
+   "impressions": 34866,
+   "reach": 33243,
+   "clicks": 264,
+   "link_clicks": 83,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2026-07-02",
+   "spend": 1671.72,
+   "impressions": 57431,
+   "reach": 56070,
+   "clicks": 386,
+   "link_clicks": 101,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2026-07-03",
+   "spend": 20579.54,
+   "impressions": 141210,
+   "reach": 71924,
+   "clicks": 2811,
+   "link_clicks": 1797,
+   "purchases": 662,
+   "revenue": 107711.72
+  },
+  {
+   "date": "2026-07-04",
+   "spend": 22825.43,
+   "impressions": 151944,
+   "reach": 69770,
+   "clicks": 2017,
+   "link_clicks": 1185,
+   "purchases": 573,
+   "revenue": 112013.65
+  },
+  {
+   "date": "2026-07-05",
+   "spend": 275.82,
+   "impressions": 1822,
+   "reach": 1664,
+   "clicks": 25,
+   "link_clicks": 9,
+   "purchases": 10,
+   "revenue": 894.33
+  },
+  {
+   "date": "2026-07-06",
+   "spend": 717.84,
+   "impressions": 29639,
+   "reach": 27974,
+   "clicks": 226,
+   "link_clicks": 26,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2026-07-07",
+   "spend": 786.05,
+   "impressions": 36405,
+   "reach": 35399,
+   "clicks": 347,
+   "link_clicks": 58,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2026-07-08",
+   "spend": 811.36,
+   "impressions": 39336,
+   "reach": 36940,
+   "clicks": 277,
+   "link_clicks": 32,
+   "purchases": 0,
+   "revenue": 0.0
+  },
+  {
+   "date": "2026-07-09",
+   "spend": 8096.66,
+   "impressions": 144521,
+   "reach": 114805,
+   "clicks": 2858,
+   "link_clicks": 1190,
+   "purchases": 212,
+   "revenue": 81119.59
+  },
+  {
+   "date": "2026-07-10",
+   "spend": 18921.23,
+   "impressions": 115387,
+   "reach": 36560,
+   "clicks": 2960,
+   "link_clicks": 1666,
+   "purchases": 482,
+   "revenue": 205340.67
+  },
+  {
+   "date": "2026-07-11",
+   "spend": 22156.97,
+   "impressions": 152604,
+   "reach": 55432,
+   "clicks": 2785,
+   "link_clicks": 1584,
+   "purchases": 354,
+   "revenue": 130552.25
+  },
+  {
+   "date": "2026-07-12",
+   "spend": 20724.85,
+   "impressions": 156656,
+   "reach": 61477,
+   "clicks": 2454,
+   "link_clicks": 1394,
+   "purchases": 293,
+   "revenue": 99484.5
+  },
+  {
+   "date": "2026-07-13",
+   "spend": 21491.12,
+   "impressions": 165730,
+   "reach": 68255,
+   "clicks": 2660,
+   "link_clicks": 1598,
+   "purchases": 332,
+   "revenue": 194982.42
+  },
+  {
+   "date": "2026-07-14",
+   "spend": 19806.83,
+   "impressions": 151027,
+   "reach": 62483,
+   "clicks": 2277,
+   "link_clicks": 1342,
+   "purchases": 230,
+   "revenue": 95211.07
+  },
+  {
+   "date": "2026-07-15",
+   "spend": 23016.85,
+   "impressions": 154178,
+   "reach": 59079,
+   "clicks": 2797,
+   "link_clicks": 1682,
+   "purchases": 400,
+   "revenue": 166461.58
+  },
+  {
+   "date": "2026-07-16",
+   "spend": 22240.03,
+   "impressions": 166338,
+   "reach": 75782,
+   "clicks": 2883,
+   "link_clicks": 1801,
+   "purchases": 356,
+   "revenue": 199928.95
+  },
+  {
+   "date": "2026-07-17",
+   "spend": 26796.1,
+   "impressions": 174188,
+   "reach": 70749,
+   "clicks": 3370,
+   "link_clicks": 2025,
+   "purchases": 352,
+   "revenue": 166019.99
+  },
+  {
+   "date": "2026-07-18",
+   "spend": 22514.15,
+   "impressions": 134875,
+   "reach": 49254,
+   "clicks": 3193,
+   "link_clicks": 2119,
+   "purchases": 800,
+   "revenue": 396831.32
+  },
+  {
+   "date": "2026-07-19",
+   "spend": 24089.94,
+   "impressions": 160919,
+   "reach": 53984,
+   "clicks": 3048,
+   "link_clicks": 1869,
+   "purchases": 265,
+   "revenue": 117544.61
+  },
+  {
+   "date": "2026-07-20",
+   "spend": 6778.0,
+   "impressions": 47410,
+   "reach": 23932,
+   "clicks": 844,
+   "link_clicks": 424,
+   "purchases": 57,
+   "revenue": 38183.73
+  }
+ ],
+ "window": {
+  "since": "2026-06-20",
+  "until": "2026-07-19"
+ },
+ "funnel": {
+  "spend": 468091,
+  "impressions": 3440258,
+  "reach": 629682,
+  "frequency": 5.46,
+  "clicks": 53195,
+  "link_clicks": 31516,
+  "purchases": 7427,
+  "revenue": 2916713,
+  "ctr": 1.55,
+  "link_ctr": 0.92,
+  "cpc": 8.8,
+  "cpc_link": 14.85,
+  "cpm": 136.06,
+  "cvr": 23.6,
+  "cpa": 63.0,
+  "aov": 393,
+  "roas": 6.23,
+  "real_roas": 4.36
+ },
+ "deltas": {
+  "spend": -36.5,
+  "roas": 36.0,
+  "cpa": -23.7,
+  "ctr": -8.3,
+  "cpm": -11.7,
+  "frequency": -11.1,
+  "purchases": -16.8,
+  "link_ctr": -17.1
+ },
+ "campaigns": [
+  {
+   "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
+   "spend": 233744,
+   "cpm": 159.9,
+   "cpc": 9.8,
+   "ctr": 1.63,
+   "frequency": 8.8,
+   "reach": 166125,
+   "purchases": 4364,
+   "roas": 7.76,
+   "role": "core",
+   "fatigue": true
+  },
+  {
+   "name": "DC | 03 Prospecting · свіжа кров (excl. наші)",
+   "spend": 70849,
+   "cpm": 113.5,
+   "cpc": 6.87,
+   "ctr": 1.65,
+   "frequency": 3.04,
+   "reach": 205283,
+   "purchases": 1044,
+   "roas": 5.15,
+   "role": "prospecting",
+   "fatigue": false
+  },
+  {
+   "name": "DC | 05 Тест аудиторій (vg) · 35-54 / 45-54 / LAL",
+   "spend": 66522,
+   "cpm": 152.2,
+   "cpc": 8.64,
+   "ctr": 1.76,
+   "frequency": 4.62,
+   "reach": 94594,
+   "purchases": 1051,
+   "roas": 5.39,
+   "role": "core",
+   "fatigue": true
+  },
+  {
+   "name": "на ШИРОКУ продажі",
+   "spend": 28757,
+   "cpm": 186.0,
+   "cpc": 17.34,
+   "ctr": 1.07,
+   "frequency": 2.39,
+   "reach": 64704,
+   "purchases": 218,
+   "roas": 3.18,
+   "role": "core",
+   "fatigue": false
+  },
+  {
+   "name": "На НОВИХ продажі",
+   "spend": 26919,
+   "cpm": 136.2,
+   "cpc": 12.26,
+   "ctr": 1.11,
+   "frequency": 1.45,
+   "reach": 136472,
+   "purchases": 119,
+   "roas": 1.3,
+   "role": "acquisition",
+   "fatigue": false
+  },
+  {
+   "name": "DC | 02 Retargeting · дожим теплих",
+   "spend": 17223,
+   "cpm": 158.8,
+   "cpc": 6.76,
+   "ctr": 2.35,
+   "frequency": 6.45,
+   "reach": 16823,
+   "purchases": 304,
+   "roas": 5.91,
+   "role": "retarget",
+   "fatigue": true
+  },
+  {
+   "name": "DC | 06 Engagement · розшевелити (байти/коменти)",
+   "spend": 9399,
+   "cpm": 25.3,
+   "cpc": 3.07,
+   "ctr": 0.82,
+   "frequency": 1.43,
+   "reach": 259279,
+   "purchases": 0,
+   "roas": 0.0,
+   "role": "core",
+   "fatigue": false
+  },
+  {
+   "name": "DC|02b База · Дожим покупців (апсейл)",
+   "spend": 9013,
+   "cpm": 200.6,
+   "cpc": 10.35,
+   "ctr": 1.94,
+   "frequency": 6.65,
+   "reach": 6757,
+   "purchases": 180,
+   "roas": 11.7,
+   "role": "retarget",
+   "fatigue": true
+  },
+  {
+   "name": "DC | 04 Testing · інкубатор (ABO)",
+   "spend": 5665,
+   "cpm": 144.0,
+   "cpc": 5.79,
+   "ctr": 2.49,
+   "frequency": 1.73,
+   "reach": 22682,
+   "purchases": 147,
+   "roas": 8.07,
+   "role": "core",
+   "fatigue": false
+  }
+ ],
+ "clusters": [
+  {
+   "cluster": "Інше",
+   "spend": 156426,
+   "spend_pct": 33.4,
+   "roas": 8.23,
+   "purchases": 2812,
+   "ctr": 1.68,
+   "cpa": 56,
+   "is_video": false
+  },
+  {
+   "cluster": "Картинка-нумерована",
+   "spend": 138135,
+   "spend_pct": 29.5,
+   "roas": 5.63,
+   "purchases": 1901,
+   "ctr": 1.58,
+   "cpa": 73,
+   "is_video": false
+  },
+  {
+   "cluster": "Mustang-пост",
+   "spend": 77260,
+   "spend_pct": 16.5,
+   "roas": 3.75,
+   "purchases": 734,
+   "ctr": 1.24,
+   "cpa": 105,
+   "is_video": false
+  },
+  {
+   "cluster": "Відео",
+   "spend": 66323,
+   "spend_pct": 14.2,
+   "roas": 5.63,
+   "purchases": 1194,
+   "ctr": 1.35,
+   "cpa": 56,
+   "is_video": true
+  },
+  {
+   "cluster": "iPhone/айфон",
+   "spend": 21584,
+   "spend_pct": 4.6,
+   "roas": 6.08,
+   "purchases": 646,
+   "ctr": 1.87,
+   "cpa": 33,
+   "is_video": false
+  },
+  {
+   "cluster": "Картинка-нова",
+   "spend": 8363,
+   "spend_pct": 1.8,
+   "roas": 6.02,
+   "purchases": 101,
+   "ctr": 1.14,
+   "cpa": 83,
+   "is_video": false
+  }
+ ],
+ "video_vs_static": {
+  "video": {
+   "spend": 66323,
+   "pct": 14.2,
+   "roas": 5.63,
+   "purchases": 1194
+  },
+  "static": {
+   "spend": 401768,
+   "pct": 85.8,
+   "roas": 6.31,
+   "purchases": 6194
+  }
+ },
+ "ai": {
+  "summary": "Реал ROAS ~4.36 (pixel 6.23), CPA 63.0 ₴, частота 5.46. ROAS ↑36.0% до попер. періоду. Важелі — реалокація у топ-кластери, відео, ротація при частоті >4.",
+  "priorities": [
+   {
+    "id": "P1",
+    "action": "Перелити бюджет з «Картинка-нумерована» у топ (Інше)",
+    "why": "Картинка-нумерована 29.5% / ROAS 5.63 проти Інше 8.23",
+    "impact": "Високий",
+    "effort": "Низьке",
+    "expect": "+0.3–0.7 ROAS"
+   },
+   {
+    "id": "P3",
+    "action": "Ротувати креативи де частота >4 (DC | 01 Ядро · Advanta, DC | 05 Тест аудиторій, DC | 02 Retargeting · )",
+    "why": "Частота↑ + CTR↓ + CPC↑ = втома",
+    "impact": "Високий",
+    "effort": "Середнє",
+    "expect": "CTR↑, CPC↓"
+   }
+  ],
+  "alerts": [
+   {
+    "sev": "mod",
+    "text": "Частота 5.46 — висока (поріг 4.0). Освіжати креативи/аудиторії."
+   },
+   {
+    "sev": "mod",
+    "text": "«DC | 01 Ядро · Advantage+ Sales (broad)»: частота 8.8, CTR 1.63% — втома."
+   },
+   {
+    "sev": "mod",
+    "text": "«DC | 05 Тест аудиторій (vg) · 35-54 / 45-54 / LAL»: частота 4.62, CTR 1.76% — втома."
+   },
+   {
+    "sev": "mod",
+    "text": "«DC | 02 Retargeting · дожим теплих»: частота 6.45, CTR 2.35% — втома."
+   },
+   {
+    "sev": "cri",
+    "text": "«DC | 06 Engagement · розшевелити (байти/коменти)»: ROAS 0.0 при 9399 ₴ — зламана, ревізія."
+   },
+   {
+    "sev": "mod",
+    "text": "«DC|02b База · Дожим покупців (апсейл)»: частота 6.65, CTR 1.94% — втома."
+   }
+  ]
+ }
 }
