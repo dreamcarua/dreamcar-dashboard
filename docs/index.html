@@ -2823,14 +2823,21 @@ function buildTable(containerSelector, opts) {
     search: ''
   };
 
+  // #search-all (21.07.2026): з opts.searchAll шукаємо по ВСІХ полях рядка
+  // (sendpulse id, wc_order_id, телефон, tariff, усі utm_*), а не лише по видимих
+  // колонках — щоб знайти конкретну транзакцію за будь-яким параметром.
+  function matchRow(r, q) {
+    if (opts.searchAll) {
+      return Object.values(r).some(v => v != null && typeof v !== 'object' && String(v).toLowerCase().includes(q));
+    }
+    return opts.cols.some(c => String((c.key ? r[c.key] : '') ?? '').toLowerCase().includes(q));
+  }
+
   function render() {
     let rows = opts.rows.slice();
     if (state.search) {
       const q = state.search.toLowerCase();
-      rows = rows.filter(r => opts.cols.some(c => {
-        const v = c.key ? r[c.key] : '';
-        return String(v ?? '').toLowerCase().includes(q);
-      }));
+      rows = rows.filter(r => matchRow(r, q));
     }
     if (state.sortKey) {
       const col = opts.cols.find(c => c.key === state.sortKey);
@@ -2920,8 +2927,13 @@ function buildTable(containerSelector, opts) {
     });
     const csvBtn = $('.t-csv', cont);
     if (csvBtn) csvBtn.addEventListener('click', () => {
-      const cols = opts.cols.map(c => ({ key: c.key, label: c.label || c.key, val: c.csv || (r => r[c.key]) }));
-      exportCSV(opts.rows, cols, opts.csvFile);
+      // csvCols — розширений набір для вивантаження (більше полів, ніж видно в таблиці).
+      const src = opts.csvCols || opts.cols;
+      const cols = src.map(c => ({ key: c.key, label: c.label || c.key, val: c.csv || (r => r[c.key]) }));
+      // Експортуємо ВЕСЬ набір за поточним фільтром + пошуком (не лише поточну сторінку).
+      let out = opts.rows.slice();
+      if (state.search) { const q = state.search.toLowerCase(); out = out.filter(r => matchRow(r, q)); }
+      exportCSV(out, cols, opts.csvFile);
     });
     const search = $('.t-search', cont);
     if (search) {
@@ -2939,7 +2951,7 @@ function buildTable(containerSelector, opts) {
           let lst = opts.rows.slice();
           if (state.search) {
             const q = state.search.toLowerCase();
-            lst = lst.filter(r => opts.cols.some(c => String((c.key ? r[c.key] : '') ?? '').toLowerCase().includes(q)));
+            lst = lst.filter(r => matchRow(r, q));
           }
           if (state.sortKey) {
             const col = opts.cols.find(c => c.key === state.sortKey);
@@ -3297,7 +3309,6 @@ async function renderOverview() {
     const cpl = adSpend > 0 && totalForConv > 0 ? adSpend / totalForConv : null;
     const cpa = adSpend > 0 && paid.length > 0 ? adSpend / paid.length : null;
     const byDay = aggregateByDay(rows, filters.granularity);
-    const last20 = rows.slice(0, 20);
     const byProj7 = aggregateByField(rows, 'project').slice(0, 7);
     const conv = totalForConv ? (paid.length / totalForConv * 100) : 0;
     const granLabel = { day: 'По днях', week: 'По тижнях', month: 'По місяцях' }[filters.granularity || 'day'];
@@ -3354,7 +3365,7 @@ async function renderOverview() {
       </div>
 
       <div class="card">
-        <div class="card-head"><h3>Останні 20 угод</h3><span class="meta">клік на рядок — деталі</span></div>
+        <div class="card-head"><h3>Угоди за період</h3><span class="meta">${fmtNum(rows.length)} операцій · пошук за будь-яким полем · клік на рядок — деталі</span></div>
         <div id="t-recent"></div>
       </div>
     `;
@@ -3429,9 +3440,11 @@ async function renderOverview() {
     }
     // 14.06.2026 #392.2 — legacy Chart.js `if (false && byProj7.length)` блок видалено.
 
+    // 21.07.2026: замість «останні 20» — УСІ угоди за поточним фільтром, з пошуком
+    // по всіх полях (id/email/телефон/utm/тариф) і вивантаженням у CSV.
     buildTable('#t-recent', {
-      rows: last20,
-      pageSize: 20,
+      rows: rows,
+      pageSize: 25,
       sortKey: 'created_at',
       rowClick: openLeadDetailsModal,
       cols: [
@@ -3444,7 +3457,29 @@ async function renderOverview() {
         { key: 'amount', label: 'Сума', class: 'amount', fmt: (v, r) => fmtMoney(v, r.currency) },
         { key: 'status', label: 'Статус', fmt: statusPill }
       ],
-      search: false
+      // Вивантаження — з подробицями (більше полів, ніж видно в таблиці)
+      csvCols: [
+        { key: 'created_at', label: 'Дата створення' },
+        { key: 'paid_at', label: 'Дата оплати' },
+        { key: 'sendpulse_deal_id', label: 'SendPulse ID' },
+        { key: 'wc_order_id', label: 'WC Order ID' },
+        { key: 'status', label: 'Статус' },
+        { key: 'amount', label: 'Сума' },
+        { key: 'currency', label: 'Валюта' },
+        { key: 'project', label: 'Проект' },
+        { key: 'tariff', label: 'Тариф' },
+        { key: 'customer_email', label: 'Email' },
+        { key: 'customer_phone', label: 'Телефон' },
+        { key: 'customer_type', label: 'Тип клієнта' },
+        { key: 'pay_provider', label: 'Платіжка' },
+        { key: 'utm_source', label: 'utm_source' },
+        { key: 'utm_medium', label: 'utm_medium' },
+        { key: 'utm_campaign', label: 'utm_campaign' },
+        { key: 'utm_term', label: 'utm_term (виконавець)' },
+        { key: 'utm_content', label: 'utm_content' }
+      ],
+      csvFile: `dreamcar-ugody_${filters.from}_${filters.to}.csv`,
+      searchAll: true
     });
   } catch (e) { renderError(c, e); }
 }
