@@ -1,124 +1,115 @@
 {
- "generated": "2026-07-21T07:56:13.410513+00:00",
+ "generated": "2026-07-22T07:56:27.500578+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-07-20",
-  "prev_date": "2026-07-19",
-  "spend": 23793.24,
-  "impressions": 154573,
-  "clicks": 3124,
-  "purchases": 269,
-  "pixel_roas": 6.59,
-  "cpa": 88.45,
-  "frequency": 3.19,
-  "real_ad_revenue": 90665,
-  "real_ad_roas": 3.81,
+  "date": "2026-07-21",
+  "prev_date": "2026-07-20",
+  "spend": 20647.89,
+  "impressions": 138888,
+  "clicks": 3417,
+  "purchases": 216,
+  "pixel_roas": 4.97,
+  "cpa": 95.59,
+  "frequency": 2.88,
+  "real_ad_revenue": 40133,
+  "real_ad_roas": 1.94,
   "deltas": {
-   "spend": -1.3,
-   "pixel_roas": 35.0,
-   "purchases": 1.5,
-   "cpa": -2.7
+   "spend": -13.3,
+   "pixel_roas": -24.5,
+   "purchases": -19.7,
+   "cpa": 8.0
   },
   "week": {
    "this": {
-    "from": "2026-07-14",
-    "to": "2026-07-20",
-    "spend": 162269,
-    "purchases": 2672,
-    "pixel_roas": 8.0,
-    "cpa": 60.73,
-    "real_revenue": 614427,
-    "real_roas": 3.79
+    "from": "2026-07-15",
+    "to": "2026-07-21",
+    "spend": 163124,
+    "purchases": 2658,
+    "pixel_roas": 8.01,
+    "cpa": 61.37,
+    "real_revenue": 596602,
+    "real_roas": 3.66
    },
    "prev": {
-    "from": "2026-07-07",
-    "to": "2026-07-13",
-    "spend": 92988,
-    "purchases": 1672,
-    "pixel_roas": 7.65,
-    "cpa": 55.61,
-    "real_revenue": 439854,
-    "real_roas": 4.73
+    "from": "2026-07-08",
+    "to": "2026-07-14",
+    "spend": 112009,
+    "purchases": 1902,
+    "pixel_roas": 7.2,
+    "cpa": 58.89,
+    "real_revenue": 501610,
+    "real_roas": 4.48
    },
    "deltas": {
-    "spend": 74.5,
-    "real_roas": -19.9,
-    "pixel_roas": 4.6,
-    "cpa": 9.2,
-    "purchases": 59.8
+    "spend": 45.6,
+    "real_roas": -18.3,
+    "pixel_roas": 11.2,
+    "cpa": 4.2,
+    "purchases": 39.7
    }
   },
   "real_by_placement": [
    {
     "placement": "instagram_reels",
-    "revenue": 29091,
-    "paid": 37
+    "revenue": 13995,
+    "paid": 25
    },
    {
     "placement": "instagram_feed",
-    "revenue": 24270,
-    "paid": 45
+    "revenue": 11073,
+    "paid": 25
    },
    {
     "placement": "instagram_stories",
-    "revenue": 19037,
-    "paid": 41
+    "revenue": 7482,
+    "paid": 17
    },
    {
     "placement": "facebook_mobile_reels",
-    "revenue": 9083,
-    "paid": 16
+    "revenue": 3392,
+    "paid": 8
    },
    {
     "placement": "facebook_mobile_feed",
-    "revenue": 5988,
-    "paid": 12
+    "revenue": 2893,
+    "paid": 7
    },
    {
     "placement": "facebook_stories",
-    "revenue": 3196,
-    "paid": 4
+    "revenue": 1298,
+    "paid": 2
    }
   ],
   "active_cycles": [],
   "top_creatives": [
    {
-    "name": "другий пост х6м",
-    "ad_id": "120250988812140624",
-    "spend": 379.57,
-    "purchases": 5,
-    "roas": 30.31,
-    "ctr": 1.45
-   },
-   {
-    "name": "х2 пост х6м",
-    "ad_id": "120251174131800624",
-    "spend": 545.3,
-    "purchases": 15,
-    "roas": 12.54,
-    "ctr": 1.65
-   },
-   {
-    "name": "ціна пост х6м",
-    "ad_id": "120251164760810624",
-    "spend": 326.48,
+    "name": "Відео меган+х6м",
+    "ad_id": "120251215662760624",
+    "spend": 333.71,
     "purchases": 4,
-    "roas": 9.72,
-    "ctr": 2.42
+    "roas": 17.0,
+    "ctr": 1.87
+   },
+   {
+    "name": "Відео меган+х6м 2",
+    "ad_id": "120251224004740624",
+    "spend": 702.03,
+    "purchases": 11,
+    "roas": 9.03,
+    "ctr": 2.4
+   },
+   {
+    "name": "Відео меган+х6м 9",
+    "ad_id": "120251215842560624",
+    "spend": 780.22,
+    "purchases": 15,
+    "roas": 7.89,
+    "ctr": 1.75
    }
   ],
-  "weak_creatives": [
-   {
-    "name": "Відео меган+х6м 10 boost",
-    "ad_id": "120251215842520624",
-    "spend": 1107.18,
-    "purchases": 1,
-    "roas": 0.18,
-    "ctr": 3.78
-   }
-  ]
+  "weak_creatives": []
  },
  "projects": [
   {
@@ -8949,10 +8940,10 @@
     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
     "status": "ACTIVE",
     "daily_budget": 10000,
-    "spend": 263027,
-    "purchases": 4725,
-    "roas": 7.53,
-    "ctr": 1.63
+    "spend": 271508,
+    "purchases": 4833,
+    "roas": 7.5,
+    "ctr": 1.65
    },
    {
     "id": "120249698605960624",
@@ -8962,10 +8953,10 @@
     "name": "DC | 02 Retargeting · дожим теплих",
     "status": "ACTIVE",
     "daily_budget": 1040,
-    "spend": 20170,
-    "purchases": 321,
-    "roas": 5.5,
-    "ctr": 2.29
+    "spend": 20900,
+    "purchases": 331,
+    "roas": 5.51,
+    "ctr": 2.33
    },
    {
     "id": "120249698608790624",
@@ -8974,11 +8965,11 @@
     "desc": "5-10%. «Свіжа кров» — лише нові люди (виключені відвідувачі сайту + покупці), щоб алгоритм не крутився в нашій бульбашці.",
     "name": "DC | 03 Prospecting · свіжа кров (excl. наші)",
     "status": "ACTIVE",
-    "daily_budget": 6000,
-    "spend": 79283,
-    "purchases": 1122,
-    "roas": 5.06,
-    "ctr": 1.67
+    "daily_budget": 5000,
+    "spend": 83954,
+    "purchases": 1168,
+    "roas": 5.01,
+    "ctr": 1.72
    },
    {
     "id": "120249698612830624",
@@ -8988,10 +8979,10 @@
     "name": "DC | 04 Testing · інкубатор (ABO)",
     "status": "ACTIVE",
     "daily_budget": null,
-    "spend": 6361,
-    "purchases": 152,
-    "roas": 7.81,
-    "ctr": 2.54
+    "spend": 6715,
+    "purchases": 156,
+    "roas": 7.61,
+    "ctr": 2.59
    }
   ],
   "audiences": [
