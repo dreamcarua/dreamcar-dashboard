@@ -1,0 +1,28 @@
+name: Meta Delete Ads (write)
+# Видаляє список ad-id через FB_ACCESS_TOKEN. Звільняє слоти адсета:
+# ліміт Meta = 50 оголошень/адсет, і ВИМКНЕНІ рахуються — пауза не звільняє, тільки видалення.
+# Захист: НІКОЛИ не видаляє ACTIVE (лише paused / disapproved / with_issues / pending). dry_run за замовчуванням.
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'true = лише план (без видалень), false = видалити'
+        default: 'true'
+        required: true
+      ad_ids:
+        description: 'ad id через || (або кому/пробіл)'
+        required: true
+jobs:
+  delete:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Delete
+        env:
+          FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+          AD_ACCOUNT_ID: '4136058269783354'
+          DRY_RUN: ${{ inputs.dry_run }}
+          AD_IDS: ${{ inputs.ad_ids }}
+        run: python3 scripts/meta_delete_ads.py
