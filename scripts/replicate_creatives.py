@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Replicate source page-posts into ALL active SALES adsets as ACTIVE ads (Meta act 4136058269783354).
-Strategy: build a plain creative from object_story_id (no enhancement spec); if that is rejected,
-reuse the source ad's own creative_id. Then attach as a new ad in every active sales adset (dedupe by post).
-env: FB_ACCESS_TOKEN, AD_ACCOUNT_ID, DRY_RUN, STATUS_OPTION(ACTIVE/PAUSED), MAX_CREATES,
-     SOURCES(name::postid::adid||...).
+Sources resolved by NAME (env SOURCE_NAMES, ||-sep) via Graph name-CONTAIN filter, else DEFAULT_SOURCES.
+Builds ONE clean creative per source (object_story_id, no enhancement spec) and attaches as a new ad in
+every active sales adset (dedupe by post). Avoids /copies (subcode 3858504).
+env: FB_ACCESS_TOKEN, AD_ACCOUNT_ID, DRY_RUN, STATUS_OPTION, MAX_CREATES, SOURCE_NAMES(name||name...).
 """
 import os, json, time, urllib.parse, urllib.request, urllib.error
 from collections import Counter
@@ -13,7 +13,7 @@ TOKEN = os.environ["FB_ACCESS_TOKEN"]
 ACT = os.environ.get("AD_ACCOUNT_ID", "4136058269783354")
 DRY = os.environ.get("DRY_RUN", "true").lower() == "true"
 STATUS = os.environ.get("STATUS_OPTION", "ACTIVE").upper()
-MAXC = int(os.environ.get("MAX_CREATES", "90"))
+MAXC = int(os.environ.get("MAX_CREATES", "120"))
 BASE = f"https://graph.facebook.com/{GRAPH}"
 DEFAULT_SOURCES = [
     ("меган перший пост х6м", "1676843282640684_3812050758938051", "120251106548460624"),
@@ -21,16 +21,11 @@ DEFAULT_SOURCES = [
     ("на своїй пост х6м", "1676843282640684_862903833255150", "120251106548440624"),
     ("камерамен пост х6м", "1676843282640684_1587690539640623", "120251106548430624"),
 ]
-_env = os.environ.get("SOURCES", "").strip()
-if _env:
-    SOURCES = []
-    for part in _env.split("||"):
-        bits = part.split("::")
-        if len(bits) >= 3:
-            SOURCES.append((bits[0].strip(), bits[1].strip(), bits[2].strip()))
-else:
-    SOURCES = DEFAULT_SOURCES
 SALES_OBJ = {"OUTCOME_SALES", "CONVERSIONS", "PRODUCT_CATALOG_SALES"}
+
+
+def norm(s):
+    return " ".join((s or "").replace("–", "-").replace("—", "-").split()).lower()
 
 
 def get(path, params=None):
@@ -79,15 +74,40 @@ def post(path, params):
     return None, "retry_exhausted"
 
 
-print(f"REPLICATE v3 · act {ACT} · dry_run={DRY} · status={STATUS}")
+def resolve_by_name(names):
+    out = []
+    for nm in names:
+        res = get(f"act_{ACT}/ads", {"fields": "id,name,created_time,creative{effective_object_story_id}",
+                                     "filtering": json.dumps([{"field": "name", "operator": "CONTAIN", "value": nm}]),
+                                     "limit": 100})
+        cands = res.get("data", [])
+        exact = [c for c in cands if norm(c.get("name")) == norm(nm)]
+        pool = exact or cands
+        pool.sort(key=lambda x: x.get("created_time", ""), reverse=True)
+        if pool:
+            c = pool[0]; pid = (c.get("creative") or {}).get("effective_object_story_id")
+            if pid:
+                out.append((nm, pid, c["id"])); print(f"  RESOLVE OK '{nm[:26]}' -> ad {c['id']} post={pid} (cands={len(cands)})")
+            else:
+                print(f"  RESOLVE no-post '{nm[:26]}' (ad {c.get('id')})")
+        else:
+            print(f"  RESOLVE MISS '{nm[:26]}'")
+    return out
+
+
+names_env = os.environ.get("SOURCE_NAMES", "").strip()
+print(f"REPLICATE v4 · act {ACT} · dry_run={DRY} · status={STATUS}")
+if names_env:
+    NAMES = [n for n in names_env.split("||") if n.strip()]
+    print("=== RESOLVE SOURCES BY NAME ===")
+    SOURCES = resolve_by_name(NAMES)
+else:
+    SOURCES = DEFAULT_SOURCES
 print("=== SOURCES ===")
 for nm, pid, adid in SOURCES:
-    print(f"  {nm[:32]:32} post={pid} ad={adid}")
-
-# DIAGNOSTIC: dump first source creative structure
-print("=== DIAG source[0] creative ===")
-diag = get(f"{SOURCES[0][2]}", {"fields": "name,creative{id,object_story_id,effective_object_story_id,object_type,degrees_of_freedom_spec,asset_feed_spec,image_hash,video_id}"})
-print("  " + json.dumps(diag, ensure_ascii=False)[:900])
+    print(f"  {nm[:30]:30} post={pid} ad={adid}")
+if not SOURCES:
+    print("NO SOURCES RESOLVED — abort"); print("DONE_REPLICATE"); raise SystemExit(0)
 
 print("=== TARGET ADSETS (active sales) ===")
 camps = get_all(f"act_{ACT}/campaigns", {"fields": "name,objective,effective_status",
@@ -113,44 +133,39 @@ for (nm, pid, adid) in SOURCES:
     for (aid, an, cn) in targets:
         if pid in present.get(aid, set()):
             continue
-        plan.append((nm, pid, adid, aid, an, cn))
+        plan.append((nm, pid, aid, an, cn))
 print(f"=== PLAN: {len(plan)} ads (dry_run={DRY}) ===")
+for (nm, pid, aid, an, cn) in plan:
+    print(f"  '{nm[:20]}' -> [{cn[:16]}] {an[:28]} ({aid})")
 if len(plan) > MAXC:
     print(f"ABORT plan>{MAXC}"); print("DONE_REPLICATE"); raise SystemExit(0)
 if DRY:
     print("DRY_RUN — no writes."); print("DONE_REPLICATE"); raise SystemExit(0)
 
-# Build one creative per source: try plain object_story_id, fallback to source creative_id
 print("=== BUILD CREATIVES ===")
 cre = {}
 for (nm, pid, adid) in SOURCES:
     res, err = post(f"act_{ACT}/adcreatives", {"name": f"[repl] {nm}"[:90], "object_story_id": pid})
     if not err and res.get("id"):
-        cre[pid] = res.get("id"); print(f"  CRE OK(plain) {res.get('id')} <- '{nm[:20]}'")
+        cre[pid] = res.get("id"); print(f"  CRE OK {res.get('id')} <- '{nm[:22]}'")
     else:
-        print(f"  CRE FAIL(plain) '{nm[:20]}': {err}")
-        scid = (get(f"{adid}", {"fields": "creative{id}"}).get("creative") or {}).get("id")
-        if scid:
-            cre[pid] = scid; print(f"  CRE FALLBACK reuse {scid} <- '{nm[:20]}'")
-        else:
-            print(f"  CRE NONE for '{nm[:20]}'")
+        print(f"  CRE FAIL '{nm[:22]}': {err}")
     time.sleep(1)
 
 print("=== CREATE ADS ===")
 created = []
 fails = Counter()
-for (nm, pid, adid, aid, an, cn) in plan:
+for (nm, pid, aid, an, cn) in plan:
     cid = cre.get(pid)
     if not cid:
         continue
     res, err = post(f"act_{ACT}/ads", {"name": nm, "adset_id": aid, "creative": json.dumps({"creative_id": cid}), "status": STATUS})
     if err:
-        fails[err[:60]] += 1
-        print(f"  AD FAIL '{nm[:14]}'->{an[:20]}: {err}")
+        fails[err[:50]] += 1; print(f"  AD FAIL '{nm[:14]}'->{an[:20]}: {err}")
     else:
         created.append(res.get("id")); print(f"  AD OK {res.get('id')} '{nm[:14]}'->{an[:20]}")
     time.sleep(1)
-print(f"created={len(created)}/{len(plan)}  fail_kinds={dict(fails)}")
+print(f"created={len(created)}/{len(plan)} fails={dict(fails)}")
 
 print("=== VERIFY ===")
 cnt = Counter()
