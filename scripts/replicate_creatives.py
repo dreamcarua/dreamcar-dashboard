@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Replicate source page-posts into ALL active SALES adsets as ACTIVE ads (Meta act 4136058269783354).
 Sources resolved by NAME (env SOURCE_NAMES, ||-sep) via Graph name-CONTAIN filter, else DEFAULT_SOURCES.
-Builds ONE clean creative per source (object_story_id, no enhancement spec) and attaches as a new ad in
-every active sales adset (dedupe by post). Avoids /copies (subcode 3858504).
+Builds ONE clean creative per source (object_story_id); if that is rejected (e.g. dynamic asset_feed_spec,
+subcode 1815017/3858504), FALLS BACK to reusing the source ad's own creative_id. Then attaches as a new
+ad in every active sales adset (dedupe by post). Avoids naive /copies pitfalls.
 env: FB_ACCESS_TOKEN, AD_ACCOUNT_ID, DRY_RUN, STATUS_OPTION, MAX_CREATES, SOURCE_NAMES(name||name...).
 """
 import os, json, time, urllib.parse, urllib.request, urllib.error
@@ -77,7 +78,7 @@ def post(path, params):
 def resolve_by_name(names):
     out = []
     for nm in names:
-        res = get(f"act_{ACT}/ads", {"fields": "id,name,created_time,creative{effective_object_story_id}",
+        res = get(f"act_{ACT}/ads", {"fields": "id,name,created_time,creative{id,effective_object_story_id}",
                                      "filtering": json.dumps([{"field": "name", "operator": "CONTAIN", "value": nm}]),
                                      "limit": 100})
         cands = res.get("data", [])
@@ -85,18 +86,19 @@ def resolve_by_name(names):
         pool = exact or cands
         pool.sort(key=lambda x: x.get("created_time", ""), reverse=True)
         if pool:
-            c = pool[0]; pid = (c.get("creative") or {}).get("effective_object_story_id")
+            c = pool[0]; cr = c.get("creative") or {}
+            pid = cr.get("effective_object_story_id") or ("CID:" + cr.get("id")) if cr.get("id") else None
             if pid:
-                out.append((nm, pid, c["id"])); print(f"  RESOLVE OK '{nm[:26]}' -> ad {c['id']} post={pid} (cands={len(cands)})")
+                out.append((nm, pid, c["id"])); print(f"  RESOLVE OK '{nm[:26]}' -> ad {c['id']} key={pid} (cands={len(cands)})")
             else:
-                print(f"  RESOLVE no-post '{nm[:26]}' (ad {c.get('id')})")
+                print(f"  RESOLVE no-key '{nm[:26]}' (ad {c.get('id')})")
         else:
             print(f"  RESOLVE MISS '{nm[:26]}'")
     return out
 
 
 names_env = os.environ.get("SOURCE_NAMES", "").strip()
-print(f"REPLICATE v4 · act {ACT} · dry_run={DRY} · status={STATUS}")
+print(f"REPLICATE v5 · act {ACT} · dry_run={DRY} · status={STATUS}")
 if names_env:
     NAMES = [n for n in names_env.split("||") if n.strip()]
     print("=== RESOLVE SOURCES BY NAME ===")
@@ -105,7 +107,7 @@ else:
     SOURCES = DEFAULT_SOURCES
 print("=== SOURCES ===")
 for nm, pid, adid in SOURCES:
-    print(f"  {nm[:30]:30} post={pid} ad={adid}")
+    print(f"  {nm[:30]:30} key={pid} ad={adid}")
 if not SOURCES:
     print("NO SOURCES RESOLVED — abort"); print("DONE_REPLICATE"); raise SystemExit(0)
 
@@ -130,12 +132,13 @@ for (aid, _, _) in targets:
 
 plan = []
 for (nm, pid, adid) in SOURCES:
+    dedupe_key = pid if not pid.startswith("CID:") else None
     for (aid, an, cn) in targets:
-        if pid in present.get(aid, set()):
+        if dedupe_key and dedupe_key in present.get(aid, set()):
             continue
-        plan.append((nm, pid, aid, an, cn))
+        plan.append((nm, pid, adid, aid, an, cn))
 print(f"=== PLAN: {len(plan)} ads (dry_run={DRY}) ===")
-for (nm, pid, aid, an, cn) in plan:
+for (nm, pid, adid, aid, an, cn) in plan:
     print(f"  '{nm[:20]}' -> [{cn[:16]}] {an[:28]} ({aid})")
 if len(plan) > MAXC:
     print(f"ABORT plan>{MAXC}"); print("DONE_REPLICATE"); raise SystemExit(0)
@@ -145,17 +148,25 @@ if DRY:
 print("=== BUILD CREATIVES ===")
 cre = {}
 for (nm, pid, adid) in SOURCES:
+    if pid.startswith("CID:"):
+        cre[pid] = pid[4:]; print(f"  CRE reuse-source {cre[pid]} <- '{nm[:22]}' (no post)")
+        continue
     res, err = post(f"act_{ACT}/adcreatives", {"name": f"[repl] {nm}"[:90], "object_story_id": pid})
     if not err and res.get("id"):
-        cre[pid] = res.get("id"); print(f"  CRE OK {res.get('id')} <- '{nm[:22]}'")
+        cre[pid] = res.get("id"); print(f"  CRE OK(plain) {res.get('id')} <- '{nm[:22]}'")
     else:
-        print(f"  CRE FAIL '{nm[:22]}': {err}")
+        print(f"  CRE plain-fail '{nm[:22]}': {err}")
+        scid = (get(f"{adid}", {"fields": "creative{id}"}).get("creative") or {}).get("id")
+        if scid:
+            cre[pid] = scid; print(f"  CRE FALLBACK reuse source creative {scid} <- '{nm[:22]}'")
+        else:
+            print(f"  CRE NONE for '{nm[:22]}'")
     time.sleep(1)
 
 print("=== CREATE ADS ===")
 created = []
 fails = Counter()
-for (nm, pid, aid, an, cn) in plan:
+for (nm, pid, adid, aid, an, cn) in plan:
     cid = cre.get(pid)
     if not cid:
         continue
