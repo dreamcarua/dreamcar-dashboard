@@ -78,6 +78,11 @@ def normalize_project(deal_name: str) -> str | None:
     if 'dci-moto-' in dn:   return 'MOTORCYCLE'
     if 'dci-hummer-' in dn: return 'HUMMER H2'
     if 'dci-audi-' in dn:   return 'AUDI E-TRON'
+    if 'dci-bmwx6m-' in dn: return 'BMW X6M'
+    # 31.07.2026 fix: префікса №20 тут не було -> fallback на стейл «Проект_deal» (AUDI E-TRON)
+    # створив течу атрибуції (3 024 pending перекинуто бекфілом, міграція fix_normalize_project_bmwx6m).
+    # Для наступних циклів: додавати префікс СЮДИ і в БД-тригер tg_dashboard_deals_normalize_project
+    # разом зі створенням launch (або перейти на fallback active-launch).
     return None
 
 
