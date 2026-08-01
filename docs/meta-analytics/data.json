@@ -1,129 +1,117 @@
 {
- "generated": "2026-07-31T08:17:38.479875+00:00",
+ "generated": "2026-08-01T07:44:04.931455+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-07-30",
-  "prev_date": "2026-07-29",
-  "spend": 24140.77,
-  "impressions": 164381,
-  "clicks": 2904,
-  "purchases": 331,
-  "pixel_roas": 7.16,
-  "cpa": 72.93,
-  "frequency": 2.7,
-  "real_ad_revenue": 88379,
-  "real_ad_roas": 3.66,
+  "date": "2026-07-31",
+  "prev_date": "2026-07-30",
+  "spend": 28133.19,
+  "impressions": 183274,
+  "clicks": 3051,
+  "purchases": 314,
+  "pixel_roas": 4.85,
+  "cpa": 89.6,
+  "frequency": 2.87,
+  "real_ad_revenue": 75013,
+  "real_ad_roas": 2.67,
   "deltas": {
-   "spend": -0.7,
-   "pixel_roas": 10.0,
-   "purchases": 48.4,
-   "cpa": -33.1
+   "spend": 16.5,
+   "pixel_roas": -32.3,
+   "purchases": -5.1,
+   "cpa": 22.8
   },
   "week": {
    "this": {
-    "from": "2026-07-24",
-    "to": "2026-07-30",
-    "spend": 164341,
-    "purchases": 1940,
-    "pixel_roas": 5.74,
-    "cpa": 84.71,
-    "real_revenue": 520754,
+    "from": "2026-07-25",
+    "to": "2026-07-31",
+    "spend": 171812,
+    "purchases": 2058,
+    "pixel_roas": 5.79,
+    "cpa": 83.49,
+    "real_revenue": 545279,
     "real_roas": 3.17
    },
    "prev": {
-    "from": "2026-07-17",
-    "to": "2026-07-23",
-    "spend": 157166,
-    "purchases": 2380,
-    "pixel_roas": 7.57,
-    "cpa": 66.04,
-    "real_revenue": 625306,
+    "from": "2026-07-18",
+    "to": "2026-07-24",
+    "spend": 151040,
+    "purchases": 2225,
+    "pixel_roas": 7.34,
+    "cpa": 67.88,
+    "real_revenue": 601090,
     "real_roas": 3.98
    },
    "deltas": {
-    "spend": 4.6,
+    "spend": 13.8,
     "real_roas": -20.4,
-    "pixel_roas": -24.2,
-    "cpa": 28.3,
-    "purchases": -18.5
+    "pixel_roas": -21.1,
+    "cpa": 23.0,
+    "purchases": -7.5
    }
   },
   "real_by_placement": [
    {
+    "placement": "instagram_reels",
+    "revenue": 20750,
+    "paid": 39
+   },
+   {
     "placement": "instagram_feed",
-    "revenue": 29489,
-    "paid": 64
+    "revenue": 20065,
+    "paid": 52
    },
    {
     "placement": "instagram_stories",
-    "revenue": 24957,
-    "paid": 46
-   },
-   {
-    "placement": "instagram_reels",
-    "revenue": 22067,
-    "paid": 46
+    "revenue": 18466,
+    "paid": 41
    },
    {
     "placement": "facebook_mobile_feed",
-    "revenue": 7179,
-    "paid": 19
+    "revenue": 9676,
+    "paid": 24
    },
    {
     "placement": "facebook_mobile_reels",
-    "revenue": 2991,
-    "paid": 7
+    "revenue": 4060,
+    "paid": 9
    },
    {
     "placement": "facebook_stories",
-    "revenue": 1497,
+    "revenue": 1997,
     "paid": 3
-   },
-   {
-    "placement": "facebook_desktop_feed",
-    "revenue": 199,
-    "paid": 1
    }
   ],
-  "active_cycles": [],
+  "active_cycles": [
+   "BMW X6M"
+  ],
   "top_creatives": [
    {
-    "name": "меган перший пост х6м",
-    "ad_id": "120251106548460624",
-    "spend": 319.86,
-    "purchases": 7,
-    "roas": 23.88,
-    "ctr": 2.29
+    "name": "ціна пост х6м",
+    "ad_id": "120251164694650624",
+    "spend": 463.4,
+    "purchases": 9,
+    "roas": 10.65,
+    "ctr": 4.58
    },
    {
-    "name": "Вже цієї неділі пост х6м · База",
-    "ad_id": "120251409922560624",
-    "spend": 866.3,
-    "purchases": 16,
-    "roas": 18.94,
-    "ctr": 2.18
+    "name": "подарунки пост х6м",
+    "ad_id": "120251274477740624",
+    "spend": 390.38,
+    "purchases": 5,
+    "roas": 9.4,
+    "ctr": 2.63
    },
    {
-    "name": "картинка х6м 4",
-    "ad_id": "120250963562620624",
-    "spend": 495.8,
-    "purchases": 8,
-    "roas": 15.85,
-    "ctr": 1.1
+    "name": "Відео меган+х6м 9",
+    "ad_id": "120251215842560624",
+    "spend": 352.45,
+    "purchases": 5,
+    "roas": 8.47,
+    "ctr": 1.06
    }
   ],
-  "weak_creatives": [
-   {
-    "name": "картинка х6м 6",
-    "ad_id": "120250986289350624",
-    "spend": 2775.94,
-    "purchases": 14,
-    "roas": 1.92,
-    "ctr": 1.72
-   }
-  ]
+  "weak_creatives": []
  },
  "projects": [
   {
@@ -8941,9 +8929,2313 @@
     }
    ],
    "is_current": false
+  },
+  {
+   "code": "iphone_17_jul2026",
+   "name": "IPHONE 17 PRO MAX 2",
+   "car_model": null,
+   "date_from": "2026-07-02",
+   "date_to": "2026-07-05",
+   "spend": 45352.51,
+   "impressions": 352407,
+   "clicks": 5239,
+   "ctr": 1.49,
+   "reach": 165664,
+   "frequency": 2.13,
+   "purchases": 1246,
+   "pixel_roas": 4.86,
+   "cpa": 36.4,
+   "pixel_revenue": 220620,
+   "real_ad_revenue": 133112,
+   "real_ad_roas": 2.94,
+   "gap_pct": -39.7,
+   "segments": {
+    "platform": [
+     [
+      "instagram",
+      36123.79,
+      1023,
+      4.85
+     ],
+     [
+      "facebook",
+      8868.33,
+      210,
+      4.77
+     ],
+     [
+      "threads",
+      282.82,
+      9,
+      6.3
+     ],
+     [
+      "audience_network",
+      77.56,
+      2,
+      16.77
+     ],
+     [
+      "unknown",
+      0.0,
+      2,
+      0.0
+     ]
+    ],
+    "age": [
+     [
+      "25-34",
+      21212.53,
+      604,
+      5.38
+     ],
+     [
+      "35-44",
+      15358.98,
+      472,
+      5.07
+     ],
+     [
+      "45-54",
+      4008.26,
+      67,
+      3.4
+     ],
+     [
+      "18-24",
+      3214.73,
+      82,
+      3.84
+     ],
+     [
+      "65+",
+      835.62,
+      7,
+      0.98
+     ],
+     [
+      "55-64",
+      721.42,
+      13,
+      2.29
+     ],
+     [
+      "Unknown",
+      0.97,
+      1,
+      283.4
+     ]
+    ],
+    "gender": [
+     [
+      "male",
+      36521.38,
+      989,
+      5.07
+     ],
+     [
+      "female",
+      8776.02,
+      253,
+      3.99
+     ],
+     [
+      "unknown",
+      55.11,
+      5,
+      10.66
+     ]
+    ],
+    "device": [
+     [
+      "iphone",
+      25064.57,
+      730,
+      5.16
+     ],
+     [
+      "android_smartphone",
+      20139.19,
+      507,
+      4.48
+     ],
+     [
+      "desktop",
+      69.01,
+      6,
+      8.51
+     ],
+     [
+      "android_tablet",
+      49.02,
+      0,
+      0.0
+     ],
+     [
+      "ipad",
+      30.55,
+      0,
+      0.0
+     ],
+     [
+      "other",
+      0.17,
+      3,
+      2746.15
+     ]
+    ]
+   },
+   "creatives": [
+    {
+     "name": "iphone 49 грн новий дизайн відео 2 – к2",
+     "ad_id": "120250797115010624",
+     "spend": 9.07,
+     "purchases": 2,
+     "roas": 52.02,
+     "ctr": 7.89
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 1 – к1",
+     "ad_id": "120250796832150624",
+     "spend": 12.59,
+     "purchases": 1,
+     "roas": 33.45,
+     "ctr": 1.54
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 1",
+     "ad_id": "120250775811820624",
+     "spend": 76.36,
+     "purchases": 10,
+     "roas": 22.11,
+     "ctr": 3.15
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 3 – к1",
+     "ad_id": "120250796934900624",
+     "spend": 17.23,
+     "purchases": 2,
+     "roas": 20.0,
+     "ctr": 3.06
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 3",
+     "ad_id": "120250775457770624",
+     "spend": 563.08,
+     "purchases": 9,
+     "roas": 19.32,
+     "ctr": 1.44
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 2",
+     "ad_id": "120250775873240624",
+     "spend": 39.28,
+     "purchases": 3,
+     "roas": 15.06,
+     "ctr": 2.98
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 3",
+     "ad_id": "120250775561550624",
+     "spend": 442.14,
+     "purchases": 23,
+     "roas": 13.0,
+     "ctr": 3.26
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 1",
+     "ad_id": "120250775561560624",
+     "spend": 716.07,
+     "purchases": 43,
+     "roas": 12.05,
+     "ctr": 3.05
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 1 – к1",
+     "ad_id": "120250796816280624",
+     "spend": 344.51,
+     "purchases": 16,
+     "roas": 11.94,
+     "ctr": 1.25
+    },
+    {
+     "name": "пост телефон новий дизайн",
+     "ad_id": "120250817902090624",
+     "spend": 38.67,
+     "purchases": 2,
+     "roas": 11.82,
+     "ctr": 2.34
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 3",
+     "ad_id": "120250775811250624",
+     "spend": 122.93,
+     "purchases": 8,
+     "roas": 11.74,
+     "ctr": 4.28
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 1 – к1",
+     "ad_id": "120250796878750624",
+     "spend": 44.98,
+     "purchases": 3,
+     "roas": 11.64,
+     "ctr": 3.05
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 2",
+     "ad_id": "120250775499340624",
+     "spend": 881.53,
+     "purchases": 52,
+     "roas": 10.72,
+     "ctr": 3.27
+    },
+    {
+     "name": "iphone 49 грн новий дизайн – копія",
+     "ad_id": "120250775189970624",
+     "spend": 1059.16,
+     "purchases": 45,
+     "roas": 10.21,
+     "ctr": 1.75
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 2",
+     "ad_id": "120250775764050624",
+     "spend": 5.27,
+     "purchases": 1,
+     "roas": 9.22,
+     "ctr": 8.33
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 3",
+     "ad_id": "120250775811300624",
+     "spend": 54.44,
+     "purchases": 4,
+     "roas": 8.11,
+     "ctr": 3.42
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 2",
+     "ad_id": "120250775796120624",
+     "spend": 1753.98,
+     "purchases": 60,
+     "roas": 7.34,
+     "ctr": 2.12
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 1",
+     "ad_id": "120250775860720624",
+     "spend": 91.21,
+     "purchases": 4,
+     "roas": 7.16,
+     "ctr": 2.16
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 1 – к1",
+     "ad_id": "120250796951340624",
+     "spend": 21.35,
+     "purchases": 3,
+     "roas": 6.84,
+     "ctr": 1.18
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 3 – к2",
+     "ad_id": "120250796892230624",
+     "spend": 85.86,
+     "purchases": 5,
+     "roas": 6.74,
+     "ctr": 2.3
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 1 – к2",
+     "ad_id": "120250796817320624",
+     "spend": 1019.46,
+     "purchases": 23,
+     "roas": 6.64,
+     "ctr": 1.23
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 3 – к2",
+     "ad_id": "120250797027050624",
+     "spend": 84.15,
+     "purchases": 5,
+     "roas": 6.56,
+     "ctr": 1.97
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 3",
+     "ad_id": "120250775886370624",
+     "spend": 47.13,
+     "purchases": 2,
+     "roas": 6.5,
+     "ctr": 2.25
+    },
+    {
+     "name": "iphone 49 грн старий дизайн",
+     "ad_id": "120250774758290624",
+     "spend": 7167.9,
+     "purchases": 253,
+     "roas": 6.31,
+     "ctr": 2.11
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 1",
+     "ad_id": "120250775891570624",
+     "spend": 135.49,
+     "purchases": 4,
+     "roas": 6.19,
+     "ctr": 2.72
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 2",
+     "ad_id": "120250775852500624",
+     "spend": 69.88,
+     "purchases": 4,
+     "roas": 6.02,
+     "ctr": 2.37
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 1 – к1",
+     "ad_id": "120250796855290624",
+     "spend": 51.66,
+     "purchases": 3,
+     "roas": 5.95,
+     "ctr": 2.83
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 1 – к1",
+     "ad_id": "120250796905010624",
+     "spend": 271.88,
+     "purchases": 10,
+     "roas": 5.81,
+     "ctr": 2.61
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 3 – к2",
+     "ad_id": "120250796808460624",
+     "spend": 85.77,
+     "purchases": 1,
+     "roas": 5.77,
+     "ctr": 0.8
+    },
+    {
+     "name": "iphone 49 грн новий дизайн",
+     "ad_id": "120250775082420624",
+     "spend": 1650.3,
+     "purchases": 66,
+     "roas": 5.58,
+     "ctr": 2.51
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 3",
+     "ad_id": "120250775796140624",
+     "spend": 142.76,
+     "purchases": 8,
+     "roas": 5.56,
+     "ctr": 1.82
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 2 – к1",
+     "ad_id": "120250796868010624",
+     "spend": 116.32,
+     "purchases": 1,
+     "roas": 5.45,
+     "ctr": 0.95
+    },
+    {
+     "name": "iphone 49 грн новий дизайн",
+     "ad_id": "120250775843770624",
+     "spend": 261.82,
+     "purchases": 7,
+     "roas": 5.41,
+     "ctr": 2.9
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 3 – к1",
+     "ad_id": "120250796847640624",
+     "spend": 91.43,
+     "purchases": 3,
+     "roas": 5.41,
+     "ctr": 1.0
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 1 – к1",
+     "ad_id": "120250796926610624",
+     "spend": 267.9,
+     "purchases": 10,
+     "roas": 5.26,
+     "ctr": 1.65
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 1",
+     "ad_id": "120250775316810624",
+     "spend": 351.74,
+     "purchases": 11,
+     "roas": 5.18,
+     "ctr": 1.94
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 3 – к1",
+     "ad_id": "120250797065920624",
+     "spend": 66.87,
+     "purchases": 4,
+     "roas": 5.17,
+     "ctr": 1.82
+    },
+    {
+     "name": "iphone 49 грн старий дизайн – копія – копія",
+     "ad_id": "120250775146890624",
+     "spend": 306.28,
+     "purchases": 12,
+     "roas": 4.97,
+     "ctr": 2.38
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 1",
+     "ad_id": "120250775877920624",
+     "spend": 214.17,
+     "purchases": 7,
+     "roas": 4.85,
+     "ctr": 2.62
+    },
+    {
+     "name": "iphone 49 грн новий дизайн – копія – копія",
+     "ad_id": "120250775249500624",
+     "spend": 4645.81,
+     "purchases": 140,
+     "roas": 4.8,
+     "ctr": 1.51
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 1 – к2",
+     "ad_id": "120250796907910624",
+     "spend": 152.59,
+     "purchases": 5,
+     "roas": 4.73,
+     "ctr": 2.14
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 2",
+     "ad_id": "120250775873220624",
+     "spend": 134.08,
+     "purchases": 4,
+     "roas": 4.69,
+     "ctr": 1.21
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 2",
+     "ad_id": "120250775831630624",
+     "spend": 21.51,
+     "purchases": 1,
+     "roas": 4.52,
+     "ctr": 4.82
+    },
+    {
+     "name": "пост телефон новий дизайн",
+     "ad_id": "120250817896140624",
+     "spend": 500.63,
+     "purchases": 8,
+     "roas": 4.41,
+     "ctr": 1.36
+    },
+    {
+     "name": "пост телефон новий дизайн",
+     "ad_id": "120250817899810624",
+     "spend": 203.01,
+     "purchases": 4,
+     "roas": 4.3,
+     "ctr": 2.29
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 3",
+     "ad_id": "120250775757660624",
+     "spend": 65.38,
+     "purchases": 2,
+     "roas": 4.14,
+     "ctr": 3.06
+    },
+    {
+     "name": "пост телефон новий дизайн",
+     "ad_id": "120250817300570624",
+     "spend": 5223.61,
+     "purchases": 111,
+     "roas": 4.1,
+     "ctr": 1.38
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 3 – к1",
+     "ad_id": "120250797030620624",
+     "spend": 133.32,
+     "purchases": 4,
+     "roas": 4.09,
+     "ctr": 0.78
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 2 – к2",
+     "ad_id": "120250797110960624",
+     "spend": 86.1,
+     "purchases": 2,
+     "roas": 4.06,
+     "ctr": 0.81
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 3",
+     "ad_id": "120250775772430624",
+     "spend": 102.15,
+     "purchases": 3,
+     "roas": 3.88,
+     "ctr": 0.84
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 3",
+     "ad_id": "120250775784270624",
+     "spend": 127.41,
+     "purchases": 4,
+     "roas": 3.88,
+     "ctr": 1.72
+    },
+    {
+     "name": "iphone 49 грн новий дизайн",
+     "ad_id": "120250775788210624",
+     "spend": 69.27,
+     "purchases": 2,
+     "roas": 3.78,
+     "ctr": 3.65
+    },
+    {
+     "name": "пост телефон новий дизайн",
+     "ad_id": "120250817897100624",
+     "spend": 1267.75,
+     "purchases": 33,
+     "roas": 3.75,
+     "ctr": 1.77
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 2",
+     "ad_id": "120250775757760624",
+     "spend": 398.08,
+     "purchases": 9,
+     "roas": 3.73,
+     "ctr": 2.35
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 3 – к2",
+     "ad_id": "120250797063360624",
+     "spend": 121.36,
+     "purchases": 2,
+     "roas": 3.71,
+     "ctr": 1.42
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 3 – к1",
+     "ad_id": "120250796942370624",
+     "spend": 21.11,
+     "purchases": 1,
+     "roas": 3.61,
+     "ctr": 2.59
+    },
+    {
+     "name": "iphone 49 грн старий дизайн – копія",
+     "ad_id": "120250775116120624",
+     "spend": 515.15,
+     "purchases": 14,
+     "roas": 3.59,
+     "ctr": 1.45
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 1",
+     "ad_id": "120250775757730624",
+     "spend": 700.39,
+     "purchases": 18,
+     "roas": 3.52,
+     "ctr": 2.24
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 1 – к2",
+     "ad_id": "120250796858820624",
+     "spend": 312.97,
+     "purchases": 9,
+     "roas": 3.36,
+     "ctr": 1.67
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 1",
+     "ad_id": "120250775757740624",
+     "spend": 151.18,
+     "purchases": 4,
+     "roas": 3.25,
+     "ctr": 2.62
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 2 – к1",
+     "ad_id": "120250796818420624",
+     "spend": 41.89,
+     "purchases": 2,
+     "roas": 2.98,
+     "ctr": 1.93
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 2 – к2",
+     "ad_id": "120250796827420624",
+     "spend": 306.26,
+     "purchases": 7,
+     "roas": 2.53,
+     "ctr": 1.28
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 2",
+     "ad_id": "120250775811280624",
+     "spend": 19.75,
+     "purchases": 1,
+     "roas": 2.46,
+     "ctr": 3.52
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 3 – к1",
+     "ad_id": "120250796803680624",
+     "spend": 243.97,
+     "purchases": 6,
+     "roas": 2.32,
+     "ctr": 1.67
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 1",
+     "ad_id": "120250775835370624",
+     "spend": 21.99,
+     "purchases": 1,
+     "roas": 2.23,
+     "ctr": 1.64
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 1",
+     "ad_id": "120250775796050624",
+     "spend": 601.68,
+     "purchases": 10,
+     "roas": 2.18,
+     "ctr": 1.56
+    },
+    {
+     "name": "пост телефон новий дизайн",
+     "ad_id": "120250817898260624",
+     "spend": 107.16,
+     "purchases": 3,
+     "roas": 2.13,
+     "ctr": 1.44
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 3 – к1",
+     "ad_id": "120250796895670624",
+     "spend": 326.23,
+     "purchases": 9,
+     "roas": 2.1,
+     "ctr": 1.63
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 3",
+     "ad_id": "120250775854350624",
+     "spend": 326.35,
+     "purchases": 10,
+     "roas": 2.06,
+     "ctr": 2.07
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 1",
+     "ad_id": "120250775840300624",
+     "spend": 143.73,
+     "purchases": 3,
+     "roas": 2.02,
+     "ctr": 1.04
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 3 – к1",
+     "ad_id": "120250796811010624",
+     "spend": 137.45,
+     "purchases": 4,
+     "roas": 2.01,
+     "ctr": 1.02
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 2",
+     "ad_id": "120250775886690624",
+     "spend": 150.14,
+     "purchases": 2,
+     "roas": 1.91,
+     "ctr": 0.75
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 2",
+     "ad_id": "120250775427960624",
+     "spend": 97.66,
+     "purchases": 1,
+     "roas": 1.85,
+     "ctr": 0.8
+    },
+    {
+     "name": "пост телефон новий дизайн",
+     "ad_id": "120250817899410624",
+     "spend": 305.65,
+     "purchases": 9,
+     "roas": 1.81,
+     "ctr": 1.6
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 2 – к1",
+     "ad_id": "120250796823580624",
+     "spend": 261.35,
+     "purchases": 4,
+     "roas": 1.67,
+     "ctr": 0.7
+    },
+    {
+     "name": "iphone 49 грн новий дизайн – копія – копія",
+     "ad_id": "120250775839540624",
+     "spend": 142.02,
+     "purchases": 4,
+     "roas": 1.66,
+     "ctr": 1.26
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 1 – к2",
+     "ad_id": "120250796835460624",
+     "spend": 231.18,
+     "purchases": 2,
+     "roas": 1.66,
+     "ctr": 0.94
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 3",
+     "ad_id": "120250775851910624",
+     "spend": 29.55,
+     "purchases": 1,
+     "roas": 1.65,
+     "ctr": 2.42
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 2 – к2",
+     "ad_id": "120250796864690624",
+     "spend": 247.87,
+     "purchases": 3,
+     "roas": 1.59,
+     "ctr": 2.02
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 1",
+     "ad_id": "120250775800570624",
+     "spend": 136.18,
+     "purchases": 1,
+     "roas": 1.47,
+     "ctr": 1.36
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 2 – к2",
+     "ad_id": "120250796819970624",
+     "spend": 500.53,
+     "purchases": 6,
+     "roas": 1.39,
+     "ctr": 1.36
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 2",
+     "ad_id": "120250775758160624",
+     "spend": 1946.52,
+     "purchases": 29,
+     "roas": 1.26,
+     "ctr": 1.8
+    },
+    {
+     "name": "пост телефон новий дизайн",
+     "ad_id": "120250817900740624",
+     "spend": 166.11,
+     "purchases": 5,
+     "roas": 1.17,
+     "ctr": 1.66
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 2 – к1",
+     "ad_id": "120250796919150624",
+     "spend": 44.99,
+     "purchases": 1,
+     "roas": 1.08,
+     "ctr": 1.54
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 3",
+     "ad_id": "120250775795900624",
+     "spend": 56.9,
+     "purchases": 1,
+     "roas": 1.05,
+     "ctr": 1.68
+    },
+    {
+     "name": "пост телефон новий дизайн",
+     "ad_id": "120250817898660624",
+     "spend": 286.61,
+     "purchases": 3,
+     "roas": 0.98,
+     "ctr": 2.68
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 2 – к1",
+     "ad_id": "120250796861160624",
+     "spend": 60.89,
+     "purchases": 1,
+     "roas": 0.8,
+     "ctr": 2.62
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 2",
+     "ad_id": "120250775811840624",
+     "spend": 91.67,
+     "purchases": 1,
+     "roas": 0.68,
+     "ctr": 3.09
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 3 – к1",
+     "ad_id": "120250796840860624",
+     "spend": 71.05,
+     "purchases": 1,
+     "roas": 0.68,
+     "ctr": 1.95
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 1 – к2",
+     "ad_id": "120250796930010624",
+     "spend": 128.36,
+     "purchases": 1,
+     "roas": 0.56,
+     "ctr": 2.52
+    },
+    {
+     "name": "iphone 49 грн новий дизайн відео 3 – к2",
+     "ad_id": "120250796989300624",
+     "spend": 86.96,
+     "purchases": 1,
+     "roas": 0.56,
+     "ctr": 2.4
+    },
+    {
+     "name": "iphone 49 грн старий дизайн",
+     "ad_id": "120250775786130624",
+     "spend": 31.74,
+     "purchases": 0,
+     "roas": 0.12,
+     "ctr": 1.78
+    },
+    {
+     "name": "iphone 49 грн старий дизайн відео 2 – к2",
+     "ad_id": "120250796962240624",
+     "spend": 69.37,
+     "purchases": 0,
+     "roas": 0.08,
+     "ctr": 1.37
+    },
+    {
+     "name": "engagement · DaN7NasMYgp · 20624",
+     "ad_id": "120250696082060624",
+     "spend": 441.45,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.59
+    },
+    {
+     "name": "engagement · DaN7NasMYgp · 30624",
+     "ad_id": "120250696082220624",
+     "spend": 434.3,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.49
+    },
+    {
+     "name": "engagement · DaN7NasMYgp · 10624",
+     "ad_id": "120250696083010624",
+     "spend": 467.93,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.69
+    },
+    {
+     "name": "engagement · DaN7NasMYgp · 60624",
+     "ad_id": "120250696083310624",
+     "spend": 642.08,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.9
+    },
+    {
+     "name": "engagement · DaN7NasMYgp · 80624",
+     "ad_id": "120250696083610624",
+     "spend": 423.85,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.63
+    },
+    {
+     "name": "engagement · DaN7NasMYgp · покупці",
+     "ad_id": "120250759670920624",
+     "spend": 204.56,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.81
+    },
+    {
+     "name": "engagement · DaN7NasMYgp · свіжі",
+     "ad_id": "120250759672810624",
+     "spend": 499.22,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.59
+    }
+   ],
+   "series": [
+    {
+     "date": "2026-07-02",
+     "spend": 1671.72,
+     "purchases": 0,
+     "roas": 0.0,
+     "cpa": null
+    },
+    {
+     "date": "2026-07-03",
+     "spend": 20579.54,
+     "purchases": 662,
+     "roas": 5.23,
+     "cpa": 31.09
+    },
+    {
+     "date": "2026-07-04",
+     "spend": 22825.43,
+     "purchases": 573,
+     "roas": 4.91,
+     "cpa": 39.83
+    },
+    {
+     "date": "2026-07-05",
+     "spend": 275.82,
+     "purchases": 10,
+     "roas": 3.24,
+     "cpa": 27.58
+    }
+   ],
+   "adsets": [
+    {
+     "name": "Broad · UA 18-45 · A+A · VALUE · інкремент",
+     "spend": 26808.49,
+     "purchases": 853,
+     "roas": 6.13,
+     "ctr": 1.84,
+     "cpa": 31.43
+    },
+    {
+     "name": "Cold · UA broad · EXCL. сайт+покупці (свіжа кров) · v2",
+     "spend": 5410.92,
+     "purchases": 154,
+     "roas": 4.64,
+     "ctr": 1.92,
+     "cpa": 35.14
+    },
+    {
+     "name": "Retarget · сайт 180д+30д (excl. покупці) · v2",
+     "spend": 4888.52,
+     "purchases": 95,
+     "roas": 2.63,
+     "ctr": 1.89,
+     "cpa": 51.46
+    },
+    {
+     "name": "FB+IG Stories · чол 35-54",
+     "spend": 985.94,
+     "purchases": 25,
+     "roas": 3.15,
+     "ctr": 1.9,
+     "cpa": 39.44
+    },
+    {
+     "name": "45-54 · чоловіки · UA (діамант)",
+     "spend": 975.73,
+     "purchases": 12,
+     "roas": 1.81,
+     "ctr": 2.27,
+     "cpa": 81.31
+    },
+    {
+     "name": "LAL 1% покупці 90д · чол · UA",
+     "spend": 975.32,
+     "purchases": 29,
+     "roas": 3.55,
+     "ctr": 2.01,
+     "cpa": 33.63
+    },
+    {
+     "name": "35-54 · чоловіки · UA (sweet spot)",
+     "spend": 973.02,
+     "purchases": 32,
+     "roas": 4.03,
+     "ctr": 1.71,
+     "cpa": 30.41
+    },
+    {
+     "name": "4 · Broad UA 18+ (Advantage)",
+     "spend": 642.08,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.9,
+     "cpa": null
+    }
+   ],
+   "adsets_window": "2026-07-02",
+   "recommendations": [
+    {
+     "sev": "cri",
+     "text": "Вимкнути 1 збитков. креатив(ів): «iphone 49 грн новий дизайн відео» (ROAS 1.26). Зливають ~1 946 ₴ при ROAS<2.0."
+    },
+    {
+     "sev": "inf",
+     "text": "Лідер: «iphone 49 грн старий дизайн відео 3» ROAS 19.32, CTR 1.44% — масштабувати й дублювати в інші adset."
+    },
+    {
+     "sev": "inf",
+     "text": "Найефективніший вік: 25-34 (ROAS 5.38) — пріоритет у таргетингу."
+    }
+   ],
+   "is_current": false
+  },
+  {
+   "code": "bmw_x6m",
+   "name": "BMW X6M",
+   "car_model": "BMW X6M",
+   "date_from": "2026-07-08",
+   "date_to": "2026-08-01",
+   "spend": 520997.56,
+   "impressions": 3633487,
+   "clicks": 68609,
+   "ctr": 1.89,
+   "reach": 417322,
+   "frequency": 8.71,
+   "purchases": 7422,
+   "pixel_roas": 6.74,
+   "cpa": 70.2,
+   "pixel_revenue": 3512115,
+   "real_ad_revenue": 1904403,
+   "real_ad_roas": 3.66,
+   "gap_pct": -45.8,
+   "segments": {
+    "platform": [
+     [
+      "instagram",
+      416677.25,
+      5877,
+      6.66
+     ],
+     [
+      "facebook",
+      99793.51,
+      1480,
+      7.06
+     ],
+     [
+      "audience_network",
+      2678.56,
+      45,
+      8.6
+     ],
+     [
+      "threads",
+      1848.18,
+      19,
+      3.77
+     ],
+     [
+      "unknown",
+      0.07,
+      2,
+      6206.97
+     ]
+    ],
+    "age": [
+     [
+      "25-34",
+      255730.87,
+      3608,
+      6.76
+     ],
+     [
+      "35-44",
+      171038.83,
+      2602,
+      7.27
+     ],
+     [
+      "18-24",
+      43741.94,
+      561,
+      5.06
+     ],
+     [
+      "45-54",
+      39003.83,
+      467,
+      6.01
+     ],
+     [
+      "55-64",
+      5952.76,
+      86,
+      7.22
+     ],
+     [
+      "65+",
+      5505.58,
+      76,
+      7.04
+     ],
+     [
+      "Unknown",
+      23.75,
+      25,
+      524.11
+     ]
+    ],
+    "gender": [
+     [
+      "male",
+      436764.22,
+      6295,
+      6.97
+     ],
+     [
+      "female",
+      83406.53,
+      1091,
+      5.47
+     ],
+     [
+      "unknown",
+      826.81,
+      39,
+      26.27
+     ]
+    ],
+    "device": [
+     [
+      "iphone",
+      313603.42,
+      4278,
+      6.5
+     ],
+     [
+      "android_smartphone",
+      205668.67,
+      3121,
+      7.11
+     ],
+     [
+      "desktop",
+      1060.26,
+      15,
+      6.04
+     ],
+     [
+      "ipad",
+      340.71,
+      1,
+      2.33
+     ],
+     [
+      "android_tablet",
+      324.1,
+      2,
+      2.14
+     ],
+     [
+      "other",
+      0.39,
+      5,
+      4923.28
+     ]
+    ]
+   },
+   "creatives": [
+    {
+     "name": "Відео меган+х6м 2",
+     "ad_id": "120251224003910624",
+     "spend": 3.63,
+     "purchases": 2,
+     "roas": 98.33,
+     "ctr": 20.0,
+     "thumb": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/7QCEUGhvdG9zaG9wIDMuMAA4QklNBAQAAAAAAGgcAigAYkZCTUQwYTAwMGE3YjAxMDAwMGQ0MDEwMDAwNjAwMjAwMDA5ZDAyMDAwMGM3MDIwMDAwMTkwMzAwMDAxMjA0MDAwMDJjMDQwMDAwOGQwNDAwMDBiYzA0MDAwMDFiMDYwMDAwAP/bAIQABgcHDQkNDAwMDBENDg0REREQEBERExASERIQExMUExUVExQTFBMXFxcTFBUXGRkXFRccGxwXGxkZGx4bHhsbFgEGBgYLCAsKCwsKDQkLCQ0MDAoKDAwPCwwLDAsPEA4NDg4NDhAODQ0KDQ0ODw4QEA4PEAwODBAPEBAPFxkXFxfB/8IAEQgAQABAAwEiAAIRAQMRAf/EAEYAAAMBAQEBAAAAAAAAAAAAAAMEBQIBBgAQAAEDAwIEBQQCAwAAAAAAAAEAESECMUEDURBhcYEEkaHB8BIgsdETIhTh8f/aAAwDAQACAAMAAAABgVMV1xehf4Y5F49zyos9InTTUjWYlZqn6UotFFmPWQ+z5gBhKg5RXLs/qNpda+OtILzchOnsAdWlKJCCLPjdNOfxn7dZmb6JYv8A/9oACAEBAAEFAjU50iHoHAqosatWpz/IqPpK8PpgoDgV4gkHS1mIqNa06GXhwhx1tN1qUshVWUHbw8cH4attWr6lpVVKmqNK4KdOq1SHWn9a1KYoodWWq9C/yP7/AMiqvXpkHxFLGi1SrrdalbV6euyppJMlas1Cll4nU/jp8NqfWtXRdVBeF1FUHX//2gAIAQMAAT8BoF2hkyJYFEJ+AWpUMC2Si8cuFOkanbBvutXRM7mZRo+l1oQfq9/kKiioVk4JLquimuCv/9oACAECAAE/AQU61LKyzwqDgoj4U8oBVVAM+VUP6qmmVXsqyDSBkMiv/9oACAEBAAY/AgPt64Q/qhHVlJ+0YX9i+0JxAf8AHCPtBT0wN/0EfuZMzNnhf7Wsj9gm6+ho3RgoFRZZT8HCJsgDN/RPSmOEOnDZGXXNWsm4f//aAAgBAQABPyEhAMOY91MTB4AHBC3+D9mTQjtOf0mCQEgmJB27oYNp7+SKzI+XQwGA4AtqEuJTkZ8Ay6Gj82IuQxdhlA6N0HAoU9lhQdySGwoABgziSghcO6wv6wgeAlFcA7YTSEOWGzosCILf8bpvfZEGksYGOnDPANwUQjmdz0shcDhnN7R6q4GUUmDWuMIlu6Ar3AJ5FMJMOsJLgsnGQAM3QFrZ8Spel3QSG4i4N+StMYkBE6aADmHlFEEk7QAbhjyReUpOQ8exCcBdAhsmwixQWALHe0lMAgFLuMAp0IsfIKAZhnXkRiLd0Y3AcrZvYDaUcJfC6//aAAwDAQACAAMAAAAQIQjzmmhYARdPT7zX/9oACAEDAAE/EH3SQ5F+DMJENvjs6YOPVTDAMwl5nYdESmEh7Ps/5TAyEmyN0/0iIdCHzz3ixYKSWurfEGAwZfmD1Dc0IbMgo5sdk/IG+FfC2AGAy09Ct+Oyu9rIBd57Ff/aAAgBAgABPxB7DIKfxHASgCbXJDSwsi5CHbYH0KAXDB9OAOId2+SseBHDmNl//9oACAEBAAE/EGMe2Rxjcu9gdsMcozDgihHZH0XB9gtwGLZ7GQxInAHUWPhQIPXsdgyMdUbMbgM4fqyhJgBDJmTwKO4yA95o8whE+wYGP1EK0Q2fOWWAJiVMh0bIUMT7Dy1781ImU+ikUWEgm3a8P+0xC7MAkhAPLzQV1EmhuHYL5VgQujc4iR6o3l71+TdNIw4JATmw83JY+iHuz+E03yA6fo7oTN3ZL7n0QBGJlk7NnTgBeE2i5MrcJ2/mi5BAoltnYhGPSZmbeSPbmhXeGPzzf9o92GQG9E2wastex3XabY/D5fsjsi+SJi91tGHsMbk+6hxckXdmRPyZATzn1Dsm2/RDkxeef4smJCOMmhewOBPNwiUO5tITYUHeyONYHmd5oijBLyF8hrBG4XJ5HmflCb+4e735phMl5h7nyQ9+Dzug/ecyELTZk7rHyLAQG80gsk9lIsYQR74br//Z"
+    },
+    {
+     "name": "що спыльного пост х6м",
+     "ad_id": "120251274379170624",
+     "spend": 40.52,
+     "purchases": 3,
+     "roas": 56.27,
+     "ctr": 1.71,
+     "thumb": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/7QCEUGhvdG9zaG9wIDMuMAA4QklNBAQAAAAAAGgcAigAYkZCTUQwYTAwMGE3ZTAxMDAwMGNlMDEwMDAwM2IwMjAwMDA1ZTAyMDAwMDc0MDIwMDAwYzYwMjAwMDA4NTAzMDAwMDlmMDMwMDAwZDgwMzAwMDBmMDAzMDAwMGUzMDQwMDAwAP/bAIQABgcHDQkNDAwMDBENDg0REREQEBERExASERIQExMUExUVExQTFBMXFxcTFBUXGRkXFRccGxwXGxkZGx4bHhsbFgEGBgYLCAsKCwsKDQkLCQ0MDAoKDAwPCwwLDAsPEA4NDg4NDhAODQ0KDQ0ODw4QEA4PEAwODBAPEBAPFxkXFxfB/8IAEQgAQABAAwEiAAIRAQMRAf/EAEkAAAEFAQEAAAAAAAAAAAAAAAEAAgMEBQYHEAABAwIDBQYGAwAAAAAAAAABABEhAjEQQXEDUWGBoQQSEyCR0QUiMLHw8RXB4f/aAAwDAQACAAMAAAAB8uSBCTkkxPCQLbSUQ9IzkuKGrO12E3r+bRh6PBAk77zi+JIKF2vED0sOFaBlpqw1+yyrQmgkoyxNdsZ8c4MMj3Jv/9oACAEBAAEFAvr0bKqvEhU095ENgFs+017NH4FWtp8IroQ2XinZUeHtP4/a7YHZmiohOu3/ABY1Il8PDqXYu2V9nr7RV39tUmXhobNGlsLqGQC7qstrhTTSBVGBhVbc93xqkanwoDnaXpC8Nf/aAAgBAwABPwHy0ByBvREsgwuHQnAXfcu894VAYygiZRK//9oACAECAAE/AfKSwTxgcCmVZRTIBf/aAAgBAQAGPwL6/wAtJOg8jDyfLUVG0HoVO0o9UwI5lkQWgZF0K6aXB4hGmq4viaNlAzq36YghCflJ+YZLaVCxJ+k+BxvLEnGJVJzmWV1d/N//2gAIAQEAAT8hfiuSZMcGTJsWxJfDqTh+yZMmkQmHKPAhigFAjUK0J+d5WaeoPdByYMyQMahHZ0s8YxxOaO5hLIgysRBW5jRInnc6G8xSAuxCY6YXZtQG/BuDjnoiXF9cADeACGMynRO+DYYJ4EbwgzgkEYnknJm5DJm2AdlPEoxMw2maBRSCEgM/B0UALwLZev6QMyEncgYc0BFggcQm6IAUtSsg8uYeG5dETXcjNdBCYAM1fGieBYOiQJBFl//aAAwDAQACAAMAAAAQ/XVvjr/tklR7Zw9P/9oACAEDAAE/EPLxcMghqQ7KYAOyM2VoZmAt+/I7vdR5hib/AOpksw9Smgg4DuPziop/ciBu/eB//9oACAECAAE/EPK8HEhi4EEggXLKSswP/9oACAEBAAE/EAyyO+TlCZpqmNFdORxCFC5VrMnIyWYHpgbb8l4ImMsEdSUGWiK6IKeKAlCGI6Okyp5Fx0ENJQn4ycUbGRLEoiL+XyVa1dZFP4kHrqCOChBJsmZcCm68g1AQVMQLnopeY+4yNcUd5vl90As7P4KNVFwMsROpCJbCgkEIgiMvchuEf2kChwk50CNcXlOsKLTvouURcD/Qcl/9UiBRkDqLLVxCAZ4IidSgYDyzNgrgohvGRaM0fJPdAyCXRiMmFjOc2zbLjdNYM+YDQ6rp/VoeyJuC0smEcyYuHRQ4D7EcS4EdP7Rsj832hf/Z"
+    },
+    {
+     "name": "ult встигни! пост х6м · Retarget",
+     "ad_id": "120251409940390624",
+     "spend": 90.17,
+     "purchases": 1,
+     "roas": 55.0,
+     "ctr": 1.2,
+     "thumb": "data:image/jpeg;base64,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"
+    },
+    {
+     "name": "Відео меган+х6м 5",
+     "ad_id": "120251223989530624",
+     "spend": 65.9,
+     "purchases": 1,
+     "roas": 45.14,
+     "ctr": 1.33,
+     "thumb": "data:image/jpeg;base64,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"
+    },
+    {
+     "name": "ult встигни! пост х6м · База",
+     "ad_id": "120251409921060624",
+     "spend": 67.51,
+     "purchases": 1,
+     "roas": 44.06,
+     "ctr": 2.17,
+     "thumb": "data:image/jpeg;base64,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"
+    },
+    {
+     "name": "що спыльного пост х6м",
+     "ad_id": "120251274488500624",
+     "spend": 14.7,
+     "purchases": 1,
+     "roas": 33.71,
+     "ctr": 1.85,
+     "thumb": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/7QCEUGhvdG9zaG9wIDMuMAA4QklNBAQAAAAAAGgcAigAYkZCTUQwYTAwMGE3ZTAxMDAwMGNlMDEwMDAwM2IwMjAwMDA1ZTAyMDAwMDc0MDIwMDAwYzYwMjAwMDA4NTAzMDAwMDlmMDMwMDAwZDgwMzAwMDBmMDAzMDAwMGUzMDQwMDAwAP/bAIQABgcHDQkNDAwMDBENDg0REREQEBERExASERIQExMUExUVExQTFBMXFxcTFBUXGRkXFRccGxwXGxkZGx4bHhsbFgEGBgYLCAsKCwsKDQkLCQ0MDAoKDAwPCwwLDAsPEA4NDg4NDhAODQ0KDQ0ODw4QEA4PEAwODBAPEBAPFxkXFxfB/8IAEQgAQABAAwEiAAIRAQMRAf/EAEkAAAEFAQEAAAAAAAAAAAAAAAEAAgMEBQYHEAABAwIDBQYGAwAAAAAAAAABABEhAjEQQXEDUWGBoQQSEyCR0QUiMLHw8RXB4f/aAAwDAQACAAMAAAAB8uSBCTkkxPCQLbSUQ9IzkuKGrO12E3r+bRh6PBAk77zi+JIKF2vED0sOFaBlpqw1+yyrQmgkoyxNdsZ8c4MMj3Jv/9oACAEBAAEFAvr0bKqvEhU095ENgFs+017NH4FWtp8IroQ2XinZUeHtP4/a7YHZmiohOu3/ABY1Il8PDqXYu2V9nr7RV39tUmXhobNGlsLqGQC7qstrhTTSBVGBhVbc93xqkanwoDnaXpC8Nf/aAAgBAwABPwHy0ByBvREsgwuHQnAXfcu894VAYygiZRK//9oACAECAAE/AfKSwTxgcCmVZRTIBf/aAAgBAQAGPwL6/wAtJOg8jDyfLUVG0HoVO0o9UwI5lkQWgZF0K6aXB4hGmq4viaNlAzq36YghCflJ+YZLaVCxJ+k+BxvLEnGJVJzmWV1d/N//2gAIAQEAAT8hfiuSZMcGTJsWxJfDqTh+yZMmkQmHKPAhigFAjUK0J+d5WaeoPdByYMyQMahHZ0s8YxxOaO5hLIgysRBW5jRInnc6G8xSAuxCY6YXZtQG/BuDjnoiXF9cADeACGMynRO+DYYJ4EbwgzgkEYnknJm5DJm2AdlPEoxMw2maBRSCEgM/B0UALwLZev6QMyEncgYc0BFggcQm6IAUtSsg8uYeG5dETXcjNdBCYAM1fGieBYOiQJBFl//aAAwDAQACAAMAAAAQ/XVvjr/tklR7Zw9P/9oACAEDAAE/EPLxcMghqQ7KYAOyM2VoZmAt+/I7vdR5hib/AOpksw9Smgg4DuPziop/ciBu/eB//9oACAECAAE/EPK8HEhi4EEggXLKSswP/9oACAEBAAE/EAyyO+TlCZpqmNFdORxCFC5VrMnIyWYHpgbb8l4ImMsEdSUGWiK6IKeKAlCGI6Okyp5Fx0ENJQn4ycUbGRLEoiL+XyVa1dZFP4kHrqCOChBJsmZcCm68g1AQVMQLnopeY+4yNcUd5vl90As7P4KNVFwMsROpCJbCgkEIgiMvchuEf2kChwk50CNcXlOsKLTvouURcD/Qcl/9UiBRkDqLLVxCAZ4IidSgYDyzNgrgohvGRaM0fJPdAyCXRiMmFjOc2zbLjdNYM+YDQ6rp/VoeyJuC0smEcyYuHRQ4D7EcS4EdP7Rsj832hf/Z"
+    },
+    {
+     "name": "картинка х6м 7",
+     "ad_id": "120250986230040624",
+     "spend": 6.7,
+     "purchases": 1,
+     "roas": 29.49,
+     "ctr": 2.99
+    },
+    {
+     "name": "картинка меган+х6м 5",
+     "ad_id": "120251174153340624",
+     "spend": 51.35,
+     "purchases": 2,
+     "roas": 26.17,
+     "ctr": 2.88
+    },
+    {
+     "name": "ай картинка х6м",
+     "ad_id": "120251328734620624",
+     "spend": 421.45,
+     "purchases": 9,
+     "roas": 22.53,
+     "ctr": 1.36
+    },
+    {
+     "name": "пакет супер пост х6м · База",
+     "ad_id": "120251409919270624",
+     "spend": 275.85,
+     "purchases": 6,
+     "roas": 18.52,
+     "ctr": 1.46
+    },
+    {
+     "name": "Відео меган+х6м 8",
+     "ad_id": "120251216143440624",
+     "spend": 44.22,
+     "purchases": 1,
+     "roas": 18.26,
+     "ctr": 2.8
+    },
+    {
+     "name": "ай меган+х6м відео",
+     "ad_id": "120251329209830624",
+     "spend": 160.63,
+     "purchases": 7,
+     "roas": 16.04,
+     "ctr": 2.94
+    },
+    {
+     "name": "доведеться двічі пост х6м",
+     "ad_id": "120251164767050624",
+     "spend": 12.38,
+     "purchases": 1,
+     "roas": 15.95,
+     "ctr": 3.03
+    },
+    {
+     "name": "ай пост х6м",
+     "ad_id": "120251329205630624",
+     "spend": 87.11,
+     "purchases": 4,
+     "roas": 15.9,
+     "ctr": 1.94
+    },
+    {
+     "name": "Відео меган+х6м",
+     "ad_id": "120251215662760624",
+     "spend": 1559.98,
+     "purchases": 22,
+     "roas": 14.78,
+     "ctr": 1.62
+    },
+    {
+     "name": "меган перший пост х6м",
+     "ad_id": "120251109464470624",
+     "spend": 1.51,
+     "purchases": 0,
+     "roas": 14.63,
+     "ctr": 0.0
+    },
+    {
+     "name": "Вже цієї неділі пост х6м · База",
+     "ad_id": "120251409922560624",
+     "spend": 1801.05,
+     "purchases": 30,
+     "roas": 14.41,
+     "ctr": 2.19
+    },
+    {
+     "name": "ай картинка х6м 5",
+     "ad_id": "120251328770030624",
+     "spend": 429.35,
+     "purchases": 9,
+     "roas": 13.76,
+     "ctr": 1.26
+    },
+    {
+     "name": "що спыльного пост х6м",
+     "ad_id": "120251274486080624",
+     "spend": 37.53,
+     "purchases": 1,
+     "roas": 13.2,
+     "ctr": 1.43
+    },
+    {
+     "name": "Відео меган+х6м 3",
+     "ad_id": "120251215842600624",
+     "spend": 1186.88,
+     "purchases": 17,
+     "roas": 12.67,
+     "ctr": 2.04
+    },
+    {
+     "name": "картинка х6м 6",
+     "ad_id": "120250987457030624",
+     "spend": 15.78,
+     "purchases": 1,
+     "roas": 12.51,
+     "ctr": 2.31
+    },
+    {
+     "name": "ULTIMATE пост х6м · База",
+     "ad_id": "120251409916980624",
+     "spend": 814.12,
+     "purchases": 12,
+     "roas": 12.28,
+     "ctr": 2.07
+    },
+    {
+     "name": "ай меган+х6м відео 4",
+     "ad_id": "120251329193230624",
+     "spend": 1307.05,
+     "purchases": 30,
+     "roas": 11.64,
+     "ctr": 1.98
+    },
+    {
+     "name": "ай картинка х6м 4",
+     "ad_id": "120251329203580624",
+     "spend": 43.74,
+     "purchases": 1,
+     "roas": 11.32,
+     "ctr": 4.38
+    },
+    {
+     "name": "ай меган+х6м відео 2",
+     "ad_id": "120251329226390624",
+     "spend": 487.78,
+     "purchases": 6,
+     "roas": 11.26,
+     "ctr": 1.51
+    },
+    {
+     "name": "картинка меган+х6м",
+     "ad_id": "120251172557030624",
+     "spend": 1.56,
+     "purchases": 0,
+     "roas": 11.21,
+     "ctr": 0.0
+    },
+    {
+     "name": "super пост х6м",
+     "ad_id": "120251274481050624",
+     "spend": 500.6,
+     "purchases": 8,
+     "roas": 11.0,
+     "ctr": 1.5
+    },
+    {
+     "name": "ай пост х6м",
+     "ad_id": "120251328425650624",
+     "spend": 882.73,
+     "purchases": 19,
+     "roas": 10.76,
+     "ctr": 2.36
+    },
+    {
+     "name": "картинка х6м 1",
+     "ad_id": "120250960847320624",
+     "spend": 704.52,
+     "purchases": 5,
+     "roas": 10.68,
+     "ctr": 1.81
+    },
+    {
+     "name": "багато нас таких х6м",
+     "ad_id": "120251465745680624",
+     "spend": 124.38,
+     "purchases": 1,
+     "roas": 10.37,
+     "ctr": 2.06
+    },
+    {
+     "name": "ай меган+х6м відео 2",
+     "ad_id": "120251329007450624",
+     "spend": 2130.99,
+     "purchases": 47,
+     "roas": 10.25,
+     "ctr": 1.61
+    },
+    {
+     "name": "super пост х6м",
+     "ad_id": "120251274480530624",
+     "spend": 120.12,
+     "purchases": 3,
+     "roas": 10.07,
+     "ctr": 2.93
+    },
+    {
+     "name": "Відео меган+х6м 5",
+     "ad_id": "120251215842580624",
+     "spend": 457.6,
+     "purchases": 9,
+     "roas": 9.45,
+     "ctr": 1.26
+    },
+    {
+     "name": "ай картинка х6м 5",
+     "ad_id": "120251329212870624",
+     "spend": 120.01,
+     "purchases": 3,
+     "roas": 9.07,
+     "ctr": 1.74
+    },
+    {
+     "name": "перший пост х6м",
+     "ad_id": "120250971615980624",
+     "spend": 83.74,
+     "purchases": 4,
+     "roas": 8.98,
+     "ctr": 2.74
+    },
+    {
+     "name": "ціна пост х6м",
+     "ad_id": "120251164758690624",
+     "spend": 368.3,
+     "purchases": 7,
+     "roas": 8.6,
+     "ctr": 5.62
+    },
+    {
+     "name": "Відео меган+х6м 2",
+     "ad_id": "120251215842590624",
+     "spend": 4761.13,
+     "purchases": 55,
+     "roas": 8.56,
+     "ctr": 2.01
+    },
+    {
+     "name": "ай меган+х6м відео 4",
+     "ad_id": "120251329007430624",
+     "spend": 1232.91,
+     "purchases": 24,
+     "roas": 8.48,
+     "ctr": 2.21
+    },
+    {
+     "name": "ай картинка х6м 4",
+     "ad_id": "120251328770050624",
+     "spend": 870.95,
+     "purchases": 23,
+     "roas": 8.26,
+     "ctr": 1.57
+    },
+    {
+     "name": "ULTIMATE пост х6м",
+     "ad_id": "120251409393570624",
+     "spend": 3878.07,
+     "purchases": 49,
+     "roas": 8.25,
+     "ctr": 1.6
+    },
+    {
+     "name": "ай меган+х6м відео 4",
+     "ad_id": "120251329201460624",
+     "spend": 720.18,
+     "purchases": 15,
+     "roas": 8.05,
+     "ctr": 2.02
+    },
+    {
+     "name": "подарунки пост х6м",
+     "ad_id": "120251274379160624",
+     "spend": 2522.63,
+     "purchases": 30,
+     "roas": 7.94,
+     "ctr": 1.39
+    },
+    {
+     "name": "ult встигни! пост х6м · LAL90",
+     "ad_id": "120251409951440624",
+     "spend": 62.37,
+     "purchases": 1,
+     "roas": 7.94,
+     "ctr": 0.65
+    },
+    {
+     "name": "картинка х6м 7",
+     "ad_id": "120250963885120624",
+     "spend": 2162.46,
+     "purchases": 29,
+     "roas": 7.88,
+     "ctr": 1.33
+    },
+    {
+     "name": "картинка х6м 11",
+     "ad_id": "120250964202770624",
+     "spend": 842.92,
+     "purchases": 14,
+     "roas": 7.82,
+     "ctr": 1.78
+    },
+    {
+     "name": "картинка х6м 6",
+     "ad_id": "120250963819500624",
+     "spend": 5993.47,
+     "purchases": 87,
+     "roas": 7.76,
+     "ctr": 1.28
+    },
+    {
+     "name": "ціна пост х6м",
+     "ad_id": "120251164694650624",
+     "spend": 4280.29,
+     "purchases": 53,
+     "roas": 7.63,
+     "ctr": 3.31
+    },
+    {
+     "name": "картинка х6м 4",
+     "ad_id": "120250963562620624",
+     "spend": 3019.29,
+     "purchases": 36,
+     "roas": 7.51,
+     "ctr": 1.35
+    },
+    {
+     "name": "Відео меган+х6м 2",
+     "ad_id": "120251224002160624",
+     "spend": 559.1,
+     "purchases": 16,
+     "roas": 7.51,
+     "ctr": 2.5
+    },
+    {
+     "name": "ай меган+х6м відео 4",
+     "ad_id": "120251329062960624",
+     "spend": 2426.39,
+     "purchases": 44,
+     "roas": 7.44,
+     "ctr": 1.98
+    },
+    {
+     "name": "меган перший пост х6м",
+     "ad_id": "120251106548460624",
+     "spend": 4028.46,
+     "purchases": 53,
+     "roas": 7.39,
+     "ctr": 2.0
+    },
+    {
+     "name": "доведеться двічі пост х6м",
+     "ad_id": "120251164757930624",
+     "spend": 27.0,
+     "purchases": 1,
+     "roas": 7.31,
+     "ctr": 1.76
+    },
+    {
+     "name": "Відео меган+х6м",
+     "ad_id": "120251223984150624",
+     "spend": 108.92,
+     "purchases": 1,
+     "roas": 7.28,
+     "ctr": 1.15
+    },
+    {
+     "name": "Відео меган+х6м 2",
+     "ad_id": "120251223982320624",
+     "spend": 186.35,
+     "purchases": 3,
+     "roas": 7.15,
+     "ctr": 0.56
+    },
+    {
+     "name": "Вже цієї неділі  пост х6м",
+     "ad_id": "120251409393560624",
+     "spend": 8569.28,
+     "purchases": 125,
+     "roas": 7.08,
+     "ctr": 1.58
+    },
+    {
+     "name": "картинка х6м 6",
+     "ad_id": "120250986366240624",
+     "spend": 27.92,
+     "purchases": 1,
+     "roas": 7.07,
+     "ctr": 4.76
+    },
+    {
+     "name": "ай меган+х6м відео 4",
+     "ad_id": "120251329199930624",
+     "spend": 415.4,
+     "purchases": 7,
+     "roas": 7.02,
+     "ctr": 1.53
+    },
+    {
+     "name": "ULTIMATE пост х6м · LAL90",
+     "ad_id": "120251409949330624",
+     "spend": 894.12,
+     "purchases": 9,
+     "roas": 6.84,
+     "ctr": 1.54
+    },
+    {
+     "name": "Відео меган+х6м 9",
+     "ad_id": "120251215842560624",
+     "spend": 3748.51,
+     "purchases": 54,
+     "roas": 6.66,
+     "ctr": 1.78
+    },
+    {
+     "name": "Відео меган+х6м 7",
+     "ad_id": "120251223992890624",
+     "spend": 74.68,
+     "purchases": 1,
+     "roas": 6.64,
+     "ctr": 2.56
+    },
+    {
+     "name": "пакет супер пост х6м",
+     "ad_id": "120251409393580624",
+     "spend": 1298.25,
+     "purchases": 11,
+     "roas": 6.6,
+     "ctr": 1.6
+    },
+    {
+     "name": "картинка х6м 2",
+     "ad_id": "120250986347090624",
+     "spend": 1.06,
+     "purchases": 0,
+     "roas": 6.58,
+     "ctr": 0.0
+    },
+    {
+     "name": "super пост х6м",
+     "ad_id": "120251274482910624",
+     "spend": 334.3,
+     "purchases": 4,
+     "roas": 6.52,
+     "ctr": 1.9
+    },
+    {
+     "name": "буст пост х6м",
+     "ad_id": "120251209157320624",
+     "spend": 6734.7,
+     "purchases": 74,
+     "roas": 6.38,
+     "ctr": 2.13
+    },
+    {
+     "name": "ай меган+х6м відео 3",
+     "ad_id": "120251329208210624",
+     "spend": 143.15,
+     "purchases": 3,
+     "roas": 6.38,
+     "ctr": 2.11
+    },
+    {
+     "name": "ціна пост х6м",
+     "ad_id": "120251164760810624",
+     "spend": 2071.16,
+     "purchases": 27,
+     "roas": 6.31,
+     "ctr": 2.68
+    },
+    {
+     "name": "ай меган+х6м відео 3",
+     "ad_id": "120251329193530624",
+     "spend": 1087.9,
+     "purchases": 18,
+     "roas": 6.31,
+     "ctr": 1.69
+    },
+    {
+     "name": "камерамен пост х6м",
+     "ad_id": "120251109512160624",
+     "spend": 11.57,
+     "purchases": 0,
+     "roas": 6.22,
+     "ctr": 0.0
+    },
+    {
+     "name": "super пост х6м",
+     "ad_id": "120251274482060624",
+     "spend": 962.3,
+     "purchases": 14,
+     "roas": 5.9,
+     "ctr": 1.58
+    },
+    {
+     "name": "другий пост х6м",
+     "ad_id": "120250988812140624",
+     "spend": 2730.57,
+     "purchases": 29,
+     "roas": 5.88,
+     "ctr": 1.68
+    },
+    {
+     "name": "доведеться двічі пост х6м",
+     "ad_id": "120251164753810624",
+     "spend": 1035.68,
+     "purchases": 15,
+     "roas": 5.83,
+     "ctr": 1.92
+    },
+    {
+     "name": "пакет супер пост х6м · Retarget",
+     "ad_id": "120251409938930624",
+     "spend": 554.64,
+     "purchases": 6,
+     "roas": 5.77,
+     "ctr": 1.81
+    },
+    {
+     "name": "багато нас таких х6м",
+     "ad_id": "120251465738220624",
+     "spend": 34.24,
+     "purchases": 1,
+     "roas": 5.77,
+     "ctr": 1.33
+    },
+    {
+     "name": "подарунки пост х6м",
+     "ad_id": "120251274478230624",
+     "spend": 2512.34,
+     "purchases": 33,
+     "roas": 5.66,
+     "ctr": 1.96
+    },
+    {
+     "name": "Відео меган+х6м 2",
+     "ad_id": "120251224004740624",
+     "spend": 1914.24,
+     "purchases": 33,
+     "roas": 5.64,
+     "ctr": 2.45
+    },
+    {
+     "name": "ай меган+х6м відео 2",
+     "ad_id": "120251329193920624",
+     "spend": 558.94,
+     "purchases": 10,
+     "roas": 5.57,
+     "ctr": 2.02
+    },
+    {
+     "name": "меган перший пост х6м",
+     "ad_id": "120251109466010624",
+     "spend": 89.78,
+     "purchases": 1,
+     "roas": 5.51,
+     "ctr": 2.39
+    },
+    {
+     "name": "ай картинка х6м 3",
+     "ad_id": "120251329194860624",
+     "spend": 95.14,
+     "purchases": 1,
+     "roas": 5.44,
+     "ctr": 1.71
+    },
+    {
+     "name": "доведеться двічі пост х6м",
+     "ad_id": "120251164694640624",
+     "spend": 449.06,
+     "purchases": 5,
+     "roas": 5.42,
+     "ctr": 1.28
+    },
+    {
+     "name": "Вже цієї неділі пост х6м · Retarget",
+     "ad_id": "120251409941420624",
+     "spend": 2230.85,
+     "purchases": 40,
+     "roas": 5.41,
+     "ctr": 2.12
+    },
+    {
+     "name": "super пост х6м",
+     "ad_id": "120251274373740624",
+     "spend": 2004.1,
+     "purchases": 23,
+     "roas": 5.39,
+     "ctr": 1.54
+    },
+    {
+     "name": "картинка х6м 8",
+     "ad_id": "120250963925240624",
+     "spend": 937.54,
+     "purchases": 9,
+     "roas": 5.3,
+     "ctr": 1.09
+    },
+    {
+     "name": "пакет супер пост х6м · 35-54",
+     "ad_id": "120251409943550624",
+     "spend": 365.91,
+     "purchases": 8,
+     "roas": 5.29,
+     "ctr": 2.24
+    },
+    {
+     "name": "Вже цієї неділі пост х6м — DC|F",
+     "ad_id": "120251455549180624",
+     "spend": 2023.55,
+     "purchases": 22,
+     "roas": 5.28,
+     "ctr": 1.49
+    },
+    {
+     "name": "подарунки пост х6м",
+     "ad_id": "120251274478590624",
+     "spend": 2436.07,
+     "purchases": 35,
+     "roas": 5.19,
+     "ctr": 1.56
+    },
+    {
+     "name": "ай картинка х6м 4",
+     "ad_id": "120251329213760624",
+     "spend": 199.24,
+     "purchases": 3,
+     "roas": 5.01,
+     "ctr": 1.92
+    },
+    {
+     "name": "фінал картинка х6м 2",
+     "ad_id": "120251465755030624",
+     "spend": 714.54,
+     "purchases": 9,
+     "roas": 5.01,
+     "ctr": 1.66
+    },
+    {
+     "name": "ай меган+х6м відео",
+     "ad_id": "120251329193730624",
+     "spend": 290.24,
+     "purchases": 4,
+     "roas": 4.96,
+     "ctr": 1.4
+    },
+    {
+     "name": "Відео меган+х6м 8",
+     "ad_id": "120251215842530624",
+     "spend": 1751.07,
+     "purchases": 18,
+     "roas": 4.85,
+     "ctr": 2.08
+    },
+    {
+     "name": "подарунки пост х6м",
+     "ad_id": "120251274477740624",
+     "spend": 2967.97,
+     "purchases": 35,
+     "roas": 4.84,
+     "ctr": 2.77
+    },
+    {
+     "name": "ай меган+х6м відео 4",
+     "ad_id": "120251329192920624",
+     "spend": 691.43,
+     "purchases": 8,
+     "roas": 4.79,
+     "ctr": 2.26
+    },
+    {
+     "name": "пакет супер пост х6м · LAL90",
+     "ad_id": "120251409950200624",
+     "spend": 294.6,
+     "purchases": 3,
+     "roas": 4.75,
+     "ctr": 0.92
+    },
+    {
+     "name": "Відео меган+х6м 9",
+     "ad_id": "120251223994910624",
+     "spend": 865.84,
+     "purchases": 9,
+     "roas": 4.73,
+     "ctr": 1.37
+    },
+    {
+     "name": "Вже цієї неділі пост х6м · 35-54",
+     "ad_id": "120251409946000624",
+     "spend": 1552.98,
+     "purchases": 21,
+     "roas": 4.67,
+     "ctr": 2.11
+    },
+    {
+     "name": "пакет супер пост х6м · Cold",
+     "ad_id": "120251409925900624",
+     "spend": 1861.01,
+     "purchases": 22,
+     "roas": 4.59,
+     "ctr": 1.63
+    },
+    {
+     "name": "ай меган+х6м відео",
+     "ad_id": "120251329202970624",
+     "spend": 419.69,
+     "purchases": 5,
+     "roas": 4.49,
+     "ctr": 1.99
+    },
+    {
+     "name": "ціна пост х6м",
+     "ad_id": "120251164768040624",
+     "spend": 133.71,
+     "purchases": 3,
+     "roas": 4.47,
+     "ctr": 3.69
+    },
+    {
+     "name": "картинка х6м 9",
+     "ad_id": "120250964034910624",
+     "spend": 2337.68,
+     "purchases": 24,
+     "roas": 4.46,
+     "ctr": 1.22
+    },
+    {
+     "name": "доведеться двічі пост х6м",
+     "ad_id": "120251164762910624",
+     "spend": 266.31,
+     "purchases": 4,
+     "roas": 4.46,
+     "ctr": 1.93
+    },
+    {
+     "name": "камерамен пост х6м",
+     "ad_id": "120251106548430624",
+     "spend": 920.49,
+     "purchases": 7,
+     "roas": 4.42,
+     "ctr": 2.17
+    }
+   ],
+   "series": [
+    {
+     "date": "2026-07-08",
+     "spend": 811.36,
+     "purchases": 0,
+     "roas": 0.0,
+     "cpa": null
+    },
+    {
+     "date": "2026-07-09",
+     "spend": 8096.66,
+     "purchases": 212,
+     "roas": 10.02,
+     "cpa": 38.19
+    },
+    {
+     "date": "2026-07-10",
+     "spend": 18921.23,
+     "purchases": 482,
+     "roas": 10.85,
+     "cpa": 39.26
+    },
+    {
+     "date": "2026-07-11",
+     "spend": 22156.97,
+     "purchases": 354,
+     "roas": 5.89,
+     "cpa": 62.59
+    },
+    {
+     "date": "2026-07-12",
+     "spend": 20724.85,
+     "purchases": 293,
+     "roas": 4.8,
+     "cpa": 70.73
+    },
+    {
+     "date": "2026-07-13",
+     "spend": 21491.12,
+     "purchases": 332,
+     "roas": 9.07,
+     "cpa": 64.73
+    },
+    {
+     "date": "2026-07-14",
+     "spend": 19806.83,
+     "purchases": 230,
+     "roas": 4.81,
+     "cpa": 86.12
+    },
+    {
+     "date": "2026-07-15",
+     "spend": 23016.85,
+     "purchases": 400,
+     "roas": 7.23,
+     "cpa": 57.54
+    },
+    {
+     "date": "2026-07-16",
+     "spend": 22240.03,
+     "purchases": 356,
+     "roas": 8.99,
+     "cpa": 62.47
+    },
+    {
+     "date": "2026-07-17",
+     "spend": 26796.1,
+     "purchases": 352,
+     "roas": 6.2,
+     "cpa": 76.13
+    },
+    {
+     "date": "2026-07-18",
+     "spend": 22514.15,
+     "purchases": 800,
+     "roas": 17.63,
+     "cpa": 28.14
+    },
+    {
+     "date": "2026-07-19",
+     "spend": 24101.96,
+     "purchases": 265,
+     "roas": 4.88,
+     "cpa": 90.95
+    },
+    {
+     "date": "2026-07-20",
+     "spend": 23808.78,
+     "purchases": 269,
+     "roas": 6.58,
+     "cpa": 88.51
+    },
+    {
+     "date": "2026-07-21",
+     "spend": 20661.07,
+     "purchases": 216,
+     "roas": 4.97,
+     "cpa": 95.65
+    },
+    {
+     "date": "2026-07-22",
+     "spend": 17268.37,
+     "purchases": 229,
+     "roas": 5.64,
+     "cpa": 75.41
+    },
+    {
+     "date": "2026-07-23",
+     "spend": 22015.6,
+     "purchases": 249,
+     "roas": 6.96,
+     "cpa": 88.42
+    },
+    {
+     "date": "2026-07-24",
+     "spend": 20670.26,
+     "purchases": 197,
+     "roas": 4.11,
+     "cpa": 104.93
+    },
+    {
+     "date": "2026-07-25",
+     "spend": 23534.78,
+     "purchases": 541,
+     "roas": 9.5,
+     "cpa": 43.5
+    },
+    {
+     "date": "2026-07-26",
+     "spend": 27222.3,
+     "purchases": 247,
+     "roas": 3.87,
+     "cpa": 110.21
+    },
+    {
+     "date": "2026-07-27",
+     "spend": 21156.41,
+     "purchases": 190,
+     "roas": 4.17,
+     "cpa": 111.35
+    },
+    {
+     "date": "2026-07-28",
+     "spend": 23303.4,
+     "purchases": 211,
+     "roas": 4.74,
+     "cpa": 110.44
+    },
+    {
+     "date": "2026-07-29",
+     "spend": 24313.51,
+     "purchases": 223,
+     "roas": 6.51,
+     "cpa": 109.03
+    },
+    {
+     "date": "2026-07-30",
+     "spend": 24148.91,
+     "purchases": 331,
+     "roas": 7.16,
+     "cpa": 72.96
+    },
+    {
+     "date": "2026-07-31",
+     "spend": 28133.19,
+     "purchases": 314,
+     "roas": 4.85,
+     "cpa": 89.6
+    },
+    {
+     "date": "2026-08-01",
+     "spend": 14082.87,
+     "purchases": 133,
+     "roas": 5.6,
+     "cpa": 105.89
+    }
+   ],
+   "adsets": [
+    {
+     "name": "Broad · UA 18-45 · A+A · VALUE · інкремент",
+     "spend": 85179.54,
+     "purchases": 1092,
+     "roas": 7.13,
+     "ctr": 1.69,
+     "cpa": 78.0
+    },
+    {
+     "name": "Cold · UA broad · EXCL. сайт+покупці (свіжа кров) · v2",
+     "spend": 47249.1,
+     "purchases": 435,
+     "roas": 3.71,
+     "ctr": 1.89,
+     "cpa": 108.62
+    },
+    {
+     "name": "Покупці 0–180д · апсейл · VALUE",
+     "spend": 10989.45,
+     "purchases": 150,
+     "roas": 8.5,
+     "ctr": 1.98,
+     "cpa": 73.26
+    },
+    {
+     "name": "Retarget · сайт 180д+30д (excl. покупці) · v2",
+     "spend": 9123.88,
+     "purchases": 136,
+     "roas": 5.65,
+     "ctr": 2.16,
+     "cpa": 67.09
+    },
+    {
+     "name": "35-54 · чоловіки · UA (sweet spot)",
+     "spend": 9102.89,
+     "purchases": 114,
+     "roas": 4.33,
+     "ctr": 2.06,
+     "cpa": 79.85
+    },
+    {
+     "name": "LAL 1% покупці 90д · чол · UA",
+     "spend": 8856.6,
+     "purchases": 128,
+     "roas": 5.22,
+     "ctr": 1.82,
+     "cpa": 69.19
+    },
+    {
+     "name": "Broad UA 18–54 · A+A · VALUE (x2-механіка)",
+     "spend": 5021.49,
+     "purchases": 40,
+     "roas": 3.51,
+     "ctr": 1.39,
+     "cpa": 125.54
+    },
+    {
+     "name": "Test · broad UA 18-45 · v2",
+     "spend": 3625.62,
+     "purchases": 45,
+     "roas": 4.74,
+     "ctr": 2.82,
+     "cpa": 80.57
+    }
+   ],
+   "adsets_window": "2026-07-25",
+   "recommendations": [
+    {
+     "sev": "cri",
+     "text": "Сумарна частота 8.71 за цикл — аудиторія вигоряє. Терміново освіжити креативи або розширити аудиторію/гео."
+    },
+    {
+     "sev": "inf",
+     "text": "Лідер: «Відео меган+х6м» ROAS 14.78, CTR 1.62% — масштабувати й дублювати в інші adset."
+    },
+    {
+     "sev": "inf",
+     "text": "Найефективніший вік: 35-44 (ROAS 7.27) — пріоритет у таргетингу."
+    }
+   ],
+   "is_current": true
   }
  ],
- "signals": [],
+ "signals": [
+  {
+   "sev": "cri",
+   "scope": "BMW X6M",
+   "text": "Сумарна частота 8.71 за цикл — аудиторія вигоряє. Терміново освіжити креативи або розширити аудиторію/гео."
+  },
+  {
+   "sev": "mod",
+   "scope": "Вчора (07-31)",
+   "text": "Pixel ROAS вчора впав на 32% до дня раніше — стежити, чи не тренд."
+  }
+ ],
  "strategy": {
   "campaigns": [
    {
@@ -8953,10 +11245,10 @@
     "desc": "70-80% бюджету. Головний драйвер. Увесь робочий креатив-пул (12-20). Highest Volume на старті → Highest Value, коли стабільно.",
     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
     "status": "ACTIVE",
-    "daily_budget": 11000,
-    "spend": 368163,
-    "purchases": 6047,
-    "roas": 7.41,
+    "daily_budget": 24000,
+    "spend": 382549,
+    "purchases": 6233,
+    "roas": 7.39,
     "ctr": 1.67
    },
    {
@@ -8966,11 +11258,11 @@
     "desc": "15-20%. Дожим теплих: дедлайн, соц-доказ, апсел токенів. Строгий таргет (A+A off).",
     "name": "DC | 02 Retargeting · дожим теплих",
     "status": "ACTIVE",
-    "daily_budget": 1041,
-    "spend": 30998,
-    "purchases": 466,
+    "daily_budget": 3500,
+    "spend": 32861,
+    "purchases": 495,
     "roas": 5.37,
-    "ctr": 2.25
+    "ctr": 2.26
    },
    {
     "id": "120249698608790624",
@@ -8979,11 +11271,11 @@
     "desc": "5-10%. «Свіжа кров» — лише нові люди (виключені відвідувачі сайту + покупці), щоб алгоритм не крутився в нашій бульбашці.",
     "name": "DC | 03 Prospecting · свіжа кров (excl. наші)",
     "status": "ACTIVE",
-    "daily_budget": 6500,
-    "spend": 137014,
-    "purchases": 1659,
-    "roas": 4.53,
-    "ctr": 1.83
+    "daily_budget": 10000,
+    "spend": 144508,
+    "purchases": 1728,
+    "roas": 4.47,
+    "ctr": 1.82
    },
    {
     "id": "120249698612830624",
@@ -8993,10 +11285,10 @@
     "name": "DC | 04 Testing · інкубатор (ABO)",
     "status": "ACTIVE",
     "daily_budget": null,
-    "spend": 11336,
-    "purchases": 212,
-    "roas": 6.2,
-    "ctr": 2.65
+    "spend": 11685,
+    "purchases": 219,
+    "roas": 6.36,
+    "ctr": 2.66
    }
   ],
   "audiences": [
