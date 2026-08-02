@@ -3110,9 +3110,13 @@ const SECTION_TITLES = {
   'payroll': 'Payroll', 'settings': 'Settings', 'help': 'Допомога'
 };
 
-const UTM_SECTIONS = new Set(['overview','analytics','projects','sources','medium','campaigns','content','terms','combos','deals']);
+// Tech-request #6 (02.08.2026): 'projects' прибрано з UTM_SECTIONS — розділ показує
+// ЛАЙФТАЙМ по кожному проєкту (свій date_start..date_end у кожного), тож глобальні
+// фільтри періоду/типу клієнта там принципово не застосовуються. Раніше панель
+// фільтрів висіла і виглядала зламаною. Тепер вона там просто не показується.
+const UTM_SECTIONS = new Set(['overview','analytics','sources','medium','campaigns','content','terms','combos','deals']);
 const ADS_SECTIONS = new Set(['ads-overview','ads-campaigns']);
-const NOFILTER_SECTIONS = new Set(['webhooks','mapping','costs','cards','usdt','payroll','settings','help']);
+const NOFILTER_SECTIONS = new Set(['projects','webhooks','mapping','costs','cards','usdt','payroll','settings','help']);
 
 /* ---------------- OVERVIEW ---------------- */
 /* ---------------- PROJECTS OVERVIEW ---------------- */
@@ -3160,7 +3164,7 @@ async function renderProjectsOverview() {
 
     c.innerHTML = `
       <div class="section-head">
-        <div><h1>🏎️ Проекти</h1><div class="subtitle">${rows.length} проектів · full-lifetime stats</div></div>
+        <div><h1>🏎️ Проекти</h1><div class="subtitle">${rows.length} проектів · лайфтайм по кожному за його власний період — глобальні фільтри тут не застосовуються</div></div>
       </div>
 
       <div class="kpi-grid">
