@@ -1,0 +1,19 @@
+name: Kill All Ads (sales cutoff)
+on:
+  schedule:
+    # 20:58 UTC = 23:58 Europe/Kyiv on 02.08 — cloud backup for the sales cutoff
+    - cron: '58 20 2 8 *'
+  workflow_dispatch:
+
+jobs:
+  kill:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - name: Pause all active campaigns
+        env:
+          FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+          AD_ACCOUNT_ID: '4136058269783354'
+        run: python3 scripts/kill_all_ads.py
