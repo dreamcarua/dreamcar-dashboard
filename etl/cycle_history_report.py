@@ -61,8 +61,8 @@ def main():
         a, b = utc_bounds(d1, d2)
         sel = 'created_at,amount,customer_type,utm_medium' + (',' + idcol if idcol else '')
         rows = fetch('dashboard_deals', {'select': sel, 'status': 'eq.pay',
-                                         'created_at': f'gte.{a}', 'order': 'created_at.asc'})
-        rows = [r for r in rows if r['created_at'][:19] < b]
+                                         'and': f'(created_at.gte.{a},created_at.lt.{b})',
+                                         'order': 'created_at.asc'})
         days = (datetime.fromisoformat(d2) - datetime.fromisoformat(d1)).days + 1
         n = len(rows); rev = sum(float(r.get('amount') or 0) for r in rows)
         new = [r for r in rows if r.get('customer_type') == 'new']
