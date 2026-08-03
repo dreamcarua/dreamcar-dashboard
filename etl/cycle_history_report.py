@@ -25,9 +25,9 @@ def utc_bounds(d1, d2):
     return a.strftime('%Y-%m-%dT%H:%M:%S'), b.strftime('%Y-%m-%dT%H:%M:%S')
 
 
-def fetch(table, params, page=1000):
+def fetch(table, params, page=1000, max_pages=200):
     rows, offset = [], 0
-    while True:
+    for _ in range(max_pages):
         p = dict(params); p['limit'] = str(page); p['offset'] = str(offset)
         url = f'{SB}/rest/v1/{table}?' + urllib.parse.urlencode(p)
         req = urllib.request.Request(url, headers={'apikey': KEY, 'Authorization': f'Bearer {KEY}'})
@@ -37,13 +37,22 @@ def fetch(table, params, page=1000):
         if len(chunk) < page:
             return rows
         offset += page
+    return rows
+
+
+def fetch_one(table, params):
+    p = dict(params); p['limit'] = '1'
+    url = f'{SB}/rest/v1/{table}?' + urllib.parse.urlencode(p)
+    req = urllib.request.Request(url, headers={'apikey': KEY, 'Authorization': f'Bearer {KEY}'})
+    with urllib.request.urlopen(req, timeout=90) as r:
+        return json.load(r)
 
 
 def main():
     if not KEY:
         print('NO KEY'); return
     # 0) які колонки-ідентифікатори клієнта існують
-    one = fetch('dashboard_deals', {'select': '*', 'order': 'created_at.desc'}, 1)[:1]
+    one = fetch_one('dashboard_deals', {'select': '*', 'order': 'created_at.desc'})
     cols = list(one[0].keys()) if one else []
     print('COLUMNS:', cols)
     idcol = None
