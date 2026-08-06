@@ -1,53 +1,53 @@
 {
- "generated": "2026-08-05T08:04:02.017684+00:00",
+ "generated": "2026-08-06T08:02:56.168426+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-08-04",
-  "prev_date": "2026-08-03",
+  "date": "2026-08-05",
+  "prev_date": "2026-08-04",
   "spend": 0,
-  "impressions": 0,
-  "clicks": 0,
-  "purchases": 0,
-  "pixel_roas": 0.0,
+  "impressions": null,
+  "clicks": null,
+  "purchases": null,
+  "pixel_roas": null,
   "cpa": null,
-  "frequency": 0.0,
+  "frequency": null,
   "real_ad_revenue": 0,
   "real_ad_roas": null,
   "deltas": {
-   "spend": -100.0,
-   "pixel_roas": -100.0,
-   "purchases": -100.0,
+   "spend": null,
+   "pixel_roas": null,
+   "purchases": null,
    "cpa": null
   },
   "week": {
    "this": {
-    "from": "2026-07-29",
-    "to": "2026-08-04",
-    "spend": 205794,
-    "purchases": 2469,
-    "pixel_roas": 5.87,
-    "cpa": 83.35,
-    "real_revenue": 567888,
-    "real_roas": 2.76
+    "from": "2026-07-30",
+    "to": "2026-08-05",
+    "spend": 181481,
+    "purchases": 2246,
+    "pixel_roas": 5.78,
+    "cpa": 80.8,
+    "real_revenue": 472193,
+    "real_roas": 2.6
    },
    "prev": {
-    "from": "2026-07-22",
-    "to": "2026-07-28",
-    "spend": 155171,
-    "purchases": 1865,
-    "pixel_roas": 5.56,
-    "cpa": 83.2,
-    "real_revenue": 476717,
-    "real_roas": 3.07
+    "from": "2026-07-23",
+    "to": "2026-07-29",
+    "spend": 162216,
+    "purchases": 1859,
+    "pixel_roas": 5.7,
+    "cpa": 87.26,
+    "real_revenue": 516309,
+    "real_roas": 3.18
    },
    "deltas": {
-    "spend": 32.6,
-    "real_roas": -10.1,
-    "pixel_roas": 5.6,
-    "cpa": 0.2,
-    "purchases": 32.4
+    "spend": 11.9,
+    "real_roas": -18.2,
+    "pixel_roas": 1.4,
+    "cpa": -7.4,
+    "purchases": 20.8
    }
   },
   "real_by_placement": [],
@@ -11167,13 +11167,7 @@
    "is_current": false
   }
  ],
- "signals": [
-  {
-   "sev": "mod",
-   "scope": "Вчора (08-04)",
-   "text": "Pixel ROAS вчора впав на 100% до дня раніше — стежити, чи не тренд."
-  }
- ],
+ "signals": [],
  "strategy": {
   "campaigns": [
    {
