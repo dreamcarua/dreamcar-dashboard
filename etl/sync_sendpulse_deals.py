@@ -191,9 +191,16 @@ def main():
         for d in deals:
             r = map_sp_to_supabase(d)
             if r: rows.append(r)
-            if r and r.get('created_at'):
-                if not last_updated_seen or r['created_at'] > last_updated_seen:
-                    last_updated_seen = r['created_at']
+            # 08.08.2026 (аудит): курсор має рухатись по updated_at (як і API-фільтр),
+            # а НЕ по created_at. Інакше нова угода стрибала маркер у "зараз", і старі
+            # угоди, що пізніше змінили статус pending→pay, більше ніколи не синкались
+            # → тихий недооблік виручки.
+            cursor_val = (d.get('updated_at') or {}).get('date') if isinstance(d.get('updated_at'), dict) else d.get('updated_at')
+            if not cursor_val and r:
+                cursor_val = r.get('updated_at') or r.get('created_at')
+            if cursor_val:
+                if not last_updated_seen or cursor_val > last_updated_seen:
+                    last_updated_seen = cursor_val
         if args.dry_run:
             log(f'[DRY] would upsert {len(rows)} rows; sample: {json.dumps(rows[0] if rows else {}, ensure_ascii=False)[:200]}')
         else:

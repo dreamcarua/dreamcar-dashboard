@@ -62,14 +62,7 @@ jobs:
           if [ -n "${{ github.event.inputs.until }}" ]; then
             ARGS="$ARGS --until=${{ github.event.inputs.until }}"
           fi
-          # 2 ітерації × 15 хв — покриває весь 30-min slot до наступного cron.
-          # FB Ads має rate limit 200/h, тому залишаємо 15 хв між ітераціями.
-          for i in 1 2; do
-            echo "=== Iteration $i/2 at $(date -u +%H:%M:%S) UTC ==="
-            python etl/sync_fb_ads.py $ARGS || echo "  ⚠ iteration $i failed, continuing"
-            if [ "$i" != "2" ]; then
-              echo "  💤 sleep 15 min..."
-              sleep 895
-            fi
-          done
+          # 08.08.2026 (аудит): loop 2×15хв прибрано (див. etl-mysql-sync — та сама причина:
+          # накладання на власні тригери + idle-білінг). Один прохід; каденс — cron + pg_cron.
+          python etl/sync_fb_ads.py $ARGS
           echo "✅ Done"

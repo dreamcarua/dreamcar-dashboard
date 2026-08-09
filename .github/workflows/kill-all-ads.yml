@@ -1,8 +1,8 @@
 name: Kill All Ads (sales cutoff)
 on:
-  schedule:
-    # 20:58 UTC = 23:58 Europe/Kyiv on 02.08 — cloud backup for the sales cutoff
-    - cron: '58 20 2 8 *'
+  # 08.08.2026 (аудит): schedule ЗНЯТО. Річний cron '58 20 2 8 *' відпрацював 02.08.2026
+  # і лишався зарядженим на КОЖНЕ наступне 2 серпня — вимкнув би всю рекламу посеред
+  # майбутнього циклу. Тепер тільки ручний запуск.
   workflow_dispatch:
 
 jobs:

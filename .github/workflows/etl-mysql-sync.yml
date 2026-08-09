@@ -63,14 +63,9 @@ jobs:
           if [ -n "${{ github.event.inputs.limit }}" ]; then
             LIMIT_ARG="--limit=${{ github.event.inputs.limit }}"
           fi
-          # 6 iterations: sync → sleep 5min → repeat. Загалом покриває весь 30-min slot до наступного cron.
-          for i in 1 2 3 4 5 6; do
-            echo "=== Iteration $i/6 at $(date -u +%H:%M:%S) UTC ==="
-            python etl/sync_mysql_to_supabase.py --mode="$MODE" --only="$ONLY" $LIMIT_ARG || echo "  ⚠ iteration $i failed, continuing"
-            # Не спимо після останньої ітерації (щоб не висіти зайве)
-            if [ "$i" != "6" ]; then
-              echo "  💤 sleep 5 min..."
-              sleep 295
-            fi
-          done
-          echo "✅ All 6 iterations done"
+          # 08.08.2026 (аудит): внутрішній loop 6×5хв ПРИБРАНО. Джоб тривав ~27 хв при
+          # тригерах кожні 5-15 хв (cron + pg_net dispatch) → черга росла, GitHub скасовував
+          # хвіст (~12 cancelled/год = шторм fail-листів) + ~40 000 idle-хвилин/міс білінгу.
+          # Тепер один прохід ~2 хв; каденс задають cron 0,30 + pg_cron :15,:45 = кожні 15 хв.
+          python etl/sync_mysql_to_supabase.py --mode="$MODE" --only="$ONLY" $LIMIT_ARG
+          echo "✅ Done"

@@ -112,8 +112,15 @@ def fb_get(path, params=None):
         r = requests.get(url, params=params, timeout=60)
         if r.status_code == 200:
             return r.json()
-        # FB throttling
-        if r.status_code in (4, 17, 32) or 'usage' in r.text.lower():
+        # FB throttling. 08.08.2026 (аудит): 4/17/32 — це КОДИ ПОМИЛОК Meta у тілі JSON,
+        # а не HTTP-статуси; порівняння з status_code ніколи не спрацьовувало і throttle
+        # валив увесь прогін. Тепер читаємо error.code з тіла.
+        _err_code = None
+        try:
+            _err_code = (r.json().get('error') or {}).get('code')
+        except Exception:
+            pass
+        if r.status_code == 429 or _err_code in (4, 17, 32) or 'usage' in r.text.lower():
             wait = 2 ** attempt * 5
             log(f'  ⏳ FB rate limit, sleep {wait}s...')
             time.sleep(wait)
@@ -208,7 +215,10 @@ def get_ad_link_urls(acct):
     next_url = None
     while True:
         if next_url:
+            # 08.08.2026 (аудит): без raise_for_status помилкова сторінка тихо обривала
+            # пагінацію і прогін звітував успіх із частковими даними.
             r = requests.get(next_url, timeout=60)
+            r.raise_for_status()
             data = r.json()
         else:
             data = fb_get(f'{acct}/ads', params)
@@ -290,6 +300,7 @@ def _fetch_insights_chunk(acct, since, until):
     while True:
         if next_url:
             r = requests.get(next_url, timeout=120)
+            r.raise_for_status()  # 08.08.2026 (аудит): див. коментар у пагінації /ads
             data = r.json()
         else:
             data = fb_get(f'{acct}/insights', params)

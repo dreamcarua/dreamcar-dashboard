@@ -245,8 +245,12 @@ def sync_deals(mode, limit=None):
         offset += len(rows)
         log(f'[deals] {offset}/{total} (pushed {pushed})')
     conn.close()
-    if max_updated:
+    # 08.08.2026 (аудит): при --limit курсор НЕ рухаємо. Раніше маркер ставав MAX(updated_at)
+    # по ПОВНІЙ вибірці, хоча залито лише limit рядків → усе між limit і max губилось назавжди.
+    if max_updated and not limit:
         set_last_sync('etl_deals_last_sync', max_updated.isoformat())
+    elif limit:
+        log('[deals] --limit задано → курсор не оновлюю (тестовий прогін)')
     log(f'[deals] ✓ done, {pushed} pushed')
     return pushed
 

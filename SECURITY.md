@@ -7,14 +7,14 @@ Original repo (`cemahalexandr/dashboard-dreamcar`) contained leaked secrets у g
 
 | Type | Status | Action |
 |---|---|---|
-| `OPENAI_API_KEY` (sk-proj-elMu…) | 🔴 Compromised | **REVOKED** 2026-06-01 |
-| `GITHUB_PAT` (ghp_ke29HtqV…) | 🔴 Compromised | **REVOKED** 2026-06-01 |
-| `DB_PASS` (A8Ci4dC79n@fincheck) | 🔴 Compromised | **ROTATE на MySQL** + update у env обох серверів |
-| `SSH_PASSWORD` (dA3lvB2tqW@serflow) | 🔴 Compromised | **ROTATE на ukraine.com.ua** |
-| `TELEGRAM_BOT_TOKEN` (1769…AAHh…) | 🔴 Compromised | **REVOKE через @BotFather** + новий токен |
-| `WP_DB_PASS` (74TBL8aav6@dreamlava) | 🔴 Compromised | **ROTATE на MySQL** + update у env обох серверів |
-| `META_APP_SECRET` (52c69c93...) | 🔴 Compromised | **ROTATE через developers.facebook.com → App Settings → Basic** |
-| `META_CLIENT_TOKEN` (5aa6f133...) | 🔴 Compromised | **ROTATE там же** |
+| `OPENAI_API_KEY` (REVOKED) | 🔴 Compromised | **REVOKED** 2026-06-01 |
+| `GITHUB_PAT` (REVOKED) | 🔴 Compromised | **REVOKED** 2026-06-01 |
+| `DB_PASS` (значення ВИДАЛЕНО з git 08.08.2026 — див. менеджер паролів) | 🔴 Compromised | **ROTATE на MySQL** + update у env обох серверів |
+| `SSH_PASSWORD` (значення ВИДАЛЕНО з git 08.08.2026) | 🔴 Compromised | **ROTATE на ukraine.com.ua** |
+| `TELEGRAM_BOT_TOKEN` (REVOKED) | 🔴 Compromised | **REVOKE через @BotFather** + новий токен |
+| `WP_DB_PASS` (значення ВИДАЛЕНО з git 08.08.2026) | 🔴 Compromised | **ROTATE на MySQL** + update у env обох серверів |
+| `META_APP_SECRET` (ROTATED-REMOVED) | 🔴 Compromised | **ROTATE через developers.facebook.com → App Settings → Basic** |
+| `META_CLIENT_TOKEN` (ROTATED-REMOVED) | 🔴 Compromised | **ROTATE там же** |
 | `GITHUB_WEBHOOK_SECRET` | 🟠 Rotate | Перегенерувати у GitHub repo settings |
 
 ## How to onboard
