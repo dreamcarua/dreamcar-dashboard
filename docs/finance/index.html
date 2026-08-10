@@ -338,6 +338,7 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
     <button class="tab" data-pane="percent">📊 % з угод <span class="cnt" id="c-percent">…</span></button>
     <button class="tab" data-pane="project">💸 Project Costs <span class="cnt" id="c-project">…</span></button>
     <button class="tab" data-pane="launches">🏆 Проєкти (приз) <span class="cnt" id="c-launches">…</span></button>
+    <button class="tab" data-pane="extra">💰 Додаткові надходження <span class="cnt" id="c-extra">…</span></button>
   </div>
 
   <!-- OVERVIEW PANE -->
@@ -575,6 +576,35 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
     </div>
   </div>
 
+  <!-- EXTRA INCOME PANE (10.08.2026, Вадим): крипта/ФОП/інше → у загальний P&L -->
+  <div class="pane" id="pane-extra">
+    <div class="toolbar" style="flex-wrap:wrap;gap:10px">
+      <span class="muted" style="font-size:12px">Крипта — мінус власний % на запис · ФОП — мінус системні відсотки (звичайна схема, зараз Σ = <b id="exSysRate">…</b>%) · Інше — повна сума. Чисте додається в загальний P&amp;L (Огляд).</span>
+    </div>
+    <div class="tbl-card" style="padding:12px;margin-bottom:14px">
+      <div id="extraErr"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
+        <div class="field" style="margin:0"><label>Дата</label><input id="exDate" type="date"></div>
+        <div class="field" style="margin:0"><label>Тип</label><select id="exKind" onchange="togglePct()"><option value="crypto">Крипта</option><option value="fop">ФОП (офіційно)</option><option value="other">Інше</option></select></div>
+        <div class="field" style="margin:0"><label>Сума, ₴ (гросс)</label><input id="exAmount" type="number" min="0" step="0.01" placeholder="0"></div>
+        <div class="field" id="exPctWrap" style="margin:0"><label>Відрахування, %</label><input id="exPct" type="number" min="0" max="100" step="0.01" placeholder="напр. 10"></div>
+        <div class="field" style="margin:0;flex:1;min-width:130px"><label>Джерело</label><input id="exSource" type="text" placeholder="напр. Binance / ФОП"></div>
+        <div class="field" style="margin:0;flex:1;min-width:130px"><label>Нотатка</label><input id="exNote" type="text" placeholder="необовʼязково"></div>
+        <button class="btn" onclick="extraAdd()">+ Додати</button>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px">
+      <div class="kpi"><div class="label">Гросс</div><div class="value" id="ex-gross">—</div></div>
+      <div class="kpi"><div class="label">Відрахування</div><div class="value" id="ex-ded">—</div></div>
+      <div class="kpi pos"><div class="label">Чисте (в P&amp;L)</div><div class="value" id="ex-net">—</div></div>
+    </div>
+    <div class="tbl-card">
+      <table id="tblExtra"><thead><tr>
+        <th style="text-align:left">Дата</th><th>Тип</th><th style="text-align:right">Сума ₴</th><th style="text-align:right">Відрах.%</th><th style="text-align:right">Чисте ₴</th><th style="text-align:left">Джерело</th><th>Дії</th>
+      </tr></thead><tbody><tr><td colspan="7" class="empty">завантаження…</td></tr></tbody></table>
+    </div>
+  </div>
+
 </div>
 </div><!-- /app-layout -->
 
@@ -711,7 +741,82 @@ document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () =>
   document.getElementById('pane-' + t.dataset.pane).classList.add('on');
   // Лінива ініціалізація overview при першому переході (якщо ще не зрендерене)
   if (t.dataset.pane === 'overview' && !window.__overviewBooted) reloadOverview();
+  if (t.dataset.pane === 'extra') renderExtra();
 }));
+
+// === Додаткові надходження (10.08.2026, Вадим) ===
+function togglePct() {
+  var k = document.getElementById('exKind').value;
+  var w = document.getElementById('exPctWrap');
+  if (w) w.style.display = (k === 'crypto') ? '' : 'none';
+}
+async function renderExtra() {
+  var fUAH = function (n) { return Number(n || 0).toLocaleString('uk-UA', { maximumFractionDigits: 0 }) + ' ₴'; };
+  var KIND = { crypto: 'Крипта', fop: 'ФОП', other: 'Інше' };
+  try {
+    await getSb();
+    var today = new Date().toISOString().slice(0, 10);
+    try {
+      var sr = await sb.rpc('fin_system_rate_at', { d: today });
+      var srEl = document.getElementById('exSysRate'); if (srEl) srEl.textContent = (sr && sr.data != null) ? sr.data : '—';
+    } catch (e) {}
+    var dInp = document.getElementById('exDate'); if (dInp && !dInp.value) dInp.value = today;
+    togglePct();
+    var res = await sb.rpc('dashboard_additional_income', { p_from: '2024-01-01', p_to: today });
+    if (res.error) throw res.error;
+    var d = res.data || {};
+    document.getElementById('ex-gross').textContent = fUAH(d.gross);
+    document.getElementById('ex-ded').textContent = fUAH(d.deduction);
+    document.getElementById('ex-net').textContent = fUAH(d.net);
+    var cnt = document.getElementById('c-extra'); if (cnt) cnt.textContent = d.count || 0;
+    var rows = d.rows || [];
+    var tb = document.querySelector('#tblExtra tbody');
+    tb.innerHTML = rows.length ? rows.map(function (r) {
+      return '<tr><td style="text-align:left">' + fmtDate(r.occurred_on) + '</td><td>' + (KIND[r.kind] || r.kind) + '</td>' +
+        '<td style="text-align:right">' + fUAH(r.amount_uah) + '</td>' +
+        '<td style="text-align:right">' + Number(r.eff_pct || 0) + '%</td>' +
+        '<td style="text-align:right;color:#3fb950">' + fUAH(r.net_uah) + '</td>' +
+        '<td style="text-align:left">' + esc(r.source || '') + (r.note ? ' · ' + esc(r.note) : '') + '</td>' +
+        '<td><button class="btn ghost" style="padding:2px 8px" onclick="extraDel(\'' + r.id + '\')">🗑</button></td></tr>';
+    }).join('') : '<tr><td colspan="7" class="empty">Ще немає записів. Додай перший вище.</td></tr>';
+  } catch (e) {
+    console.warn('[extra] render', e);
+    var tb2 = document.querySelector('#tblExtra tbody');
+    if (tb2) tb2.innerHTML = '<tr><td colspan="7" class="empty">Помилка: ' + esc(e.message || e) + '</td></tr>';
+  }
+}
+async function extraAdd() {
+  var err = document.getElementById('extraErr'); if (err) err.textContent = '';
+  var kind = document.getElementById('exKind').value;
+  var amount = parseFloat(document.getElementById('exAmount').value);
+  var pct = parseFloat(document.getElementById('exPct').value);
+  var occurred_on = document.getElementById('exDate').value || new Date().toISOString().slice(0, 10);
+  var source = (document.getElementById('exSource').value || '').trim() || null;
+  var note = (document.getElementById('exNote').value || '').trim() || null;
+  if (isNaN(amount) || amount < 0) { if (err) err.textContent = 'Впиши суму'; return; }
+  var row = { occurred_on: occurred_on, kind: kind, amount_uah: amount, source: source, note: note,
+              deduction_pct: (kind === 'crypto' && !isNaN(pct)) ? pct : null };
+  try {
+    await getSb();
+    var r = await sb.from('additional_income').insert(row);
+    if (r.error) throw r.error;
+    document.getElementById('exAmount').value = ''; document.getElementById('exPct').value = '';
+    document.getElementById('exSource').value = ''; document.getElementById('exNote').value = '';
+    renderExtra();
+    if (window.__overviewBooted) reloadOverview();
+  } catch (e) { if (err) err.textContent = 'Не додалось: ' + (e.message || e); console.warn('[extra] add', e); }
+}
+async function extraDel(id) {
+  if (!confirm('Видалити цей запис додаткового надходження?')) return;
+  try {
+    await getSb();
+    var r = await sb.from('additional_income').update({ deleted_at: new Date().toISOString() }).eq('id', id);
+    if (r.error) throw r.error;
+    renderExtra();
+    if (window.__overviewBooted) reloadOverview();
+  } catch (e) { alert('Не вдалось видалити: ' + (e.message || e)); }
+}
+window.togglePct = togglePct; window.renderExtra = renderExtra; window.extraAdd = extraAdd; window.extraDel = extraDel;
 
 // === LOAD ===
 async function loadAll() {
@@ -1157,11 +1262,25 @@ function renderKpi(periodRev, periodPaid, prevRev, summary, days) {
   cur('k-cost', shortUAH(periodRev - periodProfitProxy));
   cur('k-margin', tMargin!=null ? tMargin.toFixed(1)+'%' : '—');
   // Async — точний period-aware net profit (Net = revenue - daily costs у періоді)
-  fetchPeriodPnLForKpi(OV.from, OV.to).then(p => {
+  fetchPeriodPnLForKpi(OV.from, OV.to).then(async p => {
     if (!p) return;
-    const periodNet = Number(p.net_profit || 0);
-    const periodCost = Number(p.total_cost || 0);
-    const periodMargin = p.revenue > 0 ? (periodNet / p.revenue * 100) : 0;
+    let periodNet = Number(p.net_profit || 0);
+    let periodCost = Number(p.total_cost || 0);
+    let periodRevDisp = Number(p.revenue || 0);
+    // 10.08.2026 (Вадим): + «Додаткові надходження» у загальний P&L.
+    // Консистентне подвійне проведення: revenue += гросс, cost += відрахування, net += чисте.
+    let extra = null;
+    try {
+      const { data: ex } = await sb.rpc('dashboard_additional_income', { p_from: OV.from, p_to: OV.to });
+      extra = ex;
+    } catch (e) { console.warn('[kpi] extra income', e); }
+    if (extra && Number(extra.gross || 0) > 0) {
+      periodRevDisp += Number(extra.gross || 0);
+      periodCost   += Number(extra.deduction || 0);
+      periodNet    += Number(extra.net || 0);
+      cur('k-revenue', shortUAH(periodRevDisp));
+    }
+    const periodMargin = periodRevDisp > 0 ? (periodNet / periodRevDisp * 100) : 0;
     cur('k-profit', shortUAH(periodNet));
     cur('k-cost', shortUAH(periodCost));
     cur('k-margin', periodMargin.toFixed(1)+'%');
@@ -1173,6 +1292,11 @@ function renderKpi(periodRev, periodPaid, prevRev, summary, days) {
     // Margin proxy → actual
     const sm = document.getElementById('s-margin');
     if (sm) sm.textContent = periodMargin >= 30 ? '✓ target ≥ 30%' : 'target ≥ 30%';
+    // Позначка про дод. надходження під Net Profit
+    if (extra && Number(extra.net || 0) > 0) {
+      const dp = document.getElementById('d-profit');
+      if (dp) dp.textContent = `у т.ч. дод. надходження: +${shortUAH(Number(extra.net))} (чисте)`;
+    }
   }).catch(e => console.warn('[kpi] period RPC', e));
   cur('k-cac', periodCac!=null && periodAov ? (periodAov/periodCac).toFixed(1)+'×' : '—');
   cur('s-cac', periodCac!=null ? `CAC ${periodCac.toFixed(0)}₴ · AOV ${periodAov.toFixed(0)}₴` : 'CAC / AOV');
