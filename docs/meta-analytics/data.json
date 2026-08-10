@@ -1,11 +1,11 @@
 {
- "generated": "2026-08-09T06:09:13.841460+00:00",
+ "generated": "2026-08-10T06:53:18.923989+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-08-08",
-  "prev_date": "2026-08-07",
+  "date": "2026-08-09",
+  "prev_date": "2026-08-08",
   "spend": 0,
   "impressions": null,
   "clicks": null,
@@ -23,31 +23,31 @@
   },
   "week": {
    "this": {
-    "from": "2026-08-02",
-    "to": "2026-08-08",
-    "spend": 75870,
-    "purchases": 1098,
-    "pixel_roas": 6.13,
-    "cpa": 69.1,
-    "real_revenue": 178902,
-    "real_roas": 2.36
+    "from": "2026-08-03",
+    "to": "2026-08-09",
+    "spend": 2433,
+    "purchases": 28,
+    "pixel_roas": 3.58,
+    "cpa": 86.9,
+    "real_revenue": 1096,
+    "real_roas": 0.45
    },
    "prev": {
-    "from": "2026-07-26",
-    "to": "2026-08-01",
-    "spend": 201606,
-    "purchases": 2019,
-    "pixel_roas": 5.19,
-    "cpa": 99.85,
-    "real_revenue": 548609,
-    "real_roas": 2.72
+    "from": "2026-07-27",
+    "to": "2026-08-02",
+    "spend": 247821,
+    "purchases": 2842,
+    "pixel_roas": 5.64,
+    "cpa": 87.2,
+    "real_revenue": 661936,
+    "real_roas": 2.67
    },
    "deltas": {
-    "spend": -62.4,
-    "real_roas": -13.2,
-    "pixel_roas": 18.1,
-    "cpa": -30.8,
-    "purchases": -45.6
+    "spend": -99.0,
+    "real_roas": -83.1,
+    "pixel_roas": -36.5,
+    "cpa": -0.3,
+    "purchases": -99.0
    }
   },
   "real_by_placement": [],
@@ -11167,7 +11167,13 @@
    "is_current": false
   }
  ],
- "signals": [],
+ "signals": [
+  {
+   "sev": "cri",
+   "scope": "Акаунт · тиждень",
+   "text": "Реал ROAS тижня 0.45 vs попереднього 2.67 (-83%) — перевірити креативи/аудиторію/бюджет."
+  }
+ ],
  "strategy": {
   "campaigns": [
    {
