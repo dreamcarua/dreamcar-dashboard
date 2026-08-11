@@ -11,3 +11,9 @@ alter table public.kasa_transactions
 
 comment on column public.kasa_transactions.qty is
   'Кількість у валюті рахунку (крипта). amount_uah — гривнева оцінка. Для UAH-книг null.';
+
+-- 11.08.2026: CHECK на kind дозволяв лише bank/cash/dividends → нові книги crypto/other
+-- відхилялись БД (frontend їх пропонував, а insert падав). Розширюємо перелік.
+alter table public.kasa_accounts drop constraint if exists kasa_accounts_kind_check;
+alter table public.kasa_accounts add constraint kasa_accounts_kind_check
+  check (kind = any (array['bank'::text,'cash'::text,'dividends'::text,'crypto'::text,'other'::text]));
