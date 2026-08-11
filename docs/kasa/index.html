@@ -227,7 +227,7 @@ html,body{overflow-x:hidden;max-width:100%}
   <div class="tabs">
     <button class="tab on" data-pane="overview">📊 Огляд</button>
     <button class="tab" data-pane="bank">🏦 Безготівка <span class="cnt" id="c-bank">…</span></button>
-    <button class="tab" data-pane="cash">💵 Готівка <span class="cnt" id="c-cash">…</span></button>
+    <button class="tab" data-pane="cash">💵 Готівка / Крипта <span class="cnt" id="c-cash">…</span></button>
     <button class="tab" data-pane="div">💰 Дивіденди <span class="cnt" id="c-div">…</span></button>
     <button class="tab" data-pane="transfers">🔄 Перекази <span class="cnt" id="c-tr">…</span></button>
     <button class="tab" data-pane="accounts">⚙️ Рахунки <span class="cnt" id="c-acc">…</span></button>
@@ -326,7 +326,7 @@ html,body{overflow-x:hidden;max-width:100%}
     <div class="acct-grid" id="cashAccts"></div>
     <div class="toolbar">
       <input class="search" id="searchCash" placeholder="🔍 Пошук…">
-      <button class="btn" onclick="openTxModal('cash')">+ Готівкова операція</button>
+      <button class="btn" onclick="openTxModal('manual')">+ Операція (готівка/крипта/інше)</button>
     </div>
     <div class="tbl-card"><table id="tblCash"><thead><tr>
       <th>Дата</th><th style="text-align:left">Опис</th><th>Контрагент</th><th>Рахунок</th><th>Категорія</th><th>Проєкт</th><th>Сума</th><th>Дії</th>
@@ -394,13 +394,14 @@ html,body{overflow-x:hidden;max-width:100%}
   <div class="field"><label>Тип</label>
     <div class="seg"><button type="button" id="txIn" onclick="setDir('in')">↓ Надходження</button><button type="button" id="txOut" onclick="setDir('out')">↑ Витрата</button><button type="button" id="txMove" onclick="setDir('move')">🔄 Переміщення</button></div>
   </div>
-  <div class="field"><label>Рахунок *</label><select id="txAcct"></select></div>
+  <div class="field"><label>Рахунок *</label><select id="txAcct" onchange="txAcctChange()"></select></div>
   <div class="field" id="txMoveWrap" style="display:none"><label>Куди перемістити *</label><select id="txMoveTo" onchange="moveToggle()"><option value="cash">💵 Готівка</option><option value="dividends">💰 Дивіденди</option></select></div>
   <div class="field" id="txDivWrap" style="display:none"><label>Кому (дивіденди) *</label><select id="txDivWho"><option value="vadym">Вадим</option><option value="artem">Артем</option><option value="split">Порівну (50/50)</option></select></div>
   <div class="field-row">
-    <div class="field"><label>Сума UAH *</label><input id="txAmount" type="number" min="0" step="0.01"></div>
+    <div class="field"><label>Сума UAH * <span id="txAmtHint" class="muted"></span></label><input id="txAmount" type="number" min="0" step="0.01"></div>
     <div class="field"><label>Дата *</label><input id="txDate" type="date"></div>
   </div>
+  <div class="field" id="txQtyWrap" style="display:none"><label>Кількість <span id="txQtyCur" class="muted"></span></label><input id="txQty" type="number" step="any" placeholder="напр. 0.5"></div>
   <div class="field"><label>Опис</label><input id="txDesc" type="text" placeholder="за що / призначення"></div>
   <div class="field"><label>Контрагент</label><input id="txCp" type="text" placeholder="хто платник/отримувач"></div>
   <div class="field-row">
@@ -433,9 +434,10 @@ html,body{overflow-x:hidden;max-width:100%}
   <h3 id="accTitle">Новий рахунок</h3><div id="accErr"></div>
   <div class="field"><label>Назва *</label><input id="accName" type="text"></div>
   <div class="field-row">
-    <div class="field"><label>Тип *</label><select id="accKind"><option value="bank">Банк (безготівка)</option><option value="cash">Готівка</option><option value="dividends">Дивіденди</option></select></div>
+    <div class="field"><label>Тип *</label><select id="accKind" onchange="accKindChange()"><option value="bank">Банк (безготівка)</option><option value="cash">Готівка</option><option value="crypto">Крипта</option><option value="other">Інше (поза рахунками)</option><option value="dividends">Дивіденди</option></select></div>
     <div class="field"><label>Банк</label><select id="accBank"><option value="">—</option><option value="monobank">monobank</option><option value="privatbank">ПриватБанк</option><option value="pumb">ПУМБ</option></select></div>
   </div>
+  <div class="field" id="accCurWrap" style="display:none"><label>Валюта / актив <span class="muted">(для крипти)</span></label><input id="accCurrency" type="text" placeholder="USDT / BTC / ETH / USD" maxlength="12"></div>
   <div class="field-row">
     <div class="field"><label>Стартовий баланс UAH</label><input id="accOpen" type="number" step="0.01" value="0"></div>
     <div class="field"><label>Стартова дата</label><input id="accOpenDate" type="date"></div>
@@ -802,7 +804,7 @@ function acctCard(a){
   } else {
     extra=`<div class="meta">\u0437\u0430 \u043e\u043f\u0435\u0440\u0430\u0446\u0456\u044f\u043c\u0438</div>`;
   }
-  return `<div class="acct"><div class="nm">${esc(a.icon||'🏦')} ${esc(a.name)} ${bk}</div><div class="bal">${fmtUAH(shown)}</div>${extra}<div class="meta">${a.kind}${a.is_active?'':' · \u043d\u0435\u0430\u043a\u0442\u0438\u0432\u043d\u0438\u0439'}</div></div>`;
+  return `<div class="acct"><div class="nm">${esc(a.icon||'🏦')} ${esc(a.name)} ${bk}</div><div class="bal">${fmtUAH(shown)}</div>${a.kind==='crypto'?('<div class="meta" style="color:#e8b923">'+(Math.round(cryptoQtyOf(a.id)*1e8)/1e8)+' '+esc(a.currency||'')+'</div>'):''}${extra}<div class="meta">${a.kind}${a.is_active?'':' · \u043d\u0435\u0430\u043a\u0442\u0438\u0432\u043d\u0438\u0439'}</div></div>`;
 }
 function txRow(t,withSource){
   const a=acctById(t.account_id),c=catById(t.category_id),l=launchById(t.launch_id);
@@ -814,7 +816,7 @@ function txRow(t,withSource){
    <td>${c?esc((c.icon||'')+' '+c.name):'<span class="muted">—</span>'}</td>
    <td>${l?esc(l.name):'<span class="muted">—</span>'}</td>
    ${withSource?`<td><span class="badge">${t.source}</span></td>`:''}
-   <td class="${t.direction==='in'?'in':'out'}">${t.direction==='in'?'+':'−'}${fmtUAH(t.amount_uah)}</td>
+   <td class="${t.direction==='in'?'in':'out'}">${t.direction==='in'?'+':'−'}${fmtUAH(t.amount_uah)}${t.qty!=null?` <span class="muted">(${(Math.round(t.qty*1e8)/1e8)} ${esc((acctById(t.account_id)||{}).currency||'')})</span>`:''}</td>
    <td class="act"><button class="iconbtn" onclick="editTransaction('${t.id}')">✎</button><button class="iconbtn del" onclick="delTx('${t.id}')">🗑</button></td>
   </tr>`;
 }
@@ -882,9 +884,10 @@ document.getElementById('bankTo').addEventListener('change',renderBank);
 function bankRange(){const today=todayKyiv();const back=(n)=>{const x=new Date();x.setDate(x.getDate()-n);return x.toLocaleDateString('sv-SE',{timeZone:'Europe/Kyiv'});};const v=document.getElementById('bankPeriodFilter').value;if(v==='all')return null;if(v==='today')return{from:today,to:today};if(v==='yesterday'){const y=back(1);return{from:y,to:y};}if(v==='7')return{from:back(6),to:today};if(v==='30')return{from:back(29),to:today};if(v==='90')return{from:back(89),to:today};if(v==='365')return{from:back(364),to:today};if(v==='custom'){const ff=document.getElementById('bankFrom').value||'2020-01-01',tt=document.getElementById('bankTo').value||today;return{from:ff,to:tt};}return null;}
 
 function renderCash(){
-  document.getElementById('cashAccts').innerHTML=DATA.accounts.filter(a=>a.kind==='cash'&&a.is_active).map(acctCard).join('');
+  const MAN=['cash','other','crypto'];
+  document.getElementById('cashAccts').innerHTML=DATA.accounts.filter(a=>MAN.includes(a.kind)&&a.is_active).map(acctCard).join('');
   const q=(document.getElementById('searchCash').value||'').toLowerCase();
-  let rows=DATA.tx.filter(t=>{const a=acctById(t.account_id);return a&&a.kind==='cash';});
+  let rows=DATA.tx.filter(t=>{const a=acctById(t.account_id);return a&&MAN.includes(a.kind);});
   if(q)rows=rows.filter(t=>(t.description||'').toLowerCase().includes(q)||(t.counterparty||'').toLowerCase().includes(q));
   const pgC=pageSlice('cash',rows,q);document.querySelector('#tblCash tbody').innerHTML=rows.length?pgC.map(t=>txRow(t,false)).join(''):'<tr><td colspan="8" class="empty">Немає готівкових операцій</td></tr>';
 }
@@ -948,11 +951,15 @@ function moveToggle(){ const isM=txDir==='move'; const to=document.getElementByI
 
 function openTxModal(kind){
   editTx=null;document.getElementById('txTitle').textContent='Нова операція';showErr('txErr',null);
-  setDir('out');
-  document.getElementById('txAcct').innerHTML=DATA.accounts.filter(a=>a.is_active&&(kind?a.kind===kind:true)).map(a=>`<option value="${a.id}">${esc(a.icon+' '+a.name)}</option>`).join('');
+  setDir(kind==='manual'?'in':'out');
+  const MAN=['cash','other','crypto'];
+  const filt=a=>a.is_active&&(!kind?true:(kind==='manual'?MAN.includes(a.kind):a.kind===kind));
+  document.getElementById('txAcct').innerHTML=DATA.accounts.filter(filt).map(a=>`<option value="${a.id}">${esc(a.icon+' '+a.name)}</option>`).join('');
   ['txAmount','txDesc','txCp'].forEach(i=>document.getElementById(i).value='');
+  const _q=document.getElementById('txQty'); if(_q)_q.value='';
   document.getElementById('txCat').value='';document.getElementById('txLaunch').value='';
   document.getElementById('txDate').value=todayKyiv();
+  txAcctChange();
   openModal('modalTx');
 }
 function editTransaction(id){
@@ -961,6 +968,7 @@ function editTransaction(id){
   document.getElementById('txAcct').innerHTML=DATA.accounts.map(a=>`<option value="${a.id}">${esc(a.icon+' '+a.name)} (${a.kind})</option>`).join('');
   document.getElementById('txAcct').value=t.account_id;
   document.getElementById('txAmount').value=t.amount_uah;document.getElementById('txDate').value=t.occurred_at;
+  const _q=document.getElementById('txQty'); if(_q)_q.value=(t.qty!=null?t.qty:''); txAcctChange();
   document.getElementById('txDesc').value=t.description||'';document.getElementById('txCp').value=t.counterparty||'';
   document.getElementById('txCat').value=t.category_id||'';document.getElementById('txLaunch').value=t.launch_id||'';
   if(t.div_to){ setDir('move'); document.getElementById('txMoveTo').value='dividends'; document.getElementById('txDivWho').value=t.div_to; moveToggle(); }
@@ -975,7 +983,10 @@ async function saveTx(){
   if(!account_id)return showErr('txErr','Вибери рахунок');
   if(!(amount_uah>0))return showErr('txErr','Сума > 0');
   if(!occurred_at)return showErr('txErr','Вкажи дату');
+  const _acc=acctById(account_id);
+  const _qty=parseFloat(document.getElementById('txQty').value);
   const payload={account_id,direction:txDir,amount_uah,occurred_at,
+    qty:(_acc&&_acc.kind==='crypto'&&!isNaN(_qty))?_qty:null,
     description:document.getElementById('txDesc').value.trim()||null,
     counterparty:document.getElementById('txCp').value.trim()||null,
     category_id:document.getElementById('txCat').value||null,
@@ -1008,16 +1019,36 @@ async function delTransfer(id){if(!confirm('Видалити переказ?'))r
 
 function openAcct(){editAcc=null;document.getElementById('accTitle').textContent='Новий рахунок';showErr('accErr',null);
   ['accName','accOpen','accOpenDate','accIcon'].forEach(i=>document.getElementById(i).value='');document.getElementById('accOpen').value='0';
-  document.getElementById('accKind').value='cash';document.getElementById('accBank').value='';document.getElementById('accActive').value='true';openModal('modalAcc');}
+  const _c=document.getElementById('accCurrency'); if(_c)_c.value='';
+  document.getElementById('accKind').value='cash';document.getElementById('accBank').value='';document.getElementById('accActive').value='true';accKindChange();openModal('modalAcc');}
+// Показувати поле валюти лише для крипти; підставляти дефолти
+function accKindChange(){
+  const k=document.getElementById('accKind').value;
+  const w=document.getElementById('accCurWrap'); if(w) w.style.display=(k==='crypto')?'block':'none';
+  const c=document.getElementById('accCurrency'); if(c&&k==='crypto'&&!c.value) c.value='USDT';
+}
+// Поле «кількість» — лише для крипто-рахунків; підказка валюти
+function txAcctChange(){
+  const a=acctById(document.getElementById('txAcct').value);
+  const isC=!!(a&&a.kind==='crypto');
+  const w=document.getElementById('txQtyWrap'); if(w) w.style.display=isC?'block':'none';
+  const cur=document.getElementById('txQtyCur'); if(cur) cur.textContent=isC?('· '+(a.currency||'крипта')):'';
+  const hint=document.getElementById('txAmtHint'); if(hint) hint.textContent=isC?'(оцінка в грн)':'';
+}
+// Баланс крипти в одиницях активу (сума qty in − out)
+function cryptoQtyOf(accId){ let q=0; for(const t of (DATA.tx||[])){ if(t.account_id!==accId)continue; if(t.qty==null)continue; q+=(t.direction==='in'?1:-1)*Number(t.qty); } return q; }
 function editAccount(id){const a=acctById(id);if(!a)return;editAcc=a;document.getElementById('accTitle').textContent='Редагувати: '+a.name;showErr('accErr',null);
   document.getElementById('accName').value=a.name;document.getElementById('accKind').value=a.kind;document.getElementById('accBank').value=a.bank||'';
+  {const _c=document.getElementById('accCurrency'); if(_c)_c.value=(a.currency&&a.currency!=='UAH')?a.currency:''; accKindChange();}
   document.getElementById('accOpen').value=a.opening_balance||0;document.getElementById('accOpenDate').value=a.opening_date||'';
   document.getElementById('accIcon').value=a.icon||'';document.getElementById('accActive').value=String(a.is_active);openModal('modalAcc');}
 async function saveAcct(){
   const name=document.getElementById('accName').value.trim();if(!name)return showErr('accErr','Введи назву');
-  const payload={name,kind:document.getElementById('accKind').value,bank:document.getElementById('accBank').value||null,
+  const _kind=document.getElementById('accKind').value;
+  const payload={name,kind:_kind,bank:document.getElementById('accBank').value||null,
     opening_balance:parseFloat(document.getElementById('accOpen').value)||0,opening_date:document.getElementById('accOpenDate').value||null,
-    icon:document.getElementById('accIcon').value.trim()||'🏦',is_active:document.getElementById('accActive').value==='true'};
+    currency:_kind==='crypto'?(document.getElementById('accCurrency').value.trim()||'USDT'):'UAH',
+    icon:document.getElementById('accIcon').value.trim()||(_kind==='crypto'?'🪙':(_kind==='other'?'📦':'💵')),is_active:document.getElementById('accActive').value==='true'};
   try{const r=editAcc?await sb.from('kasa_accounts').update(payload).eq('id',editAcc.id):await sb.from('kasa_accounts').insert(payload);
     if(r.error)throw r.error;closeModal('modalAcc');await loadAll(true);}catch(e){showErr('accErr',e.message||e);}
 }
