@@ -540,7 +540,7 @@ let CACHE_PAINTED=false;
 // лише 1000 останніх → фільтр «Витрата» показував 7 із 524 (решта не завантажувались).
 // Тягнемо порціями по 1000, поки не вичерпаються.
 async function fetchAllTx(){
-  const cols='id,account_id,direction,amount_uah,occurred_at,occurred_ts,description,counterparty,category_id,launch_id,source,external_id,is_internal,excl_pnl,div_to';
+  const cols='id,account_id,direction,amount_uah,qty,occurred_at,occurred_ts,description,counterparty,category_id,launch_id,source,external_id,is_internal,excl_pnl,div_to';
   const PAGE=1000;
   // #PERF 10.07.2026: НЕ тягнемо всі 38k банківських на клієнт — це і давало 20с (сервер віддає за 75мс,
   // але 39 REST-запитів + ~7.7MB + парсинг = 20с у браузері). З 38626 tx: bank≈38622, cash=4, дивіденди=мітки.
@@ -551,7 +551,7 @@ async function fetchAllTx(){
     reqs.push(sb.from('kasa_transactions').select(cols).order('occurred_ts',{ascending:false,nullsFirst:false}).order('id',{ascending:false}).range(i*PAGE,i*PAGE+PAGE-1));
   }
   reqs.push(sb.from('kasa_transactions').select(cols).not('div_to','is',null).order('occurred_ts',{ascending:false,nullsFirst:false}).limit(5000));
-  const cashIds=(DATA.accounts||[]).filter(a=>a && a.kind==='cash').map(a=>a.id);
+  const cashIds=(DATA.accounts||[]).filter(a=>a && ['cash','crypto','other'].includes(a.kind)).map(a=>a.id);
   if(cashIds.length) reqs.push(sb.from('kasa_transactions').select(cols).in('account_id',cashIds).order('occurred_ts',{ascending:false,nullsFirst:false}).limit(5000));
   const res=await Promise.all(reqs);
   const map=new Map();
