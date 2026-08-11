@@ -62,7 +62,7 @@ html{overflow-y:scroll;scrollbar-gutter:stable}
 .acct .bal{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700}
 .acct .meta{font-size:10.5px;color:#888;font-family:'JetBrains Mono',monospace;margin-top:4px;text-transform:uppercase;letter-spacing:.08em}
 .badge{font-size:9.5px;padding:2px 7px;border-radius:5px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.08em;border:1px solid var(--line);color:#bbb}
-.badge.mono{border-color:#444}.badge.privat{border-color:#2BA24C;color:#5cd98a}.badge.pumb{border-color:#0057B8;color:#7fb0ff}
+.badge.mono{border-color:#444}.badge.privat{border-color:#2BA24C;color:#5cd98a}.badge.pumb{border-color:#0057B8;color:#7fb0ff}.badge.otp{border-color:#6ba539;color:#9fd36a}
 
 .tbl-card{background:var(--bg-2);border:1px solid var(--line);border-radius:10px;overflow:auto;max-height:calc(100vh - 320px);position:relative}
 table{width:100%;border-collapse:collapse;font-size:13px;font-family:'JetBrains Mono',monospace}
@@ -435,7 +435,7 @@ html,body{overflow-x:hidden;max-width:100%}
   <div class="field"><label>Назва *</label><input id="accName" type="text"></div>
   <div class="field-row">
     <div class="field"><label>Тип *</label><select id="accKind" onchange="accKindChange()"><option value="bank">Банк (безготівка)</option><option value="cash">Готівка</option><option value="crypto">Крипта</option><option value="other">Інше (поза рахунками)</option><option value="dividends">Дивіденди</option></select></div>
-    <div class="field"><label>Банк</label><select id="accBank"><option value="">—</option><option value="monobank">monobank</option><option value="privatbank">ПриватБанк</option><option value="pumb">ПУМБ</option></select></div>
+    <div class="field"><label>Банк</label><select id="accBank"><option value="">—</option><option value="monobank">monobank</option><option value="privatbank">ПриватБанк</option><option value="pumb">ПУМБ</option><option value="otp">ОТП</option></select></div>
   </div>
   <div class="field" id="accCurWrap" style="display:none"><label>Валюта / актив <span class="muted">(UAH — гривня; USD/EUR/USDT/BTC — валюта чи крипта, тоді вносиш кількість + оцінку в грн)</span></label><input id="accCurrency" type="text" placeholder="UAH / USD / EUR / USDT" maxlength="12"></div>
   <div class="field-row">
@@ -451,8 +451,8 @@ html,body{overflow-x:hidden;max-width:100%}
 
 <!-- MODAL: import -->
 <div class="modal" id="modalImp"><div class="modal-card">
-  <h3>Імпорт виписки (ПУМБ / CSV / XLSX)</h3><div id="impErr"></div>
-  <div class="note warn">ПУМБ не має прямого API. Виванта виписку з кабінету ПУМБ (Excel/CSV) і завантаж сюди. Дублі відсіюються автоматично.</div>
+  <h3>Імпорт виписки (ПУМБ / ОТП / CSV / XLSX)</h3><div id="impErr"></div>
+  <div class="note warn">ПУМБ і ОТП не мають простого API для авто-синку (як моно/Приват). Виванта виписку з кабінету банку (Excel/CSV) і завантаж сюди — операції підтягнуться так само. Дублі відсіюються автоматично.</div>
   <div class="field"><label>Рахунок призначення *</label><select id="impAcct"></select></div>
   <div class="field"><label>Файл виписки *</label><input id="impFile" type="file" accept=".csv,.xlsx,.xls" onchange="parseImport()"></div>
   <div id="impMap" style="display:none">
