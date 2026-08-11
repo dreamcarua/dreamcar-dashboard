@@ -152,64 +152,41 @@
       var items=tc.items.map(function(it){ return {s:it.str, x:it.transform[4], y:it.transform[5], w:it.width}; });
       allItems.push(items); fulltext+=items.map(function(i){return i.s;}).join(' ')+'\n';
     }
-    // Вихідне сальдо для звірки
-    var mb=fulltext.match(/Вих[іi]дне сальдо[:\s]+[\d ., ]*?([\d ]+[.,]\d{2})\s*$/m) || fulltext.match(/Вих[іi]дне сальдо[^0-9]*([\d ]+[.,]\d{2})(?!.*[\d.,])/);
-    if(mb) S.stmtBalance=parseFloat(mb[1].replace(/\s/g,'').replace(',','.'));
+    // Вихідне сальдо для звірки (беремо ОСТАННЮ суму у рядку — це кредит-баланс)
+    var mb=fulltext.match(/Вих[іiі]дне сальдо[^\n\r]*/);
+    if(mb){ var nums=mb[0].match(/[\d ]+[.,]\d{2}/g); if(nums&&nums.length) S.stmtBalance=parseFloat(nums[nums.length-1].replace(/\s/g,'').replace(',','.')); }
     if(/ПЕРШИЙ УКРАЇНСЬКИЙ|ПУМБ/i.test(fulltext)) parsePUMB(allItems);
     else { msg('PDF: автоформат не розпізнано. Поки підтримується ПУМБ. Для інших банків — вивантаж Excel/CSV.', true); }
   }
 
+  // ПУМБ PDF: pdf.js округлює y інакше, ніж pdfplumber → НЕ групуємо по y-бакетах.
+  // Прив'язуємось до токена дати й збираємо сусідні токени з допуском ±4 по y.
+  // Сума = єдиний токен вигляду \d…[.,]dd (коди/IBAN не мають 2 десяткових). Напрямок: x1<300 = дебет.
   function parsePUMB(pages){
     S.bank='ПУМБ';
-    var rows=[];
-    for(var pi=0; pi<pages.length; pi++){
-      var items=pages[pi];
-      // групуємо по рядках (y)
-      var byY={}; items.forEach(function(it){ var k=Math.round(it.y); (byY[k]=byY[k]||[]).push(it); });
-      var ys=Object.keys(byY).map(Number).sort(function(a,b){return b-a;}); // зверху вниз
-      // знаходимо колонки з заголовка сторінки
-      var deb=null,cred=null,dateX=null,cpX=null;
-      items.forEach(function(it){
-        if(/^Дебет$/.test(it.s)) deb=it.x+it.w;
-        if(/^Кредит$/.test(it.s)) cred=it.x+it.w;
-        if(/^Дата$/.test(it.s) && dateX===null) dateX=it.x;
-        if(/Платник/.test(it.s)) cpX=it.x;
-      });
-      if(deb===null) deb=289; if(cred===null) cred=331; if(cpX===null) cpX=662;
-      var thr=(deb+cred)/2;
-      var cur=null;
-      ys.forEach(function(y){
-        var line=byY[y].slice().sort(function(a,b){return a.x-b.x;});
-        var first=line[0];
-        if(first && /^\d{2}\.\d{2}\.\d{4}$/.test(first.s.trim())){
-          // нова операція
-          var date=first.s.trim(); var doc=''; var debToks=[],credToks=[],cpToks=[];
-          line.slice(1).forEach(function(w){
-            var x0=w.x, x1=w.x+w.w, tx=w.s.trim();
-            if(x0>120 && x0<220) doc+=tx;
-            if(/^[\d ]+[.,]?\d*$/.test(tx) && (tx.indexOf('.')>=0||tx.indexOf(',')>=0||tx.length<=3)){
-              if(x1<=thr && x1>thr-45) debToks.push(w); else if(x1>thr && x1<thr+45) credToks.push(w);
-            }
-            if(x0>cpX-8 && x0<cpX+110 && !/^\d+$/.test(tx)) cpToks.push(tx);
-          });
-          var da=joinAmt(debToks), ca=joinAmt(credToks);
-          var amt = da || ca; var dir = da?'out':'in';
-          cur={date:date, doc:doc, amt:amt, dir:dir, cp:cpToks.join(' '), desc:[]};
-          rows.push(cur);
-        } else if(cur){
-          line.forEach(function(w){ if(w.x>cpX-8 && w.x<cpX+110 && !/^\d+$/.test(w.s)) cur.cp+=' '+w.s.trim(); else if(w.x<600) cur.desc.push(w.s.trim()); });
-        }
-      });
-    }
-    // фінал: до формату rows
+    var AMT=/^\d[\d ]*[.,]\d{2}$/, DATE=/^\d{2}\.\d{2}\.\d{4}$/;
     var out=[], seen={};
-    rows.filter(function(o){return o.amt&&o.dir;}).forEach(function(o,i){
-      var d=toISO(o.date); var ex=(o.doc||('pumb-'+d+'-'+i)); if(seen[ex]) ex=ex+'-'+i; seen[ex]=1;
-      out.push({dir:o.dir, amt:o.amt, dt:d, ts:d+'T12:00:00+03:00', de:(o.desc||[]).join(' ').slice(0,400), cp:(o.cp||'').trim().slice(0,200), ex:ex.slice(0,120)});
-    });
+    for(var pi=0; pi<pages.length; pi++){
+      var items=pages[pi].map(function(i){return {s:String(i.s).trim(), x:i.x, x1:i.x+i.w, y:i.y};}).filter(function(i){return i.s!=='';});
+      var dates=items.filter(function(i){return i.x<95 && DATE.test(i.s);}).sort(function(a,b){return b.y-a.y;}); // зверху вниз
+      for(var di=0; di<dates.length; di++){
+        var d=dates[di], yNext=(di+1<dates.length)?dates[di+1].y:-1e9;
+        var row=items.filter(function(i){return Math.abs(i.y-d.y)<4 && i.x>d.x;});
+        var am=row.find(function(w){return AMT.test(w.s);});
+        if(!am) continue;
+        var amt=parseFloat(am.s.replace(/\s/g,'').replace(',','.')); if(!(amt>0)) continue;
+        var dir=am.x1<300?'out':'in';
+        var doc=row.filter(function(w){return w.x>120 && w.x<220;}).sort(function(a,b){return a.x-b.x;}).map(function(w){return w.s;}).join('');
+        var block=items.filter(function(i){return i.y < d.y-4 && i.y > yNext+3;}); // рядки-продовження між датами
+        var cpTok=row.concat(block).filter(function(w){return w.x>655 && w.x<775 && !/^\d+$/.test(w.s);}).sort(function(a,b){return (b.y-a.y)||(a.x-b.x);});
+        var cp=cpTok.map(function(w){return w.s;}).join(' ');
+        var desc=block.filter(function(w){return w.x<640 && !DATE.test(w.s) && !AMT.test(w.s);}).sort(function(a,b){return (b.y-a.y)||(a.x-b.x);}).map(function(w){return w.s;}).join(' ');
+        var dt=toISO(d.s); var ex=doc||('pumb-'+dt+'-'+pi+'-'+di); if(seen[ex]) ex=ex+'-'+di; seen[ex]=1;
+        out.push({dir:dir, amt:amt, dt:dt, ts:dt+'T12:00:00+03:00', de:desc.slice(0,400), cp:cp.trim().slice(0,200), ex:ex.slice(0,120)});
+      }
+    }
     finish(out);
   }
-  function joinAmt(toks){ if(!toks.length) return null; var s=toks.slice().sort(function(a,b){return a.x-b.x;}).map(function(t){return t.s;}).join('').replace(/\s/g,'').replace(',','.'); var v=parseFloat(s); return v>0?v:null; }
 
   // ---------- ЗВЕДЕННЯ + ІМПОРТ ----------
   function finish(rows){
