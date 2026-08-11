@@ -12,6 +12,9 @@
 <script src="/assets/js/role-gate.js?v=20260716" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<!-- 11.08.2026: імпорт виписок — SheetJS (Excel/CSV) + pdf.js (PDF) -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Manrope:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -339,6 +342,7 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
     <button class="tab" data-pane="project">💸 Project Costs <span class="cnt" id="c-project">…</span></button>
     <button class="tab" data-pane="launches">🏆 Проєкти (приз) <span class="cnt" id="c-launches">…</span></button>
     <button class="tab" data-pane="extra">💰 Додаткові надходження <span class="cnt" id="c-extra">…</span></button>
+    <button class="tab" data-pane="import">📥 Імпорт виписок</button>
   </div>
 
   <!-- OVERVIEW PANE -->
@@ -605,6 +609,12 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
     </div>
   </div>
 
+  <!-- IMPORT PANE (11.08.2026, Вадим): імпорт виписок для Давида, без доступу в Касу -->
+  <div class="pane" id="pane-import">
+    <div class="note">Завантаж виписку банку (Excel/CSV/PDF) — ОТП і ПУМБ розпізнаються автоматично, для інших банків зʼявиться зіставлення колонок. Операції ідуть у Касу (позицію грошей) і <b>не впливають на P&amp;L</b>. Доступно для ceo/coo/cfo.</div>
+    <div id="pane-import-body"><div class="empty">Відкрий вкладку для завантаження…</div></div>
+  </div>
+
 </div>
 </div><!-- /app-layout -->
 
@@ -742,6 +752,7 @@ document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () =>
   // Лінива ініціалізація overview при першому переході (якщо ще не зрендерене)
   if (t.dataset.pane === 'overview' && !window.__overviewBooted) reloadOverview();
   if (t.dataset.pane === 'extra') renderExtra();
+  if (t.dataset.pane === 'import' && typeof renderImport === 'function') renderImport();
 }));
 
 // === Додаткові надходження (10.08.2026, Вадим) ===
@@ -2345,5 +2356,6 @@ async function init() {
 window.addEventListener('dc-auth-ok', init);
 setTimeout(() => { if (!__initFired) init(); }, 2000);
 </script>
+<script src="finance-import.js?v=20260811-imp1"></script>
 </body>
 </html>
