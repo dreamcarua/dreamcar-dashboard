@@ -437,7 +437,7 @@ html,body{overflow-x:hidden;max-width:100%}
     <div class="field"><label>Тип *</label><select id="accKind" onchange="accKindChange()"><option value="bank">Банк (безготівка)</option><option value="cash">Готівка</option><option value="crypto">Крипта</option><option value="other">Інше (поза рахунками)</option><option value="dividends">Дивіденди</option></select></div>
     <div class="field"><label>Банк</label><select id="accBank"><option value="">—</option><option value="monobank">monobank</option><option value="privatbank">ПриватБанк</option><option value="pumb">ПУМБ</option></select></div>
   </div>
-  <div class="field" id="accCurWrap" style="display:none"><label>Валюта / актив <span class="muted">(для крипти)</span></label><input id="accCurrency" type="text" placeholder="USDT / BTC / ETH / USD" maxlength="12"></div>
+  <div class="field" id="accCurWrap" style="display:none"><label>Валюта / актив <span class="muted">(UAH — гривня; USD/EUR/USDT/BTC — валюта чи крипта, тоді вносиш кількість + оцінку в грн)</span></label><input id="accCurrency" type="text" placeholder="UAH / USD / EUR / USDT" maxlength="12"></div>
   <div class="field-row">
     <div class="field"><label>Стартовий баланс UAH</label><input id="accOpen" type="number" step="0.01" value="0"></div>
     <div class="field"><label>Стартова дата</label><input id="accOpenDate" type="date"></div>
@@ -804,7 +804,7 @@ function acctCard(a){
   } else {
     extra=`<div class="meta">\u0437\u0430 \u043e\u043f\u0435\u0440\u0430\u0446\u0456\u044f\u043c\u0438</div>`;
   }
-  return `<div class="acct"><div class="nm">${esc(a.icon||'🏦')} ${esc(a.name)} ${bk}</div><div class="bal">${fmtUAH(shown)}</div>${a.kind==='crypto'?('<div class="meta" style="color:#e8b923">'+(Math.round(cryptoQtyOf(a.id)*1e8)/1e8)+' '+esc(a.currency||'')+'</div>'):''}${extra}<div class="meta">${a.kind}${a.is_active?'':' · \u043d\u0435\u0430\u043a\u0442\u0438\u0432\u043d\u0438\u0439'}</div></div>`;
+  return `<div class="acct"><div class="nm">${esc(a.icon||'🏦')} ${esc(a.name)} ${bk}</div><div class="bal">${fmtUAH(shown)}</div>${(a.currency&&a.currency!=='UAH')?('<div class="meta" style="color:#e8b923">'+(Math.round(cryptoQtyOf(a.id)*1e8)/1e8)+' '+esc(a.currency)+'</div>'):''}${extra}<div class="meta">${a.kind}${a.is_active?'':' · \u043d\u0435\u0430\u043a\u0442\u0438\u0432\u043d\u0438\u0439'}</div></div>`;
 }
 function txRow(t,withSource){
   const a=acctById(t.account_id),c=catById(t.category_id),l=launchById(t.launch_id);
@@ -986,7 +986,7 @@ async function saveTx(){
   const _acc=acctById(account_id);
   const _qty=parseFloat(document.getElementById('txQty').value);
   const payload={account_id,direction:txDir,amount_uah,occurred_at,
-    qty:(_acc&&_acc.kind==='crypto'&&!isNaN(_qty))?_qty:null,
+    qty:(_acc&&_acc.currency&&_acc.currency!=='UAH'&&!isNaN(_qty))?_qty:null,
     description:document.getElementById('txDesc').value.trim()||null,
     counterparty:document.getElementById('txCp').value.trim()||null,
     category_id:document.getElementById('txCat').value||null,
@@ -1024,18 +1024,19 @@ function openAcct(){editAcc=null;document.getElementById('accTitle').textContent
 // Показувати поле валюти лише для крипти; підставляти дефолти
 function accKindChange(){
   const k=document.getElementById('accKind').value;
-  const w=document.getElementById('accCurWrap'); if(w) w.style.display=(k==='crypto')?'block':'none';
+  const MAN=['cash','crypto','other'];   // ручні книги можуть мати валюту (готівка USD, крипта тощо)
+  const w=document.getElementById('accCurWrap'); if(w) w.style.display=MAN.includes(k)?'block':'none';
   const c=document.getElementById('accCurrency'); if(c&&k==='crypto'&&!c.value) c.value='USDT';
 }
-// Поле «кількість» — лише для крипто-рахунків; підказка валюти
+// Поле «кількість» — для будь-якої книги з валютою ≠ UAH (готівковий USD, крипта…)
 function txAcctChange(){
   const a=acctById(document.getElementById('txAcct').value);
-  const isC=!!(a&&a.kind==='crypto');
-  const w=document.getElementById('txQtyWrap'); if(w) w.style.display=isC?'block':'none';
-  const cur=document.getElementById('txQtyCur'); if(cur) cur.textContent=isC?('· '+(a.currency||'крипта')):'';
-  const hint=document.getElementById('txAmtHint'); if(hint) hint.textContent=isC?'(оцінка в грн)':'';
+  const isFx=!!(a&&a.currency&&a.currency!=='UAH');
+  const w=document.getElementById('txQtyWrap'); if(w) w.style.display=isFx?'block':'none';
+  const cur=document.getElementById('txQtyCur'); if(cur) cur.textContent=isFx?('· '+a.currency):'';
+  const hint=document.getElementById('txAmtHint'); if(hint) hint.textContent=isFx?'(оцінка в грн)':'';
 }
-// Баланс крипти в одиницях активу (сума qty in − out)
+// Баланс у одиницях валюти/активу (сума qty in − out) — для USD/крипта книг
 function cryptoQtyOf(accId){ let q=0; for(const t of (DATA.tx||[])){ if(t.account_id!==accId)continue; if(t.qty==null)continue; q+=(t.direction==='in'?1:-1)*Number(t.qty); } return q; }
 function editAccount(id){const a=acctById(id);if(!a)return;editAcc=a;document.getElementById('accTitle').textContent='Редагувати: '+a.name;showErr('accErr',null);
   document.getElementById('accName').value=a.name;document.getElementById('accKind').value=a.kind;document.getElementById('accBank').value=a.bank||'';
@@ -1047,7 +1048,7 @@ async function saveAcct(){
   const _kind=document.getElementById('accKind').value;
   const payload={name,kind:_kind,bank:document.getElementById('accBank').value||null,
     opening_balance:parseFloat(document.getElementById('accOpen').value)||0,opening_date:document.getElementById('accOpenDate').value||null,
-    currency:_kind==='crypto'?(document.getElementById('accCurrency').value.trim()||'USDT'):'UAH',
+    currency:(['cash','crypto','other'].includes(_kind)?(document.getElementById('accCurrency').value.trim()||(_kind==='crypto'?'USDT':'UAH')):'UAH'),
     icon:document.getElementById('accIcon').value.trim()||(_kind==='crypto'?'🪙':(_kind==='other'?'📦':'💵')),is_active:document.getElementById('accActive').value==='true'};
   try{const r=editAcc?await sb.from('kasa_accounts').update(payload).eq('id',editAcc.id):await sb.from('kasa_accounts').insert(payload);
     if(r.error)throw r.error;closeModal('modalAcc');await loadAll(true);}catch(e){showErr('accErr',e.message||e);}
