@@ -1180,12 +1180,12 @@ async function saveMove(){
   try{
     if(to==='dividends'){
       const who=document.getElementById('txDivWho').value;
-      if(editTx){ const r=await sb.from('kasa_transactions').update({excl_pnl:true,div_to:who}).eq('id',editTx.id); if(r.error) throw r.error; }
+      if(editTx){ const r=await sb.from('kasa_transactions').update({description:desc,amount_uah:amount,occurred_at,excl_pnl:true,div_to:who}).eq('id',editTx.id); if(r.error) throw r.error; }
       else { const r=await sb.from('kasa_transactions').insert({account_id:fromId,direction:'out',amount_uah:amount,occurred_at,description:desc,source:'manual',excl_pnl:true,div_to:who,created_by:ME}); if(r.error) throw r.error; }
     } else {
       const cash=DATA.accounts.find(a=>a.kind==='cash'&&a.is_active);
       if(!cash) return showErr('txErr','Немає активного рахунку Готівка');
-      if(editTx){ const r1=await sb.from('kasa_transactions').update({excl_pnl:true}).eq('id',editTx.id); if(r1.error) throw r1.error; }
+      if(editTx){ const r1=await sb.from('kasa_transactions').update({description:desc,amount_uah:amount,occurred_at,excl_pnl:true}).eq('id',editTx.id); if(r1.error) throw r1.error; }
       else { const r1=await sb.from('kasa_transactions').insert({account_id:fromId,direction:'out',amount_uah:amount,occurred_at,description:desc,source:'manual',excl_pnl:true,created_by:ME}); if(r1.error) throw r1.error; }
       if(cash.id!==fromId && !(editTx&&editTx.excl_pnl)){ const r2=await sb.from('kasa_transactions').insert({account_id:cash.id,direction:'in',amount_uah:amount,occurred_at,description:desc||'Переміщення в готівку',source:'manual',excl_pnl:true,created_by:ME}); if(r2.error) throw r2.error; }
     }
