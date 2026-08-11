@@ -398,10 +398,10 @@ html,body{overflow-x:hidden;max-width:100%}
   <div class="field" id="txMoveWrap" style="display:none"><label>Куди перемістити *</label><select id="txMoveTo" onchange="moveToggle()"><option value="cash">💵 Готівка</option><option value="dividends">💰 Дивіденди</option></select></div>
   <div class="field" id="txDivWrap" style="display:none"><label>Кому (дивіденди) *</label><select id="txDivWho"><option value="vadym">Вадим</option><option value="artem">Артем</option><option value="split">Порівну (50/50)</option></select></div>
   <div class="field-row">
-    <div class="field"><label>Сума UAH * <span id="txAmtHint" class="muted"></span></label><input id="txAmount" type="number" min="0" step="0.01"></div>
+    <div class="field"><label id="txAmountLabel">Сума UAH *</label><input id="txAmount" type="number" min="0" step="0.01"></div>
     <div class="field"><label>Дата *</label><input id="txDate" type="date"></div>
   </div>
-  <div class="field" id="txQtyWrap" style="display:none"><label>Кількість <span id="txQtyCur" class="muted"></span></label><input id="txQty" type="number" step="any" placeholder="напр. 0.5"></div>
+  <div class="field" id="txQtyWrap" style="display:none"><label id="txQtyLabel">Еквівалент, грн</label><input id="txQty" type="number" step="any" placeholder="напр. 41000 (необовʼязково)"></div>
   <div class="field"><label>Опис</label><input id="txDesc" type="text" placeholder="за що / призначення"></div>
   <div class="field"><label>Контрагент</label><input id="txCp" type="text" placeholder="хто платник/отримувач"></div>
   <div class="field-row">
@@ -804,7 +804,7 @@ function acctCard(a){
   } else {
     extra=`<div class="meta">\u0437\u0430 \u043e\u043f\u0435\u0440\u0430\u0446\u0456\u044f\u043c\u0438</div>`;
   }
-  return `<div class="acct"><div class="nm">${esc(a.icon||'🏦')} ${esc(a.name)} ${bk}</div><div class="bal">${fmtUAH(shown)}</div>${(a.currency&&a.currency!=='UAH')?('<div class="meta" style="color:#e8b923">'+(Math.round(cryptoQtyOf(a.id)*1e8)/1e8)+' '+esc(a.currency)+'</div>'):''}${extra}<div class="meta">${a.kind}${a.is_active?'':' · \u043d\u0435\u0430\u043a\u0442\u0438\u0432\u043d\u0438\u0439'}</div></div>`;
+  return `<div class="acct"><div class="nm">${esc(a.icon||'🏦')} ${esc(a.name)} ${bk}</div><div class="bal">${(a.currency&&a.currency!=='UAH')?((Math.round(cryptoQtyOf(a.id)*1e8)/1e8)+' '+esc(a.currency)):fmtUAH(shown)}</div>${extra}<div class="meta">${a.kind}${a.is_active?'':' · \u043d\u0435\u0430\u043a\u0442\u0438\u0432\u043d\u0438\u0439'}</div></div>`;
 }
 function txRow(t,withSource){
   const a=acctById(t.account_id),c=catById(t.category_id),l=launchById(t.launch_id);
@@ -816,7 +816,7 @@ function txRow(t,withSource){
    <td>${c?esc((c.icon||'')+' '+c.name):'<span class="muted">—</span>'}</td>
    <td>${l?esc(l.name):'<span class="muted">—</span>'}</td>
    ${withSource?`<td><span class="badge">${t.source}</span></td>`:''}
-   <td class="${t.direction==='in'?'in':'out'}">${t.direction==='in'?'+':'−'}${fmtUAH(t.amount_uah)}${t.qty!=null?` <span class="muted">(${(Math.round(t.qty*1e8)/1e8)} ${esc((acctById(t.account_id)||{}).currency||'')})</span>`:''}</td>
+   <td class="${t.direction==='in'?'in':'out'}">${(a&&a.currency&&a.currency!=='UAH'&&t.qty!=null)?(`${t.direction==='in'?'+':'−'}${(Math.round(t.qty*1e8)/1e8)} ${esc(a.currency)}`+(Number(t.amount_uah)>0?` <span class="muted">(≈${fmtUAH(t.amount_uah)})</span>`:'')):(`${t.direction==='in'?'+':'−'}${fmtUAH(t.amount_uah)}`)}</td>
    <td class="act"><button class="iconbtn" onclick="editTransaction('${t.id}')">✎</button><button class="iconbtn del" onclick="delTx('${t.id}')">🗑</button></td>
   </tr>`;
 }
@@ -920,7 +920,7 @@ function renderAccounts(){
    <td style="text-align:left"><b>${esc(a.icon||'')} ${esc(a.name)}</b></td><td><span class="pill">${a.kind}</span></td>
    <td>${a.bank?`<span class="badge ${a.bank}">${a.bank}</span>`:'—'}</td>
    <td>${fmtUAH(a.opening_balance)}</td><td>${fmtDate(a.opening_date)}</td>
-   <td><b>${fmtUAH(realBal(a))}</b></td><td>${a.is_active?'✅':'⛔'}</td>
+   <td><b>${(a.currency&&a.currency!=='UAH')?((Math.round(cryptoQtyOf(a.id)*1e8)/1e8)+' '+esc(a.currency||'')):fmtUAH(realBal(a))}</b></td><td>${a.is_active?'✅':'⛔'}</td>
    <td class="act"><button class="iconbtn" onclick="editAccount('${a.id}')">✎</button></td></tr>`).join('')||'<tr><td colspan="8" class="empty">Немає рахунків</td></tr>';
 }
 
@@ -967,8 +967,10 @@ function editTransaction(id){
   document.getElementById('txTitle').textContent='Редагувати операцію';showErr('txErr',null);setDir(t.direction);
   document.getElementById('txAcct').innerHTML=DATA.accounts.map(a=>`<option value="${a.id}">${esc(a.icon+' '+a.name)} (${a.kind})</option>`).join('');
   document.getElementById('txAcct').value=t.account_id;
-  document.getElementById('txAmount').value=t.amount_uah;document.getElementById('txDate').value=t.occurred_at;
-  const _q=document.getElementById('txQty'); if(_q)_q.value=(t.qty!=null?t.qty:''); txAcctChange();
+  const _ea=acctById(t.account_id); const _efx=!!(_ea&&_ea.currency&&_ea.currency!=='UAH');
+  document.getElementById('txAmount').value=_efx?(t.qty!=null?t.qty:''):t.amount_uah;
+  document.getElementById('txDate').value=t.occurred_at;
+  const _q=document.getElementById('txQty'); if(_q)_q.value=_efx?(Number(t.amount_uah)>0?t.amount_uah:''):''; txAcctChange();
   document.getElementById('txDesc').value=t.description||'';document.getElementById('txCp').value=t.counterparty||'';
   document.getElementById('txCat').value=t.category_id||'';document.getElementById('txLaunch').value=t.launch_id||'';
   if(t.div_to){ setDir('move'); document.getElementById('txMoveTo').value='dividends'; document.getElementById('txDivWho').value=t.div_to; moveToggle(); }
@@ -978,15 +980,19 @@ function editTransaction(id){
 async function saveTx(){
   if(txDir==='move') return saveMove();
   const account_id=document.getElementById('txAcct').value;
-  const amount_uah=parseFloat(document.getElementById('txAmount').value);
   const occurred_at=document.getElementById('txDate').value;
   if(!account_id)return showErr('txErr','Вибери рахунок');
-  if(!(amount_uah>0))return showErr('txErr','Сума > 0');
   if(!occurred_at)return showErr('txErr','Вкажи дату');
   const _acc=acctById(account_id);
-  const _qty=parseFloat(document.getElementById('txQty').value);
-  const payload={account_id,direction:txDir,amount_uah,occurred_at,
-    qty:(_acc&&_acc.currency&&_acc.currency!=='UAH'&&!isNaN(_qty))?_qty:null,
+  const _isFx=!!(_acc&&_acc.currency&&_acc.currency!=='UAH');
+  // Валютна книга: головне поле = сума у валюті (→qty); нижнє = грн-еквівалент (→amount_uah, опційно).
+  // Гривнева книга: головне поле = грн (→amount_uah), qty=null.
+  const _primary=parseFloat(document.getElementById('txAmount').value);
+  if(!(_primary>0))return showErr('txErr','Сума > 0');
+  const _equiv=parseFloat(document.getElementById('txQty').value);
+  const amount_uah=_isFx?((!isNaN(_equiv)&&_equiv>0)?_equiv:0):_primary;
+  const qty=_isFx?_primary:null;
+  const payload={account_id,direction:txDir,amount_uah,occurred_at,qty,
     description:document.getElementById('txDesc').value.trim()||null,
     counterparty:document.getElementById('txCp').value.trim()||null,
     category_id:document.getElementById('txCat').value||null,
@@ -1028,13 +1034,21 @@ function accKindChange(){
   const w=document.getElementById('accCurWrap'); if(w) w.style.display=MAN.includes(k)?'block':'none';
   const c=document.getElementById('accCurrency'); if(c&&k==='crypto'&&!c.value) c.value='USDT';
 }
-// Поле «кількість» — для будь-якої книги з валютою ≠ UAH (готівковий USD, крипта…)
+// Валютна книга (currency≠UAH): головна сума — у валюті; грн-еквівалент опційний (для загального зведення).
 function txAcctChange(){
   const a=acctById(document.getElementById('txAcct').value);
   const isFx=!!(a&&a.currency&&a.currency!=='UAH');
-  const w=document.getElementById('txQtyWrap'); if(w) w.style.display=isFx?'block':'none';
-  const cur=document.getElementById('txQtyCur'); if(cur) cur.textContent=isFx?('· '+a.currency):'';
-  const hint=document.getElementById('txAmtHint'); if(hint) hint.textContent=isFx?'(оцінка в грн)':'';
+  const amtLbl=document.getElementById('txAmountLabel');
+  const w=document.getElementById('txQtyWrap');
+  const qLbl=document.getElementById('txQtyLabel');
+  if(isFx){
+    if(amtLbl) amtLbl.textContent='Сума · '+a.currency+' *';
+    if(w) w.style.display='block';
+    if(qLbl) qLbl.textContent='Еквівалент, грн (лише для загального зведення, необовʼязково)';
+  } else {
+    if(amtLbl) amtLbl.textContent='Сума UAH *';
+    if(w) w.style.display='none';
+  }
 }
 // Баланс у одиницях валюти/активу (сума qty in − out) — для USD/крипта книг
 function cryptoQtyOf(accId){ let q=0; for(const t of (DATA.tx||[])){ if(t.account_id!==accId)continue; if(t.qty==null)continue; q+=(t.direction==='in'?1:-1)*Number(t.qty); } return q; }
