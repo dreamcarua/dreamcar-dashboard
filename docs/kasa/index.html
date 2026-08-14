@@ -1184,23 +1184,33 @@ function renderIntFlow(){
 
 async function saveMove(){
   const fromId=document.getElementById('txAcct').value;
-  const amount=parseFloat(document.getElementById('txAmount').value);
+  const _primary=parseFloat(document.getElementById('txAmount').value);
   const occurred_at=document.getElementById('txDate').value;
   const desc=document.getElementById('txDesc').value.trim()||'Переміщення';
   if(!fromId) return showErr('txErr','Вибери рахунок-джерело');
-  if(!(amount>0)) return showErr('txErr','Сума > 0');
+  if(!(_primary>0)) return showErr('txErr','Сума > 0');
   if(!occurred_at) return showErr('txErr','Вкажи дату');
+  // 14.08.2026 (аудит): saveMove не знав про валютні книги — писав суму в amount_uah
+  // навіть для USD/крипти, тож виплата $500 лягала як 500 грн і псувала і баланс книги,
+  // і зведення. Логіка та сама, що у saveTx: у валютній книзі головне поле → qty.
+  const _accFrom=acctById(fromId);
+  const _isFx=!!(_accFrom&&_accFrom.currency&&_accFrom.currency!=='UAH');
+  const _equiv=parseFloat(document.getElementById('txQty').value);
+  const amount=_isFx?((!isNaN(_equiv)&&_equiv>0)?_equiv:0):_primary;
+  const qty=_isFx?_primary:null;
   const to=document.getElementById('txMoveTo').value;
   try{
     if(to==='dividends'){
       const who=document.getElementById('txDivWho').value;
-      if(editTx){ const r=await sb.from('kasa_transactions').update({description:desc,amount_uah:amount,occurred_at,excl_pnl:true,div_to:who}).eq('id',editTx.id); if(r.error) throw r.error; }
-      else { const r=await sb.from('kasa_transactions').insert({account_id:fromId,direction:'out',amount_uah:amount,occurred_at,description:desc,source:'manual',excl_pnl:true,div_to:who,created_by:ME}); if(r.error) throw r.error; }
+      if(editTx){ const r=await sb.from('kasa_transactions').update({description:desc,amount_uah:amount,qty,occurred_at,excl_pnl:true,div_to:who}).eq('id',editTx.id); if(r.error) throw r.error; }
+      else { const r=await sb.from('kasa_transactions').insert({account_id:fromId,direction:'out',amount_uah:amount,qty,occurred_at,description:desc,source:'manual',excl_pnl:true,div_to:who,created_by:ME}); if(r.error) throw r.error; }
     } else {
       const cash=DATA.accounts.find(a=>a.kind==='cash'&&a.is_active);
       if(!cash) return showErr('txErr','Немає активного рахунку Готівка');
-      if(editTx){ const r1=await sb.from('kasa_transactions').update({description:desc,amount_uah:amount,occurred_at,excl_pnl:true}).eq('id',editTx.id); if(r1.error) throw r1.error; }
-      else { const r1=await sb.from('kasa_transactions').insert({account_id:fromId,direction:'out',amount_uah:amount,occurred_at,description:desc,source:'manual',excl_pnl:true,created_by:ME}); if(r1.error) throw r1.error; }
+      // Готівка ведеться у грн: щоб зарахувати другу ногу, потрібен грн-еквівалент.
+      if(_isFx && !(amount>0)) return showErr('txErr','Для валютної книги вкажи грн-еквівалент — інакше нічого зарахувати в Готівку');
+      if(editTx){ const r1=await sb.from('kasa_transactions').update({description:desc,amount_uah:amount,qty,occurred_at,excl_pnl:true}).eq('id',editTx.id); if(r1.error) throw r1.error; }
+      else { const r1=await sb.from('kasa_transactions').insert({account_id:fromId,direction:'out',amount_uah:amount,qty,occurred_at,description:desc,source:'manual',excl_pnl:true,created_by:ME}); if(r1.error) throw r1.error; }
       if(cash.id!==fromId && !(editTx&&editTx.excl_pnl)){ const r2=await sb.from('kasa_transactions').insert({account_id:cash.id,direction:'in',amount_uah:amount,occurred_at,description:desc||'Переміщення в готівку',source:'manual',excl_pnl:true,created_by:ME}); if(r2.error) throw r2.error; }
     }
     closeModal('modalTx'); await loadAll(true);

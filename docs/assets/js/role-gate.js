@@ -27,6 +27,15 @@
     let { data } = await sb.from('users')
       .select('role, utm_terms, name')
       .eq('auth_id', user.id).eq('is_active', true).maybeSingle();
+    // 14.08.2026 (аудит): fallback на alias був лише в коментарі, коду не було.
+    // Наслідок — байєр, залогінений alias-акаунтом, не розпізнавався (me=null),
+    // gate мовчки виходив і показував ВСІ розділи замість лише «Виконавець».
+    if (!data) {
+      const r2 = await sb.from('users')
+        .select('role, utm_terms, name')
+        .contains('auth_id_aliases', [user.id]).eq('is_active', true).maybeSingle();
+      data = r2.data || null;
+    }
     return data || null;
   }
 
