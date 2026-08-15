@@ -1,20 +1,20 @@
 {
- "generated": "2026-08-14T06:55:26.805229+00:00",
+ "generated": "2026-08-15T05:53:31.965039+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-08-13",
-  "prev_date": "2026-08-12",
-  "spend": 0,
-  "impressions": null,
-  "clicks": null,
-  "purchases": null,
-  "pixel_roas": null,
-  "cpa": null,
-  "frequency": null,
-  "real_ad_revenue": 0,
-  "real_ad_roas": null,
+  "date": "2026-08-14",
+  "prev_date": "2026-08-13",
+  "spend": 20669.53,
+  "impressions": 106101,
+  "clicks": 1888,
+  "purchases": 439,
+  "pixel_roas": 4.74,
+  "cpa": 47.08,
+  "frequency": 1.71,
+  "real_ad_revenue": 57065,
+  "real_ad_roas": 2.76,
   "deltas": {
    "spend": null,
    "pixel_roas": null,
@@ -23,36 +23,94 @@
   },
   "week": {
    "this": {
-    "from": "2026-08-07",
-    "to": "2026-08-13",
-    "spend": 0,
-    "purchases": null,
-    "pixel_roas": null,
-    "cpa": null,
-    "real_revenue": 0,
-    "real_roas": null
+    "from": "2026-08-08",
+    "to": "2026-08-14",
+    "spend": 20670,
+    "purchases": 439,
+    "pixel_roas": 4.74,
+    "cpa": 47.08,
+    "real_revenue": 57065,
+    "real_roas": 2.76
    },
    "prev": {
-    "from": "2026-07-31",
-    "to": "2026-08-06",
-    "spend": 157332,
-    "purchases": 1915,
-    "pixel_roas": 5.57,
-    "cpa": 82.16,
-    "real_revenue": 380223,
-    "real_roas": 2.42
+    "from": "2026-08-01",
+    "to": "2026-08-07",
+    "spend": 129177,
+    "purchases": 1601,
+    "pixel_roas": 5.73,
+    "cpa": 80.69,
+    "real_revenue": 304212,
+    "real_roas": 2.35
    },
    "deltas": {
-    "spend": null,
-    "real_roas": null,
-    "pixel_roas": null,
-    "cpa": null,
-    "purchases": null
+    "spend": -84.0,
+    "real_roas": 17.4,
+    "pixel_roas": -17.3,
+    "cpa": -41.7,
+    "purchases": -72.6
    }
   },
-  "real_by_placement": [],
-  "active_cycles": [],
-  "top_creatives": [],
+  "real_by_placement": [
+   {
+    "placement": "instagram_feed",
+    "revenue": 21386,
+    "paid": 85
+   },
+   {
+    "placement": "instagram_stories",
+    "revenue": 16951,
+    "paid": 83
+   },
+   {
+    "placement": "instagram_reels",
+    "revenue": 12575,
+    "paid": 61
+   },
+   {
+    "placement": "facebook_mobile_feed",
+    "revenue": 3564,
+    "paid": 16
+   },
+   {
+    "placement": "facebook_mobile_reels",
+    "revenue": 1842,
+    "paid": 13
+   },
+   {
+    "placement": "facebook_stories",
+    "revenue": 747,
+    "paid": 3
+   }
+  ],
+  "active_cycles": [
+   "Три iPhone 17 (17 / Air / Pro Max)"
+  ],
+  "top_creatives": [
+   {
+    "name": "перший пост 3 телефона · DC|02b Baza upsell",
+    "ad_id": "120251777902470624",
+    "spend": 884.12,
+    "purchases": 26,
+    "roas": 8.09,
+    "ctr": 2.54
+   },
+   {
+    "name": "другий пост 3 телефона",
+    "ad_id": "120251775033140624",
+    "spend": 5337.5,
+    "purchases": 155,
+    "roas": 6.64,
+    "ctr": 2.24
+   },
+   {
+    "name": "другий пост 3 телефона · DC|03 Cold",
+    "ad_id": "120251777687400624",
+    "spend": 1632.43,
+    "purchases": 41,
+    "roas": 6.34,
+    "ctr": 1.74
+   }
+  ],
   "weak_creatives": []
  },
  "projects": [
@@ -11165,6 +11223,302 @@
     }
    ],
    "is_current": false
+  },
+  {
+   "code": "3iphone",
+   "name": "Три iPhone 17 (17 / Air / Pro Max)",
+   "car_model": "3 iPhone 17",
+   "date_from": "2026-08-14",
+   "date_to": "2026-08-15",
+   "spend": 22839.8,
+   "impressions": 117880,
+   "clicks": 2048,
+   "ctr": 1.74,
+   "reach": 64005,
+   "frequency": 1.84,
+   "purchases": 491,
+   "pixel_roas": 5.02,
+   "cpa": 46.52,
+   "pixel_revenue": 114599,
+   "real_ad_revenue": 62992,
+   "real_ad_roas": 2.76,
+   "gap_pct": -45.0,
+   "segments": {
+    "platform": [
+     [
+      "instagram",
+      19347.27,
+      423,
+      5.03
+     ],
+     [
+      "facebook",
+      3399.63,
+      68,
+      5.09
+     ],
+     [
+      "audience_network",
+      5.64,
+      0,
+      0.0
+     ]
+    ],
+    "age": [
+     [
+      "25-34",
+      10873.85,
+      242,
+      5.24
+     ],
+     [
+      "35-44",
+      8036.12,
+      187,
+      5.07
+     ],
+     [
+      "18-24",
+      1949.25,
+      31,
+      3.6
+     ],
+     [
+      "45-54",
+      1479.26,
+      21,
+      4.94
+     ],
+     [
+      "55-64",
+      276.65,
+      7,
+      3.58
+     ],
+     [
+      "65+",
+      224.31,
+      1,
+      0.43
+     ],
+     [
+      "Unknown",
+      0.36,
+      1,
+      4130.58
+     ]
+    ],
+    "gender": [
+     [
+      "male",
+      17204.85,
+      404,
+      5.34
+     ],
+     [
+      "female",
+      5596.57,
+      85,
+      3.76
+     ],
+     [
+      "unknown",
+      38.38,
+      2,
+      45.19
+     ]
+    ],
+    "device": [
+     [
+      "iphone",
+      13412.47,
+      296,
+      5.14
+     ],
+     [
+      "android_smartphone",
+      9276.4,
+      194,
+      4.93
+     ],
+     [
+      "desktop",
+      43.95,
+      0,
+      0.0
+     ],
+     [
+      "android_tablet",
+      11.25,
+      0,
+      0.0
+     ],
+     [
+      "ipad",
+      8.48,
+      0,
+      0.0
+     ]
+    ]
+   },
+   "creatives": [
+    {
+     "name": "перший пост 3 телефона · DC|02b Baza upsell",
+     "ad_id": "120251777902470624",
+     "spend": 985.94,
+     "purchases": 29,
+     "roas": 7.66,
+     "ctr": 2.34,
+     "thumb": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/7QCEUGhvdG9zaG9wIDMuMAA4QklNBAQAAAAAAGgcAigAYkZCTUQwYTAwMGE3ZTAxMDAwMGM3MDEwMDAwMWUwMjAwMDAzZTAyMDAwMDU1MDIwMDAwYjMwMjAwMDA1MTAzMDAwMDZiMDMwMDAwOGIwMzAwMDBhMDAzMDAwMDY3MDQwMDAwAP/bAIQABgcHDQkNDAwMDBENDg0REREQEBERExASERIQExMUExUVExQTFBMXFxcTFBUXGRkXFRccGxwXGxkZGx4bHhsbFgEGBgYLCAsKCwsKDQkLCQ0MDAoKDAwPCwwLDAsPEA4NDg4NDhAODQ0KDQ0ODw4QEA4PEAwODBAPEBAPFxkXFxfB/8IAEQgAQABAAwEiAAIRAQMRAf/EAEkAAQACAwEBAAAAAAAAAAAAAAACBQMEBgcIEAEAAQIEBAMHBAMAAAAAAAABEQAhAiAxQQMQUWEScYEEBSIwoeHwE7HB0SMykf/aAAwDAQACAAMAAAAB1eB7jkdOwqYyjuV4AFxoYEZxLqUKVc0xPo+y9Anj+ZxDI3NMb2iHUe7/ADD63KPltvbznHhoyjiyAAf/2gAIAQEAAQUC8H6Rj8OJSM3tvGnks5sf+RXKE1h928VqefD9ix8TDxfY8fDw17ljEY8NuZxsRWLj48ZXuv2j9HivyMHvnAcLAU+ySZsJhw4eLxPALOb/2gAIAQMAAT8B9ow4f9S3h/InJixT5uvPEu2TFXiyf//aAAgBAgABPwHgLq75AjnhDfJhow5P/9oACAEBAAY/AoScARDomrijrNfD8PbOcM11r4iIzrN3rp9qjLBR4sLhnIYjfvXiYjz5fDA4V8Vr4p0v2ykYm2lQ4lOWHpi+F9fv8nD4pccQn3qWhLPTOYfyanP/AP/aAAgBAQABPyGwKMkn+AF5WoIRDbVH8/vUiHM0iSuliY0Ol9aYvfdVm1SFd8yGYo902J7OtMGUrAVdAu1bidReOsbesUI0pZu8ijE0brMV0FkRKZ/N+RkqHMEIz3liQVeO5kiwL7HSWX6lOFi8PK7mP60+kK0vr8i1DwBqlpla+tbNIWvotNfQS7b9OlqSFHUzMqPU1oL7tvOpCurm/9oADAMBAAIAAwAAABAb3zwjzwfyzzCBzzz/2gAIAQMAAT8QlWNxTf6EU9uer6kus8zDuOuQUpbZP//aAAgBAgABPxDIb6bm5NmRUMXyf//aAAgBAQABPxA0ZwZDQddRIZG6v1JoRAhMwBaIz7zdX7FNMi7YfcU2olObVt69Ct0WWR3Kvnqy76aX/NsrQWgCj0Au1Me411lOw7+wavKinakrqvKSFWgahbz/AL0ruxTUiEQdujkpsASH0TWiHep9UC/S+Q8tAsIlB5g+lPGUSSSbnT0jlKvSYC/IaTT/AOH7M4128leuyfMe1HDMUCXY26atatLD0JfQachCInRNcxqIYi5Jea8s49Vp/bSIpRV6rrm//9k="
+    },
+    {
+     "name": "другий пост 3 телефона",
+     "ad_id": "120251775033140624",
+     "spend": 5786.79,
+     "purchases": 169,
+     "roas": 7.27,
+     "ctr": 2.18,
+     "thumb": "data:image/jpeg;base64,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"
+    },
+    {
+     "name": "другий пост 3 телефона · DC|02b Baza upsell",
+     "ad_id": "120251777908900624",
+     "spend": 1253.25,
+     "purchases": 29,
+     "roas": 6.95,
+     "ctr": 2.2,
+     "thumb": "data:image/jpeg;base64,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"
+    },
+    {
+     "name": "другий пост 3 телефона · DC|03 Cold",
+     "ad_id": "120251777687400624",
+     "spend": 2007.94,
+     "purchases": 48,
+     "roas": 5.6,
+     "ctr": 1.68,
+     "thumb": "data:image/jpeg;base64,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"
+    },
+    {
+     "name": "перший пост 3 телефона · DC|05 FB Stories",
+     "ad_id": "120251777692800624",
+     "spend": 366.99,
+     "purchases": 8,
+     "roas": 5.3,
+     "ctr": 1.59,
+     "thumb": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/7QCEUGhvdG9zaG9wIDMuMAA4QklNBAQAAAAAAGgcAigAYkZCTUQwYTAwMGE3ZTAxMDAwMGM3MDEwMDAwMWUwMjAwMDAzZTAyMDAwMDU1MDIwMDAwYjMwMjAwMDA1MTAzMDAwMDZiMDMwMDAwOGIwMzAwMDBhMDAzMDAwMDY3MDQwMDAwAP/bAIQABgcHDQkNDAwMDBENDg0REREQEBERExASERIQExMUExUVExQTFBMXFxcTFBUXGRkXFRccGxwXGxkZGx4bHhsbFgEGBgYLCAsKCwsKDQkLCQ0MDAoKDAwPCwwLDAsPEA4NDg4NDhAODQ0KDQ0ODw4QEA4PEAwODBAPEBAPFxkXFxfB/8IAEQgAQABAAwEiAAIRAQMRAf/EAEkAAQACAwEBAAAAAAAAAAAAAAACBQMEBgcIEAEAAQIEBAMHBAMAAAAAAAABEQAhAiAxQQMQUWEScYEEBSIwoeHwE7HB0SMykf/aAAwDAQACAAMAAAAB1eB7jkdOwqYyjuV4AFxoYEZxLqUKVc0xPo+y9Anj+ZxDI3NMb2iHUe7/ADD63KPltvbznHhoyjiyAAf/2gAIAQEAAQUC8H6Rj8OJSM3tvGnks5sf+RXKE1h928VqefD9ix8TDxfY8fDw17ljEY8NuZxsRWLj48ZXuv2j9HivyMHvnAcLAU+ySZsJhw4eLxPALOb/2gAIAQMAAT8B9ow4f9S3h/InJixT5uvPEu2TFXiyf//aAAgBAgABPwHgLq75AjnhDfJhow5P/9oACAEBAAY/AoScARDomrijrNfD8PbOcM11r4iIzrN3rp9qjLBR4sLhnIYjfvXiYjz5fDA4V8Vr4p0v2ykYm2lQ4lOWHpi+F9fv8nD4pccQn3qWhLPTOYfyanP/AP/aAAgBAQABPyGwKMkn+AF5WoIRDbVH8/vUiHM0iSuliY0Ol9aYvfdVm1SFd8yGYo902J7OtMGUrAVdAu1bidReOsbesUI0pZu8ijE0brMV0FkRKZ/N+RkqHMEIz3liQVeO5kiwL7HSWX6lOFi8PK7mP60+kK0vr8i1DwBqlpla+tbNIWvotNfQS7b9OlqSFHUzMqPU1oL7tvOpCurm/9oADAMBAAIAAwAAABAb3zwjzwfyzzCBzzz/2gAIAQMAAT8QlWNxTf6EU9uer6kus8zDuOuQUpbZP//aAAgBAgABPxDIb6bm5NmRUMXyf//aAAgBAQABPxA0ZwZDQddRIZG6v1JoRAhMwBaIz7zdX7FNMi7YfcU2olObVt69Ct0WWR3Kvnqy76aX/NsrQWgCj0Au1Me411lOw7+wavKinakrqvKSFWgahbz/AL0ruxTUiEQdujkpsASH0TWiHep9UC/S+Q8tAsIlB5g+lPGUSSSbnT0jlKvSYC/IaTT/AOH7M4128leuyfMe1HDMUCXY26atatLD0JfQachCInRNcxqIYi5Jea8s49Vp/bSIpRV6rrm//9k="
+    },
+    {
+     "name": "перший пост 3 телефона · DC|03 Cold",
+     "ad_id": "120251777682180624",
+     "spend": 2150.61,
+     "purchases": 34,
+     "roas": 4.11,
+     "ctr": 1.39,
+     "thumb": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/7QCEUGhvdG9zaG9wIDMuMAA4QklNBAQAAAAAAGgcAigAYkZCTUQwYTAwMGE3ZTAxMDAwMGM3MDEwMDAwMWUwMjAwMDAzZTAyMDAwMDU1MDIwMDAwYjMwMjAwMDA1MTAzMDAwMDZiMDMwMDAwOGIwMzAwMDBhMDAzMDAwMDY3MDQwMDAwAP/bAIQABgcHDQkNDAwMDBENDg0REREQEBERExASERIQExMUExUVExQTFBMXFxcTFBUXGRkXFRccGxwXGxkZGx4bHhsbFgEGBgYLCAsKCwsKDQkLCQ0MDAoKDAwPCwwLDAsPEA4NDg4NDhAODQ0KDQ0ODw4QEA4PEAwODBAPEBAPFxkXFxfB/8IAEQgAQABAAwEiAAIRAQMRAf/EAEkAAQACAwEBAAAAAAAAAAAAAAACBQMEBgcIEAEAAQIEBAMHBAMAAAAAAAABEQAhAiAxQQMQUWEScYEEBSIwoeHwE7HB0SMykf/aAAwDAQACAAMAAAAB1eB7jkdOwqYyjuV4AFxoYEZxLqUKVc0xPo+y9Anj+ZxDI3NMb2iHUe7/ADD63KPltvbznHhoyjiyAAf/2gAIAQEAAQUC8H6Rj8OJSM3tvGnks5sf+RXKE1h928VqefD9ix8TDxfY8fDw17ljEY8NuZxsRWLj48ZXuv2j9HivyMHvnAcLAU+ySZsJhw4eLxPALOb/2gAIAQMAAT8B9ow4f9S3h/InJixT5uvPEu2TFXiyf//aAAgBAgABPwHgLq75AjnhDfJhow5P/9oACAEBAAY/AoScARDomrijrNfD8PbOcM11r4iIzrN3rp9qjLBR4sLhnIYjfvXiYjz5fDA4V8Vr4p0v2ykYm2lQ4lOWHpi+F9fv8nD4pccQn3qWhLPTOYfyanP/AP/aAAgBAQABPyGwKMkn+AF5WoIRDbVH8/vUiHM0iSuliY0Ol9aYvfdVm1SFd8yGYo902J7OtMGUrAVdAu1bidReOsbesUI0pZu8ijE0brMV0FkRKZ/N+RkqHMEIz3liQVeO5kiwL7HSWX6lOFi8PK7mP60+kK0vr8i1DwBqlpla+tbNIWvotNfQS7b9OlqSFHUzMqPU1oL7tvOpCurm/9oADAMBAAIAAwAAABAb3zwjzwfyzzCBzzz/2gAIAQMAAT8QlWNxTf6EU9uer6kus8zDuOuQUpbZP//aAAgBAgABPxDIb6bm5NmRUMXyf//aAAgBAQABPxA0ZwZDQddRIZG6v1JoRAhMwBaIz7zdX7FNMi7YfcU2olObVt69Ct0WWR3Kvnqy76aX/NsrQWgCj0Au1Me411lOw7+wavKinakrqvKSFWgahbz/AL0ruxTUiEQdujkpsASH0TWiHep9UC/S+Q8tAsIlB5g+lPGUSSSbnT0jlKvSYC/IaTT/AOH7M4128leuyfMe1HDMUCXY26atatLD0JfQachCInRNcxqIYi5Jea8s49Vp/bSIpRV6rrm//9k="
+    },
+    {
+     "name": "перший пост 3 телефона",
+     "ad_id": "120251774986200624",
+     "spend": 8108.19,
+     "purchases": 129,
+     "roas": 3.43,
+     "ctr": 1.29
+    },
+    {
+     "name": "другий пост 3 телефона · DC|02 Retarget",
+     "ad_id": "120251777900830624",
+     "spend": 847.67,
+     "purchases": 15,
+     "roas": 3.3,
+     "ctr": 2.17
+    },
+    {
+     "name": "перший пост 3 телефона · DC|02 Retarget",
+     "ad_id": "120251777663750624",
+     "spend": 851.04,
+     "purchases": 20,
+     "roas": 2.81,
+     "ctr": 2.15
+    },
+    {
+     "name": "другий пост 3 телефона · DC|05 FB Stories",
+     "ad_id": "120251777700000624",
+     "spend": 481.38,
+     "purchases": 7,
+     "roas": 2.61,
+     "ctr": 2.68
+    }
+   ],
+   "series": [
+    {
+     "date": "2026-08-14",
+     "spend": 20669.53,
+     "purchases": 439,
+     "roas": 4.74,
+     "cpa": 47.08
+    },
+    {
+     "date": "2026-08-15",
+     "spend": 2170.27,
+     "purchases": 51,
+     "roas": 7.64,
+     "cpa": 42.55
+    }
+   ],
+   "adsets": [
+    {
+     "name": "Broad · UA 18-45 · A+A · VALUE · інкремент",
+     "spend": 13894.98,
+     "purchases": 298,
+     "roas": 5.03,
+     "ctr": 1.68,
+     "cpa": 46.63
+    },
+    {
+     "name": "Cold · UA broad · EXCL. сайт+покупці (свіжа кров) · v2",
+     "spend": 4158.55,
+     "purchases": 82,
+     "roas": 4.83,
+     "ctr": 1.54,
+     "cpa": 50.71
+    },
+    {
+     "name": "Покупці 0–180д · апсейл · VALUE",
+     "spend": 2239.19,
+     "purchases": 59,
+     "roas": 7.26,
+     "ctr": 2.26,
+     "cpa": 37.95
+    },
+    {
+     "name": "Retarget · сайт 180д+30д (excl. покупці) · v2",
+     "spend": 1698.71,
+     "purchases": 36,
+     "roas": 3.06,
+     "ctr": 2.16,
+     "cpa": 47.19
+    },
+    {
+     "name": "FB+IG Stories · чол 35-54",
+     "spend": 848.37,
+     "purchases": 15,
+     "roas": 3.77,
+     "ctr": 2.26,
+     "cpa": 56.56
+    }
+   ],
+   "adsets_window": "2026-08-14",
+   "recommendations": [
+    {
+     "sev": "inf",
+     "text": "Лідер: «перший пост 3 телефона · DC|02b Baza u» ROAS 7.66, CTR 2.34% — масштабувати й дублювати в інші adset."
+    },
+    {
+     "sev": "inf",
+     "text": "Найефективніший вік: 25-34 (ROAS 5.24) — пріоритет у таргетингу."
+    }
+   ],
+   "is_current": true
   }
  ],
  "signals": [],
@@ -11176,11 +11530,11 @@
     "sub": "Advantage+ Sales · broad · A+A",
     "desc": "70-80% бюджету. Головний драйвер. Увесь робочий креатив-пул (12-20). Highest Volume на старті → Highest Value, коли стабільно.",
     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
-    "status": "PAUSED",
-    "daily_budget": 30000,
-    "spend": 434045,
-    "purchases": 6913,
-    "roas": 7.29,
+    "status": "ACTIVE",
+    "daily_budget": 10000,
+    "spend": 447940,
+    "purchases": 7212,
+    "roas": 7.22,
     "ctr": 1.69
    },
    {
@@ -11189,12 +11543,12 @@
     "sub": "Сайт 180д + гаряча 30д, excl. покупці",
     "desc": "15-20%. Дожим теплих: дедлайн, соц-доказ, апсел токенів. Строгий таргет (A+A off).",
     "name": "DC | 02 Retargeting · дожим теплих",
-    "status": "PAUSED",
-    "daily_budget": 3500,
-    "spend": 39878,
-    "purchases": 583,
-    "roas": 5.19,
-    "ctr": 2.3
+    "status": "ACTIVE",
+    "daily_budget": 2000,
+    "spend": 41576,
+    "purchases": 619,
+    "roas": 5.1,
+    "ctr": 2.29
    },
    {
     "id": "120249698608790624",
@@ -11202,12 +11556,12 @@
     "sub": "Broad, EXCL. усі наші аудиторії",
     "desc": "5-10%. «Свіжа кров» — лише нові люди (виключені відвідувачі сайту + покупці), щоб алгоритм не крутився в нашій бульбашці.",
     "name": "DC | 03 Prospecting · свіжа кров (excl. наші)",
-    "status": "PAUSED",
-    "daily_budget": 10000,
-    "spend": 163123,
-    "purchases": 1916,
-    "roas": 4.35,
-    "ctr": 1.81
+    "status": "ACTIVE",
+    "daily_budget": 5000,
+    "spend": 167282,
+    "purchases": 1999,
+    "roas": 4.36,
+    "ctr": 1.8
    },
    {
     "id": "120249698612830624",
