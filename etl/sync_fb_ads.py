@@ -497,14 +497,12 @@ def main():
             log(f'   ❌ fetch account info: {e}')
             continue
 
-        log(f'   Fetching ad link URLs + url_tags...')
-        try:
-            link_map, tags_map = get_ad_link_urls(acct)
-            log(f'   {len(link_map)} ads with link URLs, {len(tags_map)} ads with url_tags')
-        except Exception as e:
-            log(f'   ⚠ link URLs/tags failed: {e}')
-            link_map, tags_map = {}, {}
-
+        # 24.08.2026 (аудит Actions): порядок ПЕРЕВЕРНУТО. Раніше спершу викачувався
+        # ВЕСЬ список оголошень акаунта (пагінація по 200) заради url_tags, і лише потім
+        # бралися insights. Тобто у міжпромовий період, коли реклама вимкнена і insights
+        # порожні, скрипт усе одно щоразу тягнув сотні оголошень — ~3 хв роботи заради нуля
+        # рядків. Живий приклад: після фіналу 16.08 spend = 0, а ETL ходив 12 разів на добу.
+        # Тепер: спершу insights; немає рядків — акаунт пропускається за секунди.
         log(f'   Fetching insights...')
         try:
             raw_rows = get_insights(acct, since, until)
@@ -512,6 +510,19 @@ def main():
         except Exception as e:
             log(f'   ❌ insights failed: {e}')
             continue
+
+        if not raw_rows:
+            log(f'   ⏭  за {since}..{until} показів не було — пропускаємо акаунт '
+                f'(url_tags тягнути нема для чого)')
+            continue
+
+        log(f'   Fetching ad link URLs + url_tags...')
+        try:
+            link_map, tags_map = get_ad_link_urls(acct)
+            log(f'   {len(link_map)} ads with link URLs, {len(tags_map)} ads with url_tags')
+        except Exception as e:
+            log(f'   ⚠ link URLs/tags failed: {e}')
+            link_map, tags_map = {}, {}
 
         rows = [transform_row(r, link_map, tags_map, name, currency, executor_map) for r in raw_rows]
         upserted = upsert_ads(rows)
