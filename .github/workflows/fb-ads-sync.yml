@@ -1,4 +1,4 @@
-name: ETL Facebook Ads → Supabase (every 15min)
+name: ETL Facebook Ads → Supabase
 
 # Replaces Make.com scenario "FB Ads → ads_data"
 # Pulls Facebook Marketing API insights and upserts into dashboard_ads_data.
@@ -52,7 +52,7 @@ jobs:
       - name: Install deps
         run: pip install -r etl/requirements.txt
 
-      - name: Run FB Ads ETL loop (2 iterations × 15 min = 30 min)
+      - name: Run FB Ads ETL
         env:
           FB_ACCESS_TOKEN:           ${{ secrets.FB_ACCESS_TOKEN }}
           FB_AD_ACCOUNT_IDS:         ${{ secrets.FB_AD_ACCOUNT_IDS }}

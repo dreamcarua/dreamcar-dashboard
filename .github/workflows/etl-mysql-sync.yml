@@ -1,4 +1,4 @@
-name: ETL MySQL → Supabase (every 5 min via loop)
+name: ETL MySQL → Supabase
 
 # 07.06.2026: GitHub Actions schedule cron */5 throttle-ить до ~1 раз/год при high load.
 # Тому workflow тепер запускається 1 раз на годину через schedule, але всередині робить
