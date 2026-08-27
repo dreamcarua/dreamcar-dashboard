@@ -1,11 +1,11 @@
 {
- "generated": "2026-08-26T06:01:37.341180+00:00",
+ "generated": "2026-08-27T16:40:56.288945+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-08-25",
-  "prev_date": "2026-08-24",
+  "date": "2026-08-26",
+  "prev_date": "2026-08-25",
   "spend": 0,
   "impressions": null,
   "clicks": null,
@@ -23,8 +23,8 @@
   },
   "week": {
    "this": {
-    "from": "2026-08-19",
-    "to": "2026-08-25",
+    "from": "2026-08-20",
+    "to": "2026-08-26",
     "spend": 0,
     "purchases": null,
     "pixel_roas": null,
@@ -33,8 +33,8 @@
     "real_roas": null
    },
    "prev": {
-    "from": "2026-08-12",
-    "to": "2026-08-18",
+    "from": "2026-08-13",
+    "to": "2026-08-19",
     "spend": 61261,
     "purchases": 1226,
     "pixel_roas": 4.56,
