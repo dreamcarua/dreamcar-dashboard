@@ -11,7 +11,7 @@ Tracker: none known (<?> — team.dreamcar.ua board?). This file holds what no t
 
 ## 🟡 Tails — started, not finished
 
-- **Report channel: workflow file + two secrets** — Vadym, from the Mac: copy `memory-kit/templates/.github/workflows/report-to-telegram.yml` into this repo and push; then `gh secret set TELEGRAM_BOT_TOKEN -R dreamcarua/dreamcar-dashboard`, `gh secret set TELEGRAM_CHAT_ID -R dreamcarua/dreamcar-dashboard` (values = dashboard `.env`). Next step after that: commit the first report `reports/<date>-memory-installed.json` and check it arrives. [handed over 03.09, waiting for Vadym]
+- **Report channel: workflow must read existing secrets `TG_BOT_TOKEN` / `TG_CHAT_ID`** — Vadym pushes the sed-renamed workflow from the Mac (03.09, 21:30). Next step (Claude): commit the first report `reports/<date>-memory-installed.json` and confirm it arrives in the dashboard chat. [waiting for Vadym's push]
 
 ## ⚪ Queue
 

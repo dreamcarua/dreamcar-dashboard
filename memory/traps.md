@@ -3,6 +3,12 @@
 Read before the first edit of code, workflow or config. Add an entry whenever something cost more than 15 minutes of surprise, in the same commit as the fix.
 Entries below were harvested from commit messages on 03.09.2026 (source: `git log`, commits of 24.08.2026 by "Claude (DreamCar AI)"); each carries the commit date. Text in Ukrainian on purpose — people read this file.
 
+### Назви секретів у GitHub ≠ назви в `.env`
+**Symptom:** новий воркфлоу читає `secrets.TELEGRAM_BOT_TOKEN` — порожньо; власника просять поставити секрет, який уже є.
+**Cause:** у GitHub Secrets цього репо Telegram-секрети називаються `TG_BOT_TOKEN` і `TG_CHAT_ID` (так їх читає `meta-stats-sync.yml`); `.env.example` легасі-дашборду називає ті самі речі `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID`. Інші наявні секрети: `FB_ACCESS_TOKEN`, `IG_USER_ID`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `GH_TEAM_NOTIFY_TOKEN`. SMM-чат заданий літералом у `smm-content-watchdog.yml` (`SMM_CHAT_ID`).
+**Do:** перед тим як просити новий секрет — `grep -h 'secrets\.' .github/workflows/*.yml | sort -u`: список того, що вже є. Нові воркфлоу вживають `TG_BOT_TOKEN` / `TG_CHAT_ID`.
+**Seen:** 03.09.2026 · встановлення воркфлоу звітів — помилка Claude, власник зупинив
+
 ### Один процес, два канали запуску (ETL MySQL → Supabase)
 **Symptom:** ETL стартував 96 разів на добу замість 48; половина з 324 хв/міс CI йшла в нікуди.
 **Cause:** `schedule:` у воркфлоу (0,30) і pg_cron job у Supabase через `etl-trigger` (15,45) запускали той самий процес. Кожен ран 21 с, білиться як повна хвилина.
