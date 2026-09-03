@@ -11,7 +11,8 @@ Tracker: none known (<?> — team.dreamcar.ua board?). This file holds what no t
 
 ## 🟡 Tails — started, not finished
 
-- **Report #2 sent 03.09 21:50 via TG_* secrets — confirm it arrived in the Telegram chat.** If not: Actions → report-to-telegram → last run log (Telegram response shows the reason). [handed over 03.09, waiting for Vadym]
+- **Daily Meta digest (`meta-stats-sync` → `post_tg_digest`) was silently skipped until 03.09** — found 03.09 by Claude: `TG_CHAT_ID` did not exist and `GH_TEAM_NOTIFY_TOKEN` is not set, so both delivery paths were dead and the script logs "skipped". `TG_CHAT_ID` now exists (set 03.09 21:40 → direct path should work). Next step: after the next scheduled run check the log for the digest send (`gh run list --workflow=meta-stats-sync.yml --limit 1` → `gh run view <id> --log | grep -i digest`) and that the message arrived. If the digest should go to a different chat than agent reports — split into a second secret, do not reuse `TG_CHAT_ID`. [handed over 03.09, waiting for Vadym]
+- **Bot token was pasted into a Cowork chat on 03.09** — rotate when convenient: @BotFather → `/revoke` for `@dreamcar_team_bot`, then `gh secret set TG_BOT_TOKEN -R dreamcarua/dreamcar-dashboard` AND `-R dreamcarua/dreamcar-team` (same bot, two repos), plus the team-board backend that answers `/start`. Until rotated nothing breaks. [handed over 03.09, waiting for Vadym]
 
 ## ⚪ Queue
 
@@ -22,4 +23,8 @@ Tracker: none known (<?> — team.dreamcar.ua board?). This file holds what no t
 
 | Task | Why it waits | Whose call | Since |
 |---|---|---|---|
-| (none) | | | |
+| Where agent reports should land: Vadym's direct chat with the bot (current) or a group | current `TG_CHAT_ID` is the direct chat from `/start` on 03.09; a group needs its own negative id | Vadym | 03.09.2026 |
+
+## Done, awaiting confirmation
+
+- Report channel `reports/*.json` → Telegram: live, run c69b31f delivered 03.09 21:41. [Claude 03.09]
