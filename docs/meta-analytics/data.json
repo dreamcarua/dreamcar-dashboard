@@ -1,11 +1,11 @@
 {
- "generated": "2026-09-02T09:51:34.802781+00:00",
+ "generated": "2026-09-03T10:02:48.306463+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-09-01",
-  "prev_date": "2026-08-31",
+  "date": "2026-09-02",
+  "prev_date": "2026-09-01",
   "spend": 0,
   "impressions": null,
   "clicks": null,
@@ -23,8 +23,8 @@
   },
   "week": {
    "this": {
-    "from": "2026-08-26",
-    "to": "2026-09-01",
+    "from": "2026-08-27",
+    "to": "2026-09-02",
     "spend": 0,
     "purchases": null,
     "pixel_roas": null,
@@ -33,8 +33,8 @@
     "real_roas": null
    },
    "prev": {
-    "from": "2026-08-19",
-    "to": "2026-08-25",
+    "from": "2026-08-20",
+    "to": "2026-08-26",
     "spend": 0,
     "purchases": null,
     "pixel_roas": null,
@@ -11511,11 +11511,11 @@
     "sub": "Advantage+ Sales · broad · A+A",
     "desc": "70-80% бюджету. Головний драйвер. Увесь робочий креатив-пул (12-20). Highest Volume на старті → Highest Value, коли стабільно.",
     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
-    "status": "PAUSED",
-    "daily_budget": 12500,
-    "spend": 468107,
+    "status": "ACTIVE",
+    "daily_budget": 5000,
+    "spend": 468940,
     "purchases": 7565,
-    "roas": 7.07,
+    "roas": 7.06,
     "ctr": 1.67
    },
    {
