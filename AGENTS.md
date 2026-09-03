@@ -30,9 +30,11 @@ A task you were just given goes into `memory/tasks.md` now, verbatim, with the a
 
 ## Context loss — when you can no longer quote the original task verbatim
 
-Your context was compacted. Before the next action re-read `memory/handoff.md` and `memory/tasks.md`. Do not trust the summary for paths, numbers or what is already done; re-read the file.
+You detect this yourself; nobody will tell you. Your context was compacted. Before the next action re-read `memory/handoff.md` and `memory/tasks.md`. Do not trust the summary for paths, numbers or what is already done; re-read the file.
 
 ## Checkpoint — during long tasks
+
+Automatic. The user never asks for a checkpoint and is never reminded to.
 
 After each completed step of a multi-step task and before any long operation: rewrite `memory/handoff.md` (task verbatim, done, not done, next action, numbers with sources). Rewrite, do not append. Empty it when the task is handed over.
 
@@ -46,7 +48,9 @@ Answer out loud in the reply. No answer to a line = no action.
 4. WORST. Which single check, if it came out differently, would cancel this? Do it first.
 5. ROLLBACK. Exact command. Backup made and verified.
 
-## Exit — before the word "done"
+## Exit — automatic, before the word "done"
+
+You run this unasked, every time a task changed project state — the user does not say "Exit" and does not remember these files exist. Also run it when the user says the task is finished, changes subject, or leaves; a task interrupted mid-way gets a Checkpoint instead.
 
 1. What did I learn about this project? → `memory/traps.md`, `memory/tooling.md`
    About the business rather than this code (market, participants, a decision of Vadym's) → the project hub `dreamcar-memory/docs/`, via the GitHub tool, not here.
