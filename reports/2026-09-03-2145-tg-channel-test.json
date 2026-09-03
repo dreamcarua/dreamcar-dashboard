@@ -1,0 +1,14 @@
+{
+  "project": "DreamCar Dashboard",
+  "date": "03.09.2026",
+  "agent": "Claude (Cowork)",
+  "done": [
+    "Встановлено памʼять v8: AGENTS.md, memory/ (tasks, handoff, traps, tooling, decisions), архів старого CLAUDE.md",
+    "Канал звітів: TG_CHAT_ID додано в секрети репо, workflow report-to-telegram виправлено на TG_*"
+  ],
+  "open": [
+    "Щоденний Meta-дайджест (meta-stats-sync) не доставляється: немає GH_TEAM_NOTIFY_TOKEN, раніше не було TG_CHAT_ID — перевірити наступний запуск"
+  ],
+  "next": "Перенести решту репо dreamcarua/* на v8; запустити HARVEST у старих чатах",
+  "link": "https://github.com/dreamcarua/dreamcar-dashboard/tree/main/memory"
+}
