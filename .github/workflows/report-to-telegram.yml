@@ -2,7 +2,7 @@ name: report-to-telegram
 
 # Agent commits reports/YYYY-MM-DD-HHMM-<slug>.json on main → this sends it to the project Telegram chat.
 # Secrets required (repo → Settings → Secrets → Actions, or `gh secret set NAME`):
-#   TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
+#   TG_BOT_TOKEN, TG_CHAT_ID
 # Plain text on purpose: a report with "<" or ">" must never be swallowed by markup (spec case 19.4).
 
 on:
@@ -20,14 +20,14 @@ jobs:
 
       - name: Send new reports
         env:
-          TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          CHAT: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          CHAT: ${{ secrets.TG_CHAT_ID }}
           BEFORE: ${{ github.event.before }}
           AFTER: ${{ github.sha }}
         run: |
           set -euo pipefail
           if [ -z "$TOKEN" ] || [ -z "$CHAT" ]; then
-            echo "::error::TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID is not set"; exit 1; fi
+            echo "::error::TG_BOT_TOKEN or TG_CHAT_ID is not set"; exit 1; fi
           if git cat-file -e "$BEFORE" 2>/dev/null; then
             FILES=$(git diff --name-only --diff-filter=A "$BEFORE" "$AFTER" -- 'reports/*.json')
           else
