@@ -1,4 +1,4 @@
-<!-- Archived 03.09.2026 by the memory-system v8 install. This was the root CLAUDE.md. It describes the LEGACY PHP UTM dashboard (two servers, webhooks) — still useful for that side; it does not describe the ETL/Pages/Actions part of this repo. Verbatim copy. -->
+<!-- Archived 03.09.2026 by the memory-system v8 install. Sanitised 03.09.2026: hosts, IPs, chat IDs, usernames and local paths replaced with «see password manager» — this repo is public; the values live in the password manager and in .env on the servers. This was the root CLAUDE.md. It describes the LEGACY PHP UTM dashboard (two servers, webhooks) — still useful for that side; it does not describe the ETL/Pages/Actions part of this repo. -->
 
 # UTM Dashboard - Контекст проекта
 
@@ -12,8 +12,8 @@ UTM Dashboard - аналитика лидов из SendPulse CRM. Дашборд
 
 ### Хостинг (dreamcar.ai-platform.space)
 
-- **Сервер:** ukraine.com.ua, аккаунт serflow, PHP 8.5, LiteSpeed
-- **Путь:** `/home/serflow/dreamcar.ai-platform.space/www/dashboard/utm-dashboard/`
+- **Сервер:** ukraine.com.ua, аккаунт <see password manager>, PHP 8.5, LiteSpeed
+- **Путь:** `<hosting path — see password manager>`
 - **Роль:** принимает POST webhook'и от внешних сервисов
 - **URL:** `https://dreamcar.ai-platform.space/dashboard/utm-dashboard/`
 
@@ -25,14 +25,14 @@ UTM Dashboard - аналитика лидов из SendPulse CRM. Дашборд
 
 ### VPS (ticket.ai-platform.space)
 
-- **Сервер:** 173.242.56.80, HestiaCP, пользователь serverflow, PHP 8.4
-- **Путь:** `/home/serverflow/web/ticket.ai-platform.space/www/dashboard/utm-dashboard/`
+- **Сервер:** <VPS IP — see password manager>, HestiaCP, пользователь <see password manager>, PHP 8.4
+- **Путь:** `<VPS path — see password manager>`
 - **Роль:** кабинет пользователя (UI дашборда)
 - **URL:** `https://ticket.ai-platform.space/dashboard/utm-dashboard/`
 
 ### Маршрутизация (.htaccess на хостинге)
 
-Файл `/home/serflow/dreamcar.ai-platform.space/www/dashboard/.htaccess`:
+Файл `<hosting path>/dashboard/.htaccess`:
 
 ```apache
 RewriteEngine On
@@ -53,8 +53,8 @@ RewriteRule ^(.*)$ https://ticket.ai-platform.space/dashboard/$1 [R=301,L,QSA]
 
 ### БД
 
-- **Хост:** `fincheck.mysql.network`
-- **Порт:** `10145`
+- **Хост:** `<see .env / password manager>`
+- **Порт:** `<see .env>`
 - **БД:** `dreamcar_utm`
 - **Конфиг:** `config/database.php`
 - Одна и та же БД используется и хостингом и VPS
@@ -69,14 +69,14 @@ RewriteRule ^(.*)$ https://ticket.ai-platform.space/dashboard/$1 [R=301,L,QSA]
 ### Git синхронизация
 
 **Локалка → GitHub:** git-auto-multi (daemon на Mac)
-- ID проекта: `dashboarddreamcar-4fab`
-- Локальный путь: `/Users/tsemakhold/home/serflow/dreamcar.ai-platform.space/www/dashboard`
+- ID проекта: <see git-auto-multi config>
+- Локальный путь: <на Mac Александра>
 - rsync на хостинг **ОТКЛЮЧЕН** (SSH_USER="", SSH_PASS="")
 - Коммиты создаются автоматически при изменении файлов
 
 **GitHub → VPS:** git-server-sync (пакет pattern-frame v1.11.0)
-- Webhook ID: `605106976`
-- Systemd сервис: `dashboard-git-sync` (User=serverflow)
+- Webhook ID: <see GitHub repo settings → Webhooks>
+- Systemd сервис: `dashboard-git-sync` (User=<vps user>)
 - Webhook endpoint: `https://ticket.ai-platform.space/dashboard/utm-dashboard/api/git_webhook.php`
 - Daemon: `cron/git_server_sync.php` (коммитит серверные изменения, пушит в GitHub)
 
@@ -85,8 +85,8 @@ RewriteRule ^(.*)$ https://ticket.ai-platform.space/dashboard/$1 [R=301,L,QSA]
 Если нужно обновить файл на хостинге:
 ```bash
 # SSH на хостинг
-ssh serflow@serflow.ftp.tools  # пароль: див. 1Password "DreamCar Dashboard SSH"
-# Путь: /home/serflow/dreamcar.ai-platform.space/www/dashboard/utm-dashboard/
+ssh <user>@<host>  # host, user, password: 1Password "DreamCar Dashboard SSH"
+# Путь: см. 1Password
 ```
 
 ## Webhook'и - кто куда шлет
@@ -120,13 +120,13 @@ SendPulse также может слать на VPS URL (`ticket.ai-platform.spa
 
 ## Telegram
 
-- Бот: `@tsemakhalex_bot` (1769597114)
-- Чат уведомлений дашборда: `-4800447687`
-- Чат git sync: `-1003713547131`
+- Бот: <see .env TELEGRAM_BOT_TOKEN / password manager>
+- Чат уведомлений дашборда: <see .env TELEGRAM_CHAT_ID>
+- Чат git sync: <see .env GIT_SYNC_TG_CHAT>
 
 ## Другие разработчики
 
-На VPS могут работать другие разработчики (коммиты от `Jorik-Squirtanov228` в истории). Git-server-sync daemon автоматически коммитит и пушит их серверные изменения.
+На VPS могут работать другие разработчики (коммиты другого разработчика в истории). Git-server-sync daemon автоматически коммитит и пушит их серверные изменения.
 
 ## Частые проблемы
 
