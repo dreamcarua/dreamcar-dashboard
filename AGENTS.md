@@ -2,6 +2,7 @@
 
 Internal analytics for DreamCar: ETL from Meta/Google Ads, SendPulse CRM, MySQL (legacy PHP UTM dashboard) into Supabase HQ (`wotghlaehnvxyeacznvv`, tables `dashboard_*`); static read-only frontend on GitHub Pages (`dashboard.dreamcar.ua`, served from `docs/`); 20+ scheduled GitHub Actions. Public repository — see Rules.
 Memory carrier: `github.com/dreamcarua/dreamcar-dashboard` (this repo), folder `memory/` (`docs/` is the Pages site, not memory).
+Project hub: `github.com/dreamcarua/dreamcar-memory` — project-level memory (launches, marketing, strategy, team, decisions). This repo's `memory/` is about this codebase only.
 Owner: Vadym (vg@abrisart.com). Tasks are closed by whoever set them; we hand over.
 
 ## Rules
@@ -21,6 +22,7 @@ Chat without a folder? Nothing was loaded automatically: fetch this file and `me
 3. `memory/traps.md` — before the first edit of code, workflow or config. Always.
 4. `memory/tooling.md` — before using any tool, MCP, server, database or account of this project.
 5. Recent commits — `dreamcar-bot` commits data twice a day; a human or another agent commit in the last hours means someone else is working here.
+6. The task touches marketing, launches, participants, money or people outside this codebase → fetch `AGENTS.md`, `docs/tasks.md`, `docs/decisions.md` from the project hub too.
 
 Say one sentence: how many tasks are open, which are on us, what you start with. If a move is ours, say that first, even if asked about something else.
 
@@ -47,6 +49,7 @@ Answer out loud in the reply. No answer to a line = no action.
 ## Exit — before the word "done"
 
 1. What did I learn about this project? → `memory/traps.md`, `memory/tooling.md`
+   About the business rather than this code (market, participants, a decision of Vadym's) → the project hub `dreamcar-memory/docs/`, via the GitHub tool, not here.
 2. What did I decide and why? → `memory/decisions.md`
 3. What is left open, including side findings nobody asked for? → `memory/tasks.md`
 4. Can the owner see the result without effort? If not: screenshot, preview or link with the handover.
@@ -64,6 +67,7 @@ Two people ask for opposite things: pick one, name the conflict, tell Vadym.
 | `memory/traps.md` | traps of this project | before the first edit. Always |
 | `memory/tooling.md` | tools, access, entry patterns, reporting channel | before using any tool |
 | `memory/archive/CLAUDE.md.2026-09-03.md` | previous CLAUDE.md (legacy PHP UTM dashboard, two servers, webhooks) | when touching the legacy PHP side or webhooks |
+| `github.com/dreamcarua/dreamcar-memory` (hub) | project-level memory: launches, marketing, strategy, team, decisions | when the task goes beyond this codebase |
 | `SECURITY.md` | compromised-secrets history, how to add secrets | before adding any credential |
 | `.env.example` | names of all secrets and identifiers | before configuring anything |
 
