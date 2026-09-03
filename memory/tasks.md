@@ -11,13 +11,12 @@ Tracker: none known (<?> — team.dreamcar.ua board?). This file holds what no t
 
 ## 🟡 Tails — started, not finished
 
-- **First report sent 03.09 21:40 — confirm it arrived in the dashboard Telegram chat.** If not: Actions → report-to-telegram → last run shows why (secret empty, bot not in chat). [handed over 03.09, waiting for Vadym]
+- **Report #2 sent 03.09 21:50 via TG_* secrets — confirm it arrived in the Telegram chat.** If not: Actions → report-to-telegram → last run log (Telegram response shows the reason). [handed over 03.09, waiting for Vadym]
 
 ## ⚪ Queue
 
 - **Root `README.md` describes the legacy PHP UTM dashboard, not this repo** — found 03.09 by Claude. `docs/README.md` says the site is served from `web/`, but the folder is `docs/`. Next step: rewrite `README.md` in 20 lines for what the repo is now (ETL + Pages + Actions); fix `web/` → `docs/` in `docs/README.md`.
 - **`.env.example` still carries DB host and port** — identifiers in a public repo (decision 03.09: repo stays public, identifiers leave files). Next step: replace `DB_HOST`/`DB_PORT`/`WP_DB_*` values with placeholders; real values in the password manager and server `.env`.
-- **Two names for the same Telegram secrets now exist** (`TG_*` used by meta-stats-sync, `TELEGRAM_*` used by report-to-telegram; set 03.09). Next step: when convenient, switch report-to-telegram.yml to `TG_*` and delete the `TELEGRAM_*` pair — one source, not two (traps.md).
 
 ## ⏸ Waiting for a decision
 

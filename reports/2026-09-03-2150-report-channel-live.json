@@ -1,0 +1,10 @@
+{
+  "project": "DreamCar Dashboard",
+  "date": "03.09.2026 21:50",
+  "summary": "Канал звітів агента підключено до наявних секретів TG_BOT_TOKEN / TG_CHAT_ID. Порожні дублі TELEGRAM_* видалено. Система памʼяті v8 у репозиторії повністю налаштована: це перше повідомлення, яке мало дійти.",
+  "breaks_if_not_done": "Звіти після задач лишались би тільки в чаті й у tasks.md — без сповіщення власника.",
+  "open_tasks": 2,
+  "on_us": 0,
+  "waiting_for": "Вадим — підтвердити, що це повідомлення прийшло",
+  "link": "https://github.com/dreamcarua/dreamcar-dashboard/blob/main/memory/tasks.md"
+}
