@@ -1,0 +1,10 @@
+{
+  "project": "DreamCar Dashboard",
+  "date": "03.09.2026 21:40",
+  "summary": "У репозиторій встановлено систему памʼяті v8: AGENTS.md як індекс для всіх агентів, тека memory/ із задачами, пастками, доступами і станом задачі. Старий CLAUDE.md збережено в архіві без ідентифікаторів інфраструктури. Це перший звіт через канал reports → Telegram.",
+  "breaks_if_not_done": "Кожен новий чат по дашборду починав би з нуля і повторював уже описані пастки (два канали запуску ETL, округлення білінгу).",
+  "open_tasks": 2,
+  "on_us": 0,
+  "waiting_for": "Вадим — HARVEST старих чатів по DreamCar",
+  "link": "https://github.com/dreamcarua/dreamcar-dashboard/blob/main/memory/tasks.md"
+}
