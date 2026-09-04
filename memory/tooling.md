@@ -64,3 +64,9 @@ Format: `reports/README.md`. Plain text, no markup. Delivery check: `gh run list
 | Run `kill-all-ads`, `delete-ads`, `meta-scale`, `launch-*` | Vadym or with explicit OK | real ad money |
 | Rotate any key | Vadym | agent cannot see consequences on both servers and Make/SendPulse |
 | Change webhook URLs in Make/SendPulse | Vadym / Oleksandr | external systems bound to the legacy host |
+
+## Дрібні знахідки з HARVEST 04.09.2026
+
+- `github_dispatch_token` лежить у таблиці `kasa_config` (Supabase) — ним pg_net шле dispatch у GitHub.
+- `FB_ACCESS_TOKEN` — у GitHub secrets цього репо, синхронізується в `app_secrets` окремим воркфлоу.
+- Попередження CSP про `eval()` у консолі HQ приходить від зовнішнього скрипта (SDK або спільний хедер), у власному коді `eval`/`new Function` немає — не лікувати власним кодом.

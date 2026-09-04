@@ -28,3 +28,10 @@ Tracker: none known (<?> — team.dreamcar.ua board?). This file holds what no t
 ## Done, awaiting confirmation
 
 - Report channel `reports/*.json` → Telegram: live, run c69b31f delivered 03.09 21:41. [Claude 03.09]
+
+## Зібрано з HARVEST старих чатів 04.09.2026
+
+- 🟡 **SMM Watchdog працює у двох каналах одночасно** — Edge-функція підключена до pg_cron (`25 4-19`), а GH-воркфлоу навмисно НЕ вимкнено: мали попрацювати добу паралельно й звіритись, звірка не відбулась. Крок: порівняти, чи Edge шле ті самі алерти, тоді `gh workflow disable "SMM Content Watchdog (IG stories/posts)" -R dreamcarua/dreamcar-dashboard`. [27.08]
+- ⚪ **ETL FB Ads на Edge — ймовірно не робити.** Впирається в ліміт CPU 2 с; лишити в Actions. [27.08]
+- ⏸ **Фільтр по датах у MV проєктів** (виправляє подвійний рахунок і розподіл 905 липневих оплат) — перерахує історичні цифри всіх проєктів, потрібне рішення Вадима. [17.08]
+- ⚪ **Budget на Actions ($20)** — просили поставити після аварії з квотою 24-27.08, підтвердження не було.
