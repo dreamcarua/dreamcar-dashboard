@@ -1,40 +1,40 @@
 {
- "generated": "2026-09-06T09:37:21.797734+00:00",
+ "generated": "2026-09-07T10:38:25.615440+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-09-05",
-  "prev_date": "2026-09-04",
-  "spend": 4813.51,
-  "impressions": 34210,
-  "clicks": 730,
-  "purchases": 159,
-  "pixel_roas": 11.4,
-  "cpa": 30.27,
-  "frequency": 2.24,
-  "real_ad_revenue": 26411,
-  "real_ad_roas": 5.49,
+  "date": "2026-09-06",
+  "prev_date": "2026-09-05",
+  "spend": 6905.47,
+  "impressions": 47745,
+  "clicks": 964,
+  "purchases": 142,
+  "pixel_roas": 7.6,
+  "cpa": 48.63,
+  "frequency": 2.72,
+  "real_ad_revenue": 30615,
+  "real_ad_roas": 4.43,
   "deltas": {
-   "spend": 41.4,
-   "pixel_roas": -45.9,
-   "purchases": -24.3,
-   "cpa": 86.7
+   "spend": 43.4,
+   "pixel_roas": -33.3,
+   "purchases": -10.7,
+   "cpa": 60.5
   },
   "week": {
    "this": {
-    "from": "2026-08-30",
-    "to": "2026-09-05",
-    "spend": 12145,
-    "purchases": 554,
-    "pixel_roas": 15.95,
-    "cpa": 21.92,
-    "real_revenue": 101188,
-    "real_roas": 8.33
+    "from": "2026-08-31",
+    "to": "2026-09-06",
+    "spend": 19053,
+    "purchases": 696,
+    "pixel_roas": 12.92,
+    "cpa": 27.38,
+    "real_revenue": 132002,
+    "real_roas": 6.93
    },
    "prev": {
-    "from": "2026-08-23",
-    "to": "2026-08-29",
+    "from": "2026-08-24",
+    "to": "2026-08-30",
     "spend": 0,
     "purchases": null,
     "pixel_roas": null,
@@ -53,60 +53,60 @@
   "real_by_placement": [
    {
     "placement": "instagram_stories",
-    "revenue": 9169,
-    "paid": 30
+    "revenue": 10374,
+    "paid": 25
    },
    {
     "placement": "instagram_feed",
-    "revenue": 7678,
-    "paid": 20
-   },
-   {
-    "placement": "instagram_reels",
-    "revenue": 4482,
-    "paid": 18
+    "revenue": 8771,
+    "paid": 27
    },
    {
     "placement": "facebook_mobile_feed",
-    "revenue": 3190,
-    "paid": 9
+    "revenue": 5390,
+    "paid": 10
+   },
+   {
+    "placement": "instagram_reels",
+    "revenue": 5284,
+    "paid": 16
    },
    {
     "placement": "facebook_mobile_reels",
-    "revenue": 1494,
-    "paid": 5
+    "revenue": 597,
+    "paid": 3
    },
    {
     "placement": "facebook_stories",
-    "revenue": 398,
-    "paid": 2
+    "revenue": 199,
+    "paid": 1
    }
   ],
   "active_cycles": [],
   "top_creatives": [
    {
-    "name": "четвертий пост (картинка) 22 проект AUDI Q7",
-    "ad_id": "120252131104740624",
-    "spend": 795.88,
-    "purchases": 34,
-    "roas": 14.7,
-    "ctr": 1.8
-   },
-   {
     "name": "третій пост (рілз) 22 проект AUDI Q7",
     "ad_id": "120252122514540624",
-    "spend": 1337.4,
-    "purchases": 58,
-    "roas": 14.57,
-    "ctr": 2.91
+    "spend": 1873.53,
+    "purchases": 43,
+    "roas": 10.76,
+    "ctr": 2.28
+   },
+   {
+    "name": "пʼятий пост (рілз) 22 проект AUDI Q7",
+    "ad_id": "120252143403540624",
+    "spend": 1080.66,
+    "purchases": 29,
+    "roas": 9.61,
+    "ctr": 1.98
    },
    {
     "name": "перший пост (рілз) 22 проект AUDI Q7",
     "ad_id": "120252097633500624",
-    "spend": 1742.32,
-    "purchases": 48,
-    "roas": 10.09,
-    "ctr": 1.87
+    "spend": 1289.2,
+    "purchases": 35,
+    "roas": 7.99,
+    "ctr": 2.06
    }
   ],
   "weak_creatives": []
@@ -11561,8 +11561,8 @@
  "signals": [
   {
    "sev": "mod",
-   "scope": "Вчора (09-05)",
-   "text": "Pixel ROAS вчора впав на 46% до дня раніше — стежити, чи не тренд."
+   "scope": "Вчора (09-06)",
+   "text": "Pixel ROAS вчора впав на 33% до дня раніше — стежити, чи не тренд."
   }
  ],
  "strategy": {
@@ -11574,11 +11574,11 @@
     "desc": "70-80% бюджету. Головний драйвер. Увесь робочий креатив-пул (12-20). Highest Volume на старті → Highest Value, коли стабільно.",
     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
     "status": "ACTIVE",
-    "daily_budget": 6500,
-    "spend": 482921,
-    "purchases": 8178,
+    "daily_budget": 7500,
+    "spend": 491336,
+    "purchases": 8353,
     "roas": 7.31,
-    "ctr": 1.71
+    "ctr": 1.72
    },
    {
     "id": "120249698605960624",
