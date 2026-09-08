@@ -1,40 +1,40 @@
 {
- "generated": "2026-09-07T10:38:25.615440+00:00",
+ "generated": "2026-09-08T09:59:05.583533+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-09-06",
-  "prev_date": "2026-09-05",
-  "spend": 6905.47,
-  "impressions": 47745,
-  "clicks": 964,
-  "purchases": 142,
-  "pixel_roas": 7.6,
-  "cpa": 48.63,
-  "frequency": 2.72,
-  "real_ad_revenue": 30615,
-  "real_ad_roas": 4.43,
+  "date": "2026-09-07",
+  "prev_date": "2026-09-06",
+  "spend": 7613.91,
+  "impressions": 54647,
+  "clicks": 1017,
+  "purchases": 176,
+  "pixel_roas": 8.35,
+  "cpa": 43.26,
+  "frequency": 2.41,
+  "real_ad_revenue": 25329,
+  "real_ad_roas": 3.33,
   "deltas": {
-   "spend": 43.4,
-   "pixel_roas": -33.3,
-   "purchases": -10.7,
-   "cpa": 60.5
+   "spend": 10.2,
+   "pixel_roas": 9.9,
+   "purchases": 23.9,
+   "cpa": -11.1
   },
   "week": {
    "this": {
-    "from": "2026-08-31",
-    "to": "2026-09-06",
-    "spend": 19053,
-    "purchases": 696,
-    "pixel_roas": 12.92,
-    "cpa": 27.38,
-    "real_revenue": 132002,
-    "real_roas": 6.93
+    "from": "2026-09-01",
+    "to": "2026-09-07",
+    "spend": 26671,
+    "purchases": 871,
+    "pixel_roas": 11.61,
+    "cpa": 30.62,
+    "real_revenue": 157530,
+    "real_roas": 5.91
    },
    "prev": {
-    "from": "2026-08-24",
-    "to": "2026-08-30",
+    "from": "2026-08-25",
+    "to": "2026-08-31",
     "spend": 0,
     "purchases": null,
     "pixel_roas": null,
@@ -52,61 +52,56 @@
   },
   "real_by_placement": [
    {
-    "placement": "instagram_stories",
-    "revenue": 10374,
-    "paid": 25
-   },
-   {
     "placement": "instagram_feed",
-    "revenue": 8771,
-    "paid": 27
+    "revenue": 14560,
+    "paid": 38
    },
    {
-    "placement": "facebook_mobile_feed",
+    "placement": "instagram_stories",
     "revenue": 5390,
     "paid": 10
    },
    {
     "placement": "instagram_reels",
-    "revenue": 5284,
-    "paid": 16
+    "revenue": 3187,
+    "paid": 13
+   },
+   {
+    "placement": "facebook_mobile_feed",
+    "revenue": 1794,
+    "paid": 5
    },
    {
     "placement": "facebook_mobile_reels",
-    "revenue": 597,
-    "paid": 3
-   },
-   {
-    "placement": "facebook_stories",
-    "revenue": 199,
-    "paid": 1
+    "revenue": 398,
+    "paid": 2
    }
   ],
   "active_cycles": [],
   "top_creatives": [
    {
+    "name": "другий пост (картинка) 22 проект AUDI Q7",
+    "ad_id": "120252109530420624",
+    "spend": 306.15,
+    "purchases": 13,
+    "roas": 18.04,
+    "ctr": 1.79
+   },
+   {
+    "name": "четвертий пост (картинка) 22 проект AUDI Q7",
+    "ad_id": "120252131104740624",
+    "spend": 833.69,
+    "purchases": 19,
+    "roas": 9.56,
+    "ctr": 1.12
+   },
+   {
     "name": "третій пост (рілз) 22 проект AUDI Q7",
     "ad_id": "120252122514540624",
-    "spend": 1873.53,
-    "purchases": 43,
-    "roas": 10.76,
-    "ctr": 2.28
-   },
-   {
-    "name": "пʼятий пост (рілз) 22 проект AUDI Q7",
-    "ad_id": "120252143403540624",
-    "spend": 1080.66,
-    "purchases": 29,
-    "roas": 9.61,
-    "ctr": 1.98
-   },
-   {
-    "name": "перший пост (рілз) 22 проект AUDI Q7",
-    "ad_id": "120252097633500624",
-    "spend": 1289.2,
-    "purchases": 35,
-    "roas": 7.99,
-    "ctr": 2.06
+    "spend": 1385.92,
+    "purchases": 34,
+    "roas": 9.52,
+    "ctr": 2.38
    }
   ],
   "weak_creatives": []
@@ -11558,13 +11553,7 @@
    "is_current": false
   }
  ],
- "signals": [
-  {
-   "sev": "mod",
-   "scope": "Вчора (09-06)",
-   "text": "Pixel ROAS вчора впав на 33% до дня раніше — стежити, чи не тренд."
-  }
- ],
+ "signals": [],
  "strategy": {
   "campaigns": [
    {
@@ -11575,9 +11564,9 @@
     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
     "status": "ACTIVE",
     "daily_budget": 7500,
-    "spend": 491336,
-    "purchases": 8353,
-    "roas": 7.31,
+    "spend": 498077,
+    "purchases": 8502,
+    "roas": 7.33,
     "ctr": 1.72
    },
    {
