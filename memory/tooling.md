@@ -33,7 +33,7 @@ Secret names in GitHub ≠ names in `.env.example`. Source of truth for GitHub n
 |---|---|---|
 | `DB_PASS`, `WP_DB_PASS`, `SENDPULSE_*`, `META_APP_SECRET`, `META_CLIENT_TOKEN`, `OPENAI_API_KEY`, `GITHUB_WEBHOOK_SECRET` | GitHub repo secrets + server `.env` | Vadym; history in SECURITY.md (old values compromised, rotated 06–08.2026) |
 | `TG_BOT_TOKEN`, `TG_CHAT_ID` (agent reports + Meta digest; GitHub names) — `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` are the same values under the `.env` names on the servers; `GIT_SYNC_TG_*` | GitHub repo secrets / server `.env` | Vadym |
-| `GH_TEAM_NOTIFY_TOKEN` (PAT to commit into `dreamcar-team/cowork-notify/`) | NOT set as of 03.09.2026 — the bridge path in `etl/sync_meta_stats.py` is dead | Vadym |
+| `GH_TEAM_NOTIFY_TOKEN` (PAT for the old public bridge in `dreamcarua/dreamcar-team`) | NOT set as of 03.09.2026 — that bridge path in `etl/sync_meta_stats.py` is dead and must not be revived: reports go to the private bridge in `dreamcarua/memory-kit`, see Reporting | Vadym |
 | Supabase access token | GitHub repo secret `SUPABASE_ACCESS_TOKEN` (org convention) | Vadym |
 
 ## Entry patterns — how a recurring action is actually done here
@@ -52,9 +52,25 @@ Secret names in GitHub ≠ names in `.env.example`. Source of truth for GitHub n
 
 ## Reporting
 
-Mechanism: commit `reports/YYYY-MM-DD-HHMM-<slug>.json` on `main` → `.github/workflows/report-to-telegram.yml` → Telegram via `@dreamcar_team_bot`. Secrets: `TG_BOT_TOKEN`, `TG_CHAT_ID` in repo secrets. Live since 03.09.2026 (first delivered run: c69b31f). Destination = the chat whose id is in `TG_CHAT_ID` (as of 03.09.2026: Vadym's direct chat with the bot; to move to a group send `/start@dreamcar_team_bot` there and `gh secret set TG_CHAT_ID` with the negative group id).
-When: at Exit of every task that changed project state. Not for questions, reading, estimates.
-Format: `reports/README.md`. Plain text, no markup. Delivery check: `gh run list --workflow=report-to-telegram.yml --limit 1` → `success`.
+Канал один на всі проєкти: приватний міст у `dreamcarua/memory-kit`.
+
+Механізм: закомітити `cowork-notify/<YYYY-MM-DD-HHMM>-<slug>.json` у гілку `main` репозиторію
+`dreamcarua/memory-kit` з полями `{text, type, project, link}`. Воркфлоу `cowork-tg-notify.yml`
+вибирає бота за полем `project`, шле повідомлення в приватний чат Вадима і архівує файл.
+
+Для цього носія `project` = `dreamcar`.
+
+- `text` — суть зробленого, дозволений Telegram HTML (`<b>`, `<code>`, `\n`)
+- `type` — короткий ярлик: `deploy`, `fix`, `security`, `maintenance`, `report`
+- `link` — посилання на коміт, файл або запуск воркфлоу
+
+Коли: наприкінці кожної задачі, що змінила стан проєкту — закрита задача, пуш, деплой,
+виправлення в проді. Не для читання, проміжних комітів і правок одруківок.
+
+Старий міст у публічному `dreamcarua/dreamcar-team` не використовується з 05.09.2026:
+репозиторій публічний, і кожен звіт лишався в його історії назавжди.
+
+Воркфлоу `report-to-telegram.yml` у цьому репо мертвий — каналом звітів він більше не є (останній запуск 03.09.2026). Його треба або вимкнути, або переписати під міст у `memory-kit`; задача — у `memory/tasks.md`. Сам файл у `.github/workflows/` через GitHub API не правиться — тільки з Mac.
 
 ## Access limits — what the agent deliberately does not do
 
