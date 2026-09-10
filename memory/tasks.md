@@ -25,6 +25,7 @@ Tracker: none known (<?> — team.dreamcar.ua board?). This file holds what no t
 | Task | Why it waits | Whose call | Since |
 |---|---|---|---|
 | Where agent reports should land: Vadym's direct chat with the bot (current) or a group | current `TG_CHAT_ID` is the direct chat from `/start` on 03.09; a group needs its own negative id | Vadym | 03.09.2026 |
+| Is there a task tracker at all — the `team.dreamcar.ua` board or nothing | line 4 of this file has said `Tracker: none known (<?>)` since 03.09.2026; until it is answered every session reads the guess as a fact, and nobody knows whether this file should hold everything or only what a tracker does not. Found 10.09.2026 by `verify-install.py` (`dreamcarua/repo-memory`) | Vadym | 10.09.2026 |
 
 ## Done, awaiting confirmation
 
