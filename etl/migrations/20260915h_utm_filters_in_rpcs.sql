@@ -23,11 +23,14 @@
 -- замір показав kpi_summary 18.8 -> 140 ms, kpi_with_delta 59 -> 504 ms.
 -- Без SET вона інлайниться у WHERE і коштує нуль. Функція IMMUTABLE, не SECURITY DEFINER,
 -- і не звертається до жодного об'єкта — підміна search_path їй нічого не дає.
+-- Семантика збігається з клієнтською: фронт для Огляду/Таблиці робить
+-- q.ilike('utm_x', '%' || value || '%'). Якби RPC порівнювала на рівність, той самий
+-- фільтр давав би різні числа на Огляді й на Аналітиці.
 CREATE OR REPLACE FUNCTION public.utm_eq(col text, p text)
 RETURNS boolean
 LANGUAGE sql IMMUTABLE PARALLEL SAFE
 AS $$
-  SELECT p IS NULL OR COALESCE(NULLIF(col, ''), '(none)') = p;
+  SELECT p IS NULL OR COALESCE(col, '') ILIKE '%' || p || '%';
 $$;
 
 -- Той самий діагноз для is_paid_placement (створена у 20260915g з SET search_path):
