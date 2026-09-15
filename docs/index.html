@@ -3806,10 +3806,11 @@ async function renderAnalytics() {
 
     // P2 #14 — Hourly Heatmap (day-of-week × hour)
     try {
-      const { data: hmData } = await sb.rpc('dashboard_hourly_heatmap', {
-        p_from: kyivIsoStart(filters.from), p_to: kyivIsoEnd(filters.to),
-        p_project_values: _rpcParams().p_project_values
-      });
+      // 15.09.2026: раніше сюди йшли лише дати й проєкт — теплокарта ігнорувала
+      // статус/тип клієнта/тариф/платіжку/тип трафіку/UTM (RPC їх приймала ще з червня,
+      // фронт просто не передавав) і брала filters.from/to без клампу по проєкту.
+      // На відфільтрованому екрані вона показувала весь трафік поруч із відфільтрованими плитками.
+      const { data: hmData } = await sb.rpc('dashboard_hourly_heatmap', params);
       const matrix = {};
       let maxLeads = 0;
       (hmData || []).forEach(r => {
