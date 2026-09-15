@@ -3475,6 +3475,29 @@ async function renderOverview() {
     const profit = sumTotal - adSpend;
     const roas = adSpend > 0 ? sumTotal / adSpend : null;
     const roi = adSpend > 0 ? ((sumTotal - adSpend) / adSpend * 100) : null;
+
+    // 16.09.2026 P0 FIX (аудит): «ЕКОНОМІКА» ділила ВСЮ виручку на рекламні витрати
+    // і підписувала це словом ROAS. На циклі №21 виходило 11,72× при реальному
+    // ad-ROAS 2,63× — бо у чисельнику сиділа органіка (TG-канал, IG-акаунт, ретеншн),
+    // яка реклами не коштувала. CPL і CPA були занижені з тієї ж причини.
+    // Тепер основні цифри — по ПЛАТНОМУ трафіку (канон: placement-мітка utm_medium,
+    // рішення від 15.09), а загальні лишаються поруч і чесно підписані «з органікою».
+    // Беремо з RPC, а не з rows: rows обрізані на OVERVIEW_CAP.
+    let paidTraffic = null;
+    if (filters.traffic_type !== 'organic') {
+      try {
+        const ptParams = { ..._rpcParams(), p_traffic_type: 'paid' };
+        const { data: ptData } = await sb.rpc('dashboard_kpi_summary', ptParams);
+        if (ptData && ptData[0]) paidTraffic = ptData[0];
+      } catch (e) { console.warn('[overview] paid-traffic KPI не відпрацював:', e); }
+    }
+    const ptLeads   = paidTraffic ? Number(paidTraffic.total || 0)   : 0;
+    const ptPaid    = paidTraffic ? Number(paidTraffic.paid || 0)    : 0;
+    const ptRevenue = paidTraffic ? Number(paidTraffic.revenue || 0) : 0;
+    const adRoas = (adSpend > 0 && paidTraffic) ? ptRevenue / adSpend : null;
+    const adRoi  = (adSpend > 0 && paidTraffic) ? ((ptRevenue - adSpend) / adSpend * 100) : null;
+    const adCpl  = (adSpend > 0 && ptLeads > 0) ? adSpend / ptLeads : null;
+    const adCpa  = (adSpend > 0 && ptPaid  > 0) ? adSpend / ptPaid  : null;
     // #214 fix: TDZ — leadsCount/totalForConv мають бути ОБ'ЯВЛЕНІ ДО cpl
     const leadsCount = await fetchLeadsCount();
     const totalForConv = leadsCount > 0 ? leadsCount : dealsTotal;
@@ -3503,7 +3526,7 @@ async function renderOverview() {
       <div class="kpi-grid">
         ${kpi('Всього лідів', fmtNum(totalForConv), leadsCount > 0 ? 'нові checkout-стартів (webhooks)' : 'усі статуси (pay/pending/fail)')}
         ${kpi('Оплачено', fmtNum(paidCount), fmtPct(conv) + ' success rate', 'green')}
-        ${kpi('Унікальних покупців', (exact ? '≈ ' : '') + fmtNum(buyersCnt), 'utm_email', 'blue')}
+        ${kpi('Унікальних покупців', (exact ? '≈ ' : '') + fmtNum(buyersCnt), 'email, а без нього — телефон', 'blue')}
         ${kpi('Виручка', fmtMoney(sumTotal, 'UAH'), 'сума оплачених', 'green')}
         ${kpi('Середній чек', fmtMoney(paidCount ? sumTotal / paidCount : 0, 'UAH'), 'revenue / paid', 'blue')}
         ${kpi('Джерел', fmtNum(sources), 'utm_source')}
@@ -3511,14 +3534,24 @@ async function renderOverview() {
         ${kpi('Success rate %', fmtPct(conv), 'paid / ліди', conv >= 70 ? 'green' : 'amber')}
       </div>
 
-      <div class="kpi-row-title">ЕКОНОМІКА</div>
+      <div class="kpi-row-title">ЕКОНОМІКА РЕКЛАМИ · платний трафік</div>
       <div class="kpi-grid">
         ${kpi('Рекламні витрати', fmtMoney(adSpend, 'UAH'), 'ad spend', 'amber')}
-        ${kpi('Прибуток', fmtMoney(profit, 'UAH'), 'revenue − spend', profit > 0 ? 'green' : 'amber')}
-        ${kpi('ROI', roi != null ? fmtPct(roi) : '—', 'return on investment', roi != null && roi > 0 ? 'green' : 'amber')}
-        ${kpi('ROAS', roas != null ? roas.toFixed(2)+'×' : '—', 'revenue / spend', roas != null && roas >= 1 ? 'green' : 'amber')}
-        ${kpi('CPL', cpl != null ? fmtMoney(cpl, 'UAH') : '—', 'cost per lead', 'purple')}
-        ${kpi('CPA', cpa != null ? fmtMoney(cpa, 'UAH') : '—', 'cost per acquisition', 'purple')}
+        ${kpi('Виручка з реклами', paidTraffic ? fmtMoney(ptRevenue, 'UAH') : '—', paidTraffic ? fmtNum(ptPaid) + ' оплат із ' + fmtNum(ptLeads) + ' замовлень' : 'фільтр: лише органіка', 'green')}
+        ${kpi('ROAS реклами', adRoas != null ? adRoas.toFixed(2)+'×' : '—', 'платна виручка / витрати', adRoas != null && adRoas >= 3 ? 'green' : 'amber')}
+        ${kpi('ROI реклами', adRoi != null ? fmtPct(adRoi) : '—', 'платний прибуток / витрати', adRoi != null && adRoi > 0 ? 'green' : 'amber')}
+        ${kpi('CPL', adCpl != null ? fmtMoney(adCpl, 'UAH') : '—', 'витрати / платні замовлення', 'purple')}
+        ${kpi('CPA', adCpa != null ? fmtMoney(adCpa, 'UAH') : '—', 'витрати / платні оплати', 'purple')}
+      </div>
+
+      <div class="kpi-row-title">ЗАГАЛОМ ПО ПРОЄКТУ · з органікою</div>
+      <div class="kpi-grid">
+        ${kpi('Уся виручка', fmtMoney(sumTotal, 'UAH'), 'платний трафік + органіка', 'green')}
+        ${kpi('Прибуток', fmtMoney(profit, 'UAH'), 'уся виручка − рекламні витрати', profit > 0 ? 'green' : 'amber')}
+        ${kpi('Blended ROAS', roas != null ? roas.toFixed(2)+'×' : '—', 'уся виручка / витрати — НЕ ефективність реклами', 'blue')}
+        ${kpi('Blended ROI', roi != null ? fmtPct(roi) : '—', 'уся виручка − витрати / витрати', 'blue')}
+        ${kpi('Blended CPL', cpl != null ? fmtMoney(cpl, 'UAH') : '—', 'витрати / УСІ ліди', 'blue')}
+        ${kpi('Blended CPA', cpa != null ? fmtMoney(cpa, 'UAH') : '—', 'витрати / УСІ оплати', 'blue')}
       </div>
 
       <div class="grid-2">
