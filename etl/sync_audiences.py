@@ -100,6 +100,16 @@ def fetch_segments():
 
     # активний цикл: dashboard_projects status=active, найсвіжіший date_start
     projs = sb_select('dashboard_projects?select=code,date_start,status&status=eq.active&order=date_start.desc&limit=1')
+    if not projs:
+        # fallback 16.09.2026: реєстр dashboard_projects часто заповнюють із запізненням —
+        # беремо активний запуск з launches (HQ), щоб CA «Покупці поточного циклу» не протухала
+        try:
+            ls = sb_select('launches?select=code,starts_on,status&status=eq.active&order=starts_on.desc&limit=1')
+            if ls:
+                projs = [{'code': ls[0]['code'] + ' (launches)', 'date_start': ls[0]['starts_on']}]
+                log('dashboard_projects без active — узято з launches')
+        except Exception as e:
+            log(f'launches fallback failed: {e}')
     cycle_start = projs[0]['date_start'] if projs else None
     log(f'Активний цикл: {projs[0]["code"] if projs else "нема"} (з {cycle_start})')
 
@@ -230,7 +240,9 @@ def main():
     ids = {}
     for name, pairs in segs.items():
         aud_id, _ = ensure_custom(name, existing)
-        if aud_id:
+        if aud_id and not pairs:
+            log(f'SKIP replace "{name}": сегмент порожній — стару аудиторію не стираю і не ламаю запит')
+        elif aud_id:
             try:
                 replace_users(aud_id, pairs)
             except Exception as e:
