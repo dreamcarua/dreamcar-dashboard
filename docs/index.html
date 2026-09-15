@@ -3187,6 +3187,15 @@ const UTM_SECTIONS = new Set(['overview','analytics','sources','medium','campaig
 const ADS_SECTIONS = new Set(['ads-overview','ads-campaigns']);
 const NOFILTER_SECTIONS = new Set(['projects','webhooks','mapping','costs','cards','usdt','payroll','settings','help']);
 
+// 15.09.2026 P0 FIX (аудит): розділи, що беруть числа з RPC-агрегацій. Ці RPC мають
+// параметри project/customer_type/tariff/pay_provider/traffic_type — але НЕ мають UTM.
+// Тож UTM free-text фільтри тут мовчки ігнорувались: користувач вводив utm_term=fortunatos,
+// лічильник фільтрів показував «4», а цифри лишались незмінними (5 908 замість 740).
+// На маршрутах, що читають угоди порядково (overview/campaigns/deals), фільтр працює.
+const RPC_ONLY_SECTIONS = new Set(['analytics','sources','medium','content','terms','combos']);
+const UTM_FILTER_KEYS = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
+function activeUtmFilters() { return UTM_FILTER_KEYS.filter(k => filters[k]); }
+
 /* ---------------- OVERVIEW ---------------- */
 /* ---------------- PROJECTS OVERVIEW ---------------- */
 async function renderProjectsOverview() {
@@ -5319,6 +5328,18 @@ async function renderRoute() {
   const fn = SECTIONS[route];
   try {
     await fn();
+    // 15.09.2026: краще чесно сказати, що фільтр не застосовано, ніж показати невідфільтроване як відфільтроване.
+    const _utmOn = activeUtmFilters();
+    if (_utmOn.length && RPC_ONLY_SECTIONS.has(route)) {
+      const c = $('#content');
+      if (c) c.insertAdjacentHTML('afterbegin',
+        `<div class="card" style="border-left:3px solid var(--amber,#f0a500);margin-bottom:16px;padding:12px 14px;font-size:13px;line-height:1.5;">
+          ⚠️ <b>UTM-фільтри на цьому екрані НЕ застосовуються.</b>
+          Активні: <code>${_utmOn.map(k => escapeHtml(k + '=' + filters[k])).join('</code>, <code>')}</code>.
+          Цей розділ бере числа з серверної агрегації, яка UTM не вміє звужувати.
+          Для зрізу по UTM — «Огляд», «Кампанії» або «Таблиця»: там він працює.
+        </div>`);
+    }
   } catch (e) {
     console.error('route error', e);
     $('#content').innerHTML = errorHTML(e);
