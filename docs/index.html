@@ -3506,7 +3506,10 @@ async function renderOverview() {
     const byDay = aggregateByDay(rows, filters.granularity);
     const byProj7 = aggregateByField(rows, 'project').slice(0, 7);
     const conv = totalForConv ? (paidCount / totalForConv * 100) : 0;
-    const granLabel = { day: 'По днях', week: 'По тижнях', month: 'По місяцях' }[filters.granularity || 'day'];
+    // 16.09.2026 (аудит): у мапі не було 'hour' — при виборі гранулярності «Година»
+    // заголовок картки рендерився як «Угоди undefined». bucketKey годину рахував правильно,
+    // зламаний був лише підпис.
+    const granLabel = { hour: 'По годинах', day: 'По днях', week: 'По тижнях', month: 'По місяцях' }[filters.granularity || 'day'] || 'По днях';
 
     c.innerHTML = `
       <div class="section-head">
