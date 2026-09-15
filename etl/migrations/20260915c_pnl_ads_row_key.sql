@@ -1,0 +1,53 @@
+-- 15.09.2026 (третя черга аудиту) — атрибуція витрат у dashboard_project_pnl().
+-- Застосовано на wotghlaehnvxyeacznvv 15.09.2026 через патч наявного визначення
+-- (regexp_replace + EXECUTE), щоб не переписувати 200 рядків фінансової функції вручну.
+--
+-- Що було не так:
+--   1. CTE ads_explicit_keys робив DISTINCT (date_start, spend), а ads_unmatched
+--      виключав будь-який рядок із такою самою парою. Два різні оголошення з
+--      однаковою сумою за один день склеювались → чужі витрати тихо випадали
+--      з періодної атрибуції.
+--   2. ads_explicit шукав alias у назві кампанії. Для циклу #21 alias
+--      'AUDI Q7 PRESTIGE' не збігається з 'Fortunatos | DC | Audi Q7 | ...',
+--      тож жодне оголошення не матчилось явно — усе йшло у рівний розподіл.
+--
+-- Що стало:
+--   ads_pool  — додано a.id (унікальний ключ рядка) і a.project (мітка тригера
+--               tg_dashboard_ads_stamp_project, див. 20260915b).
+--   ads_by_project — крок 1: пряма мітка проєкту в межах вікна запуску.
+--   ads_explicit   — крок 2: alias у campaign_name / utm_campaign, ЛИШЕ для
+--               рядків без мітки.
+--   ads_unmatched  — крок 3: усе, що не потрапило в кроки 1-2, за id, а не за
+--               парою (date_start, spend); далі рівний розподіл як і раніше.
+--
+-- Перевірка: ad_spend по всіх 8 циклах з 05.2026 ідентичний до і після зміни
+-- (цикли не перетинаються, тож поведінка та сама) — зміна прибирає міну
+-- на випадок паралельних запусків, а не править поточні цифри.
+--
+-- Відтворити можна тим самим патчем:
+--
+-- do $outer$
+-- declare def text; nd text; newblock text;
+-- begin
+--   select pg_get_functiondef(p.oid) into def
+--   from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+--   where n.nspname = 'public' and p.proname = 'dashboard_project_pnl';
+--   newblock := '<новий блок ads_pool ... ads_unmatched>';
+--   nd := regexp_replace(def, 'ads_pool AS \(.*?\n  ads_period AS \(', newblock || 'ads_period AS (', 's');
+--   if nd = def then raise exception 'anchor 1 not found'; end if;
+--   nd := replace(nd,
+--     'SELECT launch_id, spend FROM ads_explicit
+--     UNION ALL
+--     SELECT launch_id, spend FROM ads_period',
+--     'SELECT launch_id, spend FROM ads_by_project
+--     UNION ALL
+--     SELECT launch_id, spend FROM ads_explicit
+--     UNION ALL
+--     SELECT launch_id, spend FROM ads_period');
+--   execute nd;
+-- end $outer$;
+--
+-- Поточне визначення завжди можна прочитати так:
+--   select pg_get_functiondef('dashboard_project_pnl'::regproc);
+
+refresh materialized view mv_dashboard_project_pnl;
