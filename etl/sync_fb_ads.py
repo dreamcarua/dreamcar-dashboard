@@ -441,6 +441,10 @@ def load_prev_utm(ad_ids):
             q = ('ad_id,date_start,utm_source,utm_medium,utm_campaign,utm_term,utm_content'
                  f'&ad_id=in.({",".join(chunk)})'
                  '&utm_term=not.is.null'
+                 # 15.09.2026: беремо ТІЛЬКИ рядки з реальних url_tags. Рядки, записані
+                 # account-level fallback, мають utm_campaign IS NULL — інакше carry-forward
+                 # був би розмножувачем тієї самої помилки.
+                 '&utm_campaign=not.is.null'
                  '&order=date_start.desc&limit=5000')
             r = requests.get(f'{SB_URL}/rest/v1/dashboard_ads_data?select={q}',
                              headers=HEADERS_SB, timeout=30)
