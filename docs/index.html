@@ -1899,9 +1899,11 @@ function applyPreset(p) {
   filters.preset = p;
   if (p === 'today') { filters.from = todayYmd(); filters.to = todayYmd(); }
   else if (p === 'yesterday') { const d = new Date(today); d.setDate(d.getDate()-1); filters.from = ymd(d); filters.to = ymd(d); }
-  else if (p === '7d') { const d = new Date(today); d.setDate(d.getDate()-7); filters.from = ymd(d); filters.to = todayYmd(); }
-  else if (p === '30d') { const d = new Date(today); d.setDate(d.getDate()-30); filters.from = ymd(d); filters.to = todayYmd(); }
-  else if (p === '60d') { const d = new Date(today); d.setDate(d.getDate()-60); filters.from = ymd(d); filters.to = todayYmd(); }
+  // 15.09.2026 P0 FIX (аудит): «Останні N днів» був inclusive-inclusive → N+1 днів.
+  // 7d повертав 08.09–15.09 = 8 днів (spend не збігався з періодом). Тепер рівно N днів.
+  else if (p === '7d') { const d = new Date(today); d.setDate(d.getDate()-6); filters.from = ymd(d); filters.to = todayYmd(); }
+  else if (p === '30d') { const d = new Date(today); d.setDate(d.getDate()-29); filters.from = ymd(d); filters.to = todayYmd(); }
+  else if (p === '60d') { const d = new Date(today); d.setDate(d.getDate()-59); filters.from = ymd(d); filters.to = todayYmd(); }
   else if (p === 'all') { filters.from = '2019-01-01'; filters.to = todayYmd(); }
   else if (p === 'custom') {
     /* opens modal — handled outside */
@@ -2495,11 +2497,20 @@ async function loadProjects() {
       .order('sort_order', { ascending: true });
     __projectsList = projData || [];
 
-    const { data: dealProjData } = await sb
-      .from('dashboard_deals')
-      .select('project')
-      .not('project','is',null)
-      .limit(5000);
+    // 15.09.2026 P0 FIX (аудит): раніше — .limit(5000) БЕЗ order по 100k+ рядків,
+    // тобто довільна вибірка. Нові проекти (AUDI Q7 PRESTIGE) у неї не потрапляли,
+    // а старі alias-и ('Q7') потрапляли → fallback-матчинг чіплявся не за той проект.
+    // Тепер — matview з ПОВНИМ distinct-списком project.
+    let dealProjData = null;
+    {
+      const mv = await sb.from('mv_dashboard_filter_options').select('val').eq('field', 'project');
+      if (!mv.error && mv.data && mv.data.length) {
+        dealProjData = mv.data.map(x => ({ project: x.val }));
+      } else {
+        const r = await sb.from('dashboard_deals').select('project').not('project','is',null).limit(5000);
+        dealProjData = r.data || [];
+      }
+    }
     const dealProjSet = new Set();
     // 08.06.2026 R2 P2: filter garbage projects з історичних deals — '🔹', variation selectors, length<=1
     (dealProjData || []).forEach(r => {
@@ -2551,15 +2562,29 @@ async function loadProjects() {
           dealValues = l.deal_aliases;
         } else {
           // Fallback: substring matching по name/code
+          // 15.09.2026 P0 FIX (аудит): два запобіжники проти крадіжки чужого alias-а.
+          //  1) значення, вже закріплене за іншим проектом (existingAliases), не беремо —
+          //     інакше launch «AUDI Q7 Prestige» (#21) забирав 'Q7' у dashboard_projects.audi_q7 (гру.2025)
+          //     і весь активний розіграш показував 0 оплат / 0 виручки;
+          //  2) reverse-напрям (dp коротший за назву) вимагає >= 4 символів, щоб 'Q7'/'BMW'
+          //     не матчились до будь-якої назви, що їх містить.
           const candidates = [l.name, l.code, l.name.toUpperCase(), l.code && l.code.replace(/[_-]/g, ' ')];
           const dealMatches = Array.from(dealProjSet).filter(dp => {
             const dpU = dp.toUpperCase();
-            return candidates.some(c => c && (dpU.includes(c.toUpperCase()) || c.toUpperCase().includes(dpU)));
+            if (existingAliases.has(dpU.trim())) return false;
+            return candidates.some(c => {
+              if (!c) return false;
+              const cU = c.toUpperCase();
+              if (dpU.includes(cU)) return true;
+              return dpU.length >= 4 && cU.includes(dpU);
+            });
           });
           dealValues = dealMatches.length ? dealMatches : [l.name.toUpperCase(), l.name];
         }
         __projectsList.push({
-          code: l.code || l.id.slice(0, 8),
+          // 15.09.2026 (аудит): UUID-префікс як code збивав з пантелику у фільтрі
+          // («424f1dbc» замість читабельного коду). Лишаємо, але з префіксом-маркером.
+          code: l.code || ('launch_' + l.id.slice(0, 8)),
           name: l.name,
           date_start: l.starts_on,
           date_end: l.ends_on,
@@ -3232,11 +3257,18 @@ async function renderProjectsOverview() {
 
 
 // PROJECT → order-reference prefix map (deal_project has known mapping bug for 'new' events)
+// 15.09.2026 P0 FIX (аудит): ключі були НАЗВАМИ проектів, а filters.project — це CODE
+// ('motorcycle_jun2026', 'audi_e_tron'). Мапа не спрацьовувала НІКОЛИ → «Всього лідів»
+// рахувалось по ВСІХ проектах, тоді як «Оплачено» — по одному. Success rate був фікцією.
+// Ключі приведені до code. Значення — префікс DCI-ref у payload->>processed
+// (з роздільником на кінці: 'DCI-audi' без нього ловив би ще й 'DCI-audiq7').
 const PROJECT_REF_MAP = {
-  'MOTORCYCLE': 'DCI-moto',
-  'AUDI E-TRON': 'DCI-audi',
-  'AUDI': 'DCI-audi',
+  'motorcycle_jun2026': 'DCI-moto',
+  'audi_e_tron':        'DCI-audi-',
+  'audi_q7_prestige':   'DCI-audiq7-',
 };
+// NB: dashboard_webhooks тримає лише ~14 днів історії, тож для завершених проектів
+// лічильник лідів однаково недоступний — і це коректно обробляється через return null.
 
 // 14.06.2026 #392.1 — graceful fallback. На активному трафіку dashboard_webhooks
 // (185k+ rows) HEAD count повертає 503 (Supabase REST throttle на full-table scan).
@@ -3253,6 +3285,10 @@ async function fetchLeadsCount() {
     }
     return q;
   };
+  // 15.09.2026 P0 FIX (аудит): якщо проект обрано, але мапінгу на DCI-ref немає —
+  // цей лічильник охоплює ВСІ проекти і не може бути знаменником конверсії.
+  // Повертаємо null → caller падає на rows.length (угоди того самого проекту).
+  if (filters.project && !PROJECT_REF_MAP[filters.project]) return null;
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
       const { count, error } = await buildQuery();

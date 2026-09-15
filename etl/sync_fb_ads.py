@@ -344,7 +344,7 @@ def count_actions(actions, target_types):
     return total
 
 
-def transform_row(row, link_map, tags_map, acct_name, acct_currency, executor_map=None):
+def transform_row(row, link_map, tags_map, acct_name, acct_currency, executor_map=None, prev_utm_map=None):
     """FB insight row → dashboard_ads_data row."""
     ad_id = row.get('ad_id') or ''
     link_url = link_map.get(ad_id)
@@ -361,13 +361,29 @@ def transform_row(row, link_map, tags_map, acct_name, acct_currency, executor_ma
             if not utm.get(k) and url_utm.get(k):
                 utm[k] = url_utm[k]
 
-    # Last resort: якщо все ще немає utm_term — мапимо за ad_account_id (legacy fallback).
+    # 15.09.2026 P0 FIX (аудит дашборду).
+    # Проблема: коли FB не віддав url_tags (збій /ads, пагінація, права), спрацьовував
+    # account-level fallback і ШТАМПУВАВ на ВЕСЬ акаунт одного виконавця + вигадані
+    # utm_source='facebook', utm_medium='cpc'. У акаунті CLUB UAH працюють двоє
+    # (artem і fortunatos), тож 28 402 ₴ витрат Fortunatos за 08–15.09 осіли на Артемі,
+    # а utm_source 'meta'/'post' → 'facebook'/'cpc' ламав ще й фільтр типу трафіку.
+    #
+    # Нове правило пріоритетів:
+    #   url_tags → URL креативу → ОСТАННЄ ВІДОМЕ значення цього ж ad_id → executor_map.
+    # Carry-forward по ad_id точний (оголошення не міняє виконавця), account-level — ні.
+    if prev_utm_map:
+        prev = prev_utm_map.get(ad_id) or {}
+        for k in ('utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'):
+            if not utm.get(k) and prev.get(k):
+                utm[k] = prev[k]
+
+    # Last resort: мапимо за ad_account_id (legacy fallback).
+    # Тільки utm_term і тільки якщо акаунт закріплений РІВНО за одним виконавцем —
+    # більше НЕ вигадуємо utm_source/utm_medium.
     if not utm.get('utm_term') and executor_map:
         acct = row.get('account_id') or ''
         if acct in executor_map:
             utm['utm_term'] = executor_map[acct]
-            utm['utm_source'] = utm.get('utm_source') or 'facebook'
-            utm['utm_medium'] = utm.get('utm_medium') or 'cpc'
 
     # Conversions = leads + completed registrations + purchases
     conv = count_actions(row.get('actions'), [
@@ -405,6 +421,38 @@ def transform_row(row, link_map, tags_map, acct_name, acct_currency, executor_ma
         'utm_content':     utm.get('utm_content'),
         'raw_data':        row,
     }
+
+
+def load_prev_utm(ad_ids):
+    """15.09.2026 (аудит): останні відомі UTM по кожному ad_id з dashboard_ads_data.
+
+    Використовується як carry-forward, коли FB не віддав url_tags для оголошення.
+    Точніше за account-level executor_map: у одному рекламному акаунті може
+    працювати кілька виконавців (CLUB UAH: artem + fortunatos).
+    """
+    out = {}
+    ids = [i for i in (ad_ids or []) if i]
+    if not ids:
+        return out
+    CHUNK = 100
+    for i in range(0, len(ids), CHUNK):
+        chunk = ids[i:i + CHUNK]
+        try:
+            q = ('ad_id,date_start,utm_source,utm_medium,utm_campaign,utm_term,utm_content'
+                 f'&ad_id=in.({",".join(chunk)})'
+                 '&utm_term=not.is.null'
+                 '&order=date_start.desc&limit=5000')
+            r = requests.get(f'{SB_URL}/rest/v1/dashboard_ads_data?select={q}',
+                             headers=HEADERS_SB, timeout=30)
+            if not r.ok:
+                continue
+            for row in r.json():
+                aid = row.get('ad_id')
+                if aid and aid not in out:   # order=date_start.desc → перший = найсвіжіший
+                    out[aid] = row
+        except Exception as e:
+            log(f'   ⚠ load_prev_utm chunk failed: {e}')
+    return out
 
 
 # ===== SUPABASE =====
@@ -524,7 +572,17 @@ def main():
             log(f'   ⚠ link URLs/tags failed: {e}')
             link_map, tags_map = {}, {}
 
-        rows = [transform_row(r, link_map, tags_map, name, currency, executor_map) for r in raw_rows]
+        # 15.09.2026 (аудит): останні відомі UTM для цих ad_id — щоб збій url_tags
+        # не переписував атрибуцію на account-level дефолт.
+        prev_utm_map = load_prev_utm({r.get('ad_id') for r in raw_rows if r.get('ad_id')})
+        if tags_map:
+            log(f'   📎 carry-forward UTM доступний для {len(prev_utm_map)} ad_id')
+        else:
+            log(f'   ⚠ url_tags порожній — атрибуція піде з carry-forward '
+                f'({len(prev_utm_map)} ad_id) / executor_map')
+
+        rows = [transform_row(r, link_map, tags_map, name, currency, executor_map, prev_utm_map)
+                for r in raw_rows]
         upserted = upsert_ads(rows)
         total += upserted
 
