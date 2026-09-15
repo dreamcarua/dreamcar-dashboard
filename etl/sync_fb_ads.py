@@ -126,7 +126,13 @@ def fb_get(path, params=None):
             time.sleep(wait)
             continue
         log(f'  ❌ FB {r.status_code}: {r.text[:300]}')
-        r.raise_for_status()
+        # 15.09.2026 (аудит): requests.HTTPError несе лише '400 Client Error: ...',
+        # без коду помилки Meta. Через це викликачі не могли відрізнити «немає прав»
+        # (#10, не минеться само) від тимчасового збою. Пришиваємо код до тексту винятку.
+        try:
+            r.raise_for_status()
+        except Exception as e:
+            raise type(e)(f'{e} | meta_error_code={_err_code} | {r.text[:200]}') from None
     raise RuntimeError(f'FB API failed after 5 attempts: {path}')
 
 
@@ -205,7 +211,8 @@ def _fetch_post_url(post_id):
         return data.get('permalink_url')
     except Exception as e:
         msg = str(e)
-        if '(#10)' in msg or 'pages_read_engagement' in msg or 'Page Public Content Access' in msg:
+        if ('meta_error_code=10' in msg or '(#10)' in msg
+                or 'pages_read_engagement' in msg or 'Page Public Content Access' in msg):
             if page_id not in _POST_URL_BLOCKED_PAGES:
                 _POST_URL_BLOCKED_PAGES[page_id] = 'pages_read_engagement'
                 log(f'  ⚠ сторінка {page_id}: токен без pages_read_engagement — резолв URL через '
