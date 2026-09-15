@@ -1,0 +1,59 @@
+-- 15.09.2026 — «унікальний покупець» рахувався ЧОТИРМА різними способами.
+-- Застосовано на wotghlaehnvxyeacznvv 15.09.2026.
+--
+-- Знайдено на маршруті «Аналітика»: два тайли на ОДНОМУ екрані показували
+-- 3 654 і 3 651 покупців для того самого періоду й проєкту.
+--
+-- Що було:
+--   dashboard_kpi_summary.unique_buyers
+--       COUNT(DISTINCT customer_email) FILTER (status='pay' AND customer_email IS NOT NULL)
+--       -> порожній рядок '' ставав окремим «покупцем»
+--   dashboard_kpi_with_delta.buyers
+--       COUNT(DISTINCT COALESCE(customer_email, customer_phone)) FILTER (status='pay')
+--       -> COALESCE без NULLIF: '' теж ставав окремим «покупцем»
+--   dashboard_extended_kpi.total_buyers
+--       DISTINCT customer_email, лише непорожній, лише серед paid_at IS NOT NULL
+--       -> губив тих, хто заплатив без email
+--   frontend renderOverview()
+--       new Set(paid.map(r => r.customer_email).filter(Boolean))
+--       -> четверте визначення
+--
+-- Стало (усюди однаково): ключ покупця = email, а якщо його немає — телефон.
+--   COALESCE(NULLIF(customer_email,''), NULLIF(customer_phone,''))
+-- Це і узгоджує тайли, і не втрачає реальних покупців: у циклі #21 троє
+-- заплатили без email, але з телефоном.
+--
+-- Перевірка до/після на AUDI Q7 PRESTIGE 03.09-27.09:
+--   було:  summary 3 651 | delta 3 654 | extended 3 651
+--   стало: summary 3 654 | delta 3 654 | extended 3 654
+--   медіани і repeat_buyers не змінились (5.6 хв / 64.7 хв / 199 грн / 651).
+--
+-- Застосовано патчем наявних визначень (regexp/replace + EXECUTE), щоб не
+-- переписувати функції вручну — точні заміни:
+--
+--   dashboard_kpi_summary:
+--     'COUNT(DISTINCT customer_email) FILTER (WHERE status=''pay'' AND customer_email IS NOT NULL)::bigint,'
+--   -> 'COUNT(DISTINCT COALESCE(NULLIF(customer_email,''''), NULLIF(customer_phone,''''))) FILTER (WHERE status=''pay'')::bigint,'
+--
+--   dashboard_kpi_with_delta:
+--     'COUNT(DISTINCT COALESCE(customer_email, customer_phone)) FILTER (WHERE status=''pay'') AS buyers_distinct'
+--   -> 'COUNT(DISTINCT COALESCE(NULLIF(customer_email,''''), NULLIF(customer_phone,''''))) FILTER (WHERE status=''pay'') AS buyers_distinct'
+--
+--   dashboard_extended_kpi:
+--     base:     'SELECT customer_email, amount, currency, (paid_at - created_at) AS lag'
+--           ->  'SELECT COALESCE(NULLIF(customer_email,''''), NULLIF(customer_phone,'''')) AS buyer_key, ...'
+--     by_email: групування по customer_email -> по buyer_key WHERE buyer_key IS NOT NULL
+--
+-- Кеш RPC очищено, щоб старі числа не доживали: delete from dashboard_rpc_cache;
+--
+-- ЩО ЛИШИЛОСЬ: mv_dashboard_globals.unique_buyers і unique_buyers_30d досі рахують
+-- лише по customer_email. Це all-time глобальні числа іншого охоплення (не залежать
+-- від фільтрів), тож вони не стоять поруч із тайлами вище і не конфліктують — але
+-- за бажання їх варто привести до того самого ключа.
+
+-- Поточні визначення завжди можна прочитати так:
+--   select pg_get_functiondef('dashboard_kpi_summary'::regproc);
+--   select pg_get_functiondef('dashboard_kpi_with_delta'::regproc);
+--   select pg_get_functiondef('dashboard_extended_kpi'::regproc);
+
+delete from dashboard_rpc_cache;

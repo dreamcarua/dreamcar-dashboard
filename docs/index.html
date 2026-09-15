@@ -3378,7 +3378,12 @@ async function renderOverview() {
     setLastData('overview', rows);
     const paid = rows.filter(r => r.status === 'pay');
     const sum = paid.reduce((a,r) => a + Number(r.amount||0), 0);
-    const uniqEmails = new Set(paid.map(r => r.customer_email).filter(Boolean)).size;
+    // 15.09.2026 (аудит): ключ покупця — email, а якщо його немає, то телефон.
+    // Те саме тепер у dashboard_kpi_summary, dashboard_kpi_with_delta і dashboard_extended_kpi.
+    // Раніше було ЧОТИРИ різні визначення «унікального покупця», і два тайли
+    // на одному екрані показували 3 654 і 3 651 — троє людей заплатили без email.
+    const buyerKey = (r) => (r.customer_email && r.customer_email.trim()) || (r.customer_phone && r.customer_phone.trim()) || null;
+    const uniqEmails = new Set(paid.map(buyerKey).filter(Boolean)).size;
 
     // 15.09.2026 P0 FIX (аудит): fetchAllDealsBatched бере МАКСИМУМ 30 000 рядків і
     // раніше робив це МОВЧКИ. На «Усі проєкти + весь період» (250k угод) це давало
