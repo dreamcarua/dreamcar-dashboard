@@ -1881,12 +1881,20 @@ function getActiveModel() {
   return ACTIVE_MODELS.find(m => m.id === filters.model) || null;
 }
 
-/* Платний vs органічний UTM source */
-const PAID_SOURCES = new Set(['facebook','instagram','google','tiktok','fb','ig','meta','youtube','linkedin','x','twitter']);
-function isPaidSource(src) {
-  if (!src) return false;
-  const s = String(src).toLowerCase();
-  return PAID_SOURCES.has(s) || /(_paid|_ads|_cpc)/.test(s);
+/* Платний vs органічний — по placement-мітці utm_medium.
+   15.09.2026 (рішення Вадима): єдине канонічне визначення на всю систему.
+   Було ЧОТИРИ різні, і вони давали різний ROAS на тих самих даних:
+     цей isPaidSource (utm_source ∈ соцмережі)        → 6,4x
+     is_paid_deal (збіг з mv_paid_signatures)        → 10,0x
+     CASE у agg_deals_with_traffic (гардкод імен)      → ще інакше
+     placement-мітки utm_medium (канон)             → 2,63x  ← реальний
+   Meta підставляє {{placement}} лише для ОПЛАЧЕНИХ показів, тож instagram_feed /
+   instagram_stories / instagram_reels / facebook_mobile_* — це реклама, а баре stories,
+   post, account, telegram_bot, newsletter — органіка. Дзеркало SQL-функції
+   is_paid_placement(text). Міняти лише разом із нею. */
+const PAID_PLACEMENT_RE = /^(facebook|instagram|fb|ig|messenger|audience_network)_/i;
+function isPaidPlacement(medium) {
+  return PAID_PLACEMENT_RE.test(String(medium || ''));
 }
 
 // 07.06.2026 P0 FIX: ymd має повертати ДЕНЬ ЗА КИЇВСЬКОЮ ТЗ незалежно від браузера юзера (Польща CET vs Київ EEST/CEST).
@@ -2354,8 +2362,8 @@ async function fetchDealsRange(offset, limit) {
 /* Client-side post-filter for traffic/funnel/source */
 function applyClientFilters(rows) {
   let out = rows;
-  if (filters.traffic_type === 'paid') out = out.filter(r => isPaidSource(r.utm_source));
-  else if (filters.traffic_type === 'organic') out = out.filter(r => !isPaidSource(r.utm_source));
+  if (filters.traffic_type === 'paid') out = out.filter(r => isPaidPlacement(r.utm_medium));
+  else if (filters.traffic_type === 'organic') out = out.filter(r => !isPaidPlacement(r.utm_medium));
   if (filters.funnel_type === 'new') out = out.filter(r => r.customer_type === 'new' || !r.customer_type);
   else if (filters.funnel_type === 'returning') out = out.filter(r => r.customer_type === 'returning');
   return out;
