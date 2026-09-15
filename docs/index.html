@@ -2381,6 +2381,22 @@ function _rpcParams() {
 // 08.06.2026 R2 P1 Fix: helper для ads_data queries — раніше всі 5 місць брали тільки date range
 // без проектного intersection → spend показувався глобально на per-project сторінках.
 // Тепер всі ads queries проходять через adsBaseRange() що враховує проектний date range.
+// 15.09.2026 (аудит): витрати звужуються по проєкту, як і виручка.
+// Раніше dashboard_ads_data фільтрувалась ЛИШЕ по датах: при виборі розіграшу
+// виручка звужувалась, а spend ні — ROI/ROAS/CPA брехали при будь-якому перетині циклів.
+// Колонка dashboard_ads_data.project ставиться тригером tg_dashboard_ads_stamp_project
+// через resolve_ads_project(date_start) — ті самі значення, що й у dashboard_deals.project.
+function narrowAdsByProject(q) {
+  const sp = getSelectedProject();
+  if (sp && sp.deal_project_values && sp.deal_project_values.length) {
+    return q.in('project', sp.deal_project_values);
+  }
+  if (filters.project && filters.project.startsWith('raw::')) {
+    return q.eq('project', filters.project.slice(5));
+  }
+  return q;
+}
+
 function adsBaseRange() {
   const sp = getSelectedProject();
   let fromD = filters.from, toD = filters.to;
@@ -3334,10 +3350,12 @@ async function renderOverview() {
     let adSpend = 0;
     try {
       const adsR = adsBaseRange();
-      const { data } = await sb.from('dashboard_ads_data')
+      let aq = sb.from('dashboard_ads_data')
         .select('spend')
         .gte('date_start', adsR.fromD)
         .lte('date_start', adsR.toD);
+      aq = narrowAdsByProject(aq);
+      const { data } = await aq;
       (data||[]).forEach(r => adSpend += Number(r.spend||0));
     } catch(e) {}
 
@@ -3825,10 +3843,16 @@ async function renderUtmField(field, title, csvName) {
     let adMap = new Map();
     try {
       const adsR = adsBaseRange();
-      const { data: ads } = await sb.from('dashboard_ads_data')
+      let adsQ = sb.from('dashboard_ads_data')
         .select(field + ', spend')
         .gte('date_start', adsR.fromD)
         .lte('date_start', adsR.toD);
+      // 15.09.2026: дзеркалимо aggViaRPC — для UTM-полів бік угод НЕ звужується по проєкту
+      // (кампанії й виконавці перетинають проєкти), тож і бік витрат не звужуємо — інакше ROAS буде з різних охоплень.
+      if (!['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].includes(field)) {
+        adsQ = narrowAdsByProject(adsQ);
+      }
+      const { data: ads } = await adsQ;
       (ads||[]).forEach(a => {
         const k = a[field] || '(none)';
         adMap.set(k, (adMap.get(k)||0) + Number(a.spend||0));
@@ -3934,7 +3958,7 @@ async function renderCampaigns() {
   try {
     const [rows, adsRes] = await Promise.all([
       fetchAllDealsBatched(30000),
-      (function(){ const r = adsBaseRange(); return sb.from('dashboard_ads_data').select('campaign_name, spend, impressions, clicks').gte('date_start', r.fromD).lte('date_start', r.toD); })()
+      (function(){ const r = adsBaseRange(); return narrowAdsByProject(sb.from('dashboard_ads_data').select('campaign_name, spend, impressions, clicks').gte('date_start', r.fromD).lte('date_start', r.toD)); })()
     ]);
     const agg = aggregateByField(rows, 'utm_campaign');
     const adMap = new Map();
@@ -4695,8 +4719,8 @@ async function renderAdsOverview() {
     let offset = 0; const BATCH = 1000;
     const _adsR1 = adsBaseRange();
     while (true) {
-      const { data, error } = await sb.from('dashboard_ads_data').select('*')
-        .gte('date_start', _adsR1.fromD).lte('date_start', _adsR1.toD)
+      const { data, error } = await narrowAdsByProject(sb.from('dashboard_ads_data').select('*')
+        .gte('date_start', _adsR1.fromD).lte('date_start', _adsR1.toD))
         .order('date_start', { ascending: true })
         .range(offset, offset + BATCH - 1);
       if (error) throw error;
@@ -4764,8 +4788,8 @@ async function renderAdsCampaigns() {
     let offset = 0; const BATCH = 1000;
     const _adsR2 = adsBaseRange();
     while (true) {
-      const { data, error } = await sb.from('dashboard_ads_data').select('*')
-        .gte('date_start', _adsR2.fromD).lte('date_start', _adsR2.toD)
+      const { data, error } = await narrowAdsByProject(sb.from('dashboard_ads_data').select('*')
+        .gte('date_start', _adsR2.fromD).lte('date_start', _adsR2.toD))
         .order('date_start', { ascending: true })
         .range(offset, offset + BATCH - 1);
       if (error) throw error;

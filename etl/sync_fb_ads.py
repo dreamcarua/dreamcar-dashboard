@@ -20,7 +20,7 @@ CLI:
   --mode=initial                — last 30 days
   --mode=range --since=YYYY-MM-DD --until=YYYY-MM-DD
 """
-import os, sys, json, argparse, time
+import os, sys, json, argparse, time, re
 from datetime import datetime, timedelta, timezone
 from urllib.parse import urlparse, parse_qs
 import requests
@@ -206,12 +206,53 @@ def get_ad_link_urls(acct):
     tags = {}
     no_url_count = 0
     unresolved_post_ids = []  # для другого pass через effective_object_story_id
-    params = {
-        # url_tags — FB-поле на рівні ad, що містить «Параметри URL-адреси».
-        # Саме там медіабаєр вписує utm_term=claude / utm_term=vadym.
-        'fields': 'id,name,url_tags,creative{object_story_spec,asset_feed_spec,effective_object_story_id,link_url,template_url,url_tags}',
-        'limit': 200,
-    }
+    # 15.09.2026 P0 FIX (аудит). Для акаунту CLUB UAH цей запит стабільно віддавав
+    # FB 500 Internal Server Error — важка експансія creative{object_story_spec,asset_feed_spec}
+    # не витримувала сторінку на 200 оголошень. Весь tags_map падав у {} → атрибуція
+    # збігала до account-level дефолту і витрати Fortunatos осідали на Артемі.
+    # Тепер — сходи деградації: url_tags важливіші за URL креативу, тож останній
+    # схід тягне ТІЛЬКИ id,name,url_tags — це майже ніколи не падає.
+    FIELD_LADDER = [
+        ('id,name,url_tags,creative{object_story_spec,asset_feed_spec,'
+         'effective_object_story_id,link_url,template_url,url_tags}', 200),
+        ('id,name,url_tags,creative{effective_object_story_id,link_url,template_url,url_tags}', 100),
+        ('id,name,url_tags', 100),
+    ]
+    last_err = None
+    for attempt, (fields, page) in enumerate(FIELD_LADDER):
+        try:
+            links, tags, no_url_count, unresolved_post_ids = _walk_ads(acct, fields, page)
+            if attempt:
+                log(f'  ↳ fields ladder level {attempt + 1} спрацював ({len(tags)} url_tags)')
+            break
+        except Exception as e:
+            last_err = e
+            log(f'  ⚠ /ads fields level {attempt + 1} failed: {str(e)[:160]}')
+            links, tags, no_url_count, unresolved_post_ids = {}, {}, 0, []
+    else:
+        raise RuntimeError(f'усі рівні FIELD_LADDER впали: {last_err}')
+
+    # 2nd pass: для unresolved ads — fetch URL через post_id
+    if unresolved_post_ids:
+        log(f'  ↻ resolving {len(unresolved_post_ids)} posts for missing URLs...')
+        for ad_id, post_id, ad_name in unresolved_post_ids[:200]:  # cap до 200 викликів
+            url = _fetch_post_url(post_id)
+            if url:
+                links[ad_id] = url
+            else:
+                no_url_count += 1
+
+    log(f'  ✓ resolved {len(links)} URLs, {len(tags)} ads з url_tags, {no_url_count} без URL')
+    return links, tags
+
+
+def _walk_ads(acct, fields, page_limit):
+    """Один прохід по /ads із заданим набором полів. Кидає виняток на будь-якій помилці."""
+    links = {}
+    tags = {}
+    no_url_count = 0
+    unresolved_post_ids = []
+    params = {'fields': fields, 'limit': page_limit}
     next_url = None
     while True:
         if next_url:
@@ -243,19 +284,7 @@ def get_ad_link_urls(acct):
         next_url = paging.get('next')
         if not next_url:
             break
-
-    # 2nd pass: для unresolved ads — fetch URL через post_id
-    if unresolved_post_ids:
-        log(f'  ↻ resolving {len(unresolved_post_ids)} posts for missing URLs...')
-        for ad_id, post_id, ad_name in unresolved_post_ids[:200]:  # cap до 200 викликів
-            url = _fetch_post_url(post_id)
-            if url:
-                links[ad_id] = url
-            else:
-                no_url_count += 1
-
-    log(f'  ✓ resolved {len(links)} URLs, {len(tags)} ads з url_tags, {no_url_count} без URL')
-    return links, tags
+    return links, tags, no_url_count, unresolved_post_ids
 
 
 def _date(s):
@@ -344,7 +373,8 @@ def count_actions(actions, target_types):
     return total
 
 
-def transform_row(row, link_map, tags_map, acct_name, acct_currency, executor_map=None, prev_utm_map=None):
+def transform_row(row, link_map, tags_map, acct_name, acct_currency, executor_map=None,
+                  prev_utm_map=None, executor_rules=None):
     """FB insight row → dashboard_ads_data row."""
     ad_id = row.get('ad_id') or ''
     link_url = link_map.get(ad_id)
@@ -377,9 +407,30 @@ def transform_row(row, link_map, tags_map, acct_name, acct_currency, executor_ma
             if not utm.get(k) and prev.get(k):
                 utm[k] = prev[k]
 
+    # 15.09.2026: правила рівня кампанії/адсету (ads_executor_rules).
+    # Конвенція назв: '<Виконавець> | DC | <Модель> | ...'. Точніше за акаунт,
+    # бо в одному акаунті працює кілька медіабаєрів (CLUB UAH: artem + fortunatos).
+    if not utm.get('utm_term') and executor_rules:
+        acct = row.get('account_id') or ''
+        camp = (row.get('campaign_name') or '')
+        adset = (row.get('adset_name') or '')
+        aname = (row.get('ad_name') or '')
+        for r in executor_rules:   # вже відсортовані по priority
+            if r.get('ad_account_id') and r['ad_account_id'] != acct:
+                continue
+            if not _ilike(camp, r.get('campaign_pattern')):
+                continue
+            if not _ilike(adset, r.get('adset_pattern')):
+                continue
+            if not _ilike(aname, r.get('ad_name_pattern')):
+                continue
+            utm['utm_term'] = r['executor_utm_term']
+            break
+
     # Last resort: мапимо за ad_account_id (legacy fallback).
-    # Тільки utm_term і тільки якщо акаунт закріплений РІВНО за одним виконавцем —
-    # більше НЕ вигадуємо utm_source/utm_medium.
+    # Тільки utm_term, і ТІЛЬКИ якщо акаунт закріплений РІВНО за одним виконавцем
+    # (is_exclusive). Більше НЕ вигадуємо utm_source/utm_medium і НЕ штампуємо
+    # виконавця на акаунт, де їх кілька — краще NULL, ніж чуже ім'я.
     if not utm.get('utm_term') and executor_map:
         acct = row.get('account_id') or ''
         if acct in executor_map:
@@ -421,6 +472,31 @@ def transform_row(row, link_map, tags_map, acct_name, acct_currency, executor_ma
         'utm_content':     utm.get('utm_content'),
         'raw_data':        row,
     }
+
+
+def _ilike(value, pattern):
+    """SQL ILIKE для патернів з ads_executor_rules. None/порожній патерн = підходить будь-що."""
+    if not pattern:
+        return True
+    rx = re.escape(pattern).replace('%', '.*').replace('_', '.')
+    return re.match(rx + r'\Z', value or '', re.IGNORECASE) is not None
+
+
+def load_executor_rules():
+    """ads_executor_rules: виконавець за патерном назви кампанії/адсету/оголошення."""
+    try:
+        r = requests.get(
+            f'{SB_URL}/rest/v1/ads_executor_rules'
+            '?select=priority,ad_account_id,campaign_pattern,adset_pattern,ad_name_pattern,executor_utm_term'
+            '&is_active=eq.true&order=priority.asc',
+            headers=HEADERS_SB, timeout=30)
+        if r.ok:
+            rules = r.json()
+            log(f'   📋 executor_rules loaded: {len(rules)}')
+            return rules
+    except Exception as e:
+        log(f'   ⚠ executor_rules load failed: {e}')
+    return []
 
 
 def load_prev_utm(ad_ids):
@@ -529,14 +605,17 @@ def main():
     # для last-resort fallback коли FB API не повертає url_tags І URL без utm.
     executor_map = {}
     try:
-        r = requests.get(f'{SB_URL}/rest/v1/ads_account_to_executor?select=ad_account_id,executor_utm_term',
+        r = requests.get(f'{SB_URL}/rest/v1/ads_account_to_executor'
+                         '?select=ad_account_id,executor_utm_term&is_exclusive=is.true',
                          headers=HEADERS_SB, timeout=30)
         if r.ok:
             for row in r.json():
                 executor_map[row['ad_account_id']] = row['executor_utm_term']
-            log(f'   📋 executor_map loaded: {len(executor_map)} entries')
+            log(f'   📋 executor_map loaded: {len(executor_map)} entries (тільки is_exclusive)')
     except Exception as e:
         log(f'   ⚠ executor_map load failed: {e}')
+
+    executor_rules = load_executor_rules()
 
     total = 0
     for raw_acct in FB_ACCOUNTS:
@@ -585,7 +664,8 @@ def main():
             log(f'   ⚠ url_tags порожній — атрибуція піде з carry-forward '
                 f'({len(prev_utm_map)} ad_id) / executor_map')
 
-        rows = [transform_row(r, link_map, tags_map, name, currency, executor_map, prev_utm_map)
+        rows = [transform_row(r, link_map, tags_map, name, currency, executor_map,
+                              prev_utm_map, executor_rules)
                 for r in raw_rows]
         upserted = upsert_ads(rows)
         total += upserted

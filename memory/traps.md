@@ -101,3 +101,27 @@ Entries below were harvested from commit messages on 03.09.2026 (source: `git lo
 **Cause:** `etl/sync_fb_ads.py` → `transform_row()`: коли FB не віддав `url_tags` (збій `/ads`, пагінація, права), спрацьовував last-resort мапінг `ad_account_id → executor_utm_term` і ШТАМПУВАВ на весь акаунт одного виконавця плюс вигадані `utm_source='facebook'`, `utm_medium='cpc'`. В акаунті CLUB UAH (`1057590556523878`) працюють двоє, у таблиці `ads_account_to_executor` він закріплений лише за `artem`. Справжні мітки з `url_tags` — `utm_term=fortunatos, utm_source=meta, utm_medium=post`. Підміна `meta/post → facebook/cpc` ламала ще й фільтр типу трафіку.
 **Do:** account-level мапінг застосовний, лише коли в акаунті РІВНО один виконавець; інакше — carry-forward останнього відомого значення по `ad_id` (оголошення виконавця не міняє). Ніколи не вигадувати `utm_source`/`utm_medium`. Детектор: `select ad_id, count(distinct utm_term) from dashboard_ads_data where date_start >= … group by 1 having count(distinct utm_term) > 1`. Виправлено 15.09.2026; бекап зіпсованих рядків — `_bak_ads_utm_20260915`.
 **Seen:** 15.09.2026 · питання Вадима «переплутані мітки fortunatos та Артем по витратам?»
+
+### Справжня причина зникнення url_tags — FB 500 на важкій експансії creative
+**Symptom:** з 10.09 витрати Fortunatos щодня осідали на Артемі; після першого фіксу лишилось 11 402 ₴ «Артема» з ROAS 38x.
+**Cause:** `GET /act_1057590556523878/ads?fields=id,name,url_tags,creative{object_story_spec,asset_feed_spec,...}&limit=200` віддавав **500 Internal Server Error** — FB не витримував важку експансію creative на сторінці у 200 оголошень саме для цього акаунта. Виняток ловився одним `except` і давав `tags_map = {}` для ВСЬОГО акаунта, після чого спрацьовував account-level дефолт. Лог показував це як тихе `⚠ link URLs/tags failed: 500 Server Error`, прогін звітував success.
+**Do:** для `/ads` тримати сходи деградації набору полів — останній схід тягне ТІЛЬКИ `id,name,url_tags` (майже ніколи не падає), бо саме url_tags несуть атрибуцію, а URL креативу другорядний. Перевірка: `gh run view <id> --log | grep -E "url_tags|link URLs"` — рядок `✓ resolved N URLs, M ads з url_tags` має бути для КОЖНОГО акаунта з insight-рядками. Окремо: `(#10) pages_read_engagement` у другому pass по постах — інша, нешкідлива помилка (fallback на URL посту), не плутати.
+**Seen:** 15.09.2026 · аудит дашборду
+
+### Один рекламний акаунт ≠ один медіабаєр
+**Symptom:** таблиця «Виконавець» показувала Артему ROAS 38x при 11 402 ₴ витрат — при тому що всі 14 оголошень лежали в кампаніях з назвою `Fortunatos | DC | Audi Q7 | ...`.
+**Cause:** `ads_account_to_executor` мапить `ad_account_id → ОДИН executor_utm_term`. У CLUB UAH (`1057590556523878`) працюють двоє. Будь-який збій url_tags → весь акаунт підписувався одним іменем. Артем у циклі #21 витрат на рекламу не мав узагалі: його 1 097 оплат — органіка, TG і розсилки.
+**Do:** виконавця визначати за конвенцією назв кампаній `<Виконавець> | DC | <Модель> | <Темп> | <дата>` через `ads_executor_rules` (патерн ILIKE, priority). Account-level дефолт застосовний, лише коли `ads_account_to_executor.is_exclusive = true`; інакше краще NULL, ніж чуже імʼя. Новий медіабаєр → рядок у `ads_executor_rules`, не у мапі акаунтів.
+**Seen:** 15.09.2026 · «все одно якісь витрати у Артема» — Вадим
+
+### Платіжка живе у checkout_events, а не в угоді
+**Symptom:** фільтр «Платіжка» ховав ~99 % даних: `pay_provider` заповнений у 79 із 5 934 вересневих угод. WayForPay зник із даних 13.08, Platon — 02.09.
+**Cause:** `crm_deals.pay_provider` (MySQL) заповнювався лише колбеками WayForPay і Platon. Чекаут давно маршрутизує між `paygate`, `ibanoplata`, `betatransfer`, `transvoucher`, `lava` і прямими IBAN ФОПів (`monobank_*`, `privat_*`, `otp_*`, `ukrsib_*`, `oschad_*`, `pumb_*`) — жоден із них у CRM-угоду шлюз не пише. Але НАШ трекер чекауту пише: `checkout_events.meta = {"gateway": "...", "order_id": "DCI-..."}`, де `order_id` = `order_reference` = перша частина `deal_name` до ` - `.
+**Do:** джерело правди по платіжці — `checkout_events.meta->>'gateway'`, join по `split_part(deal_name,' - ',1)`. Тригер `tg_dashboard_deals_pay_provider` ставить її на кожен upsert, `reconcile_pay_provider()` (pg_cron, щогодини :17) добирає випадки, коли подія чекауту прийшла після угди. Ручні мітки операторів не перетираються. Покриття після бекфілу: 93,6 % оплачених угод вересня.
+**Seen:** 15.09.2026 · «Платіжка — заповнюй» — Вадим
+
+### Витрати не звужувались по проєкту — ROI брехав при перетині циклів
+**Symptom:** вибираєш розіграш — виручка звужується, spend лишається за весь період.
+**Cause:** `dashboard_ads_data` не мала колонки `project`, і `adsBaseRange()` обмежував лише дати.
+**Do:** колонка `dashboard_ads_data.project` ставиться тригером `tg_dashboard_ads_stamp_project` через `resolve_ads_project(date_start)` — вікна беруться з `v_project_windows` (dashboard_projects + launches, lifetime-проєкти ≥ 2030 ігноруються). На фронті — `narrowAdsByProject(q)`. Виняток навмисний: для UTM-полів (`utm_source/medium/campaign/term/content`) бік угод у `aggViaRPC` теж не звужується по проєкту, тож і витрати там не звужуємо — інакше ROAS рахувався б із різних охоплень.
+**Seen:** 15.09.2026 · «витрати не фільтруються по проєкту — виправляй» — Вадим
