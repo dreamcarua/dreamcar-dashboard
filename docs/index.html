@@ -1913,16 +1913,25 @@ function applyPreset(p) {
     return;
   }
   else if (p.startsWith('project-')) {
-    const m = getActiveModel();
+    // 15.09.2026 (аудит): друге джерело — вибраний проєкт (filters.project).
+    // Автовибір ставить саме його, тож покладатись лише на filters.model не можна.
+    let m = getActiveModel();
     if (!m) {
-      alert('Спершу обери «Активний розіграш» у фільтрах, щоб застосувати цей пресет.');
+      const sp = (typeof getSelectedProject === 'function') ? getSelectedProject() : null;
+      if (sp) m = { id: sp.code, name: sp.name, start: sp.date_start, end: sp.date_end };
+    }
+    if (!m || !m.start) {
+      // Без блокуючого alert: він заморожує увесь дашборд до кліку мишею.
+      console.warn('[dashboard] пресет ' + p + ': проєкт не обрано — падаємо на «Весь період»');
       filters.preset = 'all';
       $('#f-date-range').value = 'all';
       return applyPreset('all');
     }
+    // 15.09.2026: у проєктів без дати завершення (ongoing) m.end = null → беремо сьогодні.
+    const mEnd = m.end || todayYmd();
     const sd = new Date(m.start);
-    const ed = new Date(m.end);
-    if (p === 'project-all') { filters.from = m.start; filters.to = m.end; }
+    const ed = new Date(mEnd);
+    if (p === 'project-all') { filters.from = m.start; filters.to = mEnd; }
     else if (p === 'project-first3') {
       const e = new Date(sd); e.setDate(e.getDate()+2);
       filters.from = m.start; filters.to = ymd(e);
@@ -1933,10 +1942,10 @@ function applyPreset(p) {
     }
     else if (p === 'project-lastweek') {
       const s = new Date(ed); s.setDate(s.getDate()-6);
-      filters.from = ymd(s); filters.to = m.end;
+      filters.from = ymd(s); filters.to = mEnd;
     }
     else if (p === 'project-lastday') {
-      filters.from = m.end; filters.to = m.end;
+      filters.from = mEnd; filters.to = mEnd;
     }
   }
   filters.preset = p;
@@ -2259,6 +2268,11 @@ function autoSelectNewestProject() {
   // 08.06.2026 P0 FIX: null date_end (ongoing project like MOTO) — null > todayYmd() = false → filters.to = null → breaks kyivIsoEnd
   filters.to = (!pick.date_end || pick.date_end > todayYmd()) ? todayYmd() : pick.date_end;
   filters.preset = 'custom';
+  // 15.09.2026 P0 FIX (аудит): раніше ставилось ЛИШЕ значення селекта, а filters.model
+  // лишався порожнім → getActiveModel() повертав null → всі п'ять пресетів
+  // «Весь проєкт / Перші 3 дні / Перший тиждень / Останній тиждень / Останній день»
+  // кидали блокуючий alert і скидали період на «Весь період».
+  filters.model = pick.code;
   const fm = $('#f-model'); if (fm) fm.value = pick.code;
   const fp = $('#f-project'); if (fp) fp.value = pick.code;
   const dr = $('#f-date-range'); if (dr) dr.value = 'custom';
@@ -3305,6 +3319,14 @@ async function fetchLeadsCount() {
   // цей лічильник охоплює ВСІ проекти і не може бути знаменником конверсії.
   // Повертаємо null → caller падає на rows.length (угоди того самого проекту).
   if (filters.project && !PROJECT_REF_MAP[filters.project]) return null;
+  // 15.09.2026 P0 FIX (аудит, друга черга): dashboard_webhooks знає лише дату й проєкт.
+  // Будь-який фільтр рівня угоди (статус, тип клієнта, тариф, платіжка, воронка,
+  // тип трафіку, UTM) звужує чисельник, але НЕ знаменник — і success rate перетворювався на
+  // вигадку (напр. «нові клієнти»: 335 оплат / 5 570 лідів = 6,0 %).
+  // Повертаємо null → знаменником стає та сама відфільтрована множина угод.
+  const DEAL_LEVEL_FILTERS = ['status','customer_type','tariff','pay_provider','funnel_type',
+    'traffic_type','utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
+  if (DEAL_LEVEL_FILTERS.some(k => filters[k])) return null;
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
       const { count, error } = await buildQuery();

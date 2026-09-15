@@ -175,9 +175,21 @@ def _extract_url_from_creative(creative):
     return None, None
 
 
+# 15.09.2026 (аудит): токен не має pages_read_engagement для сторінки CLUB, тож резолв постів
+# падав з (#10) на КОЖНОМУ з ~900 викликів за прогін: ~90 с марного часу і тисячі
+# рядків шуму в логах, що ховали справжні помилки (саме так загубився FB 500 на /ads).
+# Перша ж така помилка гасить весь pass до кінця прогону — це права, вони не з'являться самі.
+# Ключ — page_id (перша частина post_id до '_'): права видаються посторінково,
+# тож одна закрита сторінка не має гасити резолв для інших.
+_POST_URL_BLOCKED_PAGES = {}
+
+
 def _fetch_post_url(post_id):
     """Для shared post (effective_object_story_id) — окремий fetch URL."""
     if not post_id:
+        return None
+    page_id = str(post_id).split('_', 1)[0]
+    if page_id in _POST_URL_BLOCKED_PAGES:
         return None
     try:
         data = fb_get(post_id, {'fields': 'permalink_url,call_to_action,attachments{target{url}}'})
@@ -192,7 +204,14 @@ def _fetch_post_url(post_id):
                 return target_url
         return data.get('permalink_url')
     except Exception as e:
-        log(f'  ⚠ post {post_id} fetch failed: {e}')
+        msg = str(e)
+        if '(#10)' in msg or 'pages_read_engagement' in msg or 'Page Public Content Access' in msg:
+            if page_id not in _POST_URL_BLOCKED_PAGES:
+                _POST_URL_BLOCKED_PAGES[page_id] = 'pages_read_engagement'
+                log(f'  ⚠ сторінка {page_id}: токен без pages_read_engagement — резолв URL через '
+                    f'її пости вимкнено до кінця прогону (url_tags це не зачіпає)')
+        else:
+            log(f'  ⚠ post {post_id} fetch failed: {msg[:160]}')
         return None
 
 
@@ -234,13 +253,20 @@ def get_ad_link_urls(acct):
 
     # 2nd pass: для unresolved ads — fetch URL через post_id
     if unresolved_post_ids:
-        log(f'  ↻ resolving {len(unresolved_post_ids)} posts for missing URLs...')
-        for ad_id, post_id, ad_name in unresolved_post_ids[:200]:  # cap до 200 викликів
-            url = _fetch_post_url(post_id)
-            if url:
-                links[ad_id] = url
-            else:
-                no_url_count += 1
+        pending = [t for t in unresolved_post_ids
+                   if str(t[1]).split('_', 1)[0] not in _POST_URL_BLOCKED_PAGES]
+        skipped = len(unresolved_post_ids) - len(pending)
+        if skipped:
+            no_url_count += skipped
+            log(f'  ↭ {skipped} постів пропущено (сторінка без pages_read_engagement)')
+        if pending:
+            log(f'  ↻ resolving {len(pending)} posts for missing URLs...')
+            for ad_id, post_id, ad_name in pending[:200]:  # cap до 200 викликів
+                url = _fetch_post_url(post_id)
+                if url:
+                    links[ad_id] = url
+                else:
+                    no_url_count += 1
 
     log(f'  ✓ resolved {len(links)} URLs, {len(tags)} ads з url_tags, {no_url_count} без URL')
     return links, tags
