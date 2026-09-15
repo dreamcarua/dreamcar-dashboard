@@ -3674,6 +3674,17 @@ async function renderAnalytics() {
     const k = kpiDelta || {};
     const dlt = v => v == null ? '' : (v >= 0 ? `▲ +${v}%` : `▼ ${v}%`);
     const dltClass = v => v == null ? '' : (v >= 0 ? 'pay' : 'fail');
+    // 15.09.2026 P0 FIX (аудит): RPC навмисно повертає NULL, коли попередній період
+    // менший за 5 записів — порівнювати нема з чим. Але виклики були обгорнуті у
+    // Number(): Number(null) === 0, і дашборд упевнено малював «▲ +0%» («без змін»)
+    // там, де чесна відповідь — «немає з чим порівняти». Помітно на будь-якому
+    // новому циклі: Audi Q7 + utm_term~fortunatos → 749 замовлень і «▲ +0%».
+    const dltRaw = v => (v === null || v === undefined || v === '') ? null : Number(v);
+    const dltCell = v => {
+      const n = dltRaw(v);
+      if (n == null) return `<span class="pill" title="Попередній період надто малий (&lt;5 записів) — порівнювати нема з чим">—</span>`;
+      return `<span class="pill ${dltClass(n)}">${dlt(n)}</span>`;
+    };
 
     const topMediums = mediums.slice(0, 5);
     const topCampaigns = campaigns.filter(c => c.key !== '(none)' && c.key !== '').slice(0, 10);
@@ -3692,17 +3703,17 @@ async function renderAnalytics() {
         <div class="kpi-card blue">
           <div class="kpi-label" title="К-сть рядків у dashboard_deals: всі статуси pay/pending/fail. Це NOT маркетингові ліди — це checkout-замовлення">Замовлення</div>
           <div class="kpi-value">${fmtNum(Number(k.total||0))}</div>
-          <div class="kpi-meta"><span class="pill ${dltClass(Number(k.total_delta))}">${dlt(Number(k.total_delta))}</span> vs попередній період</div>
+          <div class="kpi-meta">${dltCell(k.total_delta)} vs попередній період</div>
         </div>
         <div class="kpi-card green">
           <div class="kpi-label">Оплачено</div>
           <div class="kpi-value">${fmtNum(Number(k.paid||0))}</div>
-          <div class="kpi-meta">${fmtPct(Number(k.paid_rate||0))} success rate · <span class="pill ${dltClass(Number(k.paid_delta))}">${dlt(Number(k.paid_delta))}</span></div>
+          <div class="kpi-meta">${fmtPct(Number(k.paid_rate||0))} success rate · ${dltCell(k.paid_delta)}</div>
         </div>
         <div class="kpi-card red">
           <div class="kpi-label">Виручка UAH</div>
           <div class="kpi-value">${fmtMoney(Number(k.revenue||0))}</div>
-          <div class="kpi-meta"><span class="pill ${dltClass(Number(k.revenue_delta))}">${dlt(Number(k.revenue_delta))}</span> vs попередній</div>
+          <div class="kpi-meta">${dltCell(k.revenue_delta)} vs попередній</div>
         </div>
         <div class="kpi-card amber">
           <div class="kpi-label">Сер. чек (AOV)</div>
