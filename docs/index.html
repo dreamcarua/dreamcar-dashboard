@@ -3367,14 +3367,46 @@ async function renderOverview() {
     ${loadingHTML('Завантаження угод…')}
   `;
   try {
-    const rows = await fetchAllDealsBatched(30000);
+    const OVERVIEW_CAP = 30000;
+    const rows = await fetchAllDealsBatched(OVERVIEW_CAP);
     setLastData('overview', rows);
     const paid = rows.filter(r => r.status === 'pay');
     const sum = paid.reduce((a,r) => a + Number(r.amount||0), 0);
     const uniqEmails = new Set(paid.map(r => r.customer_email).filter(Boolean)).size;
+
+    // 15.09.2026 P0 FIX (аудит): fetchAllDealsBatched бере МАКСИМУМ 30 000 рядків і
+    // раніше робив це МОВЧКИ. На «Усі проєкти + весь період» (250k угод) це давало
+    // 24 063 оплат і 10,5 млн ₴ замість 192 673 і 79 млн — без будь-якого попередження.
+    // Тепер: точні підсумки беремо з RPC (агрегація на сервері, без ліміту),
+    // а банер каже, що графіки й топ-7 побудовані на перших 30 000.
+    const truncated = rows.length >= OVERVIEW_CAP;
+    let exact = null;
+    if (truncated) {
+      try {
+        const { data: aggRows } = await sb.rpc('dashboard_agg_deals_with_traffic',
+          { p_field: 'status', ..._rpcParams() });
+        if (aggRows && aggRows.length) {
+          exact = { deals: 0, paid: 0, sum: 0, buyers: 0 };
+          aggRows.forEach(d => {
+            // RPC не знає про filters.status — звужуємо тут, бо p_field='status'.
+            if (filters.status && d.key !== filters.status) return;
+            exact.deals += Number(d.leads || 0);
+            if (d.key === 'pay') {
+              exact.paid   += Number(d.paid || 0);
+              exact.sum    += Number(d.sum_amount || 0);
+              exact.buyers += Number(d.buyers || 0);   // ≈ : розрізи по traffic_type можуть перетинатись
+            }
+          });
+        }
+      } catch (e) { console.warn('[overview] точні підсумки RPC не відпрацювали:', e); }
+    }
+    const paidCount  = exact ? exact.paid   : paid.length;
+    const sumTotal   = exact ? exact.sum    : sum;
+    const buyersCnt  = exact ? exact.buyers : uniqEmails;
+    const dealsTotal = exact ? exact.deals  : rows.length;
     const sources = new Set(rows.map(r => r.utm_source).filter(Boolean)).size;
     const campaigns = new Set(rows.map(r => r.utm_campaign).filter(Boolean)).size;
-    const avg = paid.length ? sum / paid.length : 0;
+    const avg = paid.length ? sum / paid.length : 0;   // перерахується нижче з точних чисел
 
     let adSpend = 0;
     try {
@@ -3388,34 +3420,40 @@ async function renderOverview() {
       (data||[]).forEach(r => adSpend += Number(r.spend||0));
     } catch(e) {}
 
-    const profit = sum - adSpend;
-    const roas = adSpend > 0 ? sum / adSpend : null;
-    const roi = adSpend > 0 ? ((sum - adSpend) / adSpend * 100) : null;
+    const profit = sumTotal - adSpend;
+    const roas = adSpend > 0 ? sumTotal / adSpend : null;
+    const roi = adSpend > 0 ? ((sumTotal - adSpend) / adSpend * 100) : null;
     // #214 fix: TDZ — leadsCount/totalForConv мають бути ОБ'ЯВЛЕНІ ДО cpl
     const leadsCount = await fetchLeadsCount();
-    const totalForConv = leadsCount > 0 ? leadsCount : rows.length;
+    const totalForConv = leadsCount > 0 ? leadsCount : dealsTotal;
     const cpl = adSpend > 0 && totalForConv > 0 ? adSpend / totalForConv : null;
-    const cpa = adSpend > 0 && paid.length > 0 ? adSpend / paid.length : null;
+    const cpa = adSpend > 0 && paidCount > 0 ? adSpend / paidCount : null;
     const byDay = aggregateByDay(rows, filters.granularity);
     const byProj7 = aggregateByField(rows, 'project').slice(0, 7);
-    const conv = totalForConv ? (paid.length / totalForConv * 100) : 0;
+    const conv = totalForConv ? (paidCount / totalForConv * 100) : 0;
     const granLabel = { day: 'По днях', week: 'По тижнях', month: 'По місяцях' }[filters.granularity || 'day'];
 
     c.innerHTML = `
       <div class="section-head">
         <div>
           <h1>📊 Огляд</h1>
-          <div class="subtitle">${escapeHtml(filters.from)} → ${escapeHtml(filters.to)} · ${fmtNum(totalForConv)} лідів · ${fmtNum(paid.length)} оплат</div>
+          <div class="subtitle">${escapeHtml(filters.from)} → ${escapeHtml(filters.to)} · ${fmtNum(totalForConv)} лідів · ${fmtNum(paidCount)} оплат</div>
         </div>
       </div>
+      ${truncated ? `<div class="card" style="border-left:3px solid var(--amber,#f0a500);margin-bottom:16px;padding:12px 14px;font-size:13px;line-height:1.5;">
+        ⚠️ <b>Період завеликий для порядкового завантаження.</b>
+        Кількості, виручка й конверсія нижче — точні${exact ? '' : ' (RPC не відповів — показано лише перші ' + fmtNum(OVERVIEW_CAP) + ')'},
+        але <b>графіки, топ-7 проєктів і таблиці побудовані на перших ${fmtNum(OVERVIEW_CAP)} угодах</b>
+        (найсвіжіших). Щоб усе було точним — звузь період або обери розіграш.
+      </div>` : ''}
 
       <div class="kpi-row-title">КОНВЕРСІЯ ЧЕКАУТУ</div>
       <div class="kpi-grid">
         ${kpi('Всього лідів', fmtNum(totalForConv), leadsCount > 0 ? 'нові checkout-стартів (webhooks)' : 'усі статуси (pay/pending/fail)')}
-        ${kpi('Оплачено', fmtNum(paid.length), fmtPct(conv) + ' success rate', 'green')}
-        ${kpi('Унікальних покупців', fmtNum(uniqEmails), 'utm_email', 'blue')}
-        ${kpi('Виручка', fmtMoney(sum, 'UAH'), 'сума оплачених', 'green')}
-        ${kpi('Середній чек', fmtMoney(avg, 'UAH'), 'revenue / paid', 'blue')}
+        ${kpi('Оплачено', fmtNum(paidCount), fmtPct(conv) + ' success rate', 'green')}
+        ${kpi('Унікальних покупців', (exact ? '≈ ' : '') + fmtNum(buyersCnt), 'utm_email', 'blue')}
+        ${kpi('Виручка', fmtMoney(sumTotal, 'UAH'), 'сума оплачених', 'green')}
+        ${kpi('Середній чек', fmtMoney(paidCount ? sumTotal / paidCount : 0, 'UAH'), 'revenue / paid', 'blue')}
         ${kpi('Джерел', fmtNum(sources), 'utm_source')}
         ${kpi('Кампаній', fmtNum(campaigns), 'utm_campaign')}
         ${kpi('Success rate %', fmtPct(conv), 'paid / ліди', conv >= 70 ? 'green' : 'amber')}
