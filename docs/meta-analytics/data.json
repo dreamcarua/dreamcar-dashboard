@@ -1,112 +1,112 @@
 {
- "generated": "2026-09-14T10:55:11.090701+00:00",
+ "generated": "2026-09-15T10:19:09.647504+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-09-13",
-  "prev_date": "2026-09-12",
-  "spend": 12538.85,
-  "impressions": 76681,
-  "clicks": 1282,
-  "purchases": 159,
-  "pixel_roas": 4.57,
-  "cpa": 78.86,
-  "frequency": 2.92,
-  "real_ad_revenue": 31110,
-  "real_ad_roas": 2.48,
+  "date": "2026-09-14",
+  "prev_date": "2026-09-13",
+  "spend": 10904.9,
+  "impressions": 71872,
+  "clicks": 1191,
+  "purchases": 164,
+  "pixel_roas": 6.85,
+  "cpa": 66.49,
+  "frequency": 2.46,
+  "real_ad_revenue": 26666,
+  "real_ad_roas": 2.45,
   "deltas": {
-   "spend": 23.7,
-   "pixel_roas": -50.1,
-   "purchases": -28.7,
-   "cpa": 73.4
+   "spend": -13.1,
+   "pixel_roas": 49.9,
+   "purchases": 3.1,
+   "cpa": -15.7
   },
   "week": {
    "this": {
-    "from": "2026-09-07",
-    "to": "2026-09-13",
-    "spend": 62333,
-    "purchases": 1214,
-    "pixel_roas": 8.04,
-    "cpa": 51.35,
-    "real_revenue": 237831,
-    "real_roas": 3.82
+    "from": "2026-09-08",
+    "to": "2026-09-14",
+    "spend": 65627,
+    "purchases": 1203,
+    "pixel_roas": 7.81,
+    "cpa": 54.55,
+    "real_revenue": 238369,
+    "real_roas": 3.63
    },
    "prev": {
-    "from": "2026-08-31",
-    "to": "2026-09-06",
-    "spend": 19057,
-    "purchases": 696,
-    "pixel_roas": 12.92,
-    "cpa": 27.38,
-    "real_revenue": 132899,
-    "real_roas": 6.97
+    "from": "2026-09-01",
+    "to": "2026-09-07",
+    "spend": 26673,
+    "purchases": 871,
+    "pixel_roas": 11.61,
+    "cpa": 30.62,
+    "real_revenue": 159027,
+    "real_roas": 5.96
    },
    "deltas": {
-    "spend": 227.1,
-    "real_roas": -45.2,
-    "pixel_roas": -37.8,
-    "cpa": 87.5,
-    "purchases": 74.4
+    "spend": 146.0,
+    "real_roas": -39.1,
+    "pixel_roas": -32.7,
+    "cpa": 78.2,
+    "purchases": 38.1
    }
   },
   "real_by_placement": [
    {
-    "placement": "instagram_reels",
-    "revenue": 9178,
-    "paid": 19
-   },
-   {
     "placement": "instagram_feed",
-    "revenue": 7072,
-    "paid": 26
+    "revenue": 10672,
+    "paid": 27
    },
    {
     "placement": "instagram_stories",
-    "revenue": 6680,
-    "paid": 19
+    "revenue": 7779,
+    "paid": 20
    },
    {
-    "placement": "facebook_stories",
-    "revenue": 2896,
-    "paid": 4
+    "placement": "instagram_reels",
+    "revenue": 6822,
+    "paid": 15
    },
    {
     "placement": "facebook_mobile_feed",
-    "revenue": 2691,
-    "paid": 8
+    "revenue": 796,
+    "paid": 4
    },
    {
     "placement": "facebook_mobile_reels",
-    "revenue": 2593,
-    "paid": 6
+    "revenue": 597,
+    "paid": 2
+   },
+   {
+    "placement": "facebook_stories",
+    "revenue": 0,
+    "paid": 0
    }
   ],
   "active_cycles": [],
   "top_creatives": [
    {
+    "name": "15 пост (рілз) 22 проект AUDI Q7",
+    "ad_id": "120252253732600624",
+    "spend": 637.13,
+    "purchases": 24,
+    "roas": 18.19,
+    "ctr": 2.64
+   },
+   {
+    "name": "третій пост (рілз) 22 проект AUDI Q7",
+    "ad_id": "120252122514540624",
+    "spend": 863.29,
+    "purchases": 12,
+    "roas": 15.3,
+    "ctr": 1.48
+   },
+   {
     "name": "12 пост (рілз) 22 проект AUDI Q7",
     "ad_id": "120252239806980624",
-    "spend": 869.98,
-    "purchases": 16,
-    "roas": 8.16,
-    "ctr": 1.85
-   },
-   {
-    "name": "перший пост (рілз) 22 проект AUDI Q7",
-    "ad_id": "120252097633500624",
-    "spend": 1426.73,
-    "purchases": 21,
-    "roas": 6.17,
-    "ctr": 1.59
-   },
-   {
-    "name": "десятий пост (рілз) 22 проект AUDI Q7",
-    "ad_id": "120252190056850624",
-    "spend": 549.15,
-    "purchases": 11,
-    "roas": 6.14,
-    "ctr": 2.07
+    "spend": 689.59,
+    "purchases": 9,
+    "roas": 6.63,
+    "ctr": 1.83
    }
   ],
   "weak_creatives": []
@@ -11562,17 +11562,12 @@
   {
    "sev": "cri",
    "scope": "Акаунт · тиждень",
-   "text": "Реал ROAS тижня 3.82 vs попереднього 6.97 (-45%) — перевірити креативи/аудиторію/бюджет."
+   "text": "Реал ROAS тижня 3.63 vs попереднього 5.96 (-39%) — перевірити креативи/аудиторію/бюджет."
   },
   {
    "sev": "mod",
    "scope": "Акаунт · тиждень",
-   "text": "CPA тижня 51.35 ₴ vs 27.38 ₴ (+88%) — залучення дорожчає."
-  },
-  {
-   "sev": "mod",
-   "scope": "Вчора (09-13)",
-   "text": "Pixel ROAS вчора впав на 50% до дня раніше — стежити, чи не тренд."
+   "text": "CPA тижня 54.55 ₴ vs 30.62 ₴ (+78%) — залучення дорожчає."
   }
  ],
  "strategy": {
@@ -11585,9 +11580,9 @@
     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
     "status": "ACTIVE",
     "daily_budget": 12000,
-    "spend": 555092,
-    "purchases": 9552,
-    "roas": 7.36,
+    "spend": 564210,
+    "purchases": 9694,
+    "roas": 7.38,
     "ctr": 1.72
    },
    {
