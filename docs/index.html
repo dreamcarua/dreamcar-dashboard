@@ -1794,17 +1794,23 @@ const fmtNum = (v) => {
   return new Intl.NumberFormat('uk-UA').format(v);
 };
 const fmtPct = (v, d=1) => v == null || isNaN(v) ? '—' : v.toFixed(d) + '%';
+// 15.09.2026 P0 FIX (аудит): без timeZone ці дві функції малювали час БРАУЗЕРА,
+// тоді як УСІ агрегати дашборду рахуються по КИЇВСЬКИХ добах (див. ymd і kyivIsoStart).
+// У Польщі (CEST, UTC+2) угода з 20:28 за Києвом показувалась як 19:28 — і не сходилась
+// із SendPulse. Біля півночі розійшлась би й ДАТА: рядок з 21.09 у звіті за 22.09.
+// Двоє людей з різних країн бачили різний час одніï й тієї угоди.
+const KYIV_TZ = 'Europe/Kyiv';
 const fmtDate = (d) => {
   if (!d) return '—';
   const dt = new Date(d);
   if (isNaN(dt)) return '—';
-  return dt.toLocaleDateString('uk-UA', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  return dt.toLocaleDateString('uk-UA', { timeZone: KYIV_TZ, day: '2-digit', month: '2-digit', year: 'numeric' });
 };
 const fmtDateTime = (d) => {
   if (!d) return '—';
   const dt = new Date(d);
   if (isNaN(dt)) return '—';
-  return dt.toLocaleString('uk-UA', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  return dt.toLocaleString('uk-UA', { timeZone: KYIV_TZ, day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 };
 const escapeHtml = (s) => {
   if (s == null) return '';
