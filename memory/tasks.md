@@ -65,39 +65,46 @@ Tracker: none known (<?> — team.dreamcar.ua board?). This file holds what no t
 - ⚪ **`launches` (16) і `dashboard_projects` (13) — два реєстри**, як і записано у пастках. Новий розіграш треба заводити в обидва. [16.09.2026]
 
 
-## 🔴 Знайдено 16.09.2026 — вхід через Google відкритий, роль-гейт лише у JS
+## Рішення Вадима 16.09.2026 — доступ до грошей
 
-Будь-хто з Google-акаунтом може залогінитись і отримати JWT з роллю `authenticated`.
-`handle_new_user` заводить невідому пошту як `member` / `is_active=false` — таких у базі
-вже троє з 13. Сторінки ховають вміст роль-гейтом у JS, але PostgREST про нього не знає.
+**Гроші на рівні БД бачать ceo / coo / lead** (той самий список, що у JS-гейті головного
+дашборду). **Самореєстрацію через Google лишаємо відкритою**, покладаємось на ролі.
 
-Що бачить будь-який залогінений (на рівні БД, в обхід UI):
+Реалізовано:
 
-| Об'єкт | Що віддає |
-|---|---|
-| `dashboard_kpi_summary` і ще ~300 SECURITY DEFINER функцій | повна виручка за будь-який період |
-| `mv_finance_daily_pnl` | щоденний P&L |
-| `mv_dashboard_project_pnl` | P&L по кожному проєкту |
-| `mv_upsell_daily` | виручка A/B |
+- ✅ `dashboard_money_visible(roles)` — гейт: службові виклики (pg_cron без JWT,
+  service_role) проходять; anon ні; залогінений — лише з дозволеною роллю і `is_active`.
+- ✅ Вшито у 7 грошових RPC (`kpi_summary`, `kpi_with_delta`, `extended_kpi`,
+  `daily_series`, `hourly_series`, `hourly_heatmap`, `traffic_type_summary`).
+- ✅ `dashboard_agg_deals_with_traffic`: гілка `else` (повний доступ будь-якому
+  залогіненому) звужена до дозволених ролей. Роль `buyer` лишилась як була.
+- ✅ `dashboard_rpc_cache` — знято політику `rpc_cache_read` (вона тримала сирі
+  результати грошових RPC у jsonb і читалась будь-ким залогіненим, в обхід гейту).
+- ✅ Знято `authenticated` з `mv_finance_daily_pnl`, `mv_dashboard_project_pnl`,
+  `mv_dashboard_utm_agg`, `mv_dashboard_projects_stats` (жодна сторінка не читає їх
+  напряму — тільки SECURITY DEFINER RPC і серверні Edge-функції).
 
-Зроблено 16.09 (`20260916d`, нульовий ризик): закрито `mv_dashboard_utm_agg` і
-`mv_dashboard_projects_stats` — їх читають лише SECURITY DEFINER функції.
+Перевірено підстановкою JWT: ceo/coo/lead → повні дані; member/buyer/cfo/anon → нулі;
+service_role і postgres → повні. Живі сторінки після змін: головний дашборд, Аналітика,
+/finance/ (Net Profit 479,5k грн), /pricing-analysis/ (13 проєктів) — усе працює.
 
-Лишилось — потрібне рішення Вадима, ЯКІ РОЛІ бачать гроші:
+Лишилось по цій темі:
 
-- ⏸ **Роль-чек у money-RPC.** Додати `current_user_has_role([...])` у `dashboard_kpi_summary`,
-  `kpi_with_delta`, `extended_kpi`, `daily_series`, `hourly_series`, `hourly_heatmap`,
-  `traffic_type_summary` — за зразком `dashboard_agg_deals_with_traffic`, у якої такий
-  гейт уже є (`_dash_viewer_ctx`). Питання: `ceo/coo/lead` (як у гейті index.html),
-  чи вужче? І що з роллю `buyer` — вона ходить у зріз `utm_term` і має власне правило.
-- ⏸ **RPC-обгортки для двох P&L-матв'ю** (`mv_finance_daily_pnl`, `mv_dashboard_project_pnl`),
-  щоб зняти з них `authenticated`. Зачіпає сторінки /finance/ і /pricing-analysis/.
+- ⚪ **Фінансові RPC (`dashboard_finance_overview`, `period_pnl`, `project_pnl`,
+  `project_pnl_cached`, `additional_income`) ще не мають роль-чеку.** Вони
+  SECURITY DEFINER і великі (7,5–11,5 КБ plpgsql); вшивати гард автоматично у них
+  ризиковано — на них висять щоденні фінансові звіти. Робити окремим проходом,
+  ролі ceo/coo/cfo (як у JS-гейті /finance/). [16.09.2026]
+- ⚪ **`kasa_bank_page` і `kasa_stale_accounts`** — єдині SECURITY DEFINER серед
+  kasa-функцій, тобто обходять RLS `kasa_is_allowed()`. Решта kasa-RPC —
+  SECURITY INVOKER і вже захищені. [16.09.2026]
 - ⚪ **`upsell_daily` має два перевантаження**, одне SECURITY INVOKER — через нього
-  `mv_upsell_daily` мусить лишатись читабельним для `authenticated`. Звести до одного
-  definer-варіанта, потім закрити матв'ю.
-- ⚪ **Закрити самореєстрацію.** Або обмежити Google-провайдер доменом, або лишити
-  `is_active=false` єдиним джерелом правди і перевіряти його всюди, де є роль-чек.
+  `mv_upsell_daily` мусить лишатись читабельним для `authenticated`. Звести до
+  одного definer-варіанта, потім закрити матв'ю. [16.09.2026]
 - ⚪ **Німий екран при відмові RLS.** RLS віддає ПОРОЖНЄ, а не помилку: Каса під
-  `vg@abrisart.com` півроку показувала нулі, і ніде не було сказано «немає доступу».
-  Той самий клас, що й UTM-фільтри без банера. Треба: порожній результат при
-  непорожньому періоді → підпис «доступ обмежено», а не «0 ₴».
+  `vg@abrisart.com` показувала нулі й ніде не писала «немає доступу». Той самий клас,
+  що й UTM-фільтри без банера. Треба: порожньо при непорожньому періоді → підпис
+  «доступ обмежено». [16.09.2026]
+- ⚪ **CFO не має доступу до головного дашборду** — ні у JS-гейті (`ceo/coo/lead`
+  з червня), ні тепер у БД. Артем працює у /finance/, /kasa/, /pricing-analysis/.
+  Якщо це не навмисно — додати `cfo` в обидва місця. [16.09.2026]
