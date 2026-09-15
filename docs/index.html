@@ -1959,6 +1959,13 @@ function setupFilterBar() {
   });
   $('#f-model').addEventListener('change', e => {
     filters.model = e.target.value;
+    // 15.09.2026 P0 FIX (аудит): раніше хендлер міняв ЛИШЕ filters.model.
+    // filters.project лишався від автовибору, тож «Усі проєкти» за весь період
+    // показували цифри ОДНОГО проєкту: 4 789 оплат і 1,9 млн ₴ за 2019-2026
+    // замість усієї історії. Обидва селекти тримають той самий code, тож синхронізуємо.
+    // Побічно це знімає ризик подвійного фільтра (m.match ilike + sp.in) у fetchDealsRange.
+    filters.project = e.target.value || '';
+    const fp = $('#f-project'); if (fp) fp.value = filters.project;
     const m = getActiveModel();
     if (m && m.start && m.end) {
       // Вибрано конкретний проект → встановити його date range
