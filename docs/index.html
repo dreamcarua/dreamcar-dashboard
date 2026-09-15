@@ -2442,6 +2442,20 @@ function narrowAdsByProject(q) {
   return q;
 }
 
+// 15.09.2026 (аудит): бік ВИТРАТ має звужуватись тими самими UTM, що й бік ВИРУЧКИ.
+// Після того, як UTM поїхали у RPC, виручка фільтрувалась, а spend — ні: на розділі
+// «Виконавець» з фільтром utm_term~fortunatos з'являвся рядок «vadym» з 0 лідів і
+// 102 041 ₴ витрат, і ROAS/ROI по всій таблиці рахувались з різних охоплень.
+// dashboard_ads_data має всі 5 UTM-колонок; семантика ilike '%x%' — як у fetchDealsRange.
+function narrowAdsByUtm(q) {
+  if (filters.utm_source)   q = q.ilike('utm_source',   '%' + filters.utm_source + '%');
+  if (filters.utm_medium)   q = q.ilike('utm_medium',   '%' + filters.utm_medium + '%');
+  if (filters.utm_campaign) q = q.ilike('utm_campaign', '%' + filters.utm_campaign + '%');
+  if (filters.utm_term)     q = q.ilike('utm_term',     '%' + filters.utm_term + '%');
+  if (filters.utm_content)  q = q.ilike('utm_content',  '%' + filters.utm_content + '%');
+  return q;
+}
+
 function adsBaseRange() {
   const sp = getSelectedProject();
   let fromD = filters.from, toD = filters.to;
@@ -3453,7 +3467,7 @@ async function renderOverview() {
         .select('spend')
         .gte('date_start', adsR.fromD)
         .lte('date_start', adsR.toD);
-      aq = narrowAdsByProject(aq);
+      aq = narrowAdsByUtm(narrowAdsByProject(aq));
       const { data } = await aq;
       (data||[]).forEach(r => adSpend += Number(r.spend||0));
     } catch(e) {}
@@ -3972,6 +3986,7 @@ async function renderUtmField(field, title, csvName) {
       if (!['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].includes(field)) {
         adsQ = narrowAdsByProject(adsQ);
       }
+      adsQ = narrowAdsByUtm(adsQ);
       const { data: ads } = await adsQ;
       (ads||[]).forEach(a => {
         const k = a[field] || '(none)';
@@ -4078,7 +4093,7 @@ async function renderCampaigns() {
   try {
     const [rows, adsRes] = await Promise.all([
       fetchAllDealsBatched(30000),
-      (function(){ const r = adsBaseRange(); return narrowAdsByProject(sb.from('dashboard_ads_data').select('campaign_name, spend, impressions, clicks').gte('date_start', r.fromD).lte('date_start', r.toD)); })()
+      (function(){ const r = adsBaseRange(); return narrowAdsByUtm(narrowAdsByProject(sb.from('dashboard_ads_data').select('campaign_name, spend, impressions, clicks').gte('date_start', r.fromD).lte('date_start', r.toD))); })()
     ]);
     const agg = aggregateByField(rows, 'utm_campaign');
     const adMap = new Map();
@@ -4839,8 +4854,8 @@ async function renderAdsOverview() {
     let offset = 0; const BATCH = 1000;
     const _adsR1 = adsBaseRange();
     while (true) {
-      const { data, error } = await narrowAdsByProject(sb.from('dashboard_ads_data').select('*')
-        .gte('date_start', _adsR1.fromD).lte('date_start', _adsR1.toD))
+      const { data, error } = await narrowAdsByUtm(narrowAdsByProject(sb.from('dashboard_ads_data').select('*')
+        .gte('date_start', _adsR1.fromD).lte('date_start', _adsR1.toD)))
         .order('date_start', { ascending: true })
         .range(offset, offset + BATCH - 1);
       if (error) throw error;
@@ -4908,8 +4923,8 @@ async function renderAdsCampaigns() {
     let offset = 0; const BATCH = 1000;
     const _adsR2 = adsBaseRange();
     while (true) {
-      const { data, error } = await narrowAdsByProject(sb.from('dashboard_ads_data').select('*')
-        .gte('date_start', _adsR2.fromD).lte('date_start', _adsR2.toD))
+      const { data, error } = await narrowAdsByUtm(narrowAdsByProject(sb.from('dashboard_ads_data').select('*')
+        .gte('date_start', _adsR2.fromD).lte('date_start', _adsR2.toD)))
         .order('date_start', { ascending: true })
         .range(offset, offset + BATCH - 1);
       if (error) throw error;
