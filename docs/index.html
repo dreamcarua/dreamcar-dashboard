@@ -3694,10 +3694,20 @@ async function renderAnalytics() {
     // там, де чесна відповідь — «немає з чим порівняти». Помітно на будь-якому
     // новому циклі: Audi Q7 + utm_term~fortunatos → 749 замовлень і «▲ +0%».
     const dltRaw = v => (v === null || v === undefined || v === '') ? null : Number(v);
-    const dltCell = v => {
+    // 16.09.2026 (аудит): «▲ +12580.9%» технічно правдиве, але нечитабельне — і головне,
+    // не видно БАЗИ. На старті циклу попередній період майже порожній (47 замовлень проти
+    // 5 960), і відсоток перестає означати що-небудь. Понад +500% показуємо кратністю,
+    // а базу кладемо у title — щоб було видно, з чим порівнюємо.
+    const dltCell = (v, prev, fmt) => {
       const n = dltRaw(v);
       if (n == null) return `<span class="pill" title="Попередній період надто малий (&lt;5 записів) — порівнювати нема з чим">—</span>`;
-      return `<span class="pill ${dltClass(n)}">${dlt(n)}</span>`;
+      const base = dltRaw(prev);
+      const baseTxt = base == null ? '' : ` Попередній період: ${(fmt || fmtNum)(base)}.`;
+      if (n >= 500) {
+        const mult = 1 + n / 100;
+        return `<span class="pill ${dltClass(n)}" title="Зростання у ${mult.toFixed(1)} раза.${baseTxt}">×${mult >= 10 ? Math.round(mult) : mult.toFixed(1)}</span>`;
+      }
+      return `<span class="pill ${dltClass(n)}" title="${baseTxt.trim() || 'Порівняння з попереднім рівнозначним періодом'}">${dlt(n)}</span>`;
     };
 
     const topMediums = mediums.slice(0, 5);
@@ -3717,17 +3727,17 @@ async function renderAnalytics() {
         <div class="kpi-card blue">
           <div class="kpi-label" title="К-сть рядків у dashboard_deals: всі статуси pay/pending/fail. Це NOT маркетингові ліди — це checkout-замовлення">Замовлення</div>
           <div class="kpi-value">${fmtNum(Number(k.total||0))}</div>
-          <div class="kpi-meta">${dltCell(k.total_delta)} vs попередній період</div>
+          <div class="kpi-meta">${dltCell(k.total_delta, k.prev_total)} vs попередній період</div>
         </div>
         <div class="kpi-card green">
           <div class="kpi-label">Оплачено</div>
           <div class="kpi-value">${fmtNum(Number(k.paid||0))}</div>
-          <div class="kpi-meta">${fmtPct(Number(k.paid_rate||0))} success rate · ${dltCell(k.paid_delta)}</div>
+          <div class="kpi-meta">${fmtPct(Number(k.paid_rate||0))} success rate · ${dltCell(k.paid_delta, k.prev_paid)}</div>
         </div>
         <div class="kpi-card red">
           <div class="kpi-label">Виручка UAH</div>
           <div class="kpi-value">${fmtMoney(Number(k.revenue||0))}</div>
-          <div class="kpi-meta">${dltCell(k.revenue_delta)} vs попередній</div>
+          <div class="kpi-meta">${dltCell(k.revenue_delta, k.prev_revenue, fmtMoney)} vs попередній</div>
         </div>
         <div class="kpi-card amber">
           <div class="kpi-label">Сер. чек (AOV)</div>
