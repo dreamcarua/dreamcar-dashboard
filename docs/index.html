@@ -3703,6 +3703,12 @@ async function renderAnalytics() {
       if (n == null) return `<span class="pill" title="Попередній період надто малий (&lt;5 записів) — порівнювати нема з чим">—</span>`;
       const base = dltRaw(prev);
       const baseTxt = base == null ? '' : ` Попередній період: ${(fmt || fmtNum)(base)}.`;
+      // Поріг «5 записів» у RPC ловить лише абсолютний нуль. Але 47 замовлень проти
+      // 6 008 (0,8 %) — це теж «нема з чим порівняти», просто у відсотках воно
+      // виглядає як бадьорий ×128. n >= 1900 % означає, що база менша за 5 % поточного.
+      if (n >= 1900) {
+        return `<span class="pill" title="Попередній період фактично порожній${baseTxt ? ':' + baseTxt.replace(' Попередній період:','') : ''} — порівнювати нема з чим">—</span>`;
+      }
       if (n >= 500) {
         const mult = 1 + n / 100;
         return `<span class="pill ${dltClass(n)}" title="Зростання у ${mult.toFixed(1)} раза.${baseTxt}">×${mult >= 10 ? Math.round(mult) : mult.toFixed(1)}</span>`;
