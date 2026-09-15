@@ -2409,7 +2409,16 @@ function _rpcParams() {
     p_tariff: filters.tariff || null,
     p_pay_provider: filters.pay_provider || null,
     // 08.06.2026 R3: traffic_type тепер передається у всі RPCs (KPI/series/extended)
-    p_traffic_type: filters.traffic_type || null
+    p_traffic_type: filters.traffic_type || null,
+    // 15.09.2026: UTM тепер звужується на сервері (міграція 20260915h).
+    // Раніше UTM-фільтри працювали ЛИШЕ над сирими рядками (Огляд/Таблиця), а всі
+    // серверні агрегації їх мовчки ігнорували і показували невідфільтроване як
+    // відфільтроване. '(none)' у фільтрі матчить порожнє/NULL — як у ключах агрегації.
+    p_utm_source:   filters.utm_source   || null,
+    p_utm_medium:   filters.utm_medium   || null,
+    p_utm_campaign: filters.utm_campaign || null,
+    p_utm_term:     filters.utm_term     || null,
+    p_utm_content:  filters.utm_content  || null
   };
 }
 
@@ -3204,15 +3213,6 @@ const UTM_SECTIONS = new Set(['overview','analytics','sources','medium','campaig
 const ADS_SECTIONS = new Set(['ads-overview','ads-campaigns']);
 const NOFILTER_SECTIONS = new Set(['projects','webhooks','mapping','costs','cards','usdt','payroll','settings','help']);
 
-// 15.09.2026 P0 FIX (аудит): розділи, що беруть числа з RPC-агрегацій. Ці RPC мають
-// параметри project/customer_type/tariff/pay_provider/traffic_type — але НЕ мають UTM.
-// Тож UTM free-text фільтри тут мовчки ігнорувались: користувач вводив utm_term=fortunatos,
-// лічильник фільтрів показував «4», а цифри лишались незмінними (5 908 замість 740).
-// На маршрутах, що читають угоди порядково (overview/campaigns/deals), фільтр працює.
-const RPC_ONLY_SECTIONS = new Set(['analytics','sources','medium','content','terms','combos']);
-const UTM_FILTER_KEYS = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
-function activeUtmFilters() { return UTM_FILTER_KEYS.filter(k => filters[k]); }
-
 /* ---------------- OVERVIEW ---------------- */
 /* ---------------- PROJECTS OVERVIEW ---------------- */
 async function renderProjectsOverview() {
@@ -3654,8 +3654,11 @@ async function renderAnalytics() {
   try {
     const params = _rpcParams();
     const isToday = (filters.from === filters.to);
-    // Extended KPI params (без p_traffic_type — не підтримується)
-    const extParams = { p_from: params.p_from, p_to: params.p_to, p_project_values: params.p_project_values, p_customer_type: params.p_customer_type, p_tariff: params.p_tariff, p_pay_provider: params.p_pay_provider };
+    // 15.09.2026: коментар «без p_traffic_type — не підтримується» був застарілий —
+    // dashboard_extended_kpi приймає p_traffic_type ще з 08.06.2026, а з 20260915h ще й UTM.
+    // Через це плитки «Медіана/P90/Повторні покупці» ігнорували фільтр трафіку й UTM
+    // і показували інші числа, ніж решта того самого екрана.
+    const extParams = params;
     const [kpiDelta, daily, hourly, mediums, campaigns, sources, trafficSplit, extKpi] = await Promise.all([
       sb.rpc('dashboard_kpi_with_delta', params).then(r => r.error ? null : (r.data||[])[0]),
       dailySeriesRPC(),
@@ -5345,18 +5348,8 @@ async function renderRoute() {
   const fn = SECTIONS[route];
   try {
     await fn();
-    // 15.09.2026: краще чесно сказати, що фільтр не застосовано, ніж показати невідфільтроване як відфільтроване.
-    const _utmOn = activeUtmFilters();
-    if (_utmOn.length && RPC_ONLY_SECTIONS.has(route)) {
-      const c = $('#content');
-      if (c) c.insertAdjacentHTML('afterbegin',
-        `<div class="card" style="border-left:3px solid var(--amber,#f0a500);margin-bottom:16px;padding:12px 14px;font-size:13px;line-height:1.5;">
-          ⚠️ <b>UTM-фільтри на цьому екрані НЕ застосовуються.</b>
-          Активні: <code>${_utmOn.map(k => escapeHtml(k + '=' + filters[k])).join('</code>, <code>')}</code>.
-          Цей розділ бере числа з серверної агрегації, яка UTM не вміє звужувати.
-          Для зрізу по UTM — «Огляд», «Кампанії» або «Таблиця»: там він працює.
-        </div>`);
-    }
+    // 15.09.2026: банер «UTM-фільтри тут не застосовуються» прибрано — міграція 20260915h
+    // навчила самі RPC приймати p_utm_* , тож UTM звужується на кожному екрані.
   } catch (e) {
     console.error('route error', e);
     $('#content').innerHTML = errorHTML(e);
