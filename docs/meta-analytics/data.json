@@ -1,85 +1,85 @@
 {
- "generated": "2026-09-21T10:59:44.870884+00:00",
+ "generated": "2026-09-22T10:13:48.946626+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-09-20",
-  "prev_date": "2026-09-19",
-  "spend": 27903.28,
-  "impressions": 144205,
-  "clicks": 2545,
-  "purchases": 172,
-  "pixel_roas": 2.89,
-  "cpa": 162.23,
-  "frequency": 2.81,
-  "real_ad_revenue": 33623,
-  "real_ad_roas": 1.2,
+  "date": "2026-09-21",
+  "prev_date": "2026-09-20",
+  "spend": 21917.55,
+  "impressions": 123294,
+  "clicks": 2387,
+  "purchases": 155,
+  "pixel_roas": 2.94,
+  "cpa": 141.4,
+  "frequency": 2.64,
+  "real_ad_revenue": 33804,
+  "real_ad_roas": 1.54,
   "deltas": {
-   "spend": -27.6,
-   "pixel_roas": -72.8,
-   "purchases": -78.6,
-   "cpa": 238.0
+   "spend": -21.5,
+   "pixel_roas": 1.7,
+   "purchases": -9.9,
+   "cpa": -12.9
   },
   "week": {
    "this": {
-    "from": "2026-09-14",
-    "to": "2026-09-20",
-    "spend": 146803,
-    "purchases": 1891,
-    "pixel_roas": 6.35,
-    "cpa": 77.63,
-    "real_revenue": 409777,
-    "real_roas": 2.79
+    "from": "2026-09-15",
+    "to": "2026-09-21",
+    "spend": 157825,
+    "purchases": 1882,
+    "pixel_roas": 5.84,
+    "cpa": 83.86,
+    "real_revenue": 416915,
+    "real_roas": 2.64
    },
    "prev": {
-    "from": "2026-09-07",
-    "to": "2026-09-13",
-    "spend": 62337,
-    "purchases": 1214,
-    "pixel_roas": 8.04,
-    "cpa": 51.35,
-    "real_revenue": 237831,
-    "real_roas": 3.82
+    "from": "2026-09-08",
+    "to": "2026-09-14",
+    "spend": 65631,
+    "purchases": 1203,
+    "pixel_roas": 7.81,
+    "cpa": 54.56,
+    "real_revenue": 238369,
+    "real_roas": 3.63
    },
    "deltas": {
-    "spend": 135.5,
-    "real_roas": -27.0,
-    "pixel_roas": -21.0,
-    "cpa": 51.2,
-    "purchases": 55.8
+    "spend": 140.5,
+    "real_roas": -27.3,
+    "pixel_roas": -25.2,
+    "cpa": 53.7,
+    "purchases": 56.4
    }
   },
   "real_by_placement": [
    {
     "placement": "instagram_feed",
-    "revenue": 8370,
-    "paid": 30
+    "revenue": 12267,
+    "paid": 31
    },
    {
     "placement": "instagram_reels",
-    "revenue": 7751,
-    "paid": 25
+    "revenue": 8575,
+    "paid": 24
    },
    {
     "placement": "instagram_stories",
-    "revenue": 7329,
-    "paid": 18
+    "revenue": 7176,
+    "paid": 24
    },
    {
     "placement": "facebook_mobile_feed",
-    "revenue": 4485,
-    "paid": 13
-   },
-   {
-    "placement": "facebook_stories",
-    "revenue": 3594,
-    "paid": 4
+    "revenue": 3193,
+    "paid": 7
    },
    {
     "placement": "facebook_mobile_reels",
-    "revenue": 2094,
-    "paid": 6
+    "revenue": 1696,
+    "paid": 4
+   },
+   {
+    "placement": "facebook_stories",
+    "revenue": 897,
+    "paid": 3
    }
   ],
   "active_cycles": [
@@ -87,54 +87,54 @@
   ],
   "top_creatives": [
    {
-    "name": "11 пост (рілз) 22 проект AUDI Q7",
-    "ad_id": "120252190056870624",
-    "spend": 637.5,
-    "purchases": 5,
-    "roas": 17.31,
-    "ctr": 2.22
+    "name": "не биток пост  (рілз) 22 проект AUDI Q7",
+    "ad_id": "120252329751190624",
+    "spend": 756.02,
+    "purchases": 10,
+    "roas": 11.44,
+    "ctr": 2.45
    },
    {
-    "name": "девʼятий пост (рілз) 22 проект AUDI Q7",
-    "ad_id": "120252190056860624",
-    "spend": 621.96,
-    "purchases": 4,
-    "roas": 7.17,
-    "ctr": 1.39
+    "name": "перший пост (рілз) 22 проект AUDI Q7",
+    "ad_id": "120252097633500624",
+    "spend": 1411.56,
+    "purchases": 23,
+    "roas": 7.93,
+    "ctr": 1.89
    },
    {
-    "name": "17 пост командний (рілз) 22 проект AUDI Q7",
-    "ad_id": "120252277070330624",
-    "spend": 318.7,
-    "purchases": 3,
-    "roas": 6.28,
-    "ctr": 2.06
+    "name": "третій пост (рілз) 22 проект AUDI Q7",
+    "ad_id": "120252122514540624",
+    "spend": 435.19,
+    "purchases": 7,
+    "roas": 6.83,
+    "ctr": 2.3
    }
   ],
   "weak_creatives": [
    {
-    "name": "четвертий пост (картинка) Q7 · LAL · claude",
-    "ad_id": "120252288732000624",
-    "spend": 2597.72,
-    "purchases": 7,
-    "roas": 0.9,
-    "ctr": 1.67
-   },
-   {
     "name": "посл багажник (рілз) 22 проект AUDI Q7 – копія",
     "ad_id": "120252343909820624",
-    "spend": 2405.5,
-    "purchases": 8,
-    "roas": 1.28,
-    "ctr": 1.5
+    "spend": 4268.81,
+    "purchases": 21,
+    "roas": 1.75,
+    "ctr": 2.49
    },
    {
-    "name": "четвертий пост (картинка) Q7 · Retarget · claude",
-    "ad_id": "120252288696270624",
-    "spend": 1242.19,
+    "name": "14 пост командний (рілз) 22 проект AUDI Q7",
+    "ad_id": "120252239806970624",
+    "spend": 2124.43,
+    "purchases": 12,
+    "roas": 1.63,
+    "ctr": 1.97
+   },
+   {
+    "name": "четвертий пост (картинка) Q7 · LAL · claude",
+    "ad_id": "120252288732000624",
+    "spend": 1621.59,
     "purchases": 4,
-    "roas": 0.89,
-    "ctr": 1.34
+    "roas": 0.98,
+    "ctr": 1.72
    }
   ]
  },
@@ -340,6 +340,14 @@
      "ctr": 3.45
     },
     {
+     "name": "ad453_video_10p",
+     "ad_id": "120234204098670624",
+     "spend": 2.76,
+     "purchases": 1,
+     "roas": 72.1,
+     "ctr": 4.17
+    },
+    {
      "name": "ad_post_id_1055591056764675_1707",
      "ad_id": "120231434629860624",
      "spend": 25.17,
@@ -365,11 +373,59 @@
     },
     {
      "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120234995138280624",
+     "spend": 1758.34,
+     "purchases": 84,
+     "roas": 51.18,
+     "ctr": 1.55
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
      "ad_id": "120227636015760624",
      "spend": 222.2,
      "purchases": 5,
      "roas": 48.79,
      "ctr": 2.53
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі»",
+     "ad_id": "120234994913310624",
+     "spend": 253.16,
+     "purchases": 11,
+     "roas": 42.22,
+     "ctr": 2.07
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі»",
+     "ad_id": "120234995383370624",
+     "spend": 1639.75,
+     "purchases": 84,
+     "roas": 42.21,
+     "ctr": 2.12
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120234995138290624",
+     "spend": 2135.18,
+     "purchases": 113,
+     "roas": 42.13,
+     "ctr": 1.43
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120234995138270624",
+     "spend": 563.93,
+     "purchases": 29,
+     "roas": 42.05,
+     "ctr": 1.39
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120234995491230624",
+     "spend": 4131.56,
+     "purchases": 230,
+     "roas": 36.89,
+     "ctr": 1.52
     },
     {
      "name": "ad_post_id_1053934883596959_1507",
@@ -516,6 +572,14 @@
      "ctr": 3.34
     },
     {
+     "name": "ad453_video_10p",
+     "ad_id": "120234171778610624",
+     "spend": 59.18,
+     "purchases": 1,
+     "roas": 16.04,
+     "ctr": 4.05
+    },
+    {
      "name": "Нова реклама з ціллю «Продажі»",
      "ad_id": "120230448978750624",
      "spend": 27063.82,
@@ -626,6 +690,14 @@
      "purchases": 1,
      "roas": 13.58,
      "ctr": 1.77
+    },
+    {
+     "name": "ad456_video_10p",
+     "ad_id": "120234204097990624",
+     "spend": 90.18,
+     "purchases": 2,
+     "roas": 13.39,
+     "ctr": 0.86
     },
     {
      "name": "Нова реклама з ціллю «Продажі» – копія",
@@ -772,12 +844,28 @@
      "ctr": 2.96
     },
     {
+     "name": "ad456_video_10p",
+     "ad_id": "120234204097980624",
+     "spend": 84.86,
+     "purchases": 1,
+     "roas": 11.18,
+     "ctr": 1.06
+    },
+    {
      "name": "Нова реклама з ціллю «Продажі» – копія – копія",
      "ad_id": "120230449222210624",
      "spend": 313.51,
      "purchases": 7,
      "roas": 11.13,
      "ctr": 2.8
+    },
+    {
+     "name": "ad450_video_10p",
+     "ad_id": "120234204098610624",
+     "spend": 572.44,
+     "purchases": 13,
+     "roas": 10.88,
+     "ctr": 2.6
     },
     {
      "name": "ad_post_id_1055590110098103_1707",
@@ -818,6 +906,14 @@
      "purchases": 5,
      "roas": 10.47,
      "ctr": 1.03
+    },
+    {
+     "name": "ad453_video_10p",
+     "ad_id": "120234220866050624",
+     "spend": 76.35,
+     "purchases": 4,
+     "roas": 10.43,
+     "ctr": 2.21
     },
     {
      "name": "Нова реклама з ціллю «Продажі»",
@@ -868,6 +964,14 @@
      "ctr": 0.91
     },
     {
+     "name": "ad453_video_10p",
+     "ad_id": "120234220865580624",
+     "spend": 82.88,
+     "purchases": 4,
+     "roas": 9.6,
+     "ctr": 1.91
+    },
+    {
      "name": "ad305_video_199",
      "ad_id": "120232097539430624",
      "spend": 426.35,
@@ -876,12 +980,28 @@
      "ctr": 2.43
     },
     {
+     "name": "ad450_video_10p",
+     "ad_id": "120234204880350624",
+     "spend": 83.02,
+     "purchases": 2,
+     "roas": 9.59,
+     "ctr": 1.16
+    },
+    {
      "name": "Нова реклама з ціллю «Продажі» – копія",
      "ad_id": "120227635702190624",
      "spend": 100.22,
      "purchases": 1,
      "roas": 9.47,
      "ctr": 2.63
+    },
+    {
+     "name": "ad450_video_10p",
+     "ad_id": "120234220865990624",
+     "spend": 338.04,
+     "purchases": 9,
+     "roas": 9.39,
+     "ctr": 1.3
     },
     {
      "name": "ad_post_id_1053932926930488_1507",
@@ -898,6 +1018,14 @@
      "purchases": 696,
      "roas": 9.21,
      "ctr": 3.54
+    },
+    {
+     "name": "ad456_video_10p",
+     "ad_id": "120234220811070624",
+     "spend": 660.71,
+     "purchases": 12,
+     "roas": 9.2,
+     "ctr": 1.24
     },
     {
      "name": "Нова реклама з ціллю «Продажі»",
@@ -978,137 +1106,220 @@
      "purchases": 533,
      "roas": 8.72,
      "ctr": 3.39
-    },
-    {
-     "name": "Нова реклама з ціллю «Продажі» – копія",
-     "ad_id": "120225185556000624",
-     "spend": 1208.51,
-     "purchases": 12,
-     "roas": 8.6,
-     "ctr": 1.8
-    },
-    {
-     "name": "ad302_image_199",
-     "ad_id": "120232172797950624",
-     "spend": 23.62,
-     "purchases": 1,
-     "roas": 8.43,
-     "ctr": 2.47
-    },
-    {
-     "name": "Нова реклама з ціллю «Продажі» – копія – копія",
-     "ad_id": "120230449222220624",
-     "spend": 1797.28,
-     "purchases": 46,
-     "roas": 8.29,
-     "ctr": 2.47
-    },
-    {
-     "name": "Нова реклама з ціллю «Продажі»",
-     "ad_id": "120223781985970624",
-     "spend": 9424.39,
-     "purchases": 212,
-     "roas": 8.2,
-     "ctr": 2.45
-    },
-    {
-     "name": "ad_post_id_1055591056764675_1707",
-     "ad_id": "120231433010140624",
-     "spend": 49.18,
-     "purchases": 2,
-     "roas": 8.09,
-     "ctr": 2.48
-    },
-    {
-     "name": "ad302_image_199",
-     "ad_id": "120232173000010624",
-     "spend": 1270.41,
-     "purchases": 24,
-     "roas": 8.05,
-     "ctr": 0.51
-    },
-    {
-     "name": "Нова реклама з ціллю «Продажі» – копія",
-     "ad_id": "120225026422310624",
-     "spend": 1848.84,
-     "purchases": 54,
-     "roas": 7.9,
-     "ctr": 2.47
-    },
-    {
-     "name": "ad454_video_10p",
-     "ad_id": "120233104601340624",
-     "spend": 2878.25,
-     "purchases": 45,
-     "roas": 7.84,
-     "ctr": 1.18
-    },
-    {
-     "name": "ad303_video_199",
-     "ad_id": "120232097432940624",
-     "spend": 51.0,
-     "purchases": 2,
-     "roas": 7.8,
-     "ctr": 2.81
-    },
-    {
-     "name": "ad_post_id_1055590110098103_1707",
-     "ad_id": "120232301528260624",
-     "spend": 4115.76,
-     "purchases": 66,
-     "roas": 7.8,
-     "ctr": 2.43
-    },
-    {
-     "name": "ad206_video",
-     "ad_id": "120232058521660624",
-     "spend": 121.84,
-     "purchases": 1,
-     "roas": 7.79,
-     "ctr": 1.1
-    },
-    {
-     "name": "ad454_video_10p",
-     "ad_id": "120233104670830624",
-     "spend": 2781.45,
-     "purchases": 42,
-     "roas": 7.77,
-     "ctr": 4.18
-    },
-    {
-     "name": "Кампанія з комерційної реклами Advantage+ 03.04.2025 Реклама",
-     "ad_id": "120222473098150624",
-     "spend": 8737.64,
-     "purchases": 440,
-     "roas": 7.74,
-     "ctr": 3.73
-    },
-    {
-     "name": "ad463_video_10p",
-     "ad_id": "120233748015040624",
-     "spend": 2254.02,
-     "purchases": 38,
-     "roas": 7.73,
-     "ctr": 1.39
-    },
-    {
-     "name": "ad001_video_fomo",
-     "ad_id": "120231523499100624",
-     "spend": 2783.37,
-     "purchases": 69,
-     "roas": 7.72,
-     "ctr": 1.66
-    },
-    {
-     "name": "ad305_video_199",
-     "ad_id": "120232172999980624",
-     "spend": 3012.4,
-     "purchases": 49,
-     "roas": 7.58,
-     "ctr": 1.43
     }
    ],
-   "series": [],
+   "series": [
+    {
+     "date": "2025-08-13",
+     "spend": 25554.57,
+     "purchases": 228,
+     "roas": 2.83,
+     "cpa": 112.08
+    },
+    {
+     "date": "2025-08-14",
+     "spend": 19942.45,
+     "purchases": 260,
+     "roas": 4.79,
+     "cpa": 76.7
+    },
+    {
+     "date": "2025-08-15",
+     "spend": 16460.28,
+     "purchases": 213,
+     "roas": 6.22,
+     "cpa": 77.28
+    },
+    {
+     "date": "2025-08-16",
+     "spend": 16330.42,
+     "purchases": 182,
+     "roas": 4.58,
+     "cpa": 89.73
+    },
+    {
+     "date": "2025-08-17",
+     "spend": 16758.18,
+     "purchases": 177,
+     "roas": 3.11,
+     "cpa": 94.68
+    },
+    {
+     "date": "2025-08-18",
+     "spend": 15849.07,
+     "purchases": 175,
+     "roas": 3.74,
+     "cpa": 90.57
+    },
+    {
+     "date": "2025-08-19",
+     "spend": 14773.74,
+     "purchases": 161,
+     "roas": 4.26,
+     "cpa": 91.76
+    },
+    {
+     "date": "2025-08-20",
+     "spend": 19803.62,
+     "purchases": 137,
+     "roas": 2.69,
+     "cpa": 144.55
+    },
+    {
+     "date": "2025-08-21",
+     "spend": 30286.02,
+     "purchases": 466,
+     "roas": 5.62,
+     "cpa": 64.99
+    },
+    {
+     "date": "2025-08-22",
+     "spend": 43895.47,
+     "purchases": 697,
+     "roas": 6.03,
+     "cpa": 62.98
+    },
+    {
+     "date": "2025-08-23",
+     "spend": 41435.66,
+     "purchases": 566,
+     "roas": 4.15,
+     "cpa": 73.21
+    },
+    {
+     "date": "2025-08-24",
+     "spend": 51302.89,
+     "purchases": 556,
+     "roas": 3.21,
+     "cpa": 92.27
+    },
+    {
+     "date": "2025-08-25",
+     "spend": 31886.05,
+     "purchases": 389,
+     "roas": 4.06,
+     "cpa": 81.97
+    },
+    {
+     "date": "2025-08-26",
+     "spend": 33448.16,
+     "purchases": 373,
+     "roas": 4.01,
+     "cpa": 89.67
+    },
+    {
+     "date": "2025-08-27",
+     "spend": 33527.16,
+     "purchases": 366,
+     "roas": 3.15,
+     "cpa": 91.6
+    },
+    {
+     "date": "2025-08-28",
+     "spend": 31982.9,
+     "purchases": 358,
+     "roas": 3.01,
+     "cpa": 89.34
+    },
+    {
+     "date": "2025-08-29",
+     "spend": 18562.03,
+     "purchases": 171,
+     "roas": 3.09,
+     "cpa": 108.55
+    },
+    {
+     "date": "2025-08-30",
+     "spend": 26377.54,
+     "purchases": 411,
+     "roas": 4.61,
+     "cpa": 64.18
+    },
+    {
+     "date": "2025-08-31",
+     "spend": 15440.81,
+     "purchases": 314,
+     "roas": 5.39,
+     "cpa": 49.17
+    },
+    {
+     "date": "2025-09-01",
+     "spend": 0.0,
+     "purchases": 0,
+     "roas": 0.0,
+     "cpa": null
+    },
+    {
+     "date": "2025-09-02",
+     "spend": 0.0,
+     "purchases": 0,
+     "roas": 0.0,
+     "cpa": null
+    },
+    {
+     "date": "2025-09-03",
+     "spend": 0.0,
+     "purchases": 0,
+     "roas": 0.0,
+     "cpa": null
+    },
+    {
+     "date": "2025-09-11",
+     "spend": 186.39,
+     "purchases": 12,
+     "roas": 28.09,
+     "cpa": 15.53
+    },
+    {
+     "date": "2025-09-12",
+     "spend": 2506.05,
+     "purchases": 127,
+     "roas": 44.06,
+     "cpa": 19.73
+    },
+    {
+     "date": "2025-09-13",
+     "spend": 1417.1,
+     "purchases": 54,
+     "roas": 38.97,
+     "cpa": 26.24
+    },
+    {
+     "date": "2025-09-14",
+     "spend": 2071.83,
+     "purchases": 122,
+     "roas": 40.73,
+     "cpa": 16.98
+    },
+    {
+     "date": "2025-09-15",
+     "spend": 2581.99,
+     "purchases": 125,
+     "roas": 36.49,
+     "cpa": 20.66
+    },
+    {
+     "date": "2025-09-16",
+     "spend": 1718.56,
+     "purchases": 111,
+     "roas": 50.33,
+     "cpa": 15.48
+    },
+    {
+     "date": "2025-09-17",
+     "spend": 0.0,
+     "purchases": 0,
+     "roas": 0.0,
+     "cpa": null
+    },
+    {
+     "date": "2025-09-18",
+     "spend": 0.0,
+     "purchases": 0,
+     "roas": 0.0,
+     "cpa": null
+    }
+   ],
    "adsets": [
     {
      "name": "Новий набір реклами з ціллю «Продажі»",
@@ -1187,7 +1398,7 @@
     },
     {
      "sev": "inf",
-     "text": "Лідер: «Нова реклама з ціллю «Продажі» – копія» ROAS 23.83, CTR 4.52% — масштабувати й дублювати в інші adset."
+     "text": "Лідер: «Нова реклама з ціллю «Продажі» – копія» ROAS 51.18, CTR 1.55% — масштабувати й дублювати в інші adset."
     },
     {
      "sev": "inf",
@@ -5304,7 +5515,197 @@
      "ctr": 1.95
     }
    ],
-   "series": [],
+   "series": [
+    {
+     "date": "2026-03-24",
+     "spend": 5109.88,
+     "purchases": 136,
+     "roas": 10.77,
+     "cpa": 37.57
+    },
+    {
+     "date": "2026-03-25",
+     "spend": 6971.97,
+     "purchases": 207,
+     "roas": 12.66,
+     "cpa": 33.68
+    },
+    {
+     "date": "2026-03-26",
+     "spend": 11838.91,
+     "purchases": 402,
+     "roas": 14.99,
+     "cpa": 29.45
+    },
+    {
+     "date": "2026-03-27",
+     "spend": 13758.19,
+     "purchases": 342,
+     "roas": 9.64,
+     "cpa": 40.23
+    },
+    {
+     "date": "2026-03-28",
+     "spend": 18071.04,
+     "purchases": 708,
+     "roas": 16.03,
+     "cpa": 25.52
+    },
+    {
+     "date": "2026-03-29",
+     "spend": 17934.98,
+     "purchases": 958,
+     "roas": 23.65,
+     "cpa": 18.72
+    },
+    {
+     "date": "2026-03-30",
+     "spend": 10359.68,
+     "purchases": 166,
+     "roas": 7.05,
+     "cpa": 62.41
+    },
+    {
+     "date": "2026-03-31",
+     "spend": 11492.14,
+     "purchases": 178,
+     "roas": 9.79,
+     "cpa": 64.56
+    },
+    {
+     "date": "2026-04-01",
+     "spend": 14650.82,
+     "purchases": 146,
+     "roas": 6.86,
+     "cpa": 100.35
+    },
+    {
+     "date": "2026-04-02",
+     "spend": 13384.96,
+     "purchases": 80,
+     "roas": 2.69,
+     "cpa": 167.31
+    },
+    {
+     "date": "2026-04-03",
+     "spend": 27945.94,
+     "purchases": 490,
+     "roas": 7.17,
+     "cpa": 57.03
+    },
+    {
+     "date": "2026-04-04",
+     "spend": 20193.99,
+     "purchases": 391,
+     "roas": 9.68,
+     "cpa": 51.65
+    },
+    {
+     "date": "2026-04-05",
+     "spend": 25416.4,
+     "purchases": 359,
+     "roas": 5.78,
+     "cpa": 70.8
+    },
+    {
+     "date": "2026-04-06",
+     "spend": 21750.49,
+     "purchases": 244,
+     "roas": 4.5,
+     "cpa": 89.14
+    },
+    {
+     "date": "2026-04-07",
+     "spend": 15779.3,
+     "purchases": 100,
+     "roas": 2.91,
+     "cpa": 157.79
+    },
+    {
+     "date": "2026-04-08",
+     "spend": 31230.24,
+     "purchases": 170,
+     "roas": 5.01,
+     "cpa": 183.71
+    },
+    {
+     "date": "2026-04-09",
+     "spend": 43005.7,
+     "purchases": 650,
+     "roas": 9.5,
+     "cpa": 66.16
+    },
+    {
+     "date": "2026-04-10",
+     "spend": 22852.97,
+     "purchases": 128,
+     "roas": 2.15,
+     "cpa": 178.54
+    },
+    {
+     "date": "2026-04-11",
+     "spend": 53155.79,
+     "purchases": 373,
+     "roas": 3.21,
+     "cpa": 142.51
+    },
+    {
+     "date": "2026-04-12",
+     "spend": 44308.4,
+     "purchases": 285,
+     "roas": 2.45,
+     "cpa": 155.47
+    },
+    {
+     "date": "2026-04-13",
+     "spend": 19847.97,
+     "purchases": 107,
+     "roas": 3.07,
+     "cpa": 185.5
+    },
+    {
+     "date": "2026-04-14",
+     "spend": 16350.12,
+     "purchases": 34,
+     "roas": 1.42,
+     "cpa": 480.89
+    },
+    {
+     "date": "2026-04-15",
+     "spend": 948.82,
+     "purchases": 0,
+     "roas": 0.0,
+     "cpa": null
+    },
+    {
+     "date": "2026-04-16",
+     "spend": 897.2,
+     "purchases": 2,
+     "roas": 0.76,
+     "cpa": 448.6
+    },
+    {
+     "date": "2026-04-17",
+     "spend": 10357.91,
+     "purchases": 32,
+     "roas": 2.26,
+     "cpa": 323.68
+    },
+    {
+     "date": "2026-04-18",
+     "spend": 30487.95,
+     "purchases": 453,
+     "roas": 8.44,
+     "cpa": 67.3
+    },
+    {
+     "date": "2026-04-19",
+     "spend": 60696.58,
+     "purchases": 623,
+     "roas": 5.43,
+     "cpa": 97.43
+    }
+   ],
    "adsets": [
     {
      "name": "Пости",
@@ -11188,45 +11589,45 @@
    "name": "AUDI Q7 Prestige",
    "car_model": "Audi Q7 Prestige",
    "date_from": "2026-09-03",
-   "date_to": "2026-09-21",
-   "spend": 241219.31,
-   "impressions": 1403481,
-   "clicks": 25744,
-   "ctr": 1.83,
-   "reach": 171744,
-   "frequency": 8.17,
-   "purchases": 3880,
-   "pixel_roas": 7.08,
-   "cpa": 62.17,
-   "pixel_revenue": 1706736,
-   "real_ad_revenue": 796460,
-   "real_ad_roas": 3.3,
-   "gap_pct": -53.3,
+   "date_to": "2026-09-22",
+   "spend": 257210.18,
+   "impressions": 1498273,
+   "clicks": 27554,
+   "ctr": 1.84,
+   "reach": 180717,
+   "frequency": 8.29,
+   "purchases": 4016,
+   "pixel_roas": 6.89,
+   "cpa": 64.05,
+   "pixel_revenue": 1770916,
+   "real_ad_revenue": 822592,
+   "real_ad_roas": 3.2,
+   "gap_pct": -53.5,
    "segments": {
     "platform": [
      [
       "instagram",
-      191045.99,
-      3026,
-      6.97
+      203874.58,
+      3134,
+      6.76
      ],
      [
       "facebook",
-      48374.15,
-      805,
-      7.27
+      51301.38,
+      832,
+      7.2
      ],
      [
       "audience_network",
-      1396.2,
-      37,
-      13.33
+      1550.22,
+      38,
+      12.33
      ],
      [
       "threads",
-      402.97,
+      484.0,
       10,
-      9.88
+      8.22
      ],
      [
       "unknown",
@@ -11238,103 +11639,103 @@
     "age": [
      [
       "25-34",
-      119141.64,
-      1906,
-      7.33
+      127172.53,
+      1977,
+      7.14
      ],
      [
       "35-44",
-      82548.6,
-      1414,
-      7.22
+      87688.82,
+      1450,
+      7.0
      ],
      [
       "45-54",
-      17463.8,
-      266,
-      6.39
+      18558.09,
+      281,
+      6.38
      ],
      [
       "18-24",
-      16944.24,
-      212,
-      5.47
+      18327.83,
+      222,
+      5.23
      ],
      [
       "55-64",
-      2684.3,
-      35,
-      4.49
+      2884.31,
+      37,
+      4.53
      ],
      [
       "65+",
-      2433.96,
-      41,
-      8.31
+      2575.29,
+      42,
+      8.16
      ],
      [
       "Unknown",
-      2.77,
+      3.31,
       6,
-      427.82
+      358.02
      ]
     ],
     "gender": [
      [
       "male",
-      197116.19,
-      3302,
-      7.55
+      209494.75,
+      3423,
+      7.38
      ],
      [
       "female",
-      43691.76,
-      566,
-      4.9
+      47283.03,
+      580,
+      4.65
      ],
      [
       "unknown",
-      411.36,
+      432.4,
       12,
-      12.48
+      11.9
      ]
     ],
     "device": [
      [
       "iphone",
-      145915.0,
-      2279,
-      6.86
+      155738.85,
+      2359,
+      6.69
      ],
      [
       "android_smartphone",
-      94590.28,
-      1584,
-      7.39
+      100700.35,
+      1641,
+      7.17
      ],
      [
       "desktop",
-      472.76,
+      513.99,
       9,
-      11.94
+      10.98
      ],
      [
       "android_tablet",
-      140.89,
+      148.01,
       2,
-      2.96
+      2.82
      ],
      [
       "ipad",
-      100.03,
+      108.4,
       1,
-      1.98
+      1.82
      ],
      [
       "other",
-      0.34,
+      0.58,
       4,
-      2584.24
+      1514.7
      ]
     ]
    },
@@ -11367,6 +11768,15 @@
      "thumb": "data:image/jpeg;base64,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"
     },
     {
+     "name": "13 пост (рілз) 22 проект AUDI Q7",
+     "ad_id": "120252190056840624",
+     "spend": 119.39,
+     "purchases": 6,
+     "roas": 41.86,
+     "ctr": 2.25,
+     "thumb": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/7QCEUGhvdG9zaG9wIDMuMAA4QklNBAQAAAAAAGgcAigAYkZCTUQwYTAwMGE4NjAxMDAwMGU1MDEwMDAwYTUwMjAwMDAwMzAzMDAwMDMwMDMwMDAwMTIwNDAwMDA3YjA1MDAwMDk1MDUwMDAwZjcwNTAwMDAxNzA2MDAwMDg1MDcwMDAwAP/bAIQABgcHDQkNDAwMDBENDg0REREQEBERExASERIQExMUExUVExQTFBMXFxcTFBUXGRkXFRccGxwXGxkZGx4bHhsbFgEGBgYLCAsKCwsKDQkLCQ0MDAoKDAwPCwwLDAsPEA4NDg4NDhAODQ0KDQ0ODw4QEA4PEAwODBAPEBAPFxkXFxfB/8IAEQgAQABAAwEiAAIRAQMRAf/EAFEAAAEFAQEAAAAAAAAAAAAAAAUBAgMEBgAHEAABAwIDBQUGBAcBAAAAAAABABEhAjEDQVEEEmFxgRATkaHBIjKx0eHwBTOS8RQVICNCUqKC/9oADAMBAAIAAwAAAAHze8uogKAXT3I7Yppiry0TF8zLSwgozmphsexyj+btsLLypa9d8g9TSbzsc6NOdqcc98W1zQ9vJqdb51qW2MYSBqsGphBS8hucFcXiN8RuO7//2gAIAQEAAQUCuu4Kp2OupHYsQI7FWFVsxpXcrA2ffqwaXqxq+7pq28FYe0HFONtBoX8a574VU7HS1eyj+5tGL3lS2OrDw6cU4FeGtnrFNWAGq2oDDW6hSEaQhSmRw1s+DXTh7XiHErqAWDhd5UPw4hfwBVZ3KsPb6qRsm2d8Ky9XtKy72pDEqUr+5Wvw/wDMpwxUqdkdDYFVsFSp/D6l/Lal/L2WybKKcROt+pDEqRxaiaKMbEVWy45X4bs3dL//2gAIAQMAAT8B2DD2YgnHqklgN4hhmYE/Rdzsf+waY3qn4S6pwdih6hm7VVdNVtw2YU09yPaJn2t6EKCcj2earwa6PepNPOEKayzAl7QiG+SZ0aMWXpqi8GEyZMgv/9oACAECAAE/AcU1/wCIW9iafBb2Lp5BYW+53rck6ZMhUDm6cdjp6eCdOnRX/9oACAEBAAY/AlkoQGqlSw80JQAh0AvaFPhK91uSJpw33aSSMmVO9h7r+0OIQO7ZCqnck7rZhwVSqX4/BEi2XLsNTtiEET7o46qneJ3sMM1JZ5vI7A9s/mghui+fZ7ygv0Kkt0XvK6fE6atx7IHqt0KK/wDk/NTU/Ok/NGndog6fVVUGimXFmMqjCqDG3gnCtdWVz4lXPiVZbxnjCeusQYGZJ9F7wp5r8yj9X0U1f90qDT1rCmqn9QXvU/q+inFwx/6+iobFoqmwft94+K94+JVyOpXs79XJyvy6jzBT1Aipf//aAAgBAQABPyHxL7DoQ7SHa+f2UWIA8B0lCQWS2eqLt0CQc8l5ezIxGCOCQ46jNdfPgmxg8BpGaVAAbLGt1UPOBYFzdErYAMiWeSiJAOiDDSEyxzwAQSQRppddU+iEcpc/AigRgYH7XNz2O0BIndgAwLmJuGRiKh8D5A4ZMnTREzFskV88cn0XXWfoh4Nl7uMCzXzQ4kRcB0J9FKt9AP4oPzYoD+wpkO08G+qDyiAzogi7LLgp25YC3RZ2fQn0AIgJiX42DlEjBexH5ZnT88joixYW6HirnjTm/wASbqiUjSjKGyTnEBFyCQDOIcG2aM4SwzZMQ8x7+aBJ6xxPojoJ1+sgvsPNAkdR5ovED4kfidPY6QZBgrh4B87oyX54R8AUFjE5fOkQYfNmPOVK5bI9FC5hvLX7H9EPxJJS0VAl8iwvk0X7HiRHJD6w+aGIJI2VzzRQRwgUIJEAukXDhDUIjzDEuGBm3Ff/2gAMAwEAAgADAAAAEGwoqSikVOxE0jZ7Tv/aAAgBAwABPxBr0C7IxmknZkfJjY0igW0gk3jLJBysGARfKLJz5p/q9kwAg8gCSQ3IqSBoyDxqvEL4lKclvPIGckGY0GEXyYIhEFwRBKGI9VkAOTAGp0WoE75g1iO0cpSv/9oACAECAAE/EOhpLPOi4rw7AOWXBKORHsLAjkp/6wb/2gAIAQEAAT8QBJazwdDUR8jwaJ5E+QJDEkHeSGjkLODVS7OpcjpZMgEDPIT2UihQOKuYPwIocCfTodBKBeKR4uJRFkAaAnisJKytbj5KeVcIuqXRncynVOprnN4NALgU5P8AUQdZeyAHbozoZ3ABgtCALnxgKkQKAFdqHGFCxIJzCHFhLlsnt8Arp4RaXjq+BxmstlskvKRrwTYaTxyQcB34JyfgX3B7ggxys3NHAyZmY0AvjpHxRZYAuGEsLGZt+xQaEx0NNoBXzWV80AdHBHgrN+dnL5NBdlPRBDxxWVJIaAzkgDs5Z2chebmJcKmluVRFGUnGF3BHiaP41QAmrmL1uc9nCeUAHzJSfGC2iWrPJznTOTiXdSo0n4EQfrc87gUDJw56T8DHv5S+6FUMRxAP6iTLR9kZAlgcyILkRBza74UEVHZA51/Ef37OoTDIFzSBY46APNHArKJwcJgyfqhnkiLyDecR5vBf/9k="
+    },
+    {
      "name": "картинка х2 – копія 10",
      "ad_id": "120252329784220624",
      "spend": 99.13,
@@ -11385,13 +11795,12 @@
      "thumb": "data:image/jpeg;base64,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"
     },
     {
-     "name": "13 пост (рілз) 22 проект AUDI Q7",
-     "ad_id": "120252190056840624",
-     "spend": 362.82,
-     "purchases": 11,
-     "roas": 18.78,
-     "ctr": 2.29,
-     "thumb": "data:image/jpeg;base64,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"
+     "name": "16 пост командний (рілз) 22 проект AUDI Q7",
+     "ad_id": "120252253734440624",
+     "spend": 198.35,
+     "purchases": 9,
+     "roas": 29.02,
+     "ctr": 1.51
     },
     {
      "name": "картинка х2 – копія 14",
@@ -11442,20 +11851,20 @@
      "ctr": 1.48
     },
     {
+     "name": "х2 пост третій (рілз) 22 проект AUDI Q7",
+     "ad_id": "120252337197340624",
+     "spend": 59.71,
+     "purchases": 2,
+     "roas": 14.94,
+     "ctr": 2.08
+    },
+    {
      "name": "картинка х2 – копія 3",
      "ad_id": "120252330029420624",
      "spend": 56.69,
      "purchases": 2,
      "roas": 14.93,
      "ctr": 2.11
-    },
-    {
-     "name": "х2 пост третій (рілз) 22 проект AUDI Q7",
-     "ad_id": "120252337197340624",
-     "spend": 59.71,
-     "purchases": 2,
-     "roas": 14.9,
-     "ctr": 2.08
     },
     {
      "name": "картинка х2 – копія 2",
@@ -11562,14 +11971,6 @@
      "ctr": 1.07
     },
     {
-     "name": "15 пост (рілз) 22 проект AUDI Q7",
-     "ad_id": "120252253732600624",
-     "spend": 5274.05,
-     "purchases": 86,
-     "roas": 8.92,
-     "ctr": 1.98
-    },
-    {
      "name": "картинка х2 – копія 3",
      "ad_id": "120252329555520624",
      "spend": 117.88,
@@ -11610,6 +12011,14 @@
      "ctr": 1.0
     },
     {
+     "name": "15 пост (рілз) 22 проект AUDI Q7",
+     "ad_id": "120252253732600624",
+     "spend": 5122.87,
+     "purchases": 71,
+     "roas": 7.5,
+     "ctr": 1.91
+    },
+    {
      "name": "картинка х2 – копія 14",
      "ad_id": "120252330063530624",
      "spend": 358.87,
@@ -11626,12 +12035,12 @@
      "ctr": 1.56
     },
     {
-     "name": "третій пост (рілз) 22 проект AUDI Q7",
-     "ad_id": "120252122514540624",
-     "spend": 3970.92,
-     "purchases": 51,
-     "roas": 7.09,
-     "ctr": 1.81
+     "name": "11 пост (рілз) 22 проект AUDI Q7",
+     "ad_id": "120252190056870624",
+     "spend": 4235.63,
+     "purchases": 54,
+     "roas": 7.1,
+     "ctr": 2.05
     },
     {
      "name": "картинка х2 – копія 4",
@@ -11642,27 +12051,19 @@
      "ctr": 0.92
     },
     {
-     "name": "11 пост (рілз) 22 проект AUDI Q7",
-     "ad_id": "120252190056870624",
-     "spend": 4903.84,
-     "purchases": 61,
-     "roas": 6.91,
-     "ctr": 2.02
-    },
-    {
-     "name": "пʼятий пост (рілз) 22 проект AUDI Q7",
-     "ad_id": "120252143403540624",
-     "spend": 984.39,
-     "purchases": 11,
-     "roas": 6.86,
-     "ctr": 1.9
+     "name": "пост буст (рілз) 22 проект AUDI Q7",
+     "ad_id": "120252370184330624",
+     "spend": 142.38,
+     "purchases": 2,
+     "roas": 6.95,
+     "ctr": 1.83
     },
     {
      "name": "19 пост командний (рілз) 22 проект AUDI Q7",
      "ad_id": "120252277070310624",
-     "spend": 16985.64,
-     "purchases": 249,
-     "roas": 6.83,
+     "spend": 17436.74,
+     "purchases": 253,
+     "roas": 6.86,
      "ctr": 1.85
     },
     {
@@ -11670,16 +12071,8 @@
      "ad_id": "120252330063540624",
      "spend": 2553.27,
      "purchases": 45,
-     "roas": 6.81,
+     "roas": 6.82,
      "ctr": 1.25
-    },
-    {
-     "name": "16 пост командний (рілз) 22 проект AUDI Q7",
-     "ad_id": "120252253734440624",
-     "spend": 1405.23,
-     "purchases": 23,
-     "roas": 6.75,
-     "ctr": 1.39
     },
     {
      "name": "картинка х2 – копія 6",
@@ -11698,36 +12091,36 @@
      "ctr": 1.66
     },
     {
+     "name": "не биток пост  (рілз) 22 проект AUDI Q7",
+     "ad_id": "120252329751190624",
+     "spend": 7390.48,
+     "purchases": 98,
+     "roas": 6.29,
+     "ctr": 2.27
+    },
+    {
      "name": "18 пост командний (рілз) 22 проект AUDI Q7",
      "ad_id": "120252277070320624",
-     "spend": 6033.89,
-     "purchases": 91,
-     "roas": 6.26,
-     "ctr": 1.85
+     "spend": 6550.86,
+     "purchases": 98,
+     "roas": 6.16,
+     "ctr": 1.88
     },
     {
      "name": "12 пост (рілз) 22 проект AUDI Q7",
      "ad_id": "120252239806980624",
-     "spend": 5609.0,
-     "purchases": 76,
-     "roas": 6.04,
-     "ctr": 1.77
+     "spend": 5598.38,
+     "purchases": 74,
+     "roas": 6.05,
+     "ctr": 1.8
     },
     {
-     "name": "десятий пост (рілз) 22 проект AUDI Q7",
-     "ad_id": "120252190056850624",
-     "spend": 4882.68,
-     "purchases": 64,
-     "roas": 5.66,
-     "ctr": 1.87
-    },
-    {
-     "name": "не биток пост  (рілз) 22 проект AUDI Q7",
-     "ad_id": "120252329751190624",
-     "spend": 7016.06,
-     "purchases": 95,
-     "roas": 5.65,
-     "ctr": 2.24
+     "name": "17 пост командний (рілз) 22 проект AUDI Q7",
+     "ad_id": "120252277070330624",
+     "spend": 1753.38,
+     "purchases": 23,
+     "roas": 5.91,
+     "ctr": 1.98
     },
     {
      "name": "картинка х2 – копія 8",
@@ -11738,44 +12131,28 @@
      "ctr": 1.2
     },
     {
-     "name": "17 пост командний (рілз) 22 проект AUDI Q7",
-     "ad_id": "120252277070330624",
-     "spend": 1541.81,
-     "purchases": 20,
-     "roas": 5.57,
-     "ctr": 2.0
-    },
-    {
-     "name": "девʼятий пост (рілз) 22 проект AUDI Q7",
-     "ad_id": "120252190056860624",
-     "spend": 2193.86,
-     "purchases": 21,
-     "roas": 5.51,
-     "ctr": 1.33
-    },
-    {
-     "name": "другий пост (картинка) Q7 · База · claude",
-     "ad_id": "120252288737270624",
-     "spend": 4561.84,
-     "purchases": 39,
-     "roas": 5.14,
-     "ctr": 0.92
-    },
-    {
-     "name": "пʼятий пост (рілз) Q7 · База · claude",
-     "ad_id": "120252288736160624",
-     "spend": 578.8,
-     "purchases": 6,
-     "roas": 5.13,
-     "ctr": 1.2
+     "name": "десятий пост (рілз) 22 проект AUDI Q7",
+     "ad_id": "120252190056850624",
+     "spend": 5016.68,
+     "purchases": 65,
+     "roas": 5.43,
+     "ctr": 1.8
     },
     {
      "name": "перший пост (рілз) 22 проект AUDI Q7",
      "ad_id": "120252097633500624",
-     "spend": 14055.32,
-     "purchases": 155,
-     "roas": 4.96,
-     "ctr": 1.61
+     "spend": 13755.89,
+     "purchases": 143,
+     "roas": 5.0,
+     "ctr": 1.64
+    },
+    {
+     "name": "третій пост (рілз) 22 проект AUDI Q7",
+     "ad_id": "120252122514540624",
+     "spend": 3490.44,
+     "purchases": 45,
+     "roas": 4.9,
+     "ctr": 1.96
     },
     {
      "name": "х2 пост другий (рілз) 22 проект AUDI Q7 – копія",
@@ -11786,20 +12163,60 @@
      "ctr": 1.37
     },
     {
+     "name": "девʼятий пост (рілз) 22 проект AUDI Q7",
+     "ad_id": "120252190056860624",
+     "spend": 2244.31,
+     "purchases": 21,
+     "roas": 4.84,
+     "ctr": 1.39
+    },
+    {
+     "name": "пʼятий пост (рілз) Q7 · База · claude",
+     "ad_id": "120252288736160624",
+     "spend": 617.4,
+     "purchases": 6,
+     "roas": 4.81,
+     "ctr": 1.19
+    },
+    {
+     "name": "другий пост (картинка) Q7 · База · claude",
+     "ad_id": "120252288737270624",
+     "spend": 5109.9,
+     "purchases": 43,
+     "roas": 4.74,
+     "ctr": 0.92
+    },
+    {
+     "name": "другий пост (картинка) Q7 · Retarget-IG · claude",
+     "ad_id": "120252368882690624",
+     "spend": 41.8,
+     "purchases": 1,
+     "roas": 4.72,
+     "ctr": 0.82
+    },
+    {
      "name": "сьомий пост (рілз) 22 проект AUDI Q7",
      "ad_id": "120252157085940624",
-     "spend": 13695.24,
-     "purchases": 166,
-     "roas": 4.78,
-     "ctr": 2.11
+     "spend": 12750.6,
+     "purchases": 148,
+     "roas": 4.56,
+     "ctr": 2.16
     },
     {
      "name": "14 пост командний (рілз) 22 проект AUDI Q7",
      "ad_id": "120252239806970624",
-     "spend": 6250.1,
-     "purchases": 70,
-     "roas": 4.33,
-     "ctr": 2.08
+     "spend": 6695.26,
+     "purchases": 64,
+     "roas": 4.04,
+     "ctr": 1.98
+    },
+    {
+     "name": "третій пост (рілз) Q7 · База · claude",
+     "ad_id": "120252288735800624",
+     "spend": 2882.56,
+     "purchases": 26,
+     "roas": 3.83,
+     "ctr": 1.58
     },
     {
      "name": "картинка х2 – копія 13",
@@ -11810,12 +12227,12 @@
      "ctr": 0.68
     },
     {
-     "name": "третій пост (рілз) Q7 · База · claude",
-     "ad_id": "120252288735800624",
-     "spend": 2448.67,
-     "purchases": 21,
-     "roas": 3.29,
-     "ctr": 1.62
+     "name": "пост буст (рілз) · промо 22.09 · База · claude",
+     "ad_id": "120252370370020624",
+     "spend": 206.01,
+     "purchases": 2,
+     "roas": 3.47,
+     "ctr": 0.65
     },
     {
      "name": "картинка х2 – копія 15",
@@ -11826,20 +12243,44 @@
      "ctr": 1.25
     },
     {
+     "name": "пʼятий пост (рілз) 22 проект AUDI Q7",
+     "ad_id": "120252143403540624",
+     "spend": 1013.98,
+     "purchases": 10,
+     "roas": 3.15,
+     "ctr": 1.79
+    },
+    {
+     "name": "восьмий пост (картинки) 22 проект AUDI Q7",
+     "ad_id": "120252190056880624",
+     "spend": 1338.97,
+     "purchases": 9,
+     "roas": 2.23,
+     "ctr": 1.89
+    },
+    {
      "name": "четвертий пост (картинка) Q7 · LAL · claude",
      "ad_id": "120252288732000624",
-     "spend": 7683.29,
-     "purchases": 42,
-     "roas": 2.34,
-     "ctr": 1.73
+     "spend": 8609.6,
+     "purchases": 45,
+     "roas": 2.23,
+     "ctr": 1.72
+    },
+    {
+     "name": "посл багажник (рілз) 22 проект AUDI Q7 – копія",
+     "ad_id": "120252343909820624",
+     "spend": 7101.15,
+     "purchases": 36,
+     "roas": 2.11,
+     "ctr": 2.39
     },
     {
      "name": "другий пост (картинка) 22 проект AUDI Q7",
      "ad_id": "120252109530420624",
-     "spend": 704.76,
-     "purchases": 5,
-     "roas": 2.28,
-     "ctr": 0.87
+     "spend": 361.38,
+     "purchases": 1,
+     "roas": 1.92,
+     "ctr": 0.7
     },
     {
      "name": "картинка х2 – копія 11",
@@ -11858,92 +12299,92 @@
      "ctr": 1.1
     },
     {
-     "name": "восьмий пост (картинки) 22 проект AUDI Q7",
-     "ad_id": "120252190056880624",
-     "spend": 1228.4,
-     "purchases": 6,
-     "roas": 1.71,
-     "ctr": 1.92
-    },
-    {
      "name": "перший пост (рілз) Q7 · Retarget · claude",
      "ad_id": "120252288685010624",
-     "spend": 2025.84,
-     "purchases": 8,
-     "roas": 1.66,
-     "ctr": 1.28
+     "spend": 2294.55,
+     "purchases": 9,
+     "roas": 1.73,
+     "ctr": 1.36
     },
     {
      "name": "четвертий пост (картинка) Q7 · Retarget · claude",
      "ad_id": "120252288696270624",
-     "spend": 5391.35,
-     "purchases": 23,
-     "roas": 1.56,
-     "ctr": 1.27
-    },
-    {
-     "name": "посл багажник (рілз) 22 проект AUDI Q7 – копія",
-     "ad_id": "120252343909820624",
-     "spend": 5422.7,
-     "purchases": 23,
-     "roas": 1.46,
-     "ctr": 1.69
-    },
-    {
-     "name": "після х2 пост  (рілз) 22 проект AUDI Q7",
-     "ad_id": "120252343909830624",
-     "spend": 1245.31,
-     "purchases": 3,
-     "roas": 1.3,
-     "ctr": 1.54
-    },
-    {
-     "name": "перший пост (рілз) Q7 · LAL · claude",
-     "ad_id": "120252288727060624",
-     "spend": 3454.78,
-     "purchases": 6,
-     "roas": 1.22,
-     "ctr": 1.78
-    },
-    {
-     "name": "другий пост (картинка) Q7 · LAL · claude",
-     "ad_id": "120252288729300624",
-     "spend": 443.82,
-     "purchases": 1,
-     "roas": 1.12,
-     "ctr": 1.39
-    },
-    {
-     "name": "четвертий пост (картинка) 22 проект AUDI Q7",
-     "ad_id": "120252131104740624",
-     "spend": 532.88,
-     "purchases": 2,
-     "roas": 1.11,
-     "ctr": 1.03
+     "spend": 5923.31,
+     "purchases": 25,
+     "roas": 1.52,
+     "ctr": 1.29
     },
     {
      "name": "третій пост (рілз) Q7 · LAL · claude",
      "ad_id": "120252288727640624",
-     "spend": 801.82,
-     "purchases": 4,
-     "roas": 0.99,
-     "ctr": 1.96
+     "spend": 872.21,
+     "purchases": 5,
+     "roas": 1.47,
+     "ctr": 1.95
+    },
+    {
+     "name": "після х2 пост  (рілз) 22 проект AUDI Q7",
+     "ad_id": "120252343909830624",
+     "spend": 1762.53,
+     "purchases": 6,
+     "roas": 1.45,
+     "ctr": 1.5
+    },
+    {
+     "name": "четвертий пост (картинка) 22 проект AUDI Q7",
+     "ad_id": "120252131104740624",
+     "spend": 301.49,
+     "purchases": 1,
+     "roas": 1.26,
+     "ctr": 1.16
+    },
+    {
+     "name": "перший пост (рілз) Q7 · LAL · claude",
+     "ad_id": "120252288727060624",
+     "spend": 3647.04,
+     "purchases": 6,
+     "roas": 1.15,
+     "ctr": 1.79
     },
     {
      "name": "третій пост (рілз) Q7 · Retarget · claude",
      "ad_id": "120252288689520624",
-     "spend": 1681.4,
-     "purchases": 5,
-     "roas": 0.94,
-     "ctr": 1.9
+     "spend": 1887.41,
+     "purchases": 6,
+     "roas": 1.1,
+     "ctr": 1.87
+    },
+    {
+     "name": "другий пост (картинка) Q7 · LAL · claude",
+     "ad_id": "120252288729300624",
+     "spend": 456.26,
+     "purchases": 1,
+     "roas": 1.09,
+     "ctr": 1.42
     },
     {
      "name": "шостий пост (картинка) 22 проект AUDI Q7",
      "ad_id": "120252157080020624",
-     "spend": 59.74,
+     "spend": 27.49,
      "purchases": 0,
-     "roas": 0.35,
-     "ctr": 0.81
+     "roas": 0.62,
+     "ctr": 0.6
+    },
+    {
+     "name": "четвертий пост (картинка) Q7 · Retarget-IG · claude",
+     "ad_id": "120252368881700624",
+     "spend": 321.41,
+     "purchases": 1,
+     "roas": 0.61,
+     "ctr": 1.05
+    },
+    {
+     "name": "пост буст (рілз) · промо 22.09 · claude",
+     "ad_id": "120252370365080624",
+     "spend": 1129.04,
+     "purchases": 0,
+     "roas": 0.07,
+     "ctr": 0.87
     },
     {
      "name": "картинка х2 – копія 7",
@@ -12029,6 +12470,38 @@
      "name": "картинка х2 – копія 10",
      "ad_id": "120252330029530624",
      "spend": 1.82,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.0
+    },
+    {
+     "name": "посл прост (картинки) 22 проект AUDI Q7",
+     "ad_id": "120252370184320624",
+     "spend": 39.74,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.67
+    },
+    {
+     "name": "пост буст (рілз) · промо 22.09 · Retarget · claude",
+     "ad_id": "120252370373870624",
+     "spend": 64.29,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.64
+    },
+    {
+     "name": "пост буст (рілз) · промо 22.09 · Retarget-IG · claude",
+     "ad_id": "120252370377210624",
+     "spend": 20.57,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.0
+    },
+    {
+     "name": "пост буст (рілз) · промо 22.09 · LAL · claude",
+     "ad_id": "120252370379480624",
+     "spend": 7.45,
      "purchases": 0,
      "roas": 0.0,
      "ctr": 0.0
@@ -12156,59 +12629,66 @@
     },
     {
      "date": "2026-09-20",
-     "spend": 27903.28,
+     "spend": 27915.61,
      "purchases": 172,
      "roas": 2.89,
-     "cpa": 162.23
+     "cpa": 162.3
     },
     {
      "date": "2026-09-21",
-     "spend": 13020.94,
-     "purchases": 79,
-     "roas": 2.1,
-     "cpa": 164.82
+     "spend": 21917.55,
+     "purchases": 155,
+     "roas": 2.94,
+     "cpa": 141.4
+    },
+    {
+     "date": "2026-09-22",
+     "spend": 7081.93,
+     "purchases": 60,
+     "roas": 3.82,
+     "cpa": 118.03
     }
    ],
    "adsets": [
     {
      "name": "Broad · UA 18-45 · A+A · VALUE · інкремент",
-     "spend": 109884.5,
-     "purchases": 1367,
-     "roas": 5.82,
-     "ctr": 1.82,
-     "cpa": 80.38
+     "spend": 109990.44,
+     "purchases": 1317,
+     "roas": 5.64,
+     "ctr": 1.88,
+     "cpa": 83.52
     },
     {
      "name": "х2 – копія",
-     "spend": 14463.71,
-     "purchases": 306,
-     "roas": 11.4,
-     "ctr": 1.41,
-     "cpa": 47.27
+     "spend": 15592.75,
+     "purchases": 307,
+     "roas": 10.58,
+     "ctr": 1.37,
+     "cpa": 50.79
     },
     {
      "name": "LAL 0–3% Top-LTV · excl покупці+сайт+підписники · claude",
-     "spend": 12385.94,
-     "purchases": 53,
-     "roas": 1.9,
+     "spend": 13592.56,
+     "purchases": 57,
+     "roas": 1.85,
      "ctr": 1.74,
-     "cpa": 233.7
+     "cpa": 238.47
     },
     {
      "name": "Retarget · сайт гаряча 30д · excl покупці (CRM+pixel+цикл) · v3",
-     "spend": 9095.69,
-     "purchases": 35,
-     "roas": 1.47,
-     "ctr": 1.38,
-     "cpa": 259.88
+     "spend": 10169.56,
+     "purchases": 41,
+     "roas": 1.48,
+     "ctr": 1.4,
+     "cpa": 248.04
     },
     {
      "name": "Покупці · pixel 180д + CRM всі · апсейл · VALUE · v2",
-     "spend": 7589.31,
-     "purchases": 66,
-     "roas": 4.55,
-     "ctr": 1.13,
-     "cpa": 114.99
+     "spend": 8815.87,
+     "purchases": 77,
+     "roas": 4.42,
+     "ctr": 1.12,
+     "cpa": 114.49
     },
     {
      "name": "х2",
@@ -12225,21 +12705,29 @@
      "roas": 15.29,
      "ctr": 1.71,
      "cpa": 40.78
+    },
+    {
+     "name": "Retarget · Engaged IF 30д · excl покупці (CRM+pixel+цикл) · v4 · claude",
+     "spend": 383.78,
+     "purchases": 2,
+     "roas": 1.03,
+     "ctr": 0.97,
+     "cpa": 191.89
     }
    ],
-   "adsets_window": "2026-09-14",
+   "adsets_window": "2026-09-15",
    "recommendations": [
     {
      "sev": "cri",
-     "text": "Вимкнути 7 збитков. креатив(ів): «посл багажник (рілз) 22 проект A» (ROAS 1.46), «четвертий пост (картинка) Q7 · R» (ROAS 1.56), «перший пост (рілз) Q7 · LAL · cl» (ROAS 1.22). Зливають ~20 449 ₴ при ROAS<2.0."
+     "text": "Вимкнути 6 збитков. креатив(ів): «четвертий пост (картинка) Q7 · R» (ROAS 1.52), «перший пост (рілз) Q7 · LAL · cl» (ROAS 1.15), «перший пост (рілз) Q7 · Retarget» (ROAS 1.73). Зливають ~16 643 ₴ при ROAS<2.0."
     },
     {
      "sev": "cri",
-     "text": "Сумарна частота 8.17 за цикл — аудиторія вигоряє. Терміново освіжити креативи або розширити аудиторію/гео."
+     "text": "Сумарна частота 8.29 за цикл — аудиторія вигоряє. Терміново освіжити креативи або розширити аудиторію/гео."
     },
     {
      "sev": "mod",
-     "text": "Чоловіки ROAS 7.55 vs жінки 4.9. Жінки (~18% бюджету) тягнуть униз — тестово звузити на чоловіків."
+     "text": "Чоловіки ROAS 7.38 vs жінки 4.65. Жінки (~18% бюджету) тягнуть униз — тестово звузити на чоловіків."
     },
     {
      "sev": "inf",
@@ -12247,7 +12735,7 @@
     },
     {
      "sev": "inf",
-     "text": "Найефективніший вік: 25-34 (ROAS 7.33) — пріоритет у таргетингу."
+     "text": "Найефективніший вік: 25-34 (ROAS 7.14) — пріоритет у таргетингу."
     }
    ],
    "is_current": true
@@ -12257,32 +12745,27 @@
   {
    "sev": "cri",
    "scope": "Акаунт · тиждень",
-   "text": "Реал ROAS тижня 2.79 vs попереднього 3.82 (-27%) — перевірити креативи/аудиторію/бюджет."
+   "text": "Реал ROAS тижня 2.64 vs попереднього 3.63 (-27%) — перевірити креативи/аудиторію/бюджет."
   },
   {
    "sev": "cri",
    "scope": "AUDI Q7 Prestige",
-   "text": "Вимкнути 7 збитков. креатив(ів): «посл багажник (рілз) 22 проект A» (ROAS 1.46), «четвертий пост (картинка) Q7 · R» (ROAS 1.56), «перший пост (рілз) Q7 · LAL · cl» (ROAS 1.22). Зливають ~20 449 ₴ при ROAS<2.0."
+   "text": "Вимкнути 6 збитков. креатив(ів): «четвертий пост (картинка) Q7 · R» (ROAS 1.52), «перший пост (рілз) Q7 · LAL · cl» (ROAS 1.15), «перший пост (рілз) Q7 · Retarget» (ROAS 1.73). Зливають ~16 643 ₴ при ROAS<2.0."
   },
   {
    "sev": "cri",
    "scope": "AUDI Q7 Prestige",
-   "text": "Сумарна частота 8.17 за цикл — аудиторія вигоряє. Терміново освіжити креативи або розширити аудиторію/гео."
+   "text": "Сумарна частота 8.29 за цикл — аудиторія вигоряє. Терміново освіжити креативи або розширити аудиторію/гео."
   },
   {
    "sev": "mod",
    "scope": "Акаунт · тиждень",
-   "text": "CPA тижня 77.63 ₴ vs 51.35 ₴ (+51%) — залучення дорожчає."
-  },
-  {
-   "sev": "mod",
-   "scope": "Вчора (09-20)",
-   "text": "Pixel ROAS вчора впав на 73% до дня раніше — стежити, чи не тренд."
+   "text": "CPA тижня 83.86 ₴ vs 54.56 ₴ (+54%) — залучення дорожчає."
   },
   {
    "sev": "mod",
    "scope": "AUDI Q7 Prestige",
-   "text": "Чоловіки ROAS 7.55 vs жінки 4.9. Жінки (~18% бюджету) тягнуть униз — тестово звузити на чоловіків."
+   "text": "Чоловіки ROAS 7.38 vs жінки 4.65. Жінки (~18% бюджету) тягнуть униз — тестово звузити на чоловіків."
   }
  ],
  "strategy": {
@@ -12295,9 +12778,9 @@
     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
     "status": "ACTIVE",
     "daily_budget": 15000,
-    "spend": 664688,
-    "purchases": 10956,
-    "roas": 7.17,
+    "spend": 675662,
+    "purchases": 11070,
+    "roas": 7.13,
     "ctr": 1.74
    },
    {
@@ -12307,11 +12790,11 @@
     "desc": "15-20%. Дожим теплих: дедлайн, соц-доказ, апсел токенів. Строгий таргет (A+A off).",
     "name": "DC | 02 Retargeting · дожим теплих",
     "status": "ACTIVE",
-    "daily_budget": 1500,
-    "spend": 54297,
-    "purchases": 730,
-    "roas": 4.48,
-    "ctr": 2.13
+    "daily_budget": 1050,
+    "spend": 55368,
+    "purchases": 735,
+    "roas": 4.42,
+    "ctr": 2.12
    },
    {
     "id": "120249698608790624",
@@ -12320,10 +12803,10 @@
     "desc": "5-10%. «Свіжа кров» — лише нові люди (виключені відвідувачі сайту + покупці), щоб алгоритм не крутився в нашій бульбашці.",
     "name": "DC | 03 Prospecting · свіжа кров (excl. наші)",
     "status": "ACTIVE",
-    "daily_budget": 2000,
-    "spend": 188812,
-    "purchases": 2243,
-    "roas": 4.21,
+    "daily_budget": 1400,
+    "spend": 190018,
+    "purchases": 2247,
+    "roas": 4.19,
     "ctr": 1.78
    },
    {
