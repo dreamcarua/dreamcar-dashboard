@@ -1,0 +1,29 @@
+name: IG post comments dump (giveaway)
+
+on:
+  workflow_dispatch:
+    inputs:
+      shortcode:
+        description: "IG post shortcode (e.g. DdnnepUs58O)"
+        required: true
+
+jobs:
+  dump:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Dump post + comments
+        env:
+          FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          SHORTCODE: ${{ inputs.shortcode }}
+        run: python etl/ig_post_comments_dump.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: post-dump
+          path: out/post_dump.json
+          retention-days: 1
