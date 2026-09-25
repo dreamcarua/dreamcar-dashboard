@@ -67,11 +67,17 @@ def main():
             insights[f"_err_{metric}"] = str(e)[:160]
 
     cf = "id,text,timestamp,username,like_count,hidden,from{id,username},parent_id"
-    comments = paged(f"{G}/{mid}/comments", {"fields": cf, "limit": 50})
+    comments = paged(f"{G}/{mid}/comments",
+                     {"fields": cf + ",replies.limit(50){" + cf.replace(",parent_id", "") + "}", "limit": 50})
     print("top-level fetched", len(comments))
     replies = []
     for c in comments:
-        rs = paged(f"{G}/{c['id']}/replies", {"fields": cf, "limit": 50})
+        rep = c.pop("replies", None) or {}
+        rs = rep.get("data", [])
+        nxt = rep.get("paging", {}).get("next")
+        while nxt:
+            page = get(nxt); rs.extend(page.get("data", []))
+            nxt = page.get("paging", {}).get("next")
         for r in rs:
             r["parent_id"] = c["id"]
         replies.extend(rs)
