@@ -1647,6 +1647,10 @@
         st.setProperty('max-width','320px','important');
         st.setProperty('z-index','1500','important');
         st.setProperty('overflow-y','auto','important');
+        // 27.09.2026 R8.3 (діагностика показала disp=block vis=HIDDEN): сайдбар ховався
+        // через visibility:hidden, яку .open не скидала → transform не допомагав. Форсуємо.
+        st.setProperty('visibility','visible','important');
+        st.setProperty('opacity','1','important');
         st.setProperty('transform','translateX(0)','important');
         st.setProperty('-webkit-transform','translateX(0)','important');
       }
