@@ -1610,7 +1610,12 @@
 
     // R8.1: forward declarations — щоб openSidebar() міг викликати closeFilters() etc.
     function closeSidebar(){
-      if (sidebar) sidebar.classList.remove('open');
+      if (sidebar) {
+        sidebar.classList.remove('open');
+        // R8.2 27.09.2026: inline !important тримає drawer за екраном незалежно від каскаду
+        sidebar.style.setProperty('transform','translateX(-100%)','important');
+        sidebar.style.setProperty('-webkit-transform','translateX(-100%)','important');
+      }
       if (sidebarBd) sidebarBd.classList.remove('open');
       document.body.style.overflow = '';
     }
@@ -1626,7 +1631,25 @@
     // ---- Sidebar drawer ----
     function openSidebar(){
       closeKebab(); closeFilters();           // R8.1 mutual exclusion
-      if (sidebar) sidebar.classList.add('open');
+      if (sidebar) {
+        sidebar.classList.add('open');
+        // R8.2 27.09.2026 (Вадим: меню не відкривалось на iOS Safari; 3 CSS-фікси не допомогли).
+        // Форсуємо весь стан drawer inline з !important — б'є будь-який @media-каскад і обходить
+        // iOS-баг з toggl-ом !important-трансформа. Desktop не зачіпається: там burger display:none.
+        var st = sidebar.style;
+        st.setProperty('position','fixed','important');
+        st.setProperty('top','0','important');
+        st.setProperty('bottom','0','important');
+        st.setProperty('left','0','important');
+        st.setProperty('height','100vh','important');
+        st.setProperty('max-height','none','important');
+        st.setProperty('width','86vw','important');
+        st.setProperty('max-width','320px','important');
+        st.setProperty('z-index','1500','important');
+        st.setProperty('overflow-y','auto','important');
+        st.setProperty('transform','translateX(0)','important');
+        st.setProperty('-webkit-transform','translateX(0)','important');
+      }
       if (sidebarBd) sidebarBd.classList.add('open');
       document.body.style.overflow = 'hidden';
     }
