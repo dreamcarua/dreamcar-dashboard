@@ -1260,7 +1260,7 @@
       max-width: 320px;
       height: 100vh !important;
       max-height: none !important;
-      transform: translateX(-100%);
+      transform: translate3d(-100%,0,0); -webkit-transform: translate3d(-100%,0,0); will-change: transform;
       transition: transform 240ms cubic-bezier(.2,.8,.3,1) !important;
       z-index: 1500;
       border-right: 1px solid var(--steel) !important;
@@ -1268,7 +1268,7 @@
       padding: 14px 12px !important;
       overflow-y: auto !important;
     }
-    .sidebar.open { transform: translateX(0); }
+    .sidebar.open { transform: translate3d(0,0,0) !important; -webkit-transform: translate3d(0,0,0) !important; }
     .sidebar-backdrop {
       position: fixed; inset: 0;
       background: rgba(0,0,0,0.55);
