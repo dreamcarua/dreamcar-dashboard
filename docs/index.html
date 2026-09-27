@@ -5787,5 +5787,48 @@ bootstrap();
 }catch(e){}})();
 </script>
 
+<!-- R8.2-DIAG 27.09.2026: тимчасова діагностика меню, активна ТІЛЬКИ з ?diag=1. Read-only, нічого не змінює. -->
+<script>
+(function(){
+  try{
+    if (new URLSearchParams(location.search).get('diag')!=='1') return;
+    var box=document.createElement('pre');
+    box.id='dcDiag';
+    box.style.cssText='position:fixed;left:6px;right:6px;top:66px;z-index:99999;max-height:74vh;overflow:auto;background:rgba(0,0,0,.93);color:#0f0;font:11px/1.35 monospace;padding:10px;border:2px solid #0f0;border-radius:8px;white-space:pre-wrap;word-break:break-all;';
+    box.textContent='DIAG активна. Тапни ☰ (меню). Тап по цьому боксу — копіює текст.';
+    function one(el){ if(!el) return '(ELEMENT NOT FOUND)';
+      var cs=getComputedStyle(el), r=el.getBoundingClientRect();
+      return 'class=['+el.className+']\n inlineStyle=['+(el.getAttribute('style')||'')+']\n disp='+cs.display+' vis='+cs.visibility+' opacity='+cs.opacity+' pos='+cs.position+'\n transform='+cs.transform+'\n left='+cs.left+' top='+cs.top+' width='+cs.width+' height='+cs.height+' zIndex='+cs.zIndex+'\n rect: x='+Math.round(r.x)+' y='+Math.round(r.y)+' w='+Math.round(r.width)+' h='+Math.round(r.height)+'\n offsetParent='+(el.offsetParent?(el.offsetParent.tagName+'#'+el.offsetParent.id+'.'+el.offsetParent.className):'NULL');
+    }
+    function anc(el){ var out=[]; var n=el&&el.parentElement, i=0;
+      while(n && n.tagName!=='HTML' && i<14){ var cs=getComputedStyle(n), f=[];
+        if(cs.transform!=='none')f.push('transform'); if(cs.filter&&cs.filter!=='none')f.push('filter'); if(cs.perspective!=='none')f.push('perspective');
+        if(cs.display==='none')f.push('DISPLAY:NONE'); if(cs.visibility==='hidden')f.push('VIS:HIDDEN'); if(cs.opacity==='0')f.push('OPACITY:0');
+        if(cs.overflow!=='visible')f.push('ovf:'+cs.overflow); if(cs.contain&&cs.contain!=='none')f.push('contain');
+        if(f.length) out.push(' '+n.tagName+'#'+(n.id||'')+'.'+(n.className||'')+' => '+f.join(','));
+        n=n.parentElement; i++; }
+      return out.length?out.join('\n'):' (у предків немає transform/filter/display:none/overflow/opacity:0)';
+    }
+    function dump(tag){
+      var sb=document.getElementById('sidebar'), bd=document.getElementById('sidebarBackdrop');
+      box.textContent='DIAG '+tag+' @'+new Date().toLocaleTimeString()
+        +'\nhref='+location.href
+        +'\nmm480='+matchMedia('(max-width:480px)').matches+' mm900='+matchMedia('(max-width:900px)').matches+' innerW='+window.innerWidth
+        +'\n#sidebar count='+document.querySelectorAll('#sidebar').length+'  .sidebar count='+document.querySelectorAll('.sidebar').length
+        +'\n=== SIDEBAR ===\n'+one(sb)
+        +'\n=== ANCESTORS (тільки з прапорцями) ===\n'+anc(sb)
+        +'\n=== BACKDROP ===\n'+one(bd);
+    }
+    box.addEventListener('click',function(){ try{navigator.clipboard.writeText(box.textContent);}catch(_){}});
+    function attach(){ document.body.appendChild(box);
+      var b=document.getElementById('burger');
+      if(b) b.addEventListener('click',function(){ setTimeout(function(){dump('ПІСЛЯ ТАПУ');},400); });
+      dump('НА ЗАВАНТАЖЕННІ');
+    }
+    if(document.readyState!=='loading') attach(); else document.addEventListener('DOMContentLoaded',attach);
+  }catch(e){ try{var x=document.getElementById('dcDiag'); if(x)x.textContent='DIAG ERROR: '+(e&&e.message||e);}catch(_){}}
+})();
+</script>
+
 </body>
 </html>
