@@ -323,8 +323,10 @@ def main():
         if not done:
             frm = (now_k.replace(hour=0, minute=0, second=0, microsecond=0)).astimezone(timezone.utc)
             to = frm + timedelta(days=2)
-            evs = sb_get("ad_events", f"project=eq.{PROJECT}&status=neq.cancelled&starts_at=gte.{frm.isoformat()}"
-                                      f"&starts_at=lt.{to.isoformat()}&order=starts_at&select=title,starts_at,status")
+            # UTC як ...Z: "+00:00" у query string перетворюється на пробіл → PostgREST 400
+            evs = sb_get("ad_events", f"project=eq.{PROJECT}&status=neq.cancelled"
+                                      f"&starts_at=gte.{frm:%Y-%m-%dT%H:%M:%SZ}&starts_at=lt.{to:%Y-%m-%dT%H:%M:%SZ}"
+                                      f"&order=starts_at&select=title,starts_at,status")
             msg = calendar_msg(evs, now_k)
             if msg and tg(msg):
                 sb_upsert("ad_alerts", [{"key": ck, "project": PROJECT, "kind": "calendar", "message": msg,
