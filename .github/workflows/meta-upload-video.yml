@@ -1,0 +1,24 @@
+name: Meta Upload Ad Video (write)
+# Заливає відео в рекламний акаунт DreamCar за публічним URL (Graph API advideos, file_url).
+# Потрібно, бо завантаження медіа через Meta MCP на акаунті не розкатане (28.09.2026).
+# Вихід: рядки "VIDEO <name> <video_id> <status>" у лозі і в summary.
+on:
+  workflow_dispatch:
+    inputs:
+      videos:
+        description: 'name|https://url.mp4||name2|https://url2.mp4'
+        required: true
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Upload
+        env:
+          FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+          AD_ACCOUNT_ID: '4136058269783354'
+          VIDEOS: ${{ inputs.videos }}
+        run: python3 scripts/meta_upload_video.py
