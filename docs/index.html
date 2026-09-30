@@ -2507,6 +2507,23 @@ function adsBaseRange() {
   return { fromD, toD };
 }
 
+// 30.09.2026 (Вадим): PostgREST ріже будь-яку вибірку на 1000 рядків. dashboard_ads_data
+// має десятки тисяч денних рядків, тож сума spend на клієнті була ЗАНИЖЕНА (для «весь
+// період Ауді» показувало 348k замість 642k). Тягнемо ВСІ рядки посторінково (range).
+// buildQuery МАЄ будувати НОВИЙ запит на кожен виклик (Supabase builder одноразовий).
+async function fetchAllAdsPaged(buildQuery) {
+  const PAGE = 1000; let from = 0; let out = [];
+  for (;;) {
+    const { data, error } = await buildQuery().range(from, from + PAGE - 1);
+    if (error) throw error;
+    if (!data || !data.length) break;
+    out = out.concat(data);
+    if (data.length < PAGE) break;
+    from += PAGE;
+  }
+  return out;
+}
+
 async function aggViaRPC(field) {
   // 08.06.2026 P0 Fix: для UTM-аналітики (Кампанії/Виконавець/Джерела/Оголошення/Контент)
   // НЕ звужуємо по project — бо кампанії й виконавці перетинають проекти.
@@ -3503,12 +3520,10 @@ async function renderOverview() {
     let adSpend = 0;
     try {
       const adsR = adsBaseRange();
-      let aq = sb.from('dashboard_ads_data')
-        .select('spend')
-        .gte('date_start', adsR.fromD)
-        .lte('date_start', adsR.toD);
-      aq = narrowAdsByUtm(narrowAdsByProject(aq));
-      const { data } = await aq;
+      const _aqBuild = () => narrowAdsByUtm(narrowAdsByProject(
+        sb.from('dashboard_ads_data').select('spend')
+          .gte('date_start', adsR.fromD).lte('date_start', adsR.toD)));
+      const data = await fetchAllAdsPaged(_aqBuild);   // 30.09: без 1000-ліміту
       (data||[]).forEach(r => adSpend += Number(r.spend||0));
     } catch(e) {}
 
@@ -4069,17 +4084,19 @@ async function renderUtmField(field, title, csvName) {
     let adMap = new Map();
     try {
       const adsR = adsBaseRange();
-      let adsQ = sb.from('dashboard_ads_data')
-        .select(field + ', spend')
-        .gte('date_start', adsR.fromD)
-        .lte('date_start', adsR.toD);
-      // 15.09.2026: дзеркалимо aggViaRPC — для UTM-полів бік угод НЕ звужується по проєкту
-      // (кампанії й виконавці перетинають проєкти), тож і бік витрат не звужуємо — інакше ROAS буде з різних охоплень.
-      if (!['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].includes(field)) {
-        adsQ = narrowAdsByProject(adsQ);
-      }
-      adsQ = narrowAdsByUtm(adsQ);
-      const { data: ads } = await adsQ;
+      const _adsBuild = () => {
+        let q = sb.from('dashboard_ads_data')
+          .select(field + ', spend')
+          .gte('date_start', adsR.fromD)
+          .lte('date_start', adsR.toD);
+        // 15.09.2026: дзеркалимо aggViaRPC — для UTM-полів бік угод НЕ звужується по проєкту
+        // (кампанії й виконавці перетинають проєкти), тож і бік витрат не звужуємо.
+        if (!['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].includes(field)) {
+          q = narrowAdsByProject(q);
+        }
+        return narrowAdsByUtm(q);
+      };
+      const ads = await fetchAllAdsPaged(_adsBuild);   // 30.09: без 1000-ліміту
       (ads||[]).forEach(a => {
         const k = a[field] || '(none)';
         adMap.set(k, (adMap.get(k)||0) + Number(a.spend||0));
@@ -4186,11 +4203,11 @@ async function renderCampaigns() {
   try {
     const [rows, adsRes] = await Promise.all([
       fetchAllDealsBatched(30000),
-      (function(){ const r = adsBaseRange(); return narrowAdsByUtm(narrowAdsByProject(sb.from('dashboard_ads_data').select('campaign_name, spend, impressions, clicks').gte('date_start', r.fromD).lte('date_start', r.toD))); })()
+      (function(){ const r = adsBaseRange(); return fetchAllAdsPaged(() => narrowAdsByUtm(narrowAdsByProject(sb.from('dashboard_ads_data').select('campaign_name, spend, impressions, clicks').gte('date_start', r.fromD).lte('date_start', r.toD)))); })()
     ]);
     const agg = aggregateByField(rows, 'utm_campaign');
     const adMap = new Map();
-    (adsRes.data||[]).forEach(a => {
+    (adsRes||[]).forEach(a => {
       const k = a.campaign_name;
       if (!k) return;
       if (!adMap.has(k)) adMap.set(k, { spend:0, impr:0, clicks:0 });
