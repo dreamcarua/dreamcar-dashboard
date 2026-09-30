@@ -114,7 +114,7 @@ def fetch_segments():
     log(f'Активний цикл: {projs[0]["code"] if projs else "нема"} (з {cycle_start})')
 
     from collections import defaultdict
-    per_cust = defaultdict(lambda: {'email': None, 'phone': None, 'total365': 0.0, 'cycle': False})
+    per_cust = defaultdict(lambda: {'email': None, 'phone': None, 'total365': 0.0, 'cycle': False, 'n': 0, 'last_paid': ''})
     now = time.time()
     for r in rows:
         e, p = norm_email(r.get('customer_email')), norm_phone(r.get('customer_phone'))
@@ -130,6 +130,9 @@ def fetch_segments():
         except Exception:
             ts = 0
         amt = float(r.get('amount') or 0)
+        c['n'] += 1
+        if paid > c['last_paid']:
+            c['last_paid'] = paid
         if amt > 0 and amt < 100000 and now - ts < 365 * 86400:
             c['total365'] += amt
         if cycle_start and paid[:10] >= cycle_start:
@@ -141,10 +144,39 @@ def fetch_segments():
     payers365 = sorted([c for c in custs if c['total365'] > 0], key=lambda x: -x['total365'])
     top_n = max(100, int(len(payers365) * 0.2))
     seg_top = [(c['email'], c['phone']) for c in payers365[:top_n]]
+    # 30.09.2026 (Вадим «3 давай, особливий»): лояльні 3+ оплати, у поточному циклі ще не купили
+    seg_loyal = [(c['email'], c['phone']) for c in custs if c['n'] >= 3 and not c['cycle']]
+    # 30.09.2026 (Вадим «2 хороша ідея»): незавершені оплати 14д — угода не pay і після неї людина не платила
+    seg_pending = []
+    try:
+        since = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(time.time() - 14 * 86400))
+        prow, off = [], 0
+        while True:
+            ch = sb_select(f'dashboard_deals?select=customer_email,customer_phone,created_at&status=neq.pay&created_at=gte.{since}&order=created_at.desc&limit=1000&offset={off}')
+            prow.extend(ch)
+            if len(ch) < 1000:
+                break
+            off += 1000
+        seen = set()
+        for r in prow:
+            e, p = norm_email(r.get('customer_email')), norm_phone(r.get('customer_phone'))
+            key = e or p
+            if not key or key in seen:
+                continue
+            c = per_cust.get(key)
+            if c and c['last_paid'] and c['last_paid'] >= (r.get('created_at') or ''):
+                continue  # потім оплатив
+            seen.add(key)
+            seg_pending.append((e, p))
+    except Exception as ex:
+        log(f'pending segment failed: {ex}')
+    log(f'Нові сегменти: loyal3+={len(seg_loyal)} · pending14d={len(seg_pending)}')
     log(f'Сегменти: all={len(seg_all)} · cycle={len(seg_cycle)} · top20%365d={len(seg_top)} (поріг топу: {payers365[top_n-1]["total365"] if payers365 else 0:.0f} грн)')
     return {'DC · AUTO · Покупці (всі)': seg_all,
             'DC · AUTO · Покупці поточного циклу': seg_cycle,
-            'DC · AUTO · Топ-20% LTV': seg_top}
+            'DC · AUTO · Топ-20% LTV': seg_top,
+            'DC · AUTO · Лояльні 3+ без поточного циклу': seg_loyal,
+            'DC · AUTO · Незавершені оплати 14д': seg_pending}
 
 
 # ---------- Meta CA ----------
