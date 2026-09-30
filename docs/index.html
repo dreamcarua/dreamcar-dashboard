@@ -4107,6 +4107,7 @@ async function renderUtmField(field, title, csvName) {
       <div class="section-head">
         <div><h1>${escapeHtml(title)}</h1><div class="subtitle">${aggView.length} значень · ${fmtNum(totalLeads)} лідів${filters.source_filter ? ' · фільтр: '+filters.source_filter : ''}</div></div>
       </div>
+      ${field === 'utm_term' ? `<div class="card" style="border-left:3px solid var(--red);padding:12px 14px;margin-bottom:14px;font-size:12.5px;line-height:1.55;">ℹ️ <b>Витрати тут — по рекламному АКАУНТУ, не по баєру.</b> Мітки: <b>vadym</b> = акаунт DreamCar.ua UAH (уся реклама акаунту, разом з оголошеннями vira/artem), <b>fortunatos</b> = акаунт DreamCar.ua CLUB UAH. Тому у vira/artem є виручка, але окремих витрат нема — їхні оголошення йдуть в акаунті UAH під міткою vadym. Щоб зʼявився чесний ROAS по кожному баєру, баєр має прописати <code>utm_term=&lt;імʼя&gt;</code> у «Параметрах URL» оголошення (зараз url_tags порожні → ETL мітить по акаунту).</div>` : ''}
 
       <div class="grid-2">
         <div class="card">
