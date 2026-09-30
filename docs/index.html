@@ -1609,12 +1609,25 @@
     var fabCnt = document.getElementById('filterFabCnt');
 
     // R8.1: forward declarations — щоб openSidebar() міг викликати closeFilters() etc.
+    // R8.4 30.09.2026: чи ми у мобільному drawer-режимі (бургер видно). Інакше — десктоп,
+    // де сайдбар статичний і його НЕ можна чіпати inline-стилями.
+    function isDrawerMode(){ try { return window.matchMedia('(max-width:900px)').matches; } catch(_) { return false; } }
+    var DRAWER_INLINE_PROPS = ['position','top','bottom','left','height','max-height','width','max-width','z-index','overflow-y','visibility','opacity','transform','-webkit-transform'];
+    function clearSidebarInline(){
+      if (!sidebar) return;
+      DRAWER_INLINE_PROPS.forEach(function(p){ sidebar.style.removeProperty(p); });
+    }
     function closeSidebar(){
       if (sidebar) {
         sidebar.classList.remove('open');
-        // R8.2 27.09.2026: inline !important тримає drawer за екраном незалежно від каскаду
-        sidebar.style.setProperty('transform','translateX(-100%)','important');
-        sidebar.style.setProperty('-webkit-transform','translateX(-100%)','important');
+        if (isDrawerMode()) {
+          // мобільний: тримаємо drawer за екраном inline !important
+          sidebar.style.setProperty('transform','translateX(-100%)','important');
+          sidebar.style.setProperty('-webkit-transform','translateX(-100%)','important');
+        } else {
+          // R8.4: десктоп — прибрати будь-які drawer-inline (інакше статичний сайдбар зникає)
+          clearSidebarInline();
+        }
       }
       if (sidebarBd) sidebarBd.classList.remove('open');
       document.body.style.overflow = '';
@@ -1631,11 +1644,11 @@
     // ---- Sidebar drawer ----
     function openSidebar(){
       closeKebab(); closeFilters();           // R8.1 mutual exclusion
-      if (sidebar) {
+      if (sidebar && isDrawerMode()) {
         sidebar.classList.add('open');
         // R8.2 27.09.2026 (Вадим: меню не відкривалось на iOS Safari; 3 CSS-фікси не допомогли).
         // Форсуємо весь стан drawer inline з !important — б'є будь-який @media-каскад і обходить
-        // iOS-баг з toggl-ом !important-трансформа. Desktop не зачіпається: там burger display:none.
+        // iOS-баг з toggl-ом !important-трансформа. R8.4: лише у drawer-режимі (мобільний).
         var st = sidebar.style;
         st.setProperty('position','fixed','important');
         st.setProperty('top','0','important');
