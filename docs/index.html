@@ -2514,7 +2514,9 @@ function adsBaseRange() {
 async function fetchAllAdsPaged(buildQuery) {
   const PAGE = 1000; let from = 0; let out = [];
   for (;;) {
-    const { data, error } = await buildQuery().range(from, from + PAGE - 1);
+    // .order('id') ОБОВ'ЯЗКОВИЙ: офсет-пагінація без стабільного сортування
+    // може дублювати/пропускати рядки при паралельному ETL (*/15) → невірна сума.
+    const { data, error } = await buildQuery().order('id', { ascending: true }).range(from, from + PAGE - 1);
     if (error) throw error;
     if (!data || !data.length) break;
     out = out.concat(data);
@@ -4967,6 +4969,7 @@ async function renderAdsOverview() {
       const { data, error } = await narrowAdsByUtm(narrowAdsByProject(sb.from('dashboard_ads_data').select('*')
         .gte('date_start', _adsR1.fromD).lte('date_start', _adsR1.toD)))
         .order('date_start', { ascending: true })
+        .order('id', { ascending: true })   // тай-брейкер: date_start не унікальний → стабільний офсет
         .range(offset, offset + BATCH - 1);
       if (error) throw error;
       if (!data || !data.length) break;
@@ -5036,6 +5039,7 @@ async function renderAdsCampaigns() {
       const { data, error } = await narrowAdsByUtm(narrowAdsByProject(sb.from('dashboard_ads_data').select('*')
         .gte('date_start', _adsR2.fromD).lte('date_start', _adsR2.toD)))
         .order('date_start', { ascending: true })
+        .order('id', { ascending: true })   // тай-брейкер: date_start не унікальний → стабільний офсет
         .range(offset, offset + BATCH - 1);
       if (error) throw error;
       if (!data || !data.length) break;
