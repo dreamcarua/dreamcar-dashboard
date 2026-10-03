@@ -3440,6 +3440,16 @@ async function fetchLeadsCount() {
   const DEAL_LEVEL_FILTERS = ['status','customer_type','tariff','pay_provider','funnel_type',
     'traffic_type','utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
   if (DEAL_LEVEL_FILTERS.some(k => filters[k])) return null;
+  // 03.10.2026 FIX: dashboard_webhooks тримає ~14 днів. Якщо період починається
+  // РАНІШЕ за найстаріший наявний webhook — лічильник лідів частковий (менший за
+  // оплати → success rate >100%, напр. AUDI: 9 789 лідів / 14 425 оплат = 147%).
+  // Повертаємо null → знаменником стає dealsTotal (усі статуси, повна історія угод).
+  try {
+    const { data: _ow } = await sb.from('dashboard_webhooks')
+      .select('created_at').order('created_at', { ascending: true }).limit(1);
+    const _oldest = _ow && _ow[0] && _ow[0].created_at ? new Date(_ow[0].created_at) : null;
+    if (_oldest && new Date(kyivIsoStart(filters.from)) < _oldest) return null;
+  } catch (_) { /* проба не вдалась — рахуємо webhooks як раніше */ }
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
       const { count, error } = await buildQuery();
