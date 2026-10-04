@@ -3293,10 +3293,11 @@ async function renderProjectsOverview() {
   const c = $('#content');
   c.innerHTML = `<div class="section-head"><h1>🏎️ Проекти</h1></div>${loadingHTML()}`;
   try {
-    const [projRes, uniqRes, globRes] = await Promise.all([
+    const [projRes, uniqRes, globRes, pnlRes] = await Promise.all([
       sb.rpc('dashboard_projects_with_stats'),
       sb.rpc('dashboard_unique_buyers_total'),
-      sb.rpc('dashboard_globals').then(r => r.error ? null : (r.data||[])[0])
+      sb.rpc('dashboard_globals').then(r => r.error ? null : (r.data||[])[0]),
+      sb.rpc('dashboard_project_pnl').then(r => r.error ? [] : (r.data||[]))
     ]);
     if (projRes.error) throw projRes.error;
     const rows = (projRes.data || []).map(r => ({
@@ -3317,6 +3318,27 @@ async function renderProjectsOverview() {
       cac: r.cac != null ? Number(r.cac) : null
     }));
 
+    // 04.10.2026 — справжній ROI/прибуток із ПОВНОГО P&L (dashboard_project_pnl:
+    // реклама + приз-авто + фікс + %-витрати + собівартість). Поточний roi_pct —
+    // це рекламний ROAS ((виручка−реклама)/реклама), який у рази завищував «ROI».
+    // Два реєстри проєктів мають різні коди → мапимо stats.code → launches.code
+    // (ідентичність + легаси-винятки; нові проєкти з однаковим кодом підхопляться самі).
+    const PNL_CODE_ALIAS = {
+      audi_e_tron: 'audi_etron', bmw_x6m: 'x6m', motorcycle_jun2026: 'moto',
+      iphone_17_jun2026: 'iphone17', bmw_x5_hybrid: 'dc17_x5',
+      mercedes_gle_coupe: 'mercedes_gle', iphone_17_jul2026: 'iphone2'
+    };
+    const pnlByCode = {};
+    (pnlRes || []).forEach(p => { if (p && p.code) pnlByCode[String(p.code).toLowerCase()] = p; });
+    rows.forEach(r => {
+      const key = PNL_CODE_ALIAS[r.code] || String(r.code || '').toLowerCase();
+      const p = pnlByCode[key] || null;
+      r.true_roi    = p && p.true_roi_pct   != null ? Number(p.true_roi_pct)   : null;
+      r.true_profit = p && p.true_net_profit!= null ? Number(p.true_net_profit): null;
+      r.total_cost  = p && p.total_cost     != null ? Number(p.total_cost)     : null;
+      r.roas        = p && p.roas != null ? Number(p.roas) : (r.ad_spend > 0 ? r.revenue / r.ad_spend : null);
+    });
+
     const totals = rows.reduce((a,r) => ({
       leads: a.leads + r.leads, paid: a.paid + r.paid,
       revenue: a.revenue + r.revenue,
@@ -3326,7 +3348,10 @@ async function renderProjectsOverview() {
     const avgConv = totals.leads > 0 ? (totals.paid / totals.leads * 100) : 0;
     const avgAov = totals.paid > 0 ? (totals.revenue / totals.paid) : 0;
     const trueUniqBuyers = Number(((uniqRes.data || [])[0] || {}).unique_buyers || 0);
-    const totalRoiPct = totals.total_spend > 0 ? ((totals.revenue - totals.total_spend) / totals.total_spend * 100) : null;
+    // 04.10.2026 — загальний ROI теж із повного P&L: Σ чистий прибуток / Σ повні витрати
+    const pnlTotCost = rows.reduce((s, r) => s + (r.total_cost || 0), 0);
+    const pnlTotProfit = rows.reduce((s, r) => s + (r.true_profit || 0), 0);
+    const totalRoiPct = pnlTotCost > 0 ? (pnlTotProfit / pnlTotCost * 100) : null;
     const avgCac = totals.paid > 0 && totals.total_spend > 0 ? (totals.total_spend / totals.paid) : null;
     const bestProj = rows.reduce((best, r) => r.revenue > (best?.revenue || 0) ? r : best, null);
     const bestConv = rows.reduce((best, r) => r.conv_rate > (best?.conv_rate || 0) ? r : best, null);
@@ -3388,7 +3413,9 @@ async function renderProjectsOverview() {
         { key: 'paid', label: 'Оплати', class: 'num', fmt: fmtNum },
         { key: 'revenue', label: 'Виручка', class: 'num', fmt: fmtMoney },
         { key: 'ad_spend', label: 'Реклама', class: 'num', fmt: v => v > 0 ? fmtMoney(v) : '—' },
-        { key: 'roi_pct', label: 'ROI %', class: 'num', fmt: v => v == null ? '—' : `<span class="pill ${v >= 0 ? 'pay' : 'fail'}">${v >= 0 ? '+' : ''}${v.toFixed(0)}%</span>` },
+        { key: 'roas', label: 'ROAS', class: 'num', fmt: v => v == null ? '—' : v.toFixed(1) + 'x' },
+        { key: 'true_roi', label: 'ROI % (P&L)', class: 'num', fmt: v => v == null ? '—' : `<span class="pill ${v >= 0 ? 'pay' : 'fail'}">${v >= 0 ? '+' : ''}${v.toFixed(0)}%</span>` },
+        { key: 'true_profit', label: 'Чистий прибуток', class: 'num', fmt: v => v == null ? '—' : fmtMoney(v) },
         { key: 'cac', label: 'CAC', class: 'num', fmt: v => v == null ? '—' : fmtMoney(v) },
         { key: 'buyers', label: 'Покупців', class: 'num', fmt: fmtNum },
         { key: 'conv_rate', label: 'Конв %', class: 'num', fmt: fmtPct },
