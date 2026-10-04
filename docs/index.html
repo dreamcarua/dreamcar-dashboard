@@ -3293,11 +3293,12 @@ async function renderProjectsOverview() {
   const c = $('#content');
   c.innerHTML = `<div class="section-head"><h1>🏎️ Проекти</h1></div>${loadingHTML()}`;
   try {
-    const [projRes, uniqRes, globRes, pnlRes] = await Promise.all([
+    const [projRes, uniqRes, globRes, pnlRes, projMetaRes] = await Promise.all([
       sb.rpc('dashboard_projects_with_stats'),
       sb.rpc('dashboard_unique_buyers_total'),
       sb.rpc('dashboard_globals').then(r => r.error ? null : (r.data||[])[0]),
-      sb.rpc('dashboard_project_pnl').then(r => r.error ? [] : (r.data||[]))
+      sb.rpc('dashboard_project_pnl').then(r => r.error ? [] : (r.data||[])),
+      sb.from('dashboard_projects').select('code, launch_code').then(r => r.error ? [] : (r.data||[]))
     ]);
     if (projRes.error) throw projRes.error;
     const rows = (projRes.data || []).map(r => ({
@@ -3321,17 +3322,14 @@ async function renderProjectsOverview() {
     // 04.10.2026 — справжній ROI/прибуток із ПОВНОГО P&L (dashboard_project_pnl:
     // реклама + приз-авто + фікс + %-витрати + собівартість). Поточний roi_pct —
     // це рекламний ROAS ((виручка−реклама)/реклама), який у рази завищував «ROI».
-    // Два реєстри проєктів мають різні коди → мапимо stats.code → launches.code
-    // (ідентичність + легаси-винятки; нові проєкти з однаковим кодом підхопляться самі).
-    const PNL_CODE_ALIAS = {
-      audi_e_tron: 'audi_etron', bmw_x6m: 'x6m', motorcycle_jun2026: 'moto',
-      iphone_17_jun2026: 'iphone17', bmw_x5_hybrid: 'dc17_x5',
-      mercedes_gle_coupe: 'mercedes_gle', iphone_17_jul2026: 'iphone2'
-    };
+    // Два реєстри проєктів мають різні коди → міст у БД: dashboard_projects.launch_code
+    // (міграція 033). Фолбек на сам код (ідентичність), якщо launch_code не заданий.
+    const lcByCode = {};
+    (projMetaRes || []).forEach(m => { if (m && m.code) lcByCode[m.code] = m.launch_code; });
     const pnlByCode = {};
     (pnlRes || []).forEach(p => { if (p && p.code) pnlByCode[String(p.code).toLowerCase()] = p; });
     rows.forEach(r => {
-      const key = PNL_CODE_ALIAS[r.code] || String(r.code || '').toLowerCase();
+      const key = String(lcByCode[r.code] || r.code || '').toLowerCase();
       const p = pnlByCode[key] || null;
       r.true_roi    = p && p.true_roi_pct   != null ? Number(p.true_roi_pct)   : null;
       r.true_profit = p && p.true_net_profit!= null ? Number(p.true_net_profit): null;
