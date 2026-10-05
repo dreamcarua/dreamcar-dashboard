@@ -3335,6 +3335,10 @@ async function renderProjectsOverview() {
       r.true_profit = p && p.true_net_profit!= null ? Number(p.true_net_profit): null;
       r.total_cost  = p && p.total_cost     != null ? Number(p.total_cost)     : null;
       r.roas        = p && p.roas != null ? Number(p.roas) : (r.ad_spend > 0 ? r.revenue / r.ad_spend : null);
+      // 05.10.2026 — ефективність на день: чистий прибуток (P&L) / реально відпрацьовані дні.
+      // Нормалізує проєкти різної тривалості (5 vs 30 днів). elapsed_days = старт→сьогодні (dashboard_project_pnl).
+      r.elapsed_days   = p && p.elapsed_days != null ? Number(p.elapsed_days) : null;
+      r.profit_per_day = (r.true_profit != null && r.elapsed_days && r.elapsed_days > 0) ? (r.true_profit / r.elapsed_days) : null;
     });
 
     const totals = rows.reduce((a,r) => ({
@@ -3414,6 +3418,7 @@ async function renderProjectsOverview() {
         { key: 'roas', label: 'ROAS', class: 'num', fmt: v => v == null ? '—' : v.toFixed(1) + 'x' },
         { key: 'true_roi', label: 'ROI % (P&L)', class: 'num', fmt: v => v == null ? '—' : `<span class="pill ${v >= 0 ? 'pay' : 'fail'}">${v >= 0 ? '+' : ''}${v.toFixed(0)}%</span>` },
         { key: 'true_profit', label: 'Чистий прибуток', class: 'num', fmt: v => v == null ? '—' : fmtMoney(v) },
+        { key: 'profit_per_day', label: 'Прибуток/день', class: 'num', fmt: (v, r) => v == null ? '—' : fmtMoney(v) + (r.elapsed_days ? `<span style="opacity:.5;font-size:.85em"> ·${r.elapsed_days}д</span>` : '') },
         { key: 'cac', label: 'CAC', class: 'num', fmt: v => v == null ? '—' : fmtMoney(v) },
         { key: 'buyers', label: 'Покупців', class: 'num', fmt: fmtNum },
         { key: 'conv_rate', label: 'Конв %', class: 'num', fmt: fmtPct },
