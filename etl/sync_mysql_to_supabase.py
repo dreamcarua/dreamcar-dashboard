@@ -333,12 +333,53 @@ def sync_ads(mode, limit=None):
     return pushed
 
 
+# ===== SITE DB (database `dreamcar`: dc_payments, dc_funnel_events) =====
+SITE_DB = os.getenv('MYSQL_SITE_DB', 'dreamcar')
+
+
+def site_conn():
+    """Той самий MySQL-користувач, але база сайту. READ-ONLY (тільки SELECT)."""
+    return pymysql.connect(
+        host=MYSQL_HOST, port=MYSQL_PORT,
+        user=MYSQL_USER, password=MYSQL_PASS,
+        database=SITE_DB, connect_timeout=15, read_timeout=120,
+        cursorclass=pymysql.cursors.DictCursor,
+        charset='utf8mb4',
+    )
+
+
+def check_site_db():
+    """Діагностика доступу до бази сайту. Друкує лише булеві/лічильники/назви колонок, жодних даних чи кредів."""
+    ok = True
+    try:
+        conn = site_conn()
+    except Exception as e:
+        log(f'[check_site_db] connect to `{SITE_DB}`: FAIL ({type(e).__name__}: {str(e)[:160]})')
+        return False
+    cur = conn.cursor()
+    for t in ('dc_payments', 'dc_funnel_events'):
+        try:
+            cur.execute(f'SELECT COUNT(*) AS c, MIN(id) AS mn, MAX(id) AS mx, MIN(created_at) AS d0, MAX(created_at) AS d1 FROM {t}')
+            r = cur.fetchone()
+            log(f'[check_site_db] {t}: SELECT ok, rows={r["c"]}, id {r["mn"]}..{r["mx"]}, created_at {r["d0"]}..{r["d1"]}')
+            cur.execute(f'SHOW COLUMNS FROM {t}')
+            log(f'[check_site_db] {t} columns: ' + ', '.join(f'{c["Field"]}:{c["Type"]}' for c in cur.fetchall()))
+            cur.execute(f'SHOW INDEX FROM {t}')
+            log(f'[check_site_db] {t} indexed: ' + ', '.join(sorted({c["Column_name"] for c in cur.fetchall()})))
+        except Exception as e:
+            ok = False
+            log(f'[check_site_db] {t}: FAIL ({type(e).__name__}: {str(e)[:160]})')
+    conn.close()
+    log(f'[check_site_db] access={ok}')
+    return ok
+
+
 # ===== MAIN =====
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--mode', choices=['initial', 'incremental'], default='incremental')
     ap.add_argument('--limit', type=int, default=None)
-    ap.add_argument('--only', choices=['deals', 'webhooks', 'ads', 'all'], default='all')
+    ap.add_argument('--only', choices=['deals', 'webhooks', 'ads', 'all', 'check_site_db'], default='all')
     args = ap.parse_args()
 
     if not SB_KEY:
@@ -362,6 +403,8 @@ def main():
                 sys.exit(1)
     except Exception as e:
         log(f'[auth] WARN: cannot decode JWT: {e}')
+    if args.only == 'check_site_db':
+        sys.exit(0 if check_site_db() else 2)
     results = {}
     if args.only in ('deals', 'all'):
         results['deals'] = sync_deals(args.mode, args.limit)

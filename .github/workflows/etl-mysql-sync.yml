@@ -33,7 +33,7 @@ on:
         required: true
         default: 'all'
         type: choice
-        options: [all, deals, webhooks, ads]
+        options: [all, deals, webhooks, ads, check_site_db]
       limit:
         description: 'Limit rows (для тесту, порожнє = без обмежень)'
         required: false
