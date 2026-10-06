@@ -1,145 +1,65 @@
 {
- "generated": "2026-10-05T12:32:22.644377+00:00",
+ "generated": "2026-10-06T12:12:25.412150+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-10-04",
-  "prev_date": "2026-10-03",
-  "spend": 45476.02,
-  "impressions": 202970,
-  "clicks": 3793,
-  "purchases": 479,
-  "pixel_roas": 4.71,
-  "cpa": 94.94,
-  "frequency": 3.15,
-  "real_ad_revenue": 106177,
-  "real_ad_roas": 2.33,
+  "date": "2026-10-05",
+  "prev_date": "2026-10-04",
+  "spend": 828.39,
+  "impressions": 3609,
+  "clicks": 114,
+  "purchases": 29,
+  "pixel_roas": 14.87,
+  "cpa": 28.57,
+  "frequency": 1.41,
+  "real_ad_revenue": 799,
+  "real_ad_roas": 0.96,
   "deltas": {
-   "spend": 40.9,
-   "pixel_roas": -41.3,
-   "purchases": -17.7,
-   "cpa": 71.2
+   "spend": -98.2,
+   "pixel_roas": 215.7,
+   "purchases": -93.9,
+   "cpa": -69.9
   },
   "week": {
    "this": {
-    "from": "2026-09-28",
-    "to": "2026-10-04",
-    "spend": 181173,
-    "purchases": 2403,
-    "pixel_roas": 5.3,
-    "cpa": 75.39,
-    "real_revenue": 495264,
-    "real_roas": 2.73
+    "from": "2026-09-29",
+    "to": "2026-10-05",
+    "spend": 161966,
+    "purchases": 2225,
+    "pixel_roas": 5.58,
+    "cpa": 72.79,
+    "real_revenue": 459193,
+    "real_roas": 2.84
    },
    "prev": {
-    "from": "2026-09-21",
-    "to": "2026-09-27",
-    "spend": 158503,
-    "purchases": 1397,
-    "pixel_roas": 4.39,
-    "cpa": 113.46,
-    "real_revenue": 278919,
-    "real_roas": 1.76
+    "from": "2026-09-22",
+    "to": "2026-09-28",
+    "spend": 156627,
+    "purchases": 1449,
+    "pixel_roas": 4.47,
+    "cpa": 108.09,
+    "real_revenue": 278089,
+    "real_roas": 1.78
    },
    "deltas": {
-    "spend": 14.3,
-    "real_roas": 55.1,
-    "pixel_roas": 20.7,
-    "cpa": -33.6,
-    "purchases": 72.0
+    "spend": 3.4,
+    "real_roas": 59.6,
+    "pixel_roas": 24.8,
+    "cpa": -32.7,
+    "purchases": 53.6
    }
   },
   "real_by_placement": [
    {
     "placement": "instagram_feed",
-    "revenue": 26724,
-    "paid": 72
-   },
-   {
-    "placement": "instagram_reels",
-    "revenue": 25000,
-    "paid": 58
-   },
-   {
-    "placement": "instagram_stories",
-    "revenue": 23701,
-    "paid": 55
-   },
-   {
-    "placement": "facebook_mobile_feed",
-    "revenue": 17487,
-    "paid": 48
-   },
-   {
-    "placement": "facebook_mobile_reels",
-    "revenue": 9673,
-    "paid": 27
-   },
-   {
-    "placement": "facebook_stories",
-    "revenue": 3093,
-    "paid": 7
-   },
-   {
-    "placement": "facebook_profile_feed",
-    "revenue": 499,
+    "revenue": 799,
     "paid": 1
    }
   ],
   "active_cycles": [],
-  "top_creatives": [
-   {
-    "name": "офер-04.10-final-post · DC|11 · claude",
-    "ad_id": "120252549806400624",
-    "spend": 483.57,
-    "purchases": 7,
-    "roas": 10.13,
-    "ctr": 1.14
-   },
-   {
-    "name": "офер-04.10-final-banner1 · DC|08 · claude",
-    "ad_id": "120252549808770624",
-    "spend": 697.54,
-    "purchases": 11,
-    "roas": 8.38,
-    "ctr": 1.84
-   },
-   {
-    "name": "посл прост (картинки) 22 проект AUDI Q7",
-    "ad_id": "120252370184320624",
-    "spend": 725.76,
-    "purchases": 10,
-    "roas": 5.77,
-    "ctr": 1.23
-   }
-  ],
-  "weak_creatives": [
-   {
-    "name": "q7s25 їхні мрії переможці · Ядро · claude",
-    "ad_id": "120252412206800624",
-    "spend": 1321.66,
-    "purchases": 7,
-    "roas": 1.36,
-    "ctr": 1.62
-   },
-   {
-    "name": "пʼятий пост (рілз) 22 проект AUDI Q7",
-    "ad_id": "120252143403540624",
-    "spend": 799.83,
-    "purchases": 5,
-    "roas": 1.27,
-    "ctr": 1.54
-   },
-   {
-    "name": "офер-04.10-final-video · DC|10 · claude",
-    "ad_id": "120252549808840624",
-    "spend": 554.66,
-    "purchases": 3,
-    "roas": 1.07,
-    "ctr": 3.9
-   }
-  ]
+  "top_creatives": [],
+  "weak_creatives": []
  },
  "projects": [
   {
@@ -6481,7 +6401,7 @@
     {
      "name": "Нова реклама з ціллю «Продажі» – копія – копія – копія",
      "ad_id": "120246624955600624",
-     "spend": 3261.38,
+     "spend": 3261.34,
      "purchases": 23,
      "roas": 3.01,
      "ctr": 0.9
@@ -7495,7 +7415,7 @@
     {
      "name": "KTM_картинка",
      "ad_id": "120249028734060624",
-     "spend": 5552.27,
+     "spend": 5552.17,
      "purchases": 139,
      "roas": 6.03,
      "ctr": 2.54
@@ -7527,7 +7447,7 @@
     {
      "name": "KTM_картинка – копія",
      "ad_id": "120249030813300624",
-     "spend": 12801.76,
+     "spend": 12801.74,
      "purchases": 267,
      "roas": 5.6,
      "ctr": 2.15
@@ -7567,7 +7487,7 @@
     {
      "name": "KTM_картинка – копія",
      "ad_id": "120249041160520624",
-     "spend": 13429.18,
+     "spend": 13429.15,
      "purchases": 260,
      "roas": 4.73,
      "ctr": 2.14
@@ -11593,9 +11513,9 @@
    "car_model": "Audi Q7 Prestige",
    "date_from": "2026-09-03",
    "date_to": "2026-10-04",
-   "spend": 567886.72,
-   "impressions": 3138375,
-   "clicks": 53064,
+   "spend": 567898.03,
+   "impressions": 3138436,
+   "clicks": 53081,
    "ctr": 1.69,
    "reach": 291524,
    "frequency": 10.77,
@@ -11603,20 +11523,20 @@
    "pixel_roas": 5.87,
    "cpa": 74.71,
    "pixel_revenue": 3334606,
-   "real_ad_revenue": 1555887,
+   "real_ad_revenue": 1556386,
    "real_ad_roas": 2.74,
    "gap_pct": -53.3,
    "segments": {
     "platform": [
      [
       "instagram",
-      443339.3,
+      443339.78,
       5794,
       5.71
      ],
      [
       "facebook",
-      119688.39,
+      119699.22,
       1696,
       6.3
      ],
@@ -11642,31 +11562,31 @@
     "age": [
      [
       "25-34",
-      276452.33,
+      276458.99,
       3626,
       6.04
      ],
      [
       "35-44",
-      196804.77,
+      196808.93,
       2813,
       6.06
      ],
      [
       "45-54",
-      41658.15,
+      41658.36,
       539,
       5.18
      ],
      [
       "18-24",
-      40155.02,
+      40155.16,
       448,
       4.64
      ],
      [
       "55-64",
-      7012.03,
+      7012.17,
       89,
       4.5
      ],
@@ -11686,13 +11606,13 @@
     "gender": [
      [
       "male",
-      452098.32,
+      452106.52,
       6367,
       6.29
      ],
      [
       "female",
-      114544.53,
+      114547.64,
       1210,
       4.2
      ],
@@ -11706,13 +11626,13 @@
     "device": [
      [
       "iphone",
-      348954.85,
+      348958.13,
       4494,
       5.75
      ],
      [
       "android_smartphone",
-      217022.68,
+      217030.71,
       3073,
       6.06
      ],
@@ -12330,9 +12250,9 @@
     {
      "name": "офер-04.10-final-banner1 · DC|08 · claude",
      "ad_id": "120252549808770624",
-     "spend": 697.54,
+     "spend": 698.54,
      "purchases": 11,
-     "roas": 8.38,
+     "roas": 8.37,
      "ctr": 1.84
     },
     {
@@ -12498,7 +12418,7 @@
     {
      "name": "перший пост (рілз) 22 проект AUDI Q7",
      "ad_id": "120252097633500624",
-     "spend": 68855.39,
+     "spend": 68855.89,
      "purchases": 1151,
      "roas": 7.08,
      "ctr": 1.78
@@ -12750,24 +12670,24 @@
     },
     {
      "date": "2026-10-04",
-     "spend": 45476.02,
+     "spend": 45487.33,
      "purchases": 479,
      "roas": 4.71,
-     "cpa": 94.94
+     "cpa": 94.96
     }
    ],
    "adsets": [
     {
      "name": "Broad · UA 18-45 · A+A · VALUE · інкремент",
-     "spend": 380783.49,
+     "spend": 380790.89,
      "purchases": 5544,
      "roas": 6.28,
      "ctr": 1.77,
-     "cpa": 68.68
+     "cpa": 68.69
     },
     {
      "name": "Покупці · pixel 180д + CRM всі · апсейл · VALUE · v2",
-     "spend": 41958.09,
+     "spend": 41959.39,
      "purchases": 545,
      "roas": 6.25,
      "ctr": 1.49,
@@ -12775,7 +12695,7 @@
     },
     {
      "name": "Покупці CRM+pixel 180д · excl поточний цикл · OFFSITE · claude",
-     "spend": 40137.42,
+     "spend": 40139.45,
      "purchases": 494,
      "roas": 5.02,
      "ctr": 1.36,
@@ -12799,7 +12719,7 @@
     },
     {
      "name": "Retarget · Engaged IF 30д · excl покупці (CRM+pixel+цикл) · v4 · claude",
-     "spend": 19447.47,
+     "spend": 19447.63,
      "purchases": 165,
      "roas": 3.34,
      "ctr": 1.39,
@@ -12842,14 +12762,9 @@
  ],
  "signals": [
   {
-   "sev": "mod",
-   "scope": "Вчора (10-04)",
-   "text": "Pixel ROAS вчора впав на 41% до дня раніше — стежити, чи не тренд."
-  },
-  {
    "sev": "inf",
    "scope": "Акаунт · тиждень",
-   "text": "Реал ROAS тижня зріс до 2.73 (+55%) — є простір масштабувати переможців."
+   "text": "Реал ROAS тижня зріс до 2.84 (+60%) — є простір масштабувати переможців."
   }
  ],
  "strategy": {
@@ -12862,7 +12777,7 @@
     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
     "status": "PAUSED",
     "daily_budget": 10350,
-    "spend": 854759,
+    "spend": 854768,
     "purchases": 13241,
     "roas": 6.75,
     "ctr": 1.71
