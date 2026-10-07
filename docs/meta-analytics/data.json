@@ -1,62 +1,56 @@
 {
- "generated": "2026-10-06T12:12:25.412150+00:00",
+ "generated": "2026-10-07T11:57:29.371337+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-10-05",
-  "prev_date": "2026-10-04",
-  "spend": 828.39,
-  "impressions": 3609,
-  "clicks": 114,
-  "purchases": 29,
-  "pixel_roas": 14.87,
-  "cpa": 28.57,
-  "frequency": 1.41,
-  "real_ad_revenue": 799,
-  "real_ad_roas": 0.96,
+  "date": "2026-10-06",
+  "prev_date": "2026-10-05",
+  "spend": 0,
+  "impressions": 0,
+  "clicks": 0,
+  "purchases": 0,
+  "pixel_roas": 0.0,
+  "cpa": null,
+  "frequency": 0.0,
+  "real_ad_revenue": 0,
+  "real_ad_roas": null,
   "deltas": {
-   "spend": -98.2,
-   "pixel_roas": 215.7,
-   "purchases": -93.9,
-   "cpa": -69.9
+   "spend": -100.0,
+   "pixel_roas": -100.0,
+   "purchases": -100.0,
+   "cpa": null
   },
   "week": {
    "this": {
-    "from": "2026-09-29",
-    "to": "2026-10-05",
-    "spend": 161966,
-    "purchases": 2225,
-    "pixel_roas": 5.58,
-    "cpa": 72.79,
-    "real_revenue": 459193,
-    "real_roas": 2.84
+    "from": "2026-09-30",
+    "to": "2026-10-06",
+    "spend": 147502,
+    "purchases": 2015,
+    "pixel_roas": 5.64,
+    "cpa": 73.2,
+    "real_revenue": 416382,
+    "real_roas": 2.82
    },
    "prev": {
-    "from": "2026-09-22",
-    "to": "2026-09-28",
-    "spend": 156627,
-    "purchases": 1449,
-    "pixel_roas": 4.47,
-    "cpa": 108.09,
-    "real_revenue": 278089,
-    "real_roas": 1.78
+    "from": "2026-09-23",
+    "to": "2026-09-29",
+    "spend": 145110,
+    "purchases": 1500,
+    "pixel_roas": 4.76,
+    "cpa": 96.74,
+    "real_revenue": 284684,
+    "real_roas": 1.96
    },
    "deltas": {
-    "spend": 3.4,
-    "real_roas": 59.6,
-    "pixel_roas": 24.8,
-    "cpa": -32.7,
-    "purchases": 53.6
+    "spend": 1.6,
+    "real_roas": 43.9,
+    "pixel_roas": 18.5,
+    "cpa": -24.3,
+    "purchases": 34.3
    }
   },
-  "real_by_placement": [
-   {
-    "placement": "instagram_feed",
-    "revenue": 799,
-    "paid": 1
-   }
-  ],
+  "real_by_placement": [],
   "active_cycles": [],
   "top_creatives": [],
   "weak_creatives": []
@@ -12762,9 +12756,14 @@
  ],
  "signals": [
   {
+   "sev": "mod",
+   "scope": "Вчора (10-06)",
+   "text": "Pixel ROAS вчора впав на 100% до дня раніше — стежити, чи не тренд."
+  },
+  {
    "sev": "inf",
    "scope": "Акаунт · тиждень",
-   "text": "Реал ROAS тижня зріс до 2.84 (+60%) — є простір масштабувати переможців."
+   "text": "Реал ROAS тижня зріс до 2.82 (+44%) — є простір масштабувати переможців."
   }
  ],
  "strategy": {
@@ -12776,7 +12775,7 @@
     "desc": "70-80% бюджету. Головний драйвер. Увесь робочий креатив-пул (12-20). Highest Volume на старті → Highest Value, коли стабільно.",
     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
     "status": "PAUSED",
-    "daily_budget": 10350,
+    "daily_budget": 7000,
     "spend": 854768,
     "purchases": 13241,
     "roas": 6.75,
