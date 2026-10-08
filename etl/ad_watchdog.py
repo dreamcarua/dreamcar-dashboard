@@ -314,7 +314,10 @@ def main():
     sb_upsert("ad_alerts", upserts, "key")
 
     # 5) календар першим запуском дня
-    if not quiet:
+    # 08.10.2026: вимкнено за замовчуванням. План дня тепер шле в робочі чати команди
+    # pg_cron 'general-team-digest-morning' → general_team_digest_enqueue() (dreamcar-team, міграція 042),
+    # з аудиторіями, багатоденними акціями, розсилками і шапкою. CALENDAR_DM=1 повертає старий DM.
+    if not quiet and os.getenv("CALENDAR_DM", "") == "1":
         ck = f"calendar:{now_k:%Y-%m-%d}"
         try:
             done = sb_get("ad_alerts", f"key=eq.{ck}&select=key")
