@@ -41,11 +41,6 @@ SEG_BREAKDOWNS = {
 }
 # placement (platform_position) вимкнено: Meta API блокує його з action-полями на цьому акаунті.
 
-TG_TOKEN = os.getenv('TG_BOT_TOKEN', '')
-TG_CHAT = os.getenv('TG_CHAT_ID', '')
-GH_TEAM_TOKEN = os.getenv('GH_TEAM_NOTIFY_TOKEN', '')   # Варіант A: міст cowork-notify (write до dreamcar-team)
-VADYM_ID = 'aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaaa'        # CEO (created_by/assignee)
-SEV_PRIORITY = {'cri': 'p1', 'mod': 'p2', 'inf': 'p4'}
 
 def log(m): print(f'[{datetime.now(timezone.utc):%H:%M:%S}] {m}', flush=True)
 
@@ -56,43 +51,6 @@ def _kyiv_now():
     except Exception:
         return datetime.now(timezone.utc)
 
-def build_digest(payload):
-    cur = [p for p in payload['projects'] if p.get('is_current')] or payload['projects'][-2:]
-    lines = ['📊 <b>Meta Ads — щоденний дайджест</b>', f'<i>{_kyiv_now():%d.%m %H:%M} Київ</i>', '']
-    for p in cur:
-        sp = f'{int(p.get("spend",0)):,}'.replace(',', ' ')
-        lines.append(f'🏁 <b>{p["name"]}</b> · {sp} ₴')
-        lines.append(f'   ROAS піксель {p.get("pixel_roas")} · реал {p.get("real_ad_roas")} · CPA {p.get("cpa")} ₴')
-        for r in (p.get('recommendations') or [])[:2]:
-            mark = '🔴' if r['sev'] == 'cri' else ('🟡' if r['sev'] == 'mod' else 'ℹ️')
-            lines.append(f'   {mark} {r["text"]}')
-        lines.append('')
-    lines.append('🔗 dashboard.dreamcar.ua/meta-analytics/')
-    return '\n'.join(lines)
-
-def post_tg_digest(payload):
-    """Фаза 3. B: пряма відправка (TG_BOT_TOKEN+TG_CHAT_ID). A: міст cowork-notify (GH_TEAM_NOTIFY_TOKEN)."""
-    text = build_digest(payload)
-    if TG_TOKEN and TG_CHAT:
-        try:
-            r = requests.post(f'https://api.telegram.org/bot{TG_TOKEN}/sendMessage',
-                json={'chat_id': TG_CHAT, 'text': text, 'parse_mode': 'HTML', 'disable_web_page_preview': True}, timeout=30)
-            log(f'  {"✅" if r.status_code == 200 else "⚠"} TG (direct): {r.status_code}'); return
-        except Exception as e:
-            log(f'  ⚠ TG direct exc: {e}')
-    if GH_TEAM_TOKEN:
-        import base64
-        fn = f'cowork-notify/{_kyiv_now():%Y-%m-%d-%H%M}-meta-digest.json'
-        content = json.dumps({'text': text, 'type': 'info', 'link': 'https://dashboard.dreamcar.ua/meta-analytics/'}, ensure_ascii=False)
-        try:
-            r = requests.put(f'https://api.github.com/repos/dreamcarua/dreamcar-team/contents/{fn}',
-                headers={'Authorization': f'Bearer {GH_TEAM_TOKEN}', 'Accept': 'application/vnd.github+json'},
-                json={'message': 'meta digest', 'content': base64.b64encode(content.encode()).decode(), 'branch': 'main'}, timeout=30)
-            log(f'  {"✅" if r.status_code in (200, 201) else "⚠"} TG (bridge): {r.status_code}'); return
-        except Exception as e:
-            log(f'  ⚠ TG bridge exc: {e}')
-    log('  ℹ TG digest пропущено (нема TG_BOT_TOKEN/TG_CHAT_ID або GH_TEAM_NOTIFY_TOKEN)')
-
 def _sb_get(path):
     try:
         r = requests.get(f'{SB_URL}/rest/v1/{path}', headers={'apikey': SB_KEY, 'Authorization': f'Bearer {SB_KEY}'}, timeout=30)
@@ -101,41 +59,6 @@ def _sb_get(path):
         log(f'  ⚠ sb_get: {e}')
     return None
 
-def create_tasks(payload):
-    """Авто-задачі у team_tasks з КРИТИЧНИХ рекомендацій поточних циклів (service-role + дедуп по title)."""
-    if not SB_KEY:
-        return
-    import urllib.parse
-    created = 0
-    for p in payload['projects']:
-        if not p.get('is_current'):
-            continue
-        for r in (p.get('recommendations') or []):
-            if r['sev'] != 'cri':
-                continue
-            title = f"Meta · {p['name']}: {r['text'][:70]}"
-            ex = _sb_get(f"team_tasks?select=id&title=eq.{urllib.parse.quote(title)}&status=neq.done&limit=1")
-            if ex:
-                continue
-            body = {'title': title,
-                    'description': f"{r['text']}\n\nПроєкт: {p['name']} ({p['date_from']}→{p['date_to']})\n"
-                                   f"ROAS піксель {p.get('pixel_roas')} · реал {p.get('real_ad_roas')}\n\n"
-                                   f"https://dashboard.dreamcar.ua/meta-analytics/",
-                    'priority': SEV_PRIORITY.get(r['sev'], 'p3'),
-                    'assignee_id': VADYM_ID, 'created_by': VADYM_ID,
-                    'tags': ['meta', 'etl', 'recommendation']}
-            try:
-                resp = requests.post(f'{SB_URL}/rest/v1/team_tasks',
-                    headers={'apikey': SB_KEY, 'Authorization': f'Bearer {SB_KEY}',
-                             'Content-Type': 'application/json', 'Prefer': 'return=minimal'},
-                    json=body, timeout=30)
-                if resp.status_code in (200, 201): created += 1
-                else: log(f'  ⚠ task {resp.status_code}: {resp.text[:120]}')
-            except Exception as e:
-                log(f'  ⚠ task exc: {e}')
-    log(f'  ✓ задач створено: {created}')
-
-# ---------------- Meta Graph API ----------------
 def fb_get(path, params=None):
     params = dict(params or {}); params['access_token'] = FB_TOKEN
     url = f'https://graph.facebook.com/{FB_API_VERSION}/{path}'
@@ -413,132 +336,7 @@ def daily_snapshot(active_names):
         'weak_creatives': weak[:3],
     }
 
-# ---------------- recommendations (Фаза 2) ----------------
-BREAKEVEN = 2.0     # беззбитковий ad-ROAS (висока маржа токенів DreamCar)
-TARGET_ROAS = 5.0   # робоча ціль
-FREQ_WARN = 4.5
-FREQ_CRIT = 6.5
-CPA_WARN = 60.0     # ₴ — комфортний поріг ціни покупки
-
-def _sp(n):  # форматування грошей
-    return f'{int(n):,}'.replace(',', ' ')
-
-def _seg_pick(rows, total, min_share=0.05):
-    """повертає (best, worst) сегменти за ROAS серед значущих (частка>=min_share, >=3 покупки)."""
-    if not rows or not total:
-        return None, None
-    sig = [r for r in rows if r[1] >= total * min_share and r[2] >= 3]
-    if len(sig) < 2:
-        return (sig[0] if sig else None), None
-    return max(sig, key=lambda r: r[3]), min(sig, key=lambda r: r[3])
-
-def recommend(p):
-    """Корисні, конкретні, пріоритезовані рекомендації. Тільки sev='cri' стає задачею."""
-    recs = []
-    spend = p.get('spend') or 0
-    px = p.get('pixel_roas') or 0
-    real = p.get('real_ad_roas')
-    freq = p.get('frequency') or 0
-    cur = p.get('is_current')
-    crv = p.get('creatives') or []
-    segs = p.get('segments') or {}
-
-    # 1) Збиткові креативи -> ЗАДАЧА
-    losers = sorted([c for c in crv if (c.get('roas') or 0) < BREAKEVEN and (c.get('spend') or 0) > 1000],
-                    key=lambda c: -(c.get('spend') or 0))
-    if losers:
-        waste = sum(c['spend'] for c in losers)
-        names = ', '.join(f'«{c["name"][:32]}» (ROAS {c["roas"]})' for c in losers[:3])
-        recs.append({'sev': 'cri', 'text': f'Вимкнути {len(losers)} збитков. креатив(ів): {names}. Зливають ~{_sp(waste)} ₴ при ROAS<{BREAKEVEN}.'})
-
-    # 2) Вигорання частоти (сумарна за цикл)
-    if freq >= FREQ_CRIT:
-        recs.append({'sev': 'cri', 'text': f'Сумарна частота {freq} за цикл — аудиторія вигоряє. Терміново освіжити креативи або розширити аудиторію/гео.'})
-    elif freq >= FREQ_WARN:
-        recs.append({'sev': 'mod', 'text': f'Сумарна частота {freq} за цикл близько до порогу вигорання — ротувати креатив кожні 4-5 днів або розширити аудиторію.'})
-
-    # 3) Масштабування (тільки поточні, здорові, із запасом охоплення)
-    if cur and px >= TARGET_ROAS and 0 < freq < 3.5:
-        recs.append({'sev': 'mod', 'text': f'ROAS {px} при сумарній частоті {freq} — є запас охоплення. Підняти денний бюджет на 20-30%.'})
-
-    # 4) Лідер-креатив -> масштабувати
-    winners = [c for c in crv if (c.get('roas') or 0) >= TARGET_ROAS and (c.get('spend') or 0) > 500]
-    if winners:
-        w = max(winners, key=lambda c: c['roas'])
-        recs.append({'sev': 'inf', 'text': f'Лідер: «{w["name"][:38]}» ROAS {w["roas"]}, CTR {w.get("ctr")}% — масштабувати й дублювати в інші adset.'})
-
-    # 5) Стать — звуження
-    gen = {str(r[0]).lower(): r for r in segs.get('gender', [])}
-    male, female = gen.get('male'), gen.get('female')
-    if male and female and male[1] > 100 and female[1] > 100:
-        if male[3] >= female[3] * 1.5:
-            sf = female[1] / spend * 100 if spend else 0
-            recs.append({'sev': 'mod', 'text': f'Чоловіки ROAS {male[3]} vs жінки {female[3]}. Жінки (~{sf:.0f}% бюджету) тягнуть униз — тестово звузити на чоловіків.'})
-        elif female[3] >= male[3] * 1.5:
-            recs.append({'sev': 'mod', 'text': f'Жінки ROAS {female[3]} vs чоловіки {male[3]} — цей приз краще заходить жінкам, посилити жіночу аудиторію.'})
-
-    # 6) Платформа — перерозподіл
-    b, w2 = _seg_pick(segs.get('platform', []), spend)
-    if b and w2 and b[0] != w2[0] and b[3] >= w2[3] * 1.4:
-        recs.append({'sev': 'inf', 'text': f'{b[0]} ROAS {b[3]} (найкраще) проти {w2[0]} {w2[3]} — змістити бюджет на {b[0]}.'})
-
-    # 7) Вік — ядро
-    ab, _ = _seg_pick(segs.get('age', []), spend)
-    if ab:
-        recs.append({'sev': 'inf', 'text': f'Найефективніший вік: {ab[0]} (ROAS {ab[3]}) — пріоритет у таргетингу.'})
-
-    # 8) Pixel vs Real
-    if real and px:
-        if real >= px * 1.3:
-            recs.append({'sev': 'inf', 'text': f'Реальний ad-ROAS {real} > піксель {px} — реклама ефективніша, ніж показує піксель (він недооцінює конверсії).'})
-        elif real <= px * 0.45:  # норма 2026 = 0.54 (pixel/real 1.86, research 07.2026); алерт лише коли гірше норми
-            recs.append({'sev': 'mod', 'text': f'Піксель завищує сильніше за норму (×1.86): реальний ad-ROAS {real} vs піксель {px}. Орієнтуватись на реальний.'})
-
-    # 9) CPA
-    cpa = p.get('cpa')
-    if cur and cpa and cpa > CPA_WARN:
-        recs.append({'sev': 'mod', 'text': f'Ціна покупки {cpa} ₴ — вище комфортного ({int(CPA_WARN)} ₴). Шукати дешевші зв\'язки (плейсмент/аудиторія/креатив).'})
-
-    order = {'cri': 0, 'mod': 1, 'inf': 2}
-    recs.sort(key=lambda r: order.get(r['sev'], 3))
-    return recs
-
-def build_signals(payload):
-    """Консолідований блок сигналів: акаунт-рівень (тиждень-до-тижня, денні зриви) +
-    критичні/важливі рекомендації поточних циклів. Сортування за серйозністю."""
-    sig = []
-    daily = payload.get('daily') or {}
-    wk = daily.get('week') or {}
-    t, p = wk.get('this') or {}, wk.get('prev') or {}
-    wd = wk.get('deltas') or {}
-    # тижневий реал-ROAS
-    if t.get('real_roas') and p.get('real_roas'):
-        ch = wd.get('real_roas')
-        if ch is not None and ch <= -25:
-            sig.append({'sev': 'cri', 'scope': 'Акаунт · тиждень',
-                        'text': f'Реал ROAS тижня {t["real_roas"]} vs попереднього {p["real_roas"]} ({ch:.0f}%) — перевірити креативи/аудиторію/бюджет.'})
-        elif ch is not None and ch >= 25:
-            sig.append({'sev': 'inf', 'scope': 'Акаунт · тиждень',
-                        'text': f'Реал ROAS тижня зріс до {t["real_roas"]} (+{ch:.0f}%) — є простір масштабувати переможців.'})
-    # тижневий CPA
-    if t.get('cpa') and p.get('cpa') and wd.get('cpa') is not None and wd['cpa'] >= 30:
-        sig.append({'sev': 'mod', 'scope': 'Акаунт · тиждень',
-                    'text': f'CPA тижня {t["cpa"]} ₴ vs {p["cpa"]} ₴ (+{wd["cpa"]:.0f}%) — залучення дорожчає.'})
-    # денний зрив pixel ROAS
-    dd = daily.get('deltas') or {}
-    if dd.get('pixel_roas') is not None and dd['pixel_roas'] <= -30:
-        sig.append({'sev': 'mod', 'scope': f'Вчора ({daily.get("date","")[5:]})',
-                    'text': f'Pixel ROAS вчора впав на {abs(dd["pixel_roas"]):.0f}% до дня раніше — стежити, чи не тренд.'})
-    # рекомендації поточних циклів (cri/mod)
-    for pr in payload.get('projects', []):
-        if not pr.get('is_current'):
-            continue
-        for r in (pr.get('recommendations') or []):
-            if r.get('sev') in ('cri', 'mod'):
-                sig.append({'sev': r['sev'], 'scope': pr['name'], 'text': r['text']})
-    order = {'cri': 0, 'mod': 1, 'inf': 2}
-    sig.sort(key=lambda s: order.get(s['sev'], 3))
-    return sig
+BREAKEVEN = 2.0     # беззбитковий ad-ROAS для списку слабких оголошень у денному зрізі
 
 # ---------------- strategy structure (2026) ----------------
 STRATEGY_CAMPAIGNS = [
@@ -627,7 +425,6 @@ def build_project(proj):
         'segments': segs, 'creatives': crv,
         'series': series, 'adsets': adset_rows, 'adsets_window': as_since,
     }
-    out['recommendations'] = recommend(out)
     return out
 
 def main():
@@ -663,7 +460,6 @@ def main():
         'daily': daily,
         'projects': built,
     }
-    payload['signals'] = build_signals(payload)
     try:
         payload['strategy'] = build_strategy()
     except Exception as e:
@@ -673,8 +469,6 @@ def main():
     with open(OUT_PATH, 'w', encoding='utf-8') as f:
         json.dump(payload, f, ensure_ascii=False, indent=1)
     log(f'✅ data.json: {len(built)} проєктів -> {OUT_PATH}')
-    create_tasks(payload)
-    post_tg_digest(payload)
 
 if __name__ == '__main__':
     main()
