@@ -2307,7 +2307,12 @@ function autoSelectNewestProject() {
   let upcoming = null;
   let recent = null;
   for (const p of __projectsList) {
-    const ds = p.date_start || '1900-01-01';
+    // 09.10.2026 FIX: проєкт без дати старту («Iphone за 99 грн») вважався «активним завжди»
+    // (1900…2999) і ставав поточним → filters.from = null → RPC падав «timestamp: "null"».
+    // Поточним може бути лише проєкт з датою старту і не «довічний» (кінець ≥ 2030).
+    if (!p.date_start) continue;
+    if ((p.date_end || '') >= '2030-01-01') continue;
+    const ds = p.date_start;
     const de = p.date_end || '2999-12-31';
     if (ds <= today && today <= de) {
       // currently running
@@ -2661,7 +2666,7 @@ async function loadProjects() {
     try {
       const { data: launchData } = await sb
         .from('launches')
-        .select('id, code, name, starts_on, ends_on, status, is_active, color, deal_aliases')
+        .select('id, code, name, starts_on, ends_on, status, is_active, color, deal_aliases, kind')
         // 14.06.2026 (Vadym): прибрав idea/planning — на цих стадіях ще немає даних для аналітики.
         // Показуємо тільки active → measure → completed → archived (вони можуть мати spend/leads).
         .in('status', ['active','measure','completed','archived'])
@@ -2681,6 +2686,9 @@ async function loadProjects() {
         });
       });
       (launchData || []).forEach(l => {
+        // 09.10.2026: у фільтр розіграшів — лише розіграші з датою старту (не контент/«Iphone за 99» без дат)
+        if (l.kind && l.kind !== 'raffle') return;
+        if (!l.starts_on) return;
         if (existingCodes.has(l.code)) return; // вже є у dashboard_projects (по code)
         // #390: skip якщо name збігається з вже існуючим (case-insensitive)
         const lName = (l.name || '').toUpperCase().trim();
