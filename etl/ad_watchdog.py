@@ -288,6 +288,32 @@ def find_stuck(approved_rows, now_utc, hours=None):
     return out
 
 
+def find_offer_missing(events, active_ad_names, now_kyiv):
+    """10.10.2026: акція для всіх (offer/x2/final) іде, а жодного ACTIVE оголошення «офер-DD.MM» немає.
+    Ловить випадок, коли задача event (прив'язана до Mac Studio) не відпрацювала. Перевірка з 45-ї хвилини
+    події і до 30 хв до кінця, щоб не сваритися на вікно запуску і зупинки."""
+    names = [str(n or "").lower() for n in active_ad_names]
+    out = []
+    for e in events:
+        if e.get("kind") not in ("offer", "x2", "final") or e.get("audience", "all") != "all":
+            continue
+        if e.get("status") == "cancelled":
+            continue
+        st = datetime.fromisoformat(e["starts_at"]).astimezone(KYIV)
+        en = datetime.fromisoformat(e["ends_at"]).astimezone(KYIV) if e.get("ends_at") else st + timedelta(days=1)
+        if not (st + timedelta(minutes=45) <= now_kyiv <= en - timedelta(minutes=30)):
+            continue
+        tags = {f"офер-{now_kyiv:%d.%m}", f"офер-{st:%d.%m}"}
+        if any(t in n for t in tags for n in names):
+            continue
+        out.append({"key": f"offer_missing:{e['id']}:{now_kyiv:%Y-%m-%d}", "kind": "offer_missing",
+                    "entity_id": str(e["id"]), "entity_name": e.get("title"),
+                    "message": f"🔴 <b>Акція йде, а офер-оголошень немає</b>: {esc(e.get('title'))}\n"
+                               f"подія {st:%d.%m %H:%M}–{en:%H:%M} Kyiv, ACTIVE оголошень «офер-{now_kyiv:%d.%m}» 0. "
+                               f"Перевір задачу event (Mac Studio) і запусти офер вручну."})
+    return out
+
+
 def calendar_msg(events, now_kyiv):
     today, tomorrow = now_kyiv.date(), now_kyiv.date() + timedelta(days=1)
     rows = {today: [], tomorrow: []}
@@ -357,6 +383,21 @@ def main():
     found += find_budget_cap(budget_sum, cap, parts)
     found += find_stall(camps, by_camp, now_k)
     log(f"  спенд сьогодні {spend_today:,.0f} ₴ · бюджети {budget_sum:,.0f} ₴ · живих кампаній {len(camps)} · тривог {len(found)}")
+
+    # 3б) акція йде, а офер-оголошень немає (10.10.2026)
+    try:
+        frm = (now_k - timedelta(days=2)).astimezone(timezone.utc)
+        evs_now = sb_get("ad_events", f"project=eq.{PROJECT}&status=neq.cancelled&kind=in.(offer,x2,final)"
+                                      f"&starts_at=gte.{frm:%Y-%m-%dT%H:%M:%SZ}&select=id,kind,title,audience,status,starts_at,ends_at")
+        if any(e.get("audience", "all") == "all" for e in evs_now):
+            live_ads = fb_get_all(f"act_{ACCOUNT}/ads", {"fields": "name", "effective_status": json.dumps(["ACTIVE"])})
+            om = find_offer_missing(evs_now, [a.get("name") for a in live_ads], now_k)
+            found += om
+            log(f"  офери: подій {len(evs_now)} · ACTIVE оголошень {len(live_ads)} · тривог {len(om)}")
+    except MetaRateLimited:
+        raise
+    except Exception as e:
+        log(f"  ⚠ офери: {e}")
 
     # 3а) мовчання режимів і завислі записи ad-director
     now_utc = datetime.now(timezone.utc)
