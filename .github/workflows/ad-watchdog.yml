@@ -7,8 +7,8 @@ name: Ad Watchdog (Meta, read-only)
 # Розклад зареєстровано повторно 28.09.2026: перші два слоти GitHub пропустив.
 
 on:
-  schedule:
-    - cron: "7 * * * *"
+  # 10.10.2026: розклад GitHub прибрано. Запускає pg_cron 10762 (:07 щогодини, workflow_dispatch);
+  # подвійний тригер подвоював запити до Meta і впирався в ліміт (код 17).
   workflow_dispatch:
     inputs:
       dry_run:

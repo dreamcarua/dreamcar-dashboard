@@ -69,11 +69,36 @@ def log(m):
 
 
 # ---------- Graph API (GET only) ----------
+class MetaRateLimited(RuntimeError):
+    """Ліміт запитів Graph API (коди 4, 17, 32, 613, 80004): тимчасово, не помилка сторожа."""
+
+
+RATE_LIMIT_CODES = {4, 17, 32, 613, 80004}
+
+
+def _rate_limited(r):
+    try:
+        e = r.json().get("error", {})
+    except Exception:
+        return False
+    return int(e.get("code") or 0) in RATE_LIMIT_CODES
+
+
 def fb_get_all(path, params):
-    """GET з пагінацією. Лише читання."""
+    """GET з пагінацією. Лише читання.
+    10.10.2026: ліміт Graph API (спільний токен з ETL і рекламними задачами) → 2 повтори з паузою 20 і 60 с,
+    далі MetaRateLimited: main() пропускає запуск без падіння workflow."""
+    import time
     out, url, p = [], f"{API}/{path}", dict(params, access_token=FB_TOKEN, limit=500)
     for _ in range(40):
-        r = requests.get(url, params=p, timeout=60)
+        for wait in (20, 60, None):
+            r = requests.get(url, params=p, timeout=60)
+            if r.ok or not _rate_limited(r):
+                break
+            if wait is None:
+                raise MetaRateLimited(f"GET {path}: {r.status_code} {r.text[:200]}")
+            log(f"Meta rate limit на {path}, пауза {wait} с")
+            time.sleep(wait)
         if not r.ok:
             raise RuntimeError(f"GET {path}: {r.status_code} {r.text[:300]}")
         j = r.json()
@@ -399,4 +424,9 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except MetaRateLimited as e:
+        # Ліміт Meta не означає проблему з рекламою: пропускаємо цей запуск, наступний за годину.
+        log(f"ПРОПУСК: {e}")
+        sys.exit(0)
