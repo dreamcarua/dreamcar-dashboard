@@ -16,6 +16,12 @@ Ad Watchdog: сторож реклами DreamCar у Meta (фаза 0 «Цент
   5. stall      — жива кампанія з бюджетом ≥ STALL_MIN_BUDGET ₴ після STALL_AFTER_HOUR за Києвом
                   має 0 ₴ спенду сьогодні.
   6. calendar   — першим запуском дня: події календаря ad_events на сьогодні й завтра.
+  7. silent     — режим ad-director мовчить: найновіший рядок запуску в ad_journal (action=note,
+                  reason express-check / daily-diagnostic / event-run / event-stop) старший за свій
+                  поріг. Перевірка вмикається лише після першого такого рядка (режим, якого ще
+                  немає в розкладі, тривоги не дає). Мовчання ≠ справність (рішення 10.10.2026).
+  8. stuck      — рядок ad_journal висить у status=approved довше STUCK_HOURS: запис у Meta почато,
+                  а результат ніхто не зафіксував.
 
 Тихі години 23:00–07:00 Києва: шлемо лише overspend.
 Стеля: DAILY_CAP_UAH (деф. 20000) або dashboard_settings.ad_director_daily_cap (перекриває env).
@@ -45,6 +51,14 @@ STALL_MIN_BUDGET = float(os.getenv("STALL_MIN_BUDGET", "500"))
 STALL_AFTER_HOUR = int(os.getenv("STALL_AFTER_HOUR", "12"))
 REMIND_HOURS = float(os.getenv("REMIND_HOURS", "6"))
 QUIET_START, QUIET_END = 23, 7
+# скільки годин може мовчати кожен режим ad-director (інтервал розкладу + запас)
+SILENCE_HOURS = {
+    "express-check": float(os.getenv("SILENCE_EXPRESS_H", "4")),      # раз на 3 год
+    "daily-diagnostic": float(os.getenv("SILENCE_DAILY_H", "26")),    # раз на добу
+    "event-run": float(os.getenv("SILENCE_EVENT_RUN_H", "9")),        # найдовша пауза між запусками 7 год
+    "event-stop": float(os.getenv("SILENCE_EVENT_STOP_H", "26")),     # раз на добу
+}
+STUCK_HOURS = float(os.getenv("STUCK_HOURS", "1"))
 PROJECT = "dreamcar"
 
 SB_H = {"apikey": SB_KEY, "Authorization": f"Bearer {SB_KEY}", "Content-Type": "application/json"}
@@ -214,6 +228,41 @@ def find_stall(campaigns, spend_by_campaign, now_kyiv):
     return out
 
 
+def find_silence(note_rows, now_utc, limits=None):
+    """note_rows: рядки ad_journal action=note з полями reason, at. Тривога, коли найновіший
+    рядок режиму старший за поріг. Режим без жодного рядка пропускаємо: його ще не запускали."""
+    limits = SILENCE_HOURS if limits is None else limits
+    last = {}
+    for r in note_rows:
+        at = datetime.fromisoformat(r["at"])
+        if r.get("reason") in limits and (r["reason"] not in last or at > last[r["reason"]]):
+            last[r["reason"]] = at
+    out = []
+    for reason, at in sorted(last.items()):
+        age_h = (now_utc - at).total_seconds() / 3600
+        if age_h > limits[reason]:
+            out.append({"key": f"silent:{reason}", "kind": "silent", "entity_id": reason, "entity_name": reason,
+                        "message": f"🔴 <b>Реклама-директор мовчить</b>: режим {esc(reason)} востаннє відпрацював "
+                                   f"{at.astimezone(KYIV):%d.%m %H:%M} Kyiv ({age_h:.0f} год тому, норма до {limits[reason]:g} год). "
+                                   f"Перевір Mac Studio і заплановану задачу."})
+    return out
+
+
+def find_stuck(approved_rows, now_utc, hours=None):
+    """approved_rows: рядки ad_journal зі status=approved (id, action, entity_name, at)."""
+    hours = STUCK_HOURS if hours is None else hours
+    out = []
+    for r in approved_rows:
+        age_h = (now_utc - datetime.fromisoformat(r["at"])).total_seconds() / 3600
+        if age_h > hours:
+            out.append({"key": f"stuck:{r['id']}", "kind": "stuck", "entity_id": str(r["id"]),
+                        "entity_name": r.get("entity_name"),
+                        "message": f"🟠 <b>Запис у Meta не завершено</b>: {esc(r.get('action'))} · {esc(r.get('entity_name'))} "
+                                   f"(журнал id {r['id']}, {age_h:.0f} год у статусі approved). "
+                                   f"Наступний запуск режиму має звірити факт; якщо тривога повторюється, глянь сам."})
+    return out
+
+
 def calendar_msg(events, now_kyiv):
     today, tomorrow = now_kyiv.date(), now_kyiv.date() + timedelta(days=1)
     rows = {today: [], tomorrow: []}
@@ -284,12 +333,22 @@ def main():
     found += find_stall(camps, by_camp, now_k)
     log(f"  спенд сьогодні {spend_today:,.0f} ₴ · бюджети {budget_sum:,.0f} ₴ · живих кампаній {len(camps)} · тривог {len(found)}")
 
+    # 3а) мовчання режимів і завислі записи ad-director
+    now_utc = datetime.now(timezone.utc)
+    try:
+        notes = sb_get("ad_journal", f"project=eq.{PROJECT}&action=eq.note&select=reason,at&order=at.desc&limit=300")
+        stuck = sb_get("ad_journal", f"project=eq.{PROJECT}&status=eq.approved&select=id,action,entity_name,at")
+        silent_found = find_silence(notes, now_utc) + find_stuck(stuck, now_utc)
+        found += silent_found
+        log(f"  журнал: рядків запуску {len(notes)} · approved {len(stuck)} · тривог {len(silent_found)}")
+    except Exception as e:
+        log(f"  ⚠ ad_journal: {e}")
+
     # 4) дедуп і відправка
     try:
         prev = {r["key"]: r for r in sb_get("ad_alerts", f"project=eq.{PROJECT}&resolved_at=is.null&select=*")}
     except Exception as e:
         log(f"  ⚠ ad_alerts: {e}"); prev = {}
-    now_utc = datetime.now(timezone.utc)
     upserts, keys_now = [], set()
     for a in found:
         keys_now.add(a["key"])
@@ -308,7 +367,7 @@ def main():
         if k in keys_now or k.startswith("calendar:"):
             continue
         same_day = k.endswith(f"{now_k:%Y-%m-%d}")
-        if p.get("last_sent") and not quiet and (p["kind"] == "issue" or same_day):
+        if p.get("last_sent") and not quiet and (p["kind"] in ("issue", "silent", "stuck") or same_day):
             tg(f"✅ <b>Вирішено</b>: {esc(p.get('entity_name'))} ({p.get('kind')})")
         upserts.append({"key": k, "project": PROJECT, "kind": p["kind"], "resolved_at": now_utc.isoformat()})
     sb_upsert("ad_alerts", upserts, "key")
