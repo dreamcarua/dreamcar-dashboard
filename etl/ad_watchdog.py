@@ -29,7 +29,7 @@ Ad Watchdog: сторож реклами DreamCar у Meta (фаза 0 «Цент
 Env: FB_ACCESS_TOKEN, AD_ACCOUNT_ID, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, TG_BOT_TOKEN, TG_CHAT_ID,
      DRY_RUN=1 (рахує і друкує, нічого не шле і не пише).
 """
-import os, sys, json
+import os, re, sys, json
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 import requests
@@ -273,11 +273,44 @@ def find_silence(note_rows, now_utc, limits=None):
     return out
 
 
-def find_stuck(approved_rows, now_utc, hours=None):
-    """approved_rows: рядки ad_journal зі status=approved (id, action, entity_name, at)."""
+_CLOSE_NAME = re.compile(r"(?:підсумок|звірка)\D*?(\d+)(?:\s*[-–]\s*(\d+))?", re.I)
+
+
+def closed_by_notes(notes):
+    """12.10.2026: безлюдні сесії не можуть UPDATE ad_journal, тож закривають рядок approved
+    новим рядком-нотаткою. Повертає множину id, які такі нотатки закрили:
+    metrics.closes[].row, metrics.rows_failed / rows_done, metrics.row,
+    або назва «підсумок рядків N-M» / «звірка approved N-M»."""
+    ids = set()
+    for n in notes:
+        m = n.get("metrics") or {}
+        if isinstance(m, dict):
+            for c in m.get("closes") or []:
+                if isinstance(c, dict) and str(c.get("row", "")).isdigit():
+                    ids.add(int(c["row"]))
+            for k in ("rows_failed", "rows_done"):
+                for v in m.get(k) or []:
+                    if str(v).isdigit():
+                        ids.add(int(v))
+            if str(m.get("row", "")).isdigit():
+                ids.add(int(m["row"]))
+        mt = _CLOSE_NAME.search(str(n.get("entity_name") or ""))
+        if mt:
+            a = int(mt.group(1)); b = int(mt.group(2) or a)
+            if 0 <= b - a <= 50:
+                ids.update(range(a, b + 1))
+    return ids
+
+
+def find_stuck(approved_rows, now_utc, hours=None, closed_ids=None):
+    """approved_rows: рядки ad_journal зі status=approved (id, action, entity_name, at).
+    closed_ids: id, які пізніша нотатка вже закрила (closed_by_notes)."""
     hours = STUCK_HOURS if hours is None else hours
+    closed_ids = closed_ids or set()
     out = []
     for r in approved_rows:
+        if int(r["id"]) in closed_ids:
+            continue
         age_h = (now_utc - datetime.fromisoformat(r["at"])).total_seconds() / 3600
         if age_h > hours:
             out.append({"key": f"stuck:{r['id']}", "kind": "stuck", "entity_id": str(r["id"]),
@@ -404,7 +437,8 @@ def main():
     try:
         notes = sb_get("ad_journal", f"project=eq.{PROJECT}&action=eq.note&select=reason,at&order=at.desc&limit=300")
         stuck = sb_get("ad_journal", f"project=eq.{PROJECT}&status=eq.approved&select=id,action,entity_name,at")
-        silent_found = find_silence(notes, now_utc) + find_stuck(stuck, now_utc)
+        closers = sb_get("ad_journal", f"project=eq.{PROJECT}&action=eq.note&select=id,entity_name,metrics&order=id.desc&limit=300")
+        silent_found = find_silence(notes, now_utc) + find_stuck(stuck, now_utc, closed_ids=closed_by_notes(closers))
         found += silent_found
         log(f"  журнал: рядків запуску {len(notes)} · approved {len(stuck)} · тривог {len(silent_found)}")
     except Exception as e:
