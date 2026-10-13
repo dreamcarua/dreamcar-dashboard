@@ -101,8 +101,11 @@ def cycle_of(name):
 
 
 def real_revenue(adset_name, ad_name):
-    key = f"{adset_name}_{ad_name}"
-    q = "dashboard_deals?select=amount&status=eq.pay&utm_content=ilike." + urllib.parse.quote(key, safe="")
+    # real ROAS rule of the project: only payments with an ad placement mark in utm_medium count
+    key = f"{adset_name}_{ad_name}".replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+    q = ("dashboard_deals?select=amount&status=eq.pay&amount=gt.0"
+         "&utm_medium=match." + urllib.parse.quote("^(facebook|instagram|messenger|audience_network|threads)_", safe="")
+         + "&utm_content=ilike." + urllib.parse.quote(key, safe=""))
     res, err = sb(q)
     if err or res is None: return None, None
     return round(sum(float(r.get("amount") or 0) for r in res), 2), len(res)
