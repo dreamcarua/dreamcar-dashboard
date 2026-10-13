@@ -1,0 +1,44 @@
+name: Meta Ad Archive (+ delete)
+# Owner 13.10.2026: before deleting switched-off ads keep what each ad was and how it did (public.ad_archive).
+# Archive always first; delete only with delete=true and only after the archive row was read back.
+# Never deletes an effectively ACTIVE ad. Ads with own status ACTIVE in a switched-off campaign are not candidates.
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'ids | candidates'
+        default: 'candidates'
+        required: true
+      ad_ids:
+        description: 'mode=ids: ad id через || (або кому/пробіл)'
+        default: ''
+      created_before:
+        description: 'mode=candidates: лише створені раніше (формат 2026-10-09T08:00:00+0300)'
+        default: ''
+      delete:
+        description: 'true = після архіву видалити; false = лише архів'
+        default: 'false'
+        required: true
+      protect_campaigns:
+        description: 'campaign id через кому: їхні оголошення не видаляються'
+        default: ''
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Archive and delete
+        env:
+          FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          AD_ACCOUNT_ID: '4136058269783354'
+          MODE: ${{ inputs.mode }}
+          AD_IDS: ${{ inputs.ad_ids }}
+          CREATED_BEFORE: ${{ inputs.created_before }}
+          DELETE: ${{ inputs.delete }}
+          PROTECT_CAMPAIGNS: ${{ inputs.protect_campaigns }}
+        run: python3 scripts/meta_ad_archive.py
