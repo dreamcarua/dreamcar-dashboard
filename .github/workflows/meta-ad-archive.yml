@@ -19,6 +19,9 @@ on:
         description: 'true = після архіву видалити; false = лише архів'
         default: 'false'
         required: true
+      exclude_name_regex:
+        description: 'регулярка назв, які не чіпати (поточний цикл), напр. (старт|пост)22-'
+        default: ''
       protect_campaigns:
         description: 'campaign id через кому: їхні оголошення не видаляються'
         default: ''
@@ -41,4 +44,5 @@ jobs:
           CREATED_BEFORE: ${{ inputs.created_before }}
           DELETE: ${{ inputs.delete }}
           PROTECT_CAMPAIGNS: ${{ inputs.protect_campaigns }}
+          EXCLUDE_NAME_REGEX: ${{ inputs.exclude_name_regex }}
         run: python3 scripts/meta_ad_archive.py

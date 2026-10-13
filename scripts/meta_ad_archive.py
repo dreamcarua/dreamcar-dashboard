@@ -34,6 +34,8 @@ BEFORE = os.environ.get("CREATED_BEFORE", "").strip()
 DELETE = os.environ.get("DELETE", "false").lower() == "true"
 PROTECT = {x.strip() for x in os.environ.get("PROTECT_CAMPAIGNS", "").split(",") if x.strip()}
 PROJECT = os.environ.get("PROJECT", "dreamcar")
+EXCLUDE = os.environ.get("EXCLUDE_NAME_REGEX", "").strip()   # names of the current cycle, e.g. "(старт|пост)22-"
+EXCLUDE_RE = re.compile(EXCLUDE) if EXCLUDE else None
 LIMIT = int(os.environ.get("LIMIT", "2000"))
 BASE = f"https://graph.facebook.com/{GRAPH}"
 
@@ -78,13 +80,15 @@ def sb(path, method="GET", payload=None, prefer=None):
 def candidates():
     out, after, n = [], None, 0
     while True:
-        p = {"fields": "id,status,effective_status,created_time", "limit": 200}
+        p = {"fields": "id,name,status,effective_status,created_time", "limit": 200}
         if after: p["after"] = after
         res, err = fb(f"act_{ACT}/ads", p)
         if err: raise SystemExit(f"LIST ERR {err}")
         for a in res.get("data", []):
             n += 1
             if BEFORE and a.get("created_time", "") >= BEFORE:
+                continue
+            if EXCLUDE_RE and EXCLUDE_RE.search(a.get("name") or ""):
                 continue
             if a.get("status") == "PAUSED" or a.get("effective_status") == "DISAPPROVED":
                 out.append(a["id"])
@@ -120,6 +124,8 @@ for aid in ids:
         print(f"  UNRESOLVED {aid} {err}"); failed += 1; continue
     est = ad.get("effective_status")
     camp = (ad.get("campaign") or {})
+    if EXCLUDE_RE and EXCLUDE_RE.search(ad.get("name") or ""):
+        print(f"  SKIP EXCLUDED {aid} '{ad.get('name','')[:40]}'"); skipped += 1; continue
     if est == "ACTIVE":
         print(f"  SKIP ACTIVE {aid} '{ad.get('name','')[:40]}'"); skipped += 1; continue
     ins, _ = fb(f"{aid}/insights", {"fields": INSIGHT_FIELDS, "date_preset": "maximum"})
