@@ -1,88 +1,83 @@
 {
- "generated": "2026-10-18T09:49:29.658489+00:00",
+ "generated": "2026-10-19T11:06:42.737760+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-10-17",
-  "prev_date": "2026-10-16",
-  "spend": 25473.86,
-  "impressions": 118018,
-  "clicks": 1727,
-  "purchases": 332,
-  "pixel_roas": 6.99,
-  "cpa": 76.73,
-  "frequency": 2.74,
-  "real_ad_revenue": 65284,
-  "real_ad_roas": 2.56,
+  "date": "2026-10-18",
+  "prev_date": "2026-10-17",
+  "spend": 30950.43,
+  "impressions": 144887,
+  "clicks": 2128,
+  "purchases": 308,
+  "pixel_roas": 5.57,
+  "cpa": 100.49,
+  "frequency": 2.75,
+  "real_ad_revenue": 77352,
+  "real_ad_roas": 2.5,
   "deltas": {
-   "spend": -2.3,
-   "pixel_roas": 99.7,
-   "purchases": 58.9,
-   "cpa": -38.5
+   "spend": 21.5,
+   "pixel_roas": -20.3,
+   "purchases": -7.2,
+   "cpa": 30.9
   },
   "week": {
    "this": {
-    "from": "2026-10-11",
-    "to": "2026-10-17",
-    "spend": 141927,
-    "purchases": 1999,
-    "pixel_roas": 6.4,
-    "cpa": 71.0,
-    "real_revenue": 419168,
-    "real_roas": 2.95
+    "from": "2026-10-12",
+    "to": "2026-10-18",
+    "spend": 159735,
+    "purchases": 2082,
+    "pixel_roas": 6.25,
+    "cpa": 76.72,
+    "real_revenue": 453041,
+    "real_roas": 2.84
    },
    "prev": {
-    "from": "2026-10-04",
-    "to": "2026-10-10",
-    "spend": 83643,
-    "purchases": 1265,
-    "pixel_roas": 6.06,
-    "cpa": 66.12,
-    "real_revenue": 270193,
-    "real_roas": 3.23
+    "from": "2026-10-05",
+    "to": "2026-10-11",
+    "spend": 51301,
+    "purchases": 1011,
+    "pixel_roas": 7.3,
+    "cpa": 50.74,
+    "real_revenue": 207495,
+    "real_roas": 4.04
    },
    "deltas": {
-    "spend": 69.7,
-    "real_roas": -8.7,
-    "pixel_roas": 5.6,
-    "cpa": 7.4,
-    "purchases": 58.0
+    "spend": 211.4,
+    "real_roas": -29.7,
+    "pixel_roas": -14.4,
+    "cpa": 51.2,
+    "purchases": 105.9
    }
   },
   "real_by_placement": [
    {
-    "placement": "instagram_stories",
-    "revenue": 25869,
-    "paid": 31
-   },
-   {
     "placement": "instagram_feed",
-    "revenue": 17066,
-    "paid": 33
+    "revenue": 29833,
+    "paid": 64
    },
    {
     "placement": "instagram_reels",
-    "revenue": 9180,
-    "paid": 20
+    "revenue": 24367,
+    "paid": 32
    },
    {
     "placement": "facebook_mobile_feed",
-    "revenue": 9178,
+    "revenue": 12379,
+    "paid": 21
+   },
+   {
+    "placement": "instagram_stories",
+    "revenue": 9077,
     "paid": 22
    },
    {
     "placement": "facebook_mobile_reels",
-    "revenue": 2095,
-    "paid": 5
-   },
-   {
-    "placement": "facebook_stories",
-    "revenue": 1097,
+    "revenue": 897,
     "paid": 3
    },
    {
-    "placement": "facebook_notification",
+    "placement": "facebook_stories",
     "revenue": 799,
     "paid": 1
    }
@@ -92,38 +87,46 @@
   ],
   "top_creatives": [
    {
-    "name": "пост22-11.10-g20-22-proiekt-video · Ядро · claude",
-    "ad_id": "120252721607000624",
-    "spend": 1490.49,
-    "purchases": 40,
-    "roas": 19.97,
-    "ctr": 1.98
+    "name": "пост22-11.10-g20-22-proiekt-video · База · claude",
+    "ad_id": "120252667296480624",
+    "spend": 1123.88,
+    "purchases": 17,
+    "roas": 15.08,
+    "ctr": 1.65
    },
    {
-    "name": "офер-17.10-iphone-burgundy2-video · Ядро · claude",
-    "ad_id": "120252736099910624",
-    "spend": 2364.95,
-    "purchases": 44,
-    "roas": 11.03,
-    "ctr": 1.78
+    "name": "старт22-13-proof-21-cars · Ядро · claude",
+    "ad_id": "120252617518340624",
+    "spend": 450.43,
+    "purchases": 4,
+    "roas": 10.96,
+    "ctr": 1.39
    },
    {
-    "name": "офер-17.10-iphone-dobroho-ranku-video · База · claude",
-    "ad_id": "120252740944680624",
-    "spend": 734.62,
-    "purchases": 10,
-    "roas": 10.27,
-    "ctr": 1.07
+    "name": "офер-17.10-iphone-burgundy-video · DC|08 · claude",
+    "ad_id": "120252736088400624",
+    "spend": 383.58,
+    "purchases": 8,
+    "roas": 9.87,
+    "ctr": 1.08
    }
   ],
   "weak_creatives": [
    {
-    "name": "офер-17.10-iphone-burgundy-video · Ядро · claude",
-    "ad_id": "120252736086320624",
-    "spend": 584.81,
-    "purchases": 2,
-    "roas": 1.79,
-    "ctr": 1.03
+    "name": "тест07-A-coffee-price · DC|07 · claude",
+    "ad_id": "120252680978830624",
+    "spend": 605.12,
+    "purchases": 1,
+    "roas": 1.33,
+    "ctr": 1.45
+   },
+   {
+    "name": "старт22-15-token-mechanic · Ядро · claude",
+    "ad_id": "120252617519400624",
+    "spend": 586.46,
+    "purchases": 1,
+    "roas": 1.58,
+    "ctr": 1.46
    }
   ]
  },
@@ -12582,147 +12585,147 @@
    "name": "BMW 330i (G20)",
    "car_model": "BMW 330i G20",
    "date_from": "2026-10-09",
-   "date_to": "2026-10-18",
-   "spend": 190446.06,
-   "impressions": 1053600,
-   "clicks": 18483,
-   "ctr": 1.75,
-   "reach": 117861,
-   "frequency": 8.94,
-   "purchases": 2857,
-   "pixel_roas": 6.48,
-   "cpa": 66.66,
-   "pixel_revenue": 1234449,
-   "real_ad_revenue": 606830,
-   "real_ad_roas": 3.19,
-   "gap_pct": -50.8,
+   "date_to": "2026-10-19",
+   "spend": 223959.64,
+   "impressions": 1216393,
+   "clicks": 20736,
+   "ctr": 1.7,
+   "reach": 127735,
+   "frequency": 9.52,
+   "purchases": 3131,
+   "pixel_roas": 6.26,
+   "cpa": 71.53,
+   "pixel_revenue": 1402887,
+   "real_ad_revenue": 673409,
+   "real_ad_roas": 3.01,
+   "gap_pct": -52.0,
    "segments": {
     "platform": [
      [
       "instagram",
-      154271.1,
-      2313,
-      6.38
+      181505.06,
+      2533,
+      6.14
      ],
      [
       "facebook",
-      34164.03,
-      514,
-      7.02
+      40350.88,
+      565,
+      6.84
      ],
      [
       "threads",
-      2010.93,
-      29,
-      5.2
+      2103.7,
+      30,
+      5.31
      ],
      [
       "unknown",
       0.0,
-      2,
+      4,
       0.0
      ]
     ],
     "age": [
      [
       "25-34",
-      98690.81,
-      1491,
-      6.53
+      116054.37,
+      1638,
+      6.37
      ],
      [
       "35-44",
-      54063.37,
-      826,
-      6.43
+      63406.69,
+      916,
+      6.37
      ],
      [
       "18-24",
-      23142.57,
-      326,
-      6.68
+      27295.76,
+      349,
+      6.11
      ],
      [
       "45-54",
-      10766.86,
-      160,
-      6.32
+      12689.64,
+      169,
+      5.68
      ],
      [
       "65+",
-      2075.91,
-      23,
-      3.85
+      2416.52,
+      26,
+      3.87
      ],
      [
       "55-64",
-      1703.27,
-      26,
-      5.59
+      2092.74,
+      29,
+      5.07
      ],
      [
       "Unknown",
-      3.27,
+      3.92,
       6,
-      530.2
+      442.29
      ]
     ],
     "gender": [
      [
       "male",
-      168017.55,
-      2580,
-      6.69
+      196492.91,
+      2805,
+      6.38
      ],
      [
       "female",
-      22153.99,
-      264,
-      4.79
+      27132.07,
+      314,
+      5.4
      ],
      [
       "unknown",
-      274.52,
+      334.66,
       12,
-      14.43
+      11.84
      ]
     ],
     "device": [
      [
       "iphone",
-      130356.05,
-      1912,
-      6.39
+      153735.26,
+      2077,
+      6.15
      ],
      [
       "android_smartphone",
-      59628.33,
-      925,
-      6.56
+      69672.7,
+      1030,
+      6.39
      ],
      [
       "desktop",
-      348.68,
-      7,
-      9.3
+      409.7,
+      8,
+      9.13
      ],
      [
       "ipad",
-      61.74,
+      70.76,
       0,
       0.0
      ],
      [
       "android_tablet",
-      50.79,
+      68.34,
       1,
-      5.85
+      4.34
      ],
      [
       "other",
-      0.47,
-      12,
-      13710.97
+      2.88,
+      15,
+      2771.81
      ]
     ]
    },
@@ -12764,6 +12767,15 @@
      "thumb": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/7QCEUGhvdG9zaG9wIDMuMAA4QklNBAQAAAAAAGgcAigAYkZCTUQwYTAwMGE4MDAxMDAwMGRlMDEwMDAwNjkwMjAwMDA5ODAyMDAwMGMwMDIwMDAwMTAwMzAwMDBlMzAzMDAwMGZkMDMwMDAwMzMwNDAwMDA1ZTA0MDAwMDhlMDUwMDAwAP/bAIQABgcHDQkNDAwMDBENDg0REREQEBERExASERIQExMUExUVExQTFBMXFxcTFBUXGRkXFRccGxwXGxkZGx4bHhsbFgEGBgYLCAsKCwsKDQkLCQ0MDAoKDAwPCwwLDAsPEA4NDg4NDhAODQ0KDQ0ODw4QEA4PEAwODBAPEBAPFxkXFxfB/8IAEQgAQABAAwEiAAIRAQMRAf/EAEsAAAICAwEAAAAAAAAAAAAAAAMEBQYAAQIHEAACAQIEBAQEBQUAAAAAAAAAAREhMQIDQVEQEmGBBHGR8BOhweEFILHR8RQyM0BC/9oADAMBAAIAAwAAAAFVzRZGPbjnd62hjpMxDJIvO1i1ogiGrbDij9hnahLEDMK0er7Eyz1aFGISQ9Ehuj0OP9aWIDyUPq9eH27eIWWbX76i38wMPN+e63JRAOh9f//aAAgBAQABBQKDCciMWEggg5SOCZBynKcgsBAsJ43MeBYMB4TCkcvD4uAzPGMweLaPE5nxMWCDDmPAf1XLg8V4r4xzDZJlYeZ4sMDz4M3MxYypynw2eG/D+Y+FhaxeEMt5eZh+FlIzsOWsLxnhsrnZJcysrDlYXmJGfnJnMZCWBMy3SSTxKjM5ih//2gAIAQMAAT8BJ4rw+JnhsmnU8TlRipqLLOaDLzcPLszFj5rowZaxKW4G5fBcP//aAAgBAgABPwHjI/EJGdmSzKzKDzBYXi7GLLcnw3uYpVBYYXBuB1P/2gAIAQEABj8C/wBJYV/1wa78f716kJIVBdOD5bxRE477blKJfkbJJwlztxWLH6ERHkXp6EqMSsf40UwrD2NzovycuGxdCXDl24e9+OLhsf/aAAgBAQABPyFcGZcFcUtnClAwr4q4BFI9WHKusIe6tvrVoUJnzOehAcKrohr/AGRbpMqZn7CxHJ2b3ihOtsetRmt6bDRmrZMtP1LbhaQ1UsUCRoTG7KyTUsTjfoQoqItBTsh60IGZxLqJtMN3aifZkDhKYIklLsnzeg1kaK1kDk5ju1R80aje1JUrzRM+jSP0JdBNRCK5Db0FXdyvmKi4XRDsyEMI2+7cjtyiHCUiBE3l0gaign3PVjalF0bXowoHv3Z3DPqhNa62ZDWcutvX9z//2gAMAwEAAgADAAAAED8NI6dxKQ21juMdVf/aAAgBAwABPxCeCRSKJUeoi+Fq6/wS7SkWo3szfp0Pn+6CzLcddX0ZKbRO6NQHaPufSOFRY//aAAgBAgABPxBioNjUdRLXYsFjVuw/RT1KSu46sveglWpJ+opXqNcBqH//2gAIAQEAAT8QYiu6K8Qu5RhcKMMJIS0SgUtBCUVfepFiHA+BXAIV7kY1qXcSJZHbaW7jj3waOTVuXF1VXW5BoIlsSLttJLuy6J925qm6s66p0C79Jh1+QTa1qQhZml3bBVKa7l5H3qJaOqTYel0KiFRZ7eKX6DrsMuIg/Me1NBzRY9Q09RKr8nqqrYnRrVddo+QxHRhS15FdkfsklMbSOn0GlScvZ08hZppnZjcdSKxFBvfdtBZ0uyFsYiTeX7i3LndS80UC+FMRZ3Sv1H3gfSbCdhlLEdBcovqShEJlToewjFsJJoInImRNbplmXOZulfO3Sgk5kgJmayOiaGqNFL3GLSu0/U0vkyBTfR/BXP4IfInRo7Guvuh8iI7/AChiis8wXbVdoF6EPc9Hc//Z"
     },
     {
+     "name": "старт22-15-token-mechanic · База · claude",
+     "ad_id": "120252617536490624",
+     "spend": 566.59,
+     "purchases": 8,
+     "roas": 20.89,
+     "ctr": 1.62,
+     "thumb": "data:image/jpeg;base64,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"
+    },
+    {
      "name": "офер-12.10-turbo-video · База · claude",
      "ad_id": "120252663852620624",
      "spend": 1166.0,
@@ -12777,16 +12789,23 @@
      "ad_id": "120252681018480624",
      "spend": 2048.32,
      "purchases": 63,
-     "roas": 17.08,
-     "ctr": 1.52,
-     "thumb": "data:image/jpeg;base64,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"
+     "roas": 17.1,
+     "ctr": 1.52
+    },
+    {
+     "name": "пост22-09.10-bmw-g20-mpaket-post · База · claude",
+     "ad_id": "120252646228010624",
+     "spend": 293.23,
+     "purchases": 13,
+     "roas": 14.32,
+     "ctr": 3.43
     },
     {
      "name": "офер-14.10-x2-g20-dopivnochi-video · Ядро · claude",
      "ad_id": "120252690312550624",
      "spend": 2436.6,
      "purchases": 58,
-     "roas": 14.3,
+     "roas": 14.31,
      "ctr": 1.73
     },
     {
@@ -12796,6 +12815,22 @@
      "purchases": 8,
      "roas": 13.97,
      "ctr": 1.67
+    },
+    {
+     "name": "старт22-04-mountain-road · 02c · claude",
+     "ad_id": "120252617554750624",
+     "spend": 62.53,
+     "purchases": 1,
+     "roas": 13.59,
+     "ctr": 0.95
+    },
+    {
+     "name": "пост22-11.10-g20-22-proiekt-video · DC|08 · claude",
+     "ad_id": "120252667300390624",
+     "spend": 1335.1,
+     "purchases": 23,
+     "roas": 12.35,
+     "ctr": 1.69
     },
     {
      "name": "офер-14.10-x2-g20-poster-broll-video · DC|08 · claude",
@@ -12814,6 +12849,14 @@
      "ctr": 1.5
     },
     {
+     "name": "офер-17.10-iphone-burgundy-video · DC|11 · claude",
+     "ad_id": "120252736095350624",
+     "spend": 24.78,
+     "purchases": 1,
+     "roas": 11.97,
+     "ctr": 4.04
+    },
+    {
      "name": "офер-14.10-x2-g20-dopivnochi-video · База · claude",
      "ad_id": "120252690309880624",
      "spend": 425.11,
@@ -12826,104 +12869,64 @@
      "ad_id": "120252690293290624",
      "spend": 1863.05,
      "purchases": 48,
-     "roas": 11.73,
+     "roas": 11.74,
      "ctr": 1.76
     },
     {
-     "name": "пост22-11.10-g20-22-proiekt-video · DC|08 · claude",
-     "ad_id": "120252667300390624",
-     "spend": 1095.42,
-     "purchases": 17,
-     "roas": 11.01,
-     "ctr": 1.85
+     "name": "офер-17.10-iphone-dobroho-ranku-video · База · claude",
+     "ad_id": "120252740944680624",
+     "spend": 1033.81,
+     "purchases": 18,
+     "roas": 11.33,
+     "ctr": 1.07
     },
     {
-     "name": "старт22-04-mountain-road · 02c · claude",
-     "ad_id": "120252617554750624",
-     "spend": 141.82,
+     "name": "старт22-05-autumn-forest · DC|11 · claude",
+     "ad_id": "120252617616770624",
+     "spend": 18.01,
+     "purchases": 1,
+     "roas": 11.07,
+     "ctr": 2.17
+    },
+    {
+     "name": "пост22-09.10-bmw-g20-mpaket-post · DC|08 · claude",
+     "ad_id": "120252646253540624",
+     "spend": 108.5,
      "purchases": 4,
-     "roas": 10.33,
-     "ctr": 1.5
+     "roas": 10.45,
+     "ctr": 3.05
+    },
+    {
+     "name": "пост22-11.10-g20-22-proiekt-video · База · claude",
+     "ad_id": "120252667296480624",
+     "spend": 4531.32,
+     "purchases": 66,
+     "roas": 10.19,
+     "ctr": 1.83
     },
     {
      "name": "офер-14.10-x2v3-cd · DC|08 · claude",
      "ad_id": "120252681032960624",
      "spend": 147.66,
      "purchases": 6,
-     "roas": 10.06,
+     "roas": 10.15,
      "ctr": 1.44
-    },
-    {
-     "name": "офер-17.10-iphone-burgundy2-video · Ядро · claude",
-     "ad_id": "120252736099910624",
-     "spend": 2803.72,
-     "purchases": 49,
-     "roas": 10.06,
-     "ctr": 1.67
-    },
-    {
-     "name": "офер-17.10-iphone-bonus-banner · DC|11 · claude",
-     "ad_id": "120252743757850624",
-     "spend": 254.78,
-     "purchases": 5,
-     "roas": 9.93,
-     "ctr": 2.11
-    },
-    {
-     "name": "пост22-09.10-bmw-g20-mpaket-post · База · claude",
-     "ad_id": "120252646228010624",
-     "spend": 448.1,
-     "purchases": 14,
-     "roas": 9.81,
-     "ctr": 3.43
-    },
-    {
-     "name": "офер-17.10-iphone-dobroho-ranku-video · База · claude",
-     "ad_id": "120252740944680624",
-     "spend": 880.91,
-     "purchases": 13,
-     "roas": 9.79,
-     "ctr": 1.11
     },
     {
      "name": "пост22-10.10-g20-parking-video · База · claude",
      "ad_id": "120252667266500624",
-     "spend": 1966.27,
-     "purchases": 44,
-     "roas": 9.5,
-     "ctr": 2.27
-    },
-    {
-     "name": "пост22-11.10-g20-22-proiekt-video · База · claude",
-     "ad_id": "120252667296480624",
-     "spend": 3373.24,
+     "spend": 2490.1,
      "purchases": 54,
-     "roas": 9.4,
-     "ctr": 2.04
+     "roas": 9.29,
+     "ctr": 2.19
     },
     {
-     "name": "старт22-reel-start-video · База · claude",
-     "ad_id": "120252623104170624",
-     "spend": 784.6,
-     "purchases": 23,
-     "roas": 9.39,
-     "ctr": 1.36
-    },
-    {
-     "name": "старт22-06-parking-garage · Ядро · claude",
-     "ad_id": "120252617515330624",
-     "spend": 3049.78,
-     "purchases": 39,
-     "roas": 8.19,
-     "ctr": 1.38
-    },
-    {
-     "name": "офер-17.10-iphone-v2b-cd · DC|11 · claude",
-     "ad_id": "120252740813750624",
-     "spend": 72.74,
-     "purchases": 2,
-     "roas": 8.16,
-     "ctr": 1.71
+     "name": "офер-17.10-iphone-burgundy2-video · Ядро · claude",
+     "ad_id": "120252736099910624",
+     "spend": 4133.9,
+     "purchases": 61,
+     "roas": 9.14,
+     "ctr": 1.46
     },
     {
      "name": "офер-14.10-x2-g20-dopivnochi-video · DC|08 · claude",
@@ -12932,14 +12935,6 @@
      "purchases": 14,
      "roas": 8.12,
      "ctr": 1.54
-    },
-    {
-     "name": "пост22-10.10-g20-start-video · База · claude",
-     "ad_id": "120252667259460624",
-     "spend": 2783.13,
-     "purchases": 38,
-     "roas": 8.05,
-     "ctr": 1.52
     },
     {
      "name": "офер-14.10-x2-g20-presenter-video · DC|08 · claude",
@@ -12952,26 +12947,10 @@
     {
      "name": "пост22-11.10-g20-kompletatsiia-video · База · claude",
      "ad_id": "120252667283500624",
-     "spend": 4779.82,
-     "purchases": 79,
-     "roas": 7.96,
-     "ctr": 2.2
-    },
-    {
-     "name": "старт22-reel-start-video · DC|11 · claude",
-     "ad_id": "120252623105210624",
-     "spend": 301.71,
-     "purchases": 8,
-     "roas": 7.45,
-     "ctr": 1.29
-    },
-    {
-     "name": "старт22-04-mountain-road · База · claude",
-     "ad_id": "120252628112880624",
-     "spend": 844.31,
-     "purchases": 17,
-     "roas": 7.34,
-     "ctr": 1.12
+     "spend": 6281.41,
+     "purchases": 96,
+     "roas": 7.58,
+     "ctr": 2.15
     },
     {
      "name": "офер-14.10-x2-g20-poster-broll-video · Ядро · claude",
@@ -12982,12 +12961,12 @@
      "ctr": 1.57
     },
     {
-     "name": "старт22-05-autumn-forest · DC|11 · claude",
-     "ad_id": "120252617616770624",
-     "spend": 56.61,
-     "purchases": 2,
-     "roas": 6.97,
-     "ctr": 1.1
+     "name": "старт22-06-parking-garage · Ядро · claude",
+     "ad_id": "120252617515330624",
+     "spend": 3732.65,
+     "purchases": 40,
+     "roas": 7.02,
+     "ctr": 1.38
     },
     {
      "name": "офер-14.10-x2-g20-poster-broll-video · База · claude",
@@ -12998,12 +12977,20 @@
      "ctr": 1.2
     },
     {
+     "name": "офер-17.10-iphone-v2b-cd · DC|11 · claude",
+     "ad_id": "120252740813750624",
+     "spend": 86.99,
+     "purchases": 2,
+     "roas": 6.82,
+     "ctr": 1.7
+    },
+    {
      "name": "офер-17.10-iphone-burgundy-video · База · claude",
      "ad_id": "120252736087960624",
-     "spend": 435.19,
-     "purchases": 7,
-     "roas": 6.74,
-     "ctr": 1.1
+     "spend": 552.23,
+     "purchases": 9,
+     "roas": 6.75,
+     "ctr": 1.01
     },
     {
      "name": "офер-12.10-turbo15-post · DC|08 · claude",
@@ -13014,36 +13001,28 @@
      "ctr": 1.36
     },
     {
-     "name": "старт22-08-coffee-price · DC|08 · claude",
-     "ad_id": "120252617549170624",
-     "spend": 1523.06,
-     "purchases": 29,
-     "roas": 6.64,
-     "ctr": 1.36
-    },
-    {
-     "name": "старт22-08-coffee-price · Ядро · claude",
-     "ad_id": "120252617516910624",
-     "spend": 5937.65,
-     "purchases": 63,
-     "roas": 6.6,
+     "name": "офер-17.10-iphone-burgundy-video · Ядро · claude",
+     "ad_id": "120252736086320624",
+     "spend": 1922.07,
+     "purchases": 26,
+     "roas": 6.58,
      "ctr": 1.39
     },
     {
-     "name": "старт22-13-proof-21-cars · 02c · claude",
-     "ad_id": "120252617563700624",
-     "spend": 162.8,
-     "purchases": 5,
-     "roas": 6.57,
-     "ctr": 1.01
+     "name": "старт22-08-coffee-price · База · claude",
+     "ad_id": "120252617530950624",
+     "spend": 1321.68,
+     "purchases": 17,
+     "roas": 6.53,
+     "ctr": 1.38
     },
     {
-     "name": "пост22-10.10-g20-parking-video · DC|08 · claude",
-     "ad_id": "120252667272800624",
-     "spend": 1599.95,
-     "purchases": 31,
-     "roas": 6.43,
-     "ctr": 2.42
+     "name": "пост22-10.10-g20-start-video · База · claude",
+     "ad_id": "120252667259460624",
+     "spend": 3709.73,
+     "purchases": 42,
+     "roas": 6.5,
+     "ctr": 1.44
     },
     {
      "name": "офер-14.10-x2-g20-dopivnochi-video · DC|11 · claude",
@@ -13054,68 +13033,60 @@
      "ctr": 1.76
     },
     {
-     "name": "офер-17.10-iphone-burgundy2-video · DC|08 · claude",
-     "ad_id": "120252736107550624",
-     "spend": 748.46,
-     "purchases": 11,
-     "roas": 6.28,
-     "ctr": 1.05
+     "name": "старт22-13-proof-21-cars · Ядро · claude",
+     "ad_id": "120252617518340624",
+     "spend": 1829.31,
+     "purchases": 18,
+     "roas": 6.41,
+     "ctr": 1.49
     },
     {
-     "name": "старт22-04-mountain-road · Ядро · claude",
-     "ad_id": "120252617512660624",
-     "spend": 9674.75,
-     "purchases": 114,
-     "roas": 6.27,
-     "ctr": 1.62
-    },
-    {
-     "name": "пост22-11.10-g20-22-proiekt-video · DC|11 · claude",
-     "ad_id": "120252667293470624",
-     "spend": 68.56,
-     "purchases": 2,
-     "roas": 6.16,
-     "ctr": 3.37
-    },
-    {
-     "name": "старт22-08-coffee-price · База · claude",
-     "ad_id": "120252617530950624",
-     "spend": 1161.81,
-     "purchases": 20,
-     "roas": 6.12,
-     "ctr": 1.57
-    },
-    {
-     "name": "пост22-11.10-g20-22-proiekt-video · Ядро · claude",
-     "ad_id": "120252721607000624",
-     "spend": 6844.68,
-     "purchases": 67,
-     "roas": 6.12,
-     "ctr": 1.91
+     "name": "пост22-10.10-g20-parking-video · DC|08 · claude",
+     "ad_id": "120252667272800624",
+     "spend": 1616.69,
+     "purchases": 31,
+     "roas": 6.37,
+     "ctr": 2.43
     },
     {
      "name": "пост22-11.10-g20-kompletatsiia-video · DC|11 · claude",
      "ad_id": "120252667281450624",
-     "spend": 622.89,
-     "purchases": 9,
-     "roas": 6.05,
-     "ctr": 1.9
+     "spend": 797.37,
+     "purchases": 13,
+     "roas": 6.21,
+     "ctr": 2.11
     },
     {
      "name": "старт22-reel-start-video · DC|08 · claude",
      "ad_id": "120252623104800624",
-     "spend": 1547.26,
-     "purchases": 22,
-     "roas": 5.9,
-     "ctr": 1.48
+     "spend": 616.46,
+     "purchases": 7,
+     "roas": 6.13,
+     "ctr": 1.3
     },
     {
-     "name": "старт22-reel-start-video · Ядро · claude",
-     "ad_id": "120252623103610624",
-     "spend": 5302.98,
-     "purchases": 74,
+     "name": "офер-17.10-iphone-bonus-banner · DC|11 · claude",
+     "ad_id": "120252743757850624",
+     "spend": 561.53,
+     "purchases": 7,
+     "roas": 6.02,
+     "ctr": 1.49
+    },
+    {
+     "name": "старт22-08-coffee-price · DC|08 · claude",
+     "ad_id": "120252617549170624",
+     "spend": 1495.79,
+     "purchases": 22,
      "roas": 5.89,
-     "ctr": 1.58
+     "ctr": 1.31
+    },
+    {
+     "name": "пост22-10.10-g20-parking-video · DC|11 · claude",
+     "ad_id": "120252667265120624",
+     "spend": 618.41,
+     "purchases": 13,
+     "roas": 5.88,
+     "ctr": 2.42
     },
     {
      "name": "офер-14.10-x2-g20-10na20-video · Ядро · claude",
@@ -13126,44 +13097,60 @@
      "ctr": 1.22
     },
     {
-     "name": "офер-17.10-iphone-burgundy2-video · База · claude",
-     "ad_id": "120252736103580624",
-     "spend": 1108.33,
-     "purchases": 15,
-     "roas": 5.79,
-     "ctr": 1.27
+     "name": "офер-17.10-iphone-v2b-cd · База · claude",
+     "ad_id": "120252740812890624",
+     "spend": 1187.53,
+     "purchases": 10,
+     "roas": 5.73,
+     "ctr": 1.54
     },
     {
-     "name": "старт22-16-no-owner-yet · База · claude",
-     "ad_id": "120252617537190624",
-     "spend": 252.91,
-     "purchases": 2,
-     "roas": 5.7,
-     "ctr": 1.09
-    },
-    {
-     "name": "тест07-A-coffee-price · DC|07 · claude",
-     "ad_id": "120252680978830624",
-     "spend": 2781.35,
-     "purchases": 41,
-     "roas": 5.68,
-     "ctr": 1.46
-    },
-    {
-     "name": "пост22-10.10-g20-parking-video · DC|11 · claude",
-     "ad_id": "120252667265120624",
-     "spend": 558.46,
-     "purchases": 12,
-     "roas": 5.63,
-     "ctr": 2.52
+     "name": "офер-17.10-iphone-dobroho-ranku-video · Ядро · claude",
+     "ad_id": "120252740942820624",
+     "spend": 2935.4,
+     "purchases": 31,
+     "roas": 5.51,
+     "ctr": 1.1
     },
     {
      "name": "старт22-14-proof-stamp · DC|08 · claude",
      "ad_id": "120252628194420624",
-     "spend": 666.0,
-     "purchases": 12,
-     "roas": 5.48,
-     "ctr": 1.23
+     "spend": 407.54,
+     "purchases": 5,
+     "roas": 5.5,
+     "ctr": 0.99
+    },
+    {
+     "name": "пост22-11.10-g20-22-proiekt-video · Ядро · claude",
+     "ad_id": "120252721607000624",
+     "spend": 8671.28,
+     "purchases": 79,
+     "roas": 5.47,
+     "ctr": 1.95
+    },
+    {
+     "name": "старт22-08-coffee-price · Ядро · claude",
+     "ad_id": "120252617516910624",
+     "spend": 8932.04,
+     "purchases": 81,
+     "roas": 5.37,
+     "ctr": 1.26
+    },
+    {
+     "name": "старт22-reel-start-video · База · claude",
+     "ad_id": "120252623104170624",
+     "spend": 512.04,
+     "purchases": 9,
+     "roas": 5.36,
+     "ctr": 1.6
+    },
+    {
+     "name": "старт22-reel-start-video · DC|11 · claude",
+     "ad_id": "120252623105210624",
+     "spend": 148.2,
+     "purchases": 2,
+     "roas": 5.3,
+     "ctr": 0.95
     },
     {
      "name": "офер-14.10-x2-g20-poster-broll-video · DC|11 · claude",
@@ -13174,20 +13161,36 @@
      "ctr": 2.53
     },
     {
-     "name": "старт22-15-token-mechanic · Ядро · claude",
-     "ad_id": "120252617519400624",
-     "spend": 3456.11,
-     "purchases": 52,
-     "roas": 5.24,
-     "ctr": 1.42
-    },
-    {
      "name": "пост22-10.10-g20-start-video · DC|08 · claude",
      "ad_id": "120252667262740624",
-     "spend": 2668.84,
-     "purchases": 37,
-     "roas": 5.16,
+     "spend": 2917.94,
+     "purchases": 39,
+     "roas": 5.28,
      "ctr": 1.47
+    },
+    {
+     "name": "старт22-04-mountain-road · Ядро · claude",
+     "ad_id": "120252617512660624",
+     "spend": 10160.38,
+     "purchases": 99,
+     "roas": 5.19,
+     "ctr": 1.56
+    },
+    {
+     "name": "офер-17.10-iphone-burgundy2-video · DC|08 · claude",
+     "ad_id": "120252736107550624",
+     "spend": 934.51,
+     "purchases": 11,
+     "roas": 5.09,
+     "ctr": 1.1
+    },
+    {
+     "name": "старт22-13-proof-21-cars · 02c · claude",
+     "ad_id": "120252617563700624",
+     "spend": 94.21,
+     "purchases": 2,
+     "roas": 5.07,
+     "ctr": 0.54
     },
     {
      "name": "офер-14.10-x2-g20-presenter-video · 02c · claude",
@@ -13198,68 +13201,68 @@
      "ctr": 1.66
     },
     {
-     "name": "офер-17.10-iphone-burgundy-video · DC|08 · claude",
-     "ad_id": "120252736088400624",
-     "spend": 646.28,
+     "name": "тест07-A-coffee-price · DC|07 · claude",
+     "ad_id": "120252680978830624",
+     "spend": 3450.63,
+     "purchases": 44,
+     "roas": 4.98,
+     "ctr": 1.48
+    },
+    {
+     "name": "старт22-reel-start-video · Ядро · claude",
+     "ad_id": "120252623103610624",
+     "spend": 3963.02,
+     "purchases": 52,
+     "roas": 4.9,
+     "ctr": 1.6
+    },
+    {
+     "name": "старт22-04-mountain-road · База · claude",
+     "ad_id": "120252628112880624",
+     "spend": 518.76,
      "purchases": 7,
-     "roas": 4.85,
-     "ctr": 1.19
-    },
-    {
-     "name": "офер-17.10-iphone-bonus-banner · DC|08 · claude",
-     "ad_id": "120252743752490624",
-     "spend": 996.77,
-     "purchases": 11,
-     "roas": 4.82,
-     "ctr": 1.19
-    },
-    {
-     "name": "офер-17.10-iphone-dobroho-ranku-video · Ядро · claude",
-     "ad_id": "120252740942820624",
-     "spend": 1919.4,
-     "purchases": 19,
      "roas": 4.79,
-     "ctr": 1.04
+     "ctr": 1.03
     },
     {
      "name": "старт22-05-autumn-forest · Ядро · claude",
      "ad_id": "120252617514580624",
-     "spend": 8730.35,
-     "purchases": 101,
-     "roas": 4.77,
-     "ctr": 1.66
+     "spend": 6941.43,
+     "purchases": 75,
+     "roas": 4.76,
+     "ctr": 1.63
     },
     {
-     "name": "старт22-04-mountain-road · DC|11 · claude",
-     "ad_id": "120252617611210624",
-     "spend": 600.92,
-     "purchases": 11,
-     "roas": 4.77,
-     "ctr": 1.42
+     "name": "офер-17.10-iphone-burgundy-video · DC|08 · claude",
+     "ad_id": "120252736088400624",
+     "spend": 1547.61,
+     "purchases": 18,
+     "roas": 4.68,
+     "ctr": 1.08
     },
     {
-     "name": "старт22-13-proof-21-cars · Ядро · claude",
-     "ad_id": "120252617518340624",
-     "spend": 1614.44,
-     "purchases": 17,
-     "roas": 4.69,
-     "ctr": 1.53
+     "name": "пост22-11.10-g20-22-proiekt-video · DC|11 · claude",
+     "ad_id": "120252667293470624",
+     "spend": 91.1,
+     "purchases": 2,
+     "roas": 4.63,
+     "ctr": 2.68
     },
     {
-     "name": "офер-17.10-iphone-v2b-cd · DC|08 · claude",
-     "ad_id": "120252740813050624",
-     "spend": 427.71,
-     "purchases": 4,
-     "roas": 4.58,
-     "ctr": 1.06
+     "name": "старт22-15-token-mechanic · Ядро · claude",
+     "ad_id": "120252617519400624",
+     "spend": 3953.89,
+     "purchases": 45,
+     "roas": 4.61,
+     "ctr": 1.4
     },
     {
-     "name": "офер-17.10-iphone-v2b-cd · База · claude",
-     "ad_id": "120252740812890624",
-     "spend": 732.05,
-     "purchases": 8,
+     "name": "пост22-10.10-g20-parking-video · Ядро · claude",
+     "ad_id": "120252702149310624",
+     "spend": 5153.92,
+     "purchases": 48,
      "roas": 4.55,
-     "ctr": 1.44
+     "ctr": 2.43
     },
     {
      "name": "офер-12.10-turbo-video · DC|08 · claude",
@@ -13270,100 +13273,52 @@
      "ctr": 2.01
     },
     {
-     "name": "пост22-10.10-g20-parking-video · Ядро · claude",
-     "ad_id": "120252702149310624",
-     "spend": 5146.34,
-     "purchases": 47,
-     "roas": 4.5,
-     "ctr": 2.42
+     "name": "офер-17.10-iphone-burgundy2-video · База · claude",
+     "ad_id": "120252736103580624",
+     "spend": 1499.99,
+     "purchases": 16,
+     "roas": 4.53,
+     "ctr": 1.15
     },
     {
-     "name": "старт22-22-steering-wheel · База · claude",
-     "ad_id": "120252617542520624",
-     "spend": 299.61,
-     "purchases": 2,
-     "roas": 4.42,
-     "ctr": 0.83
-    },
-    {
-     "name": "офер-17.10-iphone-v2b-cd · Ядро · claude",
-     "ad_id": "120252740811780624",
-     "spend": 2314.23,
-     "purchases": 24,
-     "roas": 4.39,
-     "ctr": 1.65
-    },
-    {
-     "name": "старт22-22-steering-wheel · Ядро · claude",
-     "ad_id": "120252617522540624",
-     "spend": 1305.44,
-     "purchases": 15,
-     "roas": 4.32,
-     "ctr": 1.61
+     "name": "офер-17.10-iphone-bonus-banner · Ядро · claude",
+     "ad_id": "120252743743310624",
+     "spend": 3472.47,
+     "purchases": 26,
+     "roas": 4.43,
+     "ctr": 1.83
     },
     {
      "name": "тест07-D-reel-start-video · DC|07 · claude",
      "ad_id": "120252680990180624",
-     "spend": 2834.74,
-     "purchases": 25,
-     "roas": 4.22,
-     "ctr": 1.73
+     "spend": 3431.0,
+     "purchases": 31,
+     "roas": 4.33,
+     "ctr": 1.69
     },
     {
-     "name": "старт22-03-rooftop-sunset · DC|08 · claude",
-     "ad_id": "120252628192770624",
-     "spend": 631.45,
-     "purchases": 7,
-     "roas": 4.16,
-     "ctr": 1.31
+     "name": "офер-17.10-iphone-v2b-cd · Ядро · claude",
+     "ad_id": "120252740811780624",
+     "spend": 4523.11,
+     "purchases": 43,
+     "roas": 4.15,
+     "ctr": 1.37
     },
     {
-     "name": "офер-17.10-iphone-bonus-banner · База · claude",
-     "ad_id": "120252743744710624",
-     "spend": 539.86,
-     "purchases": 5,
-     "roas": 4.01,
-     "ctr": 1.26
+     "name": "старт22-04-mountain-road · DC|08 · claude",
+     "ad_id": "120252617542710624",
+     "spend": 975.54,
+     "purchases": 10,
+     "roas": 4.14,
+     "ctr": 1.04
     },
     {
      "name": "старт22-02-night-city · DC|08 · claude",
      "ad_id": "120252628189800624",
-     "spend": 1251.58,
-     "purchases": 14,
-     "roas": 3.97,
-     "ctr": 1.32
-    },
-    {
-     "name": "старт22-06-parking-garage · DC|08 · claude",
-     "ad_id": "120252617548960624",
-     "spend": 612.28,
-     "purchases": 9,
-     "roas": 3.93,
-     "ctr": 1.39
-    },
-    {
-     "name": "пост22-09.10-bmw-g20-mpaket-post · Ядро · claude",
-     "ad_id": "120252702138960624",
-     "spend": 797.23,
-     "purchases": 7,
-     "roas": 3.8,
-     "ctr": 3.02
-    },
-    {
-     "name": "старт22-16-no-owner-yet · Ядро · claude",
-     "ad_id": "120252617521210624",
-     "spend": 1200.02,
-     "purchases": 11,
-     "roas": 3.79,
-     "ctr": 1.35
-    },
-    {
-     "name": "пост22-11.10-g20-kompletatsiia-video · 02c · claude",
-     "ad_id": "120252667288780624",
-     "spend": 2276.8,
-     "purchases": 24,
-     "roas": 3.77,
-     "ctr": 1.49
+     "spend": 1008.81,
+     "purchases": 10,
+     "roas": 3.9,
+     "ctr": 1.27
     },
     {
      "name": "офер-14.10-x2-g20-presenter-video · DC|11 · claude",
@@ -13374,20 +13329,28 @@
      "ctr": 1.34
     },
     {
-     "name": "старт22-01-tvoyeyu-studio · DC|08 · claude",
-     "ad_id": "120252628180200624",
-     "spend": 1031.66,
-     "purchases": 13,
-     "roas": 3.73,
-     "ctr": 1.19
+     "name": "пост22-09.10-bmw-g20-mpaket-post · Ядро · claude",
+     "ad_id": "120252702138960624",
+     "spend": 937.07,
+     "purchases": 8,
+     "roas": 3.76,
+     "ctr": 2.94
     },
     {
-     "name": "старт22-04-mountain-road · DC|08 · claude",
-     "ad_id": "120252617542710624",
-     "spend": 1159.42,
-     "purchases": 11,
-     "roas": 3.68,
-     "ctr": 1.15
+     "name": "офер-17.10-iphone-bonus-banner · База · claude",
+     "ad_id": "120252743744710624",
+     "spend": 1407.07,
+     "purchases": 13,
+     "roas": 3.72,
+     "ctr": 1.39
+    },
+    {
+     "name": "пост22-11.10-g20-kompletatsiia-video · 02c · claude",
+     "ad_id": "120252667288780624",
+     "spend": 2846.6,
+     "purchases": 28,
+     "roas": 3.71,
+     "ctr": 1.44
     },
     {
      "name": "офер-12.10-turbo-video · 02c · claude",
@@ -13406,60 +13369,92 @@
      "ctr": 0.76
     },
     {
-     "name": "пост22-11.10-g20-kompletatsiia-video · DC|08 · claude",
-     "ad_id": "120252667291240624",
-     "spend": 3180.21,
-     "purchases": 28,
-     "roas": 3.64,
-     "ctr": 1.69
+     "name": "офер-17.10-iphone-bonus-banner · DC|08 · claude",
+     "ad_id": "120252743752490624",
+     "spend": 1852.41,
+     "purchases": 16,
+     "roas": 3.59,
+     "ctr": 1.2
     },
     {
-     "name": "тест07-C-mountain-road · DC|07 · claude",
-     "ad_id": "120252680986570624",
-     "spend": 2782.36,
-     "purchases": 32,
-     "roas": 3.57,
-     "ctr": 1.59
+     "name": "старт22-01-tvoyeyu-studio · DC|08 · claude",
+     "ad_id": "120252628180200624",
+     "spend": 886.56,
+     "purchases": 10,
+     "roas": 3.58,
+     "ctr": 0.99
+    },
+    {
+     "name": "старт22-16-no-owner-yet · База · claude",
+     "ad_id": "120252617537190624",
+     "spend": 198.05,
+     "purchases": 1,
+     "roas": 3.5,
+     "ctr": 0.97
+    },
+    {
+     "name": "пост22-11.10-g20-kompletatsiia-video · DC|08 · claude",
+     "ad_id": "120252667291240624",
+     "spend": 3605.43,
+     "purchases": 30,
+     "roas": 3.47,
+     "ctr": 1.7
+    },
+    {
+     "name": "старт22-22-steering-wheel · Ядро · claude",
+     "ad_id": "120252617522540624",
+     "spend": 1359.39,
+     "purchases": 12,
+     "roas": 3.46,
+     "ctr": 1.42
     },
     {
      "name": "офер-17.10-iphone-v2b-cd · 02c · claude",
      "ad_id": "120252740813370624",
-     "spend": 240.99,
+     "spend": 254.79,
      "purchases": 2,
-     "roas": 3.52,
+     "roas": 3.33,
      "ctr": 1.29
     },
     {
-     "name": "тест07-B-autumn-forest · DC|07 · claude",
-     "ad_id": "120252680983320624",
-     "spend": 2829.16,
-     "purchases": 25,
-     "roas": 3.23,
-     "ctr": 1.53
+     "name": "тест07-C-mountain-road · DC|07 · claude",
+     "ad_id": "120252680986570624",
+     "spend": 3374.95,
+     "purchases": 34,
+     "roas": 3.28,
+     "ctr": 1.5
     },
     {
      "name": "пост22-10.10-g20-start-video · Ядро · claude",
      "ad_id": "120252702145550624",
-     "spend": 6213.44,
-     "purchases": 44,
-     "roas": 3.19,
+     "spend": 6213.61,
+     "purchases": 45,
+     "roas": 3.24,
      "ctr": 1.4
     },
     {
-     "name": "старт22-06-parking-garage · База · claude",
-     "ad_id": "120252617530500624",
-     "spend": 429.13,
-     "purchases": 3,
-     "roas": 3.05,
-     "ctr": 1.06
+     "name": "пост22-11.10-g20-kompletatsiia-video · Ядро · claude",
+     "ad_id": "120252702160860624",
+     "spend": 2677.01,
+     "purchases": 21,
+     "roas": 3.12,
+     "ctr": 1.99
     },
     {
-     "name": "пост22-10.10-g20-start-video · DC|11 · claude",
-     "ad_id": "120252667252000624",
-     "spend": 204.36,
-     "purchases": 3,
-     "roas": 3.01,
-     "ctr": 1.22
+     "name": "офер-17.10-iphone-v2b-cd · DC|08 · claude",
+     "ad_id": "120252740813050624",
+     "spend": 1270.0,
+     "purchases": 7,
+     "roas": 3.05,
+     "ctr": 0.85
+    },
+    {
+     "name": "старт22-03-rooftop-sunset · DC|08 · claude",
+     "ad_id": "120252628192770624",
+     "spend": 462.21,
+     "purchases": 5,
+     "roas": 3.02,
+     "ctr": 1.12
     },
     {
      "name": "офер-12.10-turbo15-post · База · claude",
@@ -13470,28 +13465,20 @@
      "ctr": 0.0
     },
     {
-     "name": "пост22-10.10-g20-start-video · 02c · claude",
-     "ad_id": "120252667260840624",
-     "spend": 485.6,
-     "purchases": 3,
-     "roas": 2.98,
-     "ctr": 1.63
+     "name": "тест07-B-autumn-forest · DC|07 · claude",
+     "ad_id": "120252680983320624",
+     "spend": 3490.57,
+     "purchases": 29,
+     "roas": 2.97,
+     "ctr": 1.58
     },
     {
-     "name": "старт22-15-token-mechanic · База · claude",
-     "ad_id": "120252617536490624",
-     "spend": 696.75,
-     "purchases": 9,
-     "roas": 2.95,
-     "ctr": 1.87
-    },
-    {
-     "name": "пост22-11.10-g20-kompletatsiia-video · Ядро · claude",
-     "ad_id": "120252702160860624",
-     "spend": 2674.17,
-     "purchases": 20,
-     "roas": 2.93,
-     "ctr": 1.98
+     "name": "старт22-05-autumn-forest · DC|08 · claude",
+     "ad_id": "120252617547940624",
+     "spend": 68.15,
+     "purchases": 1,
+     "roas": 2.9,
+     "ctr": 0.75
     },
     {
      "name": "офер-14.10-x2-g20-10na20-video · DC|08 · claude",
@@ -13502,36 +13489,52 @@
      "ctr": 1.23
     },
     {
-     "name": "старт22-15-token-mechanic · 02c · claude",
-     "ad_id": "120252617567720624",
-     "spend": 139.81,
+     "name": "пост22-10.10-g20-start-video · DC|11 · claude",
+     "ad_id": "120252667252000624",
+     "spend": 215.77,
+     "purchases": 3,
+     "roas": 2.85,
+     "ctr": 1.15
+    },
+    {
+     "name": "старт22-16-no-owner-yet · Ядро · claude",
+     "ad_id": "120252617521210624",
+     "spend": 1010.86,
+     "purchases": 7,
+     "roas": 2.83,
+     "ctr": 1.27
+    },
+    {
+     "name": "старт22-04-mountain-road · DC|11 · claude",
+     "ad_id": "120252617611210624",
+     "spend": 254.16,
+     "purchases": 3,
+     "roas": 2.63,
+     "ctr": 1.21
+    },
+    {
+     "name": "старт22-06-parking-garage · База · claude",
+     "ad_id": "120252617530500624",
+     "spend": 415.59,
      "purchases": 2,
-     "roas": 2.82,
-     "ctr": 1.41
+     "roas": 2.62,
+     "ctr": 0.92
     },
     {
      "name": "пост22-10.10-g20-parking-video · 02c · claude",
      "ad_id": "120252667270430624",
-     "spend": 593.65,
+     "spend": 597.38,
      "purchases": 4,
-     "roas": 2.61,
-     "ctr": 2.15
+     "roas": 2.6,
+     "ctr": 2.18
     },
     {
-     "name": "пост22-09.10-bmw-g20-mpaket-post · DC|08 · claude",
-     "ad_id": "120252646253540624",
-     "spend": 173.91,
-     "purchases": 2,
-     "roas": 2.54,
-     "ctr": 2.55
-    },
-    {
-     "name": "офер-17.10-iphone-burgundy-video · Ядро · claude",
-     "ad_id": "120252736086320624",
-     "spend": 843.62,
-     "purchases": 5,
-     "roas": 2.53,
-     "ctr": 1.14
+     "name": "пост22-10.10-g20-start-video · 02c · claude",
+     "ad_id": "120252667260840624",
+     "spend": 560.16,
+     "purchases": 3,
+     "roas": 2.58,
+     "ctr": 1.53
     }
    ],
    "series": [
@@ -13593,86 +13596,93 @@
     },
     {
      "date": "2026-10-17",
-     "spend": 25473.86,
+     "spend": 25476.75,
      "purchases": 332,
      "roas": 6.99,
-     "cpa": 76.73
+     "cpa": 76.74
     },
     {
      "date": "2026-10-18",
-     "spend": 11192.15,
-     "purchases": 101,
-     "roas": 4.09,
-     "cpa": 110.81
+     "spend": 30950.43,
+     "purchases": 308,
+     "roas": 5.57,
+     "cpa": 100.49
+    },
+    {
+     "date": "2026-10-19",
+     "spend": 13752.41,
+     "purchases": 66,
+     "roas": 3.04,
+     "cpa": 208.37
     }
    ],
    "adsets": [
     {
      "name": "Broad · UA 18-45 · A+A · VALUE · інкремент",
-     "spend": 80488.39,
-     "purchases": 988,
-     "roas": 6.12,
-     "ctr": 1.66,
-     "cpa": 81.47
+     "spend": 91664.63,
+     "purchases": 1030,
+     "roas": 5.8,
+     "ctr": 1.61,
+     "cpa": 88.99
     },
     {
      "name": "Покупці · pixel 180д + CRM всі · апсейл · VALUE · v2",
-     "spend": 26500.14,
-     "purchases": 504,
-     "roas": 9.15,
-     "ctr": 1.81,
-     "cpa": 52.58
+     "spend": 31633.93,
+     "purchases": 529,
+     "roas": 8.97,
+     "ctr": 1.74,
+     "cpa": 59.8
     },
     {
      "name": "Покупці CRM+pixel 180д · excl поточний цикл · OFFSITE · claude",
-     "spend": 23898.91,
-     "purchases": 356,
-     "roas": 5.5,
-     "ctr": 1.54,
-     "cpa": 67.13
+     "spend": 25462.77,
+     "purchases": 342,
+     "roas": 5.28,
+     "ctr": 1.46,
+     "cpa": 74.45
     },
     {
      "name": "Retarget · Engaged IF 30д · excl покупці (CRM+pixel+цикл) · v4 · claude",
-     "spend": 7383.01,
-     "purchases": 61,
-     "roas": 2.84,
-     "ctr": 1.54,
-     "cpa": 121.03
+     "spend": 7337.47,
+     "purchases": 50,
+     "roas": 2.68,
+     "ctr": 1.49,
+     "cpa": 146.75
     },
     {
      "name": "Лояльні 3+ без поточного циклу · OFFSITE · claude",
-     "spend": 3620.8,
-     "purchases": 67,
-     "roas": 5.32,
-     "ctr": 1.72,
-     "cpa": 54.04
-    },
-    {
-     "name": "07-D рілз команди · Broad UA · рівна рука · claude",
-     "spend": 2834.74,
-     "purchases": 26,
-     "roas": 4.39,
+     "spend": 3641.04,
+     "purchases": 60,
+     "roas": 5.0,
      "ctr": 1.73,
-     "cpa": 109.03
+     "cpa": 60.68
     },
     {
      "name": "07-B lifestyle · Broad UA · рівна рука · claude",
-     "spend": 2829.16,
-     "purchases": 25,
-     "roas": 3.23,
-     "ctr": 1.53,
-     "cpa": 113.17
+     "spend": 3490.57,
+     "purchases": 29,
+     "roas": 2.97,
+     "ctr": 1.58,
+     "cpa": 120.36
     },
     {
-     "name": "07-C aspiration · Broad UA · рівна рука · claude",
-     "spend": 2782.36,
-     "purchases": 32,
-     "roas": 3.57,
-     "ctr": 1.59,
-     "cpa": 86.95
+     "name": "07-A ціна · Broad UA · рівна рука · claude",
+     "spend": 3450.63,
+     "purchases": 44,
+     "roas": 4.98,
+     "ctr": 1.48,
+     "cpa": 78.42
+    },
+    {
+     "name": "07-D рілз команди · Broad UA · рівна рука · claude",
+     "spend": 3431.0,
+     "purchases": 31,
+     "roas": 4.33,
+     "ctr": 1.69,
+     "cpa": 110.68
     }
    ],
-   "adsets_window": "2026-10-11",
+   "adsets_window": "2026-10-12",
    "is_current": true
   }
  ],
@@ -13685,10 +13695,10 @@
     "desc": "70-80% бюджету. Головний драйвер. Увесь робочий креатив-пул (12-20). Highest Volume на старті → Highest Value, коли стабільно.",
     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
     "status": "ACTIVE",
-    "daily_budget": 19500,
-    "spend": 957301,
-    "purchases": 14720,
-    "roas": 6.75,
+    "daily_budget": 12000,
+    "spend": 975215,
+    "purchases": 14866,
+    "roas": 6.71,
     "ctr": 1.72
    },
    {
