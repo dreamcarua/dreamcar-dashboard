@@ -1,80 +1,85 @@
 {
- "generated": "2026-10-20T10:19:23.595478+00:00",
+ "generated": "2026-10-21T10:29:02.315688+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-10-19",
-  "prev_date": "2026-10-18",
-  "spend": 26957.95,
-  "impressions": 141168,
-  "clicks": 1916,
-  "purchases": 146,
-  "pixel_roas": 3.15,
-  "cpa": 184.64,
-  "frequency": 2.83,
-  "real_ad_revenue": 34824,
-  "real_ad_roas": 1.29,
+  "date": "2026-10-20",
+  "prev_date": "2026-10-19",
+  "spend": 29139.91,
+  "impressions": 127766,
+  "clicks": 1709,
+  "purchases": 342,
+  "pixel_roas": 4.81,
+  "cpa": 85.2,
+  "frequency": 3.21,
+  "real_ad_revenue": 81577,
+  "real_ad_roas": 2.8,
   "deltas": {
-   "spend": -12.9,
-   "pixel_roas": -43.4,
-   "purchases": -52.6,
-   "cpa": 83.7
+   "spend": 8.0,
+   "pixel_roas": 52.7,
+   "purchases": 134.2,
+   "cpa": -53.9
   },
   "week": {
    "this": {
-    "from": "2026-10-13",
-    "to": "2026-10-19",
-    "spend": 172497,
-    "purchases": 2039,
-    "pixel_roas": 5.71,
-    "cpa": 84.6,
-    "real_revenue": 439876,
-    "real_roas": 2.55
+    "from": "2026-10-14",
+    "to": "2026-10-20",
+    "spend": 188371,
+    "purchases": 2188,
+    "pixel_roas": 5.59,
+    "cpa": 86.09,
+    "real_revenue": 476775,
+    "real_roas": 2.53
    },
    "prev": {
-    "from": "2026-10-06",
-    "to": "2026-10-12",
-    "spend": 64676,
-    "purchases": 1171,
-    "pixel_roas": 7.13,
-    "cpa": 55.23,
-    "real_revenue": 254685,
-    "real_roas": 3.94
+    "from": "2026-10-07",
+    "to": "2026-10-13",
+    "spend": 77956,
+    "purchases": 1364,
+    "pixel_roas": 6.84,
+    "cpa": 57.15,
+    "real_revenue": 299363,
+    "real_roas": 3.84
    },
    "deltas": {
-    "spend": 166.7,
-    "real_roas": -35.3,
-    "pixel_roas": -19.9,
-    "cpa": 53.2,
-    "purchases": 74.1
+    "spend": 141.6,
+    "real_roas": -34.1,
+    "pixel_roas": -18.3,
+    "cpa": 50.6,
+    "purchases": 60.4
    }
   },
   "real_by_placement": [
    {
     "placement": "instagram_feed",
-    "revenue": 13367,
-    "paid": 31
+    "revenue": 35992,
+    "paid": 103
    },
    {
     "placement": "instagram_stories",
-    "revenue": 10481,
-    "paid": 18
-   },
-   {
-    "placement": "facebook_mobile_feed",
-    "revenue": 5387,
-    "paid": 13
+    "revenue": 14748,
+    "paid": 37
    },
    {
     "placement": "instagram_reels",
-    "revenue": 4891,
-    "paid": 8
+    "revenue": 13570,
+    "paid": 28
+   },
+   {
+    "placement": "facebook_mobile_feed",
+    "revenue": 13379,
+    "paid": 21
    },
    {
     "placement": "facebook_mobile_reels",
-    "revenue": 698,
-    "paid": 2
+    "revenue": 2792,
+    "paid": 8
+   },
+   {
+    "placement": "facebook_stories",
+    "revenue": 1096,
+    "paid": 4
    }
   ],
   "active_cycles": [
@@ -84,52 +89,52 @@
    {
     "name": "пост22-10.10-g20-parking-video · База · claude",
     "ad_id": "120252667266500624",
-    "spend": 698.35,
-    "purchases": 6,
-    "roas": 6.53,
-    "ctr": 1.91
-   },
-   {
-    "name": "старт22-15-token-mechanic · Ядро · claude",
-    "ad_id": "120252617519400624",
-    "spend": 1270.25,
-    "purchases": 10,
-    "roas": 5.87,
-    "ctr": 1.28
-   },
-   {
-    "name": "пост22-11.10-g20-kompletatsiia-video · DC|08 · claude",
-    "ad_id": "120252667291240624",
-    "spend": 355.25,
-    "purchases": 7,
-    "roas": 5.82,
-    "ctr": 1.85
-   }
-  ],
-  "weak_creatives": [
-   {
-    "name": "старт22-04-mountain-road · Ядро · claude",
-    "ad_id": "120252617512660624",
-    "spend": 2411.65,
-    "purchases": 7,
-    "roas": 1.91,
-    "ctr": 1.51
-   },
-   {
-    "name": "пост22-10.10-g20-start-video · База · claude",
-    "ad_id": "120252667259460624",
-    "spend": 1334.93,
-    "purchases": 4,
-    "roas": 1.18,
-    "ctr": 1.19
+    "spend": 489.98,
+    "purchases": 16,
+    "roas": 9.39,
+    "ctr": 2.06
    },
    {
     "name": "пост22-11.10-g20-22-proiekt-video · База · claude",
     "ad_id": "120252667296480624",
-    "spend": 1191.08,
-    "purchases": 5,
-    "roas": 1.06,
-    "ctr": 1.45
+    "spend": 642.75,
+    "purchases": 14,
+    "roas": 7.57,
+    "ctr": 1.2
+   },
+   {
+    "name": "офер-20.10-macbook-post · База · claude",
+    "ad_id": "120252780944800624",
+    "spend": 524.26,
+    "purchases": 2,
+    "roas": 6.31,
+    "ctr": 1.14
+   }
+  ],
+  "weak_creatives": [
+   {
+    "name": "старт22-16-no-owner-yet · Ядро · claude",
+    "ad_id": "120252617521210624",
+    "spend": 817.95,
+    "purchases": 3,
+    "roas": 1.92,
+    "ctr": 0.97
+   },
+   {
+    "name": "тест07-D-reel-start-video · DC|07 · claude",
+    "ad_id": "120252680990180624",
+    "spend": 601.2,
+    "purchases": 3,
+    "roas": 1.02,
+    "ctr": 1.38
+   },
+   {
+    "name": "тест07-B-autumn-forest · DC|07 · claude",
+    "ad_id": "120252680983320624",
+    "spend": 597.84,
+    "purchases": 2,
+    "roas": 0.73,
+    "ctr": 1.38
    }
   ]
  },
@@ -301,140 +306,941 @@
      ]
     ]
    },
-   "creatives": [],
+   "creatives": [
+    {
+     "name": "ad207_video",
+     "ad_id": "120232057751810624",
+     "spend": 4.94,
+     "purchases": 1,
+     "roas": 192.11,
+     "ctr": 1.89
+    },
+    {
+     "name": "ad_post_id_1053961103594337_1507",
+     "ad_id": "120231434629980624",
+     "spend": 63.55,
+     "purchases": 3,
+     "roas": 163.6,
+     "ctr": 2.13
+    },
+    {
+     "name": "ad300_image_199",
+     "ad_id": "120232502503200624",
+     "spend": 14.2,
+     "purchases": 1,
+     "roas": 119.65,
+     "ctr": 2.74
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120224378670520624",
+     "spend": 18.05,
+     "purchases": 3,
+     "roas": 82.94,
+     "ctr": 3.45
+    },
+    {
+     "name": "ad453_video_10p",
+     "ad_id": "120234204098670624",
+     "spend": 2.76,
+     "purchases": 1,
+     "roas": 72.1,
+     "ctr": 4.17
+    },
+    {
+     "name": "ad_post_id_1055591056764675_1707",
+     "ad_id": "120231434629860624",
+     "spend": 25.17,
+     "purchases": 1,
+     "roas": 67.5,
+     "ctr": 1.68
+    },
+    {
+     "name": "ad452_video_10p",
+     "ad_id": "120233369286850624",
+     "spend": 3.37,
+     "purchases": 1,
+     "roas": 59.05,
+     "ctr": 4.17
+    },
+    {
+     "name": "ad301_image_199",
+     "ad_id": "120232502502900624",
+     "spend": 23.2,
+     "purchases": 2,
+     "roas": 51.47,
+     "ctr": 0.83
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120234995138280624",
+     "spend": 1758.34,
+     "purchases": 84,
+     "roas": 51.18,
+     "ctr": 1.55
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120227636015760624",
+     "spend": 222.2,
+     "purchases": 5,
+     "roas": 48.79,
+     "ctr": 2.53
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі»",
+     "ad_id": "120234994913310624",
+     "spend": 253.16,
+     "purchases": 11,
+     "roas": 42.22,
+     "ctr": 2.07
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі»",
+     "ad_id": "120234995383370624",
+     "spend": 1639.75,
+     "purchases": 84,
+     "roas": 42.21,
+     "ctr": 2.12
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120234995138290624",
+     "spend": 2135.18,
+     "purchases": 113,
+     "roas": 42.13,
+     "ctr": 1.43
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120234995138270624",
+     "spend": 563.93,
+     "purchases": 29,
+     "roas": 42.05,
+     "ctr": 1.39
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120234995491230624",
+     "spend": 4131.56,
+     "purchases": 230,
+     "roas": 36.89,
+     "ctr": 1.52
+    },
+    {
+     "name": "ad_post_id_1053934883596959_1507",
+     "ad_id": "120231433584050624",
+     "spend": 46.95,
+     "purchases": 3,
+     "roas": 28.69,
+     "ctr": 1.32
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120227636016010624",
+     "spend": 62.87,
+     "purchases": 2,
+     "roas": 27.02,
+     "ctr": 1.9
+    },
+    {
+     "name": "ad_post_id_1053961103594337_1507",
+     "ad_id": "120231437036880624",
+     "spend": 8.22,
+     "purchases": 1,
+     "roas": 24.21,
+     "ctr": 4.71
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія – копія – копія",
+     "ad_id": "120230449517940624",
+     "spend": 2728.7,
+     "purchases": 175,
+     "roas": 23.83,
+     "ctr": 4.52
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія – копія – копія",
+     "ad_id": "120224378743620624",
+     "spend": 83.32,
+     "purchases": 3,
+     "roas": 21.57,
+     "ctr": 3.51
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120224551567090624",
+     "spend": 352.05,
+     "purchases": 12,
+     "roas": 21.55,
+     "ctr": 2.43
+    },
+    {
+     "name": "ad302_image_199",
+     "ad_id": "120232505601490624",
+     "spend": 133.37,
+     "purchases": 3,
+     "roas": 21.35,
+     "ctr": 0.25
+    },
+    {
+     "name": "ad_post_id_1053934883596959_1507",
+     "ad_id": "120231437036900624",
+     "spend": 18.86,
+     "purchases": 1,
+     "roas": 21.1,
+     "ctr": 1.89
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120230447679160624",
+     "spend": 2380.16,
+     "purchases": 74,
+     "roas": 20.22,
+     "ctr": 1.85
+    },
+    {
+     "name": "ad457_video_10p",
+     "ad_id": "120233369278090624",
+     "spend": 9.91,
+     "purchases": 1,
+     "roas": 20.08,
+     "ctr": 2.38
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120230447679140624",
+     "spend": 1615.12,
+     "purchases": 61,
+     "roas": 19.34,
+     "ctr": 2.52
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120230447679150624",
+     "spend": 9591.26,
+     "purchases": 267,
+     "roas": 19.22,
+     "ctr": 1.86
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120230447679170624",
+     "spend": 2561.25,
+     "purchases": 121,
+     "roas": 19.06,
+     "ctr": 2.8
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120224444532840624",
+     "spend": 2203.04,
+     "purchases": 69,
+     "roas": 18.31,
+     "ctr": 2.28
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120227635701850624",
+     "spend": 975.62,
+     "purchases": 27,
+     "roas": 17.52,
+     "ctr": 1.93
+    },
+    {
+     "name": "ad300_image_199",
+     "ad_id": "120232097380230624",
+     "spend": 142.92,
+     "purchases": 5,
+     "roas": 17.46,
+     "ctr": 2.0
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120230448978740624",
+     "spend": 27365.21,
+     "purchases": 1105,
+     "roas": 17.4,
+     "ctr": 2.77
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі»",
+     "ad_id": "120224551567130624",
+     "spend": 227.6,
+     "purchases": 11,
+     "roas": 16.65,
+     "ctr": 3.34
+    },
+    {
+     "name": "ad453_video_10p",
+     "ad_id": "120234171778610624",
+     "spend": 59.18,
+     "purchases": 1,
+     "roas": 16.04,
+     "ctr": 4.05
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі»",
+     "ad_id": "120230448978750624",
+     "spend": 27063.82,
+     "purchases": 836,
+     "roas": 15.6,
+     "ctr": 2.02
+    },
+    {
+     "name": "ad300_image_199",
+     "ad_id": "120232502503240624",
+     "spend": 12.84,
+     "purchases": 1,
+     "roas": 15.5,
+     "ctr": 1.47
+    },
+    {
+     "name": "ad_post_id_1053932926930488_1507",
+     "ad_id": "120231437036870624",
+     "spend": 13.05,
+     "purchases": 1,
+     "roas": 15.25,
+     "ctr": 2.08
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі»",
+     "ad_id": "120224551567120624",
+     "spend": 4192.56,
+     "purchases": 170,
+     "roas": 15.08,
+     "ctr": 2.61
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120230447679180624",
+     "spend": 2557.7,
+     "purchases": 121,
+     "roas": 14.82,
+     "ctr": 2.61
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі»",
+     "ad_id": "120227756682400624",
+     "spend": 9427.73,
+     "purchases": 154,
+     "roas": 14.62,
+     "ctr": 1.81
+    },
+    {
+     "name": "ad452_video_10p",
+     "ad_id": "120233104028880624",
+     "spend": 250.22,
+     "purchases": 4,
+     "roas": 14.32,
+     "ctr": 1.29
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120227636015800624",
+     "spend": 1240.66,
+     "purchases": 38,
+     "roas": 14.27,
+     "ctr": 2.92
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія – копія",
+     "ad_id": "120230449222240624",
+     "spend": 1080.08,
+     "purchases": 57,
+     "roas": 14.25,
+     "ctr": 3.21
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120230447679120624",
+     "spend": 8250.64,
+     "purchases": 365,
+     "roas": 14.11,
+     "ctr": 2.69
+    },
+    {
+     "name": "ad202_video",
+     "ad_id": "120232058521640624",
+     "spend": 14.28,
+     "purchases": 1,
+     "roas": 13.94,
+     "ctr": 4.21
+    },
+    {
+     "name": "ad004_video_fomo",
+     "ad_id": "120231525461570624",
+     "spend": 475.56,
+     "purchases": 19,
+     "roas": 13.71,
+     "ctr": 1.82
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120230448642050624",
+     "spend": 304.95,
+     "purchases": 19,
+     "roas": 13.7,
+     "ctr": 5.15
+    },
+    {
+     "name": "ad305_video_199",
+     "ad_id": "120232172854480624",
+     "spend": 14.65,
+     "purchases": 1,
+     "roas": 13.58,
+     "ctr": 1.77
+    },
+    {
+     "name": "ad456_video_10p",
+     "ad_id": "120234204097990624",
+     "spend": 90.18,
+     "purchases": 2,
+     "roas": 13.39,
+     "ctr": 0.86
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120230447679100624",
+     "spend": 1415.23,
+     "purchases": 61,
+     "roas": 13.18,
+     "ctr": 2.1
+    },
+    {
+     "name": "ad004_video_fomo",
+     "ad_id": "120231524975010624",
+     "spend": 392.62,
+     "purchases": 7,
+     "roas": 13.14,
+     "ctr": 1.6
+    },
+    {
+     "name": "ad205_video",
+     "ad_id": "120232060126490624",
+     "spend": 205.34,
+     "purchases": 3,
+     "roas": 13.12,
+     "ctr": 1.36
+    },
+    {
+     "name": "ad302_image_199",
+     "ad_id": "120232097423880624",
+     "spend": 15.19,
+     "purchases": 1,
+     "roas": 13.1,
+     "ctr": 1.91
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі»",
+     "ad_id": "120230448232050624",
+     "spend": 25641.65,
+     "purchases": 898,
+     "roas": 12.99,
+     "ctr": 2.43
+    },
+    {
+     "name": "ad454_video_10p",
+     "ad_id": "120233393175780624",
+     "spend": 249.39,
+     "purchases": 4,
+     "roas": 12.93,
+     "ctr": 1.53
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія – копія",
+     "ad_id": "120230449222230624",
+     "spend": 189.45,
+     "purchases": 12,
+     "roas": 12.6,
+     "ctr": 3.81
+    },
+    {
+     "name": "ad_post_id_1053961103594337_1507",
+     "ad_id": "120231433208380624",
+     "spend": 75.69,
+     "purchases": 1,
+     "roas": 12.54,
+     "ctr": 0.93
+    },
+    {
+     "name": "ad_post_id_1068225888834525",
+     "ad_id": "120232258981120624",
+     "spend": 91.81,
+     "purchases": 2,
+     "roas": 12.5,
+     "ctr": 1.9
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120227635701790624",
+     "spend": 194.3,
+     "purchases": 7,
+     "roas": 12.42,
+     "ctr": 2.38
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120230447679130624",
+     "spend": 19557.63,
+     "purchases": 698,
+     "roas": 12.39,
+     "ctr": 2.37
+    },
+    {
+     "name": "ad004_video_fomo",
+     "ad_id": "120231525489320624",
+     "spend": 372.07,
+     "purchases": 13,
+     "roas": 12.3,
+     "ctr": 1.25
+    },
+    {
+     "name": "ad453_video_10p",
+     "ad_id": "120233104670790624",
+     "spend": 161.06,
+     "purchases": 1,
+     "roas": 11.78,
+     "ctr": 2.06
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія – копія – копія",
+     "ad_id": "120230449517930624",
+     "spend": 22641.41,
+     "purchases": 727,
+     "roas": 11.74,
+     "ctr": 2.9
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120230447679110624",
+     "spend": 1084.85,
+     "purchases": 38,
+     "roas": 11.71,
+     "ctr": 2.08
+    },
+    {
+     "name": "ad001_video_fomo",
+     "ad_id": "120231525441960624",
+     "spend": 2118.03,
+     "purchases": 56,
+     "roas": 11.7,
+     "ctr": 1.67
+    },
+    {
+     "name": "ad454_video_10p",
+     "ad_id": "120234171778460624",
+     "spend": 635.61,
+     "purchases": 6,
+     "roas": 11.63,
+     "ctr": 5.61
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі»",
+     "ad_id": "120222531301600624",
+     "spend": 9545.46,
+     "purchases": 535,
+     "roas": 11.36,
+     "ctr": 2.96
+    },
+    {
+     "name": "ad456_video_10p",
+     "ad_id": "120234204097980624",
+     "spend": 84.86,
+     "purchases": 1,
+     "roas": 11.18,
+     "ctr": 1.06
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія – копія",
+     "ad_id": "120230449222210624",
+     "spend": 313.51,
+     "purchases": 7,
+     "roas": 11.13,
+     "ctr": 2.8
+    },
+    {
+     "name": "ad450_video_10p",
+     "ad_id": "120234204098610624",
+     "spend": 572.44,
+     "purchases": 13,
+     "roas": 10.88,
+     "ctr": 2.6
+    },
+    {
+     "name": "ad_post_id_1055590110098103_1707",
+     "ad_id": "120231437036910624",
+     "spend": 54.97,
+     "purchases": 3,
+     "roas": 10.86,
+     "ctr": 3.12
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120227636015950624",
+     "spend": 156.71,
+     "purchases": 1,
+     "roas": 10.84,
+     "ctr": 1.67
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120230447679090624",
+     "spend": 567.12,
+     "purchases": 24,
+     "roas": 10.8,
+     "ctr": 3.39
+    },
+    {
+     "name": "ad305_video_199",
+     "ad_id": "120232172825850624",
+     "spend": 18.72,
+     "purchases": 1,
+     "roas": 10.63,
+     "ctr": 4.26
+    },
+    {
+     "name": "ad459_video_10p",
+     "ad_id": "120233691147550624",
+     "spend": 309.8,
+     "purchases": 5,
+     "roas": 10.47,
+     "ctr": 1.03
+    },
+    {
+     "name": "ad453_video_10p",
+     "ad_id": "120234220866050624",
+     "spend": 76.35,
+     "purchases": 4,
+     "roas": 10.43,
+     "ctr": 2.21
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі»",
+     "ad_id": "120224444532830624",
+     "spend": 1582.83,
+     "purchases": 49,
+     "roas": 10.36,
+     "ctr": 2.55
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120227635702240624",
+     "spend": 58.52,
+     "purchases": 3,
+     "roas": 10.2,
+     "ctr": 2.39
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120227635701820624",
+     "spend": 326.19,
+     "purchases": 9,
+     "roas": 10.09,
+     "ctr": 1.81
+    },
+    {
+     "name": "ad305_video_199",
+     "ad_id": "120232097380250624",
+     "spend": 20.47,
+     "purchases": 1,
+     "roas": 9.72,
+     "ctr": 4.95
+    },
+    {
+     "name": "ad202_video",
+     "ad_id": "120232057751830624",
+     "spend": 98.16,
+     "purchases": 1,
+     "roas": 9.67,
+     "ctr": 1.51
+    },
+    {
+     "name": "ad_post_id_1055589940098120",
+     "ad_id": "120232003697890624",
+     "spend": 98.22,
+     "purchases": 1,
+     "roas": 9.66,
+     "ctr": 0.91
+    },
+    {
+     "name": "ad453_video_10p",
+     "ad_id": "120234220865580624",
+     "spend": 82.88,
+     "purchases": 4,
+     "roas": 9.6,
+     "ctr": 1.91
+    },
+    {
+     "name": "ad305_video_199",
+     "ad_id": "120232097539430624",
+     "spend": 426.35,
+     "purchases": 13,
+     "roas": 9.59,
+     "ctr": 2.43
+    },
+    {
+     "name": "ad450_video_10p",
+     "ad_id": "120234204880350624",
+     "spend": 83.02,
+     "purchases": 2,
+     "roas": 9.59,
+     "ctr": 1.16
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120227635702190624",
+     "spend": 100.22,
+     "purchases": 1,
+     "roas": 9.47,
+     "ctr": 2.63
+    },
+    {
+     "name": "ad450_video_10p",
+     "ad_id": "120234220865990624",
+     "spend": 338.04,
+     "purchases": 9,
+     "roas": 9.39,
+     "ctr": 1.3
+    },
+    {
+     "name": "ad_post_id_1053932926930488_1507",
+     "ad_id": "120231434629640624",
+     "spend": 21.24,
+     "purchases": 1,
+     "roas": 9.37,
+     "ctr": 0.85
+    },
+    {
+     "name": "Кампанія з комерційної реклами Advantage+ 02.04.2025 Реклама",
+     "ad_id": "120222325579520624",
+     "spend": 13980.71,
+     "purchases": 696,
+     "roas": 9.21,
+     "ctr": 3.54
+    },
+    {
+     "name": "ad456_video_10p",
+     "ad_id": "120234220811070624",
+     "spend": 660.71,
+     "purchases": 12,
+     "roas": 9.2,
+     "ctr": 1.24
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі»",
+     "ad_id": "120227755685540624",
+     "spend": 9489.11,
+     "purchases": 160,
+     "roas": 9.06,
+     "ctr": 1.82
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120225026422280624",
+     "spend": 1068.61,
+     "purchases": 27,
+     "roas": 9.05,
+     "ctr": 1.96
+    },
+    {
+     "name": "ad450_video_10p",
+     "ad_id": "120233393064760624",
+     "spend": 552.0,
+     "purchases": 10,
+     "roas": 9.04,
+     "ctr": 1.48
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120227635702010624",
+     "spend": 105.54,
+     "purchases": 1,
+     "roas": 8.99,
+     "ctr": 2.5
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120227636016030624",
+     "spend": 371.06,
+     "purchases": 13,
+     "roas": 8.94,
+     "ctr": 2.76
+    },
+    {
+     "name": "ad002_video_fomo",
+     "ad_id": "120231525489330624",
+     "spend": 22.34,
+     "purchases": 1,
+     "roas": 8.91,
+     "ctr": 1.59
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120223782334040624",
+     "spend": 12999.68,
+     "purchases": 450,
+     "roas": 8.86,
+     "ctr": 2.98
+    },
+    {
+     "name": "ad005_video-upsell",
+     "ad_id": "120231525655940624",
+     "spend": 1929.26,
+     "purchases": 52,
+     "roas": 8.83,
+     "ctr": 1.97
+    },
+    {
+     "name": "ad457_video_10p",
+     "ad_id": "120233393027430624",
+     "spend": 260.81,
+     "purchases": 4,
+     "roas": 8.8,
+     "ctr": 1.6
+    },
+    {
+     "name": "Нова реклама з ціллю «Продажі» – копія",
+     "ad_id": "120224455611910624",
+     "spend": 13456.82,
+     "purchases": 533,
+     "roas": 8.72,
+     "ctr": 3.39
+    }
+   ],
    "series": [
     {
      "date": "2025-08-13",
-     "spend": 25554.57,
+     "spend": 0.0,
      "purchases": 228,
-     "roas": 2.83,
-     "cpa": 112.08
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-08-14",
-     "spend": 19942.45,
+     "spend": 0.0,
      "purchases": 260,
-     "roas": 4.79,
-     "cpa": 76.7
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-08-15",
-     "spend": 16460.28,
+     "spend": 0.0,
      "purchases": 213,
-     "roas": 6.22,
-     "cpa": 77.28
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-08-16",
-     "spend": 16330.42,
+     "spend": 0.0,
      "purchases": 182,
-     "roas": 4.58,
-     "cpa": 89.73
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-08-17",
-     "spend": 16758.18,
+     "spend": 0.0,
      "purchases": 177,
-     "roas": 3.11,
-     "cpa": 94.68
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-08-18",
-     "spend": 15849.07,
+     "spend": 0.0,
      "purchases": 175,
-     "roas": 3.74,
-     "cpa": 90.57
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-08-19",
-     "spend": 14773.74,
+     "spend": 0.0,
      "purchases": 161,
-     "roas": 4.26,
-     "cpa": 91.76
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-08-20",
-     "spend": 19803.62,
+     "spend": 0.0,
      "purchases": 137,
-     "roas": 2.69,
-     "cpa": 144.55
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-08-21",
-     "spend": 30286.02,
+     "spend": 0.0,
      "purchases": 466,
-     "roas": 5.62,
-     "cpa": 64.99
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-08-22",
-     "spend": 43895.47,
+     "spend": 0.0,
      "purchases": 697,
-     "roas": 6.03,
-     "cpa": 62.98
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-08-23",
-     "spend": 41435.66,
+     "spend": 0.0,
      "purchases": 566,
-     "roas": 4.15,
-     "cpa": 73.21
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-08-24",
-     "spend": 51302.89,
+     "spend": 0.0,
      "purchases": 556,
-     "roas": 3.21,
-     "cpa": 92.27
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-08-25",
-     "spend": 31886.05,
+     "spend": 0.0,
      "purchases": 389,
-     "roas": 4.06,
-     "cpa": 81.97
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-08-26",
-     "spend": 33448.16,
+     "spend": 0.0,
      "purchases": 373,
-     "roas": 4.01,
-     "cpa": 89.67
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-08-27",
-     "spend": 33527.16,
+     "spend": 0.0,
      "purchases": 366,
-     "roas": 3.15,
-     "cpa": 91.6
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-08-28",
-     "spend": 31982.9,
+     "spend": 0.0,
      "purchases": 358,
-     "roas": 3.01,
-     "cpa": 89.34
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-08-29",
-     "spend": 18562.03,
+     "spend": 0.0,
      "purchases": 171,
-     "roas": 3.09,
-     "cpa": 108.55
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-08-30",
-     "spend": 26377.54,
+     "spend": 0.0,
      "purchases": 411,
-     "roas": 4.61,
-     "cpa": 64.18
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-08-31",
-     "spend": 15440.81,
+     "spend": 0.0,
      "purchases": 314,
-     "roas": 5.39,
-     "cpa": 49.17
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-09-01",
@@ -459,45 +1265,45 @@
     },
     {
      "date": "2025-09-11",
-     "spend": 186.39,
+     "spend": 0.0,
      "purchases": 12,
-     "roas": 28.09,
-     "cpa": 15.53
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-09-12",
-     "spend": 2506.05,
+     "spend": 0.0,
      "purchases": 127,
-     "roas": 44.06,
-     "cpa": 19.73
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-09-13",
-     "spend": 1417.1,
+     "spend": 0.0,
      "purchases": 54,
-     "roas": 38.97,
-     "cpa": 26.24
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-09-14",
-     "spend": 2071.83,
+     "spend": 0.0,
      "purchases": 122,
-     "roas": 40.73,
-     "cpa": 16.98
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-09-15",
-     "spend": 2581.99,
+     "spend": 0.0,
      "purchases": 125,
-     "roas": 36.49,
-     "cpa": 20.66
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-09-16",
-     "spend": 1718.56,
+     "spend": 0.0,
      "purchases": 111,
-     "roas": 50.33,
-     "cpa": 15.48
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-09-17",
@@ -1549,213 +2355,213 @@
    "series": [
     {
      "date": "2025-11-01",
-     "spend": 25076.44,
+     "spend": 0.0,
      "purchases": 272,
-     "roas": 4.08,
-     "cpa": 92.19
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-02",
-     "spend": 19650.8,
+     "spend": 0.0,
      "purchases": 75,
-     "roas": 1.69,
-     "cpa": 262.01
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-03",
-     "spend": 18173.41,
+     "spend": 0.0,
      "purchases": 19,
-     "roas": 0.31,
-     "cpa": 956.5
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-04",
-     "spend": 21036.3,
+     "spend": 0.0,
      "purchases": 71,
-     "roas": 1.49,
-     "cpa": 296.29
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-05",
-     "spend": 20974.99,
+     "spend": 0.0,
      "purchases": 117,
-     "roas": 2.12,
-     "cpa": 179.27
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-06",
-     "spend": 22461.71,
+     "spend": 0.0,
      "purchases": 121,
-     "roas": 2.05,
-     "cpa": 185.63
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-07",
-     "spend": 22006.78,
+     "spend": 0.0,
      "purchases": 188,
-     "roas": 3.28,
-     "cpa": 117.06
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-08",
-     "spend": 20411.68,
+     "spend": 0.0,
      "purchases": 179,
-     "roas": 3.58,
-     "cpa": 114.03
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-09",
-     "spend": 21685.79,
+     "spend": 0.0,
      "purchases": 113,
-     "roas": 1.77,
-     "cpa": 191.91
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-10",
-     "spend": 20525.56,
+     "spend": 0.0,
      "purchases": 103,
-     "roas": 1.9,
-     "cpa": 199.28
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-11",
-     "spend": 22195.51,
+     "spend": 0.0,
      "purchases": 131,
-     "roas": 2.31,
-     "cpa": 169.43
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-12",
-     "spend": 23681.82,
+     "spend": 0.0,
      "purchases": 117,
-     "roas": 1.62,
-     "cpa": 202.41
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-13",
-     "spend": 15640.93,
+     "spend": 0.0,
      "purchases": 106,
-     "roas": 2.3,
-     "cpa": 147.56
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-14",
-     "spend": 24102.76,
+     "spend": 0.0,
      "purchases": 101,
-     "roas": 2.52,
-     "cpa": 238.64
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-15",
-     "spend": 23916.25,
+     "spend": 0.0,
      "purchases": 198,
-     "roas": 3.37,
-     "cpa": 120.79
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-16",
-     "spend": 23797.62,
+     "spend": 0.0,
      "purchases": 99,
-     "roas": 1.61,
-     "cpa": 240.38
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-17",
-     "spend": 22768.59,
+     "spend": 0.0,
      "purchases": 102,
-     "roas": 1.33,
-     "cpa": 223.22
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-18",
-     "spend": 25402.23,
+     "spend": 0.0,
      "purchases": 93,
-     "roas": 1.67,
-     "cpa": 273.14
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-19",
-     "spend": 23593.59,
+     "spend": 0.0,
      "purchases": 98,
-     "roas": 2.22,
-     "cpa": 240.75
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-20",
-     "spend": 16466.68,
+     "spend": 0.0,
      "purchases": 61,
-     "roas": 1.38,
-     "cpa": 269.95
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-21",
-     "spend": 15007.86,
+     "spend": 0.0,
      "purchases": 106,
-     "roas": 3.42,
-     "cpa": 141.58
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-22",
-     "spend": 16518.76,
+     "spend": 0.0,
      "purchases": 118,
-     "roas": 2.83,
-     "cpa": 139.99
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-23",
-     "spend": 15398.37,
+     "spend": 0.0,
      "purchases": 92,
-     "roas": 3.53,
-     "cpa": 167.37
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-24",
-     "spend": 9991.01,
+     "spend": 0.0,
      "purchases": 61,
-     "roas": 2.01,
-     "cpa": 163.79
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-25",
-     "spend": 11045.17,
+     "spend": 0.0,
      "purchases": 71,
-     "roas": 1.73,
-     "cpa": 155.57
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-26",
-     "spend": 10269.14,
+     "spend": 0.0,
      "purchases": 81,
-     "roas": 2.69,
-     "cpa": 126.78
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-27",
-     "spend": 9109.84,
+     "spend": 0.0,
      "purchases": 120,
-     "roas": 3.9,
-     "cpa": 75.92
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-28",
-     "spend": 6483.44,
+     "spend": 0.0,
      "purchases": 72,
-     "roas": 5.39,
-     "cpa": 90.05
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-29",
-     "spend": 5743.42,
+     "spend": 0.0,
      "purchases": 88,
-     "roas": 5.24,
-     "cpa": 65.27
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-11-30",
-     "spend": 4971.42,
+     "spend": 0.0,
      "purchases": 86,
-     "roas": 6.7,
-     "cpa": 57.81
+     "roas": 0.0,
+     "cpa": 0.0
     }
    ],
    "adsets": [
@@ -2137,59 +2943,59 @@
    "series": [
     {
      "date": "2025-12-09",
-     "spend": 12929.85,
+     "spend": 0.0,
      "purchases": 593,
-     "roas": 15.77,
-     "cpa": 21.8
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-12-10",
-     "spend": 7941.62,
+     "spend": 0.0,
      "purchases": 302,
-     "roas": 13.73,
-     "cpa": 26.3
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-12-11",
-     "spend": 9469.89,
+     "spend": 0.0,
      "purchases": 249,
-     "roas": 9.81,
-     "cpa": 38.03
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-12-12",
-     "spend": 9798.9,
+     "spend": 0.0,
      "purchases": 214,
-     "roas": 8.34,
-     "cpa": 45.79
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-12-13",
-     "spend": 10503.58,
+     "spend": 0.0,
      "purchases": 230,
-     "roas": 6.8,
-     "cpa": 45.67
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-12-14",
-     "spend": 12422.02,
+     "spend": 0.0,
      "purchases": 242,
-     "roas": 6.52,
-     "cpa": 51.33
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-12-15",
-     "spend": 16038.86,
+     "spend": 0.0,
      "purchases": 300,
-     "roas": 6.94,
-     "cpa": 53.46
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-12-16",
-     "spend": 5262.44,
+     "spend": 0.0,
      "purchases": 61,
-     "roas": 5.29,
-     "cpa": 86.27
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-12-17",
@@ -2235,10 +3041,10 @@
     },
     {
      "date": "2025-12-23",
-     "spend": 29295.99,
+     "spend": 0.0,
      "purchases": 243,
-     "roas": 3.21,
-     "cpa": 120.56
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2025-12-24",
@@ -2739,101 +3545,101 @@
    "series": [
     {
      "date": "2026-01-10",
-     "spend": 4167.79,
+     "spend": 0.0,
      "purchases": 45,
-     "roas": 3.74,
-     "cpa": 92.62
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-01-11",
-     "spend": 14857.1,
+     "spend": 0.0,
      "purchases": 134,
-     "roas": 3.21,
-     "cpa": 110.87
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-01-12",
-     "spend": 14599.05,
+     "spend": 0.0,
      "purchases": 33,
-     "roas": 0.71,
-     "cpa": 442.4
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-01-13",
-     "spend": 15848.51,
+     "spend": 0.0,
      "purchases": 25,
-     "roas": 0.67,
-     "cpa": 633.94
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-01-14",
-     "spend": 16838.47,
+     "spend": 0.0,
      "purchases": 32,
-     "roas": 0.75,
-     "cpa": 526.2
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-01-15",
-     "spend": 17908.31,
+     "spend": 0.0,
      "purchases": 39,
-     "roas": 0.66,
-     "cpa": 459.19
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-01-16",
-     "spend": 16149.5,
+     "spend": 0.0,
      "purchases": 57,
-     "roas": 1.45,
-     "cpa": 283.32
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-01-17",
-     "spend": 21908.68,
+     "spend": 0.0,
      "purchases": 361,
-     "roas": 6.1,
-     "cpa": 60.69
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-01-18",
-     "spend": 22245.87,
+     "spend": 0.0,
      "purchases": 284,
-     "roas": 5.08,
-     "cpa": 78.33
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-01-19",
-     "spend": 14157.57,
+     "spend": 0.0,
      "purchases": 99,
-     "roas": 2.24,
-     "cpa": 143.01
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-01-20",
-     "spend": 13385.61,
+     "spend": 0.0,
      "purchases": 143,
-     "roas": 4.29,
-     "cpa": 93.61
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-01-21",
-     "spend": 33876.89,
+     "spend": 0.0,
      "purchases": 888,
-     "roas": 12.5,
-     "cpa": 38.15
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-01-22",
-     "spend": 13871.81,
+     "spend": 0.0,
      "purchases": 182,
-     "roas": 5.38,
-     "cpa": 76.22
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-01-23",
-     "spend": 10425.55,
+     "spend": 0.0,
      "purchases": 145,
-     "roas": 4.78,
-     "cpa": 71.9
+     "roas": 0.0,
+     "cpa": 0.0
     }
    ],
    "adsets": [
@@ -3577,164 +4383,164 @@
    "series": [
     {
      "date": "2026-02-07",
-     "spend": 8224.01,
+     "spend": 0.0,
      "purchases": 270,
-     "roas": 12.48,
-     "cpa": 30.46
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-02-08",
-     "spend": 16754.42,
+     "spend": 0.0,
      "purchases": 327,
-     "roas": 6.84,
-     "cpa": 51.24
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-02-09",
-     "spend": 21163.5,
+     "spend": 0.0,
      "purchases": 276,
-     "roas": 5.51,
-     "cpa": 76.68
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-02-10",
-     "spend": 25462.02,
+     "spend": 0.0,
      "purchases": 255,
-     "roas": 4.83,
-     "cpa": 99.85
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-02-11",
-     "spend": 23816.17,
+     "spend": 0.0,
      "purchases": 185,
-     "roas": 2.86,
-     "cpa": 128.74
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-02-12",
-     "spend": 22192.71,
+     "spend": 0.0,
      "purchases": 287,
-     "roas": 5.14,
-     "cpa": 77.33
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-02-13",
-     "spend": 22549.94,
+     "spend": 0.0,
      "purchases": 289,
-     "roas": 5.15,
-     "cpa": 78.03
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-02-14",
-     "spend": 41919.31,
+     "spend": 0.0,
      "purchases": 863,
-     "roas": 7.05,
-     "cpa": 48.57
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-02-15",
-     "spend": 47009.07,
+     "spend": 0.0,
      "purchases": 680,
-     "roas": 5.4,
-     "cpa": 69.13
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-02-16",
-     "spend": 13502.01,
+     "spend": 0.0,
      "purchases": 91,
-     "roas": 2.82,
-     "cpa": 148.37
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-02-17",
-     "spend": 7202.29,
+     "spend": 0.0,
      "purchases": 89,
-     "roas": 4.74,
-     "cpa": 80.92
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-02-18",
-     "spend": 21339.4,
+     "spend": 0.0,
      "purchases": 458,
-     "roas": 7.59,
-     "cpa": 46.59
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-02-19",
-     "spend": 16033.81,
+     "spend": 0.0,
      "purchases": 128,
-     "roas": 3.76,
-     "cpa": 125.26
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-02-20",
-     "spend": 19578.81,
+     "spend": 0.0,
      "purchases": 140,
-     "roas": 6.36,
-     "cpa": 139.85
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-02-21",
-     "spend": 17299.38,
+     "spend": 0.0,
      "purchases": 93,
-     "roas": 4.13,
-     "cpa": 186.01
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-02-22",
-     "spend": 20076.96,
+     "spend": 0.0,
      "purchases": 106,
-     "roas": 7.3,
-     "cpa": 189.41
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-02-23",
-     "spend": 16492.82,
+     "spend": 0.0,
      "purchases": 169,
-     "roas": 3.7,
-     "cpa": 97.59
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-02-24",
-     "spend": 11691.6,
+     "spend": 0.0,
      "purchases": 43,
-     "roas": 1.52,
-     "cpa": 271.9
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-02-25",
-     "spend": 19953.8,
+     "spend": 0.0,
      "purchases": 376,
-     "roas": 9.53,
-     "cpa": 53.07
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-02-26",
-     "spend": 4440.46,
+     "spend": 0.0,
      "purchases": 28,
-     "roas": 1.99,
-     "cpa": 158.59
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-02-27",
-     "spend": 17447.05,
+     "spend": 0.0,
      "purchases": 277,
-     "roas": 6.65,
-     "cpa": 62.99
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-02-28",
-     "spend": 22494.61,
+     "spend": 0.0,
      "purchases": 368,
-     "roas": 6.86,
-     "cpa": 61.13
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-03-01",
-     "spend": 22592.31,
+     "spend": 0.0,
      "purchases": 355,
-     "roas": 6.78,
-     "cpa": 63.64
+     "roas": 0.0,
+     "cpa": 0.0
     }
    ],
    "adsets": [
@@ -4618,192 +5424,192 @@
    "series": [
     {
      "date": "2026-03-24",
-     "spend": 5109.88,
+     "spend": 0.0,
      "purchases": 136,
-     "roas": 10.77,
-     "cpa": 37.57
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-03-25",
-     "spend": 6971.97,
+     "spend": 0.0,
      "purchases": 207,
-     "roas": 12.66,
-     "cpa": 33.68
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-03-26",
-     "spend": 11838.91,
+     "spend": 0.0,
      "purchases": 402,
-     "roas": 14.99,
-     "cpa": 29.45
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-03-27",
-     "spend": 13758.19,
+     "spend": 0.0,
      "purchases": 342,
-     "roas": 9.64,
-     "cpa": 40.23
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-03-28",
-     "spend": 18071.04,
+     "spend": 0.0,
      "purchases": 708,
-     "roas": 16.03,
-     "cpa": 25.52
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-03-29",
-     "spend": 17934.98,
+     "spend": 0.0,
      "purchases": 958,
-     "roas": 23.65,
-     "cpa": 18.72
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-03-30",
-     "spend": 10359.68,
+     "spend": 0.0,
      "purchases": 166,
-     "roas": 7.05,
-     "cpa": 62.41
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-03-31",
-     "spend": 11492.14,
+     "spend": 0.0,
      "purchases": 178,
-     "roas": 9.79,
-     "cpa": 64.56
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-04-01",
-     "spend": 14650.82,
+     "spend": 0.0,
      "purchases": 146,
-     "roas": 6.86,
-     "cpa": 100.35
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-04-02",
-     "spend": 13384.96,
+     "spend": 0.0,
      "purchases": 80,
-     "roas": 2.69,
-     "cpa": 167.31
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-04-03",
-     "spend": 27945.94,
+     "spend": 0.0,
      "purchases": 490,
-     "roas": 7.17,
-     "cpa": 57.03
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-04-04",
-     "spend": 20193.99,
+     "spend": 0.0,
      "purchases": 391,
-     "roas": 9.68,
-     "cpa": 51.65
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-04-05",
-     "spend": 25416.4,
+     "spend": 0.0,
      "purchases": 359,
-     "roas": 5.78,
-     "cpa": 70.8
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-04-06",
-     "spend": 21750.49,
+     "spend": 0.0,
      "purchases": 244,
-     "roas": 4.5,
-     "cpa": 89.14
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-04-07",
-     "spend": 15779.3,
+     "spend": 0.0,
      "purchases": 100,
-     "roas": 2.91,
-     "cpa": 157.79
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-04-08",
-     "spend": 31230.24,
+     "spend": 0.0,
      "purchases": 170,
-     "roas": 5.01,
-     "cpa": 183.71
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-04-09",
-     "spend": 43005.7,
+     "spend": 0.0,
      "purchases": 650,
-     "roas": 9.5,
-     "cpa": 66.16
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-04-10",
-     "spend": 22852.97,
+     "spend": 0.0,
      "purchases": 128,
-     "roas": 2.15,
-     "cpa": 178.54
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-04-11",
-     "spend": 53155.79,
+     "spend": 0.0,
      "purchases": 373,
-     "roas": 3.21,
-     "cpa": 142.51
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-04-12",
-     "spend": 44308.4,
+     "spend": 0.0,
      "purchases": 285,
-     "roas": 2.45,
-     "cpa": 155.47
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-04-13",
-     "spend": 19847.97,
+     "spend": 0.0,
      "purchases": 107,
-     "roas": 3.07,
-     "cpa": 185.5
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-04-14",
-     "spend": 16350.12,
+     "spend": 0.0,
      "purchases": 34,
-     "roas": 1.42,
-     "cpa": 480.89
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-04-15",
-     "spend": 948.82,
+     "spend": 0.0,
      "purchases": 0,
      "roas": 0.0,
      "cpa": null
     },
     {
      "date": "2026-04-16",
-     "spend": 897.2,
+     "spend": 0.0,
      "purchases": 2,
-     "roas": 0.76,
-     "cpa": 448.6
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-04-17",
-     "spend": 10357.91,
+     "spend": 0.0,
      "purchases": 32,
-     "roas": 2.26,
-     "cpa": 323.68
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-04-18",
-     "spend": 30487.95,
+     "spend": 0.0,
      "purchases": 453,
-     "roas": 8.44,
-     "cpa": 67.3
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-04-19",
-     "spend": 60696.58,
+     "spend": 0.0,
      "purchases": 623,
-     "roas": 5.43,
-     "cpa": 97.43
+     "roas": 0.0,
+     "cpa": 0.0
     }
    ],
    "adsets": [
@@ -5801,178 +6607,178 @@
    "series": [
     {
      "date": "2026-05-07",
-     "spend": 16377.74,
+     "spend": 0.0,
      "purchases": 207,
-     "roas": 5.53,
-     "cpa": 79.12
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-05-08",
-     "spend": 16781.74,
+     "spend": 0.0,
      "purchases": 332,
-     "roas": 8.87,
-     "cpa": 50.55
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-05-09",
-     "spend": 12091.41,
+     "spend": 0.0,
      "purchases": 219,
-     "roas": 8.09,
-     "cpa": 55.21
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-05-10",
-     "spend": 26660.75,
+     "spend": 0.0,
      "purchases": 280,
-     "roas": 4.82,
-     "cpa": 95.22
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-05-11",
-     "spend": 27293.57,
+     "spend": 0.0,
      "purchases": 261,
-     "roas": 4.59,
-     "cpa": 104.57
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-05-12",
-     "spend": 28486.89,
+     "spend": 0.0,
      "purchases": 254,
-     "roas": 4.26,
-     "cpa": 112.15
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-05-13",
-     "spend": 47714.04,
+     "spend": 0.0,
      "purchases": 323,
-     "roas": 6.31,
-     "cpa": 147.72
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-05-14",
-     "spend": 30631.77,
+     "spend": 0.0,
      "purchases": 187,
-     "roas": 2.4,
-     "cpa": 163.81
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-05-15",
-     "spend": 29627.09,
+     "spend": 0.0,
      "purchases": 190,
-     "roas": 2.65,
-     "cpa": 155.93
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-05-16",
-     "spend": 67922.13,
+     "spend": 0.0,
      "purchases": 666,
-     "roas": 4.05,
-     "cpa": 101.99
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-05-17",
-     "spend": 55170.05,
+     "spend": 0.0,
      "purchases": 557,
-     "roas": 5.19,
-     "cpa": 99.05
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-05-18",
-     "spend": 39875.64,
+     "spend": 0.0,
      "purchases": 167,
-     "roas": 1.8,
-     "cpa": 238.78
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-05-19",
-     "spend": 27196.98,
+     "spend": 0.0,
      "purchases": 291,
-     "roas": 4.53,
-     "cpa": 93.46
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-05-20",
-     "spend": 25108.25,
+     "spend": 0.0,
      "purchases": 103,
-     "roas": 3.72,
-     "cpa": 243.77
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-05-21",
-     "spend": 27724.22,
+     "spend": 0.0,
      "purchases": 145,
-     "roas": 2.59,
-     "cpa": 191.2
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-05-22",
-     "spend": 40997.24,
+     "spend": 0.0,
      "purchases": 252,
-     "roas": 2.86,
-     "cpa": 162.69
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-05-23",
-     "spend": 39340.24,
+     "spend": 0.0,
      "purchases": 306,
-     "roas": 3.94,
-     "cpa": 128.56
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-05-24",
-     "spend": 29447.48,
+     "spend": 0.0,
      "purchases": 162,
-     "roas": 2.99,
-     "cpa": 181.77
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-05-25",
-     "spend": 45150.84,
+     "spend": 0.0,
      "purchases": 342,
-     "roas": 5.47,
-     "cpa": 132.02
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-05-26",
-     "spend": 54007.57,
+     "spend": 0.0,
      "purchases": 364,
-     "roas": 4.23,
-     "cpa": 148.37
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-05-27",
-     "spend": 54157.04,
+     "spend": 0.0,
      "purchases": 307,
-     "roas": 3.83,
-     "cpa": 176.41
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-05-28",
-     "spend": 48398.17,
+     "spend": 0.0,
      "purchases": 196,
-     "roas": 2.18,
-     "cpa": 246.93
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-05-29",
-     "spend": 25352.46,
+     "spend": 0.0,
      "purchases": 200,
-     "roas": 3.23,
-     "cpa": 126.76
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-05-30",
-     "spend": 51085.99,
+     "spend": 0.0,
      "purchases": 916,
-     "roas": 9.48,
-     "cpa": 55.77
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-05-31",
-     "spend": 38002.58,
+     "spend": 0.0,
      "purchases": 349,
-     "roas": 3.89,
-     "cpa": 108.89
+     "roas": 0.0,
+     "cpa": 0.0
     }
    ],
    "adsets": [
@@ -6727,59 +7533,59 @@
    "series": [
     {
      "date": "2026-06-07",
-     "spend": 6292.06,
+     "spend": 0.0,
      "purchases": 209,
-     "roas": 6.81,
-     "cpa": 30.11
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-06-08",
-     "spend": 16051.76,
+     "spend": 0.0,
      "purchases": 572,
-     "roas": 8.39,
-     "cpa": 28.06
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-06-09",
-     "spend": 13776.67,
+     "spend": 0.0,
      "purchases": 354,
-     "roas": 7.98,
-     "cpa": 38.92
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-06-10",
-     "spend": 16859.15,
+     "spend": 0.0,
      "purchases": 412,
-     "roas": 9.79,
-     "cpa": 40.92
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-06-11",
-     "spend": 18908.47,
+     "spend": 0.0,
      "purchases": 396,
-     "roas": 5.65,
-     "cpa": 47.75
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-06-12",
-     "spend": 21291.91,
+     "spend": 0.0,
      "purchases": 391,
-     "roas": 4.66,
-     "cpa": 54.46
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-06-13",
-     "spend": 27807.16,
+     "spend": 0.0,
      "purchases": 429,
-     "roas": 3.99,
-     "cpa": 64.82
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-06-14",
-     "spend": 33745.57,
+     "spend": 0.0,
      "purchases": 527,
-     "roas": 3.38,
-     "cpa": 64.03
+     "roas": 0.0,
+     "cpa": 0.0
     }
    ],
    "adsets": [
@@ -7795,101 +8601,101 @@
    "series": [
     {
      "date": "2026-06-15",
-     "spend": 3932.14,
+     "spend": 0.0,
      "purchases": 34,
-     "roas": 4.39,
-     "cpa": 115.65
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-06-16",
-     "spend": 20735.77,
+     "spend": 0.0,
      "purchases": 260,
-     "roas": 4.05,
-     "cpa": 79.75
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-06-17",
-     "spend": 19259.75,
+     "spend": 0.0,
      "purchases": 157,
-     "roas": 2.91,
-     "cpa": 122.67
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-06-18",
-     "spend": 26819.33,
+     "spend": 0.0,
      "purchases": 348,
-     "roas": 4.73,
-     "cpa": 77.07
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-06-19",
-     "spend": 25125.63,
+     "spend": 0.0,
      "purchases": 219,
-     "roas": 3.26,
-     "cpa": 114.73
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-06-20",
-     "spend": 31670.83,
+     "spend": 0.0,
      "purchases": 340,
-     "roas": 3.82,
-     "cpa": 93.15
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-06-21",
-     "spend": 30416.97,
+     "spend": 0.0,
      "purchases": 128,
-     "roas": 1.67,
-     "cpa": 237.63
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-06-22",
-     "spend": 14297.92,
+     "spend": 0.0,
      "purchases": 98,
-     "roas": 2.56,
-     "cpa": 145.9
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-06-23",
-     "spend": 11307.05,
+     "spend": 0.0,
      "purchases": 131,
-     "roas": 5.85,
-     "cpa": 86.31
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-06-24",
-     "spend": 12191.52,
+     "spend": 0.0,
      "purchases": 195,
-     "roas": 7.06,
-     "cpa": 62.52
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-06-25",
-     "spend": 13390.03,
+     "spend": 0.0,
      "purchases": 137,
-     "roas": 3.83,
-     "cpa": 97.74
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-06-26",
-     "spend": 20339.37,
+     "spend": 0.0,
      "purchases": 205,
-     "roas": 4.25,
-     "cpa": 99.22
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-06-27",
-     "spend": 22335.48,
+     "spend": 0.0,
      "purchases": 366,
-     "roas": 7.05,
-     "cpa": 61.03
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-06-28",
-     "spend": 33505.95,
+     "spend": 0.0,
      "purchases": 488,
-     "roas": 5.43,
-     "cpa": 68.66
+     "roas": 0.0,
+     "cpa": 0.0
     }
    ],
    "adsets": [
@@ -8921,31 +9727,31 @@
    "series": [
     {
      "date": "2026-07-02",
-     "spend": 1671.72,
+     "spend": 0.0,
      "purchases": 0,
      "roas": 0.0,
      "cpa": null
     },
     {
      "date": "2026-07-03",
-     "spend": 20579.54,
+     "spend": 0.0,
      "purchases": 662,
-     "roas": 5.23,
-     "cpa": 31.09
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-07-04",
-     "spend": 22825.43,
+     "spend": 0.0,
      "purchases": 573,
-     "roas": 4.91,
-     "cpa": 39.83
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-07-05",
-     "spend": 275.82,
+     "spend": 0.0,
      "purchases": 10,
-     "roas": 3.24,
-     "cpa": 27.58
+     "roas": 0.0,
+     "cpa": 0.0
     }
    ],
    "adsets": [
@@ -9977,185 +10783,185 @@
    "series": [
     {
      "date": "2026-07-08",
-     "spend": 811.36,
+     "spend": 0.0,
      "purchases": 0,
      "roas": 0.0,
      "cpa": null
     },
     {
      "date": "2026-07-09",
-     "spend": 8096.66,
+     "spend": 0.0,
      "purchases": 212,
-     "roas": 10.02,
-     "cpa": 38.19
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-07-10",
-     "spend": 18921.23,
+     "spend": 0.0,
      "purchases": 482,
-     "roas": 10.85,
-     "cpa": 39.26
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-07-11",
-     "spend": 22156.97,
+     "spend": 0.0,
      "purchases": 354,
-     "roas": 5.89,
-     "cpa": 62.59
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-07-12",
-     "spend": 20724.85,
+     "spend": 0.0,
      "purchases": 293,
-     "roas": 4.8,
-     "cpa": 70.73
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-07-13",
-     "spend": 21491.12,
+     "spend": 0.0,
      "purchases": 332,
-     "roas": 9.07,
-     "cpa": 64.73
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-07-14",
-     "spend": 19806.83,
+     "spend": 0.0,
      "purchases": 230,
-     "roas": 4.81,
-     "cpa": 86.12
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-07-15",
-     "spend": 23016.85,
+     "spend": 0.0,
      "purchases": 400,
-     "roas": 7.23,
-     "cpa": 57.54
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-07-16",
-     "spend": 22240.03,
+     "spend": 0.0,
      "purchases": 356,
-     "roas": 8.99,
-     "cpa": 62.47
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-07-17",
-     "spend": 26796.1,
+     "spend": 0.0,
      "purchases": 352,
-     "roas": 6.2,
-     "cpa": 76.13
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-07-18",
-     "spend": 22514.15,
+     "spend": 0.0,
      "purchases": 800,
-     "roas": 17.63,
-     "cpa": 28.14
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-07-19",
-     "spend": 24101.96,
+     "spend": 0.0,
      "purchases": 265,
-     "roas": 4.88,
-     "cpa": 90.95
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-07-20",
-     "spend": 23808.78,
+     "spend": 0.0,
      "purchases": 269,
-     "roas": 6.58,
-     "cpa": 88.51
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-07-21",
-     "spend": 20661.07,
+     "spend": 0.0,
      "purchases": 216,
-     "roas": 4.97,
-     "cpa": 95.65
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-07-22",
-     "spend": 17268.37,
+     "spend": 0.0,
      "purchases": 229,
-     "roas": 5.64,
-     "cpa": 75.41
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-07-23",
-     "spend": 22015.6,
+     "spend": 0.0,
      "purchases": 249,
-     "roas": 6.96,
-     "cpa": 88.42
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-07-24",
-     "spend": 20670.26,
+     "spend": 0.0,
      "purchases": 197,
-     "roas": 4.11,
-     "cpa": 104.93
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-07-25",
-     "spend": 23534.78,
+     "spend": 0.0,
      "purchases": 541,
-     "roas": 9.5,
-     "cpa": 43.5
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-07-26",
-     "spend": 27222.3,
+     "spend": 0.0,
      "purchases": 247,
-     "roas": 3.87,
-     "cpa": 110.21
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-07-27",
-     "spend": 21156.41,
+     "spend": 0.0,
      "purchases": 190,
-     "roas": 4.17,
-     "cpa": 111.35
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-07-28",
-     "spend": 23303.4,
+     "spend": 0.0,
      "purchases": 211,
-     "roas": 4.74,
-     "cpa": 110.44
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-07-29",
-     "spend": 24313.51,
+     "spend": 0.0,
      "purchases": 223,
-     "roas": 6.51,
-     "cpa": 109.03
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-07-30",
-     "spend": 24148.91,
+     "spend": 0.0,
      "purchases": 331,
-     "roas": 7.16,
-     "cpa": 72.96
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-07-31",
-     "spend": 28154.46,
+     "spend": 0.0,
      "purchases": 314,
-     "roas": 4.85,
-     "cpa": 89.66
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-08-01",
-     "spend": 53307.23,
+     "spend": 0.0,
      "purchases": 503,
-     "roas": 5.15,
-     "cpa": 105.98
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-08-02",
-     "spend": 73436.73,
+     "spend": 0.0,
      "purchases": 1071,
-     "roas": 6.21,
-     "cpa": 68.57
+     "roas": 0.0,
+     "cpa": 0.0
     }
    ],
    "adsets": [
@@ -10479,24 +11285,24 @@
    "series": [
     {
      "date": "2026-08-14",
-     "spend": 20682.82,
+     "spend": 0.0,
      "purchases": 439,
-     "roas": 4.74,
-     "cpa": 47.11
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-08-15",
-     "spend": 18559.82,
+     "spend": 0.0,
      "purchases": 485,
-     "roas": 6.11,
-     "cpa": 38.27
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-08-16",
-     "spend": 21752.52,
+     "spend": 0.0,
      "purchases": 297,
-     "roas": 3.07,
-     "cpa": 73.24
+     "roas": 0.0,
+     "cpa": 0.0
     }
    ],
    "adsets": [
@@ -11504,213 +12310,213 @@
    "series": [
     {
      "date": "2026-09-05",
-     "spend": 4816.58,
+     "spend": 0.0,
      "purchases": 159,
-     "roas": 11.4,
-     "cpa": 30.29
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-09-06",
-     "spend": 6909.47,
+     "spend": 0.0,
      "purchases": 142,
-     "roas": 7.6,
-     "cpa": 48.66
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-09-07",
-     "spend": 7615.5,
+     "spend": 0.0,
      "purchases": 176,
-     "roas": 8.35,
-     "cpa": 43.27
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-09-08",
-     "spend": 7282.46,
+     "spend": 0.0,
      "purchases": 154,
-     "roas": 9.93,
-     "cpa": 47.29
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-09-09",
-     "spend": 6980.59,
+     "spend": 0.0,
      "purchases": 151,
-     "roas": 9.19,
-     "cpa": 46.23
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-09-10",
-     "spend": 7961.26,
+     "spend": 0.0,
      "purchases": 161,
-     "roas": 10.54,
-     "cpa": 49.45
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-09-11",
-     "spend": 9814.09,
+     "spend": 0.0,
      "purchases": 191,
-     "roas": 6.86,
-     "cpa": 51.38
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-09-12",
-     "spend": 10140.67,
+     "spend": 0.0,
      "purchases": 223,
-     "roas": 9.15,
-     "cpa": 45.47
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-09-13",
-     "spend": 12542.91,
+     "spend": 0.0,
      "purchases": 159,
-     "roas": 4.57,
-     "cpa": 78.89
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-09-14",
-     "spend": 10908.55,
+     "spend": 0.0,
      "purchases": 164,
-     "roas": 6.85,
-     "cpa": 66.52
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-09-15",
-     "spend": 11371.92,
+     "spend": 0.0,
      "purchases": 194,
-     "roas": 10.23,
-     "cpa": 58.62
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-09-16",
-     "spend": 20224.99,
+     "spend": 0.0,
      "purchases": 189,
-     "roas": 4.24,
-     "cpa": 107.01
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-09-17",
-     "spend": 19617.77,
+     "spend": 0.0,
      "purchases": 215,
-     "roas": 5.24,
-     "cpa": 91.25
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-09-18",
-     "spend": 18230.66,
+     "spend": 0.0,
      "purchases": 154,
-     "roas": 3.44,
-     "cpa": 118.38
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-09-19",
-     "spend": 38546.29,
+     "spend": 0.0,
      "purchases": 803,
-     "roas": 10.61,
-     "cpa": 48.0
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-09-20",
-     "spend": 27915.88,
+     "spend": 0.0,
      "purchases": 172,
-     "roas": 2.89,
-     "cpa": 162.3
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-09-21",
-     "spend": 21922.93,
+     "spend": 0.0,
      "purchases": 155,
-     "roas": 2.94,
-     "cpa": 141.44
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-09-22",
-     "spend": 25979.91,
+     "spend": 0.0,
      "purchases": 158,
-     "roas": 3.1,
-     "cpa": 164.43
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-09-23",
-     "spend": 17307.51,
+     "spend": 0.0,
      "purchases": 111,
-     "roas": 2.64,
-     "cpa": 155.92
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-09-24",
-     "spend": 18659.61,
+     "spend": 0.0,
      "purchases": 153,
-     "roas": 4.1,
-     "cpa": 121.96
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-09-25",
-     "spend": 12785.83,
+     "spend": 0.0,
      "purchases": 129,
-     "roas": 5.89,
-     "cpa": 99.11
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-09-26",
-     "spend": 30024.34,
+     "spend": 0.0,
      "purchases": 348,
-     "roas": 5.58,
-     "cpa": 86.28
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-09-27",
-     "spend": 31822.66,
+     "spend": 0.0,
      "purchases": 343,
-     "roas": 5.83,
-     "cpa": 92.78
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-09-28",
-     "spend": 20046.93,
+     "spend": 0.0,
      "purchases": 207,
-     "roas": 3.45,
-     "cpa": 96.85
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-09-29",
-     "spend": 14463.28,
+     "spend": 0.0,
      "purchases": 210,
-     "roas": 4.91,
-     "cpa": 68.87
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-09-30",
-     "spend": 15232.62,
+     "spend": 0.0,
      "purchases": 292,
-     "roas": 7.56,
-     "cpa": 52.17
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-10-01",
-     "spend": 23472.4,
+     "spend": 0.0,
      "purchases": 302,
-     "roas": 4.57,
-     "cpa": 77.72
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-10-02",
-     "spend": 30212.28,
+     "spend": 0.0,
      "purchases": 331,
-     "roas": 4.1,
-     "cpa": 91.28
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-10-03",
-     "spend": 32269.43,
+     "spend": 0.0,
      "purchases": 582,
-     "roas": 8.03,
-     "cpa": 55.45
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-10-04",
-     "spend": 45487.33,
+     "spend": 0.0,
      "purchases": 479,
-     "roas": 4.71,
-     "cpa": 94.96
+     "roas": 0.0,
+     "cpa": 0.0
     }
    ],
    "adsets": [
@@ -11787,39 +12593,39 @@
    "name": "BMW 330i (G20)",
    "car_model": "BMW 330i G20",
    "date_from": "2026-10-09",
-   "date_to": "2026-10-20",
-   "spend": 251292.8,
-   "impressions": 1348898,
-   "clicks": 22554,
-   "ctr": 1.67,
-   "reach": 133260,
-   "frequency": 10.12,
-   "purchases": 3330,
-   "pixel_roas": 5.93,
-   "cpa": 75.46,
-   "pixel_revenue": 1490826,
-   "real_ad_revenue": 719089,
-   "real_ad_roas": 2.86,
-   "gap_pct": -51.8,
+   "date_to": "2026-10-21",
+   "spend": 274254.88,
+   "impressions": 1456304,
+   "clicks": 24017,
+   "ctr": 1.65,
+   "reach": 136405,
+   "frequency": 10.68,
+   "purchases": 3617,
+   "pixel_roas": 5.89,
+   "cpa": 75.82,
+   "pixel_revenue": 1616111,
+   "real_ad_revenue": 789068,
+   "real_ad_roas": 2.88,
+   "gap_pct": -51.2,
    "segments": {
     "platform": [
      [
       "instagram",
-      203801.73,
-      2694,
-      5.83
+      221754.84,
+      2921,
+      5.79
      ],
      [
       "facebook",
-      45387.02,
-      604,
-      6.39
+      50137.9,
+      662,
+      6.34
      ],
      [
       "threads",
-      2181.2,
-      30,
-      5.14
+      2362.14,
+      31,
+      4.84
      ],
      [
       "unknown",
@@ -11831,103 +12637,103 @@
     "age": [
      [
       "25-34",
-      130195.03,
-      1741,
-      6.05
+      141846.23,
+      1880,
+      6.0
      ],
      [
       "35-44",
-      71038.98,
-      980,
-      6.02
+      77851.93,
+      1083,
+      6.05
      ],
      [
       "18-24",
-      30568.66,
-      368,
-      5.8
+      33147.01,
+      385,
+      5.54
      ],
      [
       "45-54",
-      14443.38,
-      178,
-      5.17
+      15883.86,
+      194,
+      5.08
      ],
      [
       "65+",
-      2676.64,
-      28,
-      3.64
+      2889.71,
+      32,
+      3.77
      ],
      [
       "55-64",
-      2366.17,
-      32,
-      5.07
+      2632.07,
+      36,
+      6.14
      ],
      [
       "Unknown",
-      3.94,
-      6,
-      440.04
+      4.07,
+      7,
+      505.83
      ]
     ],
     "gender": [
      [
       "male",
-      220032.28,
-      2974,
-      6.05
+      239780.92,
+      3224,
+      6.01
      ],
      [
       "female",
-      30889.6,
-      345,
-      5.09
+      34056.35,
+      379,
+      5.03
      ],
      [
       "unknown",
-      370.92,
-      12,
-      10.68
+      417.61,
+      14,
+      10.74
      ]
     ],
     "device": [
      [
       "iphone",
-      172683.86,
-      2210,
-      5.81
+      188204.35,
+      2405,
+      5.78
      ],
      [
       "android_smartphone",
-      78042.6,
-      1097,
-      6.1
+      85337.48,
+      1186,
+      6.05
      ],
      [
       "desktop",
-      465.8,
+      517.86,
       8,
-      8.03
+      7.26
      ],
      [
       "android_tablet",
-      90.46,
+      102.92,
       1,
-      3.28
+      2.88
      ],
      [
       "ipad",
-      81.83,
+      86.44,
       0,
       0.0
      ],
      [
       "other",
-      5.4,
-      15,
-      1480.17
+      5.84,
+      17,
+      1437.28
      ]
     ]
    },
@@ -11964,7 +12770,7 @@
      "ad_id": "120252685369210624",
      "spend": 1889.84,
      "purchases": 102,
-     "roas": 25.06,
+     "roas": 25.07,
      "ctr": 2.55,
      "thumb": "data:image/jpeg;base64,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"
     },
@@ -11987,28 +12793,12 @@
      "thumb": "data:image/jpeg;base64,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"
     },
     {
-     "name": "старт22-15-token-mechanic · База · claude",
-     "ad_id": "120252617536490624",
-     "spend": 748.87,
-     "purchases": 6,
-     "roas": 15.24,
-     "ctr": 1.56
-    },
-    {
      "name": "офер-14.10-x2-g20-dopivnochi-video · Ядро · claude",
      "ad_id": "120252690312550624",
      "spend": 2436.6,
      "purchases": 58,
      "roas": 14.31,
      "ctr": 1.73
-    },
-    {
-     "name": "офер-13.10-ultimate-cd · DC|08 · claude",
-     "ad_id": "120252668566830624",
-     "spend": 168.35,
-     "purchases": 8,
-     "roas": 13.97,
-     "ctr": 1.67
     },
     {
      "name": "офер-14.10-x2-g20-poster-broll-video · DC|08 · claude",
@@ -12051,14 +12841,6 @@
      "ctr": 1.76
     },
     {
-     "name": "пост22-09.10-bmw-g20-mpaket-post · DC|08 · claude",
-     "ad_id": "120252646253540624",
-     "spend": 98.6,
-     "purchases": 4,
-     "roas": 11.49,
-     "ctr": 3.04
-    },
-    {
      "name": "офер-17.10-iphone-dobroho-ranku-video · База · claude",
      "ad_id": "120252740944680624",
      "spend": 1034.46,
@@ -12067,12 +12849,36 @@
      "ctr": 1.07
     },
     {
+     "name": "пост22-10.10-g20-parking-video · DC|08 · claude",
+     "ad_id": "120252667272800624",
+     "spend": 737.69,
+     "purchases": 26,
+     "roas": 11.27,
+     "ctr": 2.95
+    },
+    {
+     "name": "старт22-16-no-owner-yet · База · claude",
+     "ad_id": "120252617537190624",
+     "spend": 267.65,
+     "purchases": 4,
+     "roas": 10.8,
+     "ctr": 1.3
+    },
+    {
+     "name": "пост22-09.10-bmw-g20-mpaket-post · DC|08 · claude",
+     "ad_id": "120252646253540624",
+     "spend": 103.35,
+     "purchases": 4,
+     "roas": 10.75,
+     "ctr": 2.84
+    },
+    {
      "name": "старт22-05-autumn-forest · DC|11 · claude",
      "ad_id": "120252617616770624",
-     "spend": 17.95,
+     "spend": 19.1,
      "purchases": 1,
-     "roas": 11.11,
-     "ctr": 1.96
+     "roas": 10.44,
+     "ctr": 1.89
     },
     {
      "name": "офер-14.10-x2v3-cd · DC|08 · claude",
@@ -12083,12 +12889,12 @@
      "ctr": 1.44
     },
     {
-     "name": "пост22-09.10-bmw-g20-mpaket-post · База · claude",
-     "ad_id": "120252646228010624",
-     "spend": 191.99,
-     "purchases": 5,
-     "roas": 9.62,
-     "ctr": 2.49
+     "name": "пост22-11.10-g20-22-proiekt-video · DC|08 · claude",
+     "ad_id": "120252667300390624",
+     "spend": 1367.58,
+     "purchases": 23,
+     "roas": 9.73,
+     "ctr": 1.71
     },
     {
      "name": "офер-17.10-iphone-burgundy2-video · Ядро · claude",
@@ -12099,36 +12905,36 @@
      "ctr": 1.46
     },
     {
-     "name": "старт22-16-no-owner-yet · База · claude",
-     "ad_id": "120252617537190624",
-     "spend": 228.94,
-     "purchases": 3,
-     "roas": 9.12,
-     "ctr": 1.12
-    },
-    {
-     "name": "пост22-11.10-g20-22-proiekt-video · DC|08 · claude",
-     "ad_id": "120252667300390624",
-     "spend": 1494.71,
-     "purchases": 22,
-     "roas": 9.05,
-     "ctr": 1.68
-    },
-    {
-     "name": "пост22-11.10-g20-22-proiekt-video · База · claude",
-     "ad_id": "120252667296480624",
-     "spend": 5696.86,
-     "purchases": 78,
-     "roas": 8.57,
-     "ctr": 1.75
+     "name": "старт22-15-token-mechanic · База · claude",
+     "ad_id": "120252617536490624",
+     "spend": 1278.97,
+     "purchases": 7,
+     "roas": 9.08,
+     "ctr": 1.4
     },
     {
      "name": "пост22-10.10-g20-parking-video · База · claude",
      "ad_id": "120252667266500624",
-     "spend": 3232.06,
+     "spend": 2999.23,
      "purchases": 63,
-     "roas": 8.53,
-     "ctr": 2.1
+     "roas": 9.07,
+     "ctr": 2.08
+    },
+    {
+     "name": "пост22-11.10-g20-22-proiekt-video · База · claude",
+     "ad_id": "120252667296480624",
+     "spend": 6202.17,
+     "purchases": 87,
+     "roas": 8.83,
+     "ctr": 1.7
+    },
+    {
+     "name": "пост22-11.10-g20-22-proiekt-video · DC|11 · claude",
+     "ad_id": "120252667293470624",
+     "spend": 51.97,
+     "purchases": 2,
+     "roas": 8.12,
+     "ctr": 1.37
     },
     {
      "name": "офер-14.10-x2-g20-dopivnochi-video · DC|08 · claude",
@@ -12147,20 +12953,20 @@
      "ctr": 2.07
     },
     {
-     "name": "пост22-11.10-g20-kompletatsiia-video · База · claude",
-     "ad_id": "120252667283500624",
-     "spend": 7330.84,
-     "purchases": 108,
-     "roas": 7.77,
-     "ctr": 2.04
-    },
-    {
      "name": "офер-14.10-x2-g20-poster-broll-video · Ядро · claude",
      "ad_id": "120252690315420624",
      "spend": 2422.93,
      "purchases": 41,
      "roas": 7.22,
      "ctr": 1.57
+    },
+    {
+     "name": "пост22-11.10-g20-kompletatsiia-video · База · claude",
+     "ad_id": "120252667283500624",
+     "spend": 6542.27,
+     "purchases": 86,
+     "roas": 6.95,
+     "ctr": 1.88
     },
     {
      "name": "офер-17.10-iphone-burgundy-video · Ядро · claude",
@@ -12187,12 +12993,28 @@
      "ctr": 2.19
     },
     {
+     "name": "офер-20.10-macbook-post · Ядро · claude",
+     "ad_id": "120252780942830624",
+     "spend": 1683.92,
+     "purchases": 23,
+     "roas": 6.76,
+     "ctr": 1.54
+    },
+    {
      "name": "офер-17.10-iphone-burgundy-video · База · claude",
      "ad_id": "120252736087960624",
      "spend": 552.4,
      "purchases": 9,
      "roas": 6.75,
      "ctr": 1.01
+    },
+    {
+     "name": "пост22-10.10-g20-parking-video · DC|11 · claude",
+     "ad_id": "120252667265120624",
+     "spend": 457.99,
+     "purchases": 10,
+     "roas": 6.6,
+     "ctr": 2.07
     },
     {
      "name": "офер-14.10-x2-g20-dopivnochi-video · DC|11 · claude",
@@ -12203,12 +13025,20 @@
      "ctr": 1.76
     },
     {
-     "name": "пост22-10.10-g20-parking-video · DC|08 · claude",
-     "ad_id": "120252667272800624",
-     "spend": 1650.09,
-     "purchases": 32,
-     "roas": 6.36,
-     "ctr": 2.47
+     "name": "офер-20.10-macbook-post · База · claude",
+     "ad_id": "120252780944800624",
+     "spend": 524.4,
+     "purchases": 2,
+     "roas": 6.31,
+     "ctr": 1.14
+    },
+    {
+     "name": "пост22-09.10-bmw-g20-mpaket-post · Ядро · claude",
+     "ad_id": "120252702138960624",
+     "spend": 1178.75,
+     "purchases": 11,
+     "roas": 5.87,
+     "ctr": 2.89
     },
     {
      "name": "офер-14.10-x2-g20-10na20-video · Ядро · claude",
@@ -12219,20 +13049,20 @@
      "ctr": 1.22
     },
     {
-     "name": "старт22-06-parking-garage · Ядро · claude",
-     "ad_id": "120252617515330624",
-     "spend": 4155.98,
-     "purchases": 42,
-     "roas": 5.72,
-     "ctr": 1.34
-    },
-    {
      "name": "старт22-08-coffee-price · DC|08 · claude",
      "ad_id": "120252617549170624",
-     "spend": 1591.86,
-     "purchases": 23,
-     "roas": 5.72,
-     "ctr": 1.28
+     "spend": 1680.62,
+     "purchases": 26,
+     "roas": 5.77,
+     "ctr": 1.29
+    },
+    {
+     "name": "старт22-22-steering-wheel · Ядро · claude",
+     "ad_id": "120252617522540624",
+     "spend": 1711.06,
+     "purchases": 15,
+     "roas": 5.73,
+     "ctr": 1.26
     },
     {
      "name": "офер-17.10-iphone-v2b-cd · База · claude",
@@ -12251,36 +13081,12 @@
      "ctr": 1.45
     },
     {
-     "name": "пост22-10.10-g20-start-video · База · claude",
-     "ad_id": "120252667259460624",
-     "spend": 4462.74,
-     "purchases": 45,
-     "roas": 5.65,
-     "ctr": 1.39
-    },
-    {
-     "name": "пост22-10.10-g20-parking-video · DC|11 · claude",
-     "ad_id": "120252667265120624",
-     "spend": 618.8,
-     "purchases": 12,
-     "roas": 5.56,
-     "ctr": 2.35
-    },
-    {
-     "name": "пост22-11.10-g20-22-proiekt-video · DC|11 · claude",
-     "ad_id": "120252667293470624",
-     "spend": 76.05,
-     "purchases": 2,
-     "roas": 5.55,
-     "ctr": 2.42
-    },
-    {
-     "name": "старт22-08-coffee-price · База · claude",
-     "ad_id": "120252617530950624",
-     "spend": 1631.97,
-     "purchases": 19,
-     "roas": 5.53,
-     "ctr": 1.19
+     "name": "пост22-11.10-g20-22-proiekt-video · Ядро · claude",
+     "ad_id": "120252721607000624",
+     "spend": 9800.82,
+     "purchases": 92,
+     "roas": 5.51,
+     "ctr": 2.01
     },
     {
      "name": "офер-17.10-iphone-dobroho-ranku-video · Ядро · claude",
@@ -12291,20 +13097,44 @@
      "ctr": 1.1
     },
     {
-     "name": "пост22-11.10-g20-22-proiekt-video · Ядро · claude",
-     "ad_id": "120252721607000624",
-     "spend": 9798.42,
-     "purchases": 91,
-     "roas": 5.49,
-     "ctr": 2.0
+     "name": "старт22-reel-start-video · Ядро · claude",
+     "ad_id": "120252623103610624",
+     "spend": 1652.76,
+     "purchases": 24,
+     "roas": 5.48,
+     "ctr": 1.94
     },
     {
-     "name": "старт22-05-autumn-forest · 02c · claude",
-     "ad_id": "120252617561370624",
-     "spend": 91.67,
-     "purchases": 1,
-     "roas": 5.4,
-     "ctr": 1.16
+     "name": "пост22-11.10-g20-kompletatsiia-video · DC|11 · claude",
+     "ad_id": "120252667281450624",
+     "spend": 1122.26,
+     "purchases": 16,
+     "roas": 5.44,
+     "ctr": 1.76
+    },
+    {
+     "name": "пост22-10.10-g20-start-video · База · claude",
+     "ad_id": "120252667259460624",
+     "spend": 4262.92,
+     "purchases": 38,
+     "roas": 5.42,
+     "ctr": 1.33
+    },
+    {
+     "name": "старт22-14-proof-stamp · DC|08 · claude",
+     "ad_id": "120252628194420624",
+     "spend": 364.35,
+     "purchases": 4,
+     "roas": 5.36,
+     "ctr": 1.24
+    },
+    {
+     "name": "старт22-06-parking-garage · Ядро · claude",
+     "ad_id": "120252617515330624",
+     "spend": 3786.68,
+     "purchases": 35,
+     "roas": 5.34,
+     "ctr": 1.33
     },
     {
      "name": "офер-14.10-x2-g20-poster-broll-video · DC|11 · claude",
@@ -12323,20 +13153,36 @@
      "ctr": 1.07
     },
     {
-     "name": "старт22-22-steering-wheel · Ядро · claude",
-     "ad_id": "120252617522540624",
-     "spend": 1744.55,
-     "purchases": 16,
-     "roas": 5.27,
-     "ctr": 1.28
+     "name": "старт22-08-coffee-price · База · claude",
+     "ad_id": "120252617530950624",
+     "spend": 1846.04,
+     "purchases": 22,
+     "roas": 5.22,
+     "ctr": 1.17
     },
     {
-     "name": "пост22-11.10-g20-kompletatsiia-video · DC|11 · claude",
-     "ad_id": "120252667281450624",
-     "spend": 1047.43,
-     "purchases": 14,
-     "roas": 5.2,
-     "ctr": 1.84
+     "name": "старт22-05-autumn-forest · 02c · claude",
+     "ad_id": "120252617561370624",
+     "spend": 95.36,
+     "purchases": 1,
+     "roas": 5.19,
+     "ctr": 1.11
+    },
+    {
+     "name": "офер-20.10-macbook-post · DC|11 · claude",
+     "ad_id": "120252780948840624",
+     "spend": 94.43,
+     "purchases": 2,
+     "roas": 5.12,
+     "ctr": 0.23
+    },
+    {
+     "name": "офер-20.10-macbook-2359-cd · Ядро · claude",
+     "ad_id": "120252781373340624",
+     "spend": 3838.94,
+     "purchases": 47,
+     "roas": 5.04,
+     "ctr": 1.54
     },
     {
      "name": "офер-17.10-iphone-burgundy2-video · DC|08 · claude",
@@ -12355,52 +13201,60 @@
      "ctr": 1.66
     },
     {
+     "name": "офер-20.10-macbook-reel-video · Ядро · claude",
+     "ad_id": "120252780993920624",
+     "spend": 5044.71,
+     "purchases": 63,
+     "roas": 4.96,
+     "ctr": 1.41
+    },
+    {
+     "name": "пост22-10.10-g20-start-video · DC|11 · claude",
+     "ad_id": "120252667252000624",
+     "spend": 125.13,
+     "purchases": 3,
+     "roas": 4.91,
+     "ctr": 1.2
+    },
+    {
+     "name": "офер-20.10-macbook-post · DC|08 · claude",
+     "ad_id": "120252780946560624",
+     "spend": 368.51,
+     "purchases": 4,
+     "roas": 4.9,
+     "ctr": 0.76
+    },
+    {
+     "name": "офер-20.10-macbook-reel-video · База · claude",
+     "ad_id": "120252780996290624",
+     "spend": 2660.23,
+     "purchases": 37,
+     "roas": 4.85,
+     "ctr": 1.44
+    },
+    {
      "name": "старт22-15-token-mechanic · Ядро · claude",
      "ad_id": "120252617519400624",
-     "spend": 4127.79,
-     "purchases": 41,
-     "roas": 4.86,
+     "spend": 3255.69,
+     "purchases": 29,
+     "roas": 4.81,
      "ctr": 1.34
-    },
-    {
-     "name": "старт22-04-mountain-road · DC|11 · claude",
-     "ad_id": "120252617611210624",
-     "spend": 27.41,
-     "purchases": 0,
-     "roas": 4.7,
-     "ctr": 0.46
-    },
-    {
-     "name": "пост22-10.10-g20-start-video · DC|08 · claude",
-     "ad_id": "120252667262740624",
-     "spend": 3336.87,
-     "purchases": 40,
-     "roas": 4.7,
-     "ctr": 1.42
-    },
-    {
-     "name": "старт22-reel-start-video · Ядро · claude",
-     "ad_id": "120252623103610624",
-     "spend": 2935.91,
-     "purchases": 39,
-     "roas": 4.68,
-     "ctr": 1.68
-    },
-    {
-     "name": "старт22-08-coffee-price · Ядро · claude",
-     "ad_id": "120252617516910624",
-     "spend": 10181.71,
-     "purchases": 78,
-     "roas": 4.67,
-     "ctr": 1.22
     },
     {
      "name": "старт22-04-mountain-road · База · claude",
      "ad_id": "120252628112880624",
-     "spend": 396.03,
-     "purchases": 3,
-     "roas": 4.64,
-     "ctr": 1.35
+     "spend": 530.24,
+     "purchases": 5,
+     "roas": 4.65,
+     "ctr": 1.58
+    },
+    {
+     "name": "офер-20.10-macbook-reel-video · DC|08 · claude",
+     "ad_id": "120252780996590624",
+     "spend": 1801.15,
+     "purchases": 18,
+     "roas": 4.57,
+     "ctr": 1.33
     },
     {
      "name": "пост22-10.10-g20-parking-video · Ядро · claude",
@@ -12419,12 +13273,12 @@
      "ctr": 1.16
     },
     {
-     "name": "тест07-A-coffee-price · DC|07 · claude",
-     "ad_id": "120252680978830624",
-     "spend": 4008.55,
-     "purchases": 45,
-     "roas": 4.45,
-     "ctr": 1.44
+     "name": "старт22-08-coffee-price · Ядро · claude",
+     "ad_id": "120252617516910624",
+     "spend": 9844.17,
+     "purchases": 73,
+     "roas": 4.52,
+     "ctr": 1.22
     },
     {
      "name": "офер-17.10-iphone-bonus-banner · Ядро · claude",
@@ -12435,12 +13289,28 @@
      "ctr": 1.83
     },
     {
+     "name": "тест07-A-coffee-price · DC|07 · claude",
+     "ad_id": "120252680978830624",
+     "spend": 4450.79,
+     "purchases": 50,
+     "roas": 4.4,
+     "ctr": 1.46
+    },
+    {
+     "name": "пост22-10.10-g20-start-video · DC|08 · claude",
+     "ad_id": "120252667262740624",
+     "spend": 3153.21,
+     "purchases": 35,
+     "roas": 4.25,
+     "ctr": 1.38
+    },
+    {
      "name": "старт22-04-mountain-road · Ядро · claude",
      "ad_id": "120252617512660624",
-     "spend": 9805.02,
-     "purchases": 82,
-     "roas": 4.24,
-     "ctr": 1.53
+     "spend": 8257.74,
+     "purchases": 64,
+     "roas": 4.22,
+     "ctr": 1.59
     },
     {
      "name": "офер-17.10-iphone-v2b-cd · Ядро · claude",
@@ -12451,68 +13321,52 @@
      "ctr": 1.4
     },
     {
-     "name": "офер-20.10-macbook-2359-cd · 02c · claude",
-     "ad_id": "120252781398290624",
-     "spend": 49.8,
-     "purchases": 1,
-     "roas": 3.97,
-     "ctr": 0.75
-    },
-    {
-     "name": "старт22-reel-start-video · База · claude",
-     "ad_id": "120252623104170624",
-     "spend": 838.82,
-     "purchases": 6,
-     "roas": 3.94,
-     "ctr": 1.29
-    },
-    {
-     "name": "пост22-11.10-g20-kompletatsiia-video · 02c · claude",
-     "ad_id": "120252667288780624",
-     "spend": 3124.97,
-     "purchases": 32,
-     "roas": 3.92,
-     "ctr": 1.44
-    },
-    {
-     "name": "старт22-13-proof-21-cars · Ядро · claude",
-     "ad_id": "120252617518340624",
-     "spend": 2817.32,
-     "purchases": 16,
-     "roas": 3.89,
-     "ctr": 1.35
-    },
-    {
-     "name": "старт22-14-proof-stamp · DC|08 · claude",
-     "ad_id": "120252628194420624",
-     "spend": 305.95,
-     "purchases": 3,
-     "roas": 3.87,
-     "ctr": 1.33
+     "name": "старт22-06-parking-garage · База · claude",
+     "ad_id": "120252617530500624",
+     "spend": 473.15,
+     "purchases": 2,
+     "roas": 3.95,
+     "ctr": 1.05
     },
     {
      "name": "тест07-D-reel-start-video · DC|07 · claude",
      "ad_id": "120252680990180624",
-     "spend": 3981.22,
+     "spend": 4104.76,
      "purchases": 34,
-     "roas": 3.86,
-     "ctr": 1.63
+     "roas": 3.85,
+     "ctr": 1.62
+    },
+    {
+     "name": "старт22-13-proof-21-cars · Ядро · claude",
+     "ad_id": "120252617518340624",
+     "spend": 3626.12,
+     "purchases": 23,
+     "roas": 3.84,
+     "ctr": 1.37
     },
     {
      "name": "старт22-04-mountain-road · DC|08 · claude",
      "ad_id": "120252617542710624",
-     "spend": 628.65,
+     "spend": 624.72,
      "purchases": 5,
-     "roas": 3.82,
+     "roas": 3.8,
      "ctr": 0.95
+    },
+    {
+     "name": "пост22-11.10-g20-kompletatsiia-video · 02c · claude",
+     "ad_id": "120252667288780624",
+     "spend": 2961.98,
+     "purchases": 30,
+     "roas": 3.8,
+     "ctr": 1.39
     },
     {
      "name": "пост22-11.10-g20-kompletatsiia-video · DC|08 · claude",
      "ad_id": "120252667291240624",
-     "spend": 4157.58,
-     "purchases": 40,
-     "roas": 3.77,
-     "ctr": 1.69
+     "spend": 4427.21,
+     "purchases": 42,
+     "roas": 3.78,
+     "ctr": 1.64
     },
     {
      "name": "офер-14.10-x2-g20-presenter-video · DC|11 · claude",
@@ -12531,12 +13385,12 @@
      "ctr": 1.19
     },
     {
-     "name": "старт22-reel-start-video · DC|08 · claude",
-     "ad_id": "120252623104800624",
-     "spend": 539.67,
-     "purchases": 5,
-     "roas": 3.7,
-     "ctr": 1.09
+     "name": "старт22-05-autumn-forest · Ядро · claude",
+     "ad_id": "120252617514580624",
+     "spend": 3311.9,
+     "purchases": 32,
+     "roas": 3.75,
+     "ctr": 1.61
     },
     {
      "name": "офер-17.10-iphone-bonus-banner · База · claude",
@@ -12555,36 +13409,60 @@
      "ctr": 0.76
     },
     {
-     "name": "старт22-05-autumn-forest · DC|08 · claude",
-     "ad_id": "120252617547940624",
-     "spend": 55.26,
-     "purchases": 1,
+     "name": "старт22-reel-start-video · DC|08 · claude",
+     "ad_id": "120252623104800624",
+     "spend": 558.27,
+     "purchases": 5,
      "roas": 3.57,
-     "ctr": 0.64
+     "ctr": 1.0
     },
     {
-     "name": "старт22-05-autumn-forest · Ядро · claude",
-     "ad_id": "120252617514580624",
-     "spend": 4957.57,
-     "purchases": 49,
-     "roas": 3.55,
-     "ctr": 1.64
+     "name": "старт22-reel-start-video · База · claude",
+     "ad_id": "120252623104170624",
+     "spend": 1213.12,
+     "purchases": 8,
+     "roas": 3.54,
+     "ctr": 1.22
+    },
+    {
+     "name": "офер-20.10-macbook-2359-cd · База · claude",
+     "ad_id": "120252781384470624",
+     "spend": 1386.86,
+     "purchases": 12,
+     "roas": 3.54,
+     "ctr": 1.17
     },
     {
      "name": "старт22-01-tvoyeyu-studio · DC|08 · claude",
      "ad_id": "120252628180200624",
-     "spend": 850.72,
+     "spend": 862.24,
      "purchases": 10,
-     "roas": 3.54,
-     "ctr": 0.93
+     "roas": 3.5,
+     "ctr": 0.91
+    },
+    {
+     "name": "старт22-05-autumn-forest · База · claude",
+     "ad_id": "120252617529530624",
+     "spend": 676.24,
+     "purchases": 4,
+     "roas": 3.45,
+     "ctr": 0.94
     },
     {
      "name": "старт22-03-rooftop-sunset · DC|08 · claude",
      "ad_id": "120252628192770624",
-     "spend": 283.96,
+     "spend": 287.91,
      "purchases": 3,
-     "roas": 3.44,
-     "ctr": 0.79
+     "roas": 3.4,
+     "ctr": 0.71
+    },
+    {
+     "name": "тест07-C-mountain-road · DC|07 · claude",
+     "ad_id": "120252680986570624",
+     "spend": 3457.1,
+     "purchases": 36,
+     "roas": 3.38,
+     "ctr": 1.47
     },
     {
      "name": "офер-17.10-iphone-v2b-cd · 02c · claude",
@@ -12595,6 +13473,30 @@
      "ctr": 1.29
     },
     {
+     "name": "офер-20.10-macbook-2359-cd · DC|08 · claude",
+     "ad_id": "120252781388360624",
+     "spend": 1476.61,
+     "purchases": 15,
+     "roas": 3.35,
+     "ctr": 1.13
+    },
+    {
+     "name": "пост22-09.10-bmw-g20-mpaket-post · База · claude",
+     "ad_id": "120252646228010624",
+     "spend": 166.62,
+     "purchases": 2,
+     "roas": 3.29,
+     "ctr": 2.16
+    },
+    {
+     "name": "офер-20.10-macbook-reel-video · 02c · claude",
+     "ad_id": "120252780996880624",
+     "spend": 391.75,
+     "purchases": 5,
+     "roas": 3.28,
+     "ctr": 1.44
+    },
+    {
      "name": "пост22-10.10-g20-start-video · Ядро · claude",
      "ad_id": "120252702145550624",
      "spend": 6213.61,
@@ -12603,28 +13505,20 @@
      "ctr": 1.4
     },
     {
-     "name": "тест07-C-mountain-road · DC|07 · claude",
-     "ad_id": "120252680986570624",
-     "spend": 3665.91,
-     "purchases": 36,
-     "roas": 3.23,
-     "ctr": 1.46
-    },
-    {
-     "name": "пост22-09.10-bmw-g20-mpaket-post · Ядро · claude",
-     "ad_id": "120252702138960624",
-     "spend": 1090.02,
-     "purchases": 8,
-     "roas": 3.23,
-     "ctr": 2.85
-    },
-    {
-     "name": "офер-20.10-macbook-post · DC|08 · claude",
-     "ad_id": "120252780946560624",
-     "spend": 153.42,
+     "name": "старт22-05-autumn-forest · DC|08 · claude",
+     "ad_id": "120252617547940624",
+     "spend": 61.45,
      "purchases": 1,
-     "roas": 3.23,
-     "ctr": 1.08
+     "roas": 3.21,
+     "ctr": 0.61
+    },
+    {
+     "name": "офер-20.10-macbook-2359-cd · DC|11 · claude",
+     "ad_id": "120252781400240624",
+     "spend": 191.74,
+     "purchases": 3,
+     "roas": 3.2,
+     "ctr": 0.99
     },
     {
      "name": "офер-17.10-iphone-v2b-cd · DC|08 · claude",
@@ -12638,260 +13532,179 @@
      "name": "пост22-11.10-g20-kompletatsiia-video · Ядро · claude",
      "ad_id": "120252702160860624",
      "spend": 2677.01,
-     "purchases": 21,
+     "purchases": 22,
      "roas": 3.12,
      "ctr": 1.99
     },
     {
-     "name": "офер-20.10-macbook-reel-video · Ядро · claude",
-     "ad_id": "120252780993920624",
-     "spend": 2342.11,
-     "purchases": 21,
-     "roas": 3.02,
-     "ctr": 1.55
-    },
-    {
-     "name": "офер-14.10-x2-g20-10na20-video · DC|08 · claude",
-     "ad_id": "120252690319920624",
-     "spend": 87.89,
-     "purchases": 1,
-     "roas": 2.88,
-     "ctr": 1.23
-    },
-    {
-     "name": "пост22-10.10-g20-start-video · DC|11 · claude",
-     "ad_id": "120252667252000624",
-     "spend": 214.74,
-     "purchases": 3,
-     "roas": 2.86,
-     "ctr": 1.16
-    },
-    {
-     "name": "офер-20.10-macbook-post · Ядро · claude",
-     "ad_id": "120252780942830624",
-     "spend": 790.24,
-     "purchases": 8,
-     "roas": 2.82,
-     "ctr": 1.49
-    },
-    {
-     "name": "офер-20.10-macbook-2359-cd · DC|11 · claude",
-     "ad_id": "120252781400240624",
-     "spend": 73.27,
-     "purchases": 1,
-     "roas": 2.69,
-     "ctr": 1.15
-    },
-    {
-     "name": "офер-20.10-macbook-reel-video · DC|08 · claude",
-     "ad_id": "120252780996590624",
-     "spend": 703.5,
-     "purchases": 5,
-     "roas": 2.67,
-     "ctr": 1.25
-    },
-    {
      "name": "пост22-10.10-g20-parking-video · 02c · claude",
      "ad_id": "120252667270430624",
-     "spend": 586.27,
-     "purchases": 4,
-     "roas": 2.65,
-     "ctr": 2.25
-    },
-    {
-     "name": "тест07-B-autumn-forest · DC|07 · claude",
-     "ad_id": "120252680983320624",
-     "spend": 4065.14,
-     "purchases": 30,
-     "roas": 2.61,
-     "ctr": 1.53
-    },
-    {
-     "name": "офер-20.10-macbook-reel-video · База · claude",
-     "ad_id": "120252780996290624",
-     "spend": 1131.63,
-     "purchases": 10,
-     "roas": 2.58,
-     "ctr": 1.32
-    },
-    {
-     "name": "офер-20.10-macbook-2359-cd · База · claude",
-     "ad_id": "120252781384470624",
-     "spend": 192.97,
-     "purchases": 1,
-     "roas": 2.57,
-     "ctr": 1.48
-    },
-    {
-     "name": "пост22-10.10-g20-start-video · 02c · claude",
-     "ad_id": "120252667260840624",
-     "spend": 823.79,
-     "purchases": 5,
-     "roas": 2.23,
-     "ctr": 1.4
-    },
-    {
-     "name": "старт22-06-parking-garage · База · claude",
-     "ad_id": "120252617530500624",
-     "spend": 396.96,
-     "purchases": 1,
-     "roas": 2.22,
-     "ctr": 0.95
+     "spend": 163.08,
+     "purchases": 2,
+     "roas": 3.1,
+     "ctr": 3.04
     }
    ],
    "series": [
     {
      "date": "2026-10-09",
-     "spend": 14831.27,
+     "spend": 0.0,
      "purchases": 405,
-     "roas": 9.93,
-     "cpa": 36.62
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-10-10",
-     "spend": 22495.93,
+     "spend": 0.0,
      "purchases": 353,
-     "roas": 5.9,
-     "cpa": 63.73
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-10-11",
-     "spend": 13145.45,
+     "spend": 0.0,
      "purchases": 224,
-     "roas": 6.24,
-     "cpa": 58.69
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-10-12",
-     "spend": 14203.64,
+     "spend": 0.0,
      "purchases": 189,
-     "roas": 6.95,
-     "cpa": 75.15
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-10-13",
-     "spend": 13279.63,
+     "spend": 0.0,
      "purchases": 193,
-     "roas": 5.44,
-     "cpa": 68.81
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-10-14",
-     "spend": 21364.77,
+     "spend": 0.0,
      "purchases": 590,
-     "roas": 13.26,
-     "cpa": 36.21
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-10-15",
-     "spend": 28374.62,
+     "spend": 0.0,
      "purchases": 262,
-     "roas": 3.63,
-     "cpa": 108.3
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-10-16",
-     "spend": 26084.74,
+     "spend": 0.0,
      "purchases": 209,
-     "roas": 3.5,
-     "cpa": 124.81
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-10-17",
-     "spend": 25476.75,
+     "spend": 0.0,
      "purchases": 332,
-     "roas": 6.99,
-     "cpa": 76.74
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-10-18",
-     "spend": 30958.72,
+     "spend": 0.0,
      "purchases": 308,
-     "roas": 5.57,
-     "cpa": 100.52
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-10-19",
-     "spend": 26957.95,
+     "spend": 0.0,
      "purchases": 146,
-     "roas": 3.15,
-     "cpa": 184.64
+     "roas": 0.0,
+     "cpa": 0.0
     },
     {
      "date": "2026-10-20",
-     "spend": 14119.33,
-     "purchases": 120,
-     "roas": 3.18,
-     "cpa": 117.66
+     "spend": 0.0,
+     "purchases": 342,
+     "roas": 0.0,
+     "cpa": 0.0
+    },
+    {
+     "date": "2026-10-21",
+     "spend": 0.0,
+     "purchases": 65,
+     "roas": 0.0,
+     "cpa": 0.0
     }
    ],
    "adsets": [
     {
      "name": "Broad · UA 18-45 · A+A · VALUE · інкремент",
-     "spend": 98036.68,
-     "purchases": 1026,
-     "roas": 5.34,
-     "ctr": 1.59,
-     "cpa": 95.55
+     "spend": 101601.93,
+     "purchases": 1069,
+     "roas": 5.43,
+     "ctr": 1.58,
+     "cpa": 95.04
     },
     {
      "name": "Покупці · pixel 180д + CRM всі · апсейл · VALUE · v2",
-     "spend": 36202.43,
-     "purchases": 545,
-     "roas": 7.91,
-     "ctr": 1.67,
-     "cpa": 66.43
+     "spend": 40009.33,
+     "purchases": 563,
+     "roas": 7.41,
+     "ctr": 1.57,
+     "cpa": 71.06
     },
     {
      "name": "Покупці CRM+pixel 180д · excl поточний цикл · OFFSITE · claude",
-     "spend": 26147.71,
-     "purchases": 335,
-     "roas": 4.9,
-     "ctr": 1.43,
-     "cpa": 78.05
+     "spend": 27682.62,
+     "purchases": 352,
+     "roas": 4.91,
+     "ctr": 1.35,
+     "cpa": 78.64
     },
     {
      "name": "Retarget · Engaged IF 30д · excl покупці (CRM+pixel+цикл) · v4 · claude",
-     "spend": 7066.47,
-     "purchases": 52,
-     "roas": 2.82,
-     "ctr": 1.5,
-     "cpa": 135.89
-    },
-    {
-     "name": "07-B lifestyle · Broad UA · рівна рука · claude",
-     "spend": 4065.14,
-     "purchases": 30,
-     "roas": 2.61,
-     "ctr": 1.53,
-     "cpa": 135.5
+     "spend": 7154.26,
+     "purchases": 56,
+     "roas": 2.85,
+     "ctr": 1.41,
+     "cpa": 127.75
     },
     {
      "name": "07-A ціна · Broad UA · рівна рука · claude",
-     "spend": 4008.55,
-     "purchases": 45,
-     "roas": 4.45,
-     "ctr": 1.44,
-     "cpa": 89.08
+     "spend": 4450.79,
+     "purchases": 50,
+     "roas": 4.4,
+     "ctr": 1.46,
+     "cpa": 89.02
+    },
+    {
+     "name": "07-B lifestyle · Broad UA · рівна рука · claude",
+     "spend": 4372.45,
+     "purchases": 32,
+     "roas": 2.9,
+     "ctr": 1.54,
+     "cpa": 136.64
     },
     {
      "name": "07-D рілз команди · Broad UA · рівна рука · claude",
-     "spend": 3981.22,
+     "spend": 4104.76,
      "purchases": 34,
-     "roas": 3.86,
-     "ctr": 1.63,
-     "cpa": 117.09
+     "roas": 3.85,
+     "ctr": 1.62,
+     "cpa": 120.73
     },
     {
-     "name": "07-C aspiration · Broad UA · рівна рука · claude",
-     "spend": 3665.91,
-     "purchases": 36,
-     "roas": 3.23,
-     "ctr": 1.46,
-     "cpa": 101.83
+     "name": "Лояльні 3+ без поточного циклу · OFFSITE · claude",
+     "spend": 3465.72,
+     "purchases": 61,
+     "roas": 5.35,
+     "ctr": 1.56,
+     "cpa": 56.82
     }
    ],
-   "adsets_window": "2026-10-13",
+   "adsets_window": "2026-10-14",
    "is_current": true
   }
  ],
@@ -12905,9 +13718,9 @@
     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
     "status": "ACTIVE",
     "daily_budget": 12000,
-    "spend": 988299,
-    "purchases": 14955,
-    "roas": 6.67,
+    "spend": 998583,
+    "purchases": 15082,
+    "roas": 6.66,
     "ctr": 1.71
    },
    {
