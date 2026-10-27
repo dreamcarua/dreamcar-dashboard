@@ -1,60 +1,60 @@
 {
- "generated": "2026-10-26T05:44:25.138844+00:00",
+ "generated": "2026-10-27T05:43:16.542149+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-10-25",
-  "prev_date": "2026-10-24",
-  "spend": 59620.99,
-  "impressions": 240094,
-  "clicks": 3299,
-  "purchases": 834,
-  "pixel_roas": 5.75,
-  "cpa": 71.49,
-  "frequency": 3.65,
-  "real_ad_revenue": 170840,
-  "real_ad_roas": 2.87,
+  "date": "2026-10-26",
+  "prev_date": "2026-10-25",
+  "spend": 0,
+  "impressions": 0,
+  "clicks": 0,
+  "purchases": 32,
+  "pixel_roas": 0.0,
+  "cpa": 0.0,
+  "frequency": 0.0,
+  "real_ad_revenue": 171835,
+  "real_ad_roas": null,
   "deltas": {
-   "spend": 94.0,
-   "pixel_roas": 30.1,
-   "purchases": 125.4,
-   "cpa": -13.9
+   "spend": -100.0,
+   "pixel_roas": -100.0,
+   "purchases": -96.2,
+   "cpa": -100.0
   },
   "week": {
    "this": {
-    "from": "2026-10-19",
-    "to": "2026-10-25",
-    "spend": 211080,
-    "purchases": 2231,
-    "pixel_roas": 4.4,
-    "cpa": 94.61,
-    "real_revenue": 475059,
-    "real_roas": 2.25
+    "from": "2026-10-20",
+    "to": "2026-10-26",
+    "spend": 184335,
+    "purchases": 2117,
+    "pixel_roas": 4.63,
+    "cpa": 87.07,
+    "real_revenue": 441230,
+    "real_roas": 2.39
    },
    "prev": {
-    "from": "2026-10-12",
-    "to": "2026-10-18",
-    "spend": 159743,
-    "purchases": 2082,
-    "pixel_roas": 6.25,
-    "cpa": 76.73,
-    "real_revenue": 453041,
-    "real_roas": 2.84
+    "from": "2026-10-13",
+    "to": "2026-10-19",
+    "spend": 172511,
+    "purchases": 2039,
+    "pixel_roas": 5.71,
+    "cpa": 84.61,
+    "real_revenue": 439876,
+    "real_roas": 2.55
    },
    "deltas": {
-    "spend": 32.1,
-    "real_roas": -20.8,
-    "pixel_roas": -29.6,
-    "cpa": 23.3,
-    "purchases": 7.2
+    "spend": 6.9,
+    "real_roas": -6.3,
+    "pixel_roas": -18.9,
+    "cpa": 2.9,
+    "purchases": 3.8
    }
   },
   "real_by_placement": [
    {
     "placement": "instagram_feed",
-    "revenue": 74617,
-    "paid": 175
+    "revenue": 74816,
+    "paid": 176
    },
    {
     "placement": "instagram_stories",
@@ -63,13 +63,13 @@
    },
    {
     "placement": "instagram_reels",
-    "revenue": 33008,
-    "paid": 87
+    "revenue": 33207,
+    "paid": 88
    },
    {
     "placement": "facebook_mobile_feed",
-    "revenue": 11462,
-    "paid": 37
+    "revenue": 12059,
+    "paid": 39
    },
    {
     "placement": "facebook_mobile_reels",
@@ -88,42 +88,8 @@
    }
   ],
   "active_cycles": [],
-  "top_creatives": [
-   {
-    "name": "пост22-11.10-g20-kompletatsiia-video · DC|08 · claude",
-    "ad_id": "120252667291240624",
-    "spend": 855.85,
-    "purchases": 22,
-    "roas": 8.39,
-    "ctr": 1.5
-   },
-   {
-    "name": "офер-25.10-final-x2-reel-video · База · claude",
-    "ad_id": "120252858773170624",
-    "spend": 8267.91,
-    "purchases": 139,
-    "roas": 7.79,
-    "ctr": 1.64
-   },
-   {
-    "name": "офер-25.10-final-x2-c-cd · База · claude",
-    "ad_id": "120252854696320624",
-    "spend": 327.89,
-    "purchases": 6,
-    "roas": 7.28,
-    "ctr": 1.61
-   }
-  ],
-  "weak_creatives": [
-   {
-    "name": "офер-25.10-final-x2-ostanniy-den-banner · Ядро · claude",
-    "ad_id": "120252861355080624",
-    "spend": 2436.2,
-    "purchases": 8,
-    "roas": 1.22,
-    "ctr": 0.95
-   }
-  ]
+  "top_creatives": [],
+  "weak_creatives": []
  },
  "projects": [
   {
@@ -12581,38 +12547,38 @@
    "car_model": "BMW 330i G20",
    "date_from": "2026-10-09",
    "date_to": "2026-10-25",
-   "spend": 421295.68,
-   "impressions": 2134709,
-   "clicks": 32983,
+   "spend": 421522.13,
+   "impressions": 2135778,
+   "clicks": 33009,
    "ctr": 1.55,
    "reach": 167217,
    "frequency": 12.77,
    "purchases": 5295,
    "pixel_roas": 5.43,
-   "cpa": 79.56,
+   "cpa": 79.61,
    "pixel_revenue": 2289015,
-   "real_ad_revenue": 1134796,
+   "real_ad_revenue": 1135791,
    "real_ad_roas": 2.69,
    "gap_pct": -50.4,
    "segments": {
     "platform": [
      [
       "instagram",
-      341188.27,
+      341193.33,
       4285,
       5.38
      ],
      [
       "facebook",
-      74732.46,
+      74954.05,
       947,
-      5.72
+      5.71
      ],
      [
       "threads",
-      5374.95,
+      5374.75,
       58,
-      4.34
+      4.35
      ],
      [
       "unknown",
@@ -12624,39 +12590,39 @@
     "age": [
      [
       "25-34",
-      218296.7,
+      218369.25,
       2716,
-      5.5
+      5.49
      ],
      [
       "35-44",
-      122248.3,
+      122359.15,
       1625,
-      5.54
+      5.53
      ],
      [
       "18-24",
-      47618.11,
+      47624.13,
       542,
       5.11
      ],
      [
       "45-54",
-      24569.74,
+      24599.75,
       300,
-      5.12
+      5.11
      ],
      [
       "65+",
-      4464.07,
+      4466.31,
       45,
       3.63
      ],
      [
       "55-64",
-      4091.75,
+      4096.53,
       57,
-      5.82
+      5.81
      ],
      [
       "Unknown",
@@ -12668,51 +12634,51 @@
     "gender": [
      [
       "male",
-      364937.7,
+      365141.3,
       4718,
       5.59
      ],
      [
       "female",
-      55740.77,
+      55763.41,
       554,
       4.3
      ],
      [
       "unknown",
-      617.21,
+      617.42,
       23,
-      12.89
+      12.88
      ]
     ],
     "device": [
      [
       "iphone",
-      292621.87,
+      292701.19,
       3520,
       5.24
      ],
      [
       "android_smartphone",
-      127600.24,
+      127747.42,
       1731,
       5.73
      ],
      [
       "desktop",
-      732.63,
+      732.6,
       12,
       7.22
      ],
      [
       "android_tablet",
-      171.4,
+      171.39,
       2,
       14.02
      ],
      [
       "ipad",
-      156.28,
+      156.27,
       0,
       0.0
      ],
@@ -12720,7 +12686,7 @@
       "other",
       13.26,
       30,
-      1266.62
+      1266.67
      ]
     ]
    },
@@ -12808,9 +12774,9 @@
     {
      "name": "офер-25.10-final-x2-e-cd · DC|08 · claude",
      "ad_id": "120252854717450624",
-     "spend": 100.37,
+     "spend": 100.52,
      "purchases": 3,
-     "roas": 14.42,
+     "roas": 14.39,
      "ctr": 1.51
     },
     {
@@ -12992,10 +12958,10 @@
     {
      "name": "офер-25.10-final-x2-prospav-video · 02c · claude",
      "ad_id": "120252859224300624",
-     "spend": 270.8,
+     "spend": 271.26,
      "purchases": 5,
-     "roas": 8.04,
-     "ctr": 1.32
+     "roas": 8.03,
+     "ctr": 1.31
     },
     {
      "name": "офер-14.10-x2-g20-presenter-video · DC|08 · claude",
@@ -13032,15 +12998,15 @@
     {
      "name": "офер-25.10-final-x2-reel-video · База · claude",
      "ad_id": "120252858773170624",
-     "spend": 8267.91,
+     "spend": 8289.23,
      "purchases": 139,
-     "roas": 7.79,
+     "roas": 7.77,
      "ctr": 1.64
     },
     {
      "name": "старт22-05-autumn-forest · База · claude",
      "ad_id": "120252617529530624",
-     "spend": 2101.37,
+     "spend": 2101.49,
      "purchases": 21,
      "roas": 7.75,
      "ctr": 1.08
@@ -13096,9 +13062,9 @@
     {
      "name": "старт22-06-parking-garage · База · claude",
      "ad_id": "120252617530500624",
-     "spend": 2596.92,
+     "spend": 2597.64,
      "purchases": 47,
-     "roas": 7.14,
+     "roas": 7.13,
      "ctr": 2.08
     },
     {
@@ -13158,20 +13124,20 @@
      "ctr": 1.36
     },
     {
-     "name": "офер-25.10-final-x2-d-cd · Ядро · claude",
-     "ad_id": "120252854714340624",
-     "spend": 1725.88,
-     "purchases": 19,
-     "roas": 6.47,
-     "ctr": 1.2
-    },
-    {
      "name": "офер-14.10-x2-g20-dopivnochi-video · DC|11 · claude",
      "ad_id": "120252690314730624",
      "spend": 154.08,
      "purchases": 5,
      "roas": 6.42,
      "ctr": 1.76
+    },
+    {
+     "name": "офер-25.10-final-x2-d-cd · Ядро · claude",
+     "ad_id": "120252854714340624",
+     "spend": 1741.34,
+     "purchases": 19,
+     "roas": 6.41,
+     "ctr": 1.19
     },
     {
      "name": "старт22-reel-start-video · База · claude",
@@ -13208,17 +13174,17 @@
     {
      "name": "офер-25.10-final-x2-b-cd · Ядро · claude",
      "ad_id": "120252854320710624",
-     "spend": 7190.53,
+     "spend": 7221.19,
      "purchases": 86,
-     "roas": 6.13,
-     "ctr": 1.27
+     "roas": 6.1,
+     "ctr": 1.28
     },
     {
      "name": "офер-25.10-final-x2-prospav-video · База · claude",
      "ad_id": "120252859223720624",
-     "spend": 3833.09,
+     "spend": 3861.34,
      "purchases": 44,
-     "roas": 5.92,
+     "roas": 5.88,
      "ctr": 1.74
     },
     {
@@ -13320,7 +13286,7 @@
     {
      "name": "офер-25.10-final-x2-reel-video · Ядро · claude",
      "ad_id": "120252858769870624",
-     "spend": 1876.33,
+     "spend": 1876.39,
      "purchases": 32,
      "roas": 5.54,
      "ctr": 1.77
@@ -13352,7 +13318,7 @@
     {
      "name": "старт22-08-coffee-price · База · claude",
      "ad_id": "120252617530950624",
-     "spend": 5948.05,
+     "spend": 5949.66,
      "purchases": 67,
      "roas": 5.46,
      "ctr": 1.15
@@ -13416,7 +13382,7 @@
     {
      "name": "старт22-08-coffee-price · DC|08 · claude",
      "ad_id": "120252617549170624",
-     "spend": 3446.13,
+     "spend": 3446.14,
      "purchases": 55,
      "roas": 5.26,
      "ctr": 1.21
@@ -13446,20 +13412,20 @@
      "ctr": 1.58
     },
     {
-     "name": "офер-25.10-final-x2-ostanniy-den-banner · 02c · claude",
-     "ad_id": "120252861358890624",
-     "spend": 76.83,
-     "purchases": 1,
-     "roas": 5.14,
-     "ctr": 0.72
-    },
-    {
      "name": "офер-20.10-macbook-post · DC|11 · claude",
      "ad_id": "120252780948840624",
      "spend": 94.43,
      "purchases": 2,
      "roas": 5.12,
      "ctr": 0.23
+    },
+    {
+     "name": "офер-25.10-final-x2-ostanniy-den-banner · 02c · claude",
+     "ad_id": "120252861358890624",
+     "spend": 77.04,
+     "purchases": 1,
+     "roas": 5.12,
+     "ctr": 0.72
     },
     {
      "name": "пост22-10.10-g20-start-video · DC|11 · claude",
@@ -13480,10 +13446,10 @@
     {
      "name": "офер-25.10-final-x2-prospav-video · DC|08 · claude",
      "ad_id": "120252859223790624",
-     "spend": 2241.46,
+     "spend": 2243.48,
      "purchases": 35,
-     "roas": 5.02,
-     "ctr": 1.34
+     "roas": 5.01,
+     "ctr": 1.33
     },
     {
      "name": "офер-14.10-x2-g20-presenter-video · 02c · claude",
@@ -13518,12 +13484,12 @@
      "ctr": 1.44
     },
     {
-     "name": "офер-25.10-final-x2-reel-video · DC|08 · claude",
-     "ad_id": "120252858773330624",
-     "spend": 4315.85,
-     "purchases": 67,
-     "roas": 4.7,
-     "ctr": 1.61
+     "name": "пост22-11.10-g20-kompletatsiia-video · DC|11 · claude",
+     "ad_id": "120252667281450624",
+     "spend": 2400.71,
+     "purchases": 33,
+     "roas": 4.69,
+     "ctr": 1.6
     }
    ],
    "series": [
@@ -13641,40 +13607,40 @@
     },
     {
      "date": "2026-10-25",
-     "spend": 59620.99,
+     "spend": 59847.44,
      "purchases": 834,
-     "roas": 5.75,
-     "cpa": 71.49
+     "roas": 5.73,
+     "cpa": 71.76
     }
    ],
    "adsets": [
     {
      "name": "Broad · UA 18-45 · A+A · VALUE · інкремент",
-     "spend": 211697.38,
+     "spend": 211789.57,
      "purchases": 2483,
      "roas": 5.37,
      "ctr": 1.58,
-     "cpa": 85.26
+     "cpa": 85.3
     },
     {
      "name": "Покупці · pixel 180д + CRM всі · апсейл · VALUE · v2",
-     "spend": 95008.37,
+     "spend": 95096.2,
      "purchases": 1376,
      "roas": 6.95,
      "ctr": 1.62,
-     "cpa": 69.05
+     "cpa": 69.11
     },
     {
      "name": "Покупці CRM+pixel 180д · excl поточний цикл · OFFSITE · claude",
-     "spend": 66796.35,
+     "spend": 66837.69,
      "purchases": 914,
-     "roas": 4.61,
-     "ctr": 1.38,
-     "cpa": 73.08
+     "roas": 4.6,
+     "ctr": 1.39,
+     "cpa": 73.13
     },
     {
      "name": "Retarget · Engaged IF 30д · excl покупці (CRM+pixel+цикл) · v4 · claude",
-     "spend": 18351.11,
+     "spend": 18351.92,
      "purchases": 185,
      "roas": 3.6,
      "ctr": 1.5,
@@ -13682,7 +13648,7 @@
     },
     {
      "name": "Лояльні 3+ без поточного циклу · OFFSITE · claude",
-     "spend": 8349.55,
+     "spend": 8349.65,
      "purchases": 131,
      "roas": 4.62,
      "ctr": 1.53,
@@ -13690,11 +13656,11 @@
     },
     {
      "name": "07-B lifestyle · Broad UA · рівна рука · claude",
-     "spend": 7356.25,
+     "spend": 7360.43,
      "purchases": 75,
      "roas": 3.74,
      "ctr": 1.54,
-     "cpa": 98.08
+     "cpa": 98.14
     },
     {
      "name": "07-A ціна · Broad UA · рівна рука · claude",
@@ -13727,8 +13693,8 @@
     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
     "status": "PAUSED",
     "daily_budget": 12000,
-    "spend": 1066466,
-    "purchases": 15743,
+    "spend": 1066558,
+    "purchases": 15745,
     "roas": 6.49,
     "ctr": 1.69
    },
