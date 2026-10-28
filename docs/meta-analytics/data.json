@@ -1,90 +1,60 @@
 {
- "generated": "2026-10-27T05:43:16.542149+00:00",
+ "generated": "2026-10-28T05:36:41.482544+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-10-26",
-  "prev_date": "2026-10-25",
+  "date": "2026-10-27",
+  "prev_date": "2026-10-26",
   "spend": 0,
   "impressions": 0,
   "clicks": 0,
-  "purchases": 32,
+  "purchases": 0,
   "pixel_roas": 0.0,
-  "cpa": 0.0,
+  "cpa": null,
   "frequency": 0.0,
-  "real_ad_revenue": 171835,
+  "real_ad_revenue": 0,
   "real_ad_roas": null,
   "deltas": {
-   "spend": -100.0,
-   "pixel_roas": -100.0,
-   "purchases": -96.2,
-   "cpa": -100.0
+   "spend": null,
+   "pixel_roas": null,
+   "purchases": -100.0,
+   "cpa": null
   },
   "week": {
    "this": {
-    "from": "2026-10-20",
-    "to": "2026-10-26",
-    "spend": 184335,
-    "purchases": 2117,
-    "pixel_roas": 4.63,
-    "cpa": 87.07,
-    "real_revenue": 441230,
-    "real_roas": 2.39
+    "from": "2026-10-21",
+    "to": "2026-10-27",
+    "spend": 155179,
+    "purchases": 1775,
+    "pixel_roas": 4.6,
+    "cpa": 87.42,
+    "real_revenue": 359653,
+    "real_roas": 2.32
    },
    "prev": {
-    "from": "2026-10-13",
-    "to": "2026-10-19",
-    "spend": 172511,
-    "purchases": 2039,
-    "pixel_roas": 5.71,
-    "cpa": 84.61,
-    "real_revenue": 439876,
-    "real_roas": 2.55
+    "from": "2026-10-14",
+    "to": "2026-10-20",
+    "spend": 188388,
+    "purchases": 2188,
+    "pixel_roas": 5.59,
+    "cpa": 86.1,
+    "real_revenue": 476775,
+    "real_roas": 2.53
    },
    "deltas": {
-    "spend": 6.9,
-    "real_roas": -6.3,
-    "pixel_roas": -18.9,
-    "cpa": 2.9,
-    "purchases": 3.8
+    "spend": -17.6,
+    "real_roas": -8.3,
+    "pixel_roas": -17.7,
+    "cpa": 1.5,
+    "purchases": -18.9
    }
   },
   "real_by_placement": [
    {
-    "placement": "instagram_feed",
-    "revenue": 74816,
-    "paid": 176
-   },
-   {
-    "placement": "instagram_stories",
-    "revenue": 37968,
-    "paid": 84
-   },
-   {
     "placement": "instagram_reels",
-    "revenue": 33207,
-    "paid": 88
-   },
-   {
-    "placement": "facebook_mobile_feed",
-    "revenue": 12059,
-    "paid": 39
-   },
-   {
-    "placement": "facebook_mobile_reels",
-    "revenue": 9074,
-    "paid": 25
-   },
-   {
-    "placement": "facebook_stories",
-    "revenue": 4212,
-    "paid": 10
-   },
-   {
-    "placement": "facebook_profile_feed",
-    "revenue": 499,
-    "paid": 1
+    "revenue": 0,
+    "paid": 0
    }
   ],
   "active_cycles": [],
@@ -12547,8 +12517,8 @@
    "car_model": "BMW 330i G20",
    "date_from": "2026-10-09",
    "date_to": "2026-10-25",
-   "spend": 421522.13,
-   "impressions": 2135778,
+   "spend": 421522.24,
+   "impressions": 2135779,
    "clicks": 33009,
    "ctr": 1.55,
    "reach": 167217,
@@ -12570,7 +12540,7 @@
      ],
      [
       "facebook",
-      74954.05,
+      74954.16,
       947,
       5.71
      ],
@@ -12596,7 +12566,7 @@
      ],
      [
       "35-44",
-      122359.15,
+      122359.26,
       1625,
       5.53
      ],
@@ -12634,7 +12604,7 @@
     "gender": [
      [
       "male",
-      365141.3,
+      365141.41,
       4718,
       5.59
      ],
@@ -12666,7 +12636,7 @@
      ],
      [
       "desktop",
-      732.6,
+      732.71,
       12,
       7.22
      ],
@@ -13607,7 +13577,7 @@
     },
     {
      "date": "2026-10-25",
-     "spend": 59847.44,
+     "spend": 59847.55,
      "purchases": 834,
      "roas": 5.73,
      "cpa": 71.76
@@ -13632,7 +13602,7 @@
     },
     {
      "name": "Покупці CRM+pixel 180д · excl поточний цикл · OFFSITE · claude",
-     "spend": 66837.69,
+     "spend": 66837.8,
      "purchases": 914,
      "roas": 4.6,
      "ctr": 1.39,
