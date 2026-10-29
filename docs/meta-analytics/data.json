@@ -1,62 +1,56 @@
 {
- "generated": "2026-10-28T05:36:41.482544+00:00",
+ "generated": "2026-10-29T05:36:40.015391+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-10-27",
-  "prev_date": "2026-10-26",
+  "date": "2026-10-28",
+  "prev_date": "2026-10-27",
   "spend": 0,
-  "impressions": 0,
-  "clicks": 0,
-  "purchases": 0,
-  "pixel_roas": 0.0,
+  "impressions": null,
+  "clicks": null,
+  "purchases": null,
+  "pixel_roas": null,
   "cpa": null,
-  "frequency": 0.0,
+  "frequency": null,
   "real_ad_revenue": 0,
   "real_ad_roas": null,
   "deltas": {
    "spend": null,
    "pixel_roas": null,
-   "purchases": -100.0,
+   "purchases": null,
    "cpa": null
   },
   "week": {
    "this": {
-    "from": "2026-10-21",
-    "to": "2026-10-27",
-    "spend": 155179,
-    "purchases": 1775,
-    "pixel_roas": 4.6,
-    "cpa": 87.42,
-    "real_revenue": 359653,
-    "real_roas": 2.32
+    "from": "2026-10-22",
+    "to": "2026-10-28",
+    "spend": 133599,
+    "purchases": 1631,
+    "pixel_roas": 4.8,
+    "cpa": 81.91,
+    "real_revenue": 324926,
+    "real_roas": 2.43
    },
    "prev": {
-    "from": "2026-10-14",
-    "to": "2026-10-20",
-    "spend": 188388,
-    "purchases": 2188,
-    "pixel_roas": 5.59,
-    "cpa": 86.1,
-    "real_revenue": 476775,
-    "real_roas": 2.53
+    "from": "2026-10-15",
+    "to": "2026-10-21",
+    "spend": 188602,
+    "purchases": 1743,
+    "pixel_roas": 4.46,
+    "cpa": 108.21,
+    "real_revenue": 386359,
+    "real_roas": 2.05
    },
    "deltas": {
-    "spend": -17.6,
-    "real_roas": -8.3,
-    "pixel_roas": -17.7,
-    "cpa": 1.5,
-    "purchases": -18.9
+    "spend": -29.2,
+    "real_roas": 18.5,
+    "pixel_roas": 7.6,
+    "cpa": -24.3,
+    "purchases": -6.4
    }
   },
-  "real_by_placement": [
-   {
-    "placement": "instagram_reels",
-    "revenue": 0,
-    "paid": 0
-   }
-  ],
+  "real_by_placement": [],
   "active_cycles": [],
   "top_creatives": [],
   "weak_creatives": []
