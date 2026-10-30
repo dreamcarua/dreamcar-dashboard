@@ -275,6 +275,14 @@ def find_silence(note_rows, now_utc, limits=None):
 
 _CLOSE_NAME = re.compile(r"(?:підсумок|звірка)\D*?(\d+)(?:\s*[-–]\s*(\d+))?", re.I)
 
+# 30.10.2026: нотатки-закривачі читаємо фільтром, а не «останні 300 нотаток». Старе вікно order=id.desc&limit=300
+# за тиждень щогодинних run-рядків перестало бачити закривачі 17.10 → 316 давно закритих рядків знову «зависли»
+# і сторож надіслав 112 тривог за раз.
+CLOSERS_QUERY = (f"project=eq.{PROJECT}&action=eq.note"
+                 "&or=(metrics->closes.not.is.null,metrics->rows_done.not.is.null,metrics->rows_failed.not.is.null,"
+                 "metrics->row.not.is.null,entity_name.ilike.*підсумок*,entity_name.ilike.*звірка*)"
+                 "&select=id,entity_name,metrics&order=id.desc&limit=10000")
+
 
 def closed_by_notes(notes):
     """12.10.2026: безлюдні сесії не можуть UPDATE ad_journal, тож закривають рядок approved
@@ -437,10 +445,10 @@ def main():
     try:
         notes = sb_get("ad_journal", f"project=eq.{PROJECT}&action=eq.note&select=reason,at&order=at.desc&limit=300")
         stuck = sb_get("ad_journal", f"project=eq.{PROJECT}&status=eq.approved&select=id,action,entity_name,at")
-        closers = sb_get("ad_journal", f"project=eq.{PROJECT}&action=eq.note&select=id,entity_name,metrics&order=id.desc&limit=300")
+        closers = sb_get("ad_journal", CLOSERS_QUERY)
         silent_found = find_silence(notes, now_utc) + find_stuck(stuck, now_utc, closed_ids=closed_by_notes(closers))
         found += silent_found
-        log(f"  журнал: рядків запуску {len(notes)} · approved {len(stuck)} · тривог {len(silent_found)}")
+        log(f"  журнал: рядків запуску {len(notes)} · approved {len(stuck)} · закривачів {len(closers)} · тривог {len(silent_found)}")
     except Exception as e:
         log(f"  ⚠ ad_journal: {e}")
 
@@ -463,13 +471,23 @@ def main():
                         **({"first_seen": now_utc.isoformat()} if p is None else {}),
                         **({"last_sent": now_utc.isoformat(), "sent_count": (p or {}).get("sent_count", 0) + 1} if sent else {})})
     # вирішені: були відкриті, зараз не знайдені (для денних ключів лише в межах того ж дня)
+    # 30.10.2026: вирішені stuck шлемо одним повідомленням, не по рядку на кожен
+    resolved_stuck = []
     for k, p in prev.items():
         if k in keys_now or k.startswith("calendar:"):
             continue
         same_day = k.endswith(f"{now_k:%Y-%m-%d}")
-        if p.get("last_sent") and not quiet and (p["kind"] in ("issue", "silent", "stuck") or same_day):
-            tg(f"✅ <b>Вирішено</b>: {esc(p.get('entity_name'))} ({p.get('kind')})")
+        if p.get("last_sent") and not quiet:
+            if p["kind"] == "stuck":
+                resolved_stuck.append(p)
+            elif p["kind"] in ("issue", "silent") or same_day:
+                tg(f"✅ <b>Вирішено</b>: {esc(p.get('entity_name'))} ({p.get('kind')})")
         upserts.append({"key": k, "project": PROJECT, "kind": p["kind"], "resolved_at": now_utc.isoformat()})
+    if len(resolved_stuck) == 1:
+        p = resolved_stuck[0]
+        tg(f"✅ <b>Вирішено</b>: {esc(p.get('entity_name'))} (stuck)")
+    elif resolved_stuck:
+        tg(f"✅ <b>Вирішено</b>: {len(resolved_stuck)} завислих записів журналу закрито")
     sb_upsert("ad_alerts", upserts, "key")
 
     # 5) календар першим запуском дня
