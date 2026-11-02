@@ -58,6 +58,9 @@ def clean_targeting(t):
     geo = out.get("geo_locations") or {}
     lt = set(geo.get("location_types") or [])
     geo["location_types"] = sorted(lt | {"home", "recent"})  # rule: without it publishing fails (#1870194)
+    ig = out.get("instagram_positions")
+    if ig and "explore_home" in ig and "explore" not in ig:
+        out["instagram_positions"] = list(ig) + ["explore"]  # Meta 2490392: explore_home needs explore
     out["geo_locations"] = geo
     return out
 
@@ -97,7 +100,21 @@ def main():
         cp["daily_budget"] = camp["daily_budget"]
     if camp.get("bid_strategy"):
         cp["bid_strategy"] = camp["bid_strategy"]
-    new_c = call("POST", f"{ACT}/campaigns", cp)["id"]
+    reuse = (E("REUSE_CAMPAIGN_ID") or "").strip()  # a campaign this script made in a failed run, still empty
+    if not reuse:  # same name, no ad sets = left by a failed run of this script: reuse instead of a second orphan
+        same = call("GET", f"{ACT}/campaigns", {"fields": "id,name", "limit": 50,
+                    "filtering": json.dumps([{"field": "name", "operator": "EQUAL", "value": new_c_name}])}).get("data", [])
+        for c in same:
+            if not call("GET", f"{c['id']}/adsets", {"fields": "id", "limit": 5})["data"]:
+                reuse = c["id"]
+                summary["reused_empty_campaign"] = reuse
+                break
+    if reuse:
+        if call("GET", f"{reuse}/adsets", {"fields": "id", "limit": 5})["data"]:
+            raise SystemExit(f"REUSE_CAMPAIGN_ID {reuse} is not empty")
+        new_c = reuse
+    else:
+        new_c = call("POST", f"{ACT}/campaigns", cp)["id"]
     summary["new_campaign"] = new_c
     sp = {"name": new_s_name, "campaign_id": new_c, "optimization_goal": goal, "billing_event": s.get("billing_event", "IMPRESSIONS"),
           "promoted_object": json.dumps(s["promoted_object"]), "targeting": json.dumps(clean_targeting(s["targeting"])),

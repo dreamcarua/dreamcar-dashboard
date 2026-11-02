@@ -16,6 +16,7 @@ on:
       activate: { description: 'true = new campaign ACTIVE', default: 'false', required: true }
       pause_source: { description: 'true = pause source campaign after the new one is ACTIVE', default: 'false', required: true }
       dry_run: { description: 'true = plan only', default: 'true', required: true }
+      reuse_campaign_id: { description: 'Empty campaign left by a failed run of this workflow', default: '', required: false }
 jobs:
   clone:
     runs-on: ubuntu-latest
@@ -40,4 +41,5 @@ jobs:
           ACTIVATE: ${{ inputs.activate }}
           PAUSE_SOURCE: ${{ inputs.pause_source }}
           DRY_RUN: ${{ inputs.dry_run }}
+          REUSE_CAMPAIGN_ID: ${{ inputs.reuse_campaign_id }}
         run: python3 scripts/meta_clone_layer.py
