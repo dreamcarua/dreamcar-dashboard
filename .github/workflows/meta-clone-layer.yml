@@ -1,0 +1,43 @@
+name: Meta clone layer (new goal)
+# Clone one CBO layer into a new campaign with another optimization goal (Meta forbids editing the goal).
+# Script: scripts/meta_clone_layer.py. Used first 02.11.2026 for VALUE (owner request).
+on:
+  workflow_dispatch:
+    inputs:
+      source_campaign_id: { description: 'Source CBO campaign id', required: true }
+      new_goal: { description: 'New optimization goal', default: 'VALUE', required: true }
+      new_campaign_name: { description: 'Name of the new campaign (empty = source + goal)', default: '', required: false }
+      new_adset_name: { description: 'Name of the new ad set (empty = source + goal)', default: '', required: false }
+      creatives_from_adset: { description: 'Ad set to take ads/creatives from (empty = source ad set)', default: '', required: false }
+      ad_name_contains: { description: 'Only ads whose name contains this', default: '', required: false }
+      include_paused: { description: 'Also copy paused ads', default: 'false', required: true }
+      label_from: { description: 'Layer label in ad names to replace', default: '', required: false }
+      label_to: { description: 'Replacement layer label', default: '', required: false }
+      activate: { description: 'true = new campaign ACTIVE', default: 'false', required: true }
+      pause_source: { description: 'true = pause source campaign after the new one is ACTIVE', default: 'false', required: true }
+      dry_run: { description: 'true = plan only', default: 'true', required: true }
+jobs:
+  clone:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - name: Clone
+        env:
+          FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+          AD_ACCOUNT_ID: '4136058269783354'
+          SOURCE_CAMPAIGN_ID: ${{ inputs.source_campaign_id }}
+          NEW_GOAL: ${{ inputs.new_goal }}
+          NEW_CAMPAIGN_NAME: ${{ inputs.new_campaign_name }}
+          NEW_ADSET_NAME: ${{ inputs.new_adset_name }}
+          CREATIVES_FROM_ADSET: ${{ inputs.creatives_from_adset }}
+          AD_NAME_CONTAINS: ${{ inputs.ad_name_contains }}
+          INCLUDE_PAUSED: ${{ inputs.include_paused }}
+          LABEL_FROM: ${{ inputs.label_from }}
+          LABEL_TO: ${{ inputs.label_to }}
+          ACTIVATE: ${{ inputs.activate }}
+          PAUSE_SOURCE: ${{ inputs.pause_source }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: python3 scripts/meta_clone_layer.py
