@@ -53,7 +53,7 @@ REMIND_HOURS = float(os.getenv("REMIND_HOURS", "6"))
 QUIET_START, QUIET_END = 23, 7
 # скільки годин може мовчати кожен режим ad-director (інтервал розкладу + запас)
 SILENCE_HOURS = {
-    "express-check": float(os.getenv("SILENCE_EXPRESS_H", "4")),      # раз на 3 год
+    "express-check": float(os.getenv("SILENCE_EXPRESS_H", "5")),      # 08/12/16/20 Київ (LIMITS.md, 09.11.2026); ніч: нижче
     "daily-diagnostic": float(os.getenv("SILENCE_DAILY_H", "26")),    # раз на добу
     "event-run": float(os.getenv("SILENCE_EVENT_RUN_H", "9")),        # найдовша пауза між запусками 7 год
     "event-stop": float(os.getenv("SILENCE_EVENT_STOP_H", "26")),     # раз на добу
@@ -256,7 +256,10 @@ def find_stall(campaigns, spend_by_campaign, now_kyiv):
 def find_silence(note_rows, now_utc, limits=None):
     """note_rows: рядки ad_journal action=note з полями reason, at. Тривога, коли найновіший
     рядок режиму старший за поріг. Режим без жодного рядка пропускаємо: його ще не запускали."""
-    limits = SILENCE_HOURS if limits is None else limits
+    if limits is None:
+        limits = dict(SILENCE_HOURS)
+        if not 10 <= now_utc.astimezone(KYIV).hour <= 21:  # уночі express не запускається
+            limits["express-check"] = float(os.getenv("SILENCE_EXPRESS_NIGHT_H", "13"))
     last = {}
     for r in note_rows:
         at = datetime.fromisoformat(r["at"])
