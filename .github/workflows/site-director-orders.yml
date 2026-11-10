@@ -1,0 +1,26 @@
+name: site-director orders (read-only)
+# Paid deals by day for site-director (dreamcarua/site-director, projects/dreamcar). GET only, no personal data in the artifact.
+on:
+  workflow_dispatch:
+    inputs:
+      since: { description: 'YYYY-MM-DD (UTC, inclusive)', required: true }
+      until: { description: 'YYYY-MM-DD (UTC, exclusive)', required: true }
+      request_id: { description: 'caller run id', required: false, default: '' }
+run-name: site-director orders ${{ inputs.since }}..${{ inputs.until }} ${{ inputs.request_id }}
+permissions:
+  contents: read
+jobs:
+  orders:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - name: Query paid deals
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: python3 etl/site_director_orders.py "${{ inputs.since }}" "${{ inputs.until }}"
+      - uses: actions/upload-artifact@v4
+        with: { name: orders, path: orders.tsv, retention-days: 1 }
