@@ -50,6 +50,8 @@ Secret names in GitHub ≠ names in `.env.example`. Source of truth for GitHub n
 | Read why a workflow failed | Desktop Commander: `gh run list -R … --workflow=<file> --limit 3` → `gh run view <id> --log-failed` | Actions tab in the browser |
 | Send a session report | commit `reports/YYYY-MM-DD-HHMM-<slug>.json` on `main` → Action sends to Telegram | write the report in the reply and in tasks.md |
 
+- site-director orders (10.11.2026): `.github/workflows/site-director-orders.yml` → `etl/site_director_orders.py`. Read-only GET on `dashboard_deals` (status `pay`; paid deal without `paid_at` counted at `created_at`), inputs since/until (UTC, until exclusive) + request_id, artifact `orders` (orders.tsv: paid_at_utc, channel utm|unknown, amount, currency), retention 1 day, no personal data. Caller: `dreamcarua/site-director` `projects/dreamcar/profile.yaml` → `sources.orders.runner`. Do not add columns with email/phone: the artifact is downloadable by anyone with repo read.
+
 ## Reporting
 
 Канал один на всі проєкти: приватний міст у `dreamcarua/memory-kit`.
