@@ -22,3 +22,5 @@ Newest on top. Old decisions are never deleted; they are marked superseded.
 
 ## 14.11.2026 · TERM grouping ignores case
 Owner explicitly requested dashboard correction and live verification. Normalize TERM on both CRM and advertising sides before grouping/join; leave other UTM dimensions unchanged and never rewrite source records or native ad tags. Recompute ratios after summing additive totals, sort merged revenue before top10. Distinct buyer union is unknowable from grouped inputs: null after merges (not shown in this table). Regression tests exercise actual renderUtmField via stubs, including screenshot example, conservation, spend-only/organic/missing rows and source filters.
+
+Live verification14.11: authenticated browser after Pages deployment3ef79fe renders one TERM row; uppercase/lowercase filters identical. Full displayed table15→14rows, totalleads/payments/revenue/spend/profit conserved; each displayed profit matches revenue-spend within rounding. Private proof retained in Lab runtime, no customer data committed. Rollback: git revert3ef79fe then pushmain. No ETL/source/database/ad changes.
