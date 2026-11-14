@@ -7,3 +7,5 @@
 Архівувати нічого. Потрібне рішення людини: підняти бюджет для цього файлу
 (traps тут описують один код-бейс, але він великий — дашборд + ETL + 20 воркфлоу),
 або згорнути серпневі записи в коротші формулювання.
+
+14.11.2026: tasks.md/traps.md exceed local size budgets. No task author-confirmation or >90-day eligible incident was established in this change; no unrelated memory archived. Separate memory reconciliation needed.

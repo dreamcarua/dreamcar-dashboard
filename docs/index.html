@@ -4125,11 +4125,42 @@ async function renderTrafficType() {
 }
 
 /* ---------------- UTM FIELDS GENERIC ---------------- */
+// TERM identifies an executor, so casing must match on BOTH CRM and spend sides.
+// Other UTM dimensions retain their original identity (campaign/content may be case-sensitive).
+function utmReportKey(field, value) {
+  const key = value || '(none)';
+  return field === 'utm_term' ? key.toLowerCase() : key;
+}
+
+function mergeUtmReportDeals(field, rows) {
+  if (field !== 'utm_term') return rows;
+  const grouped = new Map();
+  for (const row of rows) {
+    const key = utmReportKey(field, row.key);
+    if (!grouped.has(key)) {
+      grouped.set(key, { ...row, key });
+      continue;
+    }
+    const total = grouped.get(key);
+    for (const metric of ['leads', 'paid', 'fail', 'pending', 'sum']) {
+      total[metric] = Number(total[metric] || 0) + Number(row[metric] || 0);
+    }
+    // Distinct buyer sets can overlap; these aggregates cannot recover their union.
+    total.buyers = null;
+    if (total.traffic_type !== row.traffic_type) total.traffic_type = 'Змішаний';
+  }
+  return [...grouped.values()].map(row => ({
+    ...row,
+    conv: row.leads > 0 ? row.paid / row.leads * 100 : 0,
+    avg: row.paid > 0 ? row.sum / row.paid : 0
+  })).sort((a, b) => b.sum - a.sum);
+}
+
 async function renderUtmField(field, title, csvName) {
   const c = $('#content');
   c.innerHTML = `<div class="section-head"><h1>${escapeHtml(title)}</h1></div>${loadingHTML()}`;
   try {
-    const agg = await aggViaRPC(field);
+    const agg = mergeUtmReportDeals(field, await aggViaRPC(field));
 
     let adMap = new Map();
     try {
@@ -4148,7 +4179,7 @@ async function renderUtmField(field, title, csvName) {
       };
       const ads = await fetchAllAdsPaged(_adsBuild);   // 30.09: без 1000-ліміту
       (ads||[]).forEach(a => {
-        const k = a[field] || '(none)';
+        const k = utmReportKey(field, a[field]);
         adMap.set(k, (adMap.get(k)||0) + Number(a.spend||0));
       });
     } catch(e) { /* ads_data might not have that field */ }

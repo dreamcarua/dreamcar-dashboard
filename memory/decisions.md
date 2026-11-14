@@ -19,3 +19,6 @@ Newest on top. Old decisions are never deleted; they are marked superseded.
 ### 10.10.2026 · Сторож реклами перевіряє мовчання режимів ad-director і завислі записи
 **Decision:** `etl/ad_watchdog.py` читає `ad_journal`: тривога `silent`, коли найновіший рядок запуску режиму (express-check 4 год, daily-diagnostic 26, event-run 9, event-stop 26) старший за поріг, і `stuck`, коли рядок висить у `approved` довше години. Перевірка режиму вмикається лише після його першого рядка.
 **Why:** модель, яка не запустилась, не може про це повідомити; мовчання системи виглядало так само, як справна робота (зовнішня критика 10.10, розбір у приватному `ad-director/docs/review-2026-10-10.md`). Воркфлоу і розклад не змінено, хвилин CI не додано.
+
+## 14.11.2026 · TERM grouping ignores case
+Owner explicitly requested dashboard correction and live verification. Normalize TERM on both CRM and advertising sides before grouping/join; leave other UTM dimensions unchanged and never rewrite source records or native ad tags. Recompute ratios after summing additive totals, sort merged revenue before top10. Distinct buyer union is unknowable from grouped inputs: null after merges (not shown in this table). Regression tests exercise actual renderUtmField via stubs, including screenshot example, conservation, spend-only/organic/missing rows and source filters.
