@@ -1,90 +1,85 @@
 {
- "generated": "2026-11-16T05:38:02.828124+00:00",
+ "generated": "2026-11-17T05:36:58.441336+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-11-15",
-  "prev_date": "2026-11-14",
-  "spend": 28413.72,
-  "impressions": 159155,
-  "clicks": 2322,
-  "purchases": 357,
-  "pixel_roas": 6.9,
-  "cpa": 79.59,
-  "frequency": 2.02,
-  "real_ad_revenue": 160910,
-  "real_ad_roas": 5.66,
+  "date": "2026-11-16",
+  "prev_date": "2026-11-15",
+  "spend": 25137.8,
+  "impressions": 154714,
+  "clicks": 1984,
+  "purchases": 174,
+  "pixel_roas": 3.49,
+  "cpa": 144.47,
+  "frequency": 2.36,
+  "real_ad_revenue": 108318,
+  "real_ad_roas": 4.31,
   "deltas": {
-   "spend": -20.9,
-   "pixel_roas": -7.1,
-   "purchases": -20.5,
-   "cpa": -0.5
+   "spend": -11.7,
+   "pixel_roas": -49.3,
+   "purchases": -51.3,
+   "cpa": 81.2
   },
   "week": {
    "this": {
-    "from": "2026-11-09",
-    "to": "2026-11-15",
-    "spend": 161433,
-    "purchases": 2027,
-    "pixel_roas": 6.54,
-    "cpa": 79.64,
-    "real_revenue": 477033,
+    "from": "2026-11-10",
+    "to": "2026-11-16",
+    "spend": 166209,
+    "purchases": 2053,
+    "pixel_roas": 6.42,
+    "cpa": 80.96,
+    "real_revenue": 489637,
     "real_roas": 2.95
    },
    "prev": {
-    "from": "2026-11-02",
-    "to": "2026-11-08",
-    "spend": 139171,
-    "purchases": 1676,
-    "pixel_roas": 6.5,
-    "cpa": 83.04,
-    "real_revenue": 424658,
-    "real_roas": 3.05
+    "from": "2026-11-03",
+    "to": "2026-11-09",
+    "spend": 139236,
+    "purchases": 1668,
+    "pixel_roas": 6.29,
+    "cpa": 83.47,
+    "real_revenue": 427055,
+    "real_roas": 3.07
    },
    "deltas": {
-    "spend": 16.0,
-    "real_roas": -3.3,
-    "pixel_roas": 0.6,
-    "cpa": -4.1,
-    "purchases": 20.9
+    "spend": 19.4,
+    "real_roas": -3.9,
+    "pixel_roas": 2.1,
+    "cpa": -3.0,
+    "purchases": 23.1
    }
   },
   "real_by_placement": [
    {
     "placement": "instagram_feed",
-    "revenue": 62405,
-    "paid": 86
+    "revenue": 39706,
+    "paid": 71
    },
    {
     "placement": "instagram_stories",
-    "revenue": 36872,
-    "paid": 74
-   },
-   {
-    "placement": "facebook_mobile_feed",
-    "revenue": 29396,
-    "paid": 50
+    "revenue": 21452,
+    "paid": 47
    },
    {
     "placement": "instagram_reels",
-    "revenue": 23554,
-    "paid": 46
+    "revenue": 21063,
+    "paid": 34
+   },
+   {
+    "placement": "facebook_mobile_feed",
+    "revenue": 18911,
+    "paid": 36
    },
    {
     "placement": "facebook_mobile_reels",
-    "revenue": 6788,
-    "paid": 11
+    "revenue": 5090,
+    "paid": 8
    },
    {
     "placement": "facebook_stories",
-    "revenue": 1297,
+    "revenue": 1797,
     "paid": 3
-   },
-   {
-    "placement": "facebook_desktop_feed",
-    "revenue": 299,
-    "paid": 1
    },
    {
     "placement": "facebook_notification",
@@ -97,46 +92,54 @@
   ],
   "top_creatives": [
    {
-    "name": "офер-14.11-iphone-duo-video · DC|10 · claude",
-    "ad_id": "120253208505420624",
-    "spend": 301.88,
-    "purchases": 9,
-    "roas": 15.18,
-    "ctr": 3.2
+    "name": "старт23-studio-rear · База · claude",
+    "ad_id": "120252950922480624",
+    "spend": 319.04,
+    "purchases": 6,
+    "roas": 16.93,
+    "ctr": 1.38
    },
    {
-    "name": "старт23-reel-start-video · DC|08 · claude",
-    "ad_id": "120252989852010624",
-    "spend": 919.98,
-    "purchases": 21,
-    "roas": 11.89,
-    "ctr": 2.25
+    "name": "старт23-lviv-cd · DC|08 · claude",
+    "ad_id": "120252989849450624",
+    "spend": 318.69,
+    "purchases": 4,
+    "roas": 6.28,
+    "ctr": 0.53
    },
    {
-    "name": "старт23-studio-dash · База · claude",
-    "ad_id": "120252950922650624",
-    "spend": 317.53,
-    "purchases": 5,
-    "roas": 10.74,
-    "ctr": 2.51
+    "name": "офер-16.11-super-soldout-post · База · claude",
+    "ad_id": "120253269549440624",
+    "spend": 687.32,
+    "purchases": 2,
+    "roas": 6.28,
+    "ctr": 1.86
    }
   ],
   "weak_creatives": [
    {
-    "name": "старт23-reel-start-video · DC|12 · claude",
-    "ad_id": "120252950000950624",
-    "spend": 637.75,
-    "purchases": 2,
-    "roas": 0.93,
-    "ctr": 2.19
+    "name": "старт23-lviv-cd · DC|12 · claude",
+    "ad_id": "120252950670360624",
+    "spend": 2683.75,
+    "purchases": 15,
+    "roas": 1.7,
+    "ctr": 1.33
    },
    {
-    "name": "офер-14.11-iphone-duo-video · 02c · claude",
-    "ad_id": "120253208505370624",
-    "spend": 520.76,
-    "purchases": 1,
-    "roas": 0.9,
-    "ctr": 1.19
+    "name": "старт23-lavra-cd · Ядро · claude",
+    "ad_id": "120252950659680624",
+    "spend": 2349.38,
+    "purchases": 10,
+    "roas": 1.61,
+    "ctr": 1.03
+   },
+   {
+    "name": "старт23-carpaty-cd · Ядро · claude",
+    "ad_id": "120252950660370624",
+    "spend": 1852.15,
+    "purchases": 7,
+    "roas": 1.34,
+    "ctr": 1.66
    }
   ]
  },
@@ -13736,45 +13739,45 @@
    "name": "Range Rover Autobiography",
    "car_model": "Range Rover Autobiography",
    "date_from": "2026-10-30",
-   "date_to": "2026-11-16",
-   "spend": 355378.46,
-   "impressions": 1999959,
-   "clicks": 32034,
-   "ctr": 1.6,
-   "reach": 294744,
-   "frequency": 6.79,
-   "purchases": 4406,
-   "pixel_roas": 6.34,
-   "cpa": 80.66,
-   "pixel_revenue": 2252345,
-   "real_ad_revenue": 982450,
-   "real_ad_roas": 2.76,
-   "gap_pct": -56.4,
+   "date_to": "2026-11-17",
+   "spend": 381601.79,
+   "impressions": 2157616,
+   "clicks": 34086,
+   "ctr": 1.58,
+   "reach": 304369,
+   "frequency": 7.09,
+   "purchases": 4587,
+   "pixel_roas": 6.14,
+   "cpa": 83.19,
+   "pixel_revenue": 2341654,
+   "real_ad_revenue": 1025065,
+   "real_ad_roas": 2.69,
+   "gap_pct": -56.2,
    "segments": {
     "platform": [
      [
       "instagram",
-      282895.37,
-      3248,
-      5.92
+      303308.58,
+      3396,
+      5.78
      ],
      [
       "facebook",
-      66614.52,
-      970,
-      7.39
+      72125.21,
+      1001,
+      6.96
      ],
      [
       "threads",
-      5900.15,
-      184,
-      14.02
+      6167.93,
+      186,
+      13.55
      ],
      [
       "unknown",
       0.05,
       4,
-      58733.12
+      59848.17
      ],
      [
       "whatsapp",
@@ -13786,107 +13789,134 @@
     "age": [
      [
       "25-34",
-      180077.26,
-      2192,
-      6.22
+      192801.01,
+      2279,
+      6.05
      ],
      [
       "35-44",
-      112209.78,
-      1489,
-      6.95
+      120736.93,
+      1549,
+      6.7
      ],
      [
       "18-24",
-      30221.2,
-      289,
-      4.73
+      32305.33,
+      307,
+      4.64
      ],
      [
       "45-54",
-      24028.97,
-      297,
-      6.25
+      26218.43,
+      308,
+      5.96
      ],
      [
       "55-64",
-      4709.89,
-      73,
-      6.78
+      5107.68,
+      77,
+      6.6
      ],
      [
       "65+",
-      4077.7,
-      59,
-      5.92
+      4377.14,
+      60,
+      5.56
      ],
      [
       "Unknown",
-      53.66,
+      55.27,
       7,
-      54.33
+      53.75
      ]
     ],
     "gender": [
      [
       "male",
-      316199.09,
-      3994,
-      6.46
+      339129.54,
+      4160,
+      6.28
      ],
      [
       "female",
-      38475.74,
-      398,
-      5.24
+      41698.57,
+      412,
+      4.95
      ],
      [
       "unknown",
-      703.63,
-      14,
-      9.24
+      773.68,
+      15,
+      8.48
      ]
     ],
     "device": [
      [
       "iphone",
-      250632.39,
-      2950,
-      6.19
+      268616.24,
+      3073,
+      6.02
      ],
      [
       "android_smartphone",
-      103808.03,
-      1445,
-      6.69
+      111960.44,
+      1502,
+      6.41
      ],
      [
       "desktop",
-      591.3,
+      664.01,
       5,
-      2.43
+      2.16
      ],
      [
       "ipad",
-      211.72,
+      222.01,
       0,
       0.1
      ],
      [
       "android_tablet",
-      122.2,
+      126.23,
       0,
-      0.22
+      0.21
      ],
      [
       "other",
-      12.82,
+      12.86,
       7,
-      345.01
+      348.25
      ]
     ]
    },
    "creatives": [
+    {
+     "name": "старт23-studio-reel-v4 · База · claude",
+     "ad_id": "120252961466140624",
+     "spend": 12.09,
+     "purchases": 6,
+     "roas": 333.85,
+     "ctr": 0.0,
+     "thumb": "data:image/jpeg;base64,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"
+    },
+    {
+     "name": "старт23-reel-start-video · Ядро · claude",
+     "ad_id": "120252949999970624",
+     "spend": 22.65,
+     "purchases": 8,
+     "roas": 186.88,
+     "ctr": 3.3,
+     "thumb": "data:image/jpeg;base64,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"
+    },
+    {
+     "name": "старт23-reel-start-video · База · claude",
+     "ad_id": "120252950001320624",
+     "spend": 8.59,
+     "purchases": 4,
+     "roas": 177.66,
+     "ctr": 0.0,
+     "thumb": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/7QCEUGhvdG9zaG9wIDMuMAA4QklNBAQAAAAAAGgcAigAYkZCTUQwYTAwMGE3ZDAxMDAwMGRhMDEwMDAwNjYwMjAwMDBhYzAyMDAwMGZhMDIwMDAwNDcwMzAwMDAyYjA0MDAwMDQ1MDQwMDAwOTMwNDAwMDBkMTA0MDAwMGVmMDUwMDAwAP/bAIQABgcHDQkNDAwMDBENDg0REREQEBERExASERIQExMUExUVExQTFBMXFxcTFBUXGRkXFRccGxwXGxkZGx4bHhsbFgEGBgYLCAsKCwsKDQkLCQ0MDAoKDAwPCwwLDAsPEA4NDg4NDhAODQ0KDQ0ODw4QEA4PEAwODBAPEBAPFxkXFxfB/8IAEQgAQABAAwEiAAIRAQMRAf/EAEgAAAMBAQEBAAAAAAAAAAAAAAMEBQYCAQcQAAIBAQUGBgICAwEAAAAAAAABESECMUFRYQMEEnGBkRCxwdHh8BOhIPEUIjIw/9oADAMBAAIAAwAAAAFQkrlVq4aNQCV44XFmCtL1E+/kjLJKqviD+c68qO4miYO5P5ek0M3jrOapon8mPsqnendcEr7X59tZzuIi2S0Us95q3OO87qylTaOZToB//9oACAEBAAEFAoIOE4SBIUiR/kj3i0Wd7LO8os7ayxW7ItpZLLR+NmztuwPhtHAyCzYbFsmcDRApLbdlbXacXhsHZRu9B7RG0t8Ce+2z/Ltn5HbLGy42vx2CzvDRsIdjfn/r+OzCcFjbtEeCsWmWYSt7R2h2SPDZ1LGzSOEqQfjkW7C3ayWbFmyQyfD/2gAIAQMAAT8B4LJZ2dnMs7JZjXDqWbMOU2bbapXqvbuWd40/fwbO1OEG87RzCcHE8yzTCpu/FWbhp2tRbvaehstlwask/9oACAECAAE/AeK0WtpbyLe2tZFvbPKC1alQ0n96mx2bdzpzktbDX9fJtZTj/o3bZqJak4UsF2LdcaG8qzSL8fklWdB7xZWptdrx6Ig//9oACAEBAAY/Av8AwuKKC4r7l5eX+FxpkXR4fP8AC4oS/Goq+DeRh4f8yRBdLuFcWW8RcyVb8HqTncVFCp2Erytf4ULv4XFaGZRL+H//2gAIAQEAAT8hRRQQRYahpnJHsBnf8Dlf1DeJcvp/o92mS9xzCZ5D+FUoTWpl5DT33KPIeQmucklVQnoIO4o6E9KvchnfUjoiSydfMwE6QjN8kiNCRbxMJQpK7VJ4T6CLhqpoOmqVdB7JyUGpJlvRHkIuBvAVMppuSnP2KMSJNUi/m/gakDSY5slwfiN7I0rDUNlcQCFCw4VYLkpiVEzT5Fcg3n5n8iKJdJLJdxBFDJmSNyMxYpXvZ0prJdqTmxSx9hNMvAnuMT4E7+QnfPk/Rck5KvuOhj+mVXqHhg/YqsU+kH//2gAMAwEAAgADAAAAECPfHewqFtC1J2UKwf/aAAgBAwABPxD+lIbu9Bhk7kSkihI9K+ip1P0BST87x8GgQplolMRmESVziWyW9nzcmkeZ1jpcZhBUwUvL4GmLd2YR1OPkxGBdhGR1H//aAAgBAgABPxD7tiN/a5MQ/Y5y0goSNaetR9Qulx9sw9zJF8QNxLN418FNSvrE55831qLSOyMY6PseMP8A/9oACAEBAAE/EEeNaXgoXN9x7khzwPoSUQzSX5iChpPM/QRy6Zx6EndcWh6ArldhoYU0eUdJKrqUPmISunqy9Q7kOf0FGLm0Exi/LQf7RRPqC6ScR0QXUy/Rmoxke6o+QkGFQE64lEJeDUlplhuxCcQ1mTIMbNuhChRXEQknhyEtVeJgwcgk7yIT9BUjkZEWYHLjfuNF0R9l4dTmuYnoaBYdQ5Gx0xjIjUPEfWTiKOXgZE9le1kn/QhauZpVx9YkyW4pGH1aC5UO96u668ppDl3qZSPhWIVAODZuQMl3Fl4BtmpoT/186HPUm/E6jnyDFUyFKiK6EHeX6NYhd3QZU2Y+yEs/Y+rzHhJuBLnfmL0INSx1OorwnXSH1zP/2Q=="
+    },
     {
      "name": "офер-12.11-drive-post · DC|10 · claude",
      "ad_id": "120253164369660624",
@@ -13920,8 +13950,7 @@
      "spend": 31.49,
      "purchases": 4,
      "roas": 44.02,
-     "ctr": 4.76,
-     "thumb": "data:image/jpeg;base64,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"
+     "ctr": 4.76
     },
     {
      "name": "офер-12.11-drive-team07-banner · 02c · claude",
@@ -13929,8 +13958,7 @@
      "spend": 14.04,
      "purchases": 1,
      "roas": 35.26,
-     "ctr": 1.01,
-     "thumb": "data:image/jpeg;base64,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"
+     "ctr": 1.01
     },
     {
      "name": "офер-14.11-iphone-duo-2-video · DC|10 · claude",
@@ -13938,8 +13966,7 @@
      "spend": 191.53,
      "purchases": 8,
      "roas": 31.75,
-     "ctr": 2.21,
-     "thumb": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/7QCEUGhvdG9zaG9wIDMuMAA4QklNBAQAAAAAAGgcAigAYkZCTUQwYTAwMGE4NTAxMDAwMGMzMDEwMDAwMWYwMjAwMDA0MTAyMDAwMDVhMDIwMDAwZDgwMjAwMDA4MjAzMDAwMDljMDMwMDAwYzcwMzAwMDBlMTAzMDAwMGFhMDQwMDAwAP/bAIQABgcHDQkNDAwMDBENDg0REREQEBERExASERIQExMUExUVExQTFBMXFxcTFBUXGRkXFRccGxwXGxkZGx4bHhsbFgEGBgYLCAsKCwsKDQkLCQ0MDAoKDAwPCwwLDAsPEA4NDg4NDhAODQ0KDQ0ODw4QEA4PEAwODBAPEBAPFxkXFxfB/8IAEQgAQABAAwEiAAIRAQMRAf/EAFAAAQACAwEBAAAAAAAAAAAAAAABBAIFBgMHEAABAgMFAgwEBwAAAAAAAAABABECITEDQVFhcRASBBMUIDAyQIGRobHwM8HR4SIjJEJykqL/2gAMAwEAAgADAAAAAfpYAAAACr5l5TwL4BqZiPOxMThjw0xP09oN/MKV3RG9cJ3mOXzJUuYe3SdFy3MZYf/aAAgBAQABBQLtXHQLlFmuPgXKLPm8js1yGzUPBIIUOB2Y5jmOLi4kbOJhw20I5baqxjibZYibq06sO8F+YVax8XYwRbwVlwiAEC237Tq2aaMDhcP6fgnCIoF//9oACAEDAAE/Aei3ThsZ1FCzUngXRaGbD9s2ikhDvCWJX//aAAgBAgABPwHot4bHQLqEGKU75OE7VX//2gAIAQEABj8C7V1guuPFdcJt8c0hq5qh8SmA8839VSuZ5kQ391iwAabAYuuvF/j6InjIh/X6L4v+QvieQ+isyYt7ekaXvRtNtp/M+g2RaFfDn6SXVGrKCJmII+aBGyMO7xXdyDwlt7C51FoV+C0noUIuMkoQS8xPxUM5UK//2gAIAQEAAT8h7UCPdM88ZDz2GBQSCgVnp9Qp1RrmR6g80AADZjzXTHnsSFkoOGqcYBuvJwIPFzCYFxNrgSSGK6iwV477AFnB0GSjhran2Chk0nt3QAhkjCQClVdoHWmGDfs/sGBUmWEgGcONB7804SO6A/kiUdoXAuHzQaQI2VTCZHkweoRxiJGS98L17BghBDkl1G1wVDJEgsGYjFiiT4IfQRVpOLF2S//aAAwDAQACAAMAAAAQ+++++22+taZWtKZP/9oACAEDAAE/EOgdtgJQjQUvOwHQHZFnEmPcHxwKkpHLCwxQDSCYMxhov//aAAgBAgABPxDoAHz+3MCy9lNVki95mGxf/9oACAEBAAE/EO1SQeZJk8uagQNERV8Fi3qq6QQEt7eIF9iTMUkAcG5hDyxQ+CQYs6DETrNTn7mVnfffqg0eYFMYwmB2SPvEGJ5xM3nEk6lAMAMNrZMZOanM2gAFilD1B+JgJrlgJo+8KIrIqPkpf2ETk5Agb2O0wkDJSR3WOaNwV70DTlRNlJ8UnrcyAHevvJ4JZJmg19oQQlThHxGya0nYwp++or6NyVTe1Y0Mgrm6szXqoGA9CLlYXpNd4ZYJJEvMoSvuZf/Z"
+     "ctr": 2.21
     },
     {
      "name": "офер-10.11-boost-podil-cd · Ядро · claude",
@@ -13950,14 +13977,6 @@
      "ctr": 3.09
     },
     {
-     "name": "старт23-studio-dash-pac · DC|12 · claude",
-     "ad_id": "120252960213260624",
-     "spend": 43.06,
-     "purchases": 2,
-     "roas": 23.11,
-     "ctr": 2.85
-    },
-    {
      "name": "офер-12.11-drive-zalyshylos-20-banner · 02c · claude",
      "ad_id": "120253180209200624",
      "spend": 23.18,
@@ -13966,12 +13985,20 @@
      "ctr": 2.83
     },
     {
-     "name": "старт23-carpaty-cd · DC|08 · claude",
-     "ad_id": "120252989850150624",
-     "spend": 60.62,
-     "purchases": 3,
-     "roas": 19.42,
-     "ctr": 2.31
+     "name": "старт23-studio-console-pac · Ядро · claude",
+     "ad_id": "120252960207000624",
+     "spend": 7.42,
+     "purchases": 0,
+     "roas": 21.25,
+     "ctr": 0.0
+    },
+    {
+     "name": "старт23-studio-rearseats · Ядро · claude",
+     "ad_id": "120252950900560624",
+     "spend": 796.81,
+     "purchases": 11,
+     "roas": 18.77,
+     "ctr": 1.3
     },
     {
      "name": "офер-12.11-drive-team01-banner · База · claude",
@@ -13980,6 +14007,14 @@
      "purchases": 1,
      "roas": 18.0,
      "ctr": 0.83
+    },
+    {
+     "name": "старт23-carpaty-cd · DC|08 · claude",
+     "ad_id": "120252989850150624",
+     "spend": 65.51,
+     "purchases": 3,
+     "roas": 17.97,
+     "ctr": 2.11
     },
     {
      "name": "офер-12.11-drive-team08-banner · База · claude",
@@ -14014,12 +14049,12 @@
      "ctr": 1.0
     },
     {
-     "name": "старт23-carpaty-cd · DC|10 · claude",
-     "ad_id": "120252989851590624",
-     "spend": 52.54,
-     "purchases": 2,
-     "roas": 15.07,
-     "ctr": 1.39
+     "name": "старт23-studio-console-pac · DC|12 · claude",
+     "ad_id": "120252960213650624",
+     "spend": 38.56,
+     "purchases": 1,
+     "roas": 15.14,
+     "ctr": 1.24
     },
     {
      "name": "офер-12.11-drive-m2-5-bilshe-3-banner · База · claude",
@@ -14030,12 +14065,36 @@
      "ctr": 1.0
     },
     {
+     "name": "старт23-carpaty-cd · DC|10 · claude",
+     "ad_id": "120252989851590624",
+     "spend": 54.1,
+     "purchases": 2,
+     "roas": 14.63,
+     "ctr": 1.97
+    },
+    {
      "name": "офер-10.11-boost-soldout-post · База · claude",
      "ad_id": "120253139962680624",
      "spend": 66.7,
      "purchases": 1,
      "roas": 14.54,
      "ctr": 3.03
+    },
+    {
+     "name": "старт23-studio-rear · База · claude",
+     "ad_id": "120252950922480624",
+     "spend": 500.26,
+     "purchases": 8,
+     "roas": 13.62,
+     "ctr": 1.34
+    },
+    {
+     "name": "старт23-lavra-cd · База · claude",
+     "ad_id": "120252950687370624",
+     "spend": 240.98,
+     "purchases": 6,
+     "roas": 12.7,
+     "ctr": 1.17
     },
     {
      "name": "офер-12.11-drive-c03-lichylnyk-100-banner · 02c · claude",
@@ -14062,20 +14121,20 @@
      "ctr": 0.89
     },
     {
-     "name": "старт23-studio-dash · DC|11 · claude",
-     "ad_id": "120252989898070624",
-     "spend": 59.54,
-     "purchases": 2,
-     "roas": 11.63,
-     "ctr": 0.34
+     "name": "офер-15.11-GPT_VADYM-IG150901-ORIGINAL-NEW-COUNT-C1",
+     "ad_id": "120253246669100624",
+     "spend": 25.64,
+     "purchases": 1,
+     "roas": 11.66,
+     "ctr": 3.14
     },
     {
-     "name": "старт23-lavra-cd · База · claude",
-     "ad_id": "120252950687370624",
-     "spend": 197.86,
-     "purchases": 5,
+     "name": "старт23-studio-dash · DC|11 · claude",
+     "ad_id": "120252989898070624",
+     "spend": 59.86,
+     "purchases": 2,
      "roas": 11.57,
-     "ctr": 1.68
+     "ctr": 0.34
     },
     {
      "name": "офер-12.11-drive-m4-100-banner · Ядро · claude",
@@ -14084,14 +14143,6 @@
      "purchases": 3,
      "roas": 11.36,
      "ctr": 0.75
-    },
-    {
-     "name": "старт23-studio-dash · DC|08 · claude",
-     "ad_id": "120252989843650624",
-     "spend": 46.54,
-     "purchases": 1,
-     "roas": 11.35,
-     "ctr": 2.39
     },
     {
      "name": "офер-12.11-drive-team09-banner · DC|10 · claude",
@@ -14122,8 +14173,16 @@
      "ad_id": "120253123111170624",
      "spend": 835.05,
      "purchases": 15,
-     "roas": 10.78,
+     "roas": 10.79,
      "ctr": 1.75
+    },
+    {
+     "name": "старт23-podil-cd · DC|12 · claude",
+     "ad_id": "120252950667960624",
+     "spend": 18.52,
+     "purchases": 1,
+     "roas": 10.66,
+     "ctr": 4.94
     },
     {
      "name": "офер-12.11-drive-c08-shtamp-lyshe-100-banner · Ядро · claude",
@@ -14134,17 +14193,25 @@
      "ctr": 1.13
     },
     {
-     "name": "старт23-lviv-cd · DC|10 · claude",
-     "ad_id": "120252989851000624",
-     "spend": 124.89,
+     "name": "старт23-studio-dash · DC|08 · claude",
+     "ad_id": "120252989843650624",
+     "spend": 52.09,
+     "purchases": 1,
+     "roas": 10.14,
+     "ctr": 2.49
+    },
+    {
+     "name": "старт23-studio-rearseats · База · claude",
+     "ad_id": "120252950923640624",
+     "spend": 352.53,
      "purchases": 2,
-     "roas": 10.31,
-     "ctr": 1.92
+     "roas": 9.95,
+     "ctr": 1.74
     },
     {
      "name": "офер-14.11-iphone-duo-video · DC|10 · claude",
      "ad_id": "120253208505420624",
-     "spend": 816.19,
+     "spend": 816.3,
      "purchases": 15,
      "roas": 9.85,
      "ctr": 2.05
@@ -14162,8 +14229,16 @@
      "ad_id": "120253123140070624",
      "spend": 167.82,
      "purchases": 2,
-     "roas": 9.7,
+     "roas": 9.73,
      "ctr": 1.37
+    },
+    {
+     "name": "офер-14.11-iphone-duo-2-video · База · claude",
+     "ad_id": "120253213130520624",
+     "spend": 5549.17,
+     "purchases": 105,
+     "roas": 9.35,
+     "ctr": 1.11
     },
     {
      "name": "старт23-city-day-video · Ядро · claude",
@@ -14174,51 +14249,19 @@
      "ctr": 1.79
     },
     {
-     "name": "старт23-kamianets-cd · Ядро · claude",
-     "ad_id": "120252950662310624",
-     "spend": 1163.42,
-     "purchases": 13,
-     "roas": 9.15,
-     "ctr": 1.55
-    },
-    {
-     "name": "старт23-studio-rearseats · Ядро · claude",
-     "ad_id": "120252950900560624",
-     "spend": 1680.72,
-     "purchases": 12,
-     "roas": 9.06,
-     "ctr": 1.17
-    },
-    {
-     "name": "старт23-studio-rear · База · claude",
-     "ad_id": "120252950922480624",
-     "spend": 234.55,
-     "purchases": 4,
-     "roas": 9.06,
-     "ctr": 1.43
-    },
-    {
-     "name": "офер-14.11-iphone-duo-2-video · База · claude",
-     "ad_id": "120253213130520624",
-     "spend": 5546.05,
-     "purchases": 103,
-     "roas": 9.06,
-     "ctr": 1.11
-    },
-    {
      "name": "старт23-title-dusk-video · Ядро · claude",
      "ad_id": "120253123984810624",
      "spend": 7425.07,
      "purchases": 146,
-     "roas": 8.9,
+     "roas": 8.91,
      "ctr": 1.43
     },
     {
      "name": "офер-14.11-iphone-duo-video · База · claude",
      "ad_id": "120253208505100624",
-     "spend": 9146.62,
-     "purchases": 161,
-     "roas": 8.88,
+     "spend": 9151.77,
+     "purchases": 162,
+     "roas": 8.9,
      "ctr": 1.51
     },
     {
@@ -14226,15 +14269,15 @@
      "ad_id": "120253172830370624",
      "spend": 118.17,
      "purchases": 2,
-     "roas": 8.85,
+     "roas": 8.89,
      "ctr": 3.18
     },
     {
      "name": "офер-14.11-iphone-duo-video · Ядро · claude",
      "ad_id": "120253208503100624",
-     "spend": 16041.49,
-     "purchases": 220,
-     "roas": 8.66,
+     "spend": 16055.96,
+     "purchases": 227,
+     "roas": 8.87,
      "ctr": 1.2
     },
     {
@@ -14246,84 +14289,52 @@
      "ctr": 0.42
     },
     {
-     "name": "старт23-studio-rear34 · 02c · claude",
-     "ad_id": "120252989819940624",
-     "spend": 173.37,
-     "purchases": 3,
-     "roas": 8.58,
-     "ctr": 1.41
-    },
-    {
      "name": "офер-12.11-drive-team06-banner · База · claude",
      "ad_id": "120253164560110624",
      "spend": 362.23,
      "purchases": 5,
-     "roas": 8.43,
+     "roas": 8.47,
      "ctr": 0.89
     },
     {
-     "name": "старт23-studio-rearseats · База · claude",
-     "ad_id": "120252950923640624",
-     "spend": 653.9,
-     "purchases": 6,
-     "roas": 8.39,
-     "ctr": 1.54
+     "name": "старт23-studio-dash-pac · DC|12 · claude",
+     "ad_id": "120252960213260624",
+     "spend": 120.34,
+     "purchases": 2,
+     "roas": 8.27,
+     "ctr": 2.54
     },
     {
      "name": "офер-10.11-boost-captions-video · DC|12 · claude",
      "ad_id": "120253128433630624",
      "spend": 2001.77,
      "purchases": 29,
-     "roas": 8.24,
+     "roas": 8.25,
      "ctr": 1.66
     },
     {
-     "name": "старт23-studio-dash · База · claude",
-     "ad_id": "120252950922650624",
-     "spend": 621.24,
-     "purchases": 9,
-     "roas": 8.17,
-     "ctr": 2.21
+     "name": "старт23-lviv-cd · DC|10 · claude",
+     "ad_id": "120252989851000624",
+     "spend": 162.86,
+     "purchases": 2,
+     "roas": 7.91,
+     "ctr": 2.12
     },
     {
-     "name": "старт23-podil-cd · DC|12 · claude",
-     "ad_id": "120252950667960624",
-     "spend": 24.24,
-     "purchases": 1,
-     "roas": 8.14,
-     "ctr": 1.95
-    },
-    {
-     "name": "старт23-reel-start-video · База · claude",
-     "ad_id": "120252950001320624",
-     "spend": 1455.49,
-     "purchases": 25,
-     "roas": 7.85,
-     "ctr": 1.43
+     "name": "старт23-studio-reel-v4 · DC|10 · claude",
+     "ad_id": "120252989839910624",
+     "spend": 553.73,
+     "purchases": 10,
+     "roas": 7.73,
+     "ctr": 2.11
     },
     {
      "name": "офер-12.11-drive-c03-lichylnyk-100-banner · DC|12 · claude",
      "ad_id": "120253164621870624",
      "spend": 164.24,
      "purchases": 3,
-     "roas": 7.57,
+     "roas": 7.6,
      "ctr": 1.38
-    },
-    {
-     "name": "старт23-reel-start-video · Ядро · claude",
-     "ad_id": "120252949999970624",
-     "spend": 3684.02,
-     "purchases": 38,
-     "roas": 7.46,
-     "ctr": 1.5
-    },
-    {
-     "name": "старт23-title-dusk-video · DC|12 · claude",
-     "ad_id": "120253123999480624",
-     "spend": 929.38,
-     "purchases": 18,
-     "roas": 7.35,
-     "ctr": 1.78
     },
     {
      "name": "старт23-square-sky-video · Ядро · claude",
@@ -14334,20 +14345,12 @@
      "ctr": 2.64
     },
     {
-     "name": "старт23-studio-reel-v4 · 02c · claude",
-     "ad_id": "120252989811840624",
-     "spend": 328.77,
-     "purchases": 4,
-     "roas": 7.1,
-     "ctr": 0.86
-    },
-    {
-     "name": "старт23-reel-start-video · DC|08 · claude",
-     "ad_id": "120252989852010624",
-     "spend": 2313.05,
-     "purchases": 32,
-     "roas": 7.04,
-     "ctr": 1.73
+     "name": "старт23-chernivtsi-cd · База · claude",
+     "ad_id": "120252950690350624",
+     "spend": 186.36,
+     "purchases": 1,
+     "roas": 7.27,
+     "ctr": 1.25
     },
     {
      "name": "офер-12.11-drive-zalyshylos-20-banner · Ядро · claude",
@@ -14362,16 +14365,8 @@
      "ad_id": "120253164583700624",
      "spend": 2327.6,
      "purchases": 33,
-     "roas": 6.93,
+     "roas": 6.94,
      "ctr": 1.34
-    },
-    {
-     "name": "старт23-lviv-cd · DC|11 · claude",
-     "ad_id": "120252989901410624",
-     "spend": 1063.33,
-     "purchases": 13,
-     "roas": 6.88,
-     "ctr": 1.29
     },
     {
      "name": "офер-12.11-drive-team06-banner · DC|12 · claude",
@@ -14382,20 +14377,20 @@
      "ctr": 1.28
     },
     {
-     "name": "старт23-studio-reel-v4 · База · claude",
-     "ad_id": "120252961466140624",
-     "spend": 1422.6,
-     "purchases": 23,
-     "roas": 6.73,
-     "ctr": 1.06
-    },
-    {
      "name": "офер-12.11-drive-team09-banner · Ядро · claude",
      "ad_id": "120253164615190624",
      "spend": 367.32,
      "purchases": 6,
      "roas": 6.62,
      "ctr": 1.87
+    },
+    {
+     "name": "офер-16.11-super-soldout-post · База · claude",
+     "ad_id": "120253269549440624",
+     "spend": 687.32,
+     "purchases": 3,
+     "roas": 6.6,
+     "ctr": 1.86
     },
     {
      "name": "офер-12.11-drive-team02-banner · База · claude",
@@ -14414,28 +14409,20 @@
      "ctr": 0.65
     },
     {
-     "name": "старт23-studio-reel-v4 · DC|10 · claude",
-     "ad_id": "120252989839910624",
-     "spend": 480.43,
-     "purchases": 9,
-     "roas": 6.22,
-     "ctr": 2.06
+     "name": "старт23-lviv-cd · DC|11 · claude",
+     "ad_id": "120252989901410624",
+     "spend": 1192.15,
+     "purchases": 13,
+     "roas": 6.18,
+     "ctr": 1.2
     },
     {
-     "name": "старт23-podil-cd · База · claude",
-     "ad_id": "120252950686990624",
-     "spend": 272.81,
-     "purchases": 2,
-     "roas": 6.19,
-     "ctr": 2.62
-    },
-    {
-     "name": "старт23-square-sky-video · DC|12 · claude",
-     "ad_id": "120253124000860624",
-     "spend": 2353.27,
-     "purchases": 26,
-     "roas": 6.13,
-     "ctr": 2.99
+     "name": "старт23-studio-rear34 · DC|12 · claude",
+     "ad_id": "120252950902960624",
+     "spend": 422.67,
+     "purchases": 5,
+     "roas": 6.1,
+     "ctr": 1.58
     },
     {
      "name": "офер-12.11-drive-ranok-video · Ядро · claude",
@@ -14446,6 +14433,14 @@
      "ctr": 1.62
     },
     {
+     "name": "старт23-reel-start-video · DC|08 · claude",
+     "ad_id": "120252989852010624",
+     "spend": 3488.26,
+     "purchases": 44,
+     "roas": 6.05,
+     "ctr": 1.46
+    },
+    {
      "name": "офер-12.11-drive-ranok-video · База · claude",
      "ad_id": "120253172820970624",
      "spend": 4063.01,
@@ -14454,20 +14449,12 @@
      "ctr": 1.56
     },
     {
-     "name": "старт23-kamianets-cd · База · claude",
-     "ad_id": "120252950689230624",
-     "spend": 94.53,
-     "purchases": 1,
-     "roas": 5.97,
-     "ctr": 1.48
-    },
-    {
      "name": "офер-14.11-GPT_VADYM-IG2021-ORIGINAL-NEW",
      "ad_id": "120253227534010624",
-     "spend": 720.57,
+     "spend": 720.64,
      "purchases": 3,
      "roas": 5.96,
-     "ctr": 1.62
+     "ctr": 1.61
     },
     {
      "name": "офер-12.11-drive-m4-100-banner · База · claude",
@@ -14478,6 +14465,14 @@
      "ctr": 0.85
     },
     {
+     "name": "старт23-square-sky-video · DC|12 · claude",
+     "ad_id": "120253124000860624",
+     "spend": 2587.52,
+     "purchases": 29,
+     "roas": 5.75,
+     "ctr": 2.98
+    },
+    {
      "name": "офер-12.11-drive-c09-rozlitayutsya-banner · База · claude",
      "ad_id": "120253164447720624",
      "spend": 354.3,
@@ -14486,28 +14481,68 @@
      "ctr": 1.5
     },
     {
+     "name": "старт23-podil-cd · База · claude",
+     "ad_id": "120252950686990624",
+     "spend": 301.43,
+     "purchases": 2,
+     "roas": 5.68,
+     "ctr": 2.08
+    },
+    {
+     "name": "старт23-title-dusk-video · DC|12 · claude",
+     "ad_id": "120253123999480624",
+     "spend": 1250.44,
+     "purchases": 19,
+     "roas": 5.64,
+     "ctr": 1.67
+    },
+    {
      "name": "офер-15.11-GPT_VADYM-F05-START299-NEW-COUNT-C1",
      "ad_id": "120253230767500624",
-     "spend": 835.27,
+     "spend": 835.41,
      "purchases": 8,
      "roas": 5.62,
-     "ctr": 1.27
+     "ctr": 1.26
+    },
+    {
+     "name": "пост23-01.11-krasyvyi-reel-video · 02c · claude",
+     "ad_id": "120253025904070624",
+     "spend": 709.79,
+     "purchases": 11,
+     "roas": 5.59,
+     "ctr": 2.69
+    },
+    {
+     "name": "старт23-studio-reel-v4 · 02c · claude",
+     "ad_id": "120252989811840624",
+     "spend": 507.06,
+     "purchases": 5,
+     "roas": 5.58,
+     "ctr": 0.84
+    },
+    {
+     "name": "офер-15.11-GPT_VADYM-IG2021-ORIGINAL-NEW-COUNT-C1",
+     "ad_id": "120253230767510624",
+     "spend": 896.06,
+     "purchases": 10,
+     "roas": 5.46,
+     "ctr": 1.66
     },
     {
      "name": "старт23-studio-rear · DC|11 · claude",
      "ad_id": "120252989898760624",
-     "spend": 101.73,
+     "spend": 102.12,
      "purchases": 1,
-     "roas": 5.41,
+     "roas": 5.39,
      "ctr": 0.54
     },
     {
-     "name": "старт23-studio-reel-v4 · DC|12 · claude",
-     "ad_id": "120252961466040624",
-     "spend": 430.62,
-     "purchases": 4,
-     "roas": 5.3,
-     "ctr": 2.16
+     "name": "офер-14.11-GPT_VADYM-F05-START299-NEW",
+     "ad_id": "120253204811450624",
+     "spend": 1784.16,
+     "purchases": 17,
+     "roas": 5.31,
+     "ctr": 1.28
     },
     {
      "name": "офер-10.11-boost-post · 02c · claude",
@@ -14526,36 +14561,28 @@
      "ctr": 1.83
     },
     {
-     "name": "старт23-proof-23cars · DC|12 · claude",
-     "ad_id": "120252960345150624",
-     "spend": 643.43,
-     "purchases": 6,
-     "roas": 5.12,
-     "ctr": 1.54
-    },
-    {
-     "name": "офер-15.11-GPT_VADYM-IG1700-ORIGINAL-NEW-COUNT-C1",
-     "ad_id": "120253230767480624",
-     "spend": 314.36,
-     "purchases": 3,
-     "roas": 5.08,
-     "ctr": 0.64
+     "name": "старт23-studio-reel-v4 · DC|08 · claude",
+     "ad_id": "120252989838390624",
+     "spend": 405.89,
+     "purchases": 2,
+     "roas": 5.14,
+     "ctr": 0.74
     },
     {
      "name": "старт23-lviv-cd · DC|08 · claude",
      "ad_id": "120252989849450624",
-     "spend": 1344.01,
-     "purchases": 12,
-     "roas": 5.05,
-     "ctr": 1.41
+     "spend": 1664.05,
+     "purchases": 15,
+     "roas": 5.11,
+     "ctr": 1.16
     },
     {
-     "name": "офер-14.11-GPT_VADYM-F05-START299-NEW",
-     "ad_id": "120253204811450624",
-     "spend": 1784.12,
-     "purchases": 16,
-     "roas": 5.03,
-     "ctr": 1.28
+     "name": "офер-15.11-GPT_VADYM-IG1700-ORIGINAL-NEW-COUNT-C1",
+     "ad_id": "120253230767480624",
+     "spend": 314.42,
+     "purchases": 3,
+     "roas": 5.08,
+     "ctr": 0.64
     },
     {
      "name": "офер-12.11-drive-team04-banner · Ядро · claude",
@@ -14582,12 +14609,20 @@
      "ctr": 2.03
     },
     {
-     "name": "старт23-studio-rear34 · DC|08 · claude",
-     "ad_id": "120252989847040624",
-     "spend": 245.83,
-     "purchases": 3,
-     "roas": 4.83,
-     "ctr": 1.69
+     "name": "старт23-reel-start-video · DC|12 · claude",
+     "ad_id": "120252950000950624",
+     "spend": 3799.44,
+     "purchases": 45,
+     "roas": 4.8,
+     "ctr": 1.99
+    },
+    {
+     "name": "старт23-studio-rear34-pac · Ядро · claude",
+     "ad_id": "120252960200990624",
+     "spend": 4973.15,
+     "purchases": 47,
+     "roas": 4.75,
+     "ctr": 1.45
     },
     {
      "name": "офер-14.11-GPT_VADYM-F03-START299-NEW",
@@ -14606,92 +14641,60 @@
      "ctr": 0.7
     },
     {
-     "name": "старт23-reel-start-video · DC|11 · claude",
-     "ad_id": "120252989906930624",
-     "spend": 907.26,
-     "purchases": 9,
-     "roas": 4.66,
-     "ctr": 1.14
-    },
-    {
-     "name": "старт23-reel-start-video · DC|12 · claude",
-     "ad_id": "120252950000950624",
-     "spend": 3854.79,
-     "purchases": 46,
-     "roas": 4.63,
-     "ctr": 1.99
-    },
-    {
-     "name": "старт23-carpaty-cd · Ядро · claude",
-     "ad_id": "120252950660370624",
-     "spend": 710.14,
-     "purchases": 5,
-     "roas": 4.63,
-     "ctr": 2.16
-    },
-    {
-     "name": "старт23-studio-rear34 · DC|12 · claude",
-     "ad_id": "120252950902960624",
-     "spend": 770.27,
-     "purchases": 7,
-     "roas": 4.63,
-     "ctr": 1.47
-    },
-    {
      "name": "старт23-studio-console · База · claude",
      "ad_id": "120252950923090624",
-     "spend": 649.72,
-     "purchases": 5,
-     "roas": 4.57,
-     "ctr": 1.15
-    },
-    {
-     "name": "офер-15.11-GPT_VADYM-IG2021-ORIGINAL-NEW-COUNT-C1",
-     "ad_id": "120253230767510624",
-     "spend": 896.06,
-     "purchases": 9,
-     "roas": 4.57,
-     "ctr": 1.66
-    },
-    {
-     "name": "пост23-01.11-krasyvyi-reel-video · 02c · claude",
-     "ad_id": "120253025904070624",
-     "spend": 1463.31,
-     "purchases": 18,
-     "roas": 4.47,
-     "ctr": 2.28
-    },
-    {
-     "name": "старт23-studio-rear34-pac · Ядро · claude",
-     "ad_id": "120252960200990624",
-     "spend": 3272.16,
-     "purchases": 28,
-     "roas": 4.46,
-     "ctr": 1.59
-    },
-    {
-     "name": "старт23-lavra-cd · DC|11 · claude",
-     "ad_id": "120252989903560624",
-     "spend": 199.38,
+     "spend": 487.06,
      "purchases": 3,
-     "roas": 4.09,
-     "ctr": 1.19
+     "roas": 4.69,
+     "ctr": 1.35
     },
     {
-     "name": "офер-12.11-drive-team06-banner · Ядро · claude",
-     "ad_id": "120253164612910624",
-     "spend": 121.53,
+     "name": "офер-15.11-GPT_VADYM-IG0006-ORIGINAL-NEW-COUNT-C1",
+     "ad_id": "120253230767490624",
+     "spend": 1105.81,
+     "purchases": 10,
+     "roas": 4.69,
+     "ctr": 1.3
+    },
+    {
+     "name": "старт23-kamianets-cd · База · claude",
+     "ad_id": "120252950689230624",
+     "spend": 123.14,
      "purchases": 1,
-     "roas": 4.07,
-     "ctr": 0.49
+     "roas": 4.58,
+     "ctr": 1.68
     },
     {
-     "name": "старт23-lavra-cd · Ядро · claude",
-     "ad_id": "120252950659680624",
-     "spend": 1934.88,
-     "purchases": 12,
-     "roas": 4.0,
-     "ctr": 1.07
+     "name": "GPT_VADYM-SUPER16-T01-PLUS2-NEW-C1",
+     "ad_id": "120253263952300624",
+     "spend": 1957.02,
+     "purchases": 10,
+     "roas": 4.44,
+     "ctr": 0.83
+    },
+    {
+     "name": "старт23-studio-dash · База · claude",
+     "ad_id": "120252950922650624",
+     "spend": 1996.71,
+     "purchases": 15,
+     "roas": 4.41,
+     "ctr": 1.41
+    },
+    {
+     "name": "офер-15.11-GPT_VADYM-F03-START299-NEW-COUNT-C1",
+     "ad_id": "120253230767540624",
+     "spend": 118.27,
+     "purchases": 1,
+     "roas": 4.22,
+     "ctr": 1.56
+    },
+    {
+     "name": "старт23-reel-start-video · DC|11 · claude",
+     "ad_id": "120252989906930624",
+     "spend": 1360.44,
+     "purchases": 13,
+     "roas": 4.21,
+     "ctr": 0.93
     }
    ],
    "series": [
@@ -14802,93 +14805,100 @@
     },
     {
      "date": "2026-11-14",
-     "spend": 35915.41,
+     "spend": 35915.64,
      "purchases": 449,
      "roas": 7.43,
      "cpa": 79.99
     },
     {
      "date": "2026-11-15",
-     "spend": 28413.72,
+     "spend": 28462.74,
      "purchases": 357,
-     "roas": 6.9,
-     "cpa": 79.59
+     "roas": 6.89,
+     "cpa": 79.73
     },
     {
      "date": "2026-11-16",
-     "spend": 1715.73,
-     "purchases": 16,
-     "roas": 3.86,
-     "cpa": 107.23
+     "spend": 25137.8,
+     "purchases": 174,
+     "roas": 3.49,
+     "cpa": 144.47
+    },
+    {
+     "date": "2026-11-17",
+     "spend": 2752.01,
+     "purchases": 23,
+     "roas": 3.01,
+     "cpa": 119.65
     }
    ],
    "adsets": [
     {
      "name": "Broad · UA 18-45 · A+A · VALUE · інкремент",
-     "spend": 62691.03,
-     "purchases": 877,
-     "roas": 7.82,
+     "spend": 61335.96,
+     "purchases": 881,
+     "roas": 7.77,
      "ctr": 1.48,
-     "cpa": 71.48
+     "cpa": 69.62
     },
     {
      "name": "Покупці · pixel 180д + CRM всі · апсейл · VALUE · v2",
-     "spend": 38117.28,
-     "purchases": 605,
-     "roas": 8.17,
-     "ctr": 1.5,
-     "cpa": 63.0
+     "spend": 39710.94,
+     "purchases": 593,
+     "roas": 7.94,
+     "ctr": 1.54,
+     "cpa": 66.97
     },
     {
      "name": "DC|12 НОВИХ · UA broad · без покупців (всі) · claude",
-     "spend": 33997.13,
-     "purchases": 302,
-     "roas": 3.88,
-     "ctr": 1.64,
-     "cpa": 112.57
-    },
-    {
-     "name": "Retarget · Engaged IG 30д · excl покупці (CRM+pixel+цикл) · VALUE · v5 · claude",
-     "spend": 6235.33,
-     "purchases": 47,
-     "roas": 3.26,
-     "ctr": 1.45,
-     "cpa": 132.67
-    },
-    {
-     "name": "Новий набір реклами з ціллю «Продажі»",
-     "spend": 6206.85,
-     "purchases": 37,
-     "roas": 3.63,
-     "ctr": 1.23,
-     "cpa": 167.75
+     "spend": 33570.54,
+     "purchases": 295,
+     "roas": 3.84,
+     "ctr": 1.63,
+     "cpa": 113.8
     },
     {
      "name": "Покупці CRM+pixel 180д · excl поточний цикл · VALUE · claude",
-     "spend": 5429.11,
-     "purchases": 57,
-     "roas": 5.37,
-     "ctr": 1.44,
-     "cpa": 95.25
+     "spend": 7104.58,
+     "purchases": 75,
+     "roas": 5.27,
+     "ctr": 1.28,
+     "cpa": 94.73
+    },
+    {
+     "name": "Retarget · Engaged IG 30д · excl покупці (CRM+pixel+цикл) · VALUE · v5 · claude",
+     "spend": 6359.24,
+     "purchases": 47,
+     "roas": 3.16,
+     "ctr": 1.37,
+     "cpa": 135.3
+    },
+    {
+     "name": "Новий набір реклами з ціллю «Продажі»",
+     "spend": 6207.04,
+     "purchases": 38,
+     "roas": 3.71,
+     "ctr": 1.23,
+     "cpa": 163.34
     },
     {
      "name": "Незавершені оплати 14д CRM + сайт почали оплату 7д · VALUE · claude",
-     "spend": 3784.45,
-     "purchases": 54,
-     "roas": 7.14,
-     "ctr": 1.89,
-     "cpa": 70.08
+     "spend": 4481.94,
+     "purchases": 59,
+     "roas": 6.53,
+     "ctr": 2.05,
+     "cpa": 75.97
     },
     {
-     "name": "DC|GPT_VADYM|DUO|NEW|COUNT|15.11",
-     "spend": 3499.44,
-     "purchases": 29,
-     "roas": 4.08,
-     "ctr": 1.33,
-     "cpa": 120.67
+     "name": "Лояльні 3+ без поточного циклу · VALUE · claude",
+     "spend": 3907.0,
+     "purchases": 40,
+     "roas": 4.45,
+     "ctr": 0.95,
+     "cpa": 97.67
     }
    ],
-   "adsets_window": "2026-11-09",
+   "adsets_window": "2026-11-10",
    "is_current": true
   }
  ],
@@ -14901,11 +14911,11 @@
     "desc": "70-80% бюджету. Головний драйвер. Увесь робочий креатив-пул (12-20). Highest Volume на старті → Highest Value, коли стабільно.",
     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
     "status": "ACTIVE",
-    "daily_budget": 9750,
-    "spend": 1239938,
-    "purchases": 18064,
-    "roas": 6.56,
-    "ctr": 1.68
+    "daily_budget": 6825,
+    "spend": 1247917,
+    "purchases": 18119,
+    "roas": 6.54,
+    "ctr": 1.67
    },
    {
     "id": "120249698605960624",
