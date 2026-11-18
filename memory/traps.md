@@ -303,4 +303,4 @@ Entries below were harvested from commit messages on 03.09.2026 (source: `git lo
 ## ad-watchdog-paused-with-issues
 **Симптом:** «⚠️ Оголошення не крутиться» про оголошення, яке ми самі поставили на паузу (офер-12.11 · База, 18.11.2026).
 **Причина:** Meta лишає `effective_status=WITH_ISSUES` і на PAUSED-оголошенні, якщо група «невалідна»; `find_issues` дивився лише effective_status.
-**Що робити:** тривога issue лише для `status=ACTIVE`. Окремо: сторож шле в TG напряму, повз cowork-notify, тому кожна його нова тривога тепер іде в owner-dm `{action:"autofix"}` (секрет `OD_WORKER_TOKEN`). Новий сторож, що шле в TG сам, мусить так само викликати autofix. 18.11.2026.
+**Що робити:** тривога issue лише для `status=ACTIVE`. Окремо: сторож шле в TG напряму, повз cowork-notify, тому кожна його нова тривога тепер іде в owner-dm `{action:"autofix"}` (секрет `AUTOFIX_TOKEN`, заголовок x-autofix-token: лише autofix). Новий сторож, що шле в TG сам, мусить так само викликати autofix. 18.11.2026.

@@ -176,16 +176,16 @@ def tg(text):
 # cowork-notify, тож autofix_watch.py їх не бачив. Тепер кожна нова тривога (перша відправка ключа) стає
 # задачею owner-dm {action:"autofix"}: сесія Claude розбирає й лагодить, ✅ власника для грошей діє як завжди.
 OD_URL = os.getenv("OD_URL", SB_URL + "/functions/v1/owner-dm")
-OD_TOKEN = os.getenv("OD_WORKER_TOKEN", "")
+OD_TOKEN = os.getenv("AUTOFIX_TOKEN", "")
 
 
 def autofix(text):
     if DRY_RUN or not OD_TOKEN:
-        log("  autofix: " + ("[DRY]" if DRY_RUN else "⚠ нема OD_WORKER_TOKEN"))
+        log("  autofix: " + ("[DRY]" if DRY_RUN else "⚠ нема AUTOFIX_TOKEN"))
         return False
     try:
         r = requests.post(OD_URL, json={"action": "autofix", "alert": text, "project": PROJECT},
-                          headers={"x-cd-worker": OD_TOKEN}, timeout=30)
+                          headers={"x-autofix-token": OD_TOKEN}, timeout=30)
         log(f"  autofix: {r.status_code} {r.text[:120]}")
         return r.ok
     except Exception as e:
