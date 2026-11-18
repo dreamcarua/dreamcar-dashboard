@@ -37,6 +37,23 @@ async function tgSend(text: string): Promise<void> {
   await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ chat_id: VADYM_TG, text, parse_mode: 'HTML', disable_web_page_preview: true }) });
 }
 
+// Auto-repair pipeline (owner-dm edge): failure alerts must also reach it. Fire-and-forget, never throws, never blocks the
+// Telegram alert. Secret AUTOFIX_TOKEN (Supabase function secret). Edge dedups 24h; call only from failure branches.
+const stripHtml = (s: string) => s.replace(/<[^>]+>/g, "").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
+function autofixReport(text: string): void {
+  try {
+    const tok = Deno.env.get("AUTOFIX_TOKEN");
+    if (!tok) return;
+    const p = fetch("https://wotghlaehnvxyeacznvv.supabase.co/functions/v1/owner-dm", {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-autofix-token": tok },
+      body: JSON.stringify({ alert: stripHtml(text).slice(0, 3500), project: "dreamcar" }),
+      signal: AbortSignal.timeout(10000),
+    }).then((r) => r.text()).catch(() => {});
+    (globalThis as any).EdgeRuntime?.waitUntil?.(p);
+  } catch (_) { /* never break the original alert */ }
+}
+
 async function shouldAlert(key: string, intervalHours: number): Promise<boolean> {
   const { data } = await sb.from('dashboard_settings').select('value').eq('key', `anomaly_alert_${key}`).maybeSingle();
   if (!data?.value) return true;
@@ -129,7 +146,7 @@ Deno.serve(async (req) => {
             ``,
             `<b>Рекламу НЕ чіпати.</b> Перевір прогін «ETL MySQL → Supabase» в Actions.`,
           ].join('\n');
-          if (!dry) { await tgSend(text); await markAlertSent('deals_stale'); }
+          if (!dry) { autofixReport(text); await tgSend(text); await markAlertSent('deals_stale'); }
           alerts.push({ key: 'deals_stale', text });
         }
       } else if (await shouldAlert('zero_revenue_2h', 4)) {
@@ -139,7 +156,11 @@ Deno.serve(async (req) => {
                   + `${checkoutOk === null ? 'невідомо' : checkoutOk + ' успішних оплат'}.`;
         const ai = await aiExplain(ctx);
         const text = `🔴 <b>ALERT — Revenue завис (2h нуль)</b>\n\n${ctx}${ai ? '\n\n' + ai : ''}`;
-        if (!dry) { await tgSend(text); await markAlertSent('zero_revenue_2h'); }
+        // Autofix gets only the technical framing (suspected checkout/data failure), never the business reading of the metric.
+        const afText = `DreamCar: suspected checkout/data failure. 0 UAH revenue in dashboard_deals for 2h while data is fresh (${stale ?? '?'} min). `
+                     + `Checkout tracker successful payments in the same 2h: ${checkoutOk === null ? 'unknown' : checkoutOk}. `
+                     + `Diagnose the checkout/payment flow and data pipeline; do not touch ads or budgets.`;
+        if (!dry) { autofixReport(afText); await tgSend(text); await markAlertSent('zero_revenue_2h'); }
         alerts.push({ key: 'zero_revenue_2h', text });
       }
     }

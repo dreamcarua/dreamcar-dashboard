@@ -3,6 +3,12 @@
 Read before the first edit of code, workflow or config. Add an entry whenever something cost more than 15 minutes of surprise, in the same commit as the fix.
 Entries below were harvested from commit messages on 03.09.2026 (source: `git log`, commits of 24.08.2026 by "Claude (DreamCar AI)"); each carries the commit date. Text in Ukrainian on purpose — people read this file.
 
+### New owner alerts must call autofix (18.11.2026)
+**Symptom:** an alert reached Vadym in Telegram, but nobody repaired it: the auto-repair pipeline only sees what it is handed.
+**Cause:** edge functions and Workers send to the owner's Telegram directly.
+**Do:** every new owner alert calls `autofixReport()` (POST to edge `owner-dm` at `https://<hq-ref>.supabase.co/functions/v1/owner-dm`, header `x-autofix-token`, Supabase function secret `AUTOFIX_TOKEN`, project `dreamcar`) from the failure branch only (not recoveries, digests, or business metrics such as roas_drop), fire-and-forget in try/catch with `AbortSignal.timeout(10000)`. Edge dedups 24h. Reference: `etl/edge/anomaly-alerter/index.ts`, `hq/supabase/functions/detect-*`.
+**Seen:** 18.11.2026
+
 ### Назви секретів у GitHub ≠ назви в `.env`
 **Symptom:** новий воркфлоу читає `secrets.TELEGRAM_BOT_TOKEN` — порожньо; власника просять поставити секрет, який уже є.
 **Cause:** у GitHub Secrets цього репо Telegram-секрети називаються `TG_BOT_TOKEN` і `TG_CHAT_ID` (так їх читає `meta-stats-sync.yml`); `.env.example` легасі-дашборду називає ті самі речі `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID`. Інші наявні секрети: `FB_ACCESS_TOKEN`, `IG_USER_ID`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `GH_TEAM_NOTIFY_TOKEN`. SMM-чат заданий літералом у `smm-content-watchdog.yml` (`SMM_CHAT_ID`).
