@@ -172,6 +172,27 @@ def tg(text):
     return r.ok
 
 
+# 18.11.2026 (Вадим: «всі ці помилки читаєш і автоматично виправляєш?»): сторож шле в TG напряму, повз
+# cowork-notify, тож autofix_watch.py їх не бачив. Тепер кожна нова тривога (перша відправка ключа) стає
+# задачею owner-dm {action:"autofix"}: сесія Claude розбирає й лагодить, ✅ власника для грошей діє як завжди.
+OD_URL = os.getenv("OD_URL", SB_URL + "/functions/v1/owner-dm")
+OD_TOKEN = os.getenv("OD_WORKER_TOKEN", "")
+
+
+def autofix(text):
+    if DRY_RUN or not OD_TOKEN:
+        log("  autofix: " + ("[DRY]" if DRY_RUN else "⚠ нема OD_WORKER_TOKEN"))
+        return False
+    try:
+        r = requests.post(OD_URL, json={"action": "autofix", "alert": text, "project": PROJECT},
+                          headers={"x-cd-worker": OD_TOKEN}, timeout=30)
+        log(f"  autofix: {r.status_code} {r.text[:120]}")
+        return r.ok
+    except Exception as e:
+        log(f"  ⚠ autofix: {e}")
+        return False
+
+
 def money(v):
     return f"{v:,.0f}".replace(",", " ")
 
@@ -190,6 +211,10 @@ def find_issues(ads, spend7):
     out = []
     for a in ads:
         if a.get("effective_status") not in ("WITH_ISSUES", "DISAPPROVED"):
+            continue
+        # 18.11.2026: оголошення, яке ми самі поставили на паузу, Meta лишає у WITH_ISSUES
+        # (офер-12.11 · База: PAUSED з 13.11, «нет основной группы»). Це не «не крутиться», а хибна тривога.
+        if a.get("status") and a.get("status") != "ACTIVE":
             continue
         camp = (a.get("campaign") or {}).get("effective_status")
         aset = (a.get("adset") or {}).get("effective_status")
@@ -468,6 +493,8 @@ def main():
                now_utc - datetime.fromisoformat(p["last_sent"]) >= timedelta(hours=REMIND_HOURS))
         send = due and (not quiet or a["kind"] == "overspend")
         sent = tg(a["message"]) if send else False
+        if sent and not (p or {}).get("sent_count"):
+            autofix(a["message"])
         upserts.append({"key": a["key"], "project": PROJECT, "kind": a["kind"], "entity_id": a["entity_id"],
                         "entity_name": a["entity_name"], "message": a["message"], "last_seen": now_utc.isoformat(),
                         "resolved_at": None,
