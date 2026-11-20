@@ -46,6 +46,8 @@ DRY_RUN = os.getenv("DRY_RUN", "") == "1"
 
 DAILY_CAP_UAH = float(os.getenv("DAILY_CAP_UAH", "20000"))
 OVERSPEND_X = float(os.getenv("OVERSPEND_X", "1.25"))
+# Кампанія акцій: без стелі за рішенням Вадима 17.11.2026 (15 000 ₴ = резерв, 0 витрат без груп акції).
+PROMO_CAMPAIGN_IDS = {"120253289274480624"}
 NO_BUY_SPEND = float(os.getenv("NO_BUY_SPEND", "1500"))
 STALL_MIN_BUDGET = float(os.getenv("STALL_MIN_BUDGET", "500"))
 STALL_AFTER_HOUR = int(os.getenv("STALL_AFTER_HOUR", "12"))
@@ -439,11 +441,11 @@ def main():
     parts, live_ids = [], {c["id"] for c in camps}
     for c in camps:
         c["_budget_uah"] = num(c.get("daily_budget")) / 100
-        if c["_budget_uah"] > 0:
+        if c["_budget_uah"] > 0 and c["id"] not in PROMO_CAMPAIGN_IDS:
             parts.append((c["name"], c["_budget_uah"]))
     for s in asets:
         b = num(s.get("daily_budget")) / 100
-        if b > 0 and s.get("campaign_id") in live_ids:
+        if b > 0 and s.get("campaign_id") in live_ids and s.get("campaign_id") not in PROMO_CAMPAIGN_IDS:
             parts.append((s["name"], b))
             for c in camps:
                 if c["id"] == s["campaign_id"]:
