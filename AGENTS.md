@@ -104,3 +104,5 @@ Two people ask for opposite things: pick one, name the conflict, tell Vadym.
 | Global rule | Here | Why | Since |
 |---|---|---|---|
 | "commit on your own to dreamcarua/*" | ad-money and CI-quota workflows need an explicit OK first | one workflow run here can spend real ad budget or the shared 3000-minute quota | 03.09.2026 |
+
+- ad_watchdog budget_cap: кампанія акцій DC|A Акції (120253289274480624) виключена з суми денних бюджетів (PROMO_CAMPAIGN_IDS), бо без стелі за рішенням Вадима 17.11.2026. Нова акційна кампанія = додати id туди (20.11.2026).
