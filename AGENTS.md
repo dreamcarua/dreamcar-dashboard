@@ -7,6 +7,7 @@ Owner: Vadym (vg@abrisart.com). Tasks are closed by whoever set them; we hand ov
 
 ## Rules
 
+- **Browser (owner rule 21.11.2026):** «кожен проект коли йому потрібен браузер, працює зі свого браузера окремого! і не заважає іншим, і створює чергу якщо треба і мені не заважає». Automation never drives the owner's Google Chrome (no Control Chrome, AppleScript/JXA, Claude in Chrome, Playwright `channel="chrome"`). Use the project's own background Chromium profile via `~/sysadmin-director/system/browser/agent-browser.mjs` (`withProfile` + lock; Python: same lock file format); profiles in `profiles.yaml` (sneco, dreamcar, abrisart, barpi, dayweft, whatif, vadym). Profile busy = wait in the queue, never take another project's browser. Sign-ins are done by the owner (`login <profile>`).
 - Talk to the user in Ukrainian (or the language they write in). Dates DD.MM.YYYY, time CET/CEST.
 - Do on your own: code edits, workflow edits, migrations under `etl/migrations/`, commits to `main` for non-destructive changes.
 - Always ask first: anything that changes CI minutes by more than ~10% (shared quota, 3000 min/month across all repos), repository visibility, ad campaigns money (`kill-all-ads`, `meta-scale`, `launch-*`, `delete-ads`), rotating any key.
