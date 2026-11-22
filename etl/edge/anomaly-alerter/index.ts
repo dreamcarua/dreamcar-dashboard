@@ -73,6 +73,13 @@ async function rangeAdsSpend(day: string): Promise<number> {
 
 // v6: наскільки свіжі дані про угоди. null = не вдалось прочитати.
 async function dealsStaleMinutes(): Promise<number | null> {
+  // 22.11.2026: міряємо час останнього УСПІШНОГО прогону ETL (heartbeat), а не вік останньої угоди:
+  // вночі нових угод годинами немає, і це давало хибний «дані застаріли» при справному ETL.
+  const hb = await sb.from('dashboard_settings').select('value').eq('key', 'etl_heartbeat').limit(1);
+  const hbVal = hb.data?.[0]?.value;
+  if (hbVal && !isNaN(new Date(hbVal).getTime())) {
+    return Math.round((Date.now() - new Date(hbVal).getTime()) / 60000);
+  }
   const { data } = await sb.from('dashboard_deals').select('created_at').order('created_at', { ascending: false }).limit(1);
   const last = data?.[0]?.created_at;
   if (!last) return null;

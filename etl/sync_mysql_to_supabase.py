@@ -369,6 +369,9 @@ def main():
         results['webhooks'] = sync_webhooks(args.mode, args.limit)
     if args.only in ('ads', 'all'):
         results['ads'] = sync_ads(args.mode, args.limit)
+    # Heartbeat: час успішного прогону (а не max(updated_at) угод) — за ним сторож міряє свіжість ETL.
+    if args.only == 'all':
+        set_last_sync('etl_heartbeat', datetime.now(timezone.utc).isoformat())
     log(f'=== ETL done: {results} ===')
 
 
