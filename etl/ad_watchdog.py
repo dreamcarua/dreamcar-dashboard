@@ -11,7 +11,7 @@ Ad Watchdog: сторож реклами DreamCar у Meta (фаза 0 «Цент
                   заархівований IG-пост (16.09: «Instagram Ads Archived Organic Media»).
   2. no_buy     — оголошення сьогодні витратило ≥ NO_BUY_SPEND ₴ і має 0 покупок за пікселем
                   (omni_purchase). Нагадування про kill-switch; real з CRM перевіряє людина або чек.
-  3. overspend  — спенд акаунта сьогодні > стеля × OVERSPEND_X (Meta може перебрати денний бюджет).
+  3. overspend  — спенд акаунта (без акційної кампанії) сьогодні > стеля × OVERSPEND_X (Meta може перебрати денний бюджет).
   4. budget_cap — сума денних бюджетів живих кампаній і груп > стеля (раз на день).
   5. stall      — жива кампанія з бюджетом ≥ STALL_MIN_BUDGET ₴ після STALL_AFTER_HOUR за Києвом
                   має 0 ₴ спенду сьогодні.
@@ -429,7 +429,9 @@ def main():
     by_camp = {}
     for r in ins_today:
         by_camp[r["campaign_id"]] = by_camp.get(r["campaign_id"], 0) + num(r.get("spend"))
-    found += find_overspend(spend_today, cap)
+    # акційна кампанія без стелі (рішення Вадима 17.11.2026): її спенд не рахуємо в перевитрату
+    spend_capped = spend_today - sum(v for k, v in by_camp.items() if k in PROMO_CAMPAIGN_IDS)
+    found += find_overspend(spend_capped, cap)
 
     # 3) бюджети живих кампаній (CBO) і груп (ABO)
     camps = fb_get_all(f"act_{ACCOUNT}/campaigns", {
