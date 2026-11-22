@@ -310,3 +310,6 @@ Entries below were harvested from commit messages on 03.09.2026 (source: `git lo
 **Симптом:** «⚠️ Оголошення не крутиться» про оголошення, яке ми самі поставили на паузу (офер-12.11 · База, 18.11.2026).
 **Причина:** Meta лишає `effective_status=WITH_ISSUES` і на PAUSED-оголошенні, якщо група «невалідна»; `find_issues` дивився лише effective_status.
 **Що робити:** тривога issue лише для `status=ACTIVE`. Окремо: сторож шле в TG напряму, повз cowork-notify, тому кожна його нова тривога тепер іде в owner-dm `{action:"autofix"}` (секрет `AUTOFIX_TOKEN`, заголовок x-autofix-token: лише autofix). Новий сторож, що шле в TG сам, мусить так само викликати autofix. 18.11.2026.
+
+## anomaly-alerter: «дані застаріли» вимірювало вік останньої угоди, а не ETL
+Симптом (22.11.2026 05:27): 🟠 «dashboard_deals не оновлювалась 129 хв» при зелених прогонах ETL. Причина: dealsStaleMinutes брав max(created_at) угод; вночі нових угод годинами нема, ETL при цьому справний. Що робити: свіжість ETL = ключ `etl_heartbeat` у dashboard_settings (пише sync_mysql_to_supabase.py на кожному повному прогоні); created_at лише fallback. Edge деплоїти через `supabase functions deploy anomaly-alerter --project-ref wotghlaehnvxyeacznvv --no-verify-jwt --use-api` (без --use-api бандл падає в /tmp).
