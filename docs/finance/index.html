@@ -690,13 +690,17 @@ tbody tr:hover td{background:rgba(227,6,19,.06)}
   <div class="modal-card">
     <h3 id="modalProjTitle">Нова витрата проєкту</h3>
     <div id="projError"></div>
-    <div class="field"><label>Проєкт *</label><select id="projLaunch"></select></div>
+    <div class="field"><label>Проєкт *</label><select id="projLaunch" onchange="projModeUpdate()"></select></div>
     <div class="field"><label>Категорія *</label><select id="projCat"></select></div>
     <div class="field"><label>Опис *</label><input id="projDesc" type="text" placeholder="що це за витрата"></div>
     <div class="field-row">
-      <div class="field"><label>Сума UAH *</label><input id="projAmount" type="number" min="0" step="0.01"></div>
-      <div class="field"><label>Дата *</label><input id="projDate" type="date"></div>
+      <div class="field"><label>Сума UAH *</label><input id="projAmount" type="number" min="0" step="0.01" oninput="projModeUpdate()"></div>
+      <div class="field"><label>Дата *</label>
+        <select id="projMode" onchange="projModeUpdate()" style="margin-bottom:6px"><option value="date">Одна дата</option><option value="whole">На весь проєкт</option></select>
+        <input id="projDate" type="date">
+      </div>
     </div>
+    <div id="projSpreadHint" class="muted" style="font-size:12px;margin:-4px 0 10px;display:none"></div>
     <div class="field-row">
       <div class="field"><label>Vendor</label><input id="projVendor" type="text" placeholder="хто виставив рахунок"></div>
       <div class="field"><label>Invoice #</label><input id="projInvoice" type="text" placeholder="номер інвойсу"></div>
@@ -839,7 +843,7 @@ async function loadAll() {
       sb.from('fixed_monthly_costs').select('*, cost_categories(code,name,icon,color)').order('valid_from', { ascending: false }),
       sb.from('percent_rates').select('*, cost_categories(code,name,icon,color)').order('valid_from', { ascending: false }),
       sb.from('project_costs').select('*, cost_categories(code,name,icon,color), launches(name,code)').order('spent_at', { ascending: false }).limit(500),
-      sb.from('launches').select('id,name,code,status,starts_on,prize_cost_uah,prize_purchased_at,prize_notes').order('starts_on', { ascending: false })
+      sb.from('launches').select('id,name,code,status,starts_on,ends_on,prize_cost_uah,prize_purchased_at,prize_notes').order('starts_on', { ascending: false })
     ]);
     if (cats.error) throw cats.error;
     if (fixed.error) throw fixed.error;
@@ -1599,7 +1603,7 @@ function renderProject() {
       <td><span class="cat-pill">${r.launches?.name ? esc(r.launches.name) : '<span class="muted">no launch</span>'}</span></td>
       <td>${r.cost_categories ? `<span class="cat-pill">${r.cost_categories.icon||''} ${esc(r.cost_categories.name).slice(0,16)}</span>` : '—'}</td>
       <td><b>${fmtUAH(r.amount_uah)}</b></td>
-      <td>${fmtDate(r.spent_at)}</td>
+      <td>${r.whole_project ? projWholeLabel(r.launch_id) : fmtDate(r.spent_at)}</td>
       <td class="muted">${esc(r.vendor || '—')}</td>
       <td class="act">
         <button class="iconbtn" title="Редагувати" onclick="editProject('${r.id}')">✎</button>
@@ -1838,7 +1842,9 @@ function openProjectModal() {
   document.getElementById('modalProjTitle').textContent = 'Нова витрата проєкту';
   ['projLaunch','projCat','projDesc','projAmount','projVendor','projInvoice'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('projDate').value = new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Kyiv' });
+  document.getElementById('projMode').value = 'date';
   showErr('projError', null);
+  projModeUpdate();
   openModal('modalProj');
 }
 function editProject(id) {
@@ -1853,21 +1859,55 @@ function editProject(id) {
   document.getElementById('projDate').value = p.spent_at;
   document.getElementById('projVendor').value = p.vendor || '';
   document.getElementById('projInvoice').value = p.invoice_number || '';
+  document.getElementById('projMode').value = p.whole_project ? 'whole' : 'date';
   showErr('projError', null);
+  projModeUpdate();
   openModal('modalProj');
 }
+// 23.11.2026 (запит Давида, ✅ Вадим): витрата «на весь проєкт» — у денному P&L ділиться порівну на дні проєкту
+// (launches.starts_on..ends_on, копійки в останній день, рахує БД: project_costs_daily). Один рядок на витрату.
+function projSpan(launchId) {
+  const l = DATA.launches.find(x => x.id === launchId);
+  if (!l || !l.starts_on || !l.ends_on) return null;
+  const days = Math.round((Date.parse(l.ends_on + 'T00:00:00Z') - Date.parse(l.starts_on + 'T00:00:00Z')) / 86400000) + 1;
+  return days >= 1 ? { from: l.starts_on, to: l.ends_on, days } : null;
+}
+function projWholeLabel(launchId) {
+  const sp = projSpan(launchId);
+  return sp ? `на весь проєкт (${sp.days} дн.)` : 'на весь проєкт';
+}
+function projModeUpdate() {
+  const whole = document.getElementById('projMode').value === 'whole';
+  const hint = document.getElementById('projSpreadHint');
+  document.getElementById('projDate').style.display = whole ? 'none' : '';
+  if (!whole) { hint.style.display = 'none'; return; }
+  hint.style.display = '';
+  const sp = projSpan(document.getElementById('projLaunch').value);
+  if (!sp) { hint.textContent = document.getElementById('projLaunch').value ? 'У проєкту немає дат старту і фіналу: задайте дати проєкту.' : 'Вибери проєкт: суму поділимо порівну на його дні.'; return; }
+  const amt = parseFloat(document.getElementById('projAmount').value);
+  const per = amt > 0 ? Math.round(amt / sp.days * 100) / 100 : null;
+  hint.textContent = (per !== null ? `≈ ${per.toLocaleString('uk-UA', { minimumFractionDigits: 0, maximumFractionDigits: 2 })} грн/день × ` : '') +
+    `${sp.days} дн. (${fmtDate(sp.from)}–${fmtDate(sp.to)}). Зміняться дати проєкту, поділ перерахується сам.`;
+}
+window.projModeUpdate = projModeUpdate;
 async function saveProject() {
   const launch_id = document.getElementById('projLaunch').value;
   const category_id = document.getElementById('projCat').value;
   const description = document.getElementById('projDesc').value.trim();
   const amount_uah = parseFloat(document.getElementById('projAmount').value);
-  const spent_at = document.getElementById('projDate').value;
+  const whole_project = document.getElementById('projMode').value === 'whole';
+  let spent_at = document.getElementById('projDate').value;
   if (!launch_id) return showErr('projError', 'Вибери проєкт');
+  if (whole_project) {
+    const sp = projSpan(launch_id);
+    if (!sp) return showErr('projError', 'У проєкту немає дат старту і фіналу: задайте дати проєкту');
+    spent_at = sp.from;
+  }
   if (!category_id) return showErr('projError', 'Вибери категорію');
   if (!description) return showErr('projError', 'Введи опис');
   if (!(amount_uah > 0)) return showErr('projError', 'Сума > 0');
   if (!spent_at) return showErr('projError', 'Введи дату');
-  const payload = { launch_id, category_id, description, amount_uah, spent_at,
+  const payload = { launch_id, category_id, description, amount_uah, spent_at, whole_project,
     vendor: document.getElementById('projVendor').value.trim() || null,
     invoice_number: document.getElementById('projInvoice').value.trim() || null };
   try {
