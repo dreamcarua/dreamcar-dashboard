@@ -60,6 +60,12 @@ SILENCE_HOURS = {
     "event-run": float(os.getenv("SILENCE_EVENT_RUN_H", "9")),        # найдовша пауза між запусками 7 год
     "event-stop": float(os.getenv("SILENCE_EVENT_STOP_H", "26")),     # раз на добу
 }
+# 24.11.2026 (Вадим: акції 6 на день, звичайний день 2, без проєкту 0): express запускає локальний гейт
+# ad-director tools/express_gate.py. Слоти й правило «день акції» дзеркалять його SLOTS_*: міняти разом.
+EXPRESS_SLOTS_NORMAL = ("08:40", "16:40")
+EXPRESS_SLOTS_EVENT = ("08:40", "11:40", "14:40", "16:40", "19:40", "22:40")
+EXPRESS_PROMO_KINDS = "offer,promo,x2,final"   # класи windowed_promo/closing профілю ad-director
+EXPRESS_GRACE_MIN = 90                         # запуск триває до ~50 хв, Mac може прокинутись пізніше
 STUCK_HOURS = float(os.getenv("STUCK_HOURS", "1"))
 PROJECT = "dreamcar"
 
@@ -280,13 +286,46 @@ def find_stall(campaigns, spend_by_campaign, now_kyiv):
     return out
 
 
-def find_silence(note_rows, now_utc, limits=None, idle=False):
+def express_limit_h(now_utc, event_days):
+    """Скільки годин може мовчати express зараз: від останнього слота, що мав відпрацювати
+    (не пізніше now - EXPRESS_GRACE_MIN), мінус 15 хв. event_days: set дат (Київ) з акцією."""
+    now_k = now_utc.astimezone(KYIV)
+    due = None
+    for back in (1, 0):
+        day = (now_k - timedelta(days=back)).date()
+        for s in (EXPRESS_SLOTS_EVENT if day in event_days else EXPRESS_SLOTS_NORMAL):
+            h, m = map(int, s.split(":"))
+            at = datetime(day.year, day.month, day.day, h, m, tzinfo=KYIV)
+            if at <= now_k - timedelta(minutes=EXPRESS_GRACE_MIN):
+                due = at
+    if due is None:
+        return None
+    return (now_k - due).total_seconds() / 3600 + 0.25
+
+
+def express_event_days(events, now_utc):
+    """Дати (Київ) учора й сьогодні, на які припадає подія з events (starts_at, ends_at)."""
+    now_k = now_utc.astimezone(KYIV)
+    out = set()
+    for back in (1, 0):
+        day = (now_k - timedelta(days=back)).date()
+        lo = datetime(day.year, day.month, day.day, tzinfo=KYIV)
+        hi = lo + timedelta(days=1)
+        for e in events:
+            if datetime.fromisoformat(e["starts_at"]) < hi and datetime.fromisoformat(e["ends_at"]) > lo:
+                out.add(day)
+    return out
+
+
+def find_silence(note_rows, now_utc, limits=None, idle=False, express_h=None):
     """note_rows: рядки ad_journal action=note з полями reason, at. Тривога, коли найновіший
     рядок режиму старший за поріг. Режим без жодного рядка пропускаємо: його ще не запускали."""
     if limits is None:
         limits = dict(SILENCE_HOURS)
         if not 10 <= now_utc.astimezone(KYIV).hour <= 21:  # уночі express не запускається
             limits["express-check"] = float(os.getenv("SILENCE_EXPRESS_NIGHT_H", "13"))
+        if express_h is not None:
+            limits["express-check"] = express_h  # за розкладом гейта (24.11.2026), годинні пороги вище лише запасні
     last = {}
     for r in note_rows:
         at = datetime.fromisoformat(r["at"])
@@ -480,7 +519,14 @@ def main():
         notes = sb_get("ad_journal", f"project=eq.{PROJECT}&action=eq.note&select=reason,at&order=at.desc&limit=300")
         stuck = sb_get("ad_journal", f"project=eq.{PROJECT}&status=eq.approved&select=id,action,entity_name,at")
         closers = sb_get("ad_journal", CLOSERS_QUERY)
-        silent_found = find_silence(notes, now_utc, idle=(spend_today <= 0 and budget_sum <= 0)) + find_stuck(stuck, now_utc, closed_ids=closed_by_notes(closers))
+        try:
+            k0 = (now_utc.astimezone(KYIV) - timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+            evs_x = sb_get("ad_events", f"project=eq.{PROJECT}&status=neq.cancelled&kind=in.({EXPRESS_PROMO_KINDS})"
+                                        f"&ends_at=gt.{k0.astimezone(timezone.utc):%Y-%m-%dT%H:%M:%SZ}&select=starts_at,ends_at")
+            express_h = express_limit_h(now_utc, express_event_days(evs_x, now_utc))
+        except Exception as e:
+            log(f"  ⚠ розклад express: {e}"); express_h = None
+        silent_found = find_silence(notes, now_utc, idle=(spend_today <= 0 and budget_sum <= 0), express_h=express_h) + find_stuck(stuck, now_utc, closed_ids=closed_by_notes(closers))
         found += silent_found
         log(f"  журнал: рядків запуску {len(notes)} · approved {len(stuck)} · закривачів {len(closers)} · тривог {len(silent_found)}")
     except Exception as e:
