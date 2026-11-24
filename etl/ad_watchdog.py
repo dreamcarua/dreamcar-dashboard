@@ -280,7 +280,7 @@ def find_stall(campaigns, spend_by_campaign, now_kyiv):
     return out
 
 
-def find_silence(note_rows, now_utc, limits=None):
+def find_silence(note_rows, now_utc, limits=None, idle=False):
     """note_rows: рядки ad_journal action=note з полями reason, at. Тривога, коли найновіший
     рядок режиму старший за поріг. Режим без жодного рядка пропускаємо: його ще не запускали."""
     if limits is None:
@@ -294,6 +294,8 @@ def find_silence(note_rows, now_utc, limits=None):
             last[r["reason"]] = at
     out = []
     for reason, at in sorted(last.items()):
+        if idle and reason == "express-check":
+            continue  # 24.11.2026: коли продаж закрито й витрат немає, express за дизайном не пише run-рядок (хмарний запуск іде кожні 3 год), мовчання не збій
         age_h = (now_utc - at).total_seconds() / 3600
         if age_h > limits[reason]:
             out.append({"key": f"silent:{reason}", "kind": "silent", "entity_id": reason, "entity_name": reason,
@@ -478,7 +480,7 @@ def main():
         notes = sb_get("ad_journal", f"project=eq.{PROJECT}&action=eq.note&select=reason,at&order=at.desc&limit=300")
         stuck = sb_get("ad_journal", f"project=eq.{PROJECT}&status=eq.approved&select=id,action,entity_name,at")
         closers = sb_get("ad_journal", CLOSERS_QUERY)
-        silent_found = find_silence(notes, now_utc) + find_stuck(stuck, now_utc, closed_ids=closed_by_notes(closers))
+        silent_found = find_silence(notes, now_utc, idle=(spend_today <= 0 and budget_sum <= 0)) + find_stuck(stuck, now_utc, closed_ids=closed_by_notes(closers))
         found += silent_found
         log(f"  журнал: рядків запуску {len(notes)} · approved {len(stuck)} · закривачів {len(closers)} · тривог {len(silent_found)}")
     except Exception as e:
