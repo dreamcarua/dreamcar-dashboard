@@ -1119,7 +1119,7 @@ Object.assign(window,{loadAll,openTxModal,editTransaction,saveTx,delTx,openTrans
 // ---- banks (creds) ----
 let BANKS=[], editBankRow=null;
 async function loadBanks(){
-  try{ const r=await sb.from('kasa_bank_creds').select('*').order('bank').order('label');
+  try{ const r=await sb.from('kasa_bank_creds').select('id,bank,label,privat_id,is_active,synced_from,last_inc,last_status,created_at,owner_name,token_last4').order('bank').order('label');
     if(r.error) throw r.error; BANKS=r.data||[]; renderBanks();
   }catch(e){ /* нема таблиці/доступу */ }
 }
@@ -1129,7 +1129,7 @@ function renderBanks(){
   tb.innerHTML=BANKS.length?BANKS.map(b=>`<tr>
     <td style="text-align:left"><span class="badge ${b.bank==='monobank'?'mono':'privat'}">${esc(b.bank)}</span></td>
     <td>${esc(b.label)}</td>
-    <td class="muted">${b.token?'\u2022\u2022\u2022'+esc(String(b.token).slice(-4)):'\u2014'}</td>
+    <td class="muted">${b.token_last4?'\u2022\u2022\u2022'+esc(String(b.token_last4)):'\u2014'}</td>
     <td class="muted">${esc(b.privat_id||'\u2014')}</td>
     <td>${b.is_active?'\u2705':'\u26d4'}</td>
     <td class="muted" style="font-size:11px">${esc(b.last_status||'\u2014')}${b.last_inc?'<br>'+fmtDate(String(b.last_inc).slice(0,10)):''}</td>
@@ -1139,18 +1139,19 @@ function renderBanks(){
 function bankToggle(){ const isP=document.getElementById('bankBank').value==='privatbank';
   document.getElementById('bankPidWrap').style.display=isP?'block':'none';
   document.getElementById('bankTokLbl').textContent=isP?'Автоклієнт Token *':'Особистий токен *'; }
-function openBank(){ editBankRow=null; document.getElementById('bankTitle').textContent='Нове підключення'; showErr('bankErr',null);
+function openBank(){ editBankRow=null; document.getElementById('bankToken').placeholder=''; document.getElementById('bankTitle').textContent='Нове підключення'; showErr('bankErr',null);
   document.getElementById('bankBank').value='monobank'; document.getElementById('bankLabel').value=''; document.getElementById('bankPid').value=''; document.getElementById('bankToken').value=''; document.getElementById('bankOwner').value=''; document.getElementById('bankActive').value='true'; bankToggle(); openModal('modalBank'); }
 function editBank(id){ const b=BANKS.find(x=>x.id===id); if(!b) return; editBankRow=b;
   document.getElementById('bankTitle').textContent='Редагувати: '+b.label; showErr('bankErr',null);
-  document.getElementById('bankBank').value=b.bank; document.getElementById('bankLabel').value=b.label; document.getElementById('bankPid').value=b.privat_id||''; document.getElementById('bankToken').value=b.token||''; document.getElementById('bankOwner').value=b.owner_name||''; document.getElementById('bankActive').value=String(b.is_active); bankToggle(); openModal('modalBank'); }
+  document.getElementById('bankBank').value=b.bank; document.getElementById('bankLabel').value=b.label; document.getElementById('bankPid').value=b.privat_id||''; document.getElementById('bankToken').value=''; document.getElementById('bankToken').placeholder='\u2022\u2022\u2022'+(b.token_last4||'')+' \u2014 \u0437\u0430\u043b\u0438\u0448 \u043f\u043e\u0440\u043e\u0436\u043d\u0456\u043c, \u0449\u043e\u0431 \u043d\u0435 \u043c\u0456\u043d\u044f\u0442\u0438'; document.getElementById('bankOwner').value=b.owner_name||''; document.getElementById('bankActive').value=String(b.is_active); bankToggle(); openModal('modalBank'); }
 async function saveBank(){
   const bank=document.getElementById('bankBank').value, label=document.getElementById('bankLabel').value.trim();
   const token=document.getElementById('bankToken').value.trim(), pid=document.getElementById('bankPid').value.trim();
   if(!label) return showErr('bankErr','Вкажи лейбл (ФОП)');
-  if(!token) return showErr('bankErr','Встав токен');
+  if(!token && !editBankRow) return showErr('bankErr','Встав токен');
   if(bank==='privatbank' && !pid) return showErr('bankErr','Privat потребує Автоклієнт ID');
-  const payload={bank,label,token,privat_id:bank==='privatbank'?pid:null,owner_name:document.getElementById('bankOwner').value.trim()||null,is_active:document.getElementById('bankActive').value==='true'};
+  const payload={bank,label,privat_id:bank==='privatbank'?pid:null,owner_name:document.getElementById('bankOwner').value.trim()||null,is_active:document.getElementById('bankActive').value==='true'};
+  if(token) payload.token=token; // 25.11.2026: token is write-only from the browser
   try{ const r=editBankRow?await sb.from('kasa_bank_creds').update(payload).eq('id',editBankRow.id):await sb.from('kasa_bank_creds').insert(payload);
     if(r.error) throw r.error; closeModal('modalBank'); await loadBanks(); }catch(e){ showErr('bankErr',e.message||e); }
 }
