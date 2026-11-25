@@ -36,7 +36,7 @@ def kyiv_to_utc_iso(dt):
     return dt.astimezone(UTC_TZ).isoformat()
 
 # ===== CONFIG =====
-MYSQL_HOST = os.getenv('MYSQL_HOST', 'fincheck.mysql.network')
+MYSQL_HOST = os.getenv('MYSQL_HOST', '')
 MYSQL_PORT = int(os.getenv('MYSQL_PORT', 10145))
 MYSQL_DB   = os.getenv('MYSQL_DB',   'dreamcar_utm')
 MYSQL_USER = os.getenv('MYSQL_USER', 'dreamcar_utm')
