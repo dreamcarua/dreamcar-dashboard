@@ -84,7 +84,7 @@ Settings → Pages → Enforce HTTPS ✓
                   │ dreamcar.ai-platform.space/...webhook_crm.php        │
                   │ dreamcar.ai-platform.space/...handler_bulk.php       │
                   │ ↓                                                    │
-                  │ MySQL fincheck.mysql.network:10145 (dreamcar_utm)    │
+                  │ MySQL (host in GitHub secrets) (dreamcar_utm)        │
                   └──────────────────────────────────────────────────────┘
                                           ▲
                                           │ READ-ONLY ETL (Phase 4, наступний крок)
@@ -111,7 +111,7 @@ Settings → Pages → Enforce HTTPS ✓
 
 ## Що далі (Phase 4 — ETL)
 
-Скрипт що читає MySQL `fincheck.mysql.network:10145` (READ-ONLY) → пише у Supabase `dashboard_deals`/`dashboard_webhooks`/`dashboard_ads_data`. Запускається через GitHub Action раз на годину.
+Скрипт що читає MySQL (хост у GitHub secrets, READ-ONLY) → пише у Supabase `dashboard_deals`/`dashboard_webhooks`/`dashboard_ads_data`. Запускається через GitHub Action раз на годину.
 
 Це дозволить побачити **справжні** дані угод/Ads без переключення webhook URLs.
 
