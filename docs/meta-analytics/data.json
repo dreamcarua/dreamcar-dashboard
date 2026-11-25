@@ -1,87 +1,56 @@
 {
- "generated": "2026-11-24T05:37:46.611578+00:00",
+ "generated": "2026-11-25T05:36:45.789485+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-11-23",
-  "prev_date": "2026-11-22",
-  "spend": 236.14,
-  "impressions": 804,
-  "clicks": 29,
-  "purchases": 27,
-  "pixel_roas": 49.8,
-  "cpa": 8.75,
-  "frequency": 1.05,
-  "real_ad_revenue": 109287,
-  "real_ad_roas": 462.81,
+  "date": "2026-11-24",
+  "prev_date": "2026-11-23",
+  "spend": 0,
+  "impressions": 0,
+  "clicks": 0,
+  "purchases": 0,
+  "pixel_roas": 0.0,
+  "cpa": null,
+  "frequency": 0.0,
+  "real_ad_revenue": 0,
+  "real_ad_roas": null,
   "deltas": {
-   "spend": -99.5,
-   "pixel_roas": 848.6,
-   "purchases": -95.4,
-   "cpa": -89.7
+   "spend": -100.0,
+   "pixel_roas": -100.0,
+   "purchases": -100.0,
+   "cpa": null
   },
   "week": {
    "this": {
-    "from": "2026-11-17",
-    "to": "2026-11-23",
-    "spend": 291034,
-    "purchases": 4124,
-    "pixel_roas": 6.11,
-    "cpa": 70.57,
-    "real_revenue": 807161,
-    "real_roas": 2.77
+    "from": "2026-11-18",
+    "to": "2026-11-24",
+    "spend": 268151,
+    "purchases": 3717,
+    "pixel_roas": 5.96,
+    "cpa": 72.14,
+    "real_revenue": 766040,
+    "real_roas": 2.86
    },
    "prev": {
-    "from": "2026-11-10",
-    "to": "2026-11-16",
-    "spend": 166268,
-    "purchases": 2053,
-    "pixel_roas": 6.42,
-    "cpa": 80.99,
-    "real_revenue": 490436,
-    "real_roas": 2.95
+    "from": "2026-11-11",
+    "to": "2026-11-17",
+    "spend": 167612,
+    "purchases": 2108,
+    "pixel_roas": 6.27,
+    "cpa": 79.51,
+    "real_revenue": 514469,
+    "real_roas": 3.07
    },
    "deltas": {
-    "spend": 75.0,
-    "real_roas": -6.1,
-    "pixel_roas": -4.8,
-    "cpa": -12.9,
-    "purchases": 100.9
+    "spend": 60.0,
+    "real_roas": -6.8,
+    "pixel_roas": -4.9,
+    "cpa": -9.3,
+    "purchases": 76.3
    }
   },
-  "real_by_placement": [
-   {
-    "placement": "instagram_feed",
-    "revenue": 38098,
-    "paid": 100
-   },
-   {
-    "placement": "instagram_reels",
-    "revenue": 21948,
-    "paid": 50
-   },
-   {
-    "placement": "instagram_stories",
-    "revenue": 20921,
-    "paid": 53
-   },
-   {
-    "placement": "facebook_mobile_feed",
-    "revenue": 19249,
-    "paid": 47
-   },
-   {
-    "placement": "facebook_mobile_reels",
-    "revenue": 7577,
-    "paid": 21
-   },
-   {
-    "placement": "facebook_stories",
-    "revenue": 1494,
-    "paid": 6
-   }
-  ],
+  "real_by_placement": [],
   "active_cycles": [],
   "top_creatives": [],
   "weak_creatives": []
@@ -1268,72 +1237,7 @@
      "cpa": null
     }
    ],
-   "adsets": [
-    {
-     "name": "Новий набір реклами з ціллю «Продажі»",
-     "spend": 164966.36,
-     "purchases": 4733,
-     "roas": 6.08,
-     "ctr": 2.0,
-     "cpa": 34.85
-    },
-    {
-     "name": "Новий набір реклами з ціллю «Продажі»",
-     "spend": 134710.86,
-     "purchases": 1983,
-     "roas": 0.64,
-     "ctr": 1.42,
-     "cpa": 67.93
-    },
-    {
-     "name": "Новий набір реклами з ціллю «Продажі»",
-     "spend": 78892.4,
-     "purchases": 1985,
-     "roas": 5.85,
-     "ctr": 1.41,
-     "cpa": 39.74
-    },
-    {
-     "name": "Новий набір реклами з ціллю «Продажі»",
-     "spend": 72610.39,
-     "purchases": 1186,
-     "roas": 0.3,
-     "ctr": 1.72,
-     "cpa": 61.22
-    },
-    {
-     "name": "Новий набір реклами з ціллю «Продажі»",
-     "spend": 67651.2,
-     "purchases": 2055,
-     "roas": 6.01,
-     "ctr": 2.35,
-     "cpa": 32.92
-    },
-    {
-     "name": "Новий набір реклами з ціллю «Продажі»",
-     "spend": 61282.33,
-     "purchases": 690,
-     "roas": 3.87,
-     "ctr": 1.3,
-     "cpa": 88.81
-    },
-    {
-     "name": "geo-ua_pl-all_audience-lal-interest-car_male_20-50_20250808",
-     "spend": 56061.21,
-     "purchases": 547,
-     "roas": 4.52,
-     "ctr": 1.23,
-     "cpa": 102.49
-    },
-    {
-     "name": "Новий набір реклами з ціллю «Продажі»",
-     "spend": 54982.03,
-     "purchases": 1949,
-     "roas": 12.85,
-     "ctr": 2.77,
-     "cpa": 28.21
-    }
-   ],
+   "adsets": [],
    "adsets_window": "2025-04-02",
    "is_current": false
   },
@@ -13683,9 +13587,9 @@
    "car_model": "Range Rover Autobiography",
    "date_from": "2026-10-30",
    "date_to": "2026-11-22",
-   "spend": 669706.39,
-   "impressions": 3662223,
-   "clicks": 59209,
+   "spend": 669708.48,
+   "impressions": 3662234,
+   "clicks": 59212,
    "ctr": 1.62,
    "reach": 463183,
    "frequency": 7.91,
@@ -13706,7 +13610,7 @@
      ],
      [
       "facebook",
-      130203.91,
+      130206.0,
       1927,
       6.92
      ],
@@ -13732,13 +13636,13 @@
     "age": [
      [
       "25-34",
-      335627.19,
+      335627.61,
       4286,
       6.07
      ],
      [
       "35-44",
-      216870.21,
+      216871.78,
       2980,
       6.64
      ],
@@ -13750,7 +13654,7 @@
      ],
      [
       "45-54",
-      46202.13,
+      46202.23,
       554,
       5.43
      ],
@@ -13776,13 +13680,13 @@
     "gender": [
      [
       "male",
-      591563.25,
+      591565.2,
       7801,
       6.29
      ],
      [
       "female",
-      76815.9,
+      76816.04,
       829,
       4.76
      ],
@@ -13796,13 +13700,13 @@
     "device": [
      [
       "iphone",
-      467497.05,
+      467497.23,
       5647,
       5.85
      ],
      [
       "android_smartphone",
-      200420.44,
+      200422.35,
       2990,
       6.75
      ],
@@ -14444,9 +14348,9 @@
     {
      "name": "офер-22.11-final-captions-d75544-video · buyers · claude",
      "ad_id": "120253410973230624",
-     "spend": 4061.57,
+     "spend": 4061.87,
      "purchases": 88,
-     "roas": 10.34,
+     "roas": 10.33,
      "ctr": 3.84
     },
     {
@@ -14798,7 +14702,7 @@
     },
     {
      "date": "2026-11-22",
-     "spend": 50503.75,
+     "spend": 50505.84,
      "purchases": 592,
      "roas": 5.25,
      "cpa": 85.31
@@ -14807,7 +14711,7 @@
    "adsets": [
     {
      "name": "Broad · UA 18-45 · A+A · VALUE · інкремент",
-     "spend": 208984.05,
+     "spend": 208985.05,
      "purchases": 2691,
      "roas": 6.76,
      "ctr": 1.55,
@@ -14815,7 +14719,7 @@
     },
     {
      "name": "DC|12 НОВИХ · UA broad · без покупців (всі) · claude",
-     "spend": 108360.54,
+     "spend": 108360.65,
      "purchases": 1025,
      "roas": 4.16,
      "ctr": 1.65,
@@ -14884,7 +14788,7 @@
     "name": "DC | 01 Ядро · Advantage+ Sales (broad)",
     "status": "PAUSED",
     "daily_budget": 4778,
-    "spend": 1280961,
+    "spend": 1280962,
     "purchases": 18541,
     "roas": 6.55,
     "ctr": 1.67
