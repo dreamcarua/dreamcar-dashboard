@@ -1,53 +1,53 @@
 {
- "generated": "2026-11-25T05:36:45.789485+00:00",
+ "generated": "2026-11-26T15:38:11.575997+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-11-24",
-  "prev_date": "2026-11-23",
+  "date": "2026-11-25",
+  "prev_date": "2026-11-24",
   "spend": 0,
-  "impressions": 0,
-  "clicks": 0,
-  "purchases": 0,
-  "pixel_roas": 0.0,
+  "impressions": null,
+  "clicks": null,
+  "purchases": null,
+  "pixel_roas": null,
   "cpa": null,
-  "frequency": 0.0,
+  "frequency": null,
   "real_ad_revenue": 0,
   "real_ad_roas": null,
   "deltas": {
-   "spend": -100.0,
-   "pixel_roas": -100.0,
-   "purchases": -100.0,
+   "spend": null,
+   "pixel_roas": null,
+   "purchases": null,
    "cpa": null
   },
   "week": {
    "this": {
-    "from": "2026-11-18",
-    "to": "2026-11-24",
-    "spend": 268151,
-    "purchases": 3717,
-    "pixel_roas": 5.96,
-    "cpa": 72.14,
-    "real_revenue": 766040,
-    "real_roas": 2.86
+    "from": "2026-11-19",
+    "to": "2026-11-25",
+    "spend": 227716,
+    "purchases": 3309,
+    "pixel_roas": 6.31,
+    "cpa": 68.82,
+    "real_revenue": 701991,
+    "real_roas": 3.08
    },
    "prev": {
-    "from": "2026-11-11",
-    "to": "2026-11-17",
-    "spend": 167612,
-    "purchases": 2108,
-    "pixel_roas": 6.27,
-    "cpa": 79.51,
-    "real_revenue": 514469,
-    "real_roas": 3.07
+    "from": "2026-11-12",
+    "to": "2026-11-18",
+    "spend": 195789,
+    "purchases": 2316,
+    "pixel_roas": 5.76,
+    "cpa": 84.54,
+    "real_revenue": 489517,
+    "real_roas": 2.5
    },
    "deltas": {
-    "spend": 60.0,
-    "real_roas": -6.8,
-    "pixel_roas": -4.9,
-    "cpa": -9.3,
-    "purchases": 76.3
+    "spend": 16.3,
+    "real_roas": 23.2,
+    "pixel_roas": 9.5,
+    "cpa": -18.6,
+    "purchases": 42.9
    }
   },
   "real_by_placement": [],
@@ -1237,7 +1237,72 @@
      "cpa": null
     }
    ],
-   "adsets": [],
+   "adsets": [
+    {
+     "name": "Новий набір реклами з ціллю «Продажі»",
+     "spend": 164966.36,
+     "purchases": 4733,
+     "roas": 6.08,
+     "ctr": 2.0,
+     "cpa": 34.85
+    },
+    {
+     "name": "Новий набір реклами з ціллю «Продажі»",
+     "spend": 134710.86,
+     "purchases": 1983,
+     "roas": 0.64,
+     "ctr": 1.42,
+     "cpa": 67.93
+    },
+    {
+     "name": "Новий набір реклами з ціллю «Продажі»",
+     "spend": 78892.4,
+     "purchases": 1985,
+     "roas": 5.85,
+     "ctr": 1.41,
+     "cpa": 39.74
+    },
+    {
+     "name": "Новий набір реклами з ціллю «Продажі»",
+     "spend": 72610.39,
+     "purchases": 1186,
+     "roas": 0.3,
+     "ctr": 1.72,
+     "cpa": 61.22
+    },
+    {
+     "name": "Новий набір реклами з ціллю «Продажі»",
+     "spend": 67651.2,
+     "purchases": 2055,
+     "roas": 6.01,
+     "ctr": 2.35,
+     "cpa": 32.92
+    },
+    {
+     "name": "Новий набір реклами з ціллю «Продажі»",
+     "spend": 61282.33,
+     "purchases": 690,
+     "roas": 3.87,
+     "ctr": 1.3,
+     "cpa": 88.81
+    },
+    {
+     "name": "geo-ua_pl-all_audience-lal-interest-car_male_20-50_20250808",
+     "spend": 56061.21,
+     "purchases": 547,
+     "roas": 4.52,
+     "ctr": 1.23,
+     "cpa": 102.49
+    },
+    {
+     "name": "Новий набір реклами з ціллю «Продажі»",
+     "spend": 54982.03,
+     "purchases": 1949,
+     "roas": 12.85,
+     "ctr": 2.77,
+     "cpa": 28.21
+    }
+   ],
    "adsets_window": "2025-04-02",
    "is_current": false
   },
