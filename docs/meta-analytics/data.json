@@ -1,11 +1,11 @@
 {
- "generated": "2026-11-26T15:38:11.575997+00:00",
+ "generated": "2026-11-27T15:29:45.936897+00:00",
  "account": "4136058269783354",
  "currency": "UAH",
  "note": "Реал ROAS = виручка ЛИШЕ від реклами Meta — по placement-мітках utm_medium (facebook_*/instagram_*). Виключено органіку (account/post/stories), Telegram, email.",
  "daily": {
-  "date": "2026-11-25",
-  "prev_date": "2026-11-24",
+  "date": "2026-11-26",
+  "prev_date": "2026-11-25",
   "spend": 0,
   "impressions": null,
   "clicks": null,
@@ -23,35 +23,37 @@
   },
   "week": {
    "this": {
-    "from": "2026-11-19",
-    "to": "2026-11-25",
-    "spend": 227716,
-    "purchases": 3309,
-    "pixel_roas": 6.31,
-    "cpa": 68.82,
-    "real_revenue": 701991,
-    "real_roas": 3.08
+    "from": "2026-11-20",
+    "to": "2026-11-26",
+    "spend": 172327,
+    "purchases": 2452,
+    "pixel_roas": 6.44,
+    "cpa": 70.28,
+    "real_revenue": 617886,
+    "real_roas": 3.59
    },
    "prev": {
-    "from": "2026-11-12",
-    "to": "2026-11-18",
-    "spend": 195789,
-    "purchases": 2316,
-    "pixel_roas": 5.76,
-    "cpa": 84.54,
-    "real_revenue": 489517,
-    "real_roas": 2.5
+    "from": "2026-11-13",
+    "to": "2026-11-19",
+    "spend": 222414,
+    "purchases": 2828,
+    "pixel_roas": 5.8,
+    "cpa": 78.65,
+    "real_revenue": 587604,
+    "real_roas": 2.64
    },
    "deltas": {
-    "spend": 16.3,
-    "real_roas": 23.2,
-    "pixel_roas": 9.5,
-    "cpa": -18.6,
-    "purchases": 42.9
+    "spend": -22.5,
+    "real_roas": 36.0,
+    "pixel_roas": 11.0,
+    "cpa": -10.6,
+    "purchases": -13.3
    }
   },
   "real_by_placement": [],
-  "active_cycles": [],
+  "active_cycles": [
+   "GTA kit"
+  ],
   "top_creatives": [],
   "weak_creatives": []
  },
@@ -14841,6 +14843,497 @@
    ],
    "adsets_window": "2026-10-30",
    "is_current": false
+  },
+  {
+   "code": "gta",
+   "name": "GTA kit",
+   "car_model": "GTA kit",
+   "date_from": "2026-11-27",
+   "date_to": "2026-11-27",
+   "spend": 633.18,
+   "impressions": 4054,
+   "clicks": 87,
+   "ctr": 2.15,
+   "reach": 2633,
+   "frequency": 1.54,
+   "purchases": 18,
+   "pixel_roas": 9.02,
+   "cpa": 35.18,
+   "pixel_revenue": 5712,
+   "real_ad_revenue": 3185,
+   "real_ad_roas": 5.03,
+   "gap_pct": -44.2,
+   "segments": {
+    "platform": [
+     [
+      "instagram",
+      435.79,
+      15,
+      11.26
+     ],
+     [
+      "facebook",
+      182.9,
+      3,
+      4.39
+     ],
+     [
+      "threads",
+      14.49,
+      0,
+      0.0
+     ]
+    ],
+    "age": [
+     [
+      "25-34",
+      306.82,
+      6,
+      3.91
+     ],
+     [
+      "35-44",
+      205.25,
+      8,
+      15.66
+     ],
+     [
+      "45-54",
+      62.17,
+      3,
+      15.67
+     ],
+     [
+      "18-24",
+      43.24,
+      1,
+      6.86
+     ],
+     [
+      "55-64",
+      8.08,
+      0,
+      0.25
+     ],
+     [
+      "65+",
+      7.62,
+      0,
+      0.26
+     ]
+    ],
+    "gender": [
+     [
+      "male",
+      596.43,
+      18,
+      9.54
+     ],
+     [
+      "female",
+      34.96,
+      0,
+      0.03
+     ],
+     [
+      "unknown",
+      1.79,
+      0,
+      0.0
+     ]
+    ],
+    "device": [
+     [
+      "iphone",
+      387.84,
+      14,
+      11.83
+     ],
+     [
+      "android_smartphone",
+      239.74,
+      5,
+      4.68
+     ],
+     [
+      "desktop",
+      5.39,
+      0,
+      0.0
+     ],
+     [
+      "android_tablet",
+      0.21,
+      0,
+      0.0
+     ]
+    ]
+   },
+   "creatives": [
+    {
+     "name": "офер-27.11-bf-100-graf-cd · new · claude",
+     "ad_id": "120253518685480624",
+     "spend": 4.59,
+     "purchases": 1,
+     "roas": 324.29,
+     "ctr": 3.57,
+     "thumb": "data:image/jpeg;base64,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"
+    },
+    {
+     "name": "офер-27.11-start-efir-cd · new · claude",
+     "ad_id": "120253533027700624",
+     "spend": 8.15,
+     "purchases": 1,
+     "roas": 36.43,
+     "ctr": 3.51,
+     "thumb": "data:image/jpeg;base64,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"
+    },
+    {
+     "name": "офер-27.11-start-p1-cd · buyers · claude",
+     "ad_id": "120253533044170624",
+     "spend": 60.89,
+     "purchases": 3,
+     "roas": 14.98,
+     "ctr": 2.33,
+     "thumb": "data:image/jpeg;base64,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"
+    },
+    {
+     "name": "офер-27.11-start-reel · buyers · claude",
+     "ad_id": "120253533182420624",
+     "spend": 36.65,
+     "purchases": 1,
+     "roas": 10.77,
+     "ctr": 2.94,
+     "thumb": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/7QCEUGhvdG9zaG9wIDMuMAA4QklNBAQAAAAAAGgcAigAYkZCTUQwYTAwMGE3ZDAxMDAwMGQxMDEwMDAwMWUwMjAwMDAzOTAyMDAwMDdjMDIwMDAwYTYwMjAwMDAyMjAzMDAwMDNjMDMwMDAwNWYwMzAwMDA5OTAzMDAwMDRhMDQwMDAwAP/bAIQABgcHDQkNDAwMDBENDg0REREQEBERExASERIQExMUExUVExQTFBMXFxcTFBUXGRkXFRccGxwXGxkZGx4bHhsbFgEGBgYLCAsKCwsKDQkLCQ0MDAoKDAwPCwwLDAsPEA4NDg4NDhAODQ0KDQ0ODw4QEA4PEAwODBAPEBAPFxkXFxfB/8IAEQgAQABAAwEiAAIRAQMRAf/EAEgAAAIDAQEBAAAAAAAAAAAAAAQFAQIDAAYHEAACAQMCBAQEBwEAAAAAAAABEQACITEDECBBUXEEYYGhEpGx0RMUIjAyQPDB/9oADAMBAAIAAwAAAAH58+Tneqt6wdNy3FHmUMwKrXStoJ0rLixMxmqrQcjK9suvB2cwaEBcktM+WZh4GK9LT2OjLnudg1Hee7oW5T0dHbMlZ7PX/9oACAEBAAEFAgJpH4ZT4mamqK5VngpMcNUq4RHHDxUUuLjprtRpkiqlBR7GhQxTT1wKNTVpNH4lnsnNSj9PBTlKVanwmrXtwUm/4rn/2gAIAQMAAT8BrEFMEMAhEEqjnxQVTMNW9Bn/2gAIAQIAAT8B1vDoKflKekoph03NWgGVgMzTE06Osq8RNTX/AJIi80fElH9QBGJo+IJGQeqmpWVCY54HWFIRKdU//9oACAEBAAY/At7h9/65/YP3hrOKfeU1cquMB4MTd7QjrveHt+wR14hP/9oACAEBAAE/IZ5gtCgY950HizNdnBuQQeOAbI4ZOxQbk7LdQrC3OWLlDDDuTCgFjbmiiAygG77LdHe8OY8nyPQxkSBjOxxJm0CHnx6iG6AJHcXfl9YcXSHkR5lKDMcj9LxCc5ihzXGK7rhxQnlLZb1jnmhGOFQGFjDHSf/aAAwDAQACAAMAAAAQgzn3oSFR8pR/51xa/9oACAEDAAE/EGjYwhRggRBg3gjPPs493+doQbsxFtxj1M//2gAIAQIAAT8Qxi0LvvMsgdItHV4MAEFRloIYWj+c85HtO7lCMQbZIswEP08oAdxcYd93h6HyKBM//9oACAEBAAE/ELzOZmDReLfJBDuAYF0uKBGUC6A8emyhEtMQtrIoLJMUMCKJnn7QcCEbAYFD2EYZX7dlCBc5F9fXaECYhJ2B5LksIvy9YaZWC3AJ0IgZAEWIPnO5jl1EJmwKfUUIWK6bDsU+vYR+AQBCHkHuP3nqd9Q9bjDPcDgdA8opCh+Y/wCoLddsFNzOv+tGNYJu9hf+eW2D2oBAvmgzdvFgeHyIf0lqX3Auc//Z"
+    },
+    {
+     "name": "офер-27.11-start-efir-cd · broad · claude",
+     "ad_id": "120253533010320624",
+     "spend": 141.14,
+     "purchases": 6,
+     "roas": 10.34,
+     "ctr": 3.21,
+     "thumb": "data:image/jpeg;base64,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"
+    },
+    {
+     "name": "офер-27.11-start-reel · broad · claude",
+     "ad_id": "120253533172610624",
+     "spend": 42.98,
+     "purchases": 1,
+     "roas": 5.86,
+     "ctr": 1.24,
+     "thumb": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/7QCEUGhvdG9zaG9wIDMuMAA4QklNBAQAAAAAAGgcAigAYkZCTUQwYTAwMGE3ZDAxMDAwMGQxMDEwMDAwMWUwMjAwMDAzOTAyMDAwMDdjMDIwMDAwYTYwMjAwMDAyMjAzMDAwMDNjMDMwMDAwNWYwMzAwMDA5OTAzMDAwMDRhMDQwMDAwAP/bAIQABgcHDQkNDAwMDBENDg0REREQEBERExASERIQExMUExUVExQTFBMXFxcTFBUXGRkXFRccGxwXGxkZGx4bHhsbFgEGBgYLCAsKCwsKDQkLCQ0MDAoKDAwPCwwLDAsPEA4NDg4NDhAODQ0KDQ0ODw4QEA4PEAwODBAPEBAPFxkXFxfB/8IAEQgAQABAAwEiAAIRAQMRAf/EAEgAAAIDAQEBAAAAAAAAAAAAAAQFAQIDAAYHEAACAQMCBAQEBwEAAAAAAAABEQACITEDECBBUXEEYYGhEpGx0RMUIjAyQPDB/9oADAMBAAIAAwAAAAH58+Tneqt6wdNy3FHmUMwKrXStoJ0rLixMxmqrQcjK9suvB2cwaEBcktM+WZh4GK9LT2OjLnudg1Hee7oW5T0dHbMlZ7PX/9oACAEBAAEFAgJpH4ZT4mamqK5VngpMcNUq4RHHDxUUuLjprtRpkiqlBR7GhQxTT1wKNTVpNH4lnsnNSj9PBTlKVanwmrXtwUm/4rn/2gAIAQMAAT8BrEFMEMAhEEqjnxQVTMNW9Bn/2gAIAQIAAT8B1vDoKflKekoph03NWgGVgMzTE06Osq8RNTX/AJIi80fElH9QBGJo+IJGQeqmpWVCY54HWFIRKdU//9oACAEBAAY/At7h9/65/YP3hrOKfeU1cquMB4MTd7QjrveHt+wR14hP/9oACAEBAAE/IZ5gtCgY950HizNdnBuQQeOAbI4ZOxQbk7LdQrC3OWLlDDDuTCgFjbmiiAygG77LdHe8OY8nyPQxkSBjOxxJm0CHnx6iG6AJHcXfl9YcXSHkR5lKDMcj9LxCc5ihzXGK7rhxQnlLZb1jnmhGOFQGFjDHSf/aAAwDAQACAAMAAAAQgzn3oSFR8pR/51xa/9oACAEDAAE/EGjYwhRggRBg3gjPPs493+doQbsxFtxj1M//2gAIAQIAAT8Qxi0LvvMsgdItHV4MAEFRloIYWj+c85HtO7lCMQbZIswEP08oAdxcYd93h6HyKBM//9oACAEBAAE/ELzOZmDReLfJBDuAYF0uKBGUC6A8emyhEtMQtrIoLJMUMCKJnn7QcCEbAYFD2EYZX7dlCBc5F9fXaECYhJ2B5LksIvy9YaZWC3AJ0IgZAEWIPnO5jl1EJmwKfUUIWK6bDsU+vYR+AQBCHkHuP3nqd9Q9bjDPcDgdA8opCh+Y/wCoLddsFNzOv+tGNYJu9hf+eW2D2oBAvmgzdvFgeHyIf0lqX3Auc//Z"
+    },
+    {
+     "name": "офер-27.11-start-ladder-cd · broad · claude",
+     "ad_id": "120253533007920624",
+     "spend": 60.61,
+     "purchases": 2,
+     "roas": 3.24,
+     "ctr": 1.89
+    },
+    {
+     "name": "офер-27.11-bf-100-foto-cd · broad · claude",
+     "ad_id": "120253518684790624",
+     "spend": 13.83,
+     "purchases": 0,
+     "roas": 1.6,
+     "ctr": 1.54
+    },
+    {
+     "name": "офер-27.11-bf-100-graf-cd · broad · claude",
+     "ad_id": "120253518684530624",
+     "spend": 26.61,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 2.61
+    },
+    {
+     "name": "офер-27.11-bf-100-graf-cd · buyers · claude",
+     "ad_id": "120253518687260624",
+     "spend": 9.4,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 11.11
+    },
+    {
+     "name": "офер-27.11-bf-100-foto-cd · buyers · claude",
+     "ad_id": "120253518687540624",
+     "spend": 23.49,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.74
+    },
+    {
+     "name": "офер-27.11-bf-100-graf-cd · engaged · claude",
+     "ad_id": "120253518688510624",
+     "spend": 3.82,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.0
+    },
+    {
+     "name": "офер-27.11-start-hero-cd · broad · claude",
+     "ad_id": "120253533003740624",
+     "spend": 22.54,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 3.15
+    },
+    {
+     "name": "офер-27.11-start-p1-cd · broad · claude",
+     "ad_id": "120253533012390624",
+     "spend": 20.83,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.65
+    },
+    {
+     "name": "офер-27.11-start-cs2-cd · broad · claude",
+     "ad_id": "120253533014460624",
+     "spend": 10.07,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 1.39
+    },
+    {
+     "name": "офер-27.11-start-hero-cd · new · claude",
+     "ad_id": "120253533022580624",
+     "spend": 2.49,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 5.88
+    },
+    {
+     "name": "офер-27.11-start-ladder-cd · new · claude",
+     "ad_id": "120253533025530624",
+     "spend": 6.32,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.0
+    },
+    {
+     "name": "офер-27.11-start-hero-cd · buyers · claude",
+     "ad_id": "120253533038980624",
+     "spend": 3.29,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.0
+    },
+    {
+     "name": "офер-27.11-start-ladder-cd · buyers · claude",
+     "ad_id": "120253533040510624",
+     "spend": 14.65,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.0
+    },
+    {
+     "name": "офер-27.11-start-efir-cd · buyers · claude",
+     "ad_id": "120253533042120624",
+     "spend": 36.48,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 3.57
+    },
+    {
+     "name": "офер-27.11-start-cs2-cd · buyers · claude",
+     "ad_id": "120253533046380624",
+     "spend": 6.19,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 2.08
+    },
+    {
+     "name": "офер-27.11-start-hero-cd · engaged · claude",
+     "ad_id": "120253533050710624",
+     "spend": 8.25,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 2.53
+    },
+    {
+     "name": "офер-27.11-start-ladder-cd · engaged · claude",
+     "ad_id": "120253533052370624",
+     "spend": 1.79,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.0
+    },
+    {
+     "name": "офер-27.11-start-efir-cd · engaged · claude",
+     "ad_id": "120253533053450624",
+     "spend": 1.06,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.0
+    },
+    {
+     "name": "офер-27.11-start-reel · new · claude",
+     "ad_id": "120253533176730624",
+     "spend": 3.05,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.0
+    },
+    {
+     "name": "офер-27.11-start-reel · engaged · claude",
+     "ad_id": "120253533185760624",
+     "spend": 1.27,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.0
+    },
+    {
+     "name": "офер-27.11-start-neon · broad · claude",
+     "ad_id": "120253533191700624",
+     "spend": 20.78,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.0
+    },
+    {
+     "name": "офер-27.11-start-neon · new · claude",
+     "ad_id": "120253533195170624",
+     "spend": 1.98,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.0
+    },
+    {
+     "name": "офер-27.11-start-neon · buyers · claude",
+     "ad_id": "120253533199230624",
+     "spend": 8.33,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.0
+    },
+    {
+     "name": "офер-27.11-start-neon · engaged · claude",
+     "ad_id": "120253533201150624",
+     "spend": 1.29,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 5.56
+    },
+    {
+     "name": "офер-27.11-bf-100-reel · buyers · claude",
+     "ad_id": "120253533404740624",
+     "spend": 1.02,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.0
+    },
+    {
+     "name": "офер-27.11-bf-100-reel · broad · claude",
+     "ad_id": "120253533413330624",
+     "spend": 1.78,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.0
+    },
+    {
+     "name": "офер-27.11-post06548 · buyers · claude",
+     "ad_id": "120253537420950624",
+     "spend": 11.84,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.0
+    },
+    {
+     "name": "офер-27.11-post06548 · new · claude",
+     "ad_id": "120253537425950624",
+     "spend": 1.21,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 20.0
+    },
+    {
+     "name": "офер-27.11-post06548 · broad · claude",
+     "ad_id": "120253537434580624",
+     "spend": 13.0,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.0
+    }
+   ],
+   "series": [
+    {
+     "date": "2026-11-27",
+     "spend": 633.18,
+     "purchases": 18,
+     "roas": 9.02,
+     "cpa": 35.18
+    }
+   ],
+   "adsets": [
+    {
+     "name": "офер-27.11-start · broad · claude",
+     "spend": 318.95,
+     "purchases": 10,
+     "roas": 5.98,
+     "ctr": 2.19,
+     "cpa": 31.89
+    },
+    {
+     "name": "офер-27.11-start · buyers · claude",
+     "spend": 166.48,
+     "purchases": 4,
+     "roas": 7.85,
+     "ctr": 2.24,
+     "cpa": 41.62
+    },
+    {
+     "name": "офер-27.11-bf-100 · broad · claude",
+     "spend": 55.22,
+     "purchases": 0,
+     "roas": 0.4,
+     "ctr": 1.73,
+     "cpa": null
+    },
+    {
+     "name": "офер-27.11-bf-100 · buyers · claude",
+     "spend": 45.75,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 1.77,
+     "cpa": null
+    },
+    {
+     "name": "офер-27.11-start · new · claude",
+     "spend": 22.28,
+     "purchases": 1,
+     "roas": 13.33,
+     "ctr": 1.76,
+     "cpa": 22.28
+    },
+    {
+     "name": "офер-27.11-start · engaged · claude",
+     "spend": 14.38,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 2.11,
+     "cpa": null
+    },
+    {
+     "name": "офер-27.11-bf-100 · new · claude",
+     "spend": 6.04,
+     "purchases": 1,
+     "roas": 246.44,
+     "ctr": 5.26,
+     "cpa": 6.04
+    },
+    {
+     "name": "офер-27.11-bf-100 · engaged · claude",
+     "spend": 4.08,
+     "purchases": 0,
+     "roas": 0.0,
+     "ctr": 0.0,
+     "cpa": null
+    }
+   ],
+   "adsets_window": "2026-11-27",
+   "is_current": true
   }
  ],
  "strategy": {
