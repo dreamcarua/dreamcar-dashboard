@@ -313,3 +313,6 @@ Entries below were harvested from commit messages on 03.09.2026 (source: `git lo
 
 ## anomaly-alerter: «дані застаріли» вимірювало вік останньої угоди, а не ETL
 Симптом (22.11.2026 05:27): 🟠 «dashboard_deals не оновлювалась 129 хв» при зелених прогонах ETL. Причина: dealsStaleMinutes брав max(created_at) угод; вночі нових угод годинами нема, ETL при цьому справний. Що робити: свіжість ETL = ключ `etl_heartbeat` у dashboard_settings (пише sync_mysql_to_supabase.py на кожному повному прогоні); created_at лише fallback. Edge деплоїти через `supabase functions deploy anomaly-alerter --project-ref wotghlaehnvxyeacznvv --no-verify-jwt --use-api` (без --use-api бандл падає в /tmp).
+
+### anomaly-alerter запускався перед ETL, а не після (28.11.2026)
+Симптом: 🟠 «дані про угоди застаріли (33 хв)» при зелених прогонах ETL. Причина: pg_cron job 95 (алерт) о :27, job 75 (ETL MySQL) щогодини о :30, тобто вік `etl_heartbeat` у момент перевірки до ~57 хв при порозі `STALE_WARN_MIN` 25; лише випадковий резервний прогін GH робив його меншим. Що робити: алерт переведено на :40 (`etl/migrations/20261128_anomaly_alerter_after_etl.sql`). Поріг свіжості завжди звіряти з фактичними розкладами в `cron.job`: частоту ETL або алерта міняєш лише разом з другим.

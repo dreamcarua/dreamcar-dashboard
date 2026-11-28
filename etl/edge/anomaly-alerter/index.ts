@@ -26,9 +26,9 @@ const VADYM_TG = Deno.env.get("DC_VADYM_TG_CHAT_ID") || "1138351072";
 const CRON_SECRET = Deno.env.get("DC_CRON_SECRET") || Deno.env.get("CRON_SECRET") || Deno.env.get("HQ_CRON_SECRET") || "";
 const MODEL = "claude-haiku-4-5-20251001";
 
-// Скільки хвилин застою dashboard_deals вважаємо поломкою даних, а не тишею продажів.
-// ETL MySQL ходить щогодини (pg_cron 30 * * * *) + резерв, тож 25 хв — це вже підозра,
-// а 70 хв — точно пропущений прогін.
+// Скільки хвилин застою ETL вважаємо поломкою даних, а не тишею продажів.
+// ETL MySQL ходить щогодини о :30 (pg_cron job 75), алерт — о :40 (job 95), тож норма ~10 хв,
+// а пропущений прогін дає ~70 хв. Міняєш один розклад — перевір другий (28.11.2026).
 const STALE_WARN_MIN = 25;
 
 const sb = createClient(SB_URL, SB_KEY, { auth: { persistSession: false } });
